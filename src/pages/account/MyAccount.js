@@ -12,7 +12,7 @@ class MyAccount extends React.Component {
   }
 
   componentDidMount() {
-    this.props.send({cmd: 'dddd', module: MODULE})
+    // this.props.send({cmd: 'dddd', module: MODULE})
   }
 
   ws_message = (message) => {
