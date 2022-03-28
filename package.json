@@ -1,7 +1,6 @@
 {
   "name": "nurims",
   "version": "0.1.0",
-  "homepage": "/nurims",
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^1.9.0",
@@ -11,14 +10,31 @@
     "@mui/lab": "^5.0.0-alpha.68",
     "@mui/material": "^5.4.0",
     "@mui/styles": "^5.4.1",
+    "@mui/utils": "^5.4.4",
+    "@mui/x-data-grid": "^5.5.1",
+    "@pdftron/pdfjs-express-viewer": "^8.2.1",
+    "@react-pdf-viewer/attachment": "^3.1.1",
+    "@react-pdf-viewer/bookmark": "^3.1.1",
+    "@react-pdf-viewer/core": "^3.1.1",
+    "@react-pdf-viewer/default-layout": "^3.1.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "canvas": "^2.9.0",
+    "classnames": "^2.3.1",
+    "date-fns": "^2.28.0",
+    "history": "^5.2.0",
+    "leaflet": "^1.7.1",
+    "pdfjs-dist": "^2.13.216",
+    "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-json-pretty": "^2.2.0",
+    "react-leaflet": "^3.2.5",
     "react-scripts": "^5.0.0",
     "react-spinners": "^0.11.0",
+    "react-toastify": "^8.1.1",
+    "react-virtualized": "^9.22.3",
     "reconnecting-websocket": "^4.4.0",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
@@ -26,7 +42,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "node generate-buildno.js && react-scripts build",
-    "postbuild": "mkdir -p ../server/public/nurims; cp -rf build/* ../server/public/nurims/",
+    "postbuild": "cp -rf build/* ../server/public/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -47,5 +63,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "constants": "0.0.2",
+    "dotenv-cli": "^5.0.0"
   }
 }
