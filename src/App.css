@@ -1,20 +1,5 @@
 /* App.css */
 
-body {
-  background-color: #2a2a2a;
-  margin: auto;
-}
-.loginButton {
-  background-image: linear-gradient( to right, #5e93cf, #303a44);
-  width: 160px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  margin: 20px;
-  height: 55px;
-  text-align:center;
-  border: none;
-  background-size: 300% 100%;
-  border-radius: 50px;
+.Toastify__toast-container {
+  width: 700px;
 }

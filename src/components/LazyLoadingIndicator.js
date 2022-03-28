@@ -5,7 +5,7 @@ function LazyLoadingIndicator() {
   return (
     <div className="lazy-container">
       <div className="lazy-box">
-        <div className="loader5" />
+        <div className="clock" />
       </div>
     </div>
   );

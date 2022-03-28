@@ -15,9 +15,6 @@ export default function AccountMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const user = props.user;
-  const wsock = props.wsock;
-  console.log("AccountMenu - user>>", user)
-  console.log("AccountMenu - wsock>>", wsock)
   const { logout } = useAuth0()
 
   const handleClick = (event) => {
@@ -79,7 +76,7 @@ export default function AccountMenu(props) {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem id={"myaccount"} onClick={props.onClick}>
+        <MenuItem id={"myaccount"} data-title={"My Account"} onClick={props.onClick}>
           <Avatar /> My Account
         </MenuItem>
         {/*<MenuItem>*/}
@@ -92,7 +89,7 @@ export default function AccountMenu(props) {
         {/*  </ListItemIcon>*/}
         {/*  Add another account*/}
         {/*</MenuItem>*/}
-        <MenuItem id={"settings"} onClick={props.onClick}>
+        <MenuItem id={"settings"} data-title={"System Settings"} onClick={props.onClick}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>

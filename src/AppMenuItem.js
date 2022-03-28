@@ -1,6 +1,6 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
-import { createStyles } from '@mui/material/styles'
+import {createStyles, styled} from '@mui/material/styles'
 import {makeStyles} from '@mui/styles';
 
 import List from '@mui/material/List'
@@ -11,25 +11,11 @@ import Collapse from '@mui/material/Collapse'
 
 import IconExpandLess from '@mui/icons-material/ExpandLess'
 import IconExpandMore from '@mui/icons-material/ExpandMore'
-import {ListItemButton, Tooltip} from "@mui/material";
+import {ListItemButton, Tooltip, Typography} from "@mui/material";
+import {getGlossaryValue} from "./utils/GlossaryUtils";
+import {tooltipClasses} from "@mui/material/Tooltip";
 
-// React runtime PropTypes
-// export const AppMenuItemPropTypes = {
-//   name: PropTypes.string.isRequired,
-//   link: PropTypes.string,
-//   Icon: PropTypes.elementType,
-//   items: PropTypes.array,
-// }
-
-// TypeScript compile-time props type, infered from propTypes
-// https://dev.to/busypeoples/notes-on-typescript-inferring-react-proptypes-1g88
-// type AppMenuItemPropTypes = PropTypes.InferProps<typeof AppMenuItemPropTypes>
-//   type AppMenuItemPropsWithoutItems = Omit<AppMenuItemPropTypes, 'items'>
-
-// Improve child items declaration
-// export type AppMenuItemProps = AppMenuItemPropsWithoutItems & {
-//   items?: AppMenuItemProps[]
-// }
+import {HtmlTooltip} from "./utils/TooltipUtils";
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -41,14 +27,14 @@ const useStyles = makeStyles(theme =>
 )
 
 export default function AppMenuItem(props) {
-  const { name, link, Icon, tooltip, authmodlevel, items = [] } = props
+  const { name, link, title, Icon, tooltip, authmodlevel, items = [] } = props
   const classes = useStyles()
   const isExpandable = items && items.length > 0
   const [open, setOpen] = React.useState(false)
 
-  function handleClick(id) {
+  function handleClick(title, link) {
     setOpen(!open)
-    props.onClick(id)
+    props.onClick(link, title)
   }
 
   function menu_disabled(organisation, modver) {
@@ -61,7 +47,7 @@ export default function AppMenuItem(props) {
   }
 
   const MenuItemRoot = (
-    <ListItemButton className={classes.menuItem} disabled={menu_disabled(props.organisation, authmodlevel)} onClick={()=>handleClick(link)}>
+    <ListItemButton className={classes.menuItem} disabled={menu_disabled(props.organisation, authmodlevel)} onClick={()=>handleClick(title, link)}>
       {/* Display an icon if any */}
       {!!Icon && (
         <ListItemIcon className={classes.menuItemIcon}>

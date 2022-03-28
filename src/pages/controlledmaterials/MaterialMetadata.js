@@ -1,0 +1,885 @@
+import React, {Component} from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import {Card, CardContent, FormControl, Grid, InputLabel, Link, Select, TableCell, Typography} from "@mui/material";
+import {DataGrid} from '@mui/x-data-grid';
+import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
+import MenuItem from "@mui/material/MenuItem";
+import {DatePicker, LocalizationProvider} from "@mui/lab";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DateRangePicker from '@mui/lab/DateRangePicker';
+import {
+  getMetadataValue,
+  setMetadataValue,
+  getDoseRecordMetadataValue,
+  getDoseRecordDosimeterId,
+  setDoseRecordMetadataValue,
+  getDateRangeFromDateString, getDateFromDateString
+} from "../../utils/MetadataUtils";
+import {
+  getPropertyValue,
+  setPropertyValue
+} from "../../utils/PropertyUtils";
+import Avatar from "@mui/material/Avatar";
+import AddIcon from "@mui/icons-material/Add";
+import TrashIcon from "@mui/icons-material/Delete";
+import {styled} from "@mui/material/styles";
+import ImageIcon from '@mui/icons-material/Image';
+import {getGlossaryValue} from "../../utils/GlossaryUtils";
+import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
+import Paper from "@mui/material/Paper";
+import {SelectField} from "../../components/DataGridUtilities";
+import {makeStyles} from "@mui/styles";
+import Button from "@mui/material/Button";
+import EditableTable from "../../components/EditableTable";
+import {toast} from "react-toastify";
+import PersonIcon from "@mui/icons-material/Person";
+import PdfViewer from "../../components/PdfViewer";
+import {
+  BLANK_PDF,
+  NURIMS_MATERIAL_CLASSIFICATION,
+  NURIMS_MATERIAL_DOCUMENTS,
+  NURIMS_MATERIAL_ID,
+  NURIMS_MATERIAL_IMAGE,
+  NURIMS_MATERIAL_INVENTORY_STATUS,
+  NURIMS_MATERIAL_PHYSICAL_FORM,
+  NURIMS_SURVEILLANCE_FREQUENCY,
+  NURIMS_MATERIAL_TYPE,
+  NURIMS_TITLE,
+  NURIMS_DESCRIPTION,
+  NURIMS_MATERIAL_REGISTRATION_DATE,
+  NURIMS_MATERIAL_MANUFACTURER,
+  NURIMS_MATERIAL_STORAGE_LOCATION,
+  NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY,
+  NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY,
+  NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, NURIMS_MATERIAL_NUCLIDES, NURIMS_MATERIAL_QUANTITY_UNITS
+} from "../../utils/constants";
+
+class MaterialMetadata extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      material: {},
+      properties: props.properties,
+    };
+    this.ref = React.createRef();
+    this.pdfRef = React.createRef();
+    this.glossary = {};
+    this.manufacturers = [];
+    this.storageLocations = [];
+    this.nuclidesData = [];
+    this.nuclideTableFields = [
+      {
+        label: "Nuclide",
+        // selectMessage: "Nuclide",
+        name: "nuclide",
+        width: '20ch',
+        align: 'center',
+        type: "select",
+        options: [],
+        validation: (e, a) => {
+          return true;
+        },
+        error: "go home kid"
+      },
+      {
+        label: "Quantity",
+        name: "quantity",
+        width: '8ch',
+        align: 'center',
+        validation: e => {
+          return true;
+        },
+        error: "Haha"
+      },
+      {
+        label: "Units",
+        // selectMessage: "Units",
+        name: "units",
+        type: "select",
+        width: '8ch',
+        align: 'center',
+        options: [],
+        validation: (e, a) => {
+          return true;
+        },
+        error: "go home kid"
+      },
+      {
+        label: "Reg. Date",
+        // selectMessage: "Units",
+        name: "date",
+        type: "date",
+        width: '18ch',
+        align: 'center',
+        validation: (e, a) => {
+          return true;
+        },
+        error: "go home kid"
+      }
+    ];
+    getPropertyValue(props.properties, NURIMS_MATERIAL_NUCLIDES, "").split('|').map((n) => {
+      const t = n.split(',');
+      if (t.length === 2) {
+        return this.nuclideTableFields[0].options.push({ label: t[1], value: t[0] });
+      }
+    })
+    getPropertyValue(props.properties, NURIMS_MATERIAL_QUANTITY_UNITS, "").split('|').map((n) => {
+      const t = n.split(',');
+      if (t.length === 2) {
+        return this.nuclideTableFields[2].options.push({ label: t[1], value: t[0] });
+      }
+    })
+  }
+
+  // renderNuclideSelectionCell = (params) => {
+  //   return <SelectField options={getPropertyValue(this.state.properties, "nurims.material.nuclides", "")} {...params} />;
+  // }
+
+  // renderUnitsSelectionCell = (params) => {
+  //   return <SelectField options={getPropertyValue(this.state.properties, "nurims.material.quantityunits", "")} {...params} />;
+  // }
+
+  componentDidMount() {
+    console.log("componentDidMount - MaterialMetadata.properties", this.state.properties)
+  }
+
+  handleChange = (e) => {
+    console.log(">>>", e.target.id)
+    const material = this.state.material;
+    if (e.target.id === "nurims.title") {
+      material["changed"] = true;
+      material[NURIMS_TITLE] = e.target.value;
+    } else if (e.target.id === "id") {
+      material["changed"] = true;
+      setMetadataValue(material, NURIMS_MATERIAL_ID, e.target.value)
+    } else if (e.target.id === "type") {
+      material["changed"] = true;
+      setMetadataValue(material, NURIMS_MATERIAL_TYPE, e.target.value)
+      const nuclideData = getMetadataValue(material, NURIMS_MATERIAL_NUCLIDES, []);
+      if (this.ref.current) {
+        this.ref.current.setRowData(nuclideData);
+      }
+    } else if (e.target.id === "description") {
+      material["changed"] = true;
+      setMetadataValue(material, NURIMS_DESCRIPTION, e.target.value)
+    }
+    this.setState({material: material})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handleMaterialTypeChange = (e) => {
+    const material = this.state.material;
+    setMetadataValue(material, NURIMS_MATERIAL_TYPE, e.target.value);
+    material.changed = true;
+    this.setState({material: material})
+    // signal to parent that metadata has changed
+    this.props.onChange(true);
+  }
+
+  handleMaterialClassificationChange = (e) => {
+    console.log("handleMaterialClassificationChange", e.target.value);
+    const material = this.state.material;
+    material["changed"] = true;
+    setMetadataValue(material, NURIMS_MATERIAL_CLASSIFICATION, e.target.value);
+    this.setState({material: material})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handleRegistrationDateChange = (date) => {
+    console.log("handleRegistrationDateChange", date);
+    const material = this.state.material;
+    setMetadataValue(material, NURIMS_MATERIAL_REGISTRATION_DATE, date.toISOString().substring(0, 10))
+    material["changed"] = true;
+    this.setState({material: material})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handleMaterialManufacturerChange = (e) => {
+    const material = this.state.material;
+    material["changed"] = true;
+    setMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER, e.target.value);
+    this.setState({material: material})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handleInventoryStatusChange = (e) => {
+    const material = this.state.material;
+    material["changed"] = true;
+    setMetadataValue(material, NURIMS_MATERIAL_INVENTORY_STATUS, e.target.value);
+    this.setState({material: material})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handlePhysicalFormChange = (e) => {
+    const material = this.state.material;
+    material["changed"] = true;
+    setMetadataValue(material, NURIMS_MATERIAL_PHYSICAL_FORM, e.target.value);
+    this.setState({material: material})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handleStorageLocationChange = (e) => {
+    const material = this.state.material;
+    material["changed"] = true;
+    setMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION, e.target.value);
+    this.setState({material: material})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handleActivitySurveillanceFrequencyChange = (e) => {
+    const material = this.state.material;
+    material["changed"] = true;
+    setMetadataValue(material, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, e.target.value);
+    this.setState({material: material})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handleLeakTestSurveillanceFrequencyChange = (e) => {
+    const material = this.state.material;
+    material["changed"] = true;
+    setMetadataValue(material, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, e.target.value);
+    this.setState({material: material})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handleInventorySurveillanceFrequencyChange = (e) => {
+    const material = this.state.material;
+    material["changed"] = true;
+    setMetadataValue(material, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, e.target.value);
+    this.setState({material: material})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  // handleWholeBodyDateRangeChange = (range) => {
+  //   console.log("WHOLEBODY DATE-RANGE", range);
+  //   const p = this.state.person;
+  //   const dosimeterId = getDoseRecordDosimeterId(p, "WholeBody", "");
+  //   setDoseRecordMetadataValue(p, dosimeterId, "WholeBody", "nurims.dosimeter.monitorperiod", `${range[0].toISOString().substring(0, 10)}|${range[1].toISOString().substring(0, 10)}`);
+  //   this.setState({person: p, has_changed: true})
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
+
+  // handleExtremityDateRangeChange = (range) => {
+  //   console.log("EXTREMITY DATE-RANGE", range);
+  //   const p = this.state.person;
+  //   const dosimeterId = getDoseRecordDosimeterId(p, "Extremity", "");
+  //   setDoseRecordMetadataValue(p, dosimeterId, "Extremity", "nurims.dosimeter.monitorperiod", `${range[0].toISOString().substring(0, 10)}|${range[1].toISOString().substring(0, 10)}`);
+  //   this.setState({person: p, has_changed: true})
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
+
+  // handleWristDateRangeChange = (range) => {
+  //   console.log("WRIST DATE-RANGE", range);
+  //   const p = this.state.person;
+  //   const dosimeterId = getDoseRecordDosimeterId(p, "Wrist", "");
+  //   setDoseRecordMetadataValue(p, dosimeterId, "Wrist", "nurims.dosimeter.monitorperiod", `${range[0].toISOString().substring(0, 10)}|${range[1].toISOString().substring(0, 10)}`);
+  //   this.setState({person: p, has_changed: true})
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
+
+  setGlossaryTerms = (terms) => {
+    console.log("MaterialMetadata.setGlossaryTerms", terms)
+    for (const term of terms) {
+      this.glossary[term.name] = term.value;
+    }
+    this.forceUpdate();
+  }
+
+  setManufacturers = (manufacturers) => {
+    console.log("MaterialMetadata.setManufacturers", manufacturers)
+    for (const manufacturer of manufacturers) {
+      this.manufacturers.push({
+        title: manufacturer[NURIMS_TITLE],
+        id: manufacturer["item_id"],
+      });
+    }
+    this.forceUpdate();
+  }
+
+  setStorageLocations = (storageLocations) => {
+    console.log("MaterialMetadata.setStorageLocations", storageLocations)
+    for (const storage of storageLocations) {
+      this.storageLocations.push({
+        title: storage[NURIMS_TITLE],
+        id: storage["item_id"],
+      });
+    }
+    this.forceUpdate();
+  }
+
+  setMaterialMetadata = (material) => {
+    console.log("MaterialMetadata.setMaterialMetadata", material)
+    const nuclideData = getMetadataValue(material, NURIMS_MATERIAL_NUCLIDES, []);
+    if (this.ref.current) {
+      this.ref.current.setRowData(nuclideData);
+    }
+    console.log("+++++++++++++++++++++++++")
+    console.log(material)
+    console.log("+++++++++++++++++++++++++")
+    this.setState({material: material})
+    this.props.onChange(false);
+  }
+
+  getMaterialMetadata = () => {
+    return this.state.manufacturer;
+  }
+
+  addNuclide = (e) => {
+    // find highest id
+    let id = 0;
+    for (const row of this.table_rows) {
+      id = Math.max(id, row.id);
+    }
+    this.table_rows.push({
+      id: id+1,
+      nuclide: "",
+      quantity: 0,
+      units: "",
+      dateCreated: new Date(),
+    });
+    this.forceUpdate();
+  }
+
+  deleteNuclide = () => {
+
+  }
+
+  saveTableData = data => {
+    console.log("UPDATED NUCLIDE TABLE DATA", data);
+    const material = this.state.material;
+    material["changed"] = true;
+    setMetadataValue(material, "nurims.material.nuclides", data);
+    this.setState({material: material})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  };
+
+  handleMaterialImageUpload = (e) => {
+    const selectedFile = e.target.files[0];
+    const that = this;
+    const fileReader = new FileReader();
+    fileReader.onerror = function () {
+      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+    };
+    fileReader.readAsDataURL(selectedFile);
+    fileReader.onload = function (event) {
+      const material = that.state.material;
+      material["changed"] = true;
+      // setMetadataValue(material, "nurims.material.image", event.target.result);
+      setMetadataValue(material, "nurims.material.image", {file: selectedFile.name, url: event.target.result});
+      that.setState({ material: material })
+      that.props.onChange(true);
+    };
+  }
+
+  handleMaterialDocumentUpload = (e) => {
+    const selectedFile = e.target.files[0];
+    const that = this;
+    const fileReader = new FileReader();
+    fileReader.onerror = function () {
+      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+    };
+    fileReader.readAsDataURL(selectedFile);
+    fileReader.onload = function (event) {
+      const material = that.state.material;
+      material["changed"] = true;
+      setMetadataValue(material, "nurims.material.documents", {file: selectedFile.name, url: event.target.result});
+      that.setState({ material: material })
+      that.props.onChange(true);
+    };
+  }
+
+  render() {
+    const {material, properties} = this.state;
+    console.log("MaterialMetadata.RENDER - material", material)
+    // console.log("MaterialMetadata.RENDER - table_rows", this.table_rows)
+    // console.log("MaterialMetadata.RENDER - glossary", this.glossary)
+    const disabled = Object.entries(material).length === 0;
+    const materialTypes = getPropertyValue(properties, NURIMS_MATERIAL_TYPE, "").split('|');
+    const materialClassification = getPropertyValue(properties, NURIMS_MATERIAL_CLASSIFICATION, "").split('|');
+    const inventoryStatus = getPropertyValue(properties, NURIMS_MATERIAL_INVENTORY_STATUS, "").split('|');
+    const physicalForm = getPropertyValue(properties, NURIMS_MATERIAL_PHYSICAL_FORM, "").split('|');
+    const surveillanceFrequency = getPropertyValue(properties, NURIMS_SURVEILLANCE_FREQUENCY, "").split('|');
+    const image = getMetadataValue(material, NURIMS_MATERIAL_IMAGE, {file: '', url: ''});
+    const documentPdf = getMetadataValue(material, NURIMS_MATERIAL_DOCUMENTS, {file: '', url: ''});
+    return (
+      <Box
+        component="form"
+        sx={{
+          '& .MuiTextField-root': {ml: 0, mb: 0},
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <div>
+          <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
+            <CardContent sx={{'& .MuiCardContent-root:last-child': {p: 0}}}>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'bottom-start'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_TITLE, "")} />
+                    }
+                  >
+                    <TextField
+                      disabled={disabled}
+                      required
+                      fullWidth
+                      id="nurims.title"
+                      label="Material Name"
+                      value={material.hasOwnProperty(NURIMS_TITLE) ? material[NURIMS_TITLE] : ""}
+                      onChange={this.handleChange}
+                    />
+                  </HtmlTooltip>
+                </Grid>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'bottom-start'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_ID, "")} />
+                    }
+                  >
+                    <TextField
+                      disabled={disabled}
+                      required
+                      fullWidth
+                      id="id"
+                      label="Material ID"
+                      value={getMetadataValue(material, NURIMS_MATERIAL_ID, "")}
+                      onChange={this.handleChange}
+                    />
+                  </HtmlTooltip>
+                </Grid>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'left'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_TYPE, "")} />
+                    }
+                  >
+                    <FormControl sx={{ml: 0, mb: 0, width: '100%'}}>
+                      <InputLabel id="type">Material Type</InputLabel>
+                      <Select
+                        disabled={disabled}
+                        required
+                        fullWidth
+                        labelId="type"
+                        label="Material Type"
+                        id="type"
+                        value={getMetadataValue(material, NURIMS_MATERIAL_TYPE, "")}
+                        onChange={this.handleMaterialTypeChange}
+                      >
+                        {materialTypes.map((materialType) => {
+                          const t = materialType.split(',');
+                          if (t.length === 2) {
+                            return (
+                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
+                            )
+                          }
+                        })}
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+          <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, width: '100%'}}>
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'left'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")} />
+                    }
+                  >
+                    <TextField
+                      disabled={disabled}
+                      fullWidth
+                      id="description"
+                      label="Material Description"
+                      value={getMetadataValue(material, NURIMS_DESCRIPTION, "")}
+                      onChange={this.handleChange}
+                    />
+                  </HtmlTooltip>
+                </Grid>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'left'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_CLASSIFICATION, "")} />
+                    }
+                  >
+                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
+                      <InputLabel id="classification">Material Classification</InputLabel>
+                      <Select
+                        disabled={disabled}
+                        required
+                        fullWidth
+                        labelId="classification"
+                        label="Material Classification"
+                        id="classification"
+                        value={getMetadataValue(material, NURIMS_MATERIAL_CLASSIFICATION, "")}
+                        onChange={this.handleMaterialClassificationChange}
+                      >
+                        {materialClassification.map((classification) => {
+                          const t = classification.split(',');
+                          if (t.length === 2) {
+                            return (
+                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
+                            )
+                          }
+                        })}
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                <Grid item xs={4}>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <HtmlTooltip
+                      placement={'left'}
+                      title={
+                        <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_REGISTRATION_DATE, "")} />
+                      }
+                    >
+                      <Box sx={{'& .MuiTextField-root': {width: '18ch'}}}>
+                        <DatePicker
+                          disabled={disabled}
+                          label="Registration Date"
+                          inputFormat={"yyyy-MM-dd"}
+                          value={getDateFromDateString(getMetadataValue(material, NURIMS_MATERIAL_REGISTRATION_DATE, "1970-01-01"), null)}
+                          onChange={this.handleRegistrationDateChange}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </Box>
+                    </HtmlTooltip>
+                  </LocalizationProvider>
+                </Grid>
+              </Grid>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'left'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_MANUFACTURER, "")} />
+                    }
+                  >
+                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
+                      <InputLabel id="manufacturer">Manufacturer</InputLabel>
+                      <Select
+                        disabled={disabled}
+                        required
+                        fullWidth
+                        labelId="manufacturer"
+                        label="Manufacturer"
+                        id="manufacturer"
+                        value={getMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER, "")}
+                        onChange={this.handleMaterialManufacturerChange}
+                      >
+                        {this.manufacturers.map((m) => {
+                          return (
+                            <MenuItem value={m["id"]}>{m["title"]}</MenuItem>
+                          )
+                        })}
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'left'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_INVENTORY_STATUS, "")} />
+                    }
+                  >
+                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
+                      <InputLabel id="inventorystatus">Inventory Status</InputLabel>
+                      <Select
+                        disabled={disabled}
+                        required
+                        fullWidth
+                        labelId="inventorystatus"
+                        label="Inventory Status"
+                        id="inventorystatus"
+                        value={getMetadataValue(material, NURIMS_MATERIAL_INVENTORY_STATUS, "")}
+                        onChange={this.handleInventoryStatusChange}
+                      >
+                        {inventoryStatus.map((status) => {
+                          const t = status.split(',');
+                          if (t.length === 2) {
+                            return (
+                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
+                            )
+                          }
+                        })}
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'left'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_PHYSICAL_FORM, "")} />
+                    }
+                  >
+                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
+                      <InputLabel id="physicalform">Physical Form</InputLabel>
+                      <Select
+                        disabled={disabled}
+                        required
+                        fullWidth
+                        labelId="physicalform"
+                        label="Physical Form"
+                        id="physicalform"
+                        value={getMetadataValue(material, NURIMS_MATERIAL_PHYSICAL_FORM, "")}
+                        onChange={this.handlePhysicalFormChange}
+                      >
+                        {physicalForm.map((form) => {
+                          const t = form.split(',');
+                          if (t.length === 2) {
+                            return (
+                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
+                            )
+                          }
+                        })}
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+              </Grid>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'left'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_STORAGE_LOCATION, "")} />
+                    }
+                  >
+                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
+                      <InputLabel id="manufacturer">Storage Location</InputLabel>
+                      <Select
+                        disabled={disabled}
+                        required
+                        fullWidth
+                        labelId="storage"
+                        label="Storage Location"
+                        id="storage"
+                        value={getMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION, "")}
+                        onChange={this.handleStorageLocationChange}
+                      >
+                        {this.storageLocations.map((l) => {
+                          return (
+                            <MenuItem value={l["id"]}>{l["title"]}</MenuItem>
+                          )
+                        })}
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+          {getMetadataValue(material, NURIMS_MATERIAL_TYPE, "") !== "controlled_item" &&
+          <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <EditableTable
+                    disable={disabled}
+                    ref={this.ref}
+                    addRowBtnText={"Add Nuclide"}
+                    initWithoutHead={false}
+                    defaultData={this.nuclidesData}
+                    getData={this.saveTableData}
+                    fieldsArr={this.nuclideTableFields}
+                  />
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+          }
+          <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, width: '100%'}}>
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'left'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")} />
+                    }
+                  >
+                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
+                      <InputLabel id="leaktest">Leak Testing Surveillance Frequency</InputLabel>
+                      <Select
+                        disabled={disabled}
+                        required
+                        fullWidth
+                        labelId="leaktest"
+                        label="Leak Testing Surveillance Frequency"
+                        id="leaktest"
+                        value={getMetadataValue(material, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")}
+                        onChange={this.handleLeakTestSurveillanceFrequencyChange}
+                      >
+                        {surveillanceFrequency.map((form) => {
+                          const t = form.split(',');
+                          if (t.length === 2) {
+                            return (
+                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
+                            )
+                          }
+                        })}
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'left'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")} />
+                    }
+                  >
+                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
+                      <InputLabel id="inventory">Inventory Surveillance Frequency</InputLabel>
+                      <Select
+                        disabled={disabled}
+                        required
+                        fullWidth
+                        labelId="inventory"
+                        label="Inventory Surveillance Frequency"
+                        id="inventory"
+                        value={getMetadataValue(material, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")}
+                        onChange={this.handleInventorySurveillanceFrequencyChange}
+                      >
+                        {surveillanceFrequency.map((form) => {
+                          const t = form.split(',');
+                          if (t.length === 2) {
+                            return (
+                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
+                            )
+                          }
+                        })}
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                <Grid item xs={4}>
+                  <HtmlTooltip
+                    placement={'left'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")} />
+                    }
+                  >
+                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
+                      <InputLabel id="activity">Activity Surveillance Frequency</InputLabel>
+                      <Select
+                        disabled={disabled}
+                        required
+                        fullWidth
+                        labelId="activity"
+                        label="Activity Surveillance Frequency"
+                        id="activity"
+                        value={getMetadataValue(material, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")}
+                        onChange={this.handleActivitySurveillanceFrequencyChange}
+                      >
+                        {surveillanceFrequency.map((form) => {
+                          const t = form.split(',');
+                          if (t.length === 2) {
+                            return (
+                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
+                            )
+                          }
+                        })}
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+          <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, width: '100%'}}>
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <input
+                    disabled={disabled}
+                    accept="image/png, image/jpeg, image/svg+xml"
+                    id="load-material-image"
+                    style={{display: 'none',}}
+                    onChange={this.handleMaterialImageUpload}
+                    type="file"
+                  />
+                  <HtmlTooltip
+                    placement={'left'}
+                    title={
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_IMAGE, "")} />
+                    }
+                  >
+                    <label htmlFor="load-material-image">
+                      <Avatar variant="rounded" sx={{ width: "100%", height: 300, border: "5px dashed grey" }} src={image.url}>
+                        {image.url === "" && <ImageIcon/>}
+                      </Avatar>
+                    </label>
+                  </HtmlTooltip>
+                </Grid>
+                <Grid item xs={8}>
+                  <input
+                    disabled={disabled}
+                    accept="application/x-pdf"
+                    id="load-material-doc"
+                    style={{display: 'none',}}
+                    onChange={this.handleMaterialDocumentUpload}
+                    type="file"
+                  />
+                  <Box sx={{display: 'flex'}}>
+                    <HtmlTooltip
+                      placement={'left'}
+                      title={
+                        <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_DOCUMENTS, "")} />
+                      }
+                    >
+                      <label htmlFor="load-material-doc">
+                        {<ImageIcon sx={{width: 32, height: 32}}/>}
+                      </label>
+                    </HtmlTooltip>
+                    {/*<iframe width={"100%"} height={"400px"} src={documentPdf.hasOwnProperty("file") ? documentPdf.url : ""} />*/}
+                    <PdfViewer height={"400px"} source={documentPdf.file === "" ? BLANK_PDF : documentPdf.url } />
+                  </Box>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </div>
+      </Box>
+    );
+  }
+}
+
+MaterialMetadata.defaultProps = {
+  onChange: (msg) => {
+  },
+};
+
+export default MaterialMetadata;

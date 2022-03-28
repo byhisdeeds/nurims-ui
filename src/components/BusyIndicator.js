@@ -3,32 +3,21 @@ import PacmanLoader from "react-spinners/PacmanLoader";
 import BeatLoader from "react-spinners/BeatLoader";
 import ClockLoader from "react-spinners/ClockLoader";
 import Backdrop from "@mui/material/Backdrop";
+import {PulseLoader, RingLoader} from "react-spinners";
 // https://www.davidhu.io/react-spinners/
 
-function BusyIndicator({ loader = 'clock', backdropLeft= 400, size = 50, open = false }) {
+function BusyIndicator({ loader = 'clock', size = 50, open = false }) {
   return (
-    <Backdrop style={{zIndex:1000, left:backdropLeft, color:'var(--backdropColor)'}} open={open}>
-      { loader === 'pacman' &&
-        <PacmanLoader
+    <Backdrop style={{zIndex:10000}} open={open}>
+      { loader === 'pulse' &&
+        <PulseLoader
           css={{
             display: 'block',
             margin: '0 auto',
-            borderColor: 'red',
+            borderColor: 'inherit',
           }}
           size={size}
-          color={'var(--busyIndicatorColor)'}
-          loading={open}
-        />
-      }
-      { loader === 'beat' &&
-        <BeatLoader
-          css={{
-            display: 'block',
-            margin: '0 auto',
-            borderColor: 'red',
-          }}
-          size={size}
-          color={'var(--busyIndicatorColor)'}
+          color={'#e3e3e3'}
           loading={open}
         />
       }
@@ -37,10 +26,22 @@ function BusyIndicator({ loader = 'clock', backdropLeft= 400, size = 50, open = 
           css={{
             display: 'block',
             margin: '0 auto',
-            borderColor: 'red',
+            borderColor: 'inherit',
           }}
           size={size}
-          color={'var(--busyIndicatorColor)'}
+          color={'#abff9e'}
+          loading={open}
+        />
+      }
+      { loader === 'ring' &&
+        <RingLoader
+          css={{
+            display: 'block',
+            margin: '0 auto',
+            borderColor: 'inherit',
+          }}
+          size={size}
+          color={'#2f2f27'}
           loading={open}
         />
       }

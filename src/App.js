@@ -1,35 +1,54 @@
-import React, { Suspense, lazy } from 'react';
+import React, {Suspense, lazy} from 'react';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { useAuth0, withAuthenticationRequired} from '@auth0/auth0-react'
-import 'react-json-pretty/themes/monikai.css';
-import {Box, IconButton, Toolbar, Tooltip, Typography} from "@mui/material";
+import {withAuthenticationRequired} from '@auth0/auth0-react'
+import { withAuth0 } from '@auth0/auth0-react';
+// import 'react-json-pretty/themes/monikai.css';
+import {
+  Box,
+  IconButton,
+  Toolbar,
+  Tooltip,
+  Typography
+} from "@mui/material";
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountMenu from "./user/AccountMenu";
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import MenuDrawer from "./MenuDrawer";
-import LazyLoadingIndicator from './components/LazyLoadingIndicator';
-import { darkTheme, lightTheme } from "./theme";
-import { ThemeProvider } from "@mui/material/styles";
-import { MenuData } from "./menudata";
-import Settings from "./pages/settings/Settings";
+import {darkTheme, lightTheme} from "./theme";
+import {ThemeProvider} from "@mui/material/styles";
+import {MenuData} from "./menudata";
 import SelectOrganisation from "./components/SelectOrganisation";
 import {NetworkCheck} from "@mui/icons-material";
 import metadata from './metadata.json';
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import BusyIndicator from "./components/BusyIndicator";
+import "./App.css"
+import {grey} from "@mui/material/colors";
+import {setPropertyValue} from "./utils/PropertyUtils";
+import {CMD_GET_SYSTEM_PROPERTIES, CMD_SET_ORG_DB, CMD_SET_SYSTEM_PROPERTIES} from "./utils/constants";
 
 const {v4: uuid} = require('uuid');
-const Constants = require('./constants');
-// const MenuData = require('./menudata');
+const Constants = require('./utils/constants');
 
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
+const Settings = lazy(() => import('./pages/settings/Settings'));
+const AddEditPersonnel = lazy(() => import('./pages/personnel/AddEditPersonnel'));
+const UpdateMonitoringStatus = lazy(() => import('./pages/personnel/UpdateMonitoringStatus'));
+const ViewPersonnelRecords = lazy(() => import('./pages/personnel/ViewPersonnelRecords'));
+const AddDosimetryMeasurement = lazy(() => import('./pages/radiationprotection/AddDosimetryMeasurement'));
+const Manufacturer = lazy(() => import('./pages/controlledmaterials/Manufacturer'));
+const Storage = lazy(() => import('./pages/controlledmaterials/Storage'));
+const Material = lazy(() => import('./pages/controlledmaterials/Material'));
+const ViewMaterialsList = lazy(() => import('./pages/controlledmaterials/ViewMaterialsList'));
 
 const drawerWidth = 300;
 
-const MODULE = "APP";
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
+})(({theme, open}) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
@@ -45,165 +64,334 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const organisation =
-  {
-    "name": "",
-    "authorized_module_level": "",
-    "role": ""
+const StyledBox = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
+}));
+
+const Puller = styled(Box)(({ theme }) => ({
+  width: 30,
+  height: 6,
+  backgroundColor: theme.palette.mode === 'light' ? grey[300] : grey[900],
+  borderRadius: 3,
+  position: 'absolute',
+  top: 8,
+  left: 'calc(50% - 15px)',
+}));
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      actionid: '',
+      open: true,
+      theme: localStorage.getItem("theme") || "light",
+      menuData: [],
+      org: {name: "", authorized_module_level: "", role: ""},
+      ready: false,
+      busy: 0,
+    };
+    this.properties = [];
+    this.menuTitle = "";
+    this.ws = null;
+    this.mounted = false;
+    this.user = this.props.auth0.user;
+    this.crefs = {
+      "MyAccount": React.createRef(),
+      "Settings": React.createRef(),
+      "AddEditPersonnel": React.createRef(),
+      "UpdateMonitoringStatus": React.createRef(),
+      "ViewPersonnelRecords": React.createRef(),
+      "AddDosimetryMeasurement": React.createRef(),
+      "Manufacturer": React.createRef(),
+      "Storage": React.createRef(),
+      "Material": React.createRef(),
+      "ViewMaterialsList": React.createRef(),
+    };
   }
 
 
-const App = () => {
-  const { user } = useAuth0()
-  const [open, setOpen] = React.useState(true);
-  const [actionid, setActionid] = React.useState("");
-  const [theme, setTheme] = React.useState("light");
-  const [menuData, setMenuData] = React.useState([]);
-  const [org, setOrg] = React.useState(organisation);
-  const [ready, setReady] = React.useState(false);
-  const [wsock, setWsock] = React.useState(null);
-  const [mounted, setMounted] = React.useState(false);
-  const [crefs, setCrefs] = React.useState({
-    "MyAccount": React.createRef(),
-    "Settings": React.createRef()
-  });
+  componentDidMount() {
+    this.mounted = true;
+    // Everything here is fired on component mount.
+    this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}:5000/nurimsws`);
+    this.ws.onopen = (event) => {
+      console.log('websocket connection established.');
+      this.setState({ ready: true });
+      // load organisation database on server
+      this.send({
+        cmd: CMD_SET_ORG_DB,
+        org: this.state.org,
+      })
+    };
+    this.ws.onerror = (error) => {
+      console.log(`websocket error - ${JSON.stringify(error)}`);
+      this.setState({ ready: false });
+    };
+    this.ws.onclose = (event) => {
+      console.log('websocket connection closed.');
+      if (this.mounted) {
+        this.setState({ ready: false, busy: 0 });
+      }
+    };
+    this.ws.onmessage = (event) => {
+      // console.log("RESPONSE >>>", event.data)
+      const data = JSON.parse(event.data);
+      // console.log("RESPONSE-DATA >>>", data)
+      if (data.hasOwnProperty('module')) {
+        for (const [k, v] of Object.entries(this.crefs)) {
+          if (k === data.module) {
+            if (v.current) {
+              v.current.ws_message(data)
+            }
+          }
+        }
+      } else if (data.cmd === CMD_SET_ORG_DB) {
+        this.setState({ org: data.org });
+      } else if (data.cmd === CMD_GET_SYSTEM_PROPERTIES) {
+        if (data.hasOwnProperty("response")) {
+          for (const property of data.response.properties) {
+            setPropertyValue(this.properties, property.name, property.value);
+          }
+        }
+      } else if (data.cmd === CMD_SET_SYSTEM_PROPERTIES) {
+        if (data.hasOwnProperty("response")) {
+          const property = data.response.property;
+          setPropertyValue(this.properties, property.name, property.value);
+        }
+      }
+      this.setState({ busy: this.state.busy - 1 });
+    };
+  }
 
-  const handleMenuAction = (e) => {
-    // console.log("menu action->", e.target.id)
-    // console.log("menu action dataset->", e)
-    // console.log("+++", typeof e)
-    if (typeof e === "object") {
-      setActionid(e.target.id)
-    } else if (typeof e === "string") {
-      if (e === 'set-light-theme') {
-        setTheme('light')
-      } else if (e === 'set-dark-theme') {
-        setTheme('dark')
-      } else {
-        setActionid(e)
+  componentWillUnmount() {
+    this.mounted = false;
+    if (this.state.ready) {
+      this.ws.close();
+    }
+  }
+
+  send = (msg) => {
+    if (this.ws && this.ws.readyState === 1) {
+      this.ws.send(JSON.stringify({
+        uuid: uuid(),
+        ...msg
+      }));
+      // this.setState({ busy: this.state.busy + 1 });
+      this.setState(pstate => {
+        return { busy: pstate.busy + 1}
+      });
+    }
+  };
+
+  handleMenuAction = (link, title) => {
+    // console.log("menu action link, title->", link, title)
+    // console.log("+++ typeof link, typeof title", typeof link, typeof title)
+    if (link && typeof link === "object") {
+      this.menuTitle = link.target.dataset.title ? link.target.dataset.title : "";
+      this.setState({ actionid: link.target.id });
+    } else if (link && typeof link === "string") {
+      if (link === 'set-light-theme') {
+        this.setState({ theme: 'light' });
+        localStorage.setItem("theme", 'light');
+      } else if (link === 'set-dark-theme') {
+        this.setState({ theme: 'dark' });
+        localStorage.setItem("theme", 'dark');
+      } else if (link && title) {
+        // console.log(">> link, title", link, title)
+        this.menuTitle = title ? title : "";
+        this.setState({ actionid: link });
       }
     }
   };
 
-  const toggleMenuDrawer = () => {
-    console.log("OPEN=", open)
-    setOpen(!open);
+  toggleMenuDrawer = () => {
+    this.setState({ open: !this.state.open });
   };
 
-  const handleOrganisationSelected = (_org) => {
-    if (typeof org === 'object') {
-      setMenuData(MenuData)
-      setOrg(_org)
-      // load server db with organisation database
-      send({
-        cmd: 'set_org_db',
-        org: _org.name,
+  handleOrganisationSelected = (_org) => {
+    if (typeof _org === 'object') {
+      this.setState({ menuData: MenuData, org: _org });
+      // load organisation database on server
+      this.send({
+        cmd: CMD_SET_ORG_DB,
+        org: _org,
+      })
+      // load system properties
+      this.send({
+        cmd: CMD_GET_SYSTEM_PROPERTIES,
       })
     }
   };
 
-  // Similar to componentDidMount/componentDidUpdate and componentWillUnmount
-  React.useEffect(() => {
-    setMounted(true);
-    // Everything here is fired on component mount.
-    const ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}:5000/nurimsws`);
-    ws.onopen = (event) => {
-      console.log('websocket connection established.');
-      setReady(true);
-    };
-    ws.onerror = (error) => {
-      console.log(`websocket error - ${error}`);
-      setReady(false);
-    };
-    ws.onclose = (event) => {
-      console.log('websocket connection closed.');
-      if (mounted) {
-        setReady(false);
-      }
-    };
-    ws.onmessage = (event) => {
-      // console.log("RESPONSE >>>", event.data)
-      let data = JSON.parse(event.data);
-      // console.log("RESPONSE-DATA >>>", data)
-      for (const [k, v] of Object.entries(crefs)) {
-        if (k === data.module) {
-          if (v.current) {
-            v.current.ws_message(data)
-          }
-        }
-      }
-    };
-    setWsock(ws)
-    return () => {
-      // Everything here is fired on component unmount.
-      setMounted(false);
-    }
-  }, [])
-
-  const send = (msg) => {
-    if (wsock && wsock.readyState === 1) {
-      wsock.send(JSON.stringify({
-        uuid: uuid(),
-        module: MODULE,
-        ...msg
-      }));
-    }
-  };
-
-  return (
-    <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              onClick={toggleMenuDrawer}
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              NURIMS
-            </Typography>
-            <Typography variant="h6" component="div">
-              Organisation: {org.name.toUpperCase()}
-            </Typography>
-            <AccountMenu user={user} onClick={handleMenuAction}/>
-            <Tooltip title="Network connection to system server">
-              <NetworkCheck sx={{ color: ready ? '#4CAF50' : '#F44336', paddingLeft: '10px', marginLeft: '10px', width: 32, height: 32 }} />
-            </Tooltip>
-          </Toolbar>
-        </AppBar>
-        {organisation.name === '' && <SelectOrganisation open={true} user={user} onSelect={handleOrganisationSelected}/>}
-        <MenuDrawer open={open} onClick={handleMenuAction} menuItems={menuData} user={user} organisation={org}>
-          <Suspense fallback={<LazyLoadingIndicator />}>
-            { actionid === Constants.MY_ACCOUNT && <MyAccount ref={crefs["MyAccount"]} user={user} send={send}/> }
-            { actionid === Constants.SETTINGS && <Settings ref={crefs["Settings"]} theme={theme} user={user} onClick={handleMenuAction} send={{send}}/> }
-            <Typography paragraph>
-              {actionid}
-              PARAGRAPH 1 ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-              tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-              enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-              imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-              Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-              Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-              adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-              nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-              leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-              feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-              consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-              sapien faucibus et molestie ac.
-            </Typography>
-          </Suspense>
-        </MenuDrawer>
-      </Box>
-    </ThemeProvider>
-  )
+  render() {
+    const {theme, org, ready, menuData, actionid, open, busy} = this.state;
+    return (
+      <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+        <Box sx={{flexGrow: 1}}>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            theme={'dark'}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+          <AppBar position="static">
+            <Toolbar>
+              <IconButton
+                onClick={this.toggleMenuDrawer}
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{mr: 2}}
+              >
+                <MenuIcon/>
+              </IconButton>
+              <Tooltip
+                title={`Build ${metadata.buildMajor}.${metadata.buildMinor}.${metadata.buildRevision} ${metadata.buildTag}`}
+                placement={"bottom-start"}
+                arrow
+              >
+                <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                  NURIMS
+                </Typography>
+              </Tooltip>
+              <Typography variant="h6" component="div">
+                Organisation: {org.name.toUpperCase()}
+              </Typography>
+              <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
+              <Tooltip title="Network connection to system server">
+                <NetworkCheck sx={{
+                  color: ready ? '#4CAF50' : '#F44336',
+                  paddingLeft: '10px',
+                  marginLeft: '10px',
+                  width: 32,
+                  height: 32
+                }}/>
+              </Tooltip>
+            </Toolbar>
+          </AppBar>
+          {org.name === '' && <SelectOrganisation open={true} user={this.user} onSelect={this.handleOrganisationSelected}/>}
+          <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user} organisation={org}>
+            <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
+              <Box sx={{ p: 3 }}>
+                <BusyIndicator open={busy>0} loader={"pulse"} size={40}/>
+                {actionid === Constants.MY_ACCOUNT &&
+                <MyAccount
+                  ref={this.crefs["MyAccount"]}
+                  title={this.menuTitle}
+                  user={this.user}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.SETTINGS &&
+                <Settings
+                  ref={this.crefs["Settings"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.ADD_EDIT_PERSONNEL &&
+                <AddEditPersonnel
+                  ref={this.crefs["AddEditPersonnel"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.ADD_DOSIMETRY_MEASUREMENT &&
+                <AddDosimetryMeasurement
+                  ref={this.crefs["AddDosimetryMeasurement"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.UPDATE_MONITORING_STATUS &&
+                <UpdateMonitoringStatus
+                  ref={this.crefs["UpdateMonitoringStatus"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.VIEW_PERSONNEL_RECORDS &&
+                <ViewPersonnelRecords
+                  ref={this.crefs["ViewPersonnelRecords"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.REGISTER_CONTROLLED_MATERIAL_MANUFACTURER &&
+                <Manufacturer
+                  ref={this.crefs["Manufacturer"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION &&
+                <Storage
+                  ref={this.crefs["Storage"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.REGISTER_CONTROLLED_MATERIAL &&
+                <Material
+                  ref={this.crefs["Material"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.VIEW_CONTROLLED_MATERIALS_LIST &&
+                <ViewMaterialsList
+                  ref={this.crefs["ViewMaterialsList"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                <Typography paragraph>
+                  {actionid}
+                </Typography>
+              </Box>
+            </Suspense>
+          </MenuDrawer>
+        </Box>
+      </ThemeProvider>
+    )
+  }
 }
 
-export default withAuthenticationRequired(App, {
-  onRedirecting: () => <div> loading ...</div>,
-});
+// export default App
+export default withAuth0(withAuthenticationRequired(App, {
+  onRedirecting: () => <BusyIndicator open={true} loader={"ring"}/>,
+}));

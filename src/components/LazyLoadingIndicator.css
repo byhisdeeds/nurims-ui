@@ -1,8 +1,9 @@
 .lazy-container{
   text-align: center;
   width: 100%;
-  background-color: var(--backgroundColor);
+  background-color: rgba(61, 61, 61, 0.6);
   overflow: hidden;
+  height: calc(100vh - 64px)
 }
 
 .lazy-box:nth-child(2n-1){

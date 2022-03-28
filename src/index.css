@@ -1,4 +1,6 @@
 :root {
+
+
   --signageTextColor: rgb(181, 132, 59);
   --placeholderColor: rgb(255, 255, 255);
   --borderColor: rgba(75, 75, 75, 1);
@@ -81,8 +83,8 @@
 }
 
 @font-face {
-  font-family: 'rither';
-  src: local('Rither'), url(./fonts/Rither.ttf) format('truetype');
+  font-family: 'robotoslabregular';
+  src: local('RobotoSlabRegular'), url(./fonts/RobotoSlabRegular.ttf) format('truetype');
 }
 
 @font-face {
@@ -112,4 +114,9 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
 }

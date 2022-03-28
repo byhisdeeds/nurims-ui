@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {styled} from '@mui/material/styles';
-// import {makeStyles} from '@mui/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -9,23 +8,6 @@ import Divider from '@mui/material/Divider';
 import AppMenuItem from "./AppMenuItem";
 
 const drawerWidth = 300;
-
-// const useStyles = makeStyles(theme =>
-//   createStyles({
-//     appMenu: {
-//       width: '100%',
-//     },
-//     navList: {
-//       width: drawerWidth,
-//     },
-//     menuItem: {
-//       width: drawerWidth,
-//     },
-//     menuItemIcon: {
-//       color: '#97c05c',
-//     },
-//   }),
-// )
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -68,28 +50,24 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function MenuDrawer(props) {
-  // const classes = useStyles()
-
-  // const toggleSubMenu = () => {
-  //   setOpen(!open);
-  // };
-  //
-  // const handleMenuClose = () => {
-  //   setOpen(false);
-  // };
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <Drawer variant="permanent" open={props.open} style={{top: 64}}>
+      <Drawer variant="permanent" open={props.open} style={{top: 64, overflowY: 'auto'}}>
         <List component="nav" disablePadding>
           {props.menuItems.map((item, index) => (
-            <AppMenuItem {...item} key={index} user={props.user} organisation={props.organisation} onClick={props.onClick} />
+            <AppMenuItem
+              {...item}
+              key={index}
+              user={props.user}
+              organisation={props.organisation}
+              onClick={props.onClick}
+            />
           ))}
         </List>
         <Divider />
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, }}>
         {props.children}
       </Box>
     </Box>

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -11,7 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 export default function SelectOrganisation(props) {
   const [open, setOpen] = React.useState(props.open);
-  const [org, setOrg] = React.useState("");
+  const [org, setOrg] = React.useState({name: "", authorized_module_level: "", role: ""});
 
   const userOrganisations = (user) => {
     for (const [key, value] of Object.entries(user)) {
