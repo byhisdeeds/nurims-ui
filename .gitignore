@@ -2,7 +2,7 @@
 
 # IDE
 /.idea/
-nurims.iml
+nurims-ui.iml
 
 # dependencies
 /node_modules
