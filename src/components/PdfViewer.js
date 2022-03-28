@@ -10,7 +10,7 @@ const PdfViewer = (props) => {
   const { width = '100%', height = '400px', marginLeft = 'auto', marginRight = 'auto', source } = props;
 
   return (
-    <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.13.216/build/pdf.worker.js">
+    <Worker workerUrl="/pdf.worker.js">
       <div
         style={{
           height: height,

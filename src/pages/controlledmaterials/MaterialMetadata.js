@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import {Card, CardContent, FormControl, Grid, InputLabel, Link, Select, TableCell, Typography} from "@mui/material";
+import {Card, CardContent, FormControl, Grid, InputLabel, Select, TableCell, Typography} from "@mui/material";
 import {DataGrid} from '@mui/x-data-grid';
 import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
 import MenuItem from "@mui/material/MenuItem";
@@ -54,7 +54,7 @@ import {
   NURIMS_DESCRIPTION,
   NURIMS_MATERIAL_REGISTRATION_DATE,
   NURIMS_MATERIAL_MANUFACTURER,
-  NURIMS_MATERIAL_STORAGE_LOCATION,
+  NURIMS_MATERIAL_STORAGE_LOCATION_RECORD,
   NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY,
   NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY,
   NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, NURIMS_MATERIAL_NUCLIDES, NURIMS_MATERIAL_QUANTITY_UNITS
@@ -230,10 +230,10 @@ class MaterialMetadata extends Component {
     this.props.onChange(true);
   }
 
-  handleStorageLocationChange = (e) => {
+  handleStorageLocationRecordChange = (e) => {
     const material = this.state.material;
     material["changed"] = true;
-    setMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION, e.target.value);
+    setMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, e.target.value);
     this.setState({material: material})
     // signal to parent that details have changed
     this.props.onChange(true);
@@ -674,7 +674,7 @@ class MaterialMetadata extends Component {
                   <HtmlTooltip
                     placement={'left'}
                     title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_STORAGE_LOCATION, "")} />
+                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")} />
                     }
                   >
                     <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
@@ -686,8 +686,8 @@ class MaterialMetadata extends Component {
                         labelId="storage"
                         label="Storage Location"
                         id="storage"
-                        value={getMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION, "")}
-                        onChange={this.handleStorageLocationChange}
+                        value={getMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")}
+                        onChange={this.handleStorageLocationRecordChange}
                       >
                         {this.storageLocations.map((l) => {
                           return (

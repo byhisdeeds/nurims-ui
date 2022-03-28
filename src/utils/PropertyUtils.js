@@ -15,7 +15,6 @@ export function getPropertyValue(properties, key, missingValue) {
 export function setPropertyValue(properties, key, value) {
   if (Array.isArray(properties)) {
     for (const property of properties) {
-      console.log("---", property)
       if (property.hasOwnProperty("name") && property.name === key) {
         property["value"] = value;
         return;

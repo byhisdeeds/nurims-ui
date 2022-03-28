@@ -234,7 +234,7 @@ class Material extends Component {
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
-          <Grid item xs={5} style={{border: '1px solid red'}}>
+          <Grid item xs={5}>
             <MaterialList
               ref={this.mlref}
               theme={this.props.theme}

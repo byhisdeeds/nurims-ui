@@ -56,6 +56,7 @@ module.exports = Object.freeze({
   NURIMS_MATERIAL_REGISTRATION_DATE: 'nurims.material.registrationdate',
   NURIMS_MATERIAL_MANUFACTURER: 'nurims.material.manufacturer',
   NURIMS_MATERIAL_STORAGE_LOCATION: 'nurims.material.storagelocation',
+  NURIMS_MATERIAL_STORAGE_LOCATION_RECORD: 'nurims.material.storagelocationrecord',
   NURIMS_MATERIAL_STORAGE_LOCATION_MARKERS: 'nurims.material.storagelocationmarkers',
   NURIMS_MATERIAL_STORAGE_IMAGE: 'nurims.material.storageimage',
   NURIMS_MATERIAL_STORAGE_MAP_IMAGE: 'nurims.material.storagemapimage',

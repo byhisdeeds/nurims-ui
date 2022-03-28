@@ -5,7 +5,7 @@ export function getMetadataValue(obj, key, missingValue) {
       for (const m of metadata) {
         for (const [k, v] of Object.entries(m)) {
           if (k === key) {
-            return (v.charAt(0) === "[" || v.charAt(0) === "{") ? JSON.parse(v.replaceAll("'", "\"")) : v;
+            return (typeof v === "number") ? v : (v.charAt(0) === "[" || v.charAt(0) === "{") ? JSON.parse(v.replaceAll("'", "\"")) : v;
           }
         }
       }
