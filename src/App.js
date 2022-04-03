@@ -42,6 +42,7 @@ const Manufacturer = lazy(() => import('./pages/controlledmaterials/Manufacturer
 const Storage = lazy(() => import('./pages/controlledmaterials/Storage'));
 const Material = lazy(() => import('./pages/controlledmaterials/Material'));
 const ViewMaterialsList = lazy(() => import('./pages/controlledmaterials/ViewMaterialsList'));
+const SSC = lazy(() => import('./pages/maintenance/SSC'));
 
 const drawerWidth = 300;
 
@@ -106,6 +107,7 @@ class App extends React.Component {
       "Storage": React.createRef(),
       "Material": React.createRef(),
       "ViewMaterialsList": React.createRef(),
+      "SSC": React.createRef(),
     };
   }
 
@@ -299,7 +301,7 @@ class App extends React.Component {
                   send={this.send}
                   properties={this.properties}
                 />}
-                {actionid === Constants.ADD_EDIT_PERSONNEL &&
+                {actionid === Constants.HR_ADD_EDIT_PERSONNEL &&
                 <AddEditPersonnel
                   ref={this.crefs["AddEditPersonnel"]}
                   title={this.menuTitle}
@@ -309,7 +311,7 @@ class App extends React.Component {
                   send={this.send}
                   properties={this.properties}
                 />}
-                {actionid === Constants.ADD_DOSIMETRY_MEASUREMENT &&
+                {actionid === Constants.RP_ADD_DOSIMETRY_MEASUREMENT &&
                 <AddDosimetryMeasurement
                   ref={this.crefs["AddDosimetryMeasurement"]}
                   title={this.menuTitle}
@@ -319,7 +321,7 @@ class App extends React.Component {
                   send={this.send}
                   properties={this.properties}
                 />}
-                {actionid === Constants.UPDATE_MONITORING_STATUS &&
+                {actionid === Constants.HR_UPDATE_MONITORING_STATUS &&
                 <UpdateMonitoringStatus
                   ref={this.crefs["UpdateMonitoringStatus"]}
                   title={this.menuTitle}
@@ -329,7 +331,7 @@ class App extends React.Component {
                   send={this.send}
                   properties={this.properties}
                 />}
-                {actionid === Constants.VIEW_PERSONNEL_RECORDS &&
+                {actionid === Constants.HR_VIEW_PERSONNEL_RECORDS &&
                 <ViewPersonnelRecords
                   ref={this.crefs["ViewPersonnelRecords"]}
                   title={this.menuTitle}
@@ -339,7 +341,7 @@ class App extends React.Component {
                   send={this.send}
                   properties={this.properties}
                 />}
-                {actionid === Constants.REGISTER_CONTROLLED_MATERIAL_MANUFACTURER &&
+                {actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER &&
                 <Manufacturer
                   ref={this.crefs["Manufacturer"]}
                   title={this.menuTitle}
@@ -349,7 +351,7 @@ class App extends React.Component {
                   send={this.send}
                   properties={this.properties}
                 />}
-                {actionid === Constants.REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION &&
+                {actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION &&
                 <Storage
                   ref={this.crefs["Storage"]}
                   title={this.menuTitle}
@@ -359,7 +361,7 @@ class App extends React.Component {
                   send={this.send}
                   properties={this.properties}
                 />}
-                {actionid === Constants.REGISTER_CONTROLLED_MATERIAL &&
+                {actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL &&
                 <Material
                   ref={this.crefs["Material"]}
                   title={this.menuTitle}
@@ -369,9 +371,19 @@ class App extends React.Component {
                   send={this.send}
                   properties={this.properties}
                 />}
-                {actionid === Constants.VIEW_CONTROLLED_MATERIALS_LIST &&
+                {actionid === Constants.CM_VIEW_CONTROLLED_MATERIALS_LIST &&
                 <ViewMaterialsList
                   ref={this.crefs["ViewMaterialsList"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.SSC_ADD_EDIT_SSC &&
+                <SSC
+                  ref={this.crefs["SSC"]}
                   title={this.menuTitle}
                   theme={theme}
                   user={this.user}

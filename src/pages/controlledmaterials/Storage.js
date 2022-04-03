@@ -17,7 +17,7 @@ import StorageList from "./StorageList";
 import StorageMetadata from "./StorageMetadata";
 import AddIcon from "@mui/icons-material/Add";
 import {
-  CMD_GET_GLOSSARY_TERMS,
+  CMD_GET_GLOSSARY_TERMS, CMD_GET_STORAGE_LOCATION_RECORDS,
   CMD_UPDATE_STORAGE_LOCATION_RECORD,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
@@ -104,7 +104,7 @@ class Storage extends Component {
 
   onRefreshStoragesList = () => {
     this.props.send({
-      cmd: 'get_storage_records',
+      cmd: CMD_GET_STORAGE_LOCATION_RECORDS,
       module: MODULE,
     });
   }
@@ -114,7 +114,7 @@ class Storage extends Component {
     if (message.hasOwnProperty("response")) {
       const response = message.response;
       if (response.hasOwnProperty("status") && response.status === 0) {
-        if (message.hasOwnProperty("cmd") && message.cmd === "get_storage_records") {
+        if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_STORAGE_LOCATION_RECORDS) {
           if (this.slref.current) {
             this.slref.current.setStorageLocations(response.storage_locations)
           }

@@ -17,7 +17,7 @@ import {getPropertyValue} from "../../utils/PropertyUtils";
 import {
   NURIMS_ENTITY_ASSIGNED_ROLE, NURIMS_ENTITY_AVATAR,
   NURIMS_ENTITY_CONTACT, NURIMS_ENTITY_DATE_OF_BIRTH, NURIMS_ENTITY_NATIONAL_ID, NURIMS_ENTITY_SEX,
-  NURIMS_TITLE, NURIMS_WITHDRAWN, NURIMS_ENTITY_WORK_DETAILS, NURIMS_ENTITY_DOSE_PROVIDER_ID,
+  NURIMS_TITLE, NURIMS_WITHDRAWN, NURIMS_ENTITY_WORK_DETAILS, NURIMS_ENTITY_DOSE_PROVIDER_ID, BLANK_IMAGE_OBJECT,
 } from "../../utils/constants";
 
 class PersonMetadata extends Component {
@@ -117,7 +117,7 @@ class PersonMetadata extends Component {
       // console.log(">>>>>", event.target.result);
       const person = that.person;
       person["changed"] = true;
-      setMetadataValue(person, NURIMS_ENTITY_AVATAR, event.target.result);
+      setMetadataValue(person, NURIMS_ENTITY_AVATAR, {file: selectedFile.name, url: event.target.result});
       that.forceUpdate();
       // signal to parent that metadata has changed
       that.props.onChange(true);
@@ -128,7 +128,7 @@ class PersonMetadata extends Component {
     const {properties} = this.state;
     const person = this.person;
     const assignedRole = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
-    const avatar = getMetadataValue(person, NURIMS_ENTITY_AVATAR, "");
+    const avatar = getMetadataValue(person, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT);
     return (
       <Box
         component="form"
@@ -150,8 +150,8 @@ class PersonMetadata extends Component {
           <Card variant="outlined" sx={{ mb:1, ml:1, width: '25ch' }}>
             <CardContent>
               <label htmlFor="load-avatar">
-                <Avatar sx={{ width: 128, height: 128 }} src={avatar}>
-                  {avatar === "" && <PersonIcon/>}
+                <Avatar sx={{ width: 128, height: 128 }} src={avatar.url}>
+                  {avatar.url === "" && <PersonIcon/>}
                 </Avatar>
               </label>
             </CardContent>

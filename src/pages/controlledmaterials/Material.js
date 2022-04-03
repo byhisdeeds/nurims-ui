@@ -20,7 +20,7 @@ import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_MANUFACTURER_RECORDS,
   CMD_GET_MATERIAL_RECORDS,
-  CMD_GET_STORAGE_RECORDS,
+  CMD_GET_STORAGE_LOCATION_RECORDS,
   CMD_SAVE_MATERIAL_RECORD,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
@@ -107,7 +107,7 @@ class Material extends Component {
       module: MODULE,
     });
     this.props.send({
-      cmd: CMD_GET_STORAGE_RECORDS,
+      cmd: CMD_GET_STORAGE_LOCATION_RECORDS,
       module: MODULE,
     });
     this.onRefreshMaterialsList();
@@ -133,7 +133,7 @@ class Material extends Component {
           if (this.mlref.current) {
             this.mmref.current.setManufacturers(response.manufacturers)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_STORAGE_RECORDS) {
+        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_STORAGE_LOCATION_RECORDS) {
           if (this.mlref.current) {
             this.mmref.current.setStorageLocations(response.storage_locations)
           }

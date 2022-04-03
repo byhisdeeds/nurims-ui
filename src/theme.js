@@ -66,6 +66,7 @@ export const lightTheme = createTheme({
       black: '#000',
       white: '#fff'
     },
+    divider: "rgba(255, 255, 255, 0.12)",
     tonalOffset: 0.2,
   },
   typography: {
@@ -170,6 +171,9 @@ export const lightTheme = createTheme({
       textTransform: "uppercase"
     }
   },
+  shape: {
+    borderRadius: 4,
+  },
 });
 
 export const darkTheme = createTheme({
@@ -238,7 +242,11 @@ export const darkTheme = createTheme({
       black: '#000',
       white: '#fff'
     },
+    divider: "rgba(255, 255, 255, 0.12)",
     tonalOffset: 0.2,
+  },
+  shape: {
+    borderRadius: 4,
   },
   typography: {
     htmlFontSize: 16,

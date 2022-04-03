@@ -12,9 +12,8 @@ import {
   Switch
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import {MapContainer, MapConsumer, Marker, ImageOverlay} from 'react-leaflet';
+import {MapContainer, Marker, ImageOverlay} from 'react-leaflet';
 import L from 'leaflet';
-import {Simple} from "leaflet/src/geo/crs/CRS.Simple";
 import defaultMarkerIcon from 'leaflet/dist/images/marker-icon.png';
 import MouseCoordinates from "../../components/MouseCoordinates";
 import LocationFinder from "../../components/LocationFinder";
@@ -31,7 +30,7 @@ import {
   NURIMS_DESCRIPTION,
   NURIMS_TITLE,
   NURIMS_MATERIAL_STORAGE_LOCATION_MARKERS,
-  NURIMS_MATERIAL_STORAGE_IMAGE, NURIMS_MATERIAL_STORAGE_MAP_IMAGE,
+  NURIMS_MATERIAL_STORAGE_IMAGE, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT,
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
@@ -148,7 +147,8 @@ class StorageMetadata extends Component {
       // console.log(">>>>>", event.target.result);
       const storage = that.state.storage;
       storage["changed"] = true;
-      setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, event.target.result);
+      setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, {file: selectedFile.name, url: event.target.result});
+      // setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, event.target.result);
       that.forceUpdate();
       // signal to parent that metadata has changed
       that.props.onChange(true);
@@ -169,7 +169,8 @@ class StorageMetadata extends Component {
       // console.log(">>>>>", event.target.result);
       const storage = that.state.storage;
       storage["changed"] = true;
-      setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, event.target.result);
+      setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, {file: selectedFile.name, url: event.target.result});
+      // setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, event.target.result);
       that.forceUpdate();
       // signal to parent that metadata has changed
       that.props.onChange(true);
@@ -188,8 +189,8 @@ class StorageMetadata extends Component {
                                                                                                     northing: 0,
                                                                                                     marker: defaultMarkerIcon});
     const markers = getPropertyValue(properties, NURIMS_MATERIAL_STORAGE_LOCATION_MARKERS, "").split('|');
-    const storageImage = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, "");
-    const storageMapImage = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, "");
+    const storageImage = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, BLANK_IMAGE_OBJECT);
+    const storageMapImage = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, BLANK_IMAGE_OBJECT);
     const storageLocationMarker = storageLocation.marker.split("#");
     const storageMarkerIcon = L.icon({
       iconUrl: storageLocationMarker[0],
@@ -326,8 +327,8 @@ class StorageMetadata extends Component {
                       <PhotoCamera />
                     </IconButton>
                   </HtmlTooltip>
-                  <Avatar variant={"square"} sx={{ width: 256, height: 256 }} src={storageImage}>
-                    {storageImage === "" && <ImageIcon/>}
+                  <Avatar variant={"square"} sx={{ width: 256, height: 256 }} src={storageImage.url}>
+                    {storageImage.file === "" && <ImageIcon/>}
                   </Avatar>
                 </label>
               </Grid>
@@ -370,7 +371,7 @@ class StorageMetadata extends Component {
                 <Box sx={{width:'100%', height: 400}}>
                   <MapContainer bounds={[[0, 0],[1, 1],]} center={[.5, .5]} scrollWheelZoom={false} style={{width:'100%', height: 400}}>
                     <ImageOverlay
-                      url={storageMapImage === "" ? require("../../components/blank_map_image.png") : storageMapImage}
+                      url={storageMapImage.file === "" ? require("../../components/blank_map_image.png") : storageMapImage.url}
                       bounds={[[0, 0],[1, 1]]}
                     />
                     <div className="leaflet-bottom leaflet-left">

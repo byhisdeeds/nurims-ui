@@ -1,6 +1,8 @@
 import IconPeople from "@mui/icons-material/People";
 import BusinessIcon from '@mui/icons-material/Business';
 import LockIcon from '@mui/icons-material/Lock';
+import EngineeringIcon from '@mui/icons-material/Engineering';
+
 
 export const MenuData = [
   {
@@ -99,17 +101,17 @@ export const MenuData = [
     ],
   },
   {
-    name: 'SSC',
-    link: 'ssc',
-    title: 'Structures, Systems, & Components',
-    tooltip: 'Structures, Systems, & Components',
-    Icon: IconPeople,
+    name: 'Maintenance',
+    link: 'maintenance',
+    title: 'Maintenance',
+    tooltip: 'Maintenance of Structures, Systems, & Components',
+    Icon: EngineeringIcon,
     authmodlevel: 'basic',
     items: [
       {
-        name: '‣ Add',
-        link: 'ssc.add.edit',
-        title: 'Add/Edit Structures, Systems, & Components',
+        name: '‣ Add SSC',
+        link: 'ssc.add.edit.ssc',
+        title: 'Add/Edit Structures, Systems, or Components',
         tooltip: 'Add/Edit organisation staff details including external contractors that interact with the nuclear or radioactive materials and need to be monitored.',
         authmodlevel: 'basic',
       },

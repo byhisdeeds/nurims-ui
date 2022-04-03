@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import {Card, CardContent, FormControl, Grid, InputLabel, Select, TableCell, Typography} from "@mui/material";
-import {DataGrid} from '@mui/x-data-grid';
-import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
+import {Card, CardContent, FormControl, Grid, InputLabel, Select} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -11,34 +9,17 @@ import DateRangePicker from '@mui/lab/DateRangePicker';
 import {
   getMetadataValue,
   setMetadataValue,
-  getDoseRecordMetadataValue,
-  getDoseRecordDosimeterId,
-  setDoseRecordMetadataValue,
-  getDateRangeFromDateString, getDateFromDateString
+  getDateFromDateString
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
-  setPropertyValue
 } from "../../utils/PropertyUtils";
 import Avatar from "@mui/material/Avatar";
-import AddIcon from "@mui/icons-material/Add";
-import TrashIcon from "@mui/icons-material/Delete";
-import {styled} from "@mui/material/styles";
 import ImageIcon from '@mui/icons-material/Image';
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
-import TableContainer from "@mui/material/TableContainer";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableBody from "@mui/material/TableBody";
-import Paper from "@mui/material/Paper";
-import {SelectField} from "../../components/DataGridUtilities";
-import {makeStyles} from "@mui/styles";
-import Button from "@mui/material/Button";
 import EditableTable from "../../components/EditableTable";
 import {toast} from "react-toastify";
-import PersonIcon from "@mui/icons-material/Person";
 import PdfViewer from "../../components/PdfViewer";
 import {
   BLANK_PDF,
@@ -57,7 +38,7 @@ import {
   NURIMS_MATERIAL_STORAGE_LOCATION_RECORD,
   NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY,
   NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY,
-  NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, NURIMS_MATERIAL_NUCLIDES, NURIMS_MATERIAL_QUANTITY_UNITS
+  NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, NURIMS_MATERIAL_NUCLIDES, NURIMS_MATERIAL_QUANTITY_UNITS, BLANK_IMAGE_OBJECT
 } from "../../utils/constants";
 
 class MaterialMetadata extends Component {
@@ -385,7 +366,7 @@ class MaterialMetadata extends Component {
       const material = that.state.material;
       material["changed"] = true;
       // setMetadataValue(material, "nurims.material.image", event.target.result);
-      setMetadataValue(material, "nurims.material.image", {file: selectedFile.name, url: event.target.result});
+      setMetadataValue(material, NURIMS_MATERIAL_IMAGE, {file: selectedFile.name, url: event.target.result});
       that.setState({ material: material })
       that.props.onChange(true);
     };
@@ -402,7 +383,7 @@ class MaterialMetadata extends Component {
     fileReader.onload = function (event) {
       const material = that.state.material;
       material["changed"] = true;
-      setMetadataValue(material, "nurims.material.documents", {file: selectedFile.name, url: event.target.result});
+      setMetadataValue(material, NURIMS_MATERIAL_DOCUMENTS, {file: selectedFile.name, url: event.target.result});
       that.setState({ material: material })
       that.props.onChange(true);
     };
@@ -419,8 +400,8 @@ class MaterialMetadata extends Component {
     const inventoryStatus = getPropertyValue(properties, NURIMS_MATERIAL_INVENTORY_STATUS, "").split('|');
     const physicalForm = getPropertyValue(properties, NURIMS_MATERIAL_PHYSICAL_FORM, "").split('|');
     const surveillanceFrequency = getPropertyValue(properties, NURIMS_SURVEILLANCE_FREQUENCY, "").split('|');
-    const image = getMetadataValue(material, NURIMS_MATERIAL_IMAGE, {file: '', url: ''});
-    const documentPdf = getMetadataValue(material, NURIMS_MATERIAL_DOCUMENTS, {file: '', url: ''});
+    const image = getMetadataValue(material, NURIMS_MATERIAL_IMAGE, BLANK_IMAGE_OBJECT);
+    const documentPdf = getMetadataValue(material, NURIMS_MATERIAL_DOCUMENTS, BLANK_IMAGE_OBJECT);
     return (
       <Box
         component="form"
