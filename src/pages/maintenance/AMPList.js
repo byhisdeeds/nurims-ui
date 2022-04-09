@@ -7,7 +7,7 @@ import {Stack} from "@mui/material";
 import {withTheme} from "@mui/styles";
 import {NURIMS_TITLE} from "../../utils/constants";
 
-class SSCList extends React.Component {
+class AMPList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,7 +31,7 @@ class SSCList extends React.Component {
     if (Array.isArray(sscs)) {
       for (const ssc of sscs) {
         let add_to_list = true;
-        console.log("SSCList.add", ssc)
+        console.log("AMPList.add", ssc)
         if (skipIfSSCInList && skipIfSSCInList === true) {
           for (const row of this.rows) {
             if (row[NURIMS_TITLE] === ssc[NURIMS_TITLE]) {
@@ -63,7 +63,7 @@ class SSCList extends React.Component {
     if (Array.isArray(sscs)) {
       this.rows.length = 0;
       for (const ssc of sscs) {
-        console.log("SSCList.setSSCs", ssc)
+        console.log("AMPList.setSSCs", ssc)
         ssc.changed = false;
         this.rows.push(ssc);
       }
@@ -87,7 +87,7 @@ class SSCList extends React.Component {
         onClick={this.onRowSelected}
         sx={{backgroundColor: bgcolor, color: this.props.theme.palette.text.primary }}
         >
-        {row[NURIMS_TITLE]}
+        Item {row[NURIMS_TITLE]}
       </Box>
     )
   }
@@ -118,9 +118,9 @@ class SSCList extends React.Component {
 
 }
 
-SSCList.defaultProps = {
+AMPList.defaultProps = {
   onRowSelection: (index) => {
   },
 };
 
-export default withTheme(SSCList)
+export default withTheme(AMPList)

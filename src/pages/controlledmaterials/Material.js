@@ -139,7 +139,7 @@ class Material extends Component {
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_MATERIAL_RECORDS) {
           if (this.mlref.current) {
-            this.mlref.current.setMaterials(response.materials)
+            this.mlref.current.setMaterials(response.material)
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_SAVE_MATERIAL_RECORD) {
           toast.success(`Successfully updated material record for ${message[NURIMS_TITLE]}.`);

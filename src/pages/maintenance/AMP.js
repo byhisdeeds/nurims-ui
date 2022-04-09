@@ -8,8 +8,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
-import SSCList from "./SSCList";
-import SSCMetadata from "./SSCMetadata";
+import AMPList from "./AMPList";
+import AMPMetadata from "./AMPMetadata";
 import AddIcon from "@mui/icons-material/Add";
 import {
   CMD_GET_GLOSSARY_TERMS,
@@ -20,9 +20,9 @@ import {
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
 
-const MODULE = "SSC";
+const MODULE = "AMP";
 
-class SSC extends Component {
+class AMP extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,20 +58,21 @@ class SSC extends Component {
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_SSC_RECORD) {
           if (this.listRef.current && this.metadataRef.current) {
+
             const row = this.listRef.current.getSSCs()[this.state.selection];
             const ssc = response.structures_systems_components[0];
             row[NURIMS_TITLE] = ssc[NURIMS_TITLE];
             row[NURIMS_WITHDRAWN] = ssc[NURIMS_WITHDRAWN];
             row.metadata = ssc.metadata;
             this.listRef.current.refresh();
-            this.metadataRef.current.setSSCMetadata(row)
+            this.metadataRef.current.setAMPMetadata(row)
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_GLOSSARY_TERMS) {
           if (this.metadataRef.current) {
             this.metadataRef.current.setGlossaryTerms(response.terms)
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_SSC_RECORD) {
-          toast.success(`Successfully updated SSC record for '${message[NURIMS_TITLE]}'.`);
+          toast.success(`Successfully updated AMP record for '${message[NURIMS_TITLE]}'.`);
         }
       } else {
         toast.error(response.message);
@@ -83,17 +84,17 @@ class SSC extends Component {
     console.log("-- onSSCSelected index --", index)
     if (this.listRef.current) {
       const ssc = this.listRef.current.getSSCs()[index];
-      if (ssc["item_id"] === -1) {
-        this.metadataRef.current.setSSCMetadata(ssc)
-      } else {
-        this.props.send({
-          cmd: CMD_GET_SSC_RECORD,
-          item_id: ssc["item_id"],
-          "include.metadata": "true",
-          module: MODULE,
-        });
-      }
+      this.props.send({
+        cmd: CMD_GET_SSC_RECORD,
+        item_id: ssc["item_id"],
+        "include.metadata": "true",
+        module: MODULE,
+      });
     }
+
+    // if (this.metadataRef.current) {
+    //   this.metadataRef.current.setAMPMetadata(storage)
+    // }
     this.setState({ selection: index })
   }
 
@@ -104,7 +105,6 @@ class SSC extends Component {
       for (const ssc of sscs) {
         console.log(">>>>>", ssc)
         if (ssc.changed) {
-          ssc["changed"] = false
           this.props.send({
             cmd: CMD_UPDATE_SSC_RECORD,
             item_id: ssc.item_id,
@@ -120,7 +120,7 @@ class SSC extends Component {
     this.setState({changed: false})
   }
 
-  onSSCMetadataChanged = (state) => {
+  onAMPMetadataChanged = (state) => {
     this.setState({changed: state});
   }
 
@@ -147,12 +147,12 @@ class SSC extends Component {
   //   }
   // }
 
-  addSSC = () => {
+  addAMP = () => {
     if (this.listRef.current) {
       this.listRef.current.add([{
         "changed": true,
         "item_id": -1,
-        "nurims.title": "New SSC",
+        "nurims.title": "New AMP",
         "nurims.withdrawn": false,
         "metadata": []
       }], false);
@@ -160,7 +160,7 @@ class SSC extends Component {
     }
   }
 
-  removeSSC = () => {
+  removeAMP = () => {
 
   }
 
@@ -173,19 +173,17 @@ class SSC extends Component {
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
           <Grid item xs={3}>
-            <SSCList
+            <AMPList
               ref={this.listRef}
               properties={this.props.properties}
               onRowSelection={this.onSSCSelected}
-              onClick={this.onSSCSelected}
-              // onRefresh={this.onRefreshSscsList}
             />
           </Grid>
           <Grid item xs={9}>
-            <SSCMetadata
+            <AMPMetadata
               ref={this.metadataRef}
               properties={this.props.properties}
-              onChange={this.onSSCMetadataChanged}
+              onChange={this.onAMPMetadataChanged}
             />
           </Grid>
         </Grid>
@@ -194,13 +192,13 @@ class SSC extends Component {
             <SaveIcon sx={{mr: 1}}/>
             Save Changes
           </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addSSC}>
+          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addAMP}>
             <AddIcon sx={{mr: 1}}/>
-            Add SSC
+            Add AMP
           </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeSSC} disabled={selection === -1}>
+          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeAMP} disabled={selection === -1}>
             <RemoveCircleIcon sx={{mr: 1}}/>
-            Remove SSC
+            Remove AMP
           </Fab>
         </Box>
       </React.Fragment>
@@ -208,10 +206,10 @@ class SSC extends Component {
   }
 }
 
-SSC.defaultProps = {
+AMP.defaultProps = {
   send: (msg) => {
   },
   user: {},
 };
 
-export default SSC;
+export default AMP;

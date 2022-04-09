@@ -103,17 +103,65 @@ export const MenuData = [
   {
     name: 'Maintenance',
     link: 'maintenance',
-    title: 'Maintenance',
     tooltip: 'Maintenance of Structures, Systems, & Components',
     Icon: EngineeringIcon,
     authmodlevel: 'basic',
     items: [
       {
-        name: '‣ Add SSC',
-        link: 'ssc.add.edit.ssc',
-        title: 'Add/Edit Structures, Systems, or Components',
-        tooltip: 'Add/Edit organisation staff details including external contractors that interact with the nuclear or radioactive materials and need to be monitored.',
+        name: '‣ SSC\'s',
+        tooltip: 'Structures, systems and components.',
         authmodlevel: 'basic',
+        items: [
+          {
+            name: '   - Add SSC Record',
+            link: 'ssc.add.edit.ssc',
+            title: 'Add/Edit Structures, Systems, and Components',
+            tooltip: 'Add/Edit structures systems and components.',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - View SSC Records',
+            link: 'ssc.view.ssc.records',
+            title: 'View SSC Records',
+            tooltip: 'View structures systems and components records.',
+            authmodlevel: 'basic',
+          },
+        ]
+      },
+      {
+        name: '‣ Aging Management',
+        tooltip: 'Aging management programme (AMP) for Structures, systems and components.',
+        authmodlevel: 'basic',
+        items: [
+          {
+            name: '   - Add SSC AMP Record',
+            link: 'ssc.add.edit.ssc.amp',
+            title: 'Add/Edit SSC Aging Management Programme',
+            tooltip: 'Add or Edit an Aging Management Programme (AMP) for an SSC',
+            authmodlevel: 'basic',
+          },
+        ]
+      },
+      {
+        name: '‣ Reports',
+        tooltip: 'Reports.',
+        authmodlevel: 'basic',
+        items: [
+          {
+            name: '   - Maintenance Schedule',
+            link: 'ssc.generate.maintenance.schedule',
+            title: 'Add/Edit Structures, Systems, and Components',
+            tooltip: 'Add/Edit structures systems and components.',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - AMP Schedule',
+            link: 'ssc.generate.amp.schedule',
+            title: 'Add/Edit Structures, Systems, and Components',
+            tooltip: 'Add/Edit structures systems and components.',
+            authmodlevel: 'basic',
+          },
+        ]
       },
     ],
   },

@@ -19,26 +19,28 @@ import MouseCoordinates from "../../components/MouseCoordinates";
 import LocationFinder from "../../components/LocationFinder";
 import "leaflet/dist/leaflet.css";
 import {
+  getDateFromDateString,
   getMetadataValue,
   setMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
+  getPropertyAsMenuitems,
   getPropertyValue,
 } from "../../utils/PropertyUtils";
 import {
   NURIMS_MATERIAL_STORAGE_LOCATION,
   NURIMS_DESCRIPTION,
   NURIMS_TITLE,
-  NURIMS_MATERIAL_STORAGE_LOCATION_MARKERS,
-  NURIMS_MATERIAL_STORAGE_IMAGE,
-  NURIMS_MATERIAL_STORAGE_MAP_IMAGE,
-  NURIMS_ENTITY_AVATAR,
-  BLANK_IMAGE_OBJECT,
-  NURIMS_MATERIAL_TYPE,
   NURIMS_SSC_TYPE,
   NURIMS_SSC_CLASSIFICATION,
-  NURIMS_MATERIAL_CLASSIFICATION,
-  NURIMS_SSC_SAFETY_FUNCTION, NURIMS_SSC_SAFETY_CATEGORY, NURIMS_SSC_SURVEILLANCE_FREQUENCY,
+  NURIMS_SSC_SAFETY_FUNCTION,
+  NURIMS_SSC_SAFETY_CATEGORY,
+  NURIMS_SSC_SURVEILLANCE_FREQUENCY,
+  NURIMS_SSC_COMMISSIONING_DATE,
+  NURIMS_SSC_ID,
+  NURIMS_ENTITY_DATE_OF_BIRTH,
+  NURIMS_SSC_MAINTAINABILITY,
+  NURIMS_SURVEILLANCE_FREQUENCY,
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
@@ -47,6 +49,8 @@ import ImageIcon from '@mui/icons-material/Image';
 import {toast} from "react-toastify";
 import IconButton from "@mui/material/IconButton";
 import {PhotoCamera} from "@mui/icons-material";
+import {DatePicker, LocalizationProvider} from "@mui/lab";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 
 class SSCMetadata extends Component {
@@ -79,40 +83,23 @@ class SSCMetadata extends Component {
     } else if (e.target.id === "description") {
       ssc["changed"] = true;
       setMetadataValue(ssc, NURIMS_DESCRIPTION, e.target.value)
-    } else if (e.target.id === "easting") {
+    } else if (e.target.id === "ssc-id") {
       ssc["changed"] = true;
-      const coverageLocation = getMetadataValue(ssc, NURIMS_MATERIAL_STORAGE_LOCATION, {});
-      coverageLocation["easting"] = parseFloat(e.target.value);
-      setMetadataValue(ssc, NURIMS_MATERIAL_STORAGE_LOCATION, coverageLocation);
-    } else if (e.target.id === "northing") {
-      ssc["changed"] = true;
-      const coverageLocation = getMetadataValue(ssc, NURIMS_MATERIAL_STORAGE_LOCATION, {});
-      coverageLocation["northing"] = parseFloat(e.target.value);
-      setMetadataValue(ssc, NURIMS_MATERIAL_STORAGE_LOCATION, coverageLocation);
+      setMetadataValue(ssc, NURIMS_SSC_ID, e.target.value);
     }
     this.setState({ssc: ssc})
     // signal to parent that details have changed
     this.props.onChange(true);
   }
 
-  // handleCoverageLocationMarkerChange = (e) => {
-  //   const storage = this.state.storage;
-  //   storage["changed"] = true;
-  //   const coverageLocation = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, {});
-  //   coverageLocation["marker"] = e.target.value;
-  //   // if easting not defined then define now
-  //   if (!coverageLocation.hasOwnProperty("easting")) {
-  //     coverageLocation["easting"] = 0;
-  //   }
-  //   // if northing not defined then define now
-  //   if (!coverageLocation.hasOwnProperty("northing")) {
-  //     coverageLocation["northing"] = 0;
-  //   }
-  //   setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, coverageLocation);
-  //   this.setState({storage: storage})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
+  handleCommissioningDateChange = (date) => {
+    const ssc = this.state.ssc;
+    ssc["changed"] = true;
+    setMetadataValue(ssc, NURIMS_SSC_COMMISSIONING_DATE, date.toISOString().substring(0,10))
+    this.setState({ssc: ssc})
+    // signal to parent that metadata has changed
+    this.props.onChange(true);
+  }
 
   setSSCMetadata = (ssc) => {
     console.log("SSCMetadata.setSSCMetadata", ssc)
@@ -123,74 +110,10 @@ class SSCMetadata extends Component {
     this.props.onChange(false);
   }
 
-  // refresh = () => {
-  //   this.forceUpdate();
-  // }
-
-  // onMapClick = (e) => {
-  //   if (this.state.mapclick) {
-  //     const storage = this.state.storage;
-  //     storage["changed"] = true;
-  //     const coverageLocation = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, {});
-  //     coverageLocation["easting"] = parseFloat(e.lng);
-  //     coverageLocation["northing"] = parseFloat(e.lat);
-  //     setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, coverageLocation);
-  //     this.setState({storage: storage})
-  //     this.props.onChange(true);
-  //   }
-  // }
-
   getSSCMetadata = () => {
     return this.state.ssc;
   }
 
-  // handleStorageImageUpload = (e) => {
-  //   const selectedFile = e.target.files[0];
-  //   // console.log("file uploaded", selectedFile)
-  //   const that = this;
-  //   const fileReader = new FileReader();
-  //   fileReader.onerror = function () {
-  //     toast.error(`Error occurred reading file: ${selectedFile.name}`)
-  //   };
-  //   fileReader.readAsDataURL(selectedFile);
-  //   // fileReader.readAsText(selectedFile);
-  //   fileReader.onload = function (event) {
-  //     // console.log(">>>>>", event.target.result);
-  //     const storage = that.state.storage;
-  //     storage["changed"] = true;
-  //     setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, {file: selectedFile.name, url: event.target.result});
-  //     // setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, event.target.result);
-  //     that.forceUpdate();
-  //     // signal to parent that metadata has changed
-  //     that.props.onChange(true);
-  //   };
-  // }
-
-  // handleStorageMapImageUpload = (e) => {
-  //   const selectedFile = e.target.files[0];
-  //   // console.log("file uploaded", selectedFile)
-  //   const that = this;
-  //   const fileReader = new FileReader();
-  //   fileReader.onerror = function () {
-  //     toast.error(`Error occurred reading file: ${selectedFile.name}`)
-  //   };
-  //   fileReader.readAsDataURL(selectedFile);
-  //   // fileReader.readAsText(selectedFile);
-  //   fileReader.onload = function (event) {
-  //     // console.log(">>>>>", event.target.result);
-  //     const storage = that.state.storage;
-  //     storage["changed"] = true;
-  //     setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, {file: selectedFile.name, url: event.target.result});
-  //     // setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, event.target.result);
-  //     that.forceUpdate();
-  //     // signal to parent that metadata has changed
-  //     that.props.onChange(true);
-  //   };
-  // }
-
-  // enableMapClick = (e) => {
-  //   this.setState({ mapclick: e.target.checked });
-  // }
   handleSSCTypeChange = (e) => {
     const ssc = this.state.ssc;
     setMetadataValue(ssc, NURIMS_SSC_TYPE, e.target.value);
@@ -215,6 +138,16 @@ class SSCMetadata extends Component {
     const ssc = this.state.ssc;
     ssc["changed"] = true;
     setMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, e.target.value);
+    this.setState({ssc: ssc})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handleSSCMaintainabilityChange = (e) => {
+    console.log("handleSSCMaintainabilityChange", e.target.value);
+    const ssc = this.state.ssc;
+    ssc["changed"] = true;
+    setMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, e.target.value);
     this.setState({ssc: ssc})
     // signal to parent that details have changed
     this.props.onChange(true);
@@ -245,18 +178,6 @@ class SSCMetadata extends Component {
     console.log("SSCMetadata.RENDER - ssc", ssc)
     const disabled = Object.entries(ssc).length === 0;
     // console.log("SSCMetadata.RENDER - properties", properties)
-    const sscClassifications = getPropertyValue(properties, NURIMS_SSC_CLASSIFICATION, "").split('|');
-    const sscSafetyFunctions = getPropertyValue(properties, NURIMS_SSC_SAFETY_FUNCTION, "").split('|');
-    const sscSafetyCategories = getPropertyValue(properties, NURIMS_SSC_SAFETY_CATEGORY, "").split('|');
-    const sscSurveillenceFrequecies = getPropertyValue(properties, NURIMS_SSC_SURVEILLANCE_FREQUENCY, "").split('|');
-    // const storageImage = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, BLANK_IMAGE_OBJECT);
-    // const storageMapImage = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, BLANK_IMAGE_OBJECT);
-    // const storageLocationMarker = storageLocation.marker.split("#");
-    // const storageMarkerIcon = L.icon({
-    //   iconUrl: storageLocationMarker[0],
-    //   iconSize: [storageLocationMarker[1], storageLocationMarker[1]],
-    //   iconAnchor: [storageLocationMarker[2], storageLocationMarker[3]],
-    // });
 
     return (
       <Box
@@ -300,6 +221,32 @@ class SSCMetadata extends Component {
                     onChange={this.handleChange}
                   />
                 </HtmlTooltip>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <HtmlTooltip
+                  placement={'left'}
+                  title={
+                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SSC_ID, "")} />
+                  }
+                >
+                  <TextField
+                    id="ssc-id"
+                    label="SSC ID"
+                    value={getMetadataValue(ssc, NURIMS_SSC_ID, "")}
+                    onChange={this.handleChange}
+                  />
+                </HtmlTooltip>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    label="SSC Commissioning Date"
+                    inputFormat={"yyyy-MM-dd"}
+                    value={getDateFromDateString(getMetadataValue(ssc, NURIMS_SSC_COMMISSIONING_DATE, "1970-01-01"), null)}
+                    onChange={this.handleCommissioningDateChange}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <HtmlTooltip
@@ -353,20 +300,11 @@ class SSCMetadata extends Component {
                       value={getMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, [])}
                       onChange={this.handleSSCClassificationChange}
                     >
-                      {sscClassifications.map((classification) => {
-                        const t = classification.split(',');
-                        if (t.length === 2) {
-                          return (
-                            <MenuItem value={t[0]}>{t[1]}</MenuItem>
-                          )
-                        }
-                      })}
+                      {getPropertyAsMenuitems(properties, NURIMS_SSC_CLASSIFICATION)}
                     </Select>
                   </FormControl>
                 </HtmlTooltip>
               </Grid>
-            </Grid>
-            <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <HtmlTooltip
                   placement={'left'}
@@ -386,20 +324,11 @@ class SSCMetadata extends Component {
                       value={getMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, "")}
                       onChange={this.handleSSCSafetyCategoryChange}
                     >
-                      {sscSafetyCategories.map((safetyCategory) => {
-                        const t = safetyCategory.split(',');
-                        if (t.length === 2) {
-                          return (
-                            <MenuItem value={t[0]}>{t[1]}</MenuItem>
-                          )
-                        }
-                      })}
+                      {getPropertyAsMenuitems(properties, NURIMS_SSC_SAFETY_CATEGORY)}
                     </Select>
                   </FormControl>
                 </HtmlTooltip>
               </Grid>
-            </Grid>
-            <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <HtmlTooltip
                   placement={'left'}
@@ -419,47 +348,55 @@ class SSCMetadata extends Component {
                       value={getMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, "")}
                       onChange={this.handleSSCSafetyFunctionChange}
                     >
-                      {sscSafetyFunctions.map((safetyfunction) => {
-                        const t = safetyfunction.split(',');
-                        if (t.length === 2) {
-                          return (
-                            <MenuItem value={t[0]}>{t[1]}</MenuItem>
-                          )
-                        }
-                      })}
+                      {getPropertyAsMenuitems(properties, NURIMS_SSC_SAFETY_FUNCTION)}
                     </Select>
                   </FormControl>
                 </HtmlTooltip>
               </Grid>
-            </Grid>
-            <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <HtmlTooltip
                   placement={'left'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SSC_SURVEILLANCE_FREQUENCY, "")} />
+                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTAINABILITY, "")} />
                   }
                 >
                   <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
-                    <InputLabel id="surveillance">SSC Surveillance Frequency</InputLabel>
+                    <InputLabel id="maintainability">SSC Maintainability</InputLabel>
                     <Select
                       disabled={disabled}
                       required
                       fullWidth
-                      labelId="surveillance"
-                      label="SSC Surveillance Frequency"
-                      id="surveillance"
+                      labelId="maintainability"
+                      label="SSC Maintainability"
+                      id="maintainability"
+                      value={getMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, "")}
+                      onChange={this.handleSSCMaintainabilityChange}
+                    >
+                      {getPropertyAsMenuitems(properties, NURIMS_SSC_MAINTAINABILITY)}
+                    </Select>
+                  </FormControl>
+                </HtmlTooltip>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <HtmlTooltip
+                  placement={'left'}
+                  title={
+                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SURVEILLANCE_FREQUENCY, "")} />
+                  }
+                >
+                  <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
+                    <InputLabel id="maintenance-surveillance">SSC Maintenance Surveillance Frequency</InputLabel>
+                    <Select
+                      disabled={disabled}
+                      required
+                      fullWidth
+                      labelId="maintenance-surveillance"
+                      label="SSC Maintenance Surveillance Frequency"
+                      id="maintenance-surveillance"
                       value={getMetadataValue(ssc, NURIMS_SSC_SURVEILLANCE_FREQUENCY, "")}
                       onChange={this.handleSSCSurveillanceFrequencyChange}
                     >
-                      {sscSurveillenceFrequecies.map((frequency) => {
-                        const t = frequency.split(',');
-                        if (t.length === 2) {
-                          return (
-                            <MenuItem value={t[0]}>{t[1]}</MenuItem>
-                          )
-                        }
-                      })}
+                      {getPropertyAsMenuitems(properties, NURIMS_SURVEILLANCE_FREQUENCY)}
                     </Select>
                   </FormControl>
                 </HtmlTooltip>

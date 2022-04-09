@@ -10,6 +10,8 @@ module.exports = Object.freeze({
   CM_REGISTER_CONTROLLED_MATERIAL: 'cm.register.update.material',
   CM_VIEW_CONTROLLED_MATERIALS_LIST: 'cm.view.controlled.materials.list',
   SSC_ADD_EDIT_SSC: 'ssc.add.edit.ssc',
+  SSC_ADD_EDIT_SSC_AMP: 'ssc.add.edit.ssc.amp',
+  SSC_VIEW_SSC_RECORDS: 'ssc.view.ssc.records',
 
   CMD_UPDATE_PERSONNEL_RECORD: "update_personnel_record",
   CMD_GET_PERSONNEL_RECORDS: "get_personnel_records",
@@ -28,6 +30,7 @@ module.exports = Object.freeze({
   CMD_GET_SSC_RECORDS: "get_ssc_records",
   CMD_GET_SSC_RECORD: "get_ssc_record",
   CMD_UPDATE_SSC_RECORD: "update_ssc_record",
+  CMD_GENERATE_SSC_RECORDS_PDF: "generate_ssc_records_pdf",
 
   NURIMS_TITLE: 'nurims.title',
   NURIMS_WITHDRAWN: 'nurims.withdrawn',
@@ -68,11 +71,23 @@ module.exports = Object.freeze({
   NURIMS_MATERIAL_NUCLIDES: 'nurims.material.nuclides',
   NURIMS_MATERIAL_QUANTITY_UNITS: 'nurims.material.quantityunits',
 
+  NURIMS_SSC_ID: "nurims.ssc.id",
+  NURIMS_SSC_COMMISSIONING_DATE: "nurims.ssc.commissioningdate",
   NURIMS_SSC_TYPE: "nurims.ssc.type",
   NURIMS_SSC_CLASSIFICATION: "nurims.ssc.classification",
   NURIMS_SSC_SAFETY_CATEGORY: "nurims.ssc.safetycategory",
   NURIMS_SSC_SAFETY_FUNCTION: "nurims.ssc.safetyfunction",
+  NURIMS_SSC_MAINTAINABILITY: "nurims.ssc.maintainability",
   NURIMS_SSC_SURVEILLANCE_FREQUENCY: "nurims.ssc.surveillancefrequency",
+
+  NURIMS_AMP_AGEING_MECHANISM: "nurims.amp.ageingmechanism",
+  NURIMS_AMP_AGEING_EFFECT: "nurims.amp.ageingeffect",
+  NURIMS_AMP_AGEING_DETECTION_METHOD: "nurims.amp.ageingdetectionmethod",
+  NURIMS_AMP_AGEING_DEGRADATION: "nurims.amp.ageingdegradation",
+  NURIMS_AMP_MATERIALS: "nurims.amp.materials",
+  NURIMS_AMP_ACCEPTANCE_CRITERIA: "nurims.amp.acceptancecriteria",
+  NURIMS_AMP_MITIGATION_STEPS: "nurims.amp.mitigationsteps",
+  NURIMS_AMP_SURVEILLANCE_FREQUENCY: "nurims.amp.surveillancefrequency",
 
   BLANK_PDF: 'data:application/pdf;base64,JVBERi0xLjQKJb/3ov4KMSAwIG9iago8PCAvUGFnZXMgMiAwIFIgL1R5cGUgL0NhdGFsb2cgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL0NvdW50IDEgL0tpZHMgWyAzIDAgUiBdIC9UeXBlIC9QYWdlcyA+PgplbmRvYmoKMyAwIG9iago8PCAvQ29udGVudHMgNCAwIFIgL0dyb3VwIDw8IC9DUyAvRGV2aWNlUkdCIC9JIHRydWUgL1MgL1RyYW5zcGFyZW5jeSAvVHlwZSAvR3JvdXAgPj4gL01lZGlhQm94IFsgMCAwIDYxMiA3OTEuMjUgXSAvUGFyZW50IDIgMCBSIC9SZXNvdXJjZXMgNSAwIFIgL1R5cGUgL1BhZ2UgPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0ZpbHRlciAvRmxhdGVEZWNvZGUgL0xlbmd0aCAzMCA+PgpzdHJlYW0KeJwzVDAAQl1DIGFuaahnZKqQnMtVyBXIBQA6LATGZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8ID4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDA2NCAwMDAwMCBuIAowMDAwMDAwMTIzIDAwMDAwIG4gCjAwMDAwMDAyOTggMDAwMDAgbiAKMDAwMDAwMDM5OCAwMDAwMCBuIAp0cmFpbGVyIDw8IC9Sb290IDEgMCBSIC9TaXplIDYgL0lEIFs8YzhjZDFmYzFhMWNiODBlZTgyNzI1ZjIyMTYyMTU2NDE+PGM4Y2QxZmMxYTFjYjgwZWU4MjcyNWYyMjE2MjE1NjQxPl0gPj4Kc3RhcnR4cmVmCjQxOQolJUVPRgo=',
 

@@ -31,7 +31,6 @@ import {CMD_GET_SYSTEM_PROPERTIES, CMD_SET_ORG_DB, CMD_SET_SYSTEM_PROPERTIES} fr
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
-
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));
 const AddEditPersonnel = lazy(() => import('./pages/personnel/AddEditPersonnel'));
@@ -43,6 +42,8 @@ const Storage = lazy(() => import('./pages/controlledmaterials/Storage'));
 const Material = lazy(() => import('./pages/controlledmaterials/Material'));
 const ViewMaterialsList = lazy(() => import('./pages/controlledmaterials/ViewMaterialsList'));
 const SSC = lazy(() => import('./pages/maintenance/SSC'));
+const AMP = lazy(() => import('./pages/maintenance/AMP'));
+const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
 
 const drawerWidth = 300;
 
@@ -108,6 +109,8 @@ class App extends React.Component {
       "Material": React.createRef(),
       "ViewMaterialsList": React.createRef(),
       "SSC": React.createRef(),
+      "AMP": React.createRef(),
+      "ViewSSCRecords": React.createRef(),
     };
   }
 
@@ -384,6 +387,26 @@ class App extends React.Component {
                 {actionid === Constants.SSC_ADD_EDIT_SSC &&
                 <SSC
                   ref={this.crefs["SSC"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.SSC_ADD_EDIT_SSC_AMP &&
+                <AMP
+                  ref={this.crefs["AMP"]}
+                  title={this.menuTitle}
+                  theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.SSC_VIEW_SSC_RECORDS &&
+                <ViewSSCRecords
+                  ref={this.crefs["ViewSSCRecords"]}
                   title={this.menuTitle}
                   theme={theme}
                   user={this.user}
