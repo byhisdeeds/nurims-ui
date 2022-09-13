@@ -16,6 +16,7 @@ import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
 import DosimetryMetadata from "./DosimetryMetadata";
 import DosimetrySurveillanceList from "./DosimetrySurveillanceList";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "AddDosimetryMeasurement";
 
@@ -332,4 +333,4 @@ AddDosimetryMeasurement.defaultProps = {
   user: {},
 };
 
-export default AddDosimetryMeasurement;
+export default withTheme(AddDosimetryMeasurement);

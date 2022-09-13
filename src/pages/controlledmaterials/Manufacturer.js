@@ -17,6 +17,7 @@ import ManufacturerList from "./ManufacturerList";
 import ManufacturerMetadata from "./ManufacturerMetadata";
 import AddIcon from "@mui/icons-material/Add";
 import {NURIMS_TITLE} from "../../utils/constants";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "Manufacturer";
 
@@ -242,4 +243,4 @@ Manufacturer.defaultProps = {
   user: {},
 };
 
-export default Manufacturer;
+export default withTheme(Manufacturer);

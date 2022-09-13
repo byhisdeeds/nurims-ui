@@ -24,6 +24,7 @@ import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "AddEditPersonnel";
 
@@ -402,4 +403,4 @@ AddEditPersonnel.defaultProps = {
   user: {},
 };
 
-export default AddEditPersonnel;
+export default withTheme(AddEditPersonnel);

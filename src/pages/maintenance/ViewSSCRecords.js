@@ -7,6 +7,7 @@ import {Grid, Typography} from "@mui/material";
 import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import PropTypes from "prop-types";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "ViewSSCRecords";
 
@@ -72,4 +73,4 @@ ViewSSCRecords.defaultProps = {
   onClick: () => {},
 };
 
-export default ViewSSCRecords;
+export default withTheme(ViewSSCRecords);

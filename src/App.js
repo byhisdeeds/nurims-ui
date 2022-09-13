@@ -1,7 +1,7 @@
 import React, {Suspense, lazy} from 'react';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import {withAuthenticationRequired} from '@auth0/auth0-react'
-import { withAuth0 } from '@auth0/auth0-react';
+// import {withAuthenticationRequired} from '@auth0/auth0-react'
+// import { withAuth0 } from '@auth0/auth0-react';
 // import 'react-json-pretty/themes/monikai.css';
 import {
   Box,
@@ -298,7 +298,6 @@ class App extends React.Component {
                 <Settings
                   ref={this.crefs["Settings"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -308,7 +307,6 @@ class App extends React.Component {
                 <AddEditPersonnel
                   ref={this.crefs["AddEditPersonnel"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -318,7 +316,6 @@ class App extends React.Component {
                 <AddDosimetryMeasurement
                   ref={this.crefs["AddDosimetryMeasurement"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -328,7 +325,6 @@ class App extends React.Component {
                 <UpdateMonitoringStatus
                   ref={this.crefs["UpdateMonitoringStatus"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -338,7 +334,6 @@ class App extends React.Component {
                 <ViewPersonnelRecords
                   ref={this.crefs["ViewPersonnelRecords"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -348,7 +343,6 @@ class App extends React.Component {
                 <Manufacturer
                   ref={this.crefs["Manufacturer"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -358,7 +352,6 @@ class App extends React.Component {
                 <Storage
                   ref={this.crefs["Storage"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -368,7 +361,6 @@ class App extends React.Component {
                 <Material
                   ref={this.crefs["Material"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -378,7 +370,6 @@ class App extends React.Component {
                 <ViewMaterialsList
                   ref={this.crefs["ViewMaterialsList"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -388,7 +379,6 @@ class App extends React.Component {
                 <SSC
                   ref={this.crefs["SSC"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -398,7 +388,6 @@ class App extends React.Component {
                 <AMP
                   ref={this.crefs["AMP"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -408,7 +397,6 @@ class App extends React.Component {
                 <ViewSSCRecords
                   ref={this.crefs["ViewSSCRecords"]}
                   title={this.menuTitle}
-                  theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -426,7 +414,7 @@ class App extends React.Component {
   }
 }
 
-// export default App
-export default withAuth0(withAuthenticationRequired(App, {
-  onRedirecting: () => <BusyIndicator open={true} loader={"ring"}/>,
-}));
+export default App
+// export default withAuth0(withAuthenticationRequired(App, {
+//   onRedirecting: () => <BusyIndicator open={true} loader={"ring"}/>,
+// }));

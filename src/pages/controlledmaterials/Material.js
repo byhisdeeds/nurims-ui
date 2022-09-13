@@ -25,6 +25,7 @@ import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
 } from "../../utils/constants";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "Material";
 
@@ -275,4 +276,4 @@ Material.defaultProps = {
   user: {},
 };
 
-export default Material;
+export default withTheme(Material);

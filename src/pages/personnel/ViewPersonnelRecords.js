@@ -10,6 +10,7 @@ import {Fab, Grid, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
 import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "ViewPersonnelRecords";
 
@@ -64,4 +65,4 @@ class ViewPersonnelRecords extends Component {
 ViewPersonnelRecords.defaultProps = {
 };
 
-export default ViewPersonnelRecords;
+export default withTheme(ViewPersonnelRecords);

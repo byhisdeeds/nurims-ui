@@ -23,6 +23,7 @@ import {
   NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
   NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, NURIMS_ENTITY_IS_WRIST_MONITORED,
 } from "../../utils/constants";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "UpdateMonitoringStatus";
 
@@ -224,4 +225,4 @@ UpdateMonitoringStatus.defaultProps = {
   user: {},
 };
 
-export default UpdateMonitoringStatus;
+export default withTheme(UpdateMonitoringStatus);

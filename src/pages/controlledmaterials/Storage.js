@@ -22,6 +22,7 @@ import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "Storage";
 
@@ -253,4 +254,4 @@ Storage.defaultProps = {
   user: {},
 };
 
-export default Storage;
+export default withTheme(Storage);

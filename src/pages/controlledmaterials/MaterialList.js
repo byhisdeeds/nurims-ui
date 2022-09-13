@@ -10,6 +10,9 @@ import { AutoSizer, Column, Table } from 'react-virtualized';
 import Box from "@mui/material/Box";
 // import {Component} from "react";
 import MuiVirtualizedTable from './VirtualizedTable'
+import {NURIMS_TITLE} from "../../utils/constants";
+import * as React from "react";
+import {Virtuoso} from "react-virtuoso";
 
 
 const styles = (theme) => ({
@@ -283,22 +286,49 @@ export default class MaterialList extends Component {
     this.props.onRowClicked(index, rowData);
   }
 
+  renderList = (index) => {
+    const row = this.rows[index];
+    const bgcolor = this.state.selected === index ?
+      this.props.theme.palette.action.selected :
+      this.props.theme.palette.background.paper;
+    return (
+      <Box
+        data-row-index={index}
+        onClick={this.onRowSelected}
+        sx={{backgroundColor: bgcolor, color: this.props.theme.palette.text.primary }}
+      >
+        Item {row[NURIMS_TITLE]}
+      </Box>
+    )
+  }
+
   render () {
     return (
-      <Box style={{ height: this.props.height, width: '100%' }}>
-        <this.VirtualizedTable
-          rowCount={this.rows.length}
-          rowGetter={({ index }) => this.rows[index]}
-          theme={this.props.theme}
-          onRowClicked={this.rowClicked}
-          columns={[
-            {
-              width: '100%',
-              label: 'Material',
-              dataKey: 'nurims.title',
-            },
-          ]}
+      <Box
+        style={{
+          height: this.props.height,
+          width: '100%'
+        }}
+      >
+        <Virtuoso
+          style={{ height: '500px' }}
+          data={this.rows}
+          totalCount={this.rows.length}
+          itemContent={this.renderList}
         />
+        {/*<this.VirtualizedTable*/}
+        {/*  rowCount={this.rows.length}*/}
+        {/*  rowGetter={({ index }) => this.rows[index]}*/}
+        {/*  theme={this.props.theme}*/}
+        {/*  onRowClicked={this.rowClicked}*/}
+        {/*  columns={[*/}
+        {/*    {*/}
+        {/*      width: '100%',*/}
+        {/*      label: 'Material',*/}
+        {/*      dataKey: 'nurims.title',*/}
+        {/*    },*/}
+        {/*  ]}*/}
+        {/*/>*/}
       </Box>
     );
   }
