@@ -19,6 +19,7 @@ import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "SSC";
 
@@ -214,4 +215,4 @@ SSC.defaultProps = {
   user: {},
 };
 
-export default SSC;
+export default withTheme(SSC);

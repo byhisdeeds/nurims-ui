@@ -6,6 +6,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import MenuItem from "@mui/material/MenuItem";
 import {toast} from "react-toastify";
 import {getPropertyValue} from "../../utils/PropertyUtils";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "Settings";
 
@@ -149,4 +150,4 @@ Settings.defaultProps = {
   send: (msg) => {},
 };
 
-export default Settings;
+export default withTheme(Settings);

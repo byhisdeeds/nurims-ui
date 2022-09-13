@@ -7,7 +7,7 @@ import {Grid, Typography} from "@mui/material";
 import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import PropTypes from "prop-types";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "ViewSSCRecords";
 
@@ -29,10 +29,10 @@ class ViewSSCRecords extends Component {
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (messageHasResponse(message)) {
+    if (message.hasOwnProperty("response")) {
       const response = message.response;
-      if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_GENERATE_SSC_RECORDS_PDF)) {
+      if (response.hasOwnProperty("status") && response.status === 0) {
+        if (message.hasOwnProperty("cmd") && message.cmd === CMD_GENERATE_SSC_RECORDS_PDF) {
           this.setState({ pdf: message.data.pdf });
         }
       } else {
@@ -73,4 +73,4 @@ ViewSSCRecords.defaultProps = {
   onClick: () => {},
 };
 
-export default ViewSSCRecords;
+export default withTheme(ViewSSCRecords);

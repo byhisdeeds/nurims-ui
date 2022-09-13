@@ -16,11 +16,7 @@ import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
 import DosimetryMetadata from "./DosimetryMetadata";
 import DosimetrySurveillanceList from "./DosimetrySurveillanceList";
-import {
-  CMD_GET_PERSONNEL_RECORDS
-} from "../../utils/constants";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
-import {v4 as uuid} from "uuid";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "AddDosimetryMeasurement";
 
@@ -94,22 +90,21 @@ class AddDosimetryMeasurement extends Component {
   }
 
   componentDidMount() {
-    this.onRefreshSurveillanceList();
-    // this.props.send({
-    //   cmd: CMD_GET_PERSONNEL_RECORDS,
-    //   module: MODULE,
-    //   // metadata: [
-    //   //   'nurims.entity.doseproviderid',
-    //   //   'nurims.entity.iswholebodymonitored',
-    //   //   'nurims.entity.isextremitymonitored',
-    //   //   'nurims.entity.iswristmonitored',
-    //   // ]
-    // })
+    this.props.send({
+      cmd: 'get_personnel_with_metadata',
+      module: MODULE,
+      metadata: [
+        'nurims.entity.doseproviderid',
+        'nurims.entity.iswholebodymonitored',
+        'nurims.entity.isextremitymonitored',
+        'nurims.entity.iswristmonitored',
+      ]
+    })
   }
 
   onRefreshSurveillanceList = () => {
     this.props.send({
-      cmd: CMD_GET_PERSONNEL_RECORDS,
+      cmd: 'get_personnel_with_metadata',
       module: MODULE,
       metadata: [
         'nurims.entity.doseproviderid',
@@ -122,19 +117,19 @@ class AddDosimetryMeasurement extends Component {
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (messageHasResponse(message)) {
+    if (message.hasOwnProperty("response")) {
       const response = message.response;
-      if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_GET_PERSONNEL_RECORDS)) {
+      if (response.hasOwnProperty("status") && response.status === 0) {
+        if (message.hasOwnProperty("cmd") && message.cmd === "get_personnel_with_metadata") {
           if (this.plref.current) {
             // this.plref.current.update_personnel(response.personnel, true)
             this.plref.current.set_personnel(response.personnel)
           }
-        // } else if (message.hasOwnProperty("cmd") && message.cmd === "get_personnel_metadata") {
-        //   if (this.pdref.current) {
-        //     this.pdref.current.update_personnel_details(response.personnel)
-        //   }
-        } else if (isCommandResponse(message, "update_personnel_record")) {
+        } else if (message.hasOwnProperty("cmd") && message.cmd === "get_personnel_metadata") {
+          if (this.pdref.current) {
+            this.pdref.current.update_personnel_details(response.personnel)
+          }
+        } else if (message.hasOwnProperty("cmd") && message.cmd === "update_personnel_record") {
           // toast.success("Personnel details updated successfully")
           // if (this.plref.current) {
           //   this.plref.current.update_selected_person(response.personnel)
@@ -142,7 +137,7 @@ class AddDosimetryMeasurement extends Component {
           // if (this.pdref.current) {
           //   this.pdref.current.update_personnel_record(response.personnel)
           // }
-        } else if (isCommandResponse(message, "permanently_delete_person")) {
+        } else if (message.hasOwnProperty("cmd") && message.cmd === "permanently_delete_person") {
           // toast.success("Personnel record deleted successfully")
           // if (this.plref.current) {
           //   this.plref.current.removePerson(this.state.selection)
@@ -184,7 +179,7 @@ class AddDosimetryMeasurement extends Component {
         ...{
           item_id: details.item_id,
           "nurims.title": details["nurims.title"],
-          record_key: details.item_id === -1 ? uuid() : "",
+          "nurims.withdrawn": details["nurims.withdrawn"],
           metadata: [],
         }
       };
@@ -338,4 +333,4 @@ AddDosimetryMeasurement.defaultProps = {
   user: {},
 };
 
-export default AddDosimetryMeasurement;
+export default withTheme(AddDosimetryMeasurement);

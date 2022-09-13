@@ -13,6 +13,7 @@ import PdfViewer from "../../components/PdfViewer";
 import MenuItem from "@mui/material/MenuItem";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import IconButton from "@mui/material/IconButton";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "ViewMaterialsList";
 
@@ -93,4 +94,4 @@ class ViewMaterialsList extends Component {
 ViewMaterialsList.defaultProps = {
 };
 
-export default ViewMaterialsList;
+export default withTheme(ViewMaterialsList);

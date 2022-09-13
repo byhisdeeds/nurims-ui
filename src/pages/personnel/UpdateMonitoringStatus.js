@@ -13,17 +13,17 @@ import {
 import SaveIcon from '@mui/icons-material/Save';
 import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
-import PersonsMonitoredStatusList from "./PersonsMonitoredStatusList";
+import MonitoredStatusPersonsList from "./MonitoredStatusPersonsList";
 import {getMetadataValue} from "../../utils/MetadataUtils";
 import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
+  CMD_GET_PERSONNEL_METADATA,
   CMD_UPDATE_PERSONNEL_RECORD,
   NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
-  NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, NURIMS_ENTITY_IS_WRIST_MONITORED, CMD_GET_PERSONNEL_RECORDS,
+  NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, NURIMS_ENTITY_IS_WRIST_MONITORED,
 } from "../../utils/constants";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
-import {v4 as uuid} from "uuid";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "UpdateMonitoringStatus";
 
@@ -98,29 +98,29 @@ class UpdateMonitoringStatus extends Component {
 
   componentDidMount() {
     this.props.send({
-      cmd: CMD_GET_PERSONNEL_RECORDS,
-      "include.metadata": "true",
+      cmd: 'get_personnel_with_metadata',
       module: MODULE,
-      // metadata: [
-      //   NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED,
-      //   NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
-      //   NURIMS_ENTITY_IS_WRIST_MONITORED,
-      // ]
+      metadata: [
+        NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED,
+        NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
+        NURIMS_ENTITY_IS_WRIST_MONITORED,
+      ]
     })
   }
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (messageHasResponse(message)) {
+    if (message.hasOwnProperty("response")) {
       const response = message.response;
-      if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_GET_PERSONNEL_RECORDS)) {
+      if (response.hasOwnProperty("status") && response.status === 0) {
+        if (message.hasOwnProperty("cmd") && message.cmd === "get_personnel_with_metadata") {
           if (this.plref.current) {
             this.plref.current.update_personnel(response.personnel)
           }
-        } else if (isCommandResponse(message, CMD_UPDATE_PERSONNEL_RECORD)) {
+        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_PERSONNEL_METADATA) {
+        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_PERSONNEL_RECORD) {
           toast.success(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)
-        } else if (isCommandResponse(message, "permanently_delete_person")) {
+        } else if (message.hasOwnProperty("cmd") && message.cmd === "permanently_delete_person") {
           toast.success("Personnel record deleted successfully")
           if (this.plref.current) {
             this.plref.current.removePerson(this.state.selection)
@@ -149,6 +149,7 @@ class UpdateMonitoringStatus extends Component {
             cmd: CMD_UPDATE_PERSONNEL_RECORD,
             item_id: person.item_id,
             "nurims.title": person[NURIMS_TITLE],
+            "nurims.withdrawn": person[NURIMS_WITHDRAWN],
             metadata: [
               {
                 "nurims.entity.iswholebodymonitored": getMetadataValue(person, NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, "false")
@@ -160,7 +161,6 @@ class UpdateMonitoringStatus extends Component {
                 "nurims.entity.iswristmonitored": getMetadataValue(person, NURIMS_ENTITY_IS_WRIST_MONITORED, "false")
               }
             ],
-            record_key: person.item_id === -1 ? uuid() : "",
             module: MODULE,
           })
         }
@@ -204,7 +204,7 @@ class UpdateMonitoringStatus extends Component {
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
           <Grid item xs={12}>
-            <PersonsMonitoredStatusList ref={this.plref} onChange={this.on_details_changed}/>
+            <MonitoredStatusPersonsList ref={this.plref} onChange={this.on_details_changed}/>
           </Grid>
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
@@ -225,4 +225,4 @@ UpdateMonitoringStatus.defaultProps = {
   user: {},
 };
 
-export default UpdateMonitoringStatus;
+export default withTheme(UpdateMonitoringStatus);

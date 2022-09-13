@@ -19,6 +19,7 @@ import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "AMP";
 
@@ -212,4 +213,4 @@ AMP.defaultProps = {
   user: {},
 };
 
-export default AMP;
+export default withTheme(AMP);

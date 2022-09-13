@@ -8,8 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   DialogContentText,
-  Typography,
-  Box
+  Typography
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
@@ -18,14 +17,14 @@ import UploadIcon from '@mui/icons-material/Upload';
 import PersonList from "./PersonList";
 import {toast} from "react-toastify";
 import PersonMetadata from "./PersonMetadata";
+import Box from "@mui/material/Box";
 import {
-  CMD_DISABLE_PERSONNEL_RECORD,
+  CMD_GET_PERSONNEL_METADATA,
   CMD_GET_PERSONNEL_RECORDS, CMD_UPDATE_PERSONNEL_RECORD,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
-import {isCommandResponse, messageHasMetadata, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
-import {v4 as uuid} from "uuid";
+import {withTheme} from "@mui/styles";
 
 const MODULE = "AddEditPersonnel";
 
@@ -39,12 +38,12 @@ function ConfirmRemoveDialog(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {`Delete record for ${props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""}`}
+          {`Delete record for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Are you sure you want to delete the record
-            for {props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""} (
+            for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} (
             {props.person.hasOwnProperty("item_id") ? props.person["item_id"] : ""})?
           </DialogContentText>
         </DialogContent>
@@ -67,11 +66,11 @@ function ConfirmSelectionChangeDialog(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {`Save Previous Changed for ${props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""}`}
+          {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            The details for {props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""} have
+            The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
             changed without being saved. Do you want to continue without saving the details and loose the changes ?
           </DialogContentText>
         </DialogContent>
@@ -102,41 +101,33 @@ class AddEditPersonnel extends Component {
   componentDidMount() {
     this.props.send({
       cmd: CMD_GET_PERSONNEL_RECORDS,
-      "include.metadata": "false",
-      "include.withdrawn": "true",
       module: MODULE,
     })
   }
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (messageHasResponse(message)) {
+    if (message.hasOwnProperty("response")) {
       const response = message.response;
-      if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_GET_PERSONNEL_RECORDS)) {
-          // console.log("UPDATE SELECTED PERSONNEL METADATA", messageHasMetadata(message))
-          if (messageHasMetadata(message)) {
-            console.log("UPDATE SELECTED PERSONNEL METADATA", Array.isArray(response.personnel))
-            const selection = this.state.selection;
-            console.log("SELECTED PERSON", selection)
-            if (response.personnel[0].item_id === selection["item_id"]) {
-              selection[NURIMS_TITLE] = response.personnel[0][NURIMS_TITLE];
-              selection[NURIMS_WITHDRAWN] = response.personnel[0][NURIMS_WITHDRAWN];
-              selection["metadata"] = [...response.personnel[0]["metadata"]]
-            }
-            if (this.pmref.current) {
-              this.pmref.current.set_person_object(selection);
-            }
-          } else {
-            // update personnel list (no metadata included)
-            console.log("UPDATE PERSONNEL LIST (NO METADATA INCLUDED)", Array.isArray(response.personnel))
-            if (this.plref.current) {
-              // We don't need to skip records with duplicate names here because
-              // these records have already been vetted and given an item_id
-              this.plref.current.add(response.personnel, false);
-            }
+      if (response.hasOwnProperty("status") && response.status === 0) {
+        if (message.hasOwnProperty("cmd") && message.cmd ===CMD_GET_PERSONNEL_RECORDS) {
+          if (this.plref.current) {
+            this.plref.current.add(response.personnel, true);
           }
-        } else if (isCommandResponse(message, CMD_UPDATE_PERSONNEL_RECORD)) {
+        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_PERSONNEL_METADATA) {
+          const selection = this.state.selection;
+          if (response.personnel.item_id === selection["item_id"]) {
+            selection[NURIMS_TITLE] = response.personnel[NURIMS_TITLE];
+            selection[NURIMS_WITHDRAWN] = response.personnel[NURIMS_WITHDRAWN];
+            selection["metadata"] = [...response.personnel["metadata"]]
+          }
+          // if (this.plref.current) {
+          //   this.plref.current.update_selected_person(response.personnel);
+          // }
+          if (this.pmref.current) {
+            this.pmref.current.set_person_object(selection);
+          }
+        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_PERSONNEL_RECORD) {
           toast.success(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)
           if (this.plref.current) {
             this.plref.current.update(response.personnel);
@@ -144,21 +135,17 @@ class AddEditPersonnel extends Component {
           // if (this.pmref.current) {
           //   this.pmref.current.set_metadata(response.personnel);
           // }
-        } else if (isCommandResponse(message, CMD_DISABLE_PERSONNEL_RECORD)) {
-          toast.success("Personnel record disabled successfully")
+        } else if (message.hasOwnProperty("cmd") && message.cmd === "permanently_delete_person") {
+          toast.success("Personnel record deleted successfully")
           if (this.plref.current) {
             this.plref.current.removePerson(this.state.selection)
           }
-          if (this.pmref.current) {
-            this.pmref.current.set_person_object({})
-          }
-          this.setState( {selection: {}})
-          // // if (this.plref.current) {
-          // //   this.plref.current.update_selected_person(response.personnel)
-          // // }
-          // if (this.pmref.current) {
-          //   this.pmref.current.update_personnel_details({})
+          // if (this.plref.current) {
+          //   this.plref.current.update_selected_person(response.personnel)
           // }
+          if (this.pmref.current) {
+            this.pmref.current.update_personnel_details({})
+          }
         }
       } else {
         toast.error(response.message);
@@ -178,9 +165,8 @@ class AddEditPersonnel extends Component {
         return { selection: selection }
       });
       this.props.send({
-        cmd: CMD_GET_PERSONNEL_RECORDS,
+        cmd: CMD_GET_PERSONNEL_METADATA,
         item_id: selection.item_id,
-        "include.metadata": "true",
         module: MODULE,
       })
     }
@@ -191,18 +177,20 @@ class AddEditPersonnel extends Component {
     if (this.plref.current) {
       const persons = this.plref.current.getPersons();
       for (const person of persons) {
+        // // get metadata
+        // if (this.pmref.current) {
+        //   persons[index] = this.pmref.current.getMetadata();
+        // }
+        // const person = persons[index];
         console.log("SAVING PERSONS WITH CHANGED METADATA ", person)
         // only save personnel with changed metadata
         if (person.changed) {
-          if (person.item_id === -1 && !person.hasOwnProperty("record_key")) {
-            person["record_key"] = uuid();
-          }
           this.props.send({
             cmd: CMD_UPDATE_PERSONNEL_RECORD,
             item_id: person.item_id,
-            "nurims.title": person[NURIMS_TITLE],
+            "nurims.title": person["nurims.title"],
+            "nurims.withdrawn": person["nurims.withdrawn"],
             metadata: person.metadata,
-            record_key: person.record_key,
             module: MODULE,
           })
         }
@@ -242,8 +230,7 @@ class AddEditPersonnel extends Component {
       }
     } else {
       this.props.send({
-        cmd: CMD_GET_PERSONNEL_RECORDS,
-        "include.metadata": "true",
+        cmd: 'get_personnel_metadata',
         item_id: this.state.selection.item_id,
         module: MODULE,
       });
@@ -274,8 +261,10 @@ class AddEditPersonnel extends Component {
       }
     } else {
       this.props.send({
-        cmd: CMD_DISABLE_PERSONNEL_RECORD,
+        cmd: 'permanently_delete_person',
         item_id: this.state.selection.item_id,
+        "nurims.title": this.state.selection["nurims.title"],
+        "nurims.withdrawn": this.state.selection["nurims.withdrawn"],
         module: MODULE,
       });
     }
@@ -383,8 +372,7 @@ class AddEditPersonnel extends Component {
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removePerson}
-               // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
-               disabled={!selection.hasOwnProperty("item_id")}>
+               disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
             <PersonRemoveIcon sx={{mr: 1}}/>
             Remove Person
           </Fab>
@@ -415,4 +403,4 @@ AddEditPersonnel.defaultProps = {
   user: {},
 };
 
-export default AddEditPersonnel;
+export default withTheme(AddEditPersonnel);
