@@ -15,7 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountMenu from "./user/AccountMenu";
 import {styled} from '@mui/material/styles';
 import MenuDrawer from "./MenuDrawer";
-import {darkTheme, lightTheme} from "./theme";
+import {darkTheme, lightTheme} from "./utils/Theme";
 import {ThemeProvider} from "@mui/material/styles";
 import {MenuData} from "./menudata";
 import SelectOrganisation from "./components/SelectOrganisation";

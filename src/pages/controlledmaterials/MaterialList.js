@@ -5,11 +5,11 @@ import { withStyles } from '@mui/styles';
 import { createTheme } from '@mui/material/styles';
 import TableCell from '@mui/material/TableCell';
 import Paper from '@mui/material/Paper';
-import { AutoSizer, Column, Table } from 'react-virtualized';
+// import { AutoSizer, Column, Table } from 'react-virtualized';
 // import {VirtualizedTable} from "./VirtualizedTable";
 import Box from "@mui/material/Box";
 // import {Component} from "react";
-import MuiVirtualizedTable from './VirtualizedTable'
+// import MuiVirtualizedTable from './VirtualizedTable'
 import {NURIMS_TITLE} from "../../utils/constants";
 import * as React from "react";
 import {Virtuoso} from "react-virtuoso";
@@ -236,7 +236,7 @@ export default class MaterialList extends Component {
       rowsPerPage: 10,
     };
     this.rows = [];
-    this.VirtualizedTable = withStyles(styles, props.theme)(MuiVirtualizedTable);
+    // this.VirtualizedTable = withStyles(styles, props.theme)(MuiVirtualizedTable);
   }
 
   add = (material, skipIfMaterialInList) => {
