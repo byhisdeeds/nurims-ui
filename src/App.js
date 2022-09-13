@@ -6,9 +6,10 @@ import { withAuth0 } from '@auth0/auth0-react';
 import {
   Box,
   IconButton,
+  Paper,
   Toolbar,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -25,9 +26,21 @@ import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import BusyIndicator from "./components/BusyIndicator";
 import "./App.css"
-import {grey} from "@mui/material/colors";
+import {
+  isCommandResponse,
+  isModuleMessage,
+  messageHasData,
+  messageHasResponse,
+  messageStatusOk
+} from "./utils/WebsocketUtils";
 import {setPropertyValue} from "./utils/PropertyUtils";
-import {CMD_GET_SYSTEM_PROPERTIES, CMD_SET_ORG_DB, CMD_SET_SYSTEM_PROPERTIES} from "./utils/constants";
+import {
+  CMD_GET_SYSTEM_PROPERTIES,
+  CMD_GET_USER_ORGANISATIONS,
+  CMD_SET_ORG_DB,
+  CMD_SET_SYSTEM_PROPERTIES
+} from "./utils/constants";
+import {object} from "prop-types";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -37,6 +50,7 @@ const AddEditPersonnel = lazy(() => import('./pages/personnel/AddEditPersonnel')
 const UpdateMonitoringStatus = lazy(() => import('./pages/personnel/UpdateMonitoringStatus'));
 const ViewPersonnelRecords = lazy(() => import('./pages/personnel/ViewPersonnelRecords'));
 const AddDosimetryMeasurement = lazy(() => import('./pages/radiationprotection/AddDosimetryMeasurement'));
+const AddEditMonitor = lazy(() => import('./pages/radiationprotection/AddEditMonitor'));
 const Manufacturer = lazy(() => import('./pages/controlledmaterials/Manufacturer'));
 const Storage = lazy(() => import('./pages/controlledmaterials/Storage'));
 const Material = lazy(() => import('./pages/controlledmaterials/Material'));
@@ -44,6 +58,9 @@ const ViewMaterialsList = lazy(() => import('./pages/controlledmaterials/ViewMat
 const SSC = lazy(() => import('./pages/maintenance/SSC'));
 const AMP = lazy(() => import('./pages/maintenance/AMP'));
 const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
+const ViewAMPRecords = lazy(() => import('./pages/maintenance/ViewAMPRecords'));
+const MaintenanceSchedule = lazy(() => import('./pages/maintenance/MaintenanceSchedule'));
+const MaintainOrganisationDocuments = lazy(() => import('./pages/organisation/MaintainOrganisationDocuments'));
 
 const drawerWidth = 300;
 
@@ -66,20 +83,6 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const StyledBox = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
-}));
-
-const Puller = styled(Box)(({ theme }) => ({
-  width: 30,
-  height: 6,
-  backgroundColor: theme.palette.mode === 'light' ? grey[300] : grey[900],
-  borderRadius: 3,
-  position: 'absolute',
-  top: 8,
-  left: 'calc(50% - 15px)',
-}));
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -88,7 +91,8 @@ class App extends React.Component {
       open: true,
       theme: localStorage.getItem("theme") || "light",
       menuData: [],
-      org: {name: "", authorized_module_level: "", role: ""},
+      org: {},
+      orgs: [],
       ready: false,
       busy: 0,
     };
@@ -104,6 +108,7 @@ class App extends React.Component {
       "UpdateMonitoringStatus": React.createRef(),
       "ViewPersonnelRecords": React.createRef(),
       "AddDosimetryMeasurement": React.createRef(),
+      "AddEditMonitor": React.createRef(),
       "Manufacturer": React.createRef(),
       "Storage": React.createRef(),
       "Material": React.createRef(),
@@ -111,6 +116,9 @@ class App extends React.Component {
       "SSC": React.createRef(),
       "AMP": React.createRef(),
       "ViewSSCRecords": React.createRef(),
+      "ViewAMPRecords": React.createRef(),
+      "MaintenanceSchedule": React.createRef(),
+      "MaintainOrganisationDocuments": React.createRef(),
     };
   }
 
@@ -118,7 +126,7 @@ class App extends React.Component {
   componentDidMount() {
     this.mounted = true;
     // Everything here is fired on component mount.
-    this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}:5000/nurimsws`);
+    this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}/nurimsws`);
     this.ws.onopen = (event) => {
       console.log('websocket connection established.');
       this.setState({ ready: true });
@@ -126,6 +134,11 @@ class App extends React.Component {
       this.send({
         cmd: CMD_SET_ORG_DB,
         org: this.state.org,
+      })
+      // get organisations and roles for user
+      this.send({
+        cmd: CMD_GET_USER_ORGANISATIONS,
+        user: this.props.auth0.user,
       })
     };
     this.ws.onerror = (error) => {
@@ -138,33 +151,39 @@ class App extends React.Component {
         this.setState({ ready: false, busy: 0 });
       }
     };
-    this.ws.onmessage = (event) => {
-      // console.log("RESPONSE >>>", event.data)
-      const data = JSON.parse(event.data);
-      // console.log("RESPONSE-DATA >>>", data)
-      if (data.hasOwnProperty('module')) {
-        for (const [k, v] of Object.entries(this.crefs)) {
-          if (k === data.module) {
-            if (v.current) {
-              v.current.ws_message(data)
+    this.ws.onmessage = (message) => {
+      if (messageHasData(message)) {
+        const data = JSON.parse(message.data);
+        // console.log("RESPONSE-DATA [MODULE:APP] >>>", data)
+        if (isModuleMessage(data)) {
+          for (const [k, v] of Object.entries(this.crefs)) {
+            if (k === data.module) {
+              if (v.current) {
+                v.current.ws_message(data)
+              }
             }
           }
-        }
-      } else if (data.cmd === CMD_SET_ORG_DB) {
-        this.setState({ org: data.org });
-      } else if (data.cmd === CMD_GET_SYSTEM_PROPERTIES) {
-        if (data.hasOwnProperty("response")) {
-          for (const property of data.response.properties) {
+        } else if (isCommandResponse(data, CMD_GET_USER_ORGANISATIONS)) {
+          console.log("CMD_GET_USER_ORGANISATIONS", data)
+          this.setState({ orgs: data.response.organisations });
+        } else if (isCommandResponse(data, CMD_SET_ORG_DB)) {
+          this.setState({ org: data.org });
+        } else if (isCommandResponse(data, CMD_GET_SYSTEM_PROPERTIES)) {
+          if (data.hasOwnProperty("response")) {
+            for (const property of data.response.properties) {
+              setPropertyValue(this.properties, property.name, property.value);
+            }
+          }
+        } else if (isCommandResponse(data, CMD_SET_SYSTEM_PROPERTIES)) {
+          if (data.hasOwnProperty("response")) {
+            const property = data.response.property;
             setPropertyValue(this.properties, property.name, property.value);
           }
         }
-      } else if (data.cmd === CMD_SET_SYSTEM_PROPERTIES) {
-        if (data.hasOwnProperty("response")) {
-          const property = data.response.property;
-          setPropertyValue(this.properties, property.name, property.value);
-        }
+        this.setState(state => ({
+          busy: state.busy - 1,
+        }));
       }
-      this.setState({ busy: this.state.busy - 1 });
     };
   }
 
@@ -182,8 +201,8 @@ class App extends React.Component {
         ...msg
       }));
       // this.setState({ busy: this.state.busy + 1 });
-      this.setState(pstate => {
-        return { busy: pstate.busy + 1}
+      this.setState(state => {
+        return { busy: state.busy + 1}
       });
     }
   };
@@ -229,7 +248,12 @@ class App extends React.Component {
   };
 
   render() {
-    const {theme, org, ready, menuData, actionid, open, busy} = this.state;
+    const {theme, org, ready, menuData, actionid, open, busy, orgs} = this.state;
+    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    // console.log("AUTH0.USER", this.user)
+    // console.log("ORG", org)
+    // console.log("ORGS", orgs)
+    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     return (
       <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
         <Box sx={{flexGrow: 1}}>
@@ -267,7 +291,7 @@ class App extends React.Component {
                 </Typography>
               </Tooltip>
               <Typography variant="h6" component="div">
-                Organisation: {org.name.toUpperCase()}
+                Organisation: {Object.keys(org).length === 0 ? "" : org.organisation.toUpperCase()}
               </Typography>
               <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
               <Tooltip title="Network connection to system server">
@@ -281,11 +305,11 @@ class App extends React.Component {
               </Tooltip>
             </Toolbar>
           </AppBar>
-          {org.name === '' && <SelectOrganisation open={true} user={this.user} onSelect={this.handleOrganisationSelected}/>}
+          {Object.keys(org).length === 0 && <SelectOrganisation open={true} user={this.user} orgs={orgs} onSelect={this.handleOrganisationSelected}/>}
           <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user} organisation={org}>
             <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
-              <Box sx={{ p: 3 }}>
-                <BusyIndicator open={busy>0} loader={"pulse"} size={40}/>
+              <Paper sx={{ p: 3, height: 'calc(100vh - 64px)'}}>
+                <BusyIndicator open={busy>0} loader={"bar"} size={40}/>
                 {actionid === Constants.MY_ACCOUNT &&
                 <MyAccount
                   ref={this.crefs["MyAccount"]}
@@ -298,7 +322,7 @@ class App extends React.Component {
                 <Settings
                   ref={this.crefs["Settings"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -308,7 +332,7 @@ class App extends React.Component {
                 <AddEditPersonnel
                   ref={this.crefs["AddEditPersonnel"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -318,7 +342,17 @@ class App extends React.Component {
                 <AddDosimetryMeasurement
                   ref={this.crefs["AddDosimetryMeasurement"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.RP_ADD_EDIT_MONITOR &&
+                <AddEditMonitor
+                  ref={this.crefs["AddEditMonitor"]}
+                  title={this.menuTitle}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -328,7 +362,7 @@ class App extends React.Component {
                 <UpdateMonitoringStatus
                   ref={this.crefs["UpdateMonitoringStatus"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -338,7 +372,7 @@ class App extends React.Component {
                 <ViewPersonnelRecords
                   ref={this.crefs["ViewPersonnelRecords"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -348,7 +382,7 @@ class App extends React.Component {
                 <Manufacturer
                   ref={this.crefs["Manufacturer"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -358,7 +392,7 @@ class App extends React.Component {
                 <Storage
                   ref={this.crefs["Storage"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -368,7 +402,7 @@ class App extends React.Component {
                 <Material
                   ref={this.crefs["Material"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -378,7 +412,7 @@ class App extends React.Component {
                 <ViewMaterialsList
                   ref={this.crefs["ViewMaterialsList"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -388,7 +422,7 @@ class App extends React.Component {
                 <SSC
                   ref={this.crefs["SSC"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -398,7 +432,7 @@ class App extends React.Component {
                 <AMP
                   ref={this.crefs["AMP"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -408,7 +442,37 @@ class App extends React.Component {
                 <ViewSSCRecords
                   ref={this.crefs["ViewSSCRecords"]}
                   title={this.menuTitle}
-                  theme={theme}
+                  // theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.SSC_VIEW_AMP_RECORDS &&
+                <ViewAMPRecords
+                  ref={this.crefs["ViewAMPRecords"]}
+                  title={this.menuTitle}
+                  // theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.SSC_GENERATE_MAINTENANCE_SCHEDULE &&
+                <MaintenanceSchedule
+                  ref={this.crefs["MaintenanceSchedule"]}
+                  title={this.menuTitle}
+                  // theme={theme}
+                  user={this.user}
+                  onClick={this.handleMenuAction}
+                  send={this.send}
+                  properties={this.properties}
+                />}
+                {actionid === Constants.ORG_MAINTAIN_ORGANISATION_DOCUMENTS &&
+                <MaintainOrganisationDocuments
+                  ref={this.crefs["MaintainOrganisationDocuments"]}
+                  title={this.menuTitle}
+                  // theme={theme}
                   user={this.user}
                   onClick={this.handleMenuAction}
                   send={this.send}
@@ -417,7 +481,7 @@ class App extends React.Component {
                 <Typography paragraph>
                   {actionid}
                 </Typography>
-              </Box>
+              </Paper>
             </Suspense>
           </MenuDrawer>
         </Box>

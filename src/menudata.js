@@ -6,6 +6,7 @@ import EngineeringIcon from '@mui/icons-material/Engineering';
 
 export const MenuData = [
   {
+    root: true,
     name: 'Organisation',
     link: 'organisation',
     tooltip: 'Details on the organisation',
@@ -19,9 +20,24 @@ export const MenuData = [
         tooltip: 'Edit details on the organisation',
         authmodlevel: 'basic',
       },
+      {
+        name: '- Statutory Requirements',
+        link: 'org.statutory.requirements',
+        title: 'Add/Edit/Print Statutory Requirements',
+        tooltip: 'Statutory requirement actions',
+        authmodlevel: 'basic',
+      },
+      {
+        name: '- Documents',
+        link: 'org.maintain.organisation.documents',
+        title: 'Maintain Organisation Documents',
+        tooltip: 'Add/Update documents related to the organisation and its responsibilities. These will include operating licenses, statutory requirements, organisational chart etc.',
+        authmodlevel: 'basic',
+      },
     ],
   },
   {
+    root: true,
     name: 'Human Resource',
     link: 'human.resource',
     title: '',
@@ -101,6 +117,7 @@ export const MenuData = [
     ],
   },
   {
+    root: true,
     name: 'Maintenance',
     link: 'maintenance',
     tooltip: 'Maintenance of Structures, Systems, & Components',
@@ -140,6 +157,13 @@ export const MenuData = [
             tooltip: 'Add or Edit an Aging Management Programme (AMP) for an SSC',
             authmodlevel: 'basic',
           },
+          {
+            name: '   - View AMP Records',
+            link: 'ssc.view.amp.records',
+            title: 'View AMP Records',
+            tooltip: 'View SSC ageing management programme records.',
+            authmodlevel: 'basic',
+          },
         ]
       },
       {
@@ -150,8 +174,8 @@ export const MenuData = [
           {
             name: '   - Maintenance Schedule',
             link: 'ssc.generate.maintenance.schedule',
-            title: 'Add/Edit Structures, Systems, and Components',
-            tooltip: 'Add/Edit structures systems and components.',
+            title: 'Generate Maintenance Schedule',
+            tooltip: 'Generate a preventive maintenance schedule for structures, systems and components.',
             authmodlevel: 'basic',
           },
           {
@@ -166,6 +190,7 @@ export const MenuData = [
     ],
   },
   {
+    root: true,
     name: 'Controlled Materials',
     link: 'controlled.materials',
     tooltip: 'Human resource actions',
@@ -259,6 +284,7 @@ export const MenuData = [
     ],
   },
   {
+    root: true,
     name: 'Radiation Protection',
     link: 'radiation.protection',
     tooltip: 'Human resource actions',
@@ -271,10 +297,10 @@ export const MenuData = [
         authmodlevel: 'basic',
         items: [
           {
-            name: '   - Add Monitor',
-            link: 'rp.add.area.monitor',
-            title: '',
-            tooltip: 'Add area,contamination, waste, and other types of monitors',
+            name: '   - Add/Edit Monitor',
+            link: 'rp.add.edit.monitor',
+            title: 'Add/Edit Monitor Records',
+            tooltip: 'Add/Edit monitor details including area, contamination, waste, and other types of monitors.',
             authmodlevel: 'basic',
           },
           {
@@ -376,6 +402,197 @@ export const MenuData = [
             authmodlevel: 'pro',
           },
         ],
+      },
+    ],
+  },
+  {
+    root: true,
+    name: 'Emergency Preparedness',
+    link: 'emergency.preparedness.response',
+    tooltip: 'Emergency preparedness and response actions',
+    authmodlevel: 'basic',
+    Icon: IconPeople,
+    items: [
+      {
+        name: '‣ Monitors',
+        tooltip: 'Human resource actions',
+        authmodlevel: 'basic',
+        items: [
+          {
+            name: '   - Add Monitor',
+            link: 'rp.add.area.monitor',
+            title: '',
+            tooltip: 'Add area,contamination, waste, and other types of monitors',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - Edit Monitor',
+            link: 'rp.edit.area.monitor',
+            title: '',
+            tooltip: 'Edit area, contamination, waste and other types monitors',
+            authmodlevel: 'basic',
+          },
+        ],
+      },
+      {
+        name: '‣ Concept of Operations',
+        tooltip: 'A basic concept of operations describing the response process. On the basis of the concept of operations, roles and responsibilities are assigned to each group, organization or individual involved in emergency preparedness and response.',
+        authmodlevel: 'basic',
+        items: [
+          {
+            name: '   - Add Measurement',
+            link: 'rp.add.dosimetry.measurement',
+            title: 'Add Dosimetry Measurement Record',
+            tooltip: 'Add dosimetry measurement for personnel, area, contamination, waste and other monitors',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - Edit Measurement',
+            link: 'rp.edit.dosimetry.measurement',
+            title: '',
+            tooltip: 'Edit dosimetry measurement for personnel, area, contamination, waste and other monitors already entered',
+            authmodlevel: 'basic',
+          },
+        ],
+      },
+      {
+        name: '‣ Reports',
+        tooltip: 'Human resource actions',
+        authmodlevel: 'basic',
+        items: [
+          {
+            name: '   - Monitors List',
+            link: 'rp.monitors.list',
+            title: '',
+            tooltip: 'Human resource actions',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - Monitor Data',
+            link: 'rp.monitor.data.statistics',
+            title: '',
+            tooltip: 'Human resource actions',
+            authmodlevel: 'pro',
+          },
+          {
+            name: '   - Personnel Dose Evaluation',
+            link: 'rp.personnel.dose.evaluation.report',
+            title: '',
+            tooltip: 'Human resource actions',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - Personnel Dose Profile',
+            link: 'rp.personnel.dose.profile.report',
+            title: '',
+            tooltip: 'Human resource actions',
+            authmodlevel: 'pro',
+          },
+        ],
+      },
+      {
+        name: '‣ Documents',
+        tooltip: 'Human resource actions',
+        authmodlevel: 'basic',
+        items: [
+          {
+            name: '   - Add Dosimetry Reports',
+            link: 'rp.documents.add.dosimetry.reports',
+            title: 'Add Dosimetry Reports',
+            tooltip: 'Human resource actions',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - Monitor Data',
+            link: 'rp.monitor.data.statistics',
+            title: '',
+            tooltip: 'Human resource actions',
+            authmodlevel: 'pro',
+          },
+          {
+            name: '   - Personnel Dose Evaluation',
+            link: 'rp.personnel.dose.evaluation.report',
+            title: '',
+            tooltip: 'Human resource actions',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - Personnel Dose Profile',
+            link: 'rp.personnel.dose.profile.report',
+            title: '',
+            tooltip: 'Human resource actions',
+            authmodlevel: 'pro',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    root: true,
+    name: 'Safety/Security Culture',
+    link: 'safety.security.culture',
+    tooltip: 'Safety and security culture actions',
+    authmodlevel: 'basic',
+    Icon: IconPeople,
+    items: [
+      {
+        name: '‣ Safety',
+        tooltip: 'Safety resource actions',
+        authmodlevel: 'basic',
+        items: [
+          {
+            name: '   - Add Monitor',
+            link: 'rp.add.area.monitor',
+            title: '',
+            tooltip: 'Add area,contamination, waste, and other types of monitors',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - Edit Monitor',
+            link: 'rp.edit.area.monitor',
+            title: '',
+            tooltip: 'Edit area, contamination, waste and other types monitors',
+            authmodlevel: 'basic',
+          },
+        ],
+      },
+      {
+        name: '‣ Security',
+        tooltip: 'Security resource actions',
+        authmodlevel: 'basic',
+        items: [
+          {
+            name: '   - Add Measurement',
+            link: 'rp.add.dosimetry.measurement',
+            title: 'Add Dosimetry Measurement Record',
+            tooltip: 'Add dosimetry measurement for personnel, area, contamination, waste and other monitors',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - Edit Measurement',
+            link: 'rp.edit.dosimetry.measurement',
+            title: '',
+            tooltip: 'Edit dosimetry measurement for personnel, area, contamination, waste and other monitors already entered',
+            authmodlevel: 'basic',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    root: true,
+    name: 'System Admin',
+    link: 'sysadmin',
+    tooltip: 'System Administration',
+    Icon: BusinessIcon,
+    authmodlevel: 'sysadmin',
+    items: [
+      {
+        name: '- Add Users',
+        link: 'sysadmin.add.users',
+        title: '',
+        tooltip: 'Add system administration',
+        authmodlevel: 'sysadmin',
       },
     ],
   },

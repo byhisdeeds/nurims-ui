@@ -15,19 +15,20 @@ import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import UploadIcon from '@mui/icons-material/Upload';
-import PersonList from "./PersonList";
+import MonitorList from "./MonitorList";
 import {toast} from "react-toastify";
-import PersonMetadata from "./PersonMetadata";
+import MonitorMetadata from "./MonitorMetadata";
 import {
-  CMD_DISABLE_PERSONNEL_RECORD,
-  CMD_GET_PERSONNEL_RECORDS, CMD_UPDATE_PERSONNEL_RECORD,
+  CMD_DISABLE_MONITOR_RECORD,
+  CMD_DISABLE_PERSONNEL_RECORD, CMD_GET_MONITOR_RECORDS,
+  CMD_GET_PERSONNEL_RECORDS, CMD_UPDATE_MONITOR_RECORD, CMD_UPDATE_PERSONNEL_RECORD,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
 import {isCommandResponse, messageHasMetadata, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 import {v4 as uuid} from "uuid";
 
-const MODULE = "AddEditPersonnel";
+const MODULE = "AddEditMonitor";
 
 function ConfirmRemoveDialog(props) {
   return (
@@ -84,7 +85,7 @@ function ConfirmSelectionChangeDialog(props) {
   );
 }
 
-class AddEditPersonnel extends Component {
+class AddEditMonitor extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -95,15 +96,13 @@ class AddEditPersonnel extends Component {
       selection: {},
       title: props.title,
     };
-    this.plref = React.createRef();
-    this.pmref = React.createRef();
+    this.mlref = React.createRef();
+    this.mmref = React.createRef();
   }
 
   componentDidMount() {
     this.props.send({
-      cmd: CMD_GET_PERSONNEL_RECORDS,
-      "include.metadata": "false",
-      "include.withdrawn": "true",
+      cmd: CMD_GET_MONITOR_RECORDS,
       module: MODULE,
     })
   }
@@ -113,52 +112,43 @@ class AddEditPersonnel extends Component {
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_GET_PERSONNEL_RECORDS)) {
+        if (isCommandResponse(message, CMD_GET_MONITOR_RECORDS)) {
           // console.log("UPDATE SELECTED PERSONNEL METADATA", messageHasMetadata(message))
           if (messageHasMetadata(message)) {
-            console.log("UPDATE SELECTED PERSONNEL METADATA", Array.isArray(response.personnel))
+            console.log("UPDATE SELECTED MONITOR METADATA", Array.isArray(response.monitor))
             const selection = this.state.selection;
-            console.log("SELECTED PERSON", selection)
-            if (response.personnel[0].item_id === selection["item_id"]) {
-              selection[NURIMS_TITLE] = response.personnel[0][NURIMS_TITLE];
-              selection[NURIMS_WITHDRAWN] = response.personnel[0][NURIMS_WITHDRAWN];
-              selection["metadata"] = [...response.personnel[0]["metadata"]]
+            console.log("SELECTED MONITOR", selection)
+            if (response.monitor[0].item_id === selection["item_id"]) {
+              selection[NURIMS_TITLE] = response.monitor[0][NURIMS_TITLE];
+              selection[NURIMS_WITHDRAWN] = response.monitor[0][NURIMS_WITHDRAWN];
+              selection["metadata"] = [...response.monitor[0]["metadata"]]
             }
-            if (this.pmref.current) {
-              this.pmref.current.set_person_object(selection);
+            if (this.mmref.current) {
+              this.mmref.current.set_monitor_object(selection);
             }
           } else {
-            // update personnel list (no metadata included)
-            console.log("UPDATE PERSONNEL LIST (NO METADATA INCLUDED)", Array.isArray(response.personnel))
-            if (this.plref.current) {
+            // update monitor list (no metadata included)
+            console.log("UPDATE MONITOR LIST (NO METADATA INCLUDED)", Array.isArray(response.monitor))
+            if (this.mlref.current) {
               // We don't need to skip records with duplicate names here because
               // these records have already been vetted and given an item_id
-              this.plref.current.add(response.personnel, false);
+              this.mlref.current.add(response.monitor, false);
             }
           }
-        } else if (isCommandResponse(message, CMD_UPDATE_PERSONNEL_RECORD)) {
-          toast.success(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)
-          if (this.plref.current) {
-            this.plref.current.update(response.personnel);
+        } else if (isCommandResponse(message, CMD_UPDATE_MONITOR_RECORD)) {
+          toast.success(`Monitor record for ${response.monitor[NURIMS_TITLE]} updated successfully`)
+          if (this.mlref.current) {
+            this.mlref.current.update(response.monitor);
           }
-          // if (this.pmref.current) {
-          //   this.pmref.current.set_metadata(response.personnel);
-          // }
-        } else if (isCommandResponse(message, CMD_DISABLE_PERSONNEL_RECORD)) {
-          toast.success("Personnel record disabled successfully")
-          if (this.plref.current) {
-            this.plref.current.removePerson(this.state.selection)
+        } else if (isCommandResponse(message, CMD_DISABLE_MONITOR_RECORD)) {
+          toast.success("Monitor record disabled successfully")
+          if (this.mlref.current) {
+            this.mlref.current.removeMonitor(this.state.selection)
           }
-          if (this.pmref.current) {
-            this.pmref.current.set_person_object({})
+          if (this.mmref.current) {
+            this.mmref.current.set_monitor_object({})
           }
           this.setState( {selection: {}})
-          // // if (this.plref.current) {
-          // //   this.plref.current.update_selected_person(response.personnel)
-          // // }
-          // if (this.pmref.current) {
-          //   this.pmref.current.update_personnel_details({})
-          // }
         }
       } else {
         toast.error(response.message);
@@ -166,19 +156,19 @@ class AddEditPersonnel extends Component {
     }
   }
 
-  onPersonSelected = (selection) => {
-    // console.log("-- onPersonSelected (previous selection) --", previous_selection)
-    console.log("-- onPersonSelected (selection) --", selection)
+  onMonitorSelected = (selection) => {
+    // console.log("-- onMonitorSelected (previous selection) --", previous_selection)
+    console.log("-- onMonitorSelected (selection) --", selection)
     if (selection.hasOwnProperty("item_id") && selection.item_id === -1) {
-      if (this.pmref.current) {
-        this.pmref.current.set_person_object(selection)
+      if (this.mmref.current) {
+        this.mmref.current.set_monitor_object(selection)
       }
     } else {
       this.setState(pstate => {
         return { selection: selection }
       });
       this.props.send({
-        cmd: CMD_GET_PERSONNEL_RECORDS,
+        cmd: CMD_GET_MONITOR_RECORDS,
         item_id: selection.item_id,
         "include.metadata": "true",
         module: MODULE,
@@ -188,21 +178,21 @@ class AddEditPersonnel extends Component {
   }
 
   saveChanges = () => {
-    if (this.plref.current) {
-      const persons = this.plref.current.getPersons();
-      for (const person of persons) {
-        console.log("SAVING PERSONS WITH CHANGED METADATA ", person)
-        // only save personnel with changed metadata
-        if (person.changed) {
-          if (person.item_id === -1 && !person.hasOwnProperty("record_key")) {
-            person["record_key"] = uuid();
+    if (this.mlref.current) {
+      const monitors = this.mlref.current.getMonitors();
+      for (const monitor of monitors) {
+        console.log("SAVING MONITOR WITH CHANGED METADATA ", monitor)
+        // only save monitor record with changed metadata
+        if (monitor.changed) {
+          if (monitor.item_id === -1 && !monitor.hasOwnProperty("record_key")) {
+            monitor["record_key"] = uuid();
           }
           this.props.send({
-            cmd: CMD_UPDATE_PERSONNEL_RECORD,
-            item_id: person.item_id,
-            "nurims.title": person[NURIMS_TITLE],
-            metadata: person.metadata,
-            record_key: person.record_key,
+            cmd: CMD_UPDATE_MONITOR_RECORD,
+            item_id: monitor.item_id,
+            "nurims.title": monitor[NURIMS_TITLE],
+            metadata: monitor.metadata,
+            record_key: monitor.record_key,
             module: MODULE,
           })
         }
@@ -212,12 +202,12 @@ class AddEditPersonnel extends Component {
     this.setState({metadata_changed: false})
   }
 
-  addPerson = () => {
-    if (this.plref.current) {
-      this.plref.current.add([{
+  addMonitor = () => {
+    if (this.mlref.current) {
+      this.mlref.current.add([{
         "changed": true,
         "item_id": -1,
-        "nurims.title": "New Person",
+        "nurims.title": "New Monitor",
         "nurims.withdrawn": 0,
         "metadata": []
       }], false);
@@ -233,12 +223,12 @@ class AddEditPersonnel extends Component {
     // set new selection and load details
     // console.log("#### saving personnel details ###", this.state.previous_selection)
     this.setState({alert: false, metadata_changed: false});
-    if (this.plref.current) {
-      this.plref.current.setSelection(this.state.selection)
+    if (this.mlref.current) {
+      this.mlref.current.setSelection(this.state.selection)
     }
     if (this.state.selection.hasOwnProperty("item_id") && this.state.selection.item_id === -1) {
-      if (this.pmref.current) {
-        this.pmref.current.set_metadata(this.state.selection)
+      if (this.mmref.current) {
+        this.mmref.current.set_metadata(this.state.selection)
       }
     } else {
       this.props.send({
@@ -252,12 +242,12 @@ class AddEditPersonnel extends Component {
 
   cancel_selection_change = () => {
     this.setState({alert: false,});
-    if (this.plref.current) {
-      this.plref.current.setSelection(this.state.previous_selection)
+    if (this.mlref.current) {
+      this.mlref.current.setSelection(this.state.previous_selection)
     }
   }
 
-  removePerson = () => {
+  removeMonitor = () => {
     this.setState({confirm_remove: true,});
   }
 
@@ -267,14 +257,14 @@ class AddEditPersonnel extends Component {
 
   proceed_with_remove = () => {
     this.setState({confirm_remove: false,});
-    console.log("REMOVE PERSON", this.state.selection);
+    console.log("REMOVE MONITOR", this.state.selection);
     if (this.state.selection.item_id === -1) {
-      if (this.plref.current) {
-        this.plref.current.removePerson(this.state.selection)
+      if (this.mlref.current) {
+        this.mlref.current.removeMonitor(this.state.selection)
       }
     } else {
       this.props.send({
-        cmd: CMD_DISABLE_PERSONNEL_RECORD,
+        cmd: CMD_DISABLE_MONITOR_RECORD,
         item_id: this.state.selection.item_id,
         module: MODULE,
       });
@@ -317,12 +307,13 @@ class AddEditPersonnel extends Component {
                       "metadata": [
                         {"nurims.entity.doseproviderid": `icens|${id}`}
                       ]
+
                     });
                     that.setState({ changed: true });
                   }
                 }
-                if (that.plref.current) {
-                  that.plref.current.add(persons, true)
+                if (that.mlref.current) {
+                  that.mlref.current.add(persons, true)
                 }
               } else {
                 toast.warn(`Incorrect dosereport.badges.badge type in dose report data file. Expecting an array but found ${typeof badge}`)
@@ -367,26 +358,26 @@ class AddEditPersonnel extends Component {
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
           <Grid item xs={5}>
-            <PersonList
-              ref={this.plref}
-              onPersonSelection={this.onPersonSelected}
+            <MonitorList
+              ref={this.mlref}
+              onPersonSelection={this.onMonitorSelected}
               properties={this.props.properties}
             />
           </Grid>
           <Grid item xs={7}>
-            <PersonMetadata
-              ref={this.pmref}
+            <MonitorMetadata
+              ref={this.mmref}
               onChange={this.onMetadataChanged}
               properties={this.props.properties}
             />
           </Grid>
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
-          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removePerson}
+          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeMonitor}
                // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
                disabled={!selection.hasOwnProperty("item_id")}>
             <PersonRemoveIcon sx={{mr: 1}}/>
-            Remove Person
+            Remove Monitor
           </Fab>
           <label htmlFor="import-file-uploader">
             <Fab variant="extended" size="small" color="primary" aria-label="import" component={"span"}>
@@ -399,9 +390,9 @@ class AddEditPersonnel extends Component {
             <SaveIcon sx={{mr: 1}}/>
             Save Changes
           </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addPerson}>
+          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addMonitor}>
             <AddIcon sx={{mr: 1}}/>
-            Add Person
+            Add Monitor
           </Fab>
         </Box>
       </React.Fragment>
@@ -409,10 +400,10 @@ class AddEditPersonnel extends Component {
   }
 }
 
-AddEditPersonnel.defaultProps = {
+AddEditMonitor.defaultProps = {
   send: (msg) => {
   },
   user: {},
 };
 
-export default AddEditPersonnel;
+export default AddEditMonitor;

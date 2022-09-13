@@ -1,6 +1,98 @@
 import {createTheme} from "@mui/material/styles";
 
 export const lightTheme = createTheme({
+  components: {
+    MuiSwitch: {
+      styleOverrides: {
+        switchBase: {
+          color: '#eeecec',
+          '&$checked': {
+            color: '#1976d2',
+          },
+          '&$checked + $track': {
+            backgroundColor: '#1976d2',
+          },
+        },
+        checked: {},
+        track: {
+          backgroundColor: '#8b8a8a',
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root:{
+          px: 1,
+          py: 0.25,
+          borderRadius: 1,
+        },
+        label: {
+          padding: 'initial',
+        },
+        icon: {
+          mr: 0.5,
+          ml: '-2px',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontSize: '1rem',
+          backgroundColor: '#1976d2',
+          color: '#dedede',
+          '&:hover': {
+            backgroundColor: '#1976d2',
+            filter: 'brightness(85%)',
+          },
+        },
+      },
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: false, // No more ripple, on the whole application 💣!
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+          fontSize: '1rem',
+          fontFamily: 'Segoeui, Cabin, RobotoSlabRegular',
+          backgroundColor: '#fff',
+          color: '#000000',
+          '&.Mui-selected': {
+            backgroundColor: 'rgba(121,152,223,0.1)',
+            color: '#ffffff',
+          },
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#ffffff',
+          color: '#000000',
+        },
+      },
+    },
+    MuiBox: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#ffffff',
+          color: '#000000',
+        },
+      },
+    },
+  },
+  direction: "ltr",
   palette: {
     mode: 'light',
     primary: {
@@ -177,6 +269,104 @@ export const lightTheme = createTheme({
 });
 
 export const darkTheme = createTheme({
+  components: {
+    MuiSwitch: {
+      styleOverrides: {
+        switchBase: {
+          color: '#eeecec',
+          '&$checked': {
+            color: '#1976d2',
+          },
+          '&$checked + $track': {
+            backgroundColor: '#1976d2',
+          },
+        },
+        checked: {},
+        track: {
+          backgroundColor: '#8b8a8a',
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root:{
+          px: 1,
+          py: 0.25,
+          borderRadius: 1,
+        },
+        label: {
+          padding: 'initial',
+        },
+        icon: {
+          mr: 0.5,
+          ml: '-2px',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontSize: '1rem',
+          backgroundColor: '#1976d2',
+          color: '#dedede',
+          '&:hover': {
+            backgroundColor: '#1976d2',
+            filter: 'brightness(85%)',
+          },
+        },
+      },
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: false, // No more ripple, on the whole application 💣!
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+          fontSize: '1rem',
+          fontFamily: 'Segoeui, Cabin, RobotoSlabRegular',
+          backgroundColor: '#383838',
+          color: '#ffffff',
+          '&.Mui-selected': {
+            backgroundColor: 'rgb(138,138,138)',
+            color: '#ffffff',
+          },
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+        },
+        head: {
+          padding: 0,
+          backgroundColor: '#212121',
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          boxShadow: 'rgb(0 0 0 / 20%) 0px 2px 4px -1px, rgb(0 0 0 / 14%) 0px 4px 5px 0px, rgb(0 0 0 / 12%) 0px 1px 10px 0px',
+          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))',
+          backgroundColor: 'rgb(40, 44, 52)',
+          color: '#eeeeee',
+        },
+      },
+    },
+    MuiBox: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgb(40, 44, 52)',
+          color: '#eeeeee',
+        },
+      },
+    },
+  },
+  direction: "ltr",
   palette: {
     mode: 'dark',
     primary: {

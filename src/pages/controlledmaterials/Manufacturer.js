@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {withTheme} from "@mui/styles";
 import {
   Fab,
   Grid,
@@ -16,37 +17,10 @@ import Box from "@mui/material/Box";
 import ManufacturerList from "./ManufacturerList";
 import ManufacturerMetadata from "./ManufacturerMetadata";
 import AddIcon from "@mui/icons-material/Add";
-import {NURIMS_TITLE} from "../../utils/constants";
+import {NURIMS_TITLE, CMD_GET_MANUFACTURER_RECORDS, CMD_SAVE_MANUFACTURER_RECORD} from "../../utils/constants";
+import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 
 const MODULE = "Manufacturer";
-
-// function ConfirmRemoveDialog(props) {
-//   return (
-//     <div>
-//       <Dialog
-//         open={props.open}
-//         onClose={props.onCancel}
-//         aria-labelledby="alert-dialog-title"
-//         aria-describedby="alert-dialog-description"
-//       >
-//         <DialogTitle id="alert-dialog-title">
-//           {`Delete record for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-//         </DialogTitle>
-//         <DialogContent>
-//           <DialogContentText id="alert-dialog-description">
-//             Are you sure you want to delete the record
-//             for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} (
-//             {props.person.hasOwnProperty("item_id") ? props.person["item_id"] : ""})?
-//           </DialogContentText>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={props.onCancel}>No</Button>
-//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </div>
-//   );
-// }
 
 function ConfirmSelectionChangeDialog(props) {
   return (
@@ -95,21 +69,22 @@ class Manufacturer extends Component {
 
   onRefreshManufacturersList = () => {
     this.props.send({
-      cmd: 'get_manufacturer_records',
+      cmd: CMD_GET_MANUFACTURER_RECORDS,
+      "include.metadata": "true",
       module: MODULE,
     });
   }
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (message.hasOwnProperty("response")) {
+    if (messageHasResponse(message)) {
       const response = message.response;
-      if (response.hasOwnProperty("status") && response.status === 0) {
-        if (message.hasOwnProperty("cmd") && message.cmd === "get_manufacturer_records") {
+      if (messageStatusOk(message)) {
+        if (isCommandResponse(message, CMD_GET_MANUFACTURER_RECORDS)) {
           if (this.mlref.current) {
-            this.mlref.current.setManufacturers(response.manufacturers)
+            this.mlref.current.setManufacturers(response.manufacturer)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === "save_manufacturer_record") {
+        } else if (isCommandResponse(message, CMD_SAVE_MANUFACTURER_RECORD)) {
           toast.success(`Manufacturer record for ${response.manufacturer[NURIMS_TITLE]} updated successfully`)
         }
       } else {
@@ -242,4 +217,4 @@ Manufacturer.defaultProps = {
   user: {},
 };
 
-export default Manufacturer;
+export default withTheme(Manufacturer);

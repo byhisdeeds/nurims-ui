@@ -22,6 +22,7 @@ import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
+import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 
 const MODULE = "Storage";
 
@@ -105,24 +106,25 @@ class Storage extends Component {
   onRefreshStoragesList = () => {
     this.props.send({
       cmd: CMD_GET_STORAGE_LOCATION_RECORDS,
+      "include.metadata": "true",
       module: MODULE,
     });
   }
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (message.hasOwnProperty("response")) {
+    if (messageHasResponse(message)) {
       const response = message.response;
-      if (response.hasOwnProperty("status") && response.status === 0) {
-        if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_STORAGE_LOCATION_RECORDS) {
+      if (messageStatusOk(message)) {
+        if (isCommandResponse(message, CMD_GET_STORAGE_LOCATION_RECORDS)) {
           if (this.slref.current) {
-            this.slref.current.setStorageLocations(response.storage_locations)
+            this.slref.current.setStorageLocations(response.storage_location)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_GLOSSARY_TERMS) {
+        } else if (isCommandResponse(message, CMD_GET_GLOSSARY_TERMS)) {
           if (this.smref.current) {
             this.smref.current.setGlossaryTerms(response.terms)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_STORAGE_LOCATION_RECORD) {
+        } else if (isCommandResponse(message, CMD_UPDATE_STORAGE_LOCATION_RECORD)) {
           toast.success(`Successfully updated storage record for ${message[NURIMS_TITLE]}.`);
         }
       } else {

@@ -56,9 +56,10 @@ export default function SelectOrganisation(props) {
                 label="Organisation"
                 onChange={handleChange}
               >
-                {userOrganisations(props.user).map(org => {
+                {/*{userOrganisations(props.user).map(org => {*/}
+                {props.orgs.map(org => {
                   return (
-                    <MenuItem key={org.name} value={org}>{org.name}</MenuItem>
+                    <MenuItem key={org.id} value={org}>{org.organisation}</MenuItem>
                   )
                 })}
               </Select>

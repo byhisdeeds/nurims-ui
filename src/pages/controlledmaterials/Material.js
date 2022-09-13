@@ -25,6 +25,7 @@ import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
 } from "../../utils/constants";
+import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 
 const MODULE = "Material";
 
@@ -104,10 +105,12 @@ class Material extends Component {
     });
     this.props.send({
       cmd: CMD_GET_MANUFACTURER_RECORDS,
+      "include.metadata": "true",
       module: MODULE,
     });
     this.props.send({
       cmd: CMD_GET_STORAGE_LOCATION_RECORDS,
+      "include.metadata": "true",
       module: MODULE,
     });
     this.onRefreshMaterialsList();
@@ -116,32 +119,33 @@ class Material extends Component {
   onRefreshMaterialsList = () => {
     this.props.send({
       cmd: CMD_GET_MATERIAL_RECORDS,
+      "include.metadata": "true",
       module: MODULE,
     });
   }
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (message.hasOwnProperty("response")) {
+    if (messageHasResponse(message)) {
       const response = message.response;
-      if (response.hasOwnProperty("status") && response.status === 0) {
-        if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_GLOSSARY_TERMS) {
+      if (messageStatusOk(message)) {
+        if (isCommandResponse(message, CMD_GET_GLOSSARY_TERMS)) {
           if (this.mmref.current) {
             this.mmref.current.setGlossaryTerms(response.terms)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_MANUFACTURER_RECORDS) {
+        } else if (isCommandResponse(message, CMD_GET_MANUFACTURER_RECORDS)) {
           if (this.mlref.current) {
-            this.mmref.current.setManufacturers(response.manufacturers)
+            this.mmref.current.setManufacturers(response.manufacturer)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_STORAGE_LOCATION_RECORDS) {
+        } else if (isCommandResponse(message, CMD_GET_STORAGE_LOCATION_RECORDS)) {
           if (this.mlref.current) {
-            this.mmref.current.setStorageLocations(response.storage_locations)
+            this.mmref.current.setStorageLocations(response.storage_location)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_MATERIAL_RECORDS) {
+        } else if (isCommandResponse(message, CMD_GET_MATERIAL_RECORDS)) {
           if (this.mlref.current) {
             this.mlref.current.setMaterials(response.material)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_SAVE_MATERIAL_RECORD) {
+        } else if (isCommandResponse(message, CMD_SAVE_MATERIAL_RECORD)) {
           toast.success(`Successfully updated material record for ${message[NURIMS_TITLE]}.`);
         }
       } else {
@@ -150,9 +154,9 @@ class Material extends Component {
     }
   }
 
-  onMaterialSelected = (materialIndex, materialMetadata) => {
+  onMaterialSelected = (materialMetadata) => {
     // console.log("-- onMaterialSelected (previous selection) --", previous_material)
-    console.log("-- onMaterialSelected (selection) --", materialIndex, materialMetadata)
+    console.log("-- onMaterialSelected (selection) --", materialMetadata)
     if (this.mmref.current) {
       this.mmref.current.setMaterialMetadata(materialMetadata)
     }

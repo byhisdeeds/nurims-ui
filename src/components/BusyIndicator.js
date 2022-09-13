@@ -3,7 +3,7 @@ import PacmanLoader from "react-spinners/PacmanLoader";
 import BeatLoader from "react-spinners/BeatLoader";
 import ClockLoader from "react-spinners/ClockLoader";
 import Backdrop from "@mui/material/Backdrop";
-import {PulseLoader, RingLoader} from "react-spinners";
+import {BarLoader, PulseLoader, RingLoader} from "react-spinners";
 // https://www.davidhu.io/react-spinners/
 
 function BusyIndicator({ loader = 'clock', size = 50, open = false }) {
@@ -42,6 +42,21 @@ function BusyIndicator({ loader = 'clock', size = 50, open = false }) {
           }}
           size={size}
           color={'#2f2f27'}
+          loading={open}
+        />
+      }
+      { loader === 'bar' &&
+        <BarLoader
+          css={{
+            display: 'block',
+            margin: '0 auto',
+            borderColor: 'inherit',
+            top: 0,
+            position: 'absolute',
+          }}
+          width={'100%'}
+          size={size}
+          color={'#d1fad1'}
           loading={open}
         />
       }

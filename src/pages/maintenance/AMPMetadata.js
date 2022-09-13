@@ -276,10 +276,11 @@ class AMPMetadata extends Component {
                       disabled={disabled}
                       required
                       fullWidth
+                      multiple
                       labelId="ageing-effect"
                       label="SSC Ageing Effect"
                       id="ageing-effect"
-                      value={getMetadataValue(ssc, NURIMS_AMP_AGEING_EFFECT, "")}
+                      value={getMetadataValue(ssc, NURIMS_AMP_AGEING_EFFECT, [])}
                       onChange={this.handleSSCAgeingEffectChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_AGEING_EFFECT)}
@@ -300,10 +301,11 @@ class AMPMetadata extends Component {
                       disabled={disabled}
                       required
                       fullWidth
+                      multiple
                       labelId="ageing-detection-method"
                       label="SSC Ageing Detection Method"
                       id="ageing-detection-method"
-                      value={getMetadataValue(ssc, NURIMS_AMP_AGEING_DETECTION_METHOD, "")}
+                      value={getMetadataValue(ssc, NURIMS_AMP_AGEING_DETECTION_METHOD, [])}
                       onChange={this.handleSSCAgeingDetectionMethodChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_AGEING_DETECTION_METHOD)}
@@ -324,10 +326,11 @@ class AMPMetadata extends Component {
                       disabled={disabled}
                       required
                       fullWidth
+                      multiple
                       labelId="ageing-degradation"
                       label="SSC Ageing Degradation"
                       id="ageing-degradation"
-                      value={getMetadataValue(ssc, NURIMS_AMP_AGEING_DEGRADATION, "")}
+                      value={getMetadataValue(ssc, NURIMS_AMP_AGEING_DEGRADATION, [])}
                       onChange={this.handleSSCAgeingDegradationChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_AGEING_DEGRADATION)}
@@ -379,10 +382,11 @@ class AMPMetadata extends Component {
                       disabled={disabled}
                       required
                       fullWidth
+                      multiple
                       labelId="acceptance-criteria"
                       label="Ageing Acceptance Criteria"
                       id="acceptance-criteria"
-                      value={getMetadataValue(ssc, NURIMS_AMP_ACCEPTANCE_CRITERIA, "")}
+                      value={getMetadataValue(ssc, NURIMS_AMP_ACCEPTANCE_CRITERIA, [])}
                       onChange={this.handleSSCAgeingAcceptanceCriteriaChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_ACCEPTANCE_CRITERIA)}
@@ -403,10 +407,11 @@ class AMPMetadata extends Component {
                       disabled={disabled}
                       required
                       fullWidth
+                      multiple
                       labelId="mitigation-steps"
                       label="Ageing Mitigation Steps"
                       id="mitigation-steps"
-                      value={getMetadataValue(ssc, NURIMS_AMP_MITIGATION_STEPS, "")}
+                      value={getMetadataValue(ssc, NURIMS_AMP_MITIGATION_STEPS, [])}
                       onChange={this.handleSSCAgeingMitigationStepsChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_MITIGATION_STEPS)}

@@ -28,9 +28,9 @@ import {isIcensDoseReport, importIcensDoseReport} from "../../utils/DoseReportUt
 import {
   getPropertyValue,
 } from "../../utils/PropertyUtils";
-
 import {toast} from "react-toastify";
 
+const TABLE_ROW_HEIGHT = 24;
 
 const METADATA_FIELDS = [
   "nurims.title",
@@ -467,19 +467,19 @@ export default class DosimetrySurveillanceList extends Component {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[20]}
             component="div"
             count={this.rows.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={this.handleChangePage}
-            onRowsPerPageChange={this.handleChangeRowsPerPage}
+            // onRowsPerPageChange={this.handleChangeRowsPerPage}
           />
         </Paper>
-        <FormControlLabel
-          control={<Switch checked={dense} onChange={this.handleChangeDense}/>}
-          label="Dense padding"
-        />
+        {/*<FormControlLabel*/}
+        {/*  control={<Switch checked={dense} onChange={this.handleChangeDense}/>}*/}
+        {/*  label="Dense padding"*/}
+        {/*/>*/}
       </Box>
     );
   }

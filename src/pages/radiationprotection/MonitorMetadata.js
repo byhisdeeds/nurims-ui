@@ -19,14 +19,15 @@ import {
   NURIMS_ENTITY_CONTACT, NURIMS_ENTITY_DATE_OF_BIRTH, NURIMS_ENTITY_NATIONAL_ID, NURIMS_ENTITY_SEX,
   NURIMS_TITLE, NURIMS_WITHDRAWN, NURIMS_ENTITY_WORK_DETAILS, NURIMS_ENTITY_DOSE_PROVIDER_ID, BLANK_IMAGE_OBJECT,
 } from "../../utils/constants";
+import {MonitorTypeSelect} from "../../components/CommonComponents";
 
-class PersonMetadata extends Component {
+class MonitorMetadata extends Component {
   constructor(props) {
     super(props);
     this.state = {
       properties: props.properties,
     };
-    this.person = {};
+    this.monitor = {};
   }
 
   componentDidMount() {
@@ -34,7 +35,7 @@ class PersonMetadata extends Component {
 
   handleChange = (e) => {
     console.log(">>>", e.target.id)
-    const p = this.person;
+    const p = this.monitor;
     if (e.target.id === "name") {
       p[NURIMS_TITLE] = e.target.value;
     } else if (e.target.id === "nid") {
@@ -52,9 +53,9 @@ class PersonMetadata extends Component {
     this.props.onChange(true);
   }
 
-  handleSexChange = (e) => {
-    console.log(">>>sex", e.target.id)
-    const p = this.person;
+  handleMonitorTypeChange = (e) => {
+    console.log(">>>monitor type", e.target.id)
+    const p = this.monitor;
     p["changed"] = true;
     setMetadataValue(p, NURIMS_ENTITY_SEX, e.target.value)
     this.forceUpdate()
@@ -64,7 +65,7 @@ class PersonMetadata extends Component {
 
   // handleDisabledChange = (e) => {
   //   console.log(">>>disabled", e.target.value)
-  //   const p = this.person;
+  //   const p = this.monitor;
   //   p["changed"] = true;
   //   p[NURIMS_WITHDRAWN] = e.target.value;
   //   this.forceUpdate()
@@ -74,7 +75,7 @@ class PersonMetadata extends Component {
 
   handleRoleChange = (e) => {
     console.log(">>>role", e.target.value)
-    const p = this.person;
+    const p = this.monitor;
     p["changed"] = true;
     setMetadataValue(p, NURIMS_ENTITY_ASSIGNED_ROLE, e.target.value)
     this.forceUpdate()
@@ -83,7 +84,7 @@ class PersonMetadata extends Component {
   }
 
   handleDobChange = (dob) => {
-    const p = this.person;
+    const p = this.monitor;
     setMetadataValue(p, NURIMS_ENTITY_DATE_OF_BIRTH, dob.toISOString().substring(0,10))
     p["changed"] = true;
     this.forceUpdate()
@@ -91,16 +92,16 @@ class PersonMetadata extends Component {
     this.props.onChange(true);
   }
 
-  set_person_object = (person) => {
-    person["changed"] = false;
-    console.log("PersonMetadata.set_person_object", person)
-    this.person = person;
+  set_monitor_object = (monitor) => {
+    monitor["changed"] = false;
+    console.log("MonitorMetadata.set_monitor_object", monitor)
+    this.monitor = monitor;
     // signal to parent that metadata has changed
     this.props.onChange(false);
   }
 
   getMetadata = () => {
-    return this.person;
+    return this.monitor;
   }
 
   handleAvatarUpload = (e) => {
@@ -115,9 +116,9 @@ class PersonMetadata extends Component {
     // fileReader.readAsText(selectedFile);
     fileReader.onload = function (event) {
       // console.log(">>>>>", event.target.result);
-      const person = that.person;
-      person["changed"] = true;
-      setMetadataValue(person, NURIMS_ENTITY_AVATAR, {file: selectedFile.name, url: event.target.result});
+      const monitor = that.monitor;
+      monitor["changed"] = true;
+      setMetadataValue(monitor, NURIMS_ENTITY_AVATAR, {file: selectedFile.name, url: event.target.result});
       that.forceUpdate();
       // signal to parent that metadata has changed
       that.props.onChange(true);
@@ -126,9 +127,10 @@ class PersonMetadata extends Component {
 
   render() {
     const {properties} = this.state;
-    const person = this.person;
+    const monitor = this.monitor;
     const assignedRole = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
-    const avatar = getMetadataValue(person, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT);
+    const monitorTypes = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
+    const avatar = getMetadataValue(monitor, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT);
     return (
       <Box
         component="form"
@@ -160,32 +162,32 @@ class PersonMetadata extends Component {
             required
             id="name"
             label="Fullname"
-            value={person.hasOwnProperty(NURIMS_TITLE) ? person[NURIMS_TITLE] : ""}
+            value={monitor.hasOwnProperty(NURIMS_TITLE) ? monitor[NURIMS_TITLE] : ""}
             onChange={this.handleChange}
           />
           <TextField
             id="nid"
             label="National ID"
-            value={getMetadataValue(person, NURIMS_ENTITY_NATIONAL_ID, "")}
+            value={getMetadataValue(monitor, NURIMS_ENTITY_NATIONAL_ID, "")}
             onChange={this.handleChange}
           />
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              label="Date Of Birth"
-              inputFormat={"yyyy-MM-dd"}
-              value={getDateFromDateString(getMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), null)}
-              onChange={this.handleDobChange}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
+          {/*<LocalizationProvider dateAdapter={AdapterDateFns}>*/}
+          {/*  <DatePicker*/}
+          {/*    label="Date Of Birth"*/}
+          {/*    inputFormat={"yyyy-MM-dd"}*/}
+          {/*    value={getDateFromDateString(getMetadataValue(monitor, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), null)}*/}
+          {/*    onChange={this.handleDobChange}*/}
+          {/*    renderInput={(params) => <TextField {...params} />}*/}
+          {/*  />*/}
+          {/*</LocalizationProvider>*/}
           <FormControl sx={{m: 1, minWidth: 250}}>
-            <InputLabel id="sex">Sex</InputLabel>
+            <InputLabel id="mtype">Monitor Type</InputLabel>
             <Select
-              labelId="sex"
-              id="sex"
-              value={getMetadataValue(person, NURIMS_ENTITY_SEX, "")}
-              label="Sex"
-              onChange={this.handleSexChange}
+              labelId="mtype"
+              id="mtype"
+              value={getMetadataValue(monitor, NURIMS_ENTITY_SEX, "")}
+              label="Monitor Type"
+              onChange={this.handleMonitorTypeChange}
             >
               <MenuItem value={"m"}>Male</MenuItem>
               <MenuItem value={"f"}>Female</MenuItem>
@@ -196,7 +198,7 @@ class PersonMetadata extends Component {
           {/*  <Select*/}
           {/*    labelId="disabled"*/}
           {/*    id="disabled"*/}
-          {/*    value={person.hasOwnProperty(NURIMS_WITHDRAWN) ? person[NURIMS_WITHDRAWN] : 0}*/}
+          {/*    value={monitor.hasOwnProperty(NURIMS_WITHDRAWN) ? monitor[NURIMS_WITHDRAWN] : 0}*/}
           {/*    label="Disabled"*/}
           {/*    onChange={this.handleDisabledChange}*/}
           {/*  >*/}
@@ -204,12 +206,18 @@ class PersonMetadata extends Component {
           {/*    <MenuItem value={1}>True</MenuItem>*/}
           {/*  </Select>*/}
           {/*</FormControl>*/}
+          <MonitorTypeSelect
+            value={getMetadataValue(monitor, NURIMS_ENTITY_NATIONAL_ID, "")}
+            // value={Object.keys(selectedAnalysisSystem).length === 0 ? '' : selectedAnalysisSystem}
+            onChange={this.handleMonitorTypeChange}
+            monitorTypes={monitorTypes}
+          />
           <FormControl sx={{m: 1, minWidth: 250}}>
             <InputLabel id="roles">Assigned Roles</InputLabel>
             <Select
               labelId="roles"
               id="roles"
-              value={getMetadataValue(person, NURIMS_ENTITY_ASSIGNED_ROLE, [])}
+              value={getMetadataValue(monitor, NURIMS_ENTITY_ASSIGNED_ROLE, [])}
               label="Assigned Roles"
               multiple
               onChange={this.handleRoleChange}
@@ -230,7 +238,7 @@ class PersonMetadata extends Component {
             multiline
             maxRows={4}
             minRows={4}
-            value={getMetadataValue(person, NURIMS_ENTITY_CONTACT, "")}
+            value={getMetadataValue(monitor, NURIMS_ENTITY_CONTACT, "")}
             onChange={this.handleChange}
           />
           <TextField
@@ -239,7 +247,7 @@ class PersonMetadata extends Component {
             multiline
             maxRows={4}
             minRows={4}
-            value={getMetadataValue(person, NURIMS_ENTITY_WORK_DETAILS, "")}
+            value={getMetadataValue(monitor, NURIMS_ENTITY_WORK_DETAILS, "")}
             onChange={this.handleChange}
           />
           <TextField
@@ -248,7 +256,7 @@ class PersonMetadata extends Component {
             multiline
             maxRows={2}
             minRows={2}
-            value={getMetadataValue(person, NURIMS_ENTITY_DOSE_PROVIDER_ID, "")}
+            value={getMetadataValue(monitor, NURIMS_ENTITY_DOSE_PROVIDER_ID, "")}
             onChange={this.handleChange}
           />
         </div>
@@ -257,9 +265,9 @@ class PersonMetadata extends Component {
   }
 }
 
-PersonMetadata.defaultProps = {
+MonitorMetadata.defaultProps = {
   onChange: (msg) => {},
   properties: {},
 };
 
-export default PersonMetadata;
+export default MonitorMetadata;

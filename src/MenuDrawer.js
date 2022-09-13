@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {withTheme} from "@mui/styles";
 import {styled} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -12,6 +13,7 @@ const drawerWidth = 300;
 const openedMixin = (theme) => ({
   width: drawerWidth,
   top: 64,
+  height: 'calc(100vh - 64px)',
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -27,6 +29,7 @@ const closedMixin = (theme) => ({
   overflowX: 'hidden',
   width: `calc(${theme.spacing(7)} + 1px)`,
   top: 64,
+  height: 'calc(100vh - 64px)',
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(9)} + 1px)`,
   },
@@ -49,15 +52,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function MenuDrawer(props) {
+function MenuDrawer(props) {
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <Drawer variant="permanent" open={props.open} style={{top: 64, overflowY: 'auto'}}>
+      <Drawer variant="permanent" open={props.open} style={{top: 64, overflowY: 'auto', height: 'calc(100vh - 64px)'}}>
         <List component="nav" disablePadding>
           {props.menuItems.map((item, index) => (
             <AppMenuItem
               {...item}
+              root={item.hasOwnProperty("root")}
               key={index}
               user={props.user}
               organisation={props.organisation}
@@ -73,3 +78,5 @@ export default function MenuDrawer(props) {
     </Box>
   );
 }
+
+export default withTheme(MenuDrawer)

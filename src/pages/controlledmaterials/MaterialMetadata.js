@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import {Card, CardContent, FormControl, Grid, InputLabel, Select} from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
+import {Card, CardContent, FormControl, Grid, InputLabel, Select, MenuItem, ButtonBase, Icon} from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DateRangePicker from '@mui/lab/DateRangePicker';
 import {
   getMetadataValue,
   setMetadataValue,
@@ -40,6 +38,25 @@ import {
   NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY,
   NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, NURIMS_MATERIAL_NUCLIDES, NURIMS_MATERIAL_QUANTITY_UNITS, BLANK_IMAGE_OBJECT
 } from "../../utils/constants";
+import {SelectFormControlWithTooltip, TextFieldWithTooltip, DatePickerWithTooltip} from "../../components/CommonComponents";
+
+// function Content(closeFn) {
+//   return (
+//     <Box padding="xl" position="relative" radius="md" variant="white" width="90vw">
+//       <h4 align="center">
+//         I'm a custom component acting as modal. No arrow and centered
+//       </h4>
+//       <ButtonBase
+//         onClick={closeFn}
+//         padding="sm"
+//         style={{ position: 'absolute', right: 16, top: 16 }}
+//       >
+//         <Icon name="close" size={24} />
+//       </ButtonBase>
+//
+//     </Box>
+//   );
+// }
 
 class MaterialMetadata extends Component {
   constructor(props) {
@@ -50,6 +67,7 @@ class MaterialMetadata extends Component {
     };
     this.ref = React.createRef();
     this.pdfRef = React.createRef();
+    this.tooltipRef = React.createRef();
     this.glossary = {};
     this.manufacturers = [];
     this.storageLocations = [];
@@ -411,76 +429,107 @@ class MaterialMetadata extends Component {
         noValidate
         autoComplete="off"
       >
-        <div>
+        <div className="tooltip-root" ref={this.tooltipRef}>
           <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
             <CardContent sx={{'& .MuiCardContent-root:last-child': {p: 0}}}>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'bottom-start'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_TITLE, "")} />
-                    }
-                  >
-                    <TextField
-                      disabled={disabled}
-                      required
-                      fullWidth
-                      id="nurims.title"
-                      label="Material Name"
-                      value={material.hasOwnProperty(NURIMS_TITLE) ? material[NURIMS_TITLE] : ""}
-                      onChange={this.handleChange}
-                    />
-                  </HtmlTooltip>
+                  <TextFieldWithTooltip
+                    id={"nurims.title"}
+                    label="Material Name"
+                    required={true}
+                    value={material.hasOwnProperty(NURIMS_TITLE) ? material[NURIMS_TITLE] : ""}
+                    onChange={this.handleChange}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_TITLE, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<HtmlTooltip*/}
+                  {/*  placement={'bottom-start'}*/}
+                  {/*  title={*/}
+                  {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_TITLE, "")} />*/}
+                  {/*  }*/}
+                  {/*>*/}
+                  {/*  <TextField*/}
+                  {/*    disabled={disabled}*/}
+                  {/*    required*/}
+                  {/*    fullWidth*/}
+                  {/*    id="nurims.title"*/}
+                  {/*    label="Material Name"*/}
+                  {/*    value={material.hasOwnProperty(NURIMS_TITLE) ? material[NURIMS_TITLE] : ""}*/}
+                  {/*    onChange={this.handleChange}*/}
+                  {/*  />*/}
+                  {/*</HtmlTooltip>*/}
                 </Grid>
                 <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'bottom-start'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_ID, "")} />
-                    }
-                  >
-                    <TextField
-                      disabled={disabled}
-                      required
-                      fullWidth
-                      id="id"
-                      label="Material ID"
-                      value={getMetadataValue(material, NURIMS_MATERIAL_ID, "")}
-                      onChange={this.handleChange}
-                    />
-                  </HtmlTooltip>
+                  <TextFieldWithTooltip
+                    id={"id"}
+                    label="Material ID"
+                    required={true}
+                    value={getMetadataValue(material, NURIMS_MATERIAL_ID, "")}
+                    onChange={this.handleChange}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_ID, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<HtmlTooltip*/}
+                  {/*  placement={'bottom-start'}*/}
+                  {/*  title={*/}
+                  {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_ID, "")} />*/}
+                  {/*  }*/}
+                  {/*>*/}
+                  {/*  <TextField*/}
+                  {/*    disabled={disabled}*/}
+                  {/*    required*/}
+                  {/*    fullWidth*/}
+                  {/*    id="id"*/}
+                  {/*    label="Material ID"*/}
+                  {/*    value={getMetadataValue(material, NURIMS_MATERIAL_ID, "")}*/}
+                  {/*    onChange={this.handleChange}*/}
+                  {/*  />*/}
+                  {/*</HtmlTooltip>*/}
                 </Grid>
                 <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'left'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_TYPE, "")} />
-                    }
-                  >
-                    <FormControl sx={{ml: 0, mb: 0, width: '100%'}}>
-                      <InputLabel id="type">Material Type</InputLabel>
-                      <Select
-                        disabled={disabled}
-                        required
-                        fullWidth
-                        labelId="type"
-                        label="Material Type"
-                        id="type"
-                        value={getMetadataValue(material, NURIMS_MATERIAL_TYPE, "")}
-                        onChange={this.handleMaterialTypeChange}
-                      >
-                        {materialTypes.map((materialType) => {
-                          const t = materialType.split(',');
-                          if (t.length === 2) {
-                            return (
-                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
-                            )
-                          }
-                        })}
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
+                  <SelectFormControlWithTooltip
+                    id={"type"}
+                    label="Material Type"
+                    required={true}
+                    value={getMetadataValue(material, NURIMS_MATERIAL_TYPE, "")}
+                    onChange={this.handleMaterialTypeChange}
+                    options={materialTypes}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_TYPE, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<HtmlTooltip*/}
+                  {/*  placement={'left'}*/}
+                  {/*  title={*/}
+                  {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_TYPE, "")} />*/}
+                  {/*  }*/}
+                  {/*>*/}
+                  {/*  <FormControl sx={{ml: 0, mb: 0, width: '100%'}}>*/}
+                  {/*    <InputLabel id="type">Material Type</InputLabel>*/}
+                  {/*    <Select*/}
+                  {/*      disabled={disabled}*/}
+                  {/*      required*/}
+                  {/*      fullWidth*/}
+                  {/*      labelId="type"*/}
+                  {/*      label="Material Type"*/}
+                  {/*      id="type"*/}
+                  {/*      value={getMetadataValue(material, NURIMS_MATERIAL_TYPE, "")}*/}
+                  {/*      onChange={this.handleMaterialTypeChange}*/}
+                  {/*    >*/}
+                  {/*      {materialTypes.map((materialType) => {*/}
+                  {/*        const t = materialType.split(',');*/}
+                  {/*        if (t.length === 2) {*/}
+                  {/*          return (*/}
+                  {/*            <MenuItem value={t[0]}>{t[1]}</MenuItem>*/}
+                  {/*          )*/}
+                  {/*        }*/}
+                  {/*      })}*/}
+                  {/*    </Select>*/}
+                  {/*  </FormControl>*/}
+                  {/*</HtmlTooltip>*/}
                 </Grid>
               </Grid>
             </CardContent>
@@ -489,195 +538,264 @@ class MaterialMetadata extends Component {
             <CardContent>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'left'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")} />
-                    }
-                  >
-                    <TextField
-                      disabled={disabled}
-                      fullWidth
-                      id="description"
-                      label="Material Description"
-                      value={getMetadataValue(material, NURIMS_DESCRIPTION, "")}
-                      onChange={this.handleChange}
-                    />
-                  </HtmlTooltip>
+                  <TextFieldWithTooltip
+                    id={"description"}
+                    label="Material Description"
+                    value={getMetadataValue(material, NURIMS_DESCRIPTION, "")}
+                    onChange={this.handleChange}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<HtmlTooltip*/}
+                  {/*  placement={'left'}*/}
+                  {/*  title={*/}
+                  {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")} />*/}
+                  {/*  }*/}
+                  {/*>*/}
+                  {/*  <TextField*/}
+                  {/*    disabled={disabled}*/}
+                  {/*    fullWidth*/}
+                  {/*    id="description"*/}
+                  {/*    label={<div>"Material Description"</div>}*/}
+                  {/*    value={getMetadataValue(material, NURIMS_DESCRIPTION, "")}*/}
+                  {/*    onChange={this.handleChange}*/}
+                  {/*  />*/}
+                  {/*</HtmlTooltip>*/}
                 </Grid>
                 <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'left'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_CLASSIFICATION, "")} />
-                    }
-                  >
-                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
-                      <InputLabel id="classification">Material Classification</InputLabel>
-                      <Select
-                        disabled={disabled}
-                        required
-                        fullWidth
-                        labelId="classification"
-                        label="Material Classification"
-                        id="classification"
-                        value={getMetadataValue(material, NURIMS_MATERIAL_CLASSIFICATION, "")}
-                        onChange={this.handleMaterialClassificationChange}
-                      >
-                        {materialClassification.map((classification) => {
-                          const t = classification.split(',');
-                          if (t.length === 2) {
-                            return (
-                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
-                            )
-                          }
-                        })}
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
+                  <SelectFormControlWithTooltip
+                    id={"classification"}
+                    label="Material Classification"
+                    value={getMetadataValue(material, NURIMS_MATERIAL_CLASSIFICATION, "")}
+                    onChange={this.handleMaterialClassificationChange}
+                    options={materialClassification}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_CLASSIFICATION, "")}
+                    // target={this.tooltipRef}
+                  />
                 </Grid>
+                {/*<Grid item xs={4}>*/}
+                {/*  <HtmlTooltip*/}
+                {/*    placement={'left'}*/}
+                {/*    title={*/}
+                {/*      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_CLASSIFICATION, "")} />*/}
+                {/*    }*/}
+                {/*  >*/}
+                {/*    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>*/}
+                {/*      <InputLabel id="classification">Material Classification</InputLabel>*/}
+                {/*      <Select*/}
+                {/*        disabled={disabled}*/}
+                {/*        required*/}
+                {/*        fullWidth*/}
+                {/*        labelId="classification"*/}
+                {/*        label="Material Classification"*/}
+                {/*        id="classification"*/}
+                {/*        value={getMetadataValue(material, NURIMS_MATERIAL_CLASSIFICATION, "")}*/}
+                {/*        onChange={this.handleMaterialClassificationChange}*/}
+                {/*      >*/}
+                {/*        {materialClassification.map((classification) => {*/}
+                {/*          const t = classification.split(',');*/}
+                {/*          if (t.length === 2) {*/}
+                {/*            return (*/}
+                {/*              <MenuItem value={t[0]}>{t[1]}</MenuItem>*/}
+                {/*            )*/}
+                {/*          }*/}
+                {/*        })}*/}
+                {/*      </Select>*/}
+                {/*    </FormControl>*/}
+                {/*  </HtmlTooltip>*/}
+                {/*</Grid>*/}
                 <Grid item xs={4}>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <HtmlTooltip
-                      placement={'left'}
-                      title={
-                        <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_REGISTRATION_DATE, "")} />
-                      }
-                    >
-                      <Box sx={{'& .MuiTextField-root': {width: '18ch'}}}>
-                        <DatePicker
-                          disabled={disabled}
-                          label="Registration Date"
-                          inputFormat={"yyyy-MM-dd"}
-                          value={getDateFromDateString(getMetadataValue(material, NURIMS_MATERIAL_REGISTRATION_DATE, "1970-01-01"), null)}
-                          onChange={this.handleRegistrationDateChange}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </Box>
-                    </HtmlTooltip>
-                  </LocalizationProvider>
-                </Grid>
-              </Grid>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'left'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_MANUFACTURER, "")} />
-                    }
-                  >
-                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
-                      <InputLabel id="manufacturer">Manufacturer</InputLabel>
-                      <Select
-                        disabled={disabled}
-                        required
-                        fullWidth
-                        labelId="manufacturer"
-                        label="Manufacturer"
-                        id="manufacturer"
-                        value={getMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER, "")}
-                        onChange={this.handleMaterialManufacturerChange}
-                      >
-                        {this.manufacturers.map((m) => {
-                          return (
-                            <MenuItem value={m["id"]}>{m["title"]}</MenuItem>
-                          )
-                        })}
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
-                </Grid>
-                <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'left'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_INVENTORY_STATUS, "")} />
-                    }
-                  >
-                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
-                      <InputLabel id="inventorystatus">Inventory Status</InputLabel>
-                      <Select
-                        disabled={disabled}
-                        required
-                        fullWidth
-                        labelId="inventorystatus"
-                        label="Inventory Status"
-                        id="inventorystatus"
-                        value={getMetadataValue(material, NURIMS_MATERIAL_INVENTORY_STATUS, "")}
-                        onChange={this.handleInventoryStatusChange}
-                      >
-                        {inventoryStatus.map((status) => {
-                          const t = status.split(',');
-                          if (t.length === 2) {
-                            return (
-                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
-                            )
-                          }
-                        })}
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
-                </Grid>
-                <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'left'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_PHYSICAL_FORM, "")} />
-                    }
-                  >
-                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
-                      <InputLabel id="physicalform">Physical Form</InputLabel>
-                      <Select
-                        disabled={disabled}
-                        required
-                        fullWidth
-                        labelId="physicalform"
-                        label="Physical Form"
-                        id="physicalform"
-                        value={getMetadataValue(material, NURIMS_MATERIAL_PHYSICAL_FORM, "")}
-                        onChange={this.handlePhysicalFormChange}
-                      >
-                        {physicalForm.map((form) => {
-                          const t = form.split(',');
-                          if (t.length === 2) {
-                            return (
-                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
-                            )
-                          }
-                        })}
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
+                  <DatePickerWithTooltip
+                    label="Registration Date"
+                    value={getDateFromDateString(getMetadataValue(material, NURIMS_MATERIAL_REGISTRATION_DATE, "1970-01-01"), null)}
+                    onChange={this.handleRegistrationDateChange}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_REGISTRATION_DATE, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<LocalizationProvider dateAdapter={AdapterDateFns}>*/}
+                  {/*  <HtmlTooltip*/}
+                  {/*    placement={'left'}*/}
+                  {/*    title={*/}
+                  {/*      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_REGISTRATION_DATE, "")} />*/}
+                  {/*    }*/}
+                  {/*  >*/}
+                  {/*    <Box sx={{'& .MuiTextField-root': {width: '18ch'}}}>*/}
+                  {/*      <DatePicker*/}
+                  {/*        disabled={disabled}*/}
+                  {/*        label="Registration Date"*/}
+                  {/*        inputFormat={"yyyy-MM-dd"}*/}
+                  {/*        value={getDateFromDateString(getMetadataValue(material, NURIMS_MATERIAL_REGISTRATION_DATE, "1970-01-01"), null)}*/}
+                  {/*        onChange={this.handleRegistrationDateChange}*/}
+                  {/*        renderInput={(params) => <TextField {...params} />}*/}
+                  {/*      />*/}
+                  {/*    </Box>*/}
+                  {/*  </HtmlTooltip>*/}
+                  {/*</LocalizationProvider>*/}
                 </Grid>
               </Grid>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'left'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")} />
-                    }
-                  >
-                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
-                      <InputLabel id="manufacturer">Storage Location</InputLabel>
-                      <Select
-                        disabled={disabled}
-                        required
-                        fullWidth
-                        labelId="storage"
-                        label="Storage Location"
-                        id="storage"
-                        value={getMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")}
-                        onChange={this.handleStorageLocationRecordChange}
-                      >
-                        {this.storageLocations.map((l) => {
-                          return (
-                            <MenuItem value={l["id"]}>{l["title"]}</MenuItem>
-                          )
-                        })}
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
+                  <SelectFormControlWithTooltip
+                    id={"manufacturer"}
+                    label="Manufacturer"
+                    value={getMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER, "")}
+                    onChange={this.handleMaterialManufacturerChange}
+                    options={this.manufacturers}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_MANUFACTURER, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<HtmlTooltip*/}
+                  {/*  placement={'left'}*/}
+                  {/*  title={*/}
+                  {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_MANUFACTURER, "")} />*/}
+                  {/*  }*/}
+                  {/*>*/}
+                  {/*  <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>*/}
+                  {/*    <InputLabel id="manufacturer">Manufacturer</InputLabel>*/}
+                  {/*    <Select*/}
+                  {/*      disabled={disabled}*/}
+                  {/*      required*/}
+                  {/*      fullWidth*/}
+                  {/*      labelId="manufacturer"*/}
+                  {/*      label="Manufacturer"*/}
+                  {/*      id="manufacturer"*/}
+                  {/*      value={getMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER, "")}*/}
+                  {/*      onChange={this.handleMaterialManufacturerChange}*/}
+                  {/*    >*/}
+                  {/*      {this.manufacturers.map((m) => {*/}
+                  {/*        return (*/}
+                  {/*          <MenuItem value={m["id"]}>{m["title"]}</MenuItem>*/}
+                  {/*        )*/}
+                  {/*      })}*/}
+                  {/*    </Select>*/}
+                  {/*  </FormControl>*/}
+                  {/*</HtmlTooltip>*/}
+                </Grid>
+                <Grid item xs={4}>
+                  <SelectFormControlWithTooltip
+                    id={"inventorystatus"}
+                    label="Inventory Status"
+                    value={getMetadataValue(material, NURIMS_MATERIAL_INVENTORY_STATUS, "")}
+                    onChange={this.handleInventoryStatusChange}
+                    options={inventoryStatus}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_INVENTORY_STATUS, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<HtmlTooltip*/}
+                  {/*  placement={'left'}*/}
+                  {/*  title={*/}
+                  {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_INVENTORY_STATUS, "")} />*/}
+                  {/*  }*/}
+                  {/*>*/}
+                  {/*  <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>*/}
+                  {/*    <InputLabel id="inventorystatus">Inventory Status</InputLabel>*/}
+                  {/*    <Select*/}
+                  {/*      disabled={disabled}*/}
+                  {/*      required*/}
+                  {/*      fullWidth*/}
+                  {/*      labelId="inventorystatus"*/}
+                  {/*      label="Inventory Status"*/}
+                  {/*      id="inventorystatus"*/}
+                  {/*      value={getMetadataValue(material, NURIMS_MATERIAL_INVENTORY_STATUS, "")}*/}
+                  {/*      onChange={this.handleInventoryStatusChange}*/}
+                  {/*    >*/}
+                  {/*      {inventoryStatus.map((status) => {*/}
+                  {/*        const t = status.split(',');*/}
+                  {/*        if (t.length === 2) {*/}
+                  {/*          return (*/}
+                  {/*            <MenuItem value={t[0]}>{t[1]}</MenuItem>*/}
+                  {/*          )*/}
+                  {/*        }*/}
+                  {/*      })}*/}
+                  {/*    </Select>*/}
+                  {/*  </FormControl>*/}
+                  {/*</HtmlTooltip>*/}
+                </Grid>
+                <Grid item xs={4}>
+                  <SelectFormControlWithTooltip
+                    id={"physicalform"}
+                    label="Physical Form"
+                    value={getMetadataValue(material, NURIMS_MATERIAL_PHYSICAL_FORM, "")}
+                    onChange={this.handlePhysicalFormChange}
+                    options={physicalForm}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_PHYSICAL_FORM, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<HtmlTooltip*/}
+                  {/*  placement={'left'}*/}
+                  {/*  title={*/}
+                  {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_PHYSICAL_FORM, "")} />*/}
+                  {/*  }*/}
+                  {/*>*/}
+                  {/*  <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>*/}
+                  {/*    <InputLabel id="physicalform">Physical Form</InputLabel>*/}
+                  {/*    <Select*/}
+                  {/*      disabled={disabled}*/}
+                  {/*      required*/}
+                  {/*      fullWidth*/}
+                  {/*      labelId="physicalform"*/}
+                  {/*      label="Physical Form"*/}
+                  {/*      id="physicalform"*/}
+                  {/*      value={getMetadataValue(material, NURIMS_MATERIAL_PHYSICAL_FORM, "")}*/}
+                  {/*      onChange={this.handlePhysicalFormChange}*/}
+                  {/*    >*/}
+                  {/*      {physicalForm.map((form) => {*/}
+                  {/*        const t = form.split(',');*/}
+                  {/*        if (t.length === 2) {*/}
+                  {/*          return (*/}
+                  {/*            <MenuItem value={t[0]}>{t[1]}</MenuItem>*/}
+                  {/*          )*/}
+                  {/*        }*/}
+                  {/*      })}*/}
+                  {/*    </Select>*/}
+                  {/*  </FormControl>*/}
+                  {/*</HtmlTooltip>*/}
+                </Grid>
+              </Grid>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <SelectFormControlWithTooltip
+                    id={"storage"}
+                    label="Storage Location"
+                    value={getMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")}
+                    onChange={this.handleStorageLocationRecordChange}
+                    options={this.storageLocations}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<HtmlTooltip*/}
+                  {/*  placement={'left'}*/}
+                  {/*  title={*/}
+                  {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")} />*/}
+                  {/*  }*/}
+                  {/*>*/}
+                  {/*  <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>*/}
+                  {/*    <InputLabel id="manufacturer">Storage Location</InputLabel>*/}
+                  {/*    <Select*/}
+                  {/*      disabled={disabled}*/}
+                  {/*      required*/}
+                  {/*      fullWidth*/}
+                  {/*      labelId="storage"*/}
+                  {/*      label="Storage Location"*/}
+                  {/*      id="storage"*/}
+                  {/*      value={getMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")}*/}
+                  {/*      onChange={this.handleStorageLocationRecordChange}*/}
+                  {/*    >*/}
+                  {/*      {this.storageLocations.map((l) => {*/}
+                  {/*        return (*/}
+                  {/*          <MenuItem value={l["id"]}>{l["title"]}</MenuItem>*/}
+                  {/*        )*/}
+                  {/*      })}*/}
+                  {/*    </Select>*/}
+                  {/*  </FormControl>*/}
+                  {/*</HtmlTooltip>*/}
                 </Grid>
               </Grid>
             </CardContent>
@@ -705,97 +823,127 @@ class MaterialMetadata extends Component {
             <CardContent>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'left'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")} />
-                    }
-                  >
-                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
-                      <InputLabel id="leaktest">Leak Testing Surveillance Frequency</InputLabel>
-                      <Select
-                        disabled={disabled}
-                        required
-                        fullWidth
-                        labelId="leaktest"
-                        label="Leak Testing Surveillance Frequency"
-                        id="leaktest"
-                        value={getMetadataValue(material, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")}
-                        onChange={this.handleLeakTestSurveillanceFrequencyChange}
-                      >
-                        {surveillanceFrequency.map((form) => {
-                          const t = form.split(',');
-                          if (t.length === 2) {
-                            return (
-                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
-                            )
-                          }
-                        })}
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
+                  <SelectFormControlWithTooltip
+                    id={"leaktest"}
+                    label="Leak Testing Surveillance Frequency"
+                    value={getMetadataValue(material, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")}
+                    onChange={this.handleLeakTestSurveillanceFrequencyChange}
+                    options={surveillanceFrequency}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<HtmlTooltip*/}
+                  {/*  placement={'left'}*/}
+                  {/*  title={*/}
+                  {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")} />*/}
+                  {/*  }*/}
+                  {/*>*/}
+                  {/*  <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>*/}
+                  {/*    <InputLabel id="leaktest">Leak Testing Surveillance Frequency</InputLabel>*/}
+                  {/*    <Select*/}
+                  {/*      disabled={disabled}*/}
+                  {/*      required*/}
+                  {/*      fullWidth*/}
+                  {/*      labelId="leaktest"*/}
+                  {/*      label="Leak Testing Surveillance Frequency"*/}
+                  {/*      id="leaktest"*/}
+                  {/*      value={getMetadataValue(material, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")}*/}
+                  {/*      onChange={this.handleLeakTestSurveillanceFrequencyChange}*/}
+                  {/*    >*/}
+                  {/*      {surveillanceFrequency.map((form) => {*/}
+                  {/*        const t = form.split(',');*/}
+                  {/*        if (t.length === 2) {*/}
+                  {/*          return (*/}
+                  {/*            <MenuItem value={t[0]}>{t[1]}</MenuItem>*/}
+                  {/*          )*/}
+                  {/*        }*/}
+                  {/*      })}*/}
+                  {/*    </Select>*/}
+                  {/*  </FormControl>*/}
+                  {/*</HtmlTooltip>*/}
                 </Grid>
                 <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'left'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")} />
-                    }
-                  >
-                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
-                      <InputLabel id="inventory">Inventory Surveillance Frequency</InputLabel>
-                      <Select
-                        disabled={disabled}
-                        required
-                        fullWidth
-                        labelId="inventory"
-                        label="Inventory Surveillance Frequency"
-                        id="inventory"
-                        value={getMetadataValue(material, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")}
-                        onChange={this.handleInventorySurveillanceFrequencyChange}
-                      >
-                        {surveillanceFrequency.map((form) => {
-                          const t = form.split(',');
-                          if (t.length === 2) {
-                            return (
-                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
-                            )
-                          }
-                        })}
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
+                  <SelectFormControlWithTooltip
+                    id={"inventory"}
+                    label="Inventory Surveillance Frequency"
+                    value={getMetadataValue(material, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")}
+                    onChange={this.handleInventorySurveillanceFrequencyChange}
+                    options={surveillanceFrequency}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<HtmlTooltip*/}
+                  {/*  placement={'left'}*/}
+                  {/*  title={*/}
+                  {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")} />*/}
+                  {/*  }*/}
+                  {/*>*/}
+                  {/*  <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>*/}
+                  {/*    <InputLabel id="inventory">Inventory Surveillance Frequency</InputLabel>*/}
+                  {/*    <Select*/}
+                  {/*      disabled={disabled}*/}
+                  {/*      required*/}
+                  {/*      fullWidth*/}
+                  {/*      labelId="inventory"*/}
+                  {/*      label="Inventory Surveillance Frequency"*/}
+                  {/*      id="inventory"*/}
+                  {/*      value={getMetadataValue(material, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")}*/}
+                  {/*      onChange={this.handleInventorySurveillanceFrequencyChange}*/}
+                  {/*    >*/}
+                  {/*      {surveillanceFrequency.map((form) => {*/}
+                  {/*        const t = form.split(',');*/}
+                  {/*        if (t.length === 2) {*/}
+                  {/*          return (*/}
+                  {/*            <MenuItem value={t[0]}>{t[1]}</MenuItem>*/}
+                  {/*          )*/}
+                  {/*        }*/}
+                  {/*      })}*/}
+                  {/*    </Select>*/}
+                  {/*  </FormControl>*/}
+                  {/*</HtmlTooltip>*/}
                 </Grid>
                 <Grid item xs={4}>
-                  <HtmlTooltip
-                    placement={'left'}
-                    title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")} />
-                    }
-                  >
-                    <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>
-                      <InputLabel id="activity">Activity Surveillance Frequency</InputLabel>
-                      <Select
-                        disabled={disabled}
-                        required
-                        fullWidth
-                        labelId="activity"
-                        label="Activity Surveillance Frequency"
-                        id="activity"
-                        value={getMetadataValue(material, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")}
-                        onChange={this.handleActivitySurveillanceFrequencyChange}
-                      >
-                        {surveillanceFrequency.map((form) => {
-                          const t = form.split(',');
-                          if (t.length === 2) {
-                            return (
-                              <MenuItem value={t[0]}>{t[1]}</MenuItem>
-                            )
-                          }
-                        })}
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
+                  <SelectFormControlWithTooltip
+                    id={"activity"}
+                    label="Activity Surveillance Frequency"
+                    value={getMetadataValue(material, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")}
+                    onChange={this.handleActivitySurveillanceFrequencyChange}
+                    options={surveillanceFrequency}
+                    disabled={disabled}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")}
+                    // target={this.tooltipRef}
+                  />
+                  {/*<HtmlTooltip*/}
+                  {/*  placement={'left'}*/}
+                  {/*  title={*/}
+                  {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")} />*/}
+                  {/*  }*/}
+                  {/*>*/}
+                  {/*  <FormControl sx={{ml: 0, mb: 1, width: '100%'}}>*/}
+                  {/*    <InputLabel id="activity">Activity Surveillance Frequency</InputLabel>*/}
+                  {/*    <Select*/}
+                  {/*      disabled={disabled}*/}
+                  {/*      required*/}
+                  {/*      fullWidth*/}
+                  {/*      labelId="activity"*/}
+                  {/*      label="Activity Surveillance Frequency"*/}
+                  {/*      id="activity"*/}
+                  {/*      value={getMetadataValue(material, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")}*/}
+                  {/*      onChange={this.handleActivitySurveillanceFrequencyChange}*/}
+                  {/*    >*/}
+                  {/*      {surveillanceFrequency.map((form) => {*/}
+                  {/*        const t = form.split(',');*/}
+                  {/*        if (t.length === 2) {*/}
+                  {/*          return (*/}
+                  {/*            <MenuItem value={t[0]}>{t[1]}</MenuItem>*/}
+                  {/*          )*/}
+                  {/*        }*/}
+                  {/*      })}*/}
+                  {/*    </Select>*/}
+                  {/*  </FormControl>*/}
+                  {/*</HtmlTooltip>*/}
                 </Grid>
               </Grid>
             </CardContent>

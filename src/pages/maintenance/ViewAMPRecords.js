@@ -1,17 +1,15 @@
 import React, {Component} from 'react';
 import {
-  BLANK_PDF,
-  CMD_GENERATE_SSC_RECORDS_PDF,
+  BLANK_PDF, CMD_GENERATE_AMP_RECORDS_PDF,
 } from "../../utils/constants";
 import {Grid, Typography} from "@mui/material";
 import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import PropTypes from "prop-types";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 
-const MODULE = "ViewSSCRecords";
+const MODULE = "ViewAMPRecords";
 
-class ViewSSCRecords extends Component {
+class ViewAMPRecords extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,17 +20,17 @@ class ViewSSCRecords extends Component {
 
   componentDidMount() {
     this.props.send({
-      cmd: CMD_GENERATE_SSC_RECORDS_PDF,
+      cmd: CMD_GENERATE_AMP_RECORDS_PDF,
       module: MODULE,
     });
   }
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (messageHasResponse(message)) {
+    if (message.hasOwnProperty("response")) {
       const response = message.response;
-      if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_GENERATE_SSC_RECORDS_PDF)) {
+      if (response.hasOwnProperty("status") && response.status === 0) {
+        if (message.hasOwnProperty("cmd") && message.cmd === CMD_GENERATE_AMP_RECORDS_PDF) {
           this.setState({ pdf: message.data.pdf });
         }
       } else {
@@ -59,7 +57,7 @@ class ViewSSCRecords extends Component {
   }
 }
 
-ViewSSCRecords.propTypes = {
+ViewAMPRecords.propTypes = {
   title: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
@@ -68,9 +66,9 @@ ViewSSCRecords.propTypes = {
   send: PropTypes.func.isRequired,
 };
 
-ViewSSCRecords.defaultProps = {
+ViewAMPRecords.defaultProps = {
   send: () => {},
   onClick: () => {},
 };
 
-export default ViewSSCRecords;
+export default ViewAMPRecords;

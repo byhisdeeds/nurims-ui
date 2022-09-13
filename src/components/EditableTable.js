@@ -555,7 +555,7 @@ class EditableTable extends React.Component {
         <Box sx={{pt:2}}>
           <Button
             variant="contained"
-            startIcon={<AddIcon />}
+            startIcon={<AddIcon small />}
             // className={classNames(classes.addBtn, `addBtn_${tableName}`)}
             disabled={isAdding || isEditing || disabled}
             onClick={() => this.setState({isAdding: true})}

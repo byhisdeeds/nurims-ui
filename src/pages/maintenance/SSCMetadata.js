@@ -41,6 +41,9 @@ import {
   NURIMS_ENTITY_DATE_OF_BIRTH,
   NURIMS_SSC_MAINTAINABILITY,
   NURIMS_SURVEILLANCE_FREQUENCY,
+  NURIMS_MATERIAL_NUCLIDES,
+  NURIMS_SSC_MAINTENANCE_SCOPE,
+  NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA, NURIMS_SSC_MAINTENANCE_TASK,
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
@@ -51,6 +54,7 @@ import IconButton from "@mui/material/IconButton";
 import {PhotoCamera} from "@mui/icons-material";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import EditableTable from "../../components/EditableTable";
 
 
 class SSCMetadata extends Component {
@@ -60,7 +64,49 @@ class SSCMetadata extends Component {
       ssc: {},
       properties: props.properties,
     };
+    this.ref = React.createRef();
     this.glossary = {};
+    this.sscSurveillanceData = [];
+    this.sscSurveillanceFields = [
+      {
+        label: "Scope",
+        name: NURIMS_SSC_MAINTENANCE_TASK,
+        width: '20ch',
+        align: 'center',
+        validation: (e, a) => {
+          return true;
+        },
+        error: "go home kid"
+      },
+      {
+        label: "Acceptance",
+        name: NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
+        width: '20ch',
+        align: 'center',
+        validation: e => {
+          return true;
+        },
+        error: "Haha"
+      },
+      {
+        label: "Frequency",
+        name: NURIMS_SSC_SURVEILLANCE_FREQUENCY,
+        type: "select",
+        width: '16ch',
+        align: 'center',
+        options: [],
+        validation: (e, a) => {
+          return true;
+        },
+        error: "go home kid"
+      },
+    ];
+    getPropertyValue(props.properties, NURIMS_SURVEILLANCE_FREQUENCY, "").split('|').map((n) => {
+      const t = n.split(',');
+      if (t.length === 2) {
+        return this.sscSurveillanceFields[2].options.push({ label: t[1], value: t[0] });
+      }
+    })
   }
 
   componentDidMount() {
@@ -103,9 +149,9 @@ class SSCMetadata extends Component {
 
   setSSCMetadata = (ssc) => {
     console.log("SSCMetadata.setSSCMetadata", ssc)
-    // if (ssc.hasOwnProperty("metadata")) {
-    //   const metadata = storage.metadata;
-    // }
+    if (this.ref.current) {
+      this.ref.current.setRowData(getMetadataValue(ssc, NURIMS_SSC_MAINTENANCE_SCOPE, []));
+    }
     this.setState({ssc: ssc})
     this.props.onChange(false);
   }
@@ -163,15 +209,25 @@ class SSCMetadata extends Component {
     this.props.onChange(true);
   }
 
-  handleSSCSurveillanceFrequencyChange = (e) => {
-    console.log("handleSSCSurveillanceFrequencyChange", e.target.value);
+  // handleSSCSurveillanceFrequencyChange = (e) => {
+  //   console.log("handleSSCSurveillanceFrequencyChange", e.target.value);
+  //   const ssc = this.state.ssc;
+  //   ssc["changed"] = true;
+  //   setMetadataValue(ssc, NURIMS_SSC_SURVEILLANCE_FREQUENCY, e.target.value);
+  //   this.setState({ssc: ssc})
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
+
+  saveTableData = data => {
+    console.log("UPDATED SURVEILLANCE TABLE DATA", data);
     const ssc = this.state.ssc;
     ssc["changed"] = true;
-    setMetadataValue(ssc, NURIMS_SSC_SURVEILLANCE_FREQUENCY, e.target.value);
+    setMetadataValue(ssc, NURIMS_SSC_MAINTENANCE_SCOPE, data);
     this.setState({ssc: ssc})
     // signal to parent that details have changed
     this.props.onChange(true);
-  }
+  };
 
   render() {
     const {ssc, properties} = this.state;
@@ -377,29 +433,38 @@ class SSCMetadata extends Component {
                   </FormControl>
                 </HtmlTooltip>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <HtmlTooltip
-                  placement={'left'}
-                  title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SURVEILLANCE_FREQUENCY, "")} />
-                  }
-                >
-                  <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
-                    <InputLabel id="maintenance-surveillance">SSC Maintenance Surveillance Frequency</InputLabel>
-                    <Select
-                      disabled={disabled}
-                      required
-                      fullWidth
-                      labelId="maintenance-surveillance"
-                      label="SSC Maintenance Surveillance Frequency"
-                      id="maintenance-surveillance"
-                      value={getMetadataValue(ssc, NURIMS_SSC_SURVEILLANCE_FREQUENCY, "")}
-                      onChange={this.handleSSCSurveillanceFrequencyChange}
-                    >
-                      {getPropertyAsMenuitems(properties, NURIMS_SURVEILLANCE_FREQUENCY)}
-                    </Select>
-                  </FormControl>
-                </HtmlTooltip>
+              <Grid item xs={12} sm={12}>
+                <EditableTable
+                  disable={disabled}
+                  ref={this.ref}
+                  addRowBtnText={"Add Surveillance"}
+                  initWithoutHead={false}
+                  defaultData={this.sscSurveillanceData}
+                  getData={this.saveTableData}
+                  fieldsArr={this.sscSurveillanceFields}
+                />
+                {/*<HtmlTooltip*/}
+                {/*  placement={'left'}*/}
+                {/*  title={*/}
+                {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SURVEILLANCE_FREQUENCY, "")} />*/}
+                {/*  }*/}
+                {/*>*/}
+                {/*  <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>*/}
+                {/*    <InputLabel id="maintenance-surveillance">SSC Maintenance Surveillance Frequency</InputLabel>*/}
+                {/*    <Select*/}
+                {/*      disabled={disabled}*/}
+                {/*      required*/}
+                {/*      fullWidth*/}
+                {/*      labelId="maintenance-surveillance"*/}
+                {/*      label="SSC Maintenance Surveillance Frequency"*/}
+                {/*      id="maintenance-surveillance"*/}
+                {/*      value={getMetadataValue(ssc, NURIMS_SSC_SURVEILLANCE_FREQUENCY, "")}*/}
+                {/*      onChange={this.handleSSCSurveillanceFrequencyChange}*/}
+                {/*    >*/}
+                {/*      {getPropertyAsMenuitems(properties, NURIMS_SURVEILLANCE_FREQUENCY)}*/}
+                {/*    </Select>*/}
+                {/*  </FormControl>*/}
+                {/*</HtmlTooltip>*/}
               </Grid>
             </Grid>
           </CardContent>
