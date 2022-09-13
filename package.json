@@ -2,6 +2,7 @@
   "name": "nurims",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/nurims",
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
@@ -34,7 +35,6 @@
     "react-scripts": "^5.0.1",
     "react-spinners": "^0.11.0",
     "react-toastify": "^8.1.1",
-    "react-virtualized": "^9.22.3",
     "react-virtuoso": "^2.18.0",
     "reconnecting-websocket": "^4.4.0",
     "uuid": "^8.3.2",
@@ -43,7 +43,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "node generate-buildno.js && react-scripts build",
-    "postbuild": "cp -rf build/* ../server/public/",
+    "postbuild": "cp -rf build/* ../server/public/nurims",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
