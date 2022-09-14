@@ -39,15 +39,6 @@ const ProtectedRoute = ({ authService, path, children }) => {
 const routing = (
   <BrowserRouter basename={"/nurims"}>
     <Routes>
-      {/*<Route*/}
-      {/*  exact*/}
-      {/*  path="/login"*/}
-      {/*  render={props => <Login*/}
-      {/*    wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}*/}
-      {/*    authService={AuthService}*/}
-      {/*    {...props} />*/}
-      {/*  }*/}
-      {/*/>*/}
       <Route
         path="/login"
         element={
