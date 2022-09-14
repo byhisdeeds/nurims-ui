@@ -20,17 +20,6 @@ const AuthService = {
   }
 };
 
-// const ProtectedRoute = ({ component: Component, ...rest }) => {
-//   // <Route {...rest} render={(props) => (
-//   //   AuthService.isAuthenticated
-//   //     ? <Component authService={AuthService} {...props} />
-//   //     : <Navigate to={'/login'} />
-//   // )} />
-//   // return AuthService.isAuthenticated ? <Component authService={AuthService} {...rest} /> : <Navigate to={'/login'}/>
-//   // return <Navigate to={'/login'}/>
-//   return Component;
-// };
-
 const ProtectedRoute = ({ authService, path, children }) => {
   authService.from = path;
   return authService.isAuthenticated ? children : <Navigate to={'/login'} replace={false}/>
