@@ -13,7 +13,7 @@ import {
 import SaveIcon from '@mui/icons-material/Save';
 import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
-import MonitoredStatusPersonsList from "./MonitoredStatusPersonsList";
+import MonitoredStatusPersonsList from "./PersonsMonitoredStatusList";
 import {getMetadataValue} from "../../utils/MetadataUtils";
 import {
   NURIMS_TITLE,

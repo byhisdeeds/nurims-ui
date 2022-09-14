@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter, Route, Switch, Router, Navigate} from 'react-router-dom';
+import {Routes, Route, Router, Navigate, BrowserRouter} from 'react-router-dom';
 import App from "./App";
 import Login from "./components/Login";
 // import { Auth0Provider } from "@auth0/auth0-react";
 
 const AuthService = {
   isAuthenticated: false,
+  from: '',
   profile: {},
   authenticate(valid, profile) {
     this.isAuthenticated = valid;
@@ -19,31 +20,56 @@ const AuthService = {
   }
 };
 
-const ProtectedRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={(props) => (
-    AuthService.isAuthenticated === true
-      ? <Component authService={AuthService} {...props} />
-      : <Navigate to='/nurims/login' />
-  )} />
-);
+// const ProtectedRoute = ({ component: Component, ...rest }) => {
+//   // <Route {...rest} render={(props) => (
+//   //   AuthService.isAuthenticated
+//   //     ? <Component authService={AuthService} {...props} />
+//   //     : <Navigate to={'/login'} />
+//   // )} />
+//   // return AuthService.isAuthenticated ? <Component authService={AuthService} {...rest} /> : <Navigate to={'/login'}/>
+//   // return <Navigate to={'/login'}/>
+//   return Component;
+// };
+
+const ProtectedRoute = ({ authService, children }) => {
+  authService.from = "/"; // window.location.path;
+  return authService.isAuthenticated ? children : <Navigate to={'/login'} replace={false}/>
+}
 
 const routing = (
-  <Router>
-    <div>
+  <BrowserRouter basename={"/nurims"}>
+    <Routes>
+      {/*<Route*/}
+      {/*  exact*/}
+      {/*  path="/login"*/}
+      {/*  render={props => <Login*/}
+      {/*    wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}*/}
+      {/*    authService={AuthService}*/}
+      {/*    {...props} />*/}
+      {/*  }*/}
+      {/*/>*/}
       <Route
-        exact
-        path="/nurims/login"
-        render={props => <Login
-                         wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}
-                         authService={AuthService}
-                         {...props} />
-               }
+        path="/login"
+        element={
+          <Login
+            authService={AuthService}
+            wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}
+          />
+        }
       />
-      <ProtectedRoute path="/nurims" exact component={App} />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute authService={AuthService}>
+            <App authService={AuthService} />
+          </ProtectedRoute>
+        }
+      />
+      {/*<ProtectedRoute exact path="/nurims" component={<App />} />*/}
       {/*<ProtectedRoute path="/onaa/spc" exact component={SpectrumAnalysis} />*/}
       {/*<ProtectedRoute path="/onaa/nuclib" component={NuclideLibrary} />*/}
-    </div>
-  </Router>
+    </Routes>
+  </BrowserRouter>
 );
 
 ReactDOM.render(routing, document.getElementById('root'));

@@ -17,6 +17,7 @@ import Container from '@mui/material/Container';
 import {toast, Zoom} from "react-toastify";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import Box from "@mui/material/Box";
+import {JSEncrypt} from "jsencrypt";
 
 const { v4: uuid } = require('uuid');
 const Constants = require('../utils/constants');
@@ -38,8 +39,6 @@ function encryptPassword(pubKey, text) {
   const jsEncrypt = new window.JSEncrypt();
   jsEncrypt.setPublicKey(pubKey);
   return jsEncrypt.encrypt(text);
-  // const encrypted = crypto.publicEncrypt(pubKey, Buffer.from(text, 'utf8'));
-  // return encrypted.toString('base64');
 }
 
 class Login extends React.Component {
@@ -130,13 +129,14 @@ class Login extends React.Component {
       }
     };
     this.ws.onmessage = (event) => {
-      let response = JSON.parse(event.data);
-      if (commandResponseEquals(response, Constants.CMD_GET_PUBLIC_KEY) && response.data.status === 0) {
-        this.puk = response.data.public;
+      const ev_data = JSON.parse(event.data);
+      if (commandResponseEquals(ev_data, Constants.CMD_GET_PUBLIC_KEY) && ev_data.data.status === 0) {
+        this.puk = ev_data.data.public_key;
         this.setState({ online: true });
-      } else if (commandResponseEquals(response, Constants.CMD_VERIFY_USER_PASSWORD)) {
-        if (response.data.hasOwnProperty('status') && response.data.status === 0) {
-          if (response.data.valid) {
+      } else if (commandResponseEquals(ev_data, Constants.CMD_VERIFY_USER_PASSWORD)) {
+        console.log(ev_data)
+        if (ev_data.hasOwnProperty("response") && ev_data.response.hasOwnProperty('status') && ev_data.response.status === 0) {
+          if (ev_data.response.valid) {
             // if Remember Me selected then save the username
             if (this.state.remember) {
               localStorage.setItem('rememberme', this.state.username);
@@ -144,11 +144,12 @@ class Login extends React.Component {
               localStorage.removeItem('rememberme');
             }
           } else {
-            toast.warn(response.data.message);
+            toast.warn(ev_data.response.message);
           }
-          this.authService.authenticate(response.data.valid, response.data.profile);
-          this.setState({ NavigateToPreviousRoute: response.data.valid });
+          this.authService.authenticate(ev_data.response.valid, ev_data.response.profile);
+          this.setState({ NavigateToPreviousRoute: ev_data.response.valid });
         } else {
+          toast.warn(ev_data.response.message);
           this.setState({ NavigateToPreviousRoute: false });
         }
       }
@@ -161,10 +162,10 @@ class Login extends React.Component {
 
   render() {
     if (this.state === null) return ('');
-    const { from } = this.props.location.state || { from: { pathname: "/" } };
+    const from = this.authService.from;
     const { NavigateToPreviousRoute, remember, username, online, theme } = this.state;
     if (NavigateToPreviousRoute) {
-      return <Navigate to={from.pathname} />;
+      return <Navigate to={from} replace={true} />;
     }
     return (
       <StyledEngineProvider injectFirst>

@@ -82,6 +82,7 @@ const Puller = styled(Box)(({ theme }) => ({
 
 class App extends React.Component {
   constructor(props) {
+    console.log("===========================")
     super(props);
     this.state = {
       actionid: '',
@@ -96,7 +97,7 @@ class App extends React.Component {
     this.menuTitle = "";
     this.ws = null;
     this.mounted = false;
-    this.user = this.props.auth0.user;
+    this.user = {};//this.props.auth0.user;
     this.crefs = {
       "MyAccount": React.createRef(),
       "Settings": React.createRef(),
@@ -267,7 +268,8 @@ class App extends React.Component {
                 </Typography>
               </Tooltip>
               <Typography variant="h6" component="div">
-                Organisation: {org.name.toUpperCase()}
+                {/*Organisation: {org.name.toUpperCase()}*/}
+                Organisation: {"ok"}
               </Typography>
               <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
               <Tooltip title="Network connection to system server">
