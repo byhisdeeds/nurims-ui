@@ -31,8 +31,8 @@ const AuthService = {
 //   return Component;
 // };
 
-const ProtectedRoute = ({ authService, children }) => {
-  authService.from = "/"; // window.location.path;
+const ProtectedRoute = ({ authService, path, children }) => {
+  authService.from = path;
   return authService.isAuthenticated ? children : <Navigate to={'/login'} replace={false}/>
 }
 
@@ -60,7 +60,7 @@ const routing = (
       <Route
         path="/"
         element={
-          <ProtectedRoute authService={AuthService}>
+          <ProtectedRoute path="/" authService={AuthService}>
             <App authService={AuthService} />
           </ProtectedRoute>
         }
