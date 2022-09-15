@@ -1,5 +1,6 @@
 import React, {Suspense, lazy} from 'react';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import PropTypes from 'prop-types'
 // import {withAuthenticationRequired} from '@auth0/auth0-react'
 // import { withAuth0 } from '@auth0/auth0-react';
 // import 'react-json-pretty/themes/monikai.css';
@@ -28,6 +29,7 @@ import "./App.css"
 import {grey} from "@mui/material/colors";
 import {setPropertyValue} from "./utils/PropertyUtils";
 import {CMD_GET_SYSTEM_PROPERTIES, CMD_SET_ORG_DB, CMD_SET_SYSTEM_PROPERTIES} from "./utils/constants";
+import {SelectFormControl} from "./components/CommonComponents";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -82,13 +84,12 @@ const Puller = styled(Box)(({ theme }) => ({
 
 class App extends React.Component {
   constructor(props) {
-    console.log("===========================")
     super(props);
     this.state = {
       actionid: '',
       open: true,
       theme: localStorage.getItem("theme") || "light",
-      menuData: [],
+      menuData: MenuData,
       org: {name: "", authorized_module_level: "", role: ""},
       ready: false,
       busy: 0,
@@ -119,14 +120,19 @@ class App extends React.Component {
   componentDidMount() {
     this.mounted = true;
     // Everything here is fired on component mount.
-    this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}:5000/nurimsws`);
+    // this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}/nurimsws`);
+    this.ws = new ReconnectingWebSocket(this.props.wsep);
     this.ws.onopen = (event) => {
       console.log('websocket connection established.');
       this.setState({ ready: true });
-      // load organisation database on server
+      // // load organisation database on server
+      // this.send({
+      //   cmd: CMD_SET_ORG_DB,
+      //   org: this.state.org,
+      // })
+      // load system properties
       this.send({
-        cmd: CMD_SET_ORG_DB,
-        org: this.state.org,
+        cmd: CMD_GET_SYSTEM_PROPERTIES,
       })
     };
     this.ws.onerror = (error) => {
@@ -214,20 +220,20 @@ class App extends React.Component {
     this.setState({ open: !this.state.open });
   };
 
-  handleOrganisationSelected = (_org) => {
-    if (typeof _org === 'object') {
-      this.setState({ menuData: MenuData, org: _org });
-      // load organisation database on server
-      this.send({
-        cmd: CMD_SET_ORG_DB,
-        org: _org,
-      })
-      // load system properties
-      this.send({
-        cmd: CMD_GET_SYSTEM_PROPERTIES,
-      })
-    }
-  };
+  // handleOrganisationSelected = (_org) => {
+  //   if (typeof _org === 'object') {
+  //     this.setState({ menuData: MenuData, org: _org });
+  //     // load organisation database on server
+  //     this.send({
+  //       cmd: CMD_SET_ORG_DB,
+  //       org: _org,
+  //     })
+  //     // load system properties
+  //     this.send({
+  //       cmd: CMD_GET_SYSTEM_PROPERTIES,
+  //     })
+  //   }
+  // };
 
   render() {
     const {theme, org, ready, menuData, actionid, open, busy} = this.state;
@@ -283,7 +289,6 @@ class App extends React.Component {
               </Tooltip>
             </Toolbar>
           </AppBar>
-          {org.name === '' && <SelectOrganisation open={true} user={this.user} onSelect={this.handleOrganisationSelected}/>}
           <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user} organisation={org}>
             <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
               <Box sx={{ p: 3 }}>
@@ -414,6 +419,11 @@ class App extends React.Component {
       </ThemeProvider>
     )
   }
+}
+
+App.propTypes = {
+  authService: PropTypes.object.isRequired,
+  wsep: PropTypes.string.isRequired,
 }
 
 export default App
