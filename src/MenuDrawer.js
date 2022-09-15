@@ -7,6 +7,8 @@ import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import AppMenuItem from "./AppMenuItem";
+import PropTypes from 'prop-types'
+import App from "./App";
 
 const drawerWidth = 300;
 
@@ -51,6 +53,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
   }),
 );
+
+MenuDrawer.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  menuItems: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  organisation: PropTypes.object.isRequired,
+}
 
 function MenuDrawer(props) {
 

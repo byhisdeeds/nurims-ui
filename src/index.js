@@ -41,7 +41,10 @@ const routing = (
         path="/"
         element={
           <ProtectedRoute path="/" authService={AuthService}>
-            <App authService={AuthService} />
+            <App
+              authService={AuthService}
+              wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}
+            />
           </ProtectedRoute>
         }
       />

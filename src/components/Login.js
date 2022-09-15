@@ -1,6 +1,8 @@
 import React from 'react';
 import {Navigate} from "react-router-dom";
+import PropTypes from 'prop-types'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
+import {withTheme} from "@mui/styles";
 import {darkTheme, lightTheme} from "../utils/Theme";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,10 +16,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {styled} from "@mui/material/styles";
 import Container from '@mui/material/Container';
-import {toast, Zoom} from "react-toastify";
+import {toast, ToastContainer, Zoom} from "react-toastify";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import Box from "@mui/material/Box";
-import {JSEncrypt} from "jsencrypt";
 
 const { v4: uuid } = require('uuid');
 const Constants = require('../utils/constants');
@@ -51,26 +52,26 @@ class Login extends React.Component {
     this._mounted = false;
     this.state = {
       NavigateToPreviousRoute: false,
-      theme: localStorage.getItem("theme") || "light" === "light" ? lightTheme : darkTheme,
+      theme: localStorage.getItem("theme") || "light",
       username: '',
       password: '',
       remember: false,
       online: false,
     }
     // Call it once in your app. At the root of your app is the best place
-    toast.configure({
-      className: 'naa-toast',
-      autoClose: 3000,
-      draggable: false,
-      position: "top-center",
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnVisibilityChange: true,
-      rtl: false,
-      newestOnTop: true,
-      pauseOnHover: true,
-      transition: Zoom,
-    });
+    // toast.configure({
+    //   className: 'naa-toast',
+    //   autoClose: 3000,
+    //   draggable: false,
+    //   position: "top-center",
+    //   hideProgressBar: true,
+    //   closeOnClick: true,
+    //   pauseOnVisibilityChange: true,
+    //   rtl: false,
+    //   newestOnTop: true,
+    //   pauseOnHover: true,
+    //   transition: Zoom,
+    // });
   }
 
   onUsernameChange = (event) => {
@@ -163,13 +164,26 @@ class Login extends React.Component {
   render() {
     if (this.state === null) return ('');
     const from = this.authService.from;
-    const { NavigateToPreviousRoute, remember, username, online, theme } = this.state;
+    const { NavigateToPreviousRoute, remember, username, online } = this.state;
+    const theme = this.state.theme === 'light' ? lightTheme : darkTheme
     if (NavigateToPreviousRoute) {
       return <Navigate to={from} replace={true} />;
     }
     return (
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
+          <ToastContainer
+            position="top-right"
+            autoClose={4000}
+            theme={'dark'}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           <Container
             component="main"
             maxWidth="xs"
@@ -248,8 +262,9 @@ class Login extends React.Component {
   }
 }
 
-Login.defaultProps = {
-  wsep: `ws://${window.location.hostname}/onaaws`,
-};
+Login.propTypes = {
+  authService: PropTypes.object.isRequired,
+  wsep: PropTypes.string.isRequired,
+}
 
 export default Login;
