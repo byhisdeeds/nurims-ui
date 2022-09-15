@@ -28,7 +28,11 @@ import BusyIndicator from "./components/BusyIndicator";
 import "./App.css"
 import {grey} from "@mui/material/colors";
 import {setPropertyValue} from "./utils/PropertyUtils";
-import {CMD_GET_SYSTEM_PROPERTIES, CMD_SET_ORG_DB, CMD_SET_SYSTEM_PROPERTIES} from "./utils/constants";
+import {
+  CMD_GET_SYSTEM_PROPERTIES,
+  CMD_GET_ORGANISATION,
+  CMD_SET_SYSTEM_PROPERTIES
+} from "./utils/constants";
 import {SelectFormControl} from "./components/CommonComponents";
 
 const {v4: uuid} = require('uuid');
@@ -68,11 +72,11 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const StyledBox = styled(Box)(({ theme }) => ({
+const StyledBox = styled(Box)(({theme}) => ({
   backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
 }));
 
-const Puller = styled(Box)(({ theme }) => ({
+const Puller = styled(Box)(({theme}) => ({
   width: 30,
   height: 6,
   backgroundColor: theme.palette.mode === 'light' ? grey[300] : grey[900],
@@ -90,7 +94,7 @@ class App extends React.Component {
       open: true,
       theme: localStorage.getItem("theme") || "light",
       menuData: MenuData,
-      org: {name: "", authorized_module_level: "", role: ""},
+      org: {name: "", authorized_module_level: ""},
       ready: false,
       busy: 0,
     };
@@ -124,12 +128,11 @@ class App extends React.Component {
     this.ws = new ReconnectingWebSocket(this.props.wsep);
     this.ws.onopen = (event) => {
       console.log('websocket connection established.');
-      this.setState({ ready: true });
-      // // load organisation database on server
-      // this.send({
-      //   cmd: CMD_SET_ORG_DB,
-      //   org: this.state.org,
-      // })
+      this.setState({ready: true});
+      // load organisation database on server
+      this.send({
+        cmd: CMD_GET_ORGANISATION,
+      })
       // load system properties
       this.send({
         cmd: CMD_GET_SYSTEM_PROPERTIES,
@@ -137,18 +140,18 @@ class App extends React.Component {
     };
     this.ws.onerror = (error) => {
       console.log(`websocket error - ${JSON.stringify(error)}`);
-      this.setState({ ready: false });
+      this.setState({ready: false});
     };
     this.ws.onclose = (event) => {
       console.log('websocket connection closed.');
       if (this.mounted) {
-        this.setState({ ready: false, busy: 0 });
+        this.setState({ready: false, busy: 0});
       }
     };
     this.ws.onmessage = (event) => {
       // console.log("RESPONSE >>>", event.data)
       const data = JSON.parse(event.data);
-      // console.log("RESPONSE-DATA >>>", data)
+      console.log("RESPONSE-DATA >>>", data)
       if (data.hasOwnProperty('module')) {
         for (const [k, v] of Object.entries(this.crefs)) {
           if (k === data.module) {
@@ -157,8 +160,8 @@ class App extends React.Component {
             }
           }
         }
-      } else if (data.cmd === CMD_SET_ORG_DB) {
-        this.setState({ org: data.org });
+      } else if (data.cmd === CMD_GET_ORGANISATION) {
+        this.setState({org: data.response.org});
       } else if (data.cmd === CMD_GET_SYSTEM_PROPERTIES) {
         if (data.hasOwnProperty("response")) {
           for (const property of data.response.properties) {
@@ -171,7 +174,7 @@ class App extends React.Component {
           setPropertyValue(this.properties, property.name, property.value);
         }
       }
-      this.setState({ busy: this.state.busy - 1 });
+      this.setState({busy: this.state.busy - 1});
     };
   }
 
@@ -190,7 +193,7 @@ class App extends React.Component {
       }));
       // this.setState({ busy: this.state.busy + 1 });
       this.setState(pstate => {
-        return { busy: pstate.busy + 1}
+        return {busy: pstate.busy + 1}
       });
     }
   };
@@ -200,24 +203,24 @@ class App extends React.Component {
     // console.log("+++ typeof link, typeof title", typeof link, typeof title)
     if (link && typeof link === "object") {
       this.menuTitle = link.target.dataset.title ? link.target.dataset.title : "";
-      this.setState({ actionid: link.target.id });
+      this.setState({actionid: link.target.id});
     } else if (link && typeof link === "string") {
       if (link === 'set-light-theme') {
-        this.setState({ theme: 'light' });
+        this.setState({theme: 'light'});
         localStorage.setItem("theme", 'light');
       } else if (link === 'set-dark-theme') {
-        this.setState({ theme: 'dark' });
+        this.setState({theme: 'dark'});
         localStorage.setItem("theme", 'dark');
       } else if (link && title) {
         // console.log(">> link, title", link, title)
         this.menuTitle = title ? title : "";
-        this.setState({ actionid: link });
+        this.setState({actionid: link});
       }
     }
   };
 
   toggleMenuDrawer = () => {
-    this.setState({ open: !this.state.open });
+    this.setState({open: !this.state.open});
   };
 
   // handleOrganisationSelected = (_org) => {
@@ -237,6 +240,7 @@ class App extends React.Component {
 
   render() {
     const {theme, org, ready, menuData, actionid, open, busy} = this.state;
+    console.log("ORG", org)
     return (
       <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
         <Box sx={{flexGrow: 1}}>
@@ -274,8 +278,7 @@ class App extends React.Component {
                 </Typography>
               </Tooltip>
               <Typography variant="h6" component="div">
-                {/*Organisation: {org.name.toUpperCase()}*/}
-                Organisation: {"ok"}
+                Organisation: {org.name.toUpperCase()}
               </Typography>
               <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
               <Tooltip title="Network connection to system server">
@@ -289,126 +292,127 @@ class App extends React.Component {
               </Tooltip>
             </Toolbar>
           </AppBar>
-          <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user} organisation={org}>
+          <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
+                      organisation={org}>
             <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
-              <Box sx={{ p: 3 }}>
-                <BusyIndicator open={busy>0} loader={"pulse"} size={40}/>
+              <Box sx={{p: 3}}>
+                <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
                 {actionid === Constants.MY_ACCOUNT &&
-                <MyAccount
-                  ref={this.crefs["MyAccount"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <MyAccount
+                    ref={this.crefs["MyAccount"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.SETTINGS &&
-                <Settings
-                  ref={this.crefs["Settings"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <Settings
+                    ref={this.crefs["Settings"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.HR_ADD_EDIT_PERSONNEL &&
-                <AddEditPersonnel
-                  ref={this.crefs["AddEditPersonnel"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <AddEditPersonnel
+                    ref={this.crefs["AddEditPersonnel"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.RP_ADD_DOSIMETRY_MEASUREMENT &&
-                <AddDosimetryMeasurement
-                  ref={this.crefs["AddDosimetryMeasurement"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <AddDosimetryMeasurement
+                    ref={this.crefs["AddDosimetryMeasurement"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.HR_UPDATE_MONITORING_STATUS &&
-                <UpdateMonitoringStatus
-                  ref={this.crefs["UpdateMonitoringStatus"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <UpdateMonitoringStatus
+                    ref={this.crefs["UpdateMonitoringStatus"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.HR_VIEW_PERSONNEL_RECORDS &&
-                <ViewPersonnelRecords
-                  ref={this.crefs["ViewPersonnelRecords"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <ViewPersonnelRecords
+                    ref={this.crefs["ViewPersonnelRecords"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER &&
-                <Manufacturer
-                  ref={this.crefs["Manufacturer"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <Manufacturer
+                    ref={this.crefs["Manufacturer"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION &&
-                <Storage
-                  ref={this.crefs["Storage"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <Storage
+                    ref={this.crefs["Storage"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL &&
-                <Material
-                  ref={this.crefs["Material"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <Material
+                    ref={this.crefs["Material"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.CM_VIEW_CONTROLLED_MATERIALS_LIST &&
-                <ViewMaterialsList
-                  ref={this.crefs["ViewMaterialsList"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <ViewMaterialsList
+                    ref={this.crefs["ViewMaterialsList"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.SSC_ADD_EDIT_SSC &&
-                <SSC
-                  ref={this.crefs["SSC"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <SSC
+                    ref={this.crefs["SSC"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.SSC_ADD_EDIT_SSC_AMP &&
-                <AMP
-                  ref={this.crefs["AMP"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <AMP
+                    ref={this.crefs["AMP"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 {actionid === Constants.SSC_VIEW_SSC_RECORDS &&
-                <ViewSSCRecords
-                  ref={this.crefs["ViewSSCRecords"]}
-                  title={this.menuTitle}
-                  user={this.user}
-                  onClick={this.handleMenuAction}
-                  send={this.send}
-                  properties={this.properties}
-                />}
+                  <ViewSSCRecords
+                    ref={this.crefs["ViewSSCRecords"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
                 <Typography paragraph>
                   {actionid}
                 </Typography>
