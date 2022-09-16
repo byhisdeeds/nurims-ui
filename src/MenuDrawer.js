@@ -67,7 +67,11 @@ function MenuDrawer(props) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <Drawer variant="permanent" open={props.open} style={{top: 64, overflowY: 'auto', height: 'calc(100vh - 64px)'}}>
+      <Drawer
+        variant="permanent"
+        open={props.open}
+        style={{top: 64, overflowY: 'auto', height: 'calc(100vh - 64px)'}}
+      >
         <List component="nav" disablePadding>
           {props.menuItems.map((item, index) => (
             <AppMenuItem

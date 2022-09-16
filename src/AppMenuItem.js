@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import {createStyles, styled} from '@mui/material/styles'
 import {makeStyles} from '@mui/styles';
 import List from '@mui/material/List'
@@ -22,12 +22,22 @@ const useStyles = makeStyles(theme =>
   }),
 )
 
+AppMenuItem.propTypes = {
+  key: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
+  organisation: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired,
+  root: PropTypes.bool.isRequired,
+}
+
 export default function AppMenuItem(props) {
   const { name, link, title, root, Icon, tooltip, user, authmodlevel, items = []} = props
   const classes = useStyles()
   const isExpandable = items && items.length > 0
-  const isSysadmin = user.hasOwnProperty("https://mydomain/app_metadata") &&
-                     user["https://mydomain/app_metadata"].hasOwnProperty("sysadmin")
+  console.log("###############################")
+  console.log("USER", user)
+  console.log("###############################")
+  const isSysadmin = user.hasOwnProperty("profile") && (user.profile["role"] === "sysadmin");
   const isVisible = (isSysadmin) || (authmodlevel !== "sysadmin")
   const [open, setOpen] = React.useState(false)
 

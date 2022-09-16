@@ -102,7 +102,7 @@ class App extends React.Component {
     this.menuTitle = "";
     this.ws = null;
     this.mounted = false;
-    this.user = {};//this.props.auth0.user;
+    this.user = this.props.authService;
     this.crefs = {
       "MyAccount": React.createRef(),
       "Settings": React.createRef(),

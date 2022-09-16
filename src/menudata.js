@@ -594,6 +594,13 @@ export const MenuData = [
         tooltip: 'Add system administration',
         authmodlevel: 'sysadmin',
       },
+      {
+        name: '- Import Personnel',
+        link: 'sysadmin.import.personnel',
+        title: '',
+        tooltip: 'Batch import personnel',
+        authmodlevel: 'sysadmin',
+      },
     ],
   },
 ]
