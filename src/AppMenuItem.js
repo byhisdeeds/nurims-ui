@@ -34,9 +34,6 @@ export default function AppMenuItem(props) {
   const { name, link, title, root, Icon, tooltip, user, authmodlevel, items = []} = props
   const classes = useStyles()
   const isExpandable = items && items.length > 0
-  console.log("###############################")
-  console.log("USER", user)
-  console.log("###############################")
   const isSysadmin = user.hasOwnProperty("profile") && (user.profile["role"] === "sysadmin");
   const isVisible = (isSysadmin) || (authmodlevel !== "sysadmin")
   const [open, setOpen] = React.useState(false)

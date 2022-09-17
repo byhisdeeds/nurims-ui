@@ -19,11 +19,14 @@ import {toast} from "react-toastify";
 import PersonMetadata from "./PersonMetadata";
 import Box from "@mui/material/Box";
 import {
-  CMD_GET_PERSONNEL_METADATA,
-  CMD_GET_PERSONNEL_RECORDS, CMD_UPDATE_PERSONNEL_RECORD,
+  CMD_GET_PERSONNEL_RECORDS,
+  CMD_UPDATE_PERSONNEL_RECORD, METADATA,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
+import {
+  getResponseObject
+} from "../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
 
 const MODULE = "AddEditPersonnel";
@@ -111,18 +114,37 @@ class AddEditPersonnel extends Component {
       const response = message.response;
       if (response.hasOwnProperty("status") && response.status === 0) {
         if (message.hasOwnProperty("cmd") && message.cmd ===CMD_GET_PERSONNEL_RECORDS) {
-          if (this.plref.current) {
-            this.plref.current.add(response.personnel, true);
+          if (message.hasOwnProperty("include.metadata")) {
+            const selection = this.state.selection;
+            const personnel = getResponseObject(message, "response.personnel", "item_id", selection["item_id"]);
+            console.log("PERSONNEL", personnel);
+            selection[NURIMS_TITLE] = personnel[NURIMS_TITLE];
+            selection[NURIMS_WITHDRAWN] = personnel[NURIMS_WITHDRAWN];
+            selection[METADATA] = [...personnel["metadata"]]
+            // if (response.personnel.item_id === selection["item_id"]) {
+            //   selection[NURIMS_TITLE] = response.personnel[NURIMS_TITLE];
+            //   selection[NURIMS_WITHDRAWN] = response.personnel[NURIMS_WITHDRAWN];
+            //   selection["metadata"] = [...response.personnel["metadata"]]
+            // }
+            if (this.pmref.current) {
+              this.pmref.current.set_person_object(selection);
+            }
+          } else {
+            if (this.plref.current) {
+              this.plref.current.add(response.personnel, true);
+            }
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_PERSONNEL_METADATA) {
+        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_PERSONNEL_RECORDS) {
           const selection = this.state.selection;
-          if (response.personnel.item_id === selection["item_id"]) {
-            selection[NURIMS_TITLE] = response.personnel[NURIMS_TITLE];
-            selection[NURIMS_WITHDRAWN] = response.personnel[NURIMS_WITHDRAWN];
-            selection["metadata"] = [...response.personnel["metadata"]]
-          }
-          // if (this.plref.current) {
-          //   this.plref.current.update_selected_person(response.personnel);
+          const personnel = getResponseObject(message, "response.personnel", "item_id", selection["item_id"]);
+          console.log("PERSONNEL", personnel);
+          selection[NURIMS_TITLE] = personnel[NURIMS_TITLE];
+          selection[NURIMS_WITHDRAWN] = personnel[NURIMS_WITHDRAWN];
+          selection[METADATA] = [...personnel["metadata"]]
+          // if (response.personnel.item_id === selection["item_id"]) {
+          //   selection[NURIMS_TITLE] = response.personnel[NURIMS_TITLE];
+          //   selection[NURIMS_WITHDRAWN] = response.personnel[NURIMS_WITHDRAWN];
+          //   selection["metadata"] = [...response.personnel["metadata"]]
           // }
           if (this.pmref.current) {
             this.pmref.current.set_person_object(selection);
@@ -165,10 +187,11 @@ class AddEditPersonnel extends Component {
         return { selection: selection }
       });
       this.props.send({
-        cmd: CMD_GET_PERSONNEL_METADATA,
+        cmd: CMD_GET_PERSONNEL_RECORDS,
         item_id: selection.item_id,
+        "include.metadata": "true",
         module: MODULE,
-      })
+      });
     }
     this.setState({ selection: selection })
   }
