@@ -37,6 +37,7 @@ module.exports = Object.freeze({
   CMD_GENERATE_SSC_RECORDS_PDF: "generate_ssc_records_pdf",
 
   METADATA: 'metadata',
+  INCLUDE_METADATA: 'include.metadata',
 
   NURIMS_TITLE: 'nurims.title',
   NURIMS_WITHDRAWN: 'nurims.withdrawn',

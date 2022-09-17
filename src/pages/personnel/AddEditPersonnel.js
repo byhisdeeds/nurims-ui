@@ -20,12 +20,14 @@ import PersonMetadata from "./PersonMetadata";
 import Box from "@mui/material/Box";
 import {
   CMD_GET_PERSONNEL_RECORDS,
-  CMD_UPDATE_PERSONNEL_RECORD, METADATA,
+  CMD_UPDATE_PERSONNEL_RECORD,
+  INCLUDE_METADATA,
+  METADATA,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
 import {
-  getResponseObject
+  getMatchingResponseObject
 } from "../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
 
@@ -114,18 +116,12 @@ class AddEditPersonnel extends Component {
       const response = message.response;
       if (response.hasOwnProperty("status") && response.status === 0) {
         if (message.hasOwnProperty("cmd") && message.cmd ===CMD_GET_PERSONNEL_RECORDS) {
-          if (message.hasOwnProperty("include.metadata")) {
+          if (message.hasOwnProperty(INCLUDE_METADATA)) {
             const selection = this.state.selection;
-            const personnel = getResponseObject(message, "response.personnel", "item_id", selection["item_id"]);
-            console.log("PERSONNEL", personnel);
+            const personnel = getMatchingResponseObject(message, "response.personnel", "item_id", selection["item_id"]);
             selection[NURIMS_TITLE] = personnel[NURIMS_TITLE];
             selection[NURIMS_WITHDRAWN] = personnel[NURIMS_WITHDRAWN];
-            selection[METADATA] = [...personnel["metadata"]]
-            // if (response.personnel.item_id === selection["item_id"]) {
-            //   selection[NURIMS_TITLE] = response.personnel[NURIMS_TITLE];
-            //   selection[NURIMS_WITHDRAWN] = response.personnel[NURIMS_WITHDRAWN];
-            //   selection["metadata"] = [...response.personnel["metadata"]]
-            // }
+            selection[METADATA] = [...personnel[METADATA]]
             if (this.pmref.current) {
               this.pmref.current.set_person_object(selection);
             }
@@ -133,21 +129,6 @@ class AddEditPersonnel extends Component {
             if (this.plref.current) {
               this.plref.current.add(response.personnel, true);
             }
-          }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_PERSONNEL_RECORDS) {
-          const selection = this.state.selection;
-          const personnel = getResponseObject(message, "response.personnel", "item_id", selection["item_id"]);
-          console.log("PERSONNEL", personnel);
-          selection[NURIMS_TITLE] = personnel[NURIMS_TITLE];
-          selection[NURIMS_WITHDRAWN] = personnel[NURIMS_WITHDRAWN];
-          selection[METADATA] = [...personnel["metadata"]]
-          // if (response.personnel.item_id === selection["item_id"]) {
-          //   selection[NURIMS_TITLE] = response.personnel[NURIMS_TITLE];
-          //   selection[NURIMS_WITHDRAWN] = response.personnel[NURIMS_WITHDRAWN];
-          //   selection["metadata"] = [...response.personnel["metadata"]]
-          // }
-          if (this.pmref.current) {
-            this.pmref.current.set_person_object(selection);
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_PERSONNEL_RECORD) {
           toast.success(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)

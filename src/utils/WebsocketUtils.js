@@ -23,7 +23,7 @@ export function isModuleMessage(data) {
   return data.hasOwnProperty("module");
 }
 
-export function getResponseObject(data, pobject, key, key_value, missingValue) {
+export function getMatchingResponseObject(data, pobject, key, key_value, missingValue) {
   let x = {};
   let d = data;
   for (const f of pobject.split(".")) {

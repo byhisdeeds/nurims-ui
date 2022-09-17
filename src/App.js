@@ -240,7 +240,6 @@ class App extends React.Component {
 
   render() {
     const {theme, org, ready, menuData, actionid, open, busy} = this.state;
-    console.log("ORG", org)
     return (
       <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
         <Box sx={{flexGrow: 1}}>
