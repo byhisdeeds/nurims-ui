@@ -13,6 +13,7 @@ module.exports = Object.freeze({
   SSC_ADD_EDIT_SSC_AMP: 'ssc.add.edit.ssc.amp',
   SSC_VIEW_SSC_RECORDS: 'ssc.view.ssc.records',
 
+  PRO_IMPORT_ICENS_PERSONNEL: 'sysadmin.import.icens.personnel',
 
   CMD_GET_PUBLIC_KEY: 'get_public_key',
   CMD_VERIFY_USER_PASSWORD: 'verify_user_password',

@@ -50,6 +50,7 @@ const ViewMaterialsList = lazy(() => import('./pages/controlledmaterials/ViewMat
 const SSC = lazy(() => import('./pages/maintenance/SSC'));
 const AMP = lazy(() => import('./pages/maintenance/AMP'));
 const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
+const ImportICENSPersonnel = lazy(() => import('./pages/packages/icens/ImportICENSPersonnel'));
 
 const drawerWidth = 300;
 
@@ -117,6 +118,7 @@ class App extends React.Component {
       "SSC": React.createRef(),
       "AMP": React.createRef(),
       "ViewSSCRecords": React.createRef(),
+      "ImportICENSPersonnel": React.createRef(),
     };
   }
 
@@ -406,6 +408,15 @@ class App extends React.Component {
                 {actionid === Constants.SSC_VIEW_SSC_RECORDS &&
                   <ViewSSCRecords
                     ref={this.crefs["ViewSSCRecords"]}
+                    title={this.menuTitle}
+                    user={this.user}
+                    onClick={this.handleMenuAction}
+                    send={this.send}
+                    properties={this.properties}
+                  />}
+                {actionid === Constants.PRO_IMPORT_ICENS_PERSONNEL &&
+                  <ImportICENSPersonnel
+                    ref={this.crefs["ImportICENSPersonnel"]}
                     title={this.menuTitle}
                     user={this.user}
                     onClick={this.handleMenuAction}
