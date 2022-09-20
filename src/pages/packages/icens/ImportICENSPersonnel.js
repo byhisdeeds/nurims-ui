@@ -20,7 +20,7 @@ import {
   CMD_GET_PERSONNEL_RECORDS,
   CMD_UPDATE_PERSONNEL_RECORD,
   INCLUDE_METADATA,
-  METADATA,
+  METADATA, NURIMS_ENTITY_CONTACT,
   NURIMS_ENTITY_DATE_OF_BIRTH,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
   NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
@@ -287,10 +287,10 @@ class ImportICENSPersonnel extends Component {
             setMetadataValue(person, NURIMS_ENTITY_SEX, d.sex)
           }
           if (d.hasOwnProperty("contact")) {
-            setMetadataValue(person, NURIMS_ENTITY_NATIONAL_ID, d.contact)
+            setMetadataValue(person, NURIMS_ENTITY_CONTACT, d.contact)
           }
           if (d.hasOwnProperty("nid")) {
-            setMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, d.nid)
+            setMetadataValue(person, NURIMS_ENTITY_NATIONAL_ID, d.nid)
           }
           if (d.hasOwnProperty("handle")) {
             setMetadataValue(person, NURIMS_ENTITY_DOSE_PROVIDER_ID, d.handle)
