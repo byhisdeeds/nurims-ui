@@ -265,10 +265,8 @@ class AddEditPersonnel extends Component {
       }
     } else {
       this.props.send({
-        cmd: 'permanently_delete_person',
+        cmd: 'delete_item_record',
         item_id: this.state.selection.item_id,
-        "nurims.title": this.state.selection["nurims.title"],
-        "nurims.withdrawn": this.state.selection["nurims.withdrawn"],
         module: MODULE,
       });
     }
@@ -376,7 +374,7 @@ class AddEditPersonnel extends Component {
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removePerson}
-               disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
+               disabled={!(selection.hasOwnProperty("item_id") && selection.item_id !== -1)}>
             <PersonRemoveIcon sx={{mr: 1}}/>
             Remove Person
           </Fab>
