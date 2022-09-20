@@ -127,7 +127,7 @@ class AddEditPersonnel extends Component {
             }
           } else {
             if (this.plref.current) {
-              this.plref.current.add(response.personnel, true);
+              this.plref.current.add(response.personnel, false);
             }
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_PERSONNEL_RECORD) {
