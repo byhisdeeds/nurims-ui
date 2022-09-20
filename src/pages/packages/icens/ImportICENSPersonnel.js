@@ -33,7 +33,7 @@ import {
   NURIMS_WITHDRAWN
 } from "../../../utils/constants";
 import {
-  getMatchingResponseObject
+  getMatchingResponseObject, messageStatusOk
 } from "../../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
 import ReactJson from "react-json-view";
@@ -111,6 +111,7 @@ class ImportICENSPersonnel extends Component {
       persons: [],
       busy: 0,
       metadata_changed: false,
+      messages: [],
       alert: false,
       confirm_remove: false,
       previous_selection: {},
@@ -122,10 +123,6 @@ class ImportICENSPersonnel extends Component {
   }
 
   componentDidMount() {
-    this.props.send({
-      cmd: CMD_GET_PERSONNEL_RECORDS,
-      module: MODULE,
-    })
   }
 
   ws_message = (message) => {
@@ -134,13 +131,16 @@ class ImportICENSPersonnel extends Component {
       const response = message.response;
       if (response.hasOwnProperty("status") && response.status === 0) {
         if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_PERSONNEL_RECORD) {
-          toast.success(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)
-          if (this.plref.current) {
-            this.plref.current.update(response.personnel);
-          }
-          // if (this.pmref.current) {
-          //   this.pmref.current.set_metadata(response.personnel);
+          const messages = this.state.messages;
+          messages.push(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`);
+          this.setState({messages: messages});
+          // toast.success(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)
+          // if (this.plref.current) {
+          //   this.plref.current.update(response.personnel);
           // }
+          // // if (this.pmref.current) {
+          // //   this.pmref.current.set_metadata(response.personnel);
+          // // }
         }
       } else {
         toast.error(response.message);
@@ -312,7 +312,7 @@ class ImportICENSPersonnel extends Component {
   }
 
   render() {
-    const {persons, busy, metadata_changed, title} = this.state;
+    const {persons, busy, metadata_changed, messages, title} = this.state;
     return (
       <React.Fragment>
         <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
@@ -336,54 +336,11 @@ class ImportICENSPersonnel extends Component {
             />
           </Grid>
           <Grid item xs={12} sx={{height: 'calc(100vh - 520px)', overflowY: 'auto', paddingTop: 0}}>
-            <ReactJson
-              theme={"bright:inverted"}
-              src={[
-                {
-                  "employers": [
-                    "tld/20"
-                  ],
-                  "isextremitymonitored": [
-                    ""
-                  ],
-                  "dob": "",
-                  "work": "Previously monitored at ICENS in 1999",
-                  "sex": "f",
-                  "contact": "",
-                  "name": "Tamara Thompson",
-                  "nid": "",
-                  "handle": "tld/42702",
-                  "iswholebodymonitored": [
-                    ""
-                  ],
-                  "id": "CNS68"
-                },
-                {
-                  "employers": [
-                    "tld/20"
-                  ],
-                  "isextremitymonitored": [
-                    ""
-                  ],
-                  "dob": "",
-                  "work": "Previously monitored at ICENS in 2001",
-                  "sex": "m",
-                  "contact": "",
-                  "name": "Lorenzo Dougharty",
-                  "nid": "",
-                  "handle": "tld/57561",
-                  "iswholebodymonitored": [
-                    ""
-                  ],
-                  "id": "CNS69"
-                },
-              ]}
-            />
-            {/*<PersonMetadata*/}
-            {/*  ref={this.pmref}*/}
-            {/*  onChange={this.onMetadataChanged}*/}
-            {/*  properties={this.props.properties}*/}
-            {/*/>*/}
+            <Box>
+              {messages.map(msg => (
+                <div>{msg}</div>
+              ))}
+            </Box>
           </Grid>
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
