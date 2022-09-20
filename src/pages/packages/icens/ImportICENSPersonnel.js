@@ -170,27 +170,18 @@ class ImportICENSPersonnel extends Component {
   // }
 
   saveChanges = () => {
-    if (this.plref.current) {
-      const persons = this.plref.current.getPersons();
-      for (const person of persons) {
-        // // get metadata
-        // if (this.pmref.current) {
-        //   persons[index] = this.pmref.current.getMetadata();
-        // }
-        // const person = persons[index];
-        console.log("SAVING PERSONS WITH CHANGED METADATA ", person)
-        // only save personnel with changed metadata
-        if (person.changed) {
-          this.props.send({
-            cmd: CMD_UPDATE_PERSONNEL_RECORD,
-            item_id: person.item_id,
-            "nurims.title": person["nurims.title"],
-            "nurims.withdrawn": person["nurims.withdrawn"],
-            metadata: person.metadata,
-            module: MODULE,
-          })
-        }
-      }
+    const persons = this.state.persons;
+    for (const person of persons) {
+      console.log("SAVING PERSONS WITH CHANGED METADATA ", person)
+      // only save personnel with changed metadata
+      this.props.send({
+        cmd: CMD_UPDATE_PERSONNEL_RECORD,
+        item_id: person.item_id,
+        "nurims.title": person["nurims.title"],
+        "nurims.withdrawn": person["nurims.withdrawn"],
+        metadata: person.metadata,
+        module: MODULE,
+      })
     }
 
     this.setState({metadata_changed: false})
@@ -315,7 +306,7 @@ class ImportICENSPersonnel extends Component {
           }
           persons.push(person);
         }
-        that.setState({persons: persons, busy: 0});
+        that.setState({persons: persons, busy: 0, metadata_changed: true});
       }
     };
   }
