@@ -283,7 +283,7 @@ export const darkTheme = createTheme({
         },
         checked: {},
         track: {
-          backgroundColor: '#8b8a8a',
+          backgroundColor: '#d7d7d7',
         },
       },
     },
@@ -371,7 +371,7 @@ export const darkTheme = createTheme({
     mode: 'dark',
     primary: {
       main: '#90caf9',
-      light: '#e3f2fd',
+      light: '#dcf0fd',
       dark: '#42a5f5',
       contrastText: 'rgba(0,0,0,0.87)',
     },

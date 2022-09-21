@@ -6,6 +6,7 @@ import Paper from '@mui/material/Paper';
 import {Component} from "react";
 import {NURIMS_TITLE, NURIMS_WITHDRAWN} from "../../utils/constants";
 import {PageableTable} from "../../components/CommonComponents";
+import {Switch} from "@mui/material";
 
 const TABLE_ROW_HEIGHT = 24;
 
@@ -16,17 +17,16 @@ class PersonList extends Component {
     this.state = {
       selected: {},
       previous_selection: {},
+      include_archived: props.include_archived,
     };
     this.rows = [];
   }
-
 
   handleRowSelection = (row) => {
     // only do something if selection has changed
     console.log("@@@@@@ HANDLE_ROW_SELECTION", row)
     if (this.state.selected !== row) {
       this.setState({selected: row});
-      // this.setState({previous_selection: this.state.selected, selected: row});
       this.props.onPersonSelection(row);
     }
   };
@@ -41,8 +41,11 @@ class PersonList extends Component {
     }
   }
 
-  add = (persons, skipIfPersonInList) => {
+  add = (persons, clearPersonsList, skipIfPersonInList) => {
     let refresh = false;
+    if (clearPersonsList) {
+      this.rows = [];
+    }
     if (Array.isArray(persons)) {
       for (const person of persons) {
         let add_to_list = true;
@@ -90,11 +93,24 @@ class PersonList extends Component {
 
   renderCell = (row, cell) => {
     return (
-      <TableCell align={cell.align} padding={cell.disablePadding ? 'none' : 'normal'}>{row[cell.id]}</TableCell>
+      <TableCell
+        align={cell.align}
+        padding={cell.disablePadding ? 'none' : 'normal'}
+        style={{color: row[NURIMS_WITHDRAWN] === 0 ?
+            this.props.theme.palette.primary.light :
+            this.props.theme.palette.text.disabled}}
+      >
+        {row[cell.id]} {(cell.id === NURIMS_TITLE && row[NURIMS_WITHDRAWN] === 1) && "<- archived"}
+      </TableCell>
     )
   }
 
+  includeArchivedRecords = (e) => {
+    this.props.requestPersonsList(e.target.checked)
+  }
+
   render() {
+    const {include_archived} = this.state;
     return (
       <Box sx={{width: '100%'}}>
         <Paper sx={{width: '100%', mb: 2}}>
@@ -110,7 +126,7 @@ class PersonList extends Component {
                 sortField: true,
               },
               {
-                id: 'nurims.title',
+                id: NURIMS_TITLE,
                 align: 'left',
                 disablePadding: true,
                 label: 'Name',
@@ -127,6 +143,11 @@ class PersonList extends Component {
             rows={this.rows}
             onRowSelection={this.handleRowSelection}
             renderCell={this.renderCell}
+            filterElement={ <Switch
+                              inputProps={{'aria-labelledby': 'include-archived-records-switch'}}
+                              onChange={this.includeArchivedRecords}
+                              checked={include_archived}
+                            />}
           />
         </Paper>
       </Box>

@@ -311,6 +311,7 @@ class App extends React.Component {
                     ref={this.crefs["Settings"]}
                     title={this.menuTitle}
                     user={this.user}
+                    theme={theme}
                     onClick={this.handleMenuAction}
                     send={this.send}
                     properties={this.properties}
