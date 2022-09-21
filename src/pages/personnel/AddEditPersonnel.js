@@ -19,6 +19,7 @@ import {toast} from "react-toastify";
 import PersonMetadata from "./PersonMetadata";
 import Box from "@mui/material/Box";
 import {
+  CMD_DELETE_PERSONNEL_RECORD, CMD_GET_MONITOR_RECORDS,
   CMD_GET_PERSONNEL_RECORDS,
   CMD_UPDATE_PERSONNEL_RECORD,
   INCLUDE_METADATA,
@@ -27,7 +28,7 @@ import {
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
 import {
-  getMatchingResponseObject
+  getMatchingResponseObject, isCommandResponse, messageHasResponse, messageStatusOk
 } from "../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
 
@@ -61,32 +62,32 @@ function ConfirmRemoveDialog(props) {
   );
 }
 
-function ConfirmSelectionChangeDialog(props) {
-  return (
-    <div>
-      <Dialog
-        open={props.open}
-        onClose={props.onCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
-            changed without being saved. Do you want to continue without saving the details and loose the changes ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onCancel}>No</Button>
-          <Button onClick={props.onProceed} autoFocus>Yes</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
+// function ConfirmSelectionChangeDialog(props) {
+//   return (
+//     <div>
+//       <Dialog
+//         open={props.open}
+//         onClose={props.onCancel}
+//         aria-labelledby="alert-dialog-title"
+//         aria-describedby="alert-dialog-description"
+//       >
+//         <DialogTitle id="alert-dialog-title">
+//           {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
+//         </DialogTitle>
+//         <DialogContent>
+//           <DialogContentText id="alert-dialog-description">
+//             The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
+//             changed without being saved. Do you want to continue without saving the details and loose the changes ?
+//           </DialogContentText>
+//         </DialogContent>
+//         <DialogActions>
+//           <Button onClick={props.onCancel}>No</Button>
+//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
+//         </DialogActions>
+//       </Dialog>
+//     </div>
+//   );
+// }
 
 class AddEditPersonnel extends Component {
   constructor(props) {
@@ -112,10 +113,10 @@ class AddEditPersonnel extends Component {
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (message.hasOwnProperty("response")) {
+    if (messageHasResponse(message)) {
       const response = message.response;
-      if (response.hasOwnProperty("status") && response.status === 0) {
-        if (message.hasOwnProperty("cmd") && message.cmd ===CMD_GET_PERSONNEL_RECORDS) {
+      if (messageStatusOk(message)) {
+        if (isCommandResponse(message, CMD_GET_PERSONNEL_RECORDS)) {
           if (message.hasOwnProperty(INCLUDE_METADATA)) {
             const selection = this.state.selection;
             const personnel = getMatchingResponseObject(message, "response.personnel", "item_id", selection["item_id"]);
@@ -130,7 +131,7 @@ class AddEditPersonnel extends Component {
               this.plref.current.add(response.personnel, false);
             }
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_PERSONNEL_RECORD) {
+        } else if (isCommandResponse(message, CMD_UPDATE_PERSONNEL_RECORD)) {
           toast.success(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)
           if (this.plref.current) {
             this.plref.current.update(response.personnel);
@@ -138,17 +139,15 @@ class AddEditPersonnel extends Component {
           // if (this.pmref.current) {
           //   this.pmref.current.set_metadata(response.personnel);
           // }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === "permanently_delete_person") {
-          toast.success("Personnel record deleted successfully")
+        } else if (isCommandResponse(message, CMD_DELETE_PERSONNEL_RECORD)) {
+          toast.success(`Personnel record (id: ${response.item_id}) deleted successfully`)
           if (this.plref.current) {
             this.plref.current.removePerson(this.state.selection)
           }
-          // if (this.plref.current) {
-          //   this.plref.current.update_selected_person(response.personnel)
-          // }
           if (this.pmref.current) {
-            this.pmref.current.update_personnel_details({})
+            this.pmref.current.set_person_object({})
           }
+          this.setState({selection: {}})
         }
       } else {
         toast.error(response.message);
@@ -157,8 +156,7 @@ class AddEditPersonnel extends Component {
   }
 
   onPersonSelected = (selection) => {
-    // console.log("-- onPersonSelected (previous selection) --", previous_selection)
-    console.log("-- onPersonSelected (selection) --", selection)
+    // console.log("-- onPersonSelected (selection) --", selection)
     if (selection.hasOwnProperty("item_id") && selection.item_id === -1) {
       if (this.pmref.current) {
         this.pmref.current.set_person_object(selection)
@@ -265,7 +263,7 @@ class AddEditPersonnel extends Component {
       }
     } else {
       this.props.send({
-        cmd: 'delete_item_record',
+        cmd: CMD_DELETE_PERSONNEL_RECORD,
         item_id: this.state.selection.item_id,
         module: MODULE,
       });
@@ -335,11 +333,11 @@ class AddEditPersonnel extends Component {
     const {metadata_changed, alert, confirm_remove, previous_selection, selection, title} = this.state;
     return (
       <React.Fragment>
-        <ConfirmSelectionChangeDialog open={alert}
-                                      person={previous_selection}
-                                      onProceed={this.proceed_with_selection_change}
-                                      onCancel={this.cancel_selection_change}
-        />
+        {/*<ConfirmSelectionChangeDialog open={alert}*/}
+        {/*                              person={previous_selection}*/}
+        {/*                              onProceed={this.proceed_with_selection_change}*/}
+        {/*                              onCancel={this.cancel_selection_change}*/}
+        {/*/>*/}
         <ConfirmRemoveDialog open={confirm_remove}
                              person={selection}
                              onProceed={this.proceed_with_remove}

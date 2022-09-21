@@ -46,7 +46,7 @@ class PersonList extends Component {
     if (Array.isArray(persons)) {
       for (const person of persons) {
         let add_to_list = true;
-        console.log("PersonList.add", person)
+        // console.log("PersonList.add", person)
         if (skipIfPersonInList && skipIfPersonInList === true) {
           for (const row of this.rows) {
             if (row[NURIMS_TITLE] === person[NURIMS_TITLE]) {
