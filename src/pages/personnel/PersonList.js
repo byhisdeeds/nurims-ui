@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import TableCell from '@mui/material/TableCell';
 import Paper from '@mui/material/Paper';
 import {Component} from "react";
-import {NURIMS_TITLE, NURIMS_WITHDRAWN} from "../../utils/constants";
+import {ITEM_ID, METADATA, NURIMS_TITLE, NURIMS_WITHDRAWN} from "../../utils/constants";
 import {PageableTable} from "../../components/CommonComponents";
 import {Switch} from "@mui/material";
 
@@ -73,16 +73,16 @@ class PersonList extends Component {
     console.log("PersonList.update", person)
     for (const row of this.rows) {
       if (row.item_id === -1 && row.record_key === person.record_key) {
-        row.item_id = person["item_id"]
+        row.item_id = person[ITEM_ID]
         row[NURIMS_TITLE] = person[NURIMS_TITLE];
         row[NURIMS_WITHDRAWN] = person[NURIMS_WITHDRAWN];
         row["changed"] = false;
-        row["metadata"] = [...person["metadata"]]
-      } else if (row.item_id !== -1 && row.item_id === person["item_id"]) {
+        row[METADATA] = [...person[METADATA]]
+      } else if (row.item_id !== -1 && row.item_id === person[ITEM_ID]) {
         row[NURIMS_TITLE] = person[NURIMS_TITLE];
         row[NURIMS_WITHDRAWN] = person[NURIMS_WITHDRAWN];
         row["changed"] = false;
-        row["metadata"] = [...person["metadata"]]
+        row[METADATA] = [...person[METADATA]]
       }
     }
   }
@@ -118,7 +118,7 @@ class PersonList extends Component {
             minWidth={350}
             cells={[
               {
-                id: 'item_id',
+                id: ITEM_ID,
                 align: 'center',
                 disablePadding: true,
                 label: 'ID',

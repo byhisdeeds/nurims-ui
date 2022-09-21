@@ -13,47 +13,51 @@ import {
 import SaveIcon from '@mui/icons-material/Save';
 import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
-import MonitoredStatusPersonsList from "./PersonsMonitoredStatusList";
+import PersonsMonitoredStatusList from "./PersonsMonitoredStatusList";
 import {getMetadataValue} from "../../utils/MetadataUtils";
 import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
-  CMD_GET_PERSONNEL_METADATA,
   CMD_UPDATE_PERSONNEL_RECORD,
-  NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
-  NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, NURIMS_ENTITY_IS_WRIST_MONITORED,
+  CMD_GET_PERSONNEL_RECORDS,
+  METADATA,
 } from "../../utils/constants";
 import {withTheme} from "@mui/styles";
+import {
+  isCommandResponse,
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
 
 const MODULE = "UpdateMonitoringStatus";
 
-function ConfirmRemoveDialog(props) {
-  return (
-    <div>
-      <Dialog
-        open={props.open}
-        onClose={props.onCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {`Delete record for ${props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""}`}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete the record
-            for {props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""} (
-            {props.person.hasOwnProperty("item_id") ? props.person["item_id"] : ""})?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onCancel}>No</Button>
-          <Button onClick={props.onProceed} autoFocus>Yes</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
+// function ConfirmRemoveDialog(props) {
+//   return (
+//     <div>
+//       <Dialog
+//         open={props.open}
+//         onClose={props.onCancel}
+//         aria-labelledby="alert-dialog-title"
+//         aria-describedby="alert-dialog-description"
+//       >
+//         <DialogTitle id="alert-dialog-title">
+//           {`Delete record for ${props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""}`}
+//         </DialogTitle>
+//         <DialogContent>
+//           <DialogContentText id="alert-dialog-description">
+//             Are you sure you want to delete the record
+//             for {props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""} (
+//             {props.person.hasOwnProperty("item_id") ? props.person["item_id"] : ""})?
+//           </DialogContentText>
+//         </DialogContent>
+//         <DialogActions>
+//           <Button onClick={props.onCancel}>No</Button>
+//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
+//         </DialogActions>
+//       </Dialog>
+//     </div>
+//   );
+// }
 
 function ConfirmSelectionChangeDialog(props) {
   return (
@@ -98,33 +102,24 @@ class UpdateMonitoringStatus extends Component {
 
   componentDidMount() {
     this.props.send({
-      cmd: 'get_personnel_with_metadata',
+      cmd: CMD_GET_PERSONNEL_RECORDS,
+      "include.withdrawn": "false",
+      "include.metadata": "true",
       module: MODULE,
-      metadata: [
-        NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED,
-        NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
-        NURIMS_ENTITY_IS_WRIST_MONITORED,
-      ]
     })
   }
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (message.hasOwnProperty("response")) {
+    if (messageHasResponse(message)) {
       const response = message.response;
-      if (response.hasOwnProperty("status") && response.status === 0) {
-        if (message.hasOwnProperty("cmd") && message.cmd === "get_personnel_with_metadata") {
+      if (messageStatusOk(message)) {
+        if (isCommandResponse(message, CMD_GET_PERSONNEL_RECORDS)) {
           if (this.plref.current) {
             this.plref.current.update_personnel(response.personnel)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_PERSONNEL_METADATA) {
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_PERSONNEL_RECORD) {
           toast.success(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)
-        } else if (message.hasOwnProperty("cmd") && message.cmd === "permanently_delete_person") {
-          toast.success("Personnel record deleted successfully")
-          if (this.plref.current) {
-            this.plref.current.removePerson(this.state.selection)
-          }
         }
       } else {
         toast.error(response.message);
@@ -132,11 +127,11 @@ class UpdateMonitoringStatus extends Component {
     }
   }
 
-  on_person_selected = (previous_person, person) => {
-    console.log("-- on_person_selected (previous selection) --", previous_person)
-    console.log("-- on_person_selected (selection) --", person)
-    this.setState({previous_selection: previous_person, selection: person})
-  }
+  // on_person_selected = (previous_person, person) => {
+  //   console.log("-- on_person_selected (previous selection) --", previous_person)
+  //   console.log("-- on_person_selected (selection) --", person)
+  //   this.setState({previous_selection: previous_person, selection: person})
+  // }
 
   saveChanges = () => {
     console.log("saving changes")
@@ -150,17 +145,7 @@ class UpdateMonitoringStatus extends Component {
             item_id: person.item_id,
             "nurims.title": person[NURIMS_TITLE],
             "nurims.withdrawn": person[NURIMS_WITHDRAWN],
-            metadata: [
-              {
-                "nurims.entity.iswholebodymonitored": getMetadataValue(person, NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, "false")
-              },
-              {
-                "nurims.entity.isextremitymonitored": getMetadataValue(person, NURIMS_ENTITY_IS_EXTREMITY_MONITORED, "false")
-              },
-              {
-                "nurims.entity.iswristmonitored": getMetadataValue(person, NURIMS_ENTITY_IS_WRIST_MONITORED, "false")
-              }
-            ],
+            metadata: person[METADATA],
             module: MODULE,
           })
         }
@@ -204,7 +189,7 @@ class UpdateMonitoringStatus extends Component {
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
           <Grid item xs={12}>
-            <MonitoredStatusPersonsList ref={this.plref} onChange={this.on_details_changed}/>
+            <PersonsMonitoredStatusList ref={this.plref} onChange={this.on_details_changed}/>
           </Grid>
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>

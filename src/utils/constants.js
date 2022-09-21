@@ -40,6 +40,7 @@ module.exports = Object.freeze({
 
   METADATA: 'metadata',
   INCLUDE_METADATA: 'include.metadata',
+  ITEM_ID: "item_id",
 
   NURIMS_TITLE: 'nurims.title',
   NURIMS_WITHDRAWN: 'nurims.withdrawn',

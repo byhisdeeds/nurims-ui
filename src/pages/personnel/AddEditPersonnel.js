@@ -23,7 +23,7 @@ import {
   CMD_DELETE_PERSONNEL_RECORD,
   CMD_GET_PERSONNEL_RECORDS,
   CMD_UPDATE_PERSONNEL_RECORD,
-  INCLUDE_METADATA,
+  INCLUDE_METADATA, ITEM_ID,
   METADATA,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
@@ -48,13 +48,13 @@ function ConfirmRemoveDialog(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {`Delete record for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
+          {`Delete record for ${props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""}`}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Are you sure you want to delete the record
             for {props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""} (
-            {props.person.hasOwnProperty("item_id") ? props.person["item_id"] : ""})?
+            {props.person.hasOwnProperty(ITEM_ID) ? props.person[ITEM_ID] : ""})?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -67,7 +67,7 @@ function ConfirmRemoveDialog(props) {
 }
 
 function isPerson(person) {
-  return (person.hasOwnProperty("item_id") && person.item_id !== -1);
+  return (person.hasOwnProperty(ITEM_ID) && person.item_id !== -1);
 }
 
 function isPersonArchived(person) {
@@ -147,7 +147,7 @@ class AddEditPersonnel extends Component {
 
   onPersonSelected = (selection) => {
     // console.log("-- onPersonSelected (selection) --", selection)
-    if (selection.hasOwnProperty("item_id") && selection.item_id === -1) {
+    if (selection.hasOwnProperty(ITEM_ID) && selection.item_id === -1) {
       if (this.pmref.current) {
         this.pmref.current.set_person_object(selection)
       }
