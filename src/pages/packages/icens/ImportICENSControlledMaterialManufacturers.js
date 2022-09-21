@@ -6,13 +6,11 @@ import {
 } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import UploadIcon from '@mui/icons-material/Upload';
-// import PersonList from "./PersonList";
 import {toast} from "react-toastify";
-// import PersonMetadata from "./PersonMetadata";
 import Box from "@mui/material/Box";
 import {
-  CMD_GET_PERSONNEL_RECORDS,
-  CMD_UPDATE_PERSONNEL_RECORD,
+  CMD_UPDATE_ITEM_RECORD, CMD_UPDATE_MANUFACTURER_RECORD,
+  CMD_UPDATE_PERSONNEL_RECORD, NURIMS_ENTITY_ADDRESS,
   NURIMS_ENTITY_CONTACT,
   NURIMS_ENTITY_DATE_OF_BIRTH,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
@@ -22,8 +20,7 @@ import {
   NURIMS_ENTITY_NATIONAL_ID,
   NURIMS_ENTITY_SEX,
   NURIMS_ENTITY_WORK_DETAILS,
-  NURIMS_TITLE,
-  NURIMS_WITHDRAWN
+  NURIMS_TITLE, NURIMS_WITHDRAWN,
 } from "../../../utils/constants";
 import {
   isCommandResponse,
@@ -35,7 +32,7 @@ import ReactJson from "react-json-view";
 import {setMetadataValue} from "../../../utils/MetadataUtils";
 import BusyIndicator from "../../../components/BusyIndicator";
 
-const MODULE = "ImportICENSPersonnel";
+const MODULE = "ImportICENSControlledMaterialManufacturers";
 
 function isPersonMonitored(status) {
   if (Array.isArray(status)) {
@@ -44,11 +41,11 @@ function isPersonMonitored(status) {
   return status === "" ? "false" : "true";
 }
 
-class ImportICENSPersonnel extends Component {
+class ImportICENSControlledMaterialManufacturers extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      persons: [],
+      manufacturers: [],
       busy: 0,
       metadata_changed: false,
       messages: [],
@@ -67,10 +64,17 @@ class ImportICENSPersonnel extends Component {
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_UPDATE_PERSONNEL_RECORD)) {
+        if (isCommandResponse(message, CMD_UPDATE_MANUFACTURER_RECORD)) {
           const messages = this.state.messages;
-          messages.push(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`);
+          messages.push(`Manufacturer record for ${response.manufacturer[NURIMS_TITLE]} updated successfully`);
           this.setState({messages: messages});
+          // toast.success(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)
+          // if (this.plref.current) {
+          //   this.plref.current.update(response.personnel);
+          // }
+          // // if (this.pmref.current) {
+          // //   this.pmref.current.set_metadata(response.personnel);
+          // // }
         }
       } else {
         toast.error(response.message);
@@ -79,16 +83,16 @@ class ImportICENSPersonnel extends Component {
   }
 
   saveChanges = () => {
-    const persons = this.state.persons;
-    for (const person of persons) {
-      console.log("SAVING PERSONS WITH CHANGED METADATA ", person)
-      // only save personnel with changed metadata
+    const manufacturers = this.state.manufacturers;
+    for (const manufacturer of manufacturers) {
+      console.log("SAVING MANUFACTURER WITH CHANGED METADATA ", manufacturer)
+      // only save manufacturers with changed metadata
       this.props.send({
-        cmd: CMD_UPDATE_PERSONNEL_RECORD,
-        item_id: person.item_id,
-        "nurims.title": person[NURIMS_TITLE],
-        "nurims.withdrawn": person[NURIMS_WITHDRAWN],
-        metadata: person.metadata,
+        cmd: CMD_UPDATE_MANUFACTURER_RECORD,
+        item_id: manufacturer.item_id,
+        "nurims.title": manufacturer[NURIMS_TITLE],
+        "nurims.withdrawn": manufacturer[NURIMS_WITHDRAWN],
+        metadata: manufacturer.metadata,
         module: MODULE,
       })
     }
@@ -110,53 +114,32 @@ class ImportICENSPersonnel extends Component {
     fileReader.onload = function (event) {
       const data = JSON.parse(event.target.result);
       if (Array.isArray(data)) {
-        const persons = [];
+        const manufacturers = [];
         for (const d of data) {
-          const person = {
+          const manufacturer = {
             item_id: -1,
             "nurims.title": "",
-            "nurims.withdrawn": 0,
+            "nurims.wihdrawn": 0,
             metadata: []
           };
           if (d.hasOwnProperty("name")) {
-            person[NURIMS_TITLE] = d.name;
+            manufacturer[NURIMS_TITLE] = d.name;
           }
-          if (d.hasOwnProperty("dob")) {
-            setMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, d.dob)
+          if (d.hasOwnProperty("nrims.manufacturer.address")) {
+            setMetadataValue(manufacturer, NURIMS_ENTITY_ADDRESS, d["nrims.manufacturer.address"])
           }
-          if (d.hasOwnProperty("work")) {
-            setMetadataValue(person, NURIMS_ENTITY_WORK_DETAILS, d.work)
+          if (d.hasOwnProperty("nrims.manufacturer.contact")) {
+            setMetadataValue(manufacturer, NURIMS_ENTITY_CONTACT, d["nrims.manufacturer.contact"])
           }
-          if (d.hasOwnProperty("sex")) {
-            setMetadataValue(person, NURIMS_ENTITY_SEX, d.sex)
-          }
-          if (d.hasOwnProperty("contact")) {
-            setMetadataValue(person, NURIMS_ENTITY_CONTACT, d.contact)
-          }
-          if (d.hasOwnProperty("nid")) {
-            setMetadataValue(person, NURIMS_ENTITY_NATIONAL_ID, d.nid)
-          }
-          if (d.hasOwnProperty("handle")) {
-            setMetadataValue(person, NURIMS_ENTITY_DOSE_PROVIDER_ID, d.handle)
-          }
-          if (d.hasOwnProperty("iswholebodymonitored")) {
-            setMetadataValue(person, NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, isPersonMonitored(d.iswholebodymonitored))
-          }
-          if (d.hasOwnProperty("isextremitymonitored")) {
-            setMetadataValue(person, NURIMS_ENTITY_IS_EXTREMITY_MONITORED, isPersonMonitored(d.isextremitymonitored))
-          }
-          if (d.hasOwnProperty("iswristmonitored")) {
-            setMetadataValue(person, NURIMS_ENTITY_IS_WRIST_MONITORED, isPersonMonitored(d.iswristmonitored))
-          }
-          persons.push(person);
+          manufacturers.push(manufacturer);
         }
-        that.setState({persons: persons, busy: 0, metadata_changed: true});
+        that.setState({manufacturers: manufacturers, busy: 0, metadata_changed: true});
       }
     };
   }
 
   render() {
-    const {persons, busy, metadata_changed, messages, title} = this.state;
+    const {manufacturers, busy, metadata_changed, messages, title} = this.state;
     return (
       <React.Fragment>
         <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
@@ -176,7 +159,7 @@ class ImportICENSPersonnel extends Component {
             <ReactJson
               theme={"bright"}
               collapsed={2}
-              src={persons}
+              src={manufacturers}
             />
           </Grid>
           <Grid item xs={12} sx={{height: 'calc(100vh - 520px)', overflowY: 'auto', paddingTop: 0}}>
@@ -205,10 +188,10 @@ class ImportICENSPersonnel extends Component {
   }
 }
 
-ImportICENSPersonnel.defaultProps = {
+ImportICENSControlledMaterialManufacturers.defaultProps = {
   send: (msg) => {
   },
   user: {},
 };
 
-export default withTheme(ImportICENSPersonnel);
+export default withTheme(ImportICENSControlledMaterialManufacturers);

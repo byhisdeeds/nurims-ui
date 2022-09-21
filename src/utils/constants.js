@@ -14,6 +14,7 @@ module.exports = Object.freeze({
   SSC_VIEW_SSC_RECORDS: 'ssc.view.ssc.records',
 
   PRO_IMPORT_ICENS_PERSONNEL: 'sysadmin.import.icens.personnel',
+  PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS: 'sysadmin.import.icens.controlled.material.manufacturers',
 
   CMD_GET_PUBLIC_KEY: 'get_public_key',
   CMD_VERIFY_USER_PASSWORD: 'verify_user_password',
@@ -21,9 +22,9 @@ module.exports = Object.freeze({
   CMD_DELETE_PERSONNEL_RECORD: "delete_personnel_record",
   CMD_UPDATE_PERSONNEL_RECORD: "update_personnel_record",
   CMD_GET_PERSONNEL_RECORDS: "get_personnel_records",
-  // CMD_GET_PERSONNEL_METADATA: "get_personnel_metadata",
   CMD_GET_GLOSSARY_TERMS: "get_glossary_terms",
   CMD_GET_MANUFACTURER_RECORDS: "get_manufacturer_records",
+  CMD_UPDATE_MANUFACTURER_RECORD: "update_manufacturer_record",
   CMD_GET_MATERIAL_RECORDS: "get_material_records",
   CMD_SAVE_MATERIAL_RECORD: "save_material_record",
   CMD_GET_ORGANISATION: "get_organisation",

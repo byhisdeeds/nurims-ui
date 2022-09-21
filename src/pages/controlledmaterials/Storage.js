@@ -195,7 +195,7 @@ class Storage extends Component {
         "changed": true,
         "item_id": -1,
         "nurims.title": "New Storage",
-        "nurims.withdrawn": false,
+        "nurims.withdrawn": 0,
         "metadata": []
       }], false);
       this.setState({ changed: true });

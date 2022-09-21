@@ -16,8 +16,9 @@ import Box from "@mui/material/Box";
 import ManufacturerList from "./ManufacturerList";
 import ManufacturerMetadata from "./ManufacturerMetadata";
 import AddIcon from "@mui/icons-material/Add";
-import {NURIMS_TITLE} from "../../utils/constants";
+import {CMD_GET_MANUFACTURER_RECORDS, CMD_UPDATE_MANUFACTURER_RECORD, NURIMS_TITLE} from "../../utils/constants";
 import {withTheme} from "@mui/styles";
+import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 
 const MODULE = "Manufacturer";
 
@@ -96,22 +97,24 @@ class Manufacturer extends Component {
 
   onRefreshManufacturersList = () => {
     this.props.send({
-      cmd: 'get_manufacturer_records',
+      cmd: CMD_GET_MANUFACTURER_RECORDS,
+      "include.withdrawn": "false",
+      "include.metadata": "true",
       module: MODULE,
     });
   }
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (message.hasOwnProperty("response")) {
+    if (messageHasResponse(message)) {
       const response = message.response;
-      if (response.hasOwnProperty("status") && response.status === 0) {
-        if (message.hasOwnProperty("cmd") && message.cmd === "get_manufacturer_records") {
+      if (messageStatusOk(message)) {
+        if (isCommandResponse(message, CMD_GET_MANUFACTURER_RECORDS)) {
           if (this.mlref.current) {
-            this.mlref.current.setManufacturers(response.manufacturers)
+            this.mlref.current.setManufacturers(response.manufacturer)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === "save_manufacturer_record") {
-          toast.success(`Manufacturer record for ${response.manufacturer[NURIMS_TITLE]} updated successfully`)
+        } else if (isCommandResponse(message, CMD_UPDATE_MANUFACTURER_RECORD)) {
+            toast.success(`Manufacturer record for ${response.manufacturer[NURIMS_TITLE]} updated successfully`)
         }
       } else {
         toast.error(response.message);
@@ -184,7 +187,7 @@ class Manufacturer extends Component {
         "changed": true,
         "item_id": -1,
         "nurims.title": "New Manufacturer",
-        "nurims.withdrawn": false,
+        "nurims.withdrawn": 0,
         "metadata": []
       }], false);
       this.setState({ changed: true });

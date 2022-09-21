@@ -601,6 +601,13 @@ export const MenuData = [
         tooltip: 'Batch import ICENS personnel',
         authmodlevel: 'sysadmin',
       },
+      {
+        name: '- Import Material Manuf.',
+        link: 'sysadmin.import.icens.controlled.material.manufacturers',
+        title: 'Import Controlled Material Manufacturers',
+        tooltip: 'Batch import of controlled material manufacturers',
+        authmodlevel: 'sysadmin',
+      },
     ],
   },
 ]

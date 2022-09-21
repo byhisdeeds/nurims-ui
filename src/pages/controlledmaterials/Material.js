@@ -215,7 +215,7 @@ class Material extends Component {
         "changed": true,
         "item_id": -1,
         "nurims.title": "New Material",
-        "nurims.withdrawn": false,
+        "nurims.withdrawn": 0,
         "metadata": []
       }], false);
       this.setState({ changed: true });
