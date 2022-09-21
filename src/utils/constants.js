@@ -25,6 +25,7 @@ module.exports = Object.freeze({
   CMD_GET_GLOSSARY_TERMS: "get_glossary_terms",
   CMD_GET_MANUFACTURER_RECORDS: "get_manufacturer_records",
   CMD_UPDATE_MANUFACTURER_RECORD: "update_manufacturer_record",
+  CMD_DELETE_MANUFACTURER_RECORD: "delete_manufacturer_record",
   CMD_GET_MATERIAL_RECORDS: "get_material_records",
   CMD_SAVE_MATERIAL_RECORD: "save_material_record",
   CMD_GET_ORGANISATION: "get_organisation",

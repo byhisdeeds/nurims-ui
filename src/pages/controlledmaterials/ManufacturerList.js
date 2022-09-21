@@ -47,9 +47,9 @@ class ManufacturerList extends Component {
     }
   };
 
-  removePerson = (person) => {
+  removeManufacturer = (manufacturer) => {
     for(let i = 0; i < this.rows.length; i++){
-      if (this.rows[i] === person) {
+      if (this.rows[i] === manufacturer) {
         this.rows.splice(i, 1);
         this.setState({ selected: {}} );
         return;

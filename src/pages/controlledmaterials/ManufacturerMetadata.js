@@ -230,6 +230,10 @@ class ManufacturerMetadata extends Component {
   //   this.setState({person: person, has_changed: false})
   //   this.props.onChange(false);
   // }
+  set_manufacturer_object = (manufacturer) => {
+    console.log("ManufacturerMetadata.set_manufacturer_object", manufacturer)
+    this.setState({manufacturer: manufacturer});
+  }
 
   setManufacturerMetadata = (manufacturer) => {
     console.log("ManufacturerMetadata.setManufacturerMetadata", manufacturer)

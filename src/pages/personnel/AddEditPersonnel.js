@@ -35,36 +35,39 @@ import {
   messageStatusOk
 } from "../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
+import {
+  ConfirmRemoveDialog
+} from "../../utils/UtilityDialogs";
 
 const MODULE = "AddEditPersonnel";
 
-function ConfirmRemoveDialog(props) {
-  return (
-    <div>
-      <Dialog
-        open={props.open}
-        onClose={props.onCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {`Delete record for ${props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""}`}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete the record
-            for {props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""} (
-            {props.person.hasOwnProperty(ITEM_ID) ? props.person[ITEM_ID] : ""})?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onCancel}>No</Button>
-          <Button onClick={props.onProceed} autoFocus>Yes</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
+// function ConfirmRemoveDialog(props) {
+//   return (
+//     <div>
+//       <Dialog
+//         open={props.open}
+//         onClose={props.onCancel}
+//         aria-labelledby="alert-dialog-title"
+//         aria-describedby="alert-dialog-description"
+//       >
+//         <DialogTitle id="alert-dialog-title">
+//           {`Delete record for ${props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""}`}
+//         </DialogTitle>
+//         <DialogContent>
+//           <DialogContentText id="alert-dialog-description">
+//             Are you sure you want to delete the record
+//             for {props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""} (
+//             {props.person.hasOwnProperty(ITEM_ID) ? props.person[ITEM_ID] : ""})?
+//           </DialogContentText>
+//         </DialogContent>
+//         <DialogActions>
+//           <Button onClick={props.onCancel}>No</Button>
+//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
+//         </DialogActions>
+//       </Dialog>
+//     </div>
+//   );
+// }
 
 function isPerson(person) {
   return (person.hasOwnProperty(ITEM_ID) && person.item_id !== -1);
@@ -303,7 +306,7 @@ class AddEditPersonnel extends Component {
     return (
       <React.Fragment>
         <ConfirmRemoveDialog open={confirm_remove}
-                             person={selection}
+                             selection={selection}
                              onProceed={this.proceed_with_remove}
                              onCancel={this.cancel_remove}
         />

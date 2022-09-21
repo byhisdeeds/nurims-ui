@@ -16,9 +16,23 @@ import Box from "@mui/material/Box";
 import ManufacturerList from "./ManufacturerList";
 import ManufacturerMetadata from "./ManufacturerMetadata";
 import AddIcon from "@mui/icons-material/Add";
-import {CMD_GET_MANUFACTURER_RECORDS, CMD_UPDATE_MANUFACTURER_RECORD, NURIMS_TITLE} from "../../utils/constants";
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import {
+  CMD_DELETE_MANUFACTURER_RECORD,
+  CMD_DELETE_PERSONNEL_RECORD,
+  CMD_GET_MANUFACTURER_RECORDS,
+  CMD_UPDATE_MANUFACTURER_RECORD, ITEM_ID,
+  NURIMS_TITLE
+} from "../../utils/constants";
 import {withTheme} from "@mui/styles";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {
+  isCommandResponse,
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
+import {
+  ConfirmRemoveDialog
+} from "../../utils/UtilityDialogs";
 
 const MODULE = "Manufacturer";
 
@@ -32,13 +46,13 @@ const MODULE = "Manufacturer";
 //         aria-describedby="alert-dialog-description"
 //       >
 //         <DialogTitle id="alert-dialog-title">
-//           {`Delete record for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
+//           {`Delete record for ${props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""}`}
 //         </DialogTitle>
 //         <DialogContent>
 //           <DialogContentText id="alert-dialog-description">
 //             Are you sure you want to delete the record
-//             for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} (
-//             {props.person.hasOwnProperty("item_id") ? props.person["item_id"] : ""})?
+//             for {props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""} (
+//             {props.selection.hasOwnProperty(ITEM_ID) ? props.selection[ITEM_ID] : ""})?
 //           </DialogContentText>
 //         </DialogContent>
 //         <DialogActions>
@@ -50,39 +64,39 @@ const MODULE = "Manufacturer";
 //   );
 // }
 
-function ConfirmSelectionChangeDialog(props) {
-  return (
-    <div>
-      <Dialog
-        open={props.open}
-        onClose={props.onCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
-            changed without being saved. Do you want to continue without saving the details and loose the changes ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onCancel}>No</Button>
-          <Button onClick={props.onProceed} autoFocus>Yes</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
+// function ConfirmSelectionChangeDialog(props) {
+//   return (
+//     <div>
+//       <Dialog
+//         open={props.open}
+//         onClose={props.onCancel}
+//         aria-labelledby="alert-dialog-title"
+//         aria-describedby="alert-dialog-description"
+//       >
+//         <DialogTitle id="alert-dialog-title">
+//           {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
+//         </DialogTitle>
+//         <DialogContent>
+//           <DialogContentText id="alert-dialog-description">
+//             The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
+//             changed without being saved. Do you want to continue without saving the details and loose the changes ?
+//           </DialogContentText>
+//         </DialogContent>
+//         <DialogActions>
+//           <Button onClick={props.onCancel}>No</Button>
+//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
+//         </DialogActions>
+//       </Dialog>
+//     </div>
+//   );
+// }
 
 class Manufacturer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       changed: false,
-      alert: false,
+      confirm_remove: false,
       previous_selection: {},
       selection: {},
       title: props.title,
@@ -114,7 +128,16 @@ class Manufacturer extends Component {
             this.mlref.current.setManufacturers(response.manufacturer)
           }
         } else if (isCommandResponse(message, CMD_UPDATE_MANUFACTURER_RECORD)) {
-            toast.success(`Manufacturer record for ${response.manufacturer[NURIMS_TITLE]} updated successfully`)
+          toast.success(`Manufacturer record for ${response.manufacturer[NURIMS_TITLE]} updated successfully`)
+        } else if (isCommandResponse(message, CMD_DELETE_MANUFACTURER_RECORD)) {
+          toast.success(`Manufacturer record (id: ${response.item_id}) deleted successfully`);
+          if (this.mlref.current) {
+            this.mlref.current.removeManufacturer(this.state.selection)
+          }
+          if (this.mmref.current) {
+            this.mmref.current.set_manufacturer_object({})
+          }
+          this.setState({selection: {}, metadata_changed: false})
         }
       } else {
         toast.error(response.message);
@@ -136,11 +159,10 @@ class Manufacturer extends Component {
     if (this.mlref.current) {
       const manufacturers = this.mlref.current.getManufacturers()
       console.log("ALL MANUFACTURERS", manufacturers)
-
       for (const manufacturer of manufacturers) {
         if (manufacturer.changed) {
           this.props.send({
-            cmd: 'save_manufacturer_record',
+            cmd: CMD_UPDATE_MANUFACTURER_RECORD,
             item_id: manufacturer.item_id,
             "nurims.title": manufacturer["nurims.title"],
             "nurims.withdrawn": manufacturer["nurims.withdrawn"],
@@ -158,28 +180,28 @@ class Manufacturer extends Component {
     this.setState({changed: state});
   }
 
-  proceed_with_selection_change = () => {
-    // set new selection and load details
-    // console.log("#### saving personnel details ###", this.state.previous_selection)
-    const selection = this.state.selection;
-    const previous_selection = this.state.previous_selection;
-    selection.has_changed = false;
-    previous_selection.has_changed = false;
-    this.setState({alert: false, selection: selection, previous_selection: previous_selection});
-    if (this.mlref.current) {
-      this.mlref.current.setSelection(selection)
-    }
-    if (this.mmref.current) {
-      this.mmref.current.setDoseMetadata(selection)
-    }
-  }
+  // proceed_with_selection_change = () => {
+  //   // set new selection and load details
+  //   // console.log("#### saving personnel details ###", this.state.previous_selection)
+  //   const selection = this.state.selection;
+  //   const previous_selection = this.state.previous_selection;
+  //   selection.has_changed = false;
+  //   previous_selection.has_changed = false;
+  //   this.setState({alert: false, selection: selection, previous_selection: previous_selection});
+  //   if (this.mlref.current) {
+  //     this.mlref.current.setSelection(selection)
+  //   }
+  //   if (this.mmref.current) {
+  //     this.mmref.current.setDoseMetadata(selection)
+  //   }
+  // }
 
-  cancel_selection_change = () => {
-    this.setState({alert: false,});
-    if (this.mlref.current) {
-      this.mlref.current.setSelection(this.state.previous_selection)
-    }
-  }
+  // cancel_selection_change = () => {
+  //   this.setState({alert: false,});
+  //   if (this.mlref.current) {
+  //     this.mlref.current.setSelection(this.state.previous_selection)
+  //   }
+  // }
 
   addManufacturer = () => {
     if (this.mlref.current) {
@@ -193,15 +215,38 @@ class Manufacturer extends Component {
       this.setState({ changed: true });
     }
   }
+  removeRecord = () => {
+    this.setState({confirm_remove: true,});
+  }
+
+  cancel_remove = () => {
+    this.setState({confirm_remove: false,});
+  }
+
+  proceed_with_remove = () => {
+    this.setState({confirm_remove: false,});
+    console.log("REMOVE MANUFACTURER", this.state.selection);
+    if (this.state.selection.item_id === -1) {
+      if (this.plref.current) {
+        this.plref.current.removePerson(this.state.selection)
+      }
+    } else {
+      this.props.send({
+        cmd: CMD_DELETE_MANUFACTURER_RECORD,
+        item_id: this.state.selection.item_id,
+        module: MODULE,
+      });
+    }
+  }
 
   render() {
-    const {changed, alert, previous_selection, selection, title, } = this.state;
+    const {changed, confirm_remove, selection, title, } = this.state;
     return (
       <React.Fragment>
-        <ConfirmSelectionChangeDialog open={alert}
-                                      person={previous_selection}
-                                      onProceed={this.proceed_with_selection_change}
-                                      onCancel={this.cancel_selection_change}
+        <ConfirmRemoveDialog open={confirm_remove}
+                             selection={selection}
+                             onProceed={this.proceed_with_remove}
+                             onCancel={this.cancel_remove}
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
@@ -225,6 +270,11 @@ class Manufacturer extends Component {
           </Grid>
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
+          <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.removeRecord}
+               disabled={!(selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1)}>
+            <RemoveCircleIcon sx={{mr: 1}}/>
+            Remove Record
+          </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
                disabled={!changed}>
             <SaveIcon sx={{mr: 1}}/>
