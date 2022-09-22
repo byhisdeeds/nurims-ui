@@ -14,7 +14,7 @@ class StorageList extends React.Component {
     super(props);
     this.state = {
       order: 'asc',
-      orderBy: 'nurims.title',
+      orderBy: NURIMS_TITLE,
       selected: {},
       previous_selection: {},
       page: 0,
@@ -63,7 +63,7 @@ class StorageList extends React.Component {
         console.log("StorageList.add", storage)
         if (skipIfStorageInList && skipIfStorageInList === true) {
           for (const row of this.rows) {
-            if (row["nurims.title"] === storage["nurims.title"]) {
+            if (row[NURIMS_TITLE] === storage[NURIMS_TITLE]) {
               add_to_list = false;
               break;
             }
