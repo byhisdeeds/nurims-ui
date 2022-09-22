@@ -6,11 +6,15 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import {Component} from "react";
 import "../../utils/MetadataUtils"
-import {getMetadataValue, setMetadataValue} from "../../utils/MetadataUtils";
+import {
+  getMetadataValue,
+  setMetadataValue
+} from "../../utils/MetadataUtils";
 import {
   NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
   NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED,
-  NURIMS_ENTITY_IS_WRIST_MONITORED, NURIMS_TITLE,
+  NURIMS_ENTITY_IS_WRIST_MONITORED,
+  NURIMS_TITLE,
 } from "../../utils/constants";
 import {PageableTable} from "../../components/CommonComponents";
 
@@ -38,7 +42,7 @@ class PersonsMonitoredStatusList extends Component {
   update_personnel = (msg) => {
     if (Array.isArray(msg)) {
       for (const person of msg) {
-        console.log("MonitoredStatusPersonsList.update_personnel", person)
+        // console.log("MonitoredStatusPersonsList.update_personnel", person)
         // this.rows.push(createData(name, '305', 3.7, 67, ""+withdrawn));
         // this.rows.push(createData(name, '305', 3.7, 67, ""+withdrawn));
         // this.rows.push(createData(name, '305', 3.7, 67, ""+withdrawn));
@@ -116,7 +120,10 @@ class PersonsMonitoredStatusList extends Component {
     } else if (cell.id === NURIMS_ENTITY_IS_WRIST_MONITORED) {
       const status = getMetadataValue(row, cell.id, "false");
       return (
-        <TableCell align={cell.align} padding={cell.disablePadding ? 'none' : 'normal'}>{
+        <TableCell
+          align={cell.align}
+          padding={cell.disablePadding ? 'none' : 'normal'}
+        >{
           <Checkbox
             id={`wrist-${row.item_id}`}
             color="primary"
@@ -131,7 +138,12 @@ class PersonsMonitoredStatusList extends Component {
       )
     } else {
       return (
-        <TableCell align={cell.align} padding={cell.disablePadding ? 'none' : 'normal'}>{row[cell.id]}</TableCell>
+        <TableCell
+          align={cell.align}
+          padding={cell.disablePadding ? 'none' : 'normal'}
+        >
+          {row[cell.id]}
+        </TableCell>
       )
     }
   }

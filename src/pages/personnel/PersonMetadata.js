@@ -92,7 +92,7 @@ class PersonMetadata extends Component {
   }
 
   set_person_object = (person) => {
-    person["changed"] = false;
+    // person["changed"] = false;
     console.log("PersonMetadata.set_person_object", person)
     this.person = person;
     // signal to parent that metadata has changed

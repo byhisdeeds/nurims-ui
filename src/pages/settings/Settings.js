@@ -67,9 +67,9 @@ class Settings extends Component {
         <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
           <Typography variant="h5" component="div">{title}</Typography>
         </Grid>
-        <Grid item xs={12} style={{border: '1px solid red'}}>
+        <Grid item xs={12}>
           <List
-            sx={{ width: '100%', bgcolor: 'background.paper' }}
+            sx={{width: '100%'}}
             subheader={<ListSubheader>General</ListSubheader>}
           >
             <ListItem>

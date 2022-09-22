@@ -11,7 +11,7 @@ import {
   Box,
   CircularProgress,
   ButtonBase,
-  Icon
+  Icon, Switch
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -414,7 +414,7 @@ DateRangePicker.propTypes = {
 
 
 export function PageableTable({theme, title, minWidth, cells, defaultOrder, defaultOrderBy, rows, rowsPerPage,
-                                rowHeight, onRowSelection, disabled, renderCell}) {
+                               rowHeight, onRowSelection, disabled, renderCell, filterElement}) {
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState(defaultOrder);
@@ -500,8 +500,8 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
         sx={{
           pl: {sm: 2},
           pr: {xs: 1, sm: 1},
-          bgColor: 'red', //theme.palette.primary.main,
-          opacity: theme.palette.action.activatedOpacity,
+          // bgColor: 'red', //theme.palette.primary.main,
+          // opacity: theme.palette.action.activatedOpacity,
           // bgColor: alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }}
       >
@@ -514,9 +514,9 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
           {title}
         </Typography>
 
-        <Tooltip title="Filter list">
+        <Tooltip title="Include archived records">
           <IconButton>
-            <FilterListIcon/>
+            {filterElement}
           </IconButton>
         </Tooltip>
       </Toolbar>
@@ -594,6 +594,7 @@ PageableTable.defaultProps = {
   renderCell: (row, cell) => { return (
     <TableCell align={cell.align} padding={cell.disablePadding ? 'none' : 'normal'}>{row[cell.id]}</TableCell>
   )},
+  filterElement: <div/>,
 };
 
 PageableTable.propTypes = {
@@ -609,6 +610,7 @@ PageableTable.propTypes = {
   rowHeight: PropTypes.number,
   onRowSelection: PropTypes.func,
   renderCell: PropTypes.func,
+  filterElement: PropTypes.object,
 }
 
 

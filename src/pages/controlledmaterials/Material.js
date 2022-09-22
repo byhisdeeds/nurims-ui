@@ -19,13 +19,14 @@ import AddIcon from "@mui/icons-material/Add";
 import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_MANUFACTURER_RECORDS,
-  CMD_GET_MATERIAL_RECORDS,
+  CMD_GET_MATERIAL_RECORDS, CMD_GET_PERSONNEL_RECORDS,
   CMD_GET_STORAGE_LOCATION_RECORDS,
   CMD_SAVE_MATERIAL_RECORD,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
 } from "../../utils/constants";
 import {withTheme} from "@mui/styles";
+import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 
 const MODULE = "Material";
 
@@ -123,26 +124,26 @@ class Material extends Component {
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (message.hasOwnProperty("response")) {
+    if (messageHasResponse(message)) {
       const response = message.response;
-      if (response.hasOwnProperty("status") && response.status === 0) {
-        if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_GLOSSARY_TERMS) {
+      if (messageStatusOk(message)) {
+        if (isCommandResponse(message, CMD_GET_GLOSSARY_TERMS)) {
           if (this.mmref.current) {
             this.mmref.current.setGlossaryTerms(response.terms)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_MANUFACTURER_RECORDS) {
+        } else if (isCommandResponse(message, CMD_GET_MANUFACTURER_RECORDS)) {
           if (this.mlref.current) {
-            this.mmref.current.setManufacturers(response.manufacturers)
+            this.mmref.current.setManufacturers(response.manufacturer)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_STORAGE_LOCATION_RECORDS) {
+        } else if (isCommandResponse(message, CMD_GET_STORAGE_LOCATION_RECORDS)) {
           if (this.mlref.current) {
-            this.mmref.current.setStorageLocations(response.storage_locations)
+            this.mmref.current.setStorageLocations(response.storage_location)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_MATERIAL_RECORDS) {
+        } else if (isCommandResponse(message, CMD_GET_MATERIAL_RECORDS)) {
           if (this.mlref.current) {
             this.mlref.current.setMaterials(response.material)
           }
-        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_SAVE_MATERIAL_RECORD) {
+        } else if (isCommandResponse(message, CMD_SAVE_MATERIAL_RECORD)) {
           toast.success(`Successfully updated material record for ${message[NURIMS_TITLE]}.`);
         }
       } else {
@@ -151,11 +152,11 @@ class Material extends Component {
     }
   }
 
-  onMaterialSelected = (materialIndex, materialMetadata) => {
+  onMaterialSelected = (material_metadata) => {
     // console.log("-- onMaterialSelected (previous selection) --", previous_material)
-    console.log("-- onMaterialSelected (selection) --", materialIndex, materialMetadata)
+    console.log("-- onMaterialSelected (selection) --", material_metadata)
     if (this.mmref.current) {
-      this.mmref.current.setMaterialMetadata(materialMetadata)
+      this.mmref.current.setMaterialMetadata(material_metadata)
     }
     // this.setState({previous_selection: previous_material, selection: material})
   }
@@ -215,7 +216,7 @@ class Material extends Component {
         "changed": true,
         "item_id": -1,
         "nurims.title": "New Material",
-        "nurims.withdrawn": false,
+        "nurims.withdrawn": 0,
         "metadata": []
       }], false);
       this.setState({ changed: true });
@@ -235,10 +236,9 @@ class Material extends Component {
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <MaterialList
               ref={this.mlref}
-              theme={this.props.theme}
               height={400}
               properties={this.props.properties}
               onRowClicked={this.onMaterialSelected}
@@ -246,7 +246,7 @@ class Material extends Component {
               onRefresh={this.onRefreshMaterialsList}
             />
           </Grid>
-          <Grid item xs={7}>
+          <Grid item xs={8}>
             <MaterialMetadata
               ref={this.mmref}
               properties={this.props.properties}

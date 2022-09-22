@@ -1,21 +1,18 @@
 import React, {Component} from 'react';
+import {withTheme} from "@mui/styles";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import {Card, CardContent, FormControl, InputLabel, Select, Tooltip, Typography} from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import {DatePicker, LocalizationProvider} from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DateRangePicker from '@mui/lab/DateRangePicker';
 import {
   getMetadataValue,
   setMetadataValue,
-  getDoseRecordMetadataValue,
-  getDoseRecordDosimeterId, setDoseRecordMetadataValue, getDateRangeFromDateString
+  getDoseRecordDosimeterId,
+  setDoseRecordMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
-  getPropertyValue,
-  setPropertyValue
-} from "../../utils/PropertyUtils";
+  NURIMS_ENTITY_ADDRESS,
+  NURIMS_ENTITY_CONTACT,
+  NURIMS_TITLE
+} from "../../utils/constants";
 
 
 // function getMetadataValue(obj, key, missingValue) {
@@ -71,14 +68,14 @@ class ManufacturerMetadata extends Component {
     const manufacturer = this.state.manufacturer;
     if (e.target.id === "name") {
       manufacturer["changed"] = true;
-      manufacturer["nurims.title"] = e.target.value;
+      manufacturer[NURIMS_TITLE] = e.target.value;
     } else if (e.target.id === "address") {
       manufacturer["changed"] = true;
-      setMetadataValue(manufacturer, "nurims.entity.address", e.target.value)
+      setMetadataValue(manufacturer, NURIMS_ENTITY_ADDRESS, e.target.value)
     } else if (e.target.id === "contact") {
       manufacturer["changed"] = true;
-      setMetadataValue(manufacturer, "nurims.entity.contact", e.target.value)
-    } else if (e.target.id === "wrist-batchid") {
+      setMetadataValue(manufacturer, NURIMS_ENTITY_CONTACT, e.target.value)
+    // } else if (e.target.id === "wrist-batchid") {
     //   const value = getDoseRecordDosimeterId(p, "Wrist", "");
     //   setDoseRecordMetadataValue(p, value, "Wrist", "nurims.dosimeter.batchid", e.target.value);
     // } else if (e.target.id === "shallowdose") {
@@ -233,6 +230,10 @@ class ManufacturerMetadata extends Component {
   //   this.setState({person: person, has_changed: false})
   //   this.props.onChange(false);
   // }
+  set_manufacturer_object = (manufacturer) => {
+    console.log("ManufacturerMetadata.set_manufacturer_object", manufacturer)
+    this.setState({manufacturer: manufacturer});
+  }
 
   setManufacturerMetadata = (manufacturer) => {
     console.log("ManufacturerMetadata.setManufacturerMetadata", manufacturer)
@@ -305,7 +306,7 @@ class ManufacturerMetadata extends Component {
             required
             id="name"
             label="Name"
-            value={manufacturer.hasOwnProperty("nurims.title") ? manufacturer["nurims.title"] : ""}
+            value={manufacturer.hasOwnProperty(NURIMS_TITLE) ? manufacturer[NURIMS_TITLE] : ""}
             onChange={this.handleChange}
           />
           <TextField
@@ -314,7 +315,7 @@ class ManufacturerMetadata extends Component {
             multiline
             maxRows={5}
             minRows={5}
-            value={getMetadataValue(manufacturer, "nurims.entity.address", "")}
+            value={getMetadataValue(manufacturer, NURIMS_ENTITY_ADDRESS, "")}
             onChange={this.handleChange}
           />
           <TextField
@@ -323,7 +324,7 @@ class ManufacturerMetadata extends Component {
             multiline
             maxRows={5}
             minRows={5}
-            value={getMetadataValue(manufacturer, "nurims.entity.contact", "")}
+            value={getMetadataValue(manufacturer, NURIMS_ENTITY_CONTACT, "")}
             onChange={this.handleChange}
           />
         </div>
@@ -337,4 +338,4 @@ ManufacturerMetadata.defaultProps = {
   },
 };
 
-export default ManufacturerMetadata;
+export default withTheme(ManufacturerMetadata);

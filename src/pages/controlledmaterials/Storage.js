@@ -195,7 +195,7 @@ class Storage extends Component {
         "changed": true,
         "item_id": -1,
         "nurims.title": "New Storage",
-        "nurims.withdrawn": false,
+        "nurims.withdrawn": 0,
         "metadata": []
       }], false);
       this.setState({ changed: true });
@@ -215,7 +215,7 @@ class Storage extends Component {
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <StorageList
               ref={this.slref}
               properties={this.props.properties}
@@ -224,7 +224,7 @@ class Storage extends Component {
               onRefresh={this.onRefreshStoragesList}
             />
           </Grid>
-          <Grid item xs={9}>
+          <Grid item xs={8}>
             <StorageMetadata
               ref={this.smref}
               properties={this.props.properties}

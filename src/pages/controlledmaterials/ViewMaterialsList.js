@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
 import {
-  BLANK_PDF, CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF,
-  CMD_GENERATE_PERSONNEL_RECORDS_PDF,
-  CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_MANUFACTURER_RECORDS, CMD_GET_MATERIAL_RECORDS,
-  CMD_GET_STORAGE_RECORDS, CMD_SAVE_MATERIAL_RECORD, NURIMS_TITLE
+  BLANK_PDF,
+  CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF, CMD_GET_PERSONNEL_RECORDS,
 } from "../../utils/constants";
-import {Fab, FormControl, Grid, InputLabel, Select, Stack, Typography} from "@mui/material";
+import {
+  Fab,
+  FormControl,
+  Grid,
+  InputLabel,
+  Select,
+  Stack,
+  Typography
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
@@ -14,6 +19,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import IconButton from "@mui/material/IconButton";
 import {withTheme} from "@mui/styles";
+import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 
 const MODULE = "ViewMaterialsList";
 
@@ -29,10 +35,10 @@ class ViewMaterialsList extends Component {
 
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
-    if (message.hasOwnProperty("response")) {
+    if (messageHasResponse(message)) {
       const response = message.response;
-      if (response.hasOwnProperty("status") && response.status === 0) {
-        if (message.hasOwnProperty("cmd") && message.cmd === CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF) {
+      if (messageStatusOk(message)) {
+        if (isCommandResponse(message, CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF)) {
           this.setState({ pdf: message.data.pdf });
         }
       } else {

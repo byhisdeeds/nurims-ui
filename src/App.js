@@ -1,9 +1,6 @@
 import React, {Suspense, lazy} from 'react';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import PropTypes from 'prop-types'
-// import {withAuthenticationRequired} from '@auth0/auth0-react'
-// import { withAuth0 } from '@auth0/auth0-react';
-// import 'react-json-pretty/themes/monikai.css';
 import {
   Box,
   IconButton,
@@ -51,6 +48,7 @@ const SSC = lazy(() => import('./pages/maintenance/SSC'));
 const AMP = lazy(() => import('./pages/maintenance/AMP'));
 const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
 const ImportICENSPersonnel = lazy(() => import('./pages/packages/icens/ImportICENSPersonnel'));
+const ImportICENSControlledMaterialManufacturers = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialManufacturers'));
 
 const drawerWidth = 300;
 
@@ -87,6 +85,30 @@ const Puller = styled(Box)(({theme}) => ({
   left: 'calc(50% - 15px)',
 }));
 
+const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+  if (actionid === Constants.PRO_IMPORT_ICENS_PERSONNEL) {
+    return (<ImportICENSPersonnel
+      ref={crefs["ImportICENSPersonnel"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS) {
+    return (<ImportICENSControlledMaterialManufacturers
+      ref={crefs["ImportICENSControlledMaterialManufacturers"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+}
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -119,6 +141,7 @@ class App extends React.Component {
       "AMP": React.createRef(),
       "ViewSSCRecords": React.createRef(),
       "ImportICENSPersonnel": React.createRef(),
+      "ImportICENSControlledMaterialManufacturers": React.createRef(),
     };
   }
 
@@ -311,6 +334,7 @@ class App extends React.Component {
                     ref={this.crefs["Settings"]}
                     title={this.menuTitle}
                     user={this.user}
+                    theme={theme}
                     onClick={this.handleMenuAction}
                     send={this.send}
                     properties={this.properties}
@@ -414,15 +438,16 @@ class App extends React.Component {
                     send={this.send}
                     properties={this.properties}
                   />}
-                {actionid === Constants.PRO_IMPORT_ICENS_PERSONNEL &&
-                  <ImportICENSPersonnel
-                    ref={this.crefs["ImportICENSPersonnel"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
+                {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                {/*{actionid === Constants.PRO_IMPORT_ICENS_PERSONNEL &&*/}
+                {/*  <ImportICENSPersonnel*/}
+                {/*    ref={this.crefs["ImportICENSPersonnel"]}*/}
+                {/*    title={this.menuTitle}*/}
+                {/*    user={this.user}*/}
+                {/*    onClick={this.handleMenuAction}*/}
+                {/*    send={this.send}*/}
+                {/*    properties={this.properties}*/}
+                {/*  />}*/}
                 <Typography paragraph>
                   {actionid}
                 </Typography>
