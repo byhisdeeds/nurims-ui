@@ -104,7 +104,7 @@ class StorageList extends React.Component {
 
   render() {
     return (
-      <Box sx={{width: '100%'}}>
+      <Box sx={{width: '98%'}}>
         <Paper sx={{width: '100%', mb: 2}}>
           <PageableTable
             minWidth={350}

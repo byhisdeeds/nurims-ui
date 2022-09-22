@@ -252,7 +252,7 @@ class Manufacturer extends Component {
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
-          <Grid item xs={4} style={{border: '1px solid red'}}>
+          <Grid item xs={4}>
             <ManufacturerList
               ref={this.mlref}
               properties={this.props.properties}
