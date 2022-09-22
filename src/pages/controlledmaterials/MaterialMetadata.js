@@ -36,7 +36,11 @@ import {
   NURIMS_MATERIAL_STORAGE_LOCATION_RECORD,
   NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY,
   NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY,
-  NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, NURIMS_MATERIAL_NUCLIDES, NURIMS_MATERIAL_QUANTITY_UNITS, BLANK_IMAGE_OBJECT
+  NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY,
+  NURIMS_MATERIAL_NUCLIDES,
+  NURIMS_MATERIAL_QUANTITY_UNITS,
+  BLANK_IMAGE_OBJECT,
+  ITEM_ID
 } from "../../utils/constants";
 import {SelectFormControlWithTooltip, TextFieldWithTooltip, DatePickerWithTooltip} from "../../components/CommonComponents";
 
@@ -308,7 +312,7 @@ class MaterialMetadata extends Component {
     for (const manufacturer of manufacturers) {
       this.manufacturers.push({
         title: manufacturer[NURIMS_TITLE],
-        id: manufacturer["item_id"],
+        id: manufacturer[ITEM_ID],
       });
     }
     this.forceUpdate();
@@ -319,7 +323,7 @@ class MaterialMetadata extends Component {
     for (const storage of storageLocations) {
       this.storageLocations.push({
         title: storage[NURIMS_TITLE],
-        id: storage["item_id"],
+        id: storage[ITEM_ID],
       });
     }
     this.forceUpdate();
