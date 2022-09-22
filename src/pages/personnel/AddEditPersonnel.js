@@ -322,7 +322,7 @@ class AddEditPersonnel extends Component {
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <PersonList
               ref={this.plref}
               onPersonSelection={this.onPersonSelected}
@@ -331,7 +331,7 @@ class AddEditPersonnel extends Component {
               properties={this.props.properties}
             />
           </Grid>
-          <Grid item xs={7}>
+          <Grid item xs={8}>
             <PersonMetadata
               ref={this.pmref}
               onChange={this.onMetadataChanged}

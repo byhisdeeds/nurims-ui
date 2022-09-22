@@ -252,7 +252,7 @@ class Manufacturer extends Component {
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
-          <Grid item xs={7} style={{border: '1px solid red'}}>
+          <Grid item xs={4} style={{border: '1px solid red'}}>
             <ManufacturerList
               ref={this.mlref}
               properties={this.props.properties}
@@ -261,7 +261,7 @@ class Manufacturer extends Component {
               onRefresh={this.onRefreshManufacturersList}
             />
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={8}>
             <ManufacturerMetadata
               ref={this.mmref}
               properties={this.props.properties}
