@@ -3,18 +3,19 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import {Card, CardContent, FormControl, InputLabel, Select, Tooltip, Typography} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import {DatePicker, LocalizationProvider} from "@mui/lab";
+import {LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DateRangePicker from '@mui/lab/DateRangePicker';
 import {
   getMetadataValue,
   setMetadataValue,
   getDoseRecordMetadataValue,
-  getDoseRecordDosimeterId, setDoseRecordMetadataValue, getDateRangeFromDateString
+  getDoseRecordDosimeterId,
+  setDoseRecordMetadataValue,
+  getDateRangeFromDateString
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
-  setPropertyValue
 } from "../../utils/PropertyUtils";
 
 

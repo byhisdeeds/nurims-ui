@@ -608,6 +608,13 @@ export const MenuData = [
         tooltip: 'Batch import of controlled material manufacturers',
         authmodlevel: 'sysadmin',
       },
+      {
+        name: '- Import ICENS Monitors',
+        link: 'sysadmin.import.icens.monitors',
+        title: 'Import ICENS Environmental Monitors',
+        tooltip: 'Batch import of environmental radiation monitors',
+        authmodlevel: 'sysadmin',
+      },
     ],
   },
 ]

@@ -2,12 +2,6 @@ import React, {Component} from 'react';
 import {
   Fab,
   Grid,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  DialogContentText,
   Typography
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
@@ -23,7 +17,8 @@ import {
   CMD_DELETE_PERSONNEL_RECORD,
   CMD_GET_PERSONNEL_RECORDS,
   CMD_UPDATE_PERSONNEL_RECORD,
-  INCLUDE_METADATA, ITEM_ID,
+  INCLUDE_METADATA,
+  ITEM_ID,
   METADATA,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
@@ -36,7 +31,8 @@ import {
 } from "../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
 import {
-  ConfirmRemoveDialog
+  ConfirmRemoveDialog,
+  isValidSelection
 } from "../../utils/UtilityDialogs";
 
 const MODULE = "AddEditPersonnel";
@@ -69,9 +65,9 @@ const MODULE = "AddEditPersonnel";
 //   );
 // }
 
-function isPerson(person) {
-  return (person.hasOwnProperty(ITEM_ID) && person.item_id !== -1);
-}
+// function isPerson(person) {
+//   return (person.hasOwnProperty(ITEM_ID) && person.item_id !== -1);
+// }
 
 function isPersonArchived(person) {
   return (person.hasOwnProperty(NURIMS_WITHDRAWN) && person[NURIMS_WITHDRAWN] === 1);
@@ -341,12 +337,12 @@ class AddEditPersonnel extends Component {
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removePerson}
-               disabled={!isPerson(selection)}>
+               disabled={!isValidSelection(selection)}>
             <PersonRemoveIcon sx={{mr: 1}}/>
             Remove Person
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!isPerson(selection)}>
+               onClick={this.changeRecordArchivalStatus} disabled={!isValidSelection(selection)}>
             {isPersonArchived(selection) ?
               <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Personnel Record"</React.Fragment> :
               <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Personnel Record"</React.Fragment>}

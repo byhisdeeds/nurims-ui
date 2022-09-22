@@ -115,11 +115,11 @@ class MaterialList extends Component {
     this.setState({selection: -1, previous_selection: -1})
   }
 
-  rowClicked = (e, index, rowData) => {
-    console.log("row clicked", index, rowData)
-    this.setState({selection: index})
-    this.props.onRowClicked(rowData);
-  }
+  // rowClicked = (e, index, rowData) => {
+  //   console.log("row clicked", index, rowData)
+  //   this.setState({selection: index})
+  //   this.props.onRowClicked(rowData);
+  // }
 
   handleRowSelection = (row) => {
     // only do something if selection has changed
@@ -143,20 +143,29 @@ class MaterialList extends Component {
   }
 
 
-  renderList = (index) => {
-    const row = this.rows[index];
-    const bgcolor = this.state.selection === index ?
-      this.props.theme.palette.action.selection :
-      this.props.theme.palette.background.paper;
-    return (
-      <Box
-        data-row-index={index}
-        onClick={this.onRowSelected}
-        sx={{backgroundColor: bgcolor, color: this.props.theme.palette.text.primary }}
-      >
-        Item {row[NURIMS_TITLE]}
-      </Box>
-    )
+  // renderList = (index) => {
+  //   const row = this.rows[index];
+  //   const bgcolor = this.state.selection === index ?
+  //     this.props.theme.palette.action.selection :
+  //     this.props.theme.palette.background.paper;
+  //   return (
+  //     <Box
+  //       data-row-index={index}
+  //       onClick={this.onRowSelected}
+  //       sx={{backgroundColor: bgcolor, color: this.props.theme.palette.text.primary }}
+  //     >
+  //       Item {row[NURIMS_TITLE]}
+  //     </Box>
+  //   )
+  // }
+  removeMaterial = (material) => {
+    for(let i = 0; i < this.rows.length; i++){
+      if (this.rows[i] === material) {
+        this.rows.splice(i, 1);
+        this.setState({ selected: {}} );
+        return;
+      }
+    }
   }
 
   render () {

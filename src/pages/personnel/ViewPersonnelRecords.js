@@ -2,12 +2,8 @@ import React, {Component} from 'react';
 import {
   BLANK_PDF,
   CMD_GENERATE_PERSONNEL_RECORDS_PDF,
-  CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_MANUFACTURER_RECORDS, CMD_GET_MATERIAL_RECORDS,
-  CMD_GET_STORAGE_RECORDS, CMD_SAVE_MATERIAL_RECORD, NURIMS_TITLE
 } from "../../utils/constants";
-import {Fab, Grid, Typography} from "@mui/material";
-import Box from "@mui/material/Box";
+import {Grid, Typography} from "@mui/material";
 import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import {withTheme} from "@mui/styles";

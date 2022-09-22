@@ -30,7 +30,9 @@ import {
   NURIMS_DESCRIPTION,
   NURIMS_TITLE,
   NURIMS_MATERIAL_STORAGE_LOCATION_MARKERS,
-  NURIMS_MATERIAL_STORAGE_IMAGE, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT,
+  NURIMS_MATERIAL_STORAGE_IMAGE,
+  NURIMS_MATERIAL_STORAGE_MAP_IMAGE,
+  BLANK_IMAGE_OBJECT,
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";

@@ -3,21 +3,25 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import {Card, CardContent, FormControl, InputLabel, Select} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import {DatePicker, LocalizationProvider} from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import {toast} from "react-toastify";
 import Avatar from "@mui/material/Avatar";
 import PersonIcon from '@mui/icons-material/Person';
 import {
-  getDateFromDateString,
   getMetadataValue,
   setMetadataValue
 } from "../../utils/MetadataUtils";
 import {getPropertyValue} from "../../utils/PropertyUtils";
 import {
-  NURIMS_ENTITY_ASSIGNED_ROLE, NURIMS_ENTITY_AVATAR,
-  NURIMS_ENTITY_CONTACT, NURIMS_ENTITY_DATE_OF_BIRTH, NURIMS_ENTITY_NATIONAL_ID, NURIMS_ENTITY_SEX,
-  NURIMS_TITLE, NURIMS_WITHDRAWN, NURIMS_ENTITY_WORK_DETAILS, NURIMS_ENTITY_DOSE_PROVIDER_ID, BLANK_IMAGE_OBJECT,
+  NURIMS_ENTITY_ASSIGNED_ROLE,
+  NURIMS_ENTITY_AVATAR,
+  NURIMS_ENTITY_CONTACT,
+  NURIMS_ENTITY_DATE_OF_BIRTH,
+  NURIMS_ENTITY_NATIONAL_ID,
+  NURIMS_ENTITY_SEX,
+  NURIMS_TITLE,
+  NURIMS_ENTITY_WORK_DETAILS,
+  NURIMS_ENTITY_DOSE_PROVIDER_ID,
+  BLANK_IMAGE_OBJECT,
 } from "../../utils/constants";
 import {MonitorTypeSelect} from "../../components/CommonComponents";
 

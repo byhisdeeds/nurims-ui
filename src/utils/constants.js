@@ -15,6 +15,7 @@ module.exports = Object.freeze({
 
   PRO_IMPORT_ICENS_PERSONNEL: 'sysadmin.import.icens.personnel',
   PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS: 'sysadmin.import.icens.controlled.material.manufacturers',
+  PRO_IMPORT_ICENS_MONITORS: 'sysadmin.import.icens.monitors',
 
   CMD_GET_PUBLIC_KEY: 'get_public_key',
   CMD_VERIFY_USER_PASSWORD: 'verify_user_password',
@@ -27,7 +28,8 @@ module.exports = Object.freeze({
   CMD_UPDATE_MANUFACTURER_RECORD: "update_manufacturer_record",
   CMD_DELETE_MANUFACTURER_RECORD: "delete_manufacturer_record",
   CMD_GET_MATERIAL_RECORDS: "get_material_records",
-  CMD_SAVE_MATERIAL_RECORD: "save_material_record",
+  CMD_UPDATE_MATERIAL_RECORD: "update_material_record",
+  CMD_DELETE_MATERIAL_RECORD: "delete_material_record",
   CMD_GET_ORGANISATION: "get_organisation",
   CMD_GET_SYSTEM_PROPERTIES: "get_system_properties",
   CMD_SET_SYSTEM_PROPERTIES: "set_system_properties",
@@ -74,7 +76,7 @@ module.exports = Object.freeze({
   NURIMS_MATERIAL_PHYSICAL_FORM: 'nurims.material.physicalform',
   NURIMS_MATERIAL_ID: 'nurims.material.id',
   NURIMS_MATERIAL_REGISTRATION_DATE: 'nurims.material.registrationdate',
-  NURIMS_MATERIAL_MANUFACTURER: 'nurims.material.manufacturer',
+  NURIMS_MATERIAL_MANUFACTURER_RECORD: 'nurims.material.manufacturerrecord',
   NURIMS_MATERIAL_STORAGE_LOCATION: 'nurims.material.storagelocation',
   NURIMS_MATERIAL_STORAGE_LOCATION_RECORD: 'nurims.material.storagelocationrecord',
   NURIMS_MATERIAL_STORAGE_LOCATION_MARKERS: 'nurims.material.storagelocationmarkers',

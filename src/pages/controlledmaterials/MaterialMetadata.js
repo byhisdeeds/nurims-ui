@@ -40,7 +40,7 @@ import {
   NURIMS_MATERIAL_NUCLIDES,
   NURIMS_MATERIAL_QUANTITY_UNITS,
   BLANK_IMAGE_OBJECT,
-  ITEM_ID
+  ITEM_ID, NURIMS_MATERIAL_MANUFACTURER_RECORD
 } from "../../utils/constants";
 import {SelectFormControlWithTooltip, TextFieldWithTooltip, DatePickerWithTooltip} from "../../components/CommonComponents";
 
@@ -209,7 +209,7 @@ class MaterialMetadata extends Component {
   handleMaterialManufacturerChange = (e) => {
     const material = this.state.material;
     material["changed"] = true;
-    setMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER, e.target.value);
+    setMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER_RECORD, e.target.value);
     this.setState({material: material})
     // signal to parent that details have changed
     this.props.onChange(true);
@@ -328,6 +328,14 @@ class MaterialMetadata extends Component {
     }
     this.forceUpdate();
   }
+
+  // set_person_object = (person) => {
+  //   // person["changed"] = false;
+  //   console.log("PersonMetadata.set_person_object", person)
+  //   this.person = person;
+  //   // signal to parent that metadata has changed
+  //   this.props.onChange(false);
+  // }
 
   setMaterialMetadata = (material) => {
     console.log("MaterialMetadata.setMaterialMetadata", material)
@@ -645,11 +653,11 @@ class MaterialMetadata extends Component {
                   <SelectFormControlWithTooltip
                     id={"manufacturer"}
                     label="Manufacturer"
-                    value={getMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER, "")}
+                    value={getMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER_RECORD, "")}
                     onChange={this.handleMaterialManufacturerChange}
                     options={this.manufacturers}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_MANUFACTURER, "")}
+                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_MANUFACTURER_RECORD, "")}
                     // target={this.tooltipRef}
                   />
                   {/*<HtmlTooltip*/}

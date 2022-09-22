@@ -2,12 +2,6 @@ import React, {Component} from 'react';
 import {
   Fab,
   Grid,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  DialogContentText,
   Typography
 } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
@@ -19,7 +13,6 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import {
   CMD_DELETE_MANUFACTURER_RECORD,
-  CMD_DELETE_PERSONNEL_RECORD,
   CMD_GET_MANUFACTURER_RECORDS,
   CMD_UPDATE_MANUFACTURER_RECORD, ITEM_ID,
   NURIMS_TITLE

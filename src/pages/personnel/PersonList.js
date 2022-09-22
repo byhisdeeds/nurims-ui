@@ -35,7 +35,7 @@ class PersonList extends Component {
     for(let i = 0; i < this.rows.length; i++){
       if (this.rows[i] === person) {
         this.rows.splice(i, 1);
-        this.setState({ selected: this.state.previous_selection, previous_selection: {}} );
+        this.setState({ selected: {}} );
         return;
       }
     }

@@ -2,12 +2,6 @@ import React, {Component} from 'react';
 import {
   Fab,
   Grid,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  DialogContentText,
   Typography
 } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
@@ -16,17 +10,27 @@ import Box from "@mui/material/Box";
 import MaterialList from "./MaterialList";
 import MaterialMetadata from "./MaterialMetadata";
 import AddIcon from "@mui/icons-material/Add";
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import {
+  CMD_DELETE_MATERIAL_RECORD,
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_MANUFACTURER_RECORDS,
-  CMD_GET_MATERIAL_RECORDS, CMD_GET_PERSONNEL_RECORDS,
+  CMD_GET_MATERIAL_RECORDS,
   CMD_GET_STORAGE_LOCATION_RECORDS,
-  CMD_SAVE_MATERIAL_RECORD,
+  CMD_UPDATE_MATERIAL_RECORD,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
 } from "../../utils/constants";
 import {withTheme} from "@mui/styles";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {
+  isCommandResponse,
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
+import {
+  ConfirmRemoveDialog,
+  isValidSelection
+} from "../../utils/UtilityDialogs";
 
 const MODULE = "Material";
 
@@ -58,40 +62,39 @@ const MODULE = "Material";
 //   );
 // }
 
-function ConfirmSelectionChangeDialog(props) {
-  return (
-    <div>
-      <Dialog
-        open={props.open}
-        onClose={props.onCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
-            changed without being saved. Do you want to continue without saving the details and loose the changes ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onCancel}>No</Button>
-          <Button onClick={props.onProceed} autoFocus>Yes</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
+// function ConfirmSelectionChangeDialog(props) {
+//   return (
+//     <div>
+//       <Dialog
+//         open={props.open}
+//         onClose={props.onCancel}
+//         aria-labelledby="alert-dialog-title"
+//         aria-describedby="alert-dialog-description"
+//       >
+//         <DialogTitle id="alert-dialog-title">
+//           {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
+//         </DialogTitle>
+//         <DialogContent>
+//           <DialogContentText id="alert-dialog-description">
+//             The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
+//             changed without being saved. Do you want to continue without saving the details and loose the changes ?
+//           </DialogContentText>
+//         </DialogContent>
+//         <DialogActions>
+//           <Button onClick={props.onCancel}>No</Button>
+//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
+//         </DialogActions>
+//       </Dialog>
+//     </div>
+//   );
+// }
 
 class Material extends Component {
   constructor(props) {
     super(props);
     this.state = {
       changed: false,
-      alert: false,
-      previous_selection: {},
+      confirm_remove: false,
       selection: {},
       title: props.title,
     };
@@ -118,6 +121,7 @@ class Material extends Component {
   onRefreshMaterialsList = () => {
     this.props.send({
       cmd: CMD_GET_MATERIAL_RECORDS,
+      "include.metadata": "true",
       module: MODULE,
     });
   }
@@ -143,8 +147,17 @@ class Material extends Component {
           if (this.mlref.current) {
             this.mlref.current.setMaterials(response.material)
           }
-        } else if (isCommandResponse(message, CMD_SAVE_MATERIAL_RECORD)) {
+        } else if (isCommandResponse(message, CMD_UPDATE_MATERIAL_RECORD)) {
           toast.success(`Successfully updated material record for ${message[NURIMS_TITLE]}.`);
+        } else if (isCommandResponse(message, CMD_DELETE_MATERIAL_RECORD)) {
+          toast.success(`Material record (id: ${response.item_id}) deleted successfully`)
+          if (this.mlref.current) {
+            this.mlref.current.removeMaterial(this.state.selection)
+          }
+          if (this.mmref.current) {
+            this.mmref.current.setMaterialMetadata({})
+          }
+          this.setState({selection: {}, metadata_changed: false})
         }
       } else {
         toast.error(response.message);
@@ -152,13 +165,13 @@ class Material extends Component {
     }
   }
 
-  onMaterialSelected = (material_metadata) => {
+  onMaterialSelected = (material) => {
     // console.log("-- onMaterialSelected (previous selection) --", previous_material)
-    console.log("-- onMaterialSelected (selection) --", material_metadata)
+    console.log("-- onMaterialSelected (selection) --", material)
     if (this.mmref.current) {
-      this.mmref.current.setMaterialMetadata(material_metadata)
+      this.mmref.current.setMaterialMetadata(material)
     }
-    // this.setState({previous_selection: previous_material, selection: material})
+    this.setState({selection: material})
   }
 
   saveChanges = () => {
@@ -169,7 +182,7 @@ class Material extends Component {
       for (const material of materials) {
         if (material.changed) {
           this.props.send({
-            cmd: CMD_SAVE_MATERIAL_RECORD,
+            cmd: CMD_UPDATE_MATERIAL_RECORD,
             item_id: material.item_id,
             "nurims.title": material[NURIMS_TITLE],
             "nurims.withdrawn": material[NURIMS_WITHDRAWN],
@@ -187,27 +200,28 @@ class Material extends Component {
     this.setState({changed: state});
   }
 
-  proceed_with_selection_change = () => {
-    // set new selection and load details
-    // console.log("#### saving personnel details ###", this.state.previous_selection)
-    const selection = this.state.selection;
-    const previous_selection = this.state.previous_selection;
-    selection.has_changed = false;
-    previous_selection.has_changed = false;
-    this.setState({alert: false, selection: selection, previous_selection: previous_selection});
-    if (this.mlref.current) {
-      this.mlref.current.setSelection(selection)
-    }
-    if (this.mmref.current) {
-      this.mmref.current.setDoseMetadata(selection)
+  removeMaterial = () => {
+    this.setState({confirm_remove: true,});
+  }
+
+  proceed_with_remove = () => {
+    this.setState({confirm_remove: false,});
+    console.log("REMOVE MATERIAL", this.state.selection);
+    if (this.state.selection.item_id === -1) {
+      if (this.plref.current) {
+        this.plref.current.removePerson(this.state.selection)
+      }
+    } else {
+      this.props.send({
+        cmd: CMD_DELETE_MATERIAL_RECORD,
+        item_id: this.state.selection.item_id,
+        module: MODULE,
+      });
     }
   }
 
-  cancel_selection_change = () => {
-    this.setState({alert: false,});
-    if (this.mlref.current) {
-      this.mlref.current.setSelection(this.state.previous_selection)
-    }
+  cancel_remove = () => {
+    this.setState({confirm_remove: false,});
   }
 
   addMaterial = () => {
@@ -224,13 +238,18 @@ class Material extends Component {
   }
 
   render() {
-    const {changed, alert, previous_selection, selection, title, } = this.state;
+    const {changed, confirm_remove, selection, title, } = this.state;
     return (
       <React.Fragment>
-        <ConfirmSelectionChangeDialog open={alert}
-                                      person={previous_selection}
-                                      onProceed={this.proceed_with_selection_change}
-                                      onCancel={this.cancel_selection_change}
+        {/*<ConfirmSelectionChangeDialog open={alert}*/}
+        {/*                              person={previous_selection}*/}
+        {/*                              onProceed={this.proceed_with_selection_change}*/}
+        {/*                              onCancel={this.cancel_selection_change}*/}
+        {/*/>*/}
+        <ConfirmRemoveDialog open={confirm_remove}
+                             selection={selection}
+                             onProceed={this.proceed_with_remove}
+                             onCancel={this.cancel_remove}
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
@@ -255,6 +274,11 @@ class Material extends Component {
           </Grid>
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
+          <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.removeMaterial}
+               disabled={!isValidSelection(selection)}>
+            <RemoveCircleIcon sx={{mr: 1}}/>
+            Remove Material
+          </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
                disabled={!changed}>
             <SaveIcon sx={{mr: 1}}/>
