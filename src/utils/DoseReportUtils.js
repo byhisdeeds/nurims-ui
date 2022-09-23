@@ -1,5 +1,8 @@
 import {toast} from "react-toastify";
-import {getMetadataValue, setDoseRecordMetadataValue} from "./MetadataUtils";
+import {
+  getMetadataValue,
+  setDoseRecordMetadataValue
+} from "./MetadataUtils";
 
 const DOSE_TRANSFORM_TABLE = {
   "mr-mr": 1.0,

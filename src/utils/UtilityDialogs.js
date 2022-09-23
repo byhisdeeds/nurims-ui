@@ -37,3 +37,7 @@ export const ConfirmRemoveDialog = (props) => (
     </Dialog>
   </div>
 )
+
+export const isValidSelection = (selection) => {
+  return (selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
+}

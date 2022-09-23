@@ -16,7 +16,6 @@ import MenuDrawer from "./MenuDrawer";
 import {darkTheme, lightTheme} from "./utils/Theme";
 import {ThemeProvider} from "@mui/material/styles";
 import {MenuData} from "./menudata";
-import SelectOrganisation from "./components/SelectOrganisation";
 import {NetworkCheck} from "@mui/icons-material";
 import metadata from './metadata.json';
 import {ToastContainer} from "react-toastify";
@@ -30,7 +29,6 @@ import {
   CMD_GET_ORGANISATION,
   CMD_SET_SYSTEM_PROPERTIES
 } from "./utils/constants";
-import {SelectFormControl} from "./components/CommonComponents";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -49,6 +47,7 @@ const AMP = lazy(() => import('./pages/maintenance/AMP'));
 const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
 const ImportICENSPersonnel = lazy(() => import('./pages/packages/icens/ImportICENSPersonnel'));
 const ImportICENSControlledMaterialManufacturers = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialManufacturers'));
+const ImportICENSMonitors = lazy(() => import('./pages/packages/icens/ImportICENSMonitors'));
 
 const drawerWidth = 300;
 
@@ -99,6 +98,16 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
   else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS) {
     return (<ImportICENSControlledMaterialManufacturers
       ref={crefs["ImportICENSControlledMaterialManufacturers"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.PRO_IMPORT_ICENS_MONITORS) {
+    return (<ImportICENSMonitors
+      ref={crefs["ImportICENSMonitors"]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}

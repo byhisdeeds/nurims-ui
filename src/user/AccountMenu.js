@@ -9,13 +9,11 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-// import { useAuth0 } from '@auth0/auth0-react'
 
 export default function AccountMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const user = props.user;
-  // const { logout } = useAuth0()
+  // const user = props.user;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
