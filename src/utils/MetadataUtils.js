@@ -162,3 +162,11 @@ export function getDoseRecordMetadataValue(person_record, dosimeter, dosimeterTy
 export function BlobObject(name, blob) {
   return {file: name, url: blob};
 }
+
+export function markerBounds(location) {
+  const fac = .025;
+  // [ll corner[lat,lng], ur corner[lat,lng]]
+  return (location) ?
+    [[location.northing-fac, location.easting-fac], [location.northing+fac, location.easting+fac]] :
+    [[-fac, -fac], [fac, fac]];
+}

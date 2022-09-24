@@ -16,7 +16,6 @@ class StorageList extends React.Component {
       order: 'asc',
       orderBy: NURIMS_TITLE,
       selected: {},
-      previous_selection: {},
       page: 0,
       dense: false,
       rowsPerPage: 10,
@@ -29,19 +28,19 @@ class StorageList extends React.Component {
     // this.props.onClick(this.state.selected, row);
   };
 
-  handleClick = (row) => {
-    // only do something if selection has changed
-    if (this.state.selected !== row) {
-      this.setState({previous_selection: this.state.selected, selected: row});
-      this.props.onClick(this.state.selected, row);
-    }
-  };
+  // handleClick = (row) => {
+  //   // only do something if selection has changed
+  //   if (this.state.selected !== row) {
+  //     this.setState({previous_selection: this.state.selected, selected: row});
+  //     this.props.onClick(this.state.selected, row);
+  //   }
+  // };
 
   handleRowSelection = (row) => {
     // only do something if selection has changed
     if (this.state.selected !== row) {
-      this.setState({previous_selection: this.state.selected, selected: row});
-      this.props.onRowSelection(this.state.selected, row);
+      this.setState({selected: row});
+      this.props.onRowSelection(row);
     }
   };
 

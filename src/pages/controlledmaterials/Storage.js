@@ -94,13 +94,12 @@ class Storage extends Component {
     }
   }
 
-  onStorageSelected = (previous_storage, storage) => {
-    console.log("-- onStorageSelected (previous selection) --", previous_storage)
+  onStorageSelected = (storage) => {
     console.log("-- onStorageSelected (selection) --", storage)
     if (this.smref.current) {
       this.smref.current.setStorageMetadata(storage)
     }
-    this.setState({previous_selection: previous_storage, selection: storage})
+    this.setState({selection: storage})
   }
 
   saveChanges = () => {
