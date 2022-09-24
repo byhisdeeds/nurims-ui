@@ -7,7 +7,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import {
   getMetadataValue,
   setMetadataValue,
-  getDateFromDateString
+  getDateFromDateString, BlobObject
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
@@ -396,7 +396,7 @@ class MaterialMetadata extends Component {
       const material = that.state.material;
       material["changed"] = true;
       // setMetadataValue(material, "nurims.material.image", event.target.result);
-      setMetadataValue(material, NURIMS_MATERIAL_IMAGE, {file: selectedFile.name, url: event.target.result});
+      setMetadataValue(material, NURIMS_MATERIAL_IMAGE, BlobObject(selectedFile.name, event.target.result));
       that.setState({ material: material })
       that.props.onChange(true);
     };
@@ -413,7 +413,7 @@ class MaterialMetadata extends Component {
     fileReader.onload = function (event) {
       const material = that.state.material;
       material["changed"] = true;
-      setMetadataValue(material, NURIMS_MATERIAL_DOCUMENTS, {file: selectedFile.name, url: event.target.result});
+      setMetadataValue(material, NURIMS_MATERIAL_DOCUMENTS, BlobObject(selectedFile.name, event.target.result));
       that.setState({ material: material })
       that.props.onChange(true);
     };

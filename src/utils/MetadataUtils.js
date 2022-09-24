@@ -159,4 +159,6 @@ export function getDoseRecordMetadataValue(person_record, dosimeter, dosimeterTy
   return missingValue;
 }
 
-
+export function BlobObject(name, blob) {
+  return {file: name, url: blob};
+}

@@ -9,8 +9,9 @@ import UploadIcon from '@mui/icons-material/Upload';
 import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
 import {
+  CMD_GET_MANUFACTURER_RECORDS,
   CMD_UPDATE_ITEM_RECORD, CMD_UPDATE_MANUFACTURER_RECORD,
-  CMD_UPDATE_PERSONNEL_RECORD, NURIMS_ENTITY_ADDRESS,
+  CMD_UPDATE_PERSONNEL_RECORD, ITEM_ID, NURIMS_ENTITY_ADDRESS,
   NURIMS_ENTITY_CONTACT,
   NURIMS_ENTITY_DATE_OF_BIRTH,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
@@ -19,7 +20,7 @@ import {
   NURIMS_ENTITY_IS_WRIST_MONITORED,
   NURIMS_ENTITY_NATIONAL_ID,
   NURIMS_ENTITY_SEX,
-  NURIMS_ENTITY_WORK_DETAILS,
+  NURIMS_ENTITY_WORK_DETAILS, NURIMS_SOURCE,
   NURIMS_TITLE, NURIMS_WITHDRAWN,
 } from "../../../utils/constants";
 import {
@@ -55,8 +56,18 @@ class ImportICENSControlledMaterialManufacturers extends Component {
       selection: {},
       title: props.title,
     };
+    this.manufacturers_list = [];
     this.plref = React.createRef();
     this.pmref = React.createRef();
+  }
+
+  componentDidMount() {
+    this.props.send({
+      cmd: CMD_GET_MANUFACTURER_RECORDS,
+      "include.withdrawn": "false",
+      "include.metadata": "true",
+      module: MODULE,
+    })
   }
 
   ws_message = (message) => {
@@ -68,13 +79,15 @@ class ImportICENSControlledMaterialManufacturers extends Component {
           const messages = this.state.messages;
           messages.push(`Manufacturer record for ${response.manufacturer[NURIMS_TITLE]} updated successfully`);
           this.setState({messages: messages});
-          // toast.success(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)
-          // if (this.plref.current) {
-          //   this.plref.current.update(response.personnel);
-          // }
-          // // if (this.pmref.current) {
-          // //   this.pmref.current.set_metadata(response.personnel);
-          // // }
+        } else if (isCommandResponse(message, CMD_GET_MANUFACTURER_RECORDS)) {
+          if (Array.isArray(response.manufacturer)) {
+            this.manufacturers_list.length = 0;
+            for (const manufacturer of response.manufacturer) {
+              manufacturer.changed = false;
+              this.manufacturers_list.push(manufacturer);
+            }
+          }
+          console.log("CMD_GET_MANUFACTURER_RECORDS", this.manufacturers_list)
         }
       } else {
         toast.error(response.message);
@@ -124,12 +137,20 @@ class ImportICENSControlledMaterialManufacturers extends Component {
           };
           if (d.hasOwnProperty("name")) {
             manufacturer[NURIMS_TITLE] = d.name;
+            for (const m of that.manufacturers_list) {
+              if (m[NURIMS_TITLE] === d.name) {
+                manufacturer.item_id = m.item_id;
+              }
+            }
           }
           if (d.hasOwnProperty("nrims.manufacturer.address")) {
             setMetadataValue(manufacturer, NURIMS_ENTITY_ADDRESS, d["nrims.manufacturer.address"])
           }
           if (d.hasOwnProperty("nrims.manufacturer.contact")) {
             setMetadataValue(manufacturer, NURIMS_ENTITY_CONTACT, d["nrims.manufacturer.contact"])
+          }
+          if (d.hasOwnProperty("dc.identifier.uri")) {
+            setMetadataValue(manufacturer, NURIMS_SOURCE, d["dc.identifier.uri"])
           }
           manufacturers.push(manufacturer);
         }

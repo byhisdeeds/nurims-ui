@@ -19,6 +19,7 @@ import MouseCoordinates from "../../components/MouseCoordinates";
 import LocationFinder from "../../components/LocationFinder";
 import "leaflet/dist/leaflet.css";
 import {
+  BlobObject,
   getMetadataValue,
   setMetadataValue,
 } from "../../utils/MetadataUtils";
@@ -149,7 +150,7 @@ class StorageMetadata extends Component {
       // console.log(">>>>>", event.target.result);
       const storage = that.state.storage;
       storage["changed"] = true;
-      setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, {file: selectedFile.name, url: event.target.result});
+      setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, BlobObject(selectedFile.name, event.target.result));
       // setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, event.target.result);
       that.forceUpdate();
       // signal to parent that metadata has changed

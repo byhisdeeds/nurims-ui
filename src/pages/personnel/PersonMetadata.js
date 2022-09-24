@@ -9,6 +9,7 @@ import {toast} from "react-toastify";
 import Avatar from "@mui/material/Avatar";
 import PersonIcon from '@mui/icons-material/Person';
 import {
+  BlobObject,
   getDateFromDateString,
   getMetadataValue,
   setMetadataValue
@@ -117,7 +118,8 @@ class PersonMetadata extends Component {
       // console.log(">>>>>", event.target.result);
       const person = that.person;
       person["changed"] = true;
-      setMetadataValue(person, NURIMS_ENTITY_AVATAR, {file: selectedFile.name, url: event.target.result});
+      // setMetadataValue(person, NURIMS_ENTITY_AVATAR, {file: selectedFile.name, url: event.target.result});
+      setMetadataValue(person, NURIMS_ENTITY_AVATAR, BlobObject(selectedFile.name, event.target.result));
       that.forceUpdate();
       // signal to parent that metadata has changed
       that.props.onChange(true);
@@ -140,7 +142,7 @@ class PersonMetadata extends Component {
       >
         <div>
           <input
-            accept="*.csv, *.txt, text/plain"
+            accept="*.jpg, *.jpeg, image/*"
             // className={classes.input}
             id="load-avatar"
             style={{display: 'none',}}
