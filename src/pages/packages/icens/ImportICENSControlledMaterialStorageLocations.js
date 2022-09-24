@@ -9,9 +9,9 @@ import UploadIcon from '@mui/icons-material/Upload';
 import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
 import {
-  CMD_GET_MANUFACTURER_RECORDS,
+  CMD_GET_MANUFACTURER_RECORDS, CMD_GET_STORAGE_LOCATION_RECORDS,
   CMD_UPDATE_ITEM_RECORD, CMD_UPDATE_MANUFACTURER_RECORD,
-  CMD_UPDATE_PERSONNEL_RECORD, ITEM_ID, NURIMS_ENTITY_ADDRESS,
+  CMD_UPDATE_PERSONNEL_RECORD, CMD_UPDATE_STORAGE_LOCATION_RECORD, ITEM_ID, NURIMS_DESCRIPTION, NURIMS_ENTITY_ADDRESS,
   NURIMS_ENTITY_CONTACT,
   NURIMS_ENTITY_DATE_OF_BIRTH,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
@@ -20,7 +20,7 @@ import {
   NURIMS_ENTITY_IS_WRIST_MONITORED,
   NURIMS_ENTITY_NATIONAL_ID,
   NURIMS_ENTITY_SEX,
-  NURIMS_ENTITY_WORK_DETAILS, NURIMS_SOURCE,
+  NURIMS_ENTITY_WORK_DETAILS, NURIMS_MATERIAL_STORAGE_IMAGE, NURIMS_MATERIAL_STORAGE_LOCATION, NURIMS_SOURCE,
   NURIMS_TITLE, NURIMS_WITHDRAWN,
 } from "../../../utils/constants";
 import {
@@ -30,10 +30,10 @@ import {
 } from "../../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
 import ReactJson from "react-json-view";
-import {setMetadataValue} from "../../../utils/MetadataUtils";
+import {BlobObject, setMetadataValue} from "../../../utils/MetadataUtils";
 import BusyIndicator from "../../../components/BusyIndicator";
 
-const MODULE = "ImportICENSControlledMaterialManufacturers";
+const MODULE = "ImportICENSControlledMaterialStorageLocations";
 
 function isPersonMonitored(status) {
   if (Array.isArray(status)) {
@@ -42,11 +42,11 @@ function isPersonMonitored(status) {
   return status === "" ? "false" : "true";
 }
 
-class ImportICENSControlledMaterialManufacturers extends Component {
+class ImportICENSControlledMaterialStorageLocations extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      manufacturers: [],
+      storage_locations: [],
       busy: 0,
       metadata_changed: false,
       messages: [],
@@ -56,14 +56,14 @@ class ImportICENSControlledMaterialManufacturers extends Component {
       selection: {},
       title: props.title,
     };
-    this.manufacturers_list = [];
+    this.storage_locations_list = [];
     this.plref = React.createRef();
     this.pmref = React.createRef();
   }
 
   componentDidMount() {
     this.props.send({
-      cmd: CMD_GET_MANUFACTURER_RECORDS,
+      cmd: CMD_GET_STORAGE_LOCATION_RECORDS,
       "include.withdrawn": "false",
       "include.metadata": "true",
       module: MODULE,
@@ -75,16 +75,16 @@ class ImportICENSControlledMaterialManufacturers extends Component {
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_UPDATE_MANUFACTURER_RECORD)) {
+        if (isCommandResponse(message, CMD_UPDATE_STORAGE_LOCATION_RECORD)) {
           const messages = this.state.messages;
-          messages.push(`Manufacturer record for ${response.manufacturer[NURIMS_TITLE]} updated successfully`);
+          messages.push(`Storage location record for ${response.storage_location[NURIMS_TITLE]} updated successfully`);
           this.setState({messages: messages});
-        } else if (isCommandResponse(message, CMD_GET_MANUFACTURER_RECORDS)) {
-          if (Array.isArray(response.manufacturer)) {
-            this.manufacturers_list.length = 0;
-            for (const manufacturer of response.manufacturer) {
-              manufacturer.changed = false;
-              this.manufacturers_list.push(manufacturer);
+        } else if (isCommandResponse(message, CMD_GET_STORAGE_LOCATION_RECORDS)) {
+          if (Array.isArray(response.storage_location)) {
+            this.storage_locations_list.length = 0;
+            for (const location of response.storage_location) {
+              location.changed = false;
+              this.storage_locations_list.push(location);
             }
           }
         }
@@ -95,16 +95,16 @@ class ImportICENSControlledMaterialManufacturers extends Component {
   }
 
   saveChanges = () => {
-    const manufacturers = this.state.manufacturers;
-    for (const manufacturer of manufacturers) {
-      console.log("SAVING MANUFACTURER WITH CHANGED METADATA ", manufacturer)
-      // only save manufacturers with changed metadata
+    const storage_locations = this.state.storage_locations;
+    for (const location of storage_locations) {
+      console.log("SAVING STORAGE LOCATION CHANGED METADATA ", location)
+      // only save storage_locations with changed metadata
       this.props.send({
-        cmd: CMD_UPDATE_MANUFACTURER_RECORD,
-        item_id: manufacturer.item_id,
-        "nurims.title": manufacturer[NURIMS_TITLE],
-        "nurims.withdrawn": manufacturer[NURIMS_WITHDRAWN],
-        metadata: manufacturer.metadata,
+        cmd: CMD_UPDATE_STORAGE_LOCATION_RECORD,
+        item_id: location.item_id,
+        "nurims.title": location[NURIMS_TITLE],
+        "nurims.withdrawn": location[NURIMS_WITHDRAWN],
+        metadata: location.metadata,
         module: MODULE,
       })
     }
@@ -126,40 +126,53 @@ class ImportICENSControlledMaterialManufacturers extends Component {
     fileReader.onload = function (event) {
       const data = JSON.parse(event.target.result);
       if (Array.isArray(data)) {
-        const manufacturers = [];
+        const storage_locations = [];
         for (const d of data) {
-          const manufacturer = {
+          const storage_location = {
             item_id: -1,
             "nurims.title": "",
             "nurims.wihdrawn": 0,
             metadata: []
           };
           if (d.hasOwnProperty("name")) {
-            manufacturer[NURIMS_TITLE] = d.name;
-            for (const m of that.manufacturers_list) {
-              if (m[NURIMS_TITLE] === d.name) {
-                manufacturer.item_id = m.item_id;
+            storage_location[NURIMS_TITLE] = d.name;
+            for (const l of that.storage_locations_list) {
+              if (l[NURIMS_TITLE] === d.name) {
+                storage_location.item_id = l.item_id;
               }
             }
           }
-          if (d.hasOwnProperty("nrims.manufacturer.address")) {
-            setMetadataValue(manufacturer, NURIMS_ENTITY_ADDRESS, d["nrims.manufacturer.address"])
+          if (d.hasOwnProperty("dc.description")) {
+            setMetadataValue(storage_location, NURIMS_DESCRIPTION, d["dc.description"])
           }
-          if (d.hasOwnProperty("nrims.manufacturer.contact")) {
-            setMetadataValue(manufacturer, NURIMS_ENTITY_CONTACT, d["nrims.manufacturer.contact"])
+          if (d.hasOwnProperty("dc.coverage.spatial")) {
+            // "dc.coverage.spatial": "{'projection':'EPSG:32663','coordinates':[231,188],'marker':'/images/marker/nuclear-store-circle.png'}",
+            // {'marker':'/images/markers/nuclear-store-circle.png#64#32#32','easting':1,'northing':1}"
+            const coverage = JSON.parse(d["dc.coverage.spatial"].replaceAll("'", "\""));
+            console.log(">>>", coverage)
+            const c = {marker: "/images/markers/nuclear-store-circle.png#64#32#32", easting: 0, northing: 0};
+            if (coverage.hasOwnProperty("coordinates") && Array.isArray(coverage.coordinates)) {
+              c.easting = coverage.coordinates[0];
+              c.northing = coverage.coordinates[1];
+            }
+            setMetadataValue(storage_location, NURIMS_MATERIAL_STORAGE_LOCATION, c);
           }
           if (d.hasOwnProperty("dc.identifier.uri")) {
-            setMetadataValue(manufacturer, NURIMS_SOURCE, d["dc.identifier.uri"])
+            setMetadataValue(storage_location, NURIMS_SOURCE, d["dc.identifier.uri"])
           }
-          manufacturers.push(manufacturer);
+          if (d.hasOwnProperty("image")) {
+            const blob = JSON.parse(d["image"].replaceAll("'", "\""));
+            setMetadataValue(storage_location, NURIMS_MATERIAL_STORAGE_IMAGE, BlobObject(blob.file, blob.url))
+          }
+          storage_locations.push(storage_location);
         }
-        that.setState({manufacturers: manufacturers, busy: 0, metadata_changed: true});
+        that.setState({storage_locations: storage_locations, busy: 0, metadata_changed: true});
       }
     };
   }
 
   render() {
-    const {manufacturers, busy, metadata_changed, messages, title} = this.state;
+    const {storage_locations, busy, metadata_changed, messages, title} = this.state;
     return (
       <React.Fragment>
         <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
@@ -179,7 +192,7 @@ class ImportICENSControlledMaterialManufacturers extends Component {
             <ReactJson
               theme={"bright"}
               collapsed={2}
-              src={manufacturers}
+              src={storage_locations}
             />
           </Grid>
           <Grid item xs={12} sx={{height: 'calc(100vh - 520px)', overflowY: 'auto', paddingTop: 0}}>
@@ -208,10 +221,10 @@ class ImportICENSControlledMaterialManufacturers extends Component {
   }
 }
 
-ImportICENSControlledMaterialManufacturers.defaultProps = {
+ImportICENSControlledMaterialStorageLocations.defaultProps = {
   send: (msg) => {
   },
   user: {},
 };
 
-export default withTheme(ImportICENSControlledMaterialManufacturers);
+export default withTheme(ImportICENSControlledMaterialStorageLocations);

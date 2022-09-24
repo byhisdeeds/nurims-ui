@@ -609,6 +609,13 @@ export const MenuData = [
         authmodlevel: 'sysadmin',
       },
       {
+        name: '- Import Material Store.',
+        link: 'sysadmin.import.icens.controlled.material.storage.locations',
+        title: 'Import Controlled Material Storage Locations',
+        tooltip: 'Batch import of controlled material storage locations',
+        authmodlevel: 'sysadmin',
+      },
+      {
         name: '- Import ICENS Monitors',
         link: 'sysadmin.import.icens.monitors',
         title: 'Import ICENS Environmental Monitors',

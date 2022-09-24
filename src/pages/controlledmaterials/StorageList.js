@@ -45,7 +45,7 @@ class StorageList extends React.Component {
     }
   };
 
-  removePerson = (person) => {
+  removeStorageLocations = (person) => {
     for(let i = 0; i < this.rows.length; i++){
       if (this.rows[i] === person) {
         this.rows.splice(i, 1);

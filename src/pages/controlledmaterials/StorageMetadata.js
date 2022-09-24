@@ -291,7 +291,7 @@ class StorageMetadata extends Component {
                     required
                     id="marker"
                     label="Marker"
-                    value={storageLocation.hasOwnProperty("marker") ? storageLocation.marker : ""}
+                    value={storageLocation.hasOwnProperty("marker") ? storageLocation.marker : "/images/markers/center-marker.png#64#32#32"}
                     onChange={this.handleCoverageLocationMarkerChange}
                   >
                     {markers.map((mark) => {

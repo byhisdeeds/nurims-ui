@@ -15,6 +15,7 @@ module.exports = Object.freeze({
 
   PRO_IMPORT_ICENS_PERSONNEL: 'sysadmin.import.icens.personnel',
   PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS: 'sysadmin.import.icens.controlled.material.manufacturers',
+  PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS: 'sysadmin.import.icens.controlled.material.storage.locations',
   PRO_IMPORT_ICENS_MONITORS: 'sysadmin.import.icens.monitors',
 
   CMD_GET_PUBLIC_KEY: 'get_public_key',
@@ -35,6 +36,7 @@ module.exports = Object.freeze({
   CMD_SET_SYSTEM_PROPERTIES: "set_system_properties",
   CMD_GENERATE_PERSONNEL_RECORDS_PDF: "generate_personnel_records_pdf",
   CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF: "generate_controlled_materials_list_pdf",
+  CMD_DELETE_STORAGE_LOCATION_RECORD: "delete_storage_location_record",
   CMD_UPDATE_STORAGE_LOCATION_RECORD: "update_storage_location_record",
   CMD_GET_STORAGE_LOCATION_RECORDS: "get_storage_location_records",
   CMD_GET_SSC_RECORDS: "get_ssc_records",

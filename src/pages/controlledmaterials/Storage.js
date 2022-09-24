@@ -2,12 +2,6 @@ import React, {Component} from 'react';
 import {
   Fab,
   Grid,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  DialogContentText,
   Typography
 } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
@@ -17,12 +11,19 @@ import StorageList from "./StorageList";
 import StorageMetadata from "./StorageMetadata";
 import AddIcon from "@mui/icons-material/Add";
 import {
-  CMD_GET_GLOSSARY_TERMS, CMD_GET_STORAGE_LOCATION_RECORDS,
+  CMD_DELETE_STORAGE_LOCATION_RECORD,
+  CMD_GET_GLOSSARY_TERMS,
+  CMD_GET_STORAGE_LOCATION_RECORDS,
   CMD_UPDATE_STORAGE_LOCATION_RECORD,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
 import {withTheme} from "@mui/styles";
+import {
+  ConfirmRemoveDialog,
+  isValidSelection
+} from "../../utils/UtilityDialogs";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
 const MODULE = "Storage";
 
@@ -54,40 +55,39 @@ const MODULE = "Storage";
 //   );
 // }
 
-function ConfirmSelectionChangeDialog(props) {
-  return (
-    <div>
-      <Dialog
-        open={props.open}
-        onClose={props.onCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
-            changed without being saved. Do you want to continue without saving the details and loose the changes ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onCancel}>No</Button>
-          <Button onClick={props.onProceed} autoFocus>Yes</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
+// function ConfirmSelectionChangeDialog(props) {
+//   return (
+//     <div>
+//       <Dialog
+//         open={props.open}
+//         onClose={props.onCancel}
+//         aria-labelledby="alert-dialog-title"
+//         aria-describedby="alert-dialog-description"
+//       >
+//         <DialogTitle id="alert-dialog-title">
+//           {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
+//         </DialogTitle>
+//         <DialogContent>
+//           <DialogContentText id="alert-dialog-description">
+//             The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
+//             changed without being saved. Do you want to continue without saving the details and loose the changes ?
+//           </DialogContentText>
+//         </DialogContent>
+//         <DialogActions>
+//           <Button onClick={props.onCancel}>No</Button>
+//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
+//         </DialogActions>
+//       </Dialog>
+//     </div>
+//   );
+// }
 
 class Storage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       changed: false,
-      alert: false,
-      previous_selection: {},
+      confirm_remove: false,
       selection: {},
       title: props.title,
     };
@@ -106,6 +106,8 @@ class Storage extends Component {
   onRefreshStoragesList = () => {
     this.props.send({
       cmd: CMD_GET_STORAGE_LOCATION_RECORDS,
+      "include.withdrawn": "false",
+      "include.metadata": "true",
       module: MODULE,
     });
   }
@@ -117,14 +119,23 @@ class Storage extends Component {
       if (response.hasOwnProperty("status") && response.status === 0) {
         if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_STORAGE_LOCATION_RECORDS) {
           if (this.slref.current) {
-            this.slref.current.setStorageLocations(response.storage_locations)
+            this.slref.current.setStorageLocations(response.storage_location)
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_GLOSSARY_TERMS) {
           if (this.smref.current) {
             this.smref.current.setGlossaryTerms(response.terms)
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_STORAGE_LOCATION_RECORD) {
-          toast.success(`Successfully updated storage record for ${message[NURIMS_TITLE]}.`);
+          toast.success(`Successfully updated storage location record for ${message[NURIMS_TITLE]}.`);
+        } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_DELETE_STORAGE_LOCATION_RECORD) {
+          toast.success(`Successfully deleted storage location record for ${message[NURIMS_TITLE]}.`);
+          if (this.slref.current) {
+            this.slref.current.removeStorageLocations(this.state.selection)
+          }
+          if (this.smref.current) {
+            this.smref.current.setStorageMetadata({})
+          }
+          this.setState({selection: {}, metadata_changed: false})
         }
       } else {
         toast.error(response.message);
@@ -166,26 +177,43 @@ class Storage extends Component {
     this.setState({changed: state});
   }
 
-  proceed_with_selection_change = () => {
-    // set new selection and load details
-    // console.log("#### saving personnel details ###", this.state.previous_selection)
-    const selection = this.state.selection;
-    const previous_selection = this.state.previous_selection;
-    selection.has_changed = false;
-    previous_selection.has_changed = false;
-    this.setState({alert: false, selection: selection, previous_selection: previous_selection});
-    if (this.slref.current) {
-      this.slref.current.setSelection(selection)
-    }
-    if (this.smref.current) {
-      this.smref.current.setDoseMetadata(selection)
-    }
+  // proceed_with_selection_change = () => {
+  //   // set new selection and load details
+  //   // console.log("#### saving personnel details ###", this.state.previous_selection)
+  //   const selection = this.state.selection;
+  //   const previous_selection = this.state.previous_selection;
+  //   selection.has_changed = false;
+  //   previous_selection.has_changed = false;
+  //   this.setState({alert: false, selection: selection, previous_selection: previous_selection});
+  //   if (this.slref.current) {
+  //     this.slref.current.setSelection(selection)
+  //   }
+  //   if (this.smref.current) {
+  //     this.smref.current.setDoseMetadata(selection)
+  //   }
+  // }
+
+  removeStorageLocation = () => {
+    this.setState({confirm_remove: true,});
   }
 
-  cancel_selection_change = () => {
-    this.setState({alert: false,});
-    if (this.slref.current) {
-      this.slref.current.setSelection(this.state.previous_selection)
+  cancel_remove = () => {
+    this.setState({confirm_remove: false,});
+  }
+
+  proceed_with_remove = () => {
+    this.setState({confirm_remove: false,});
+    console.log("REMOVE STORAGE LOCATION", this.state.selection);
+    if (this.state.selection.item_id === -1) {
+      if (this.plref.current) {
+        this.plref.current.removePerson(this.state.selection)
+      }
+    } else {
+      this.props.send({
+        cmd: CMD_DELETE_STORAGE_LOCATION_RECORD,
+        item_id: this.state.selection.item_id,
+        module: MODULE,
+      });
     }
   }
 
@@ -203,13 +231,13 @@ class Storage extends Component {
   }
 
   render() {
-    const {changed, alert, previous_selection, selection, title, } = this.state;
+    const {changed, confirm_remove, selection, title, } = this.state;
     return (
       <React.Fragment>
-        <ConfirmSelectionChangeDialog open={alert}
-                                      person={previous_selection}
-                                      onProceed={this.proceed_with_selection_change}
-                                      onCancel={this.cancel_selection_change}
+        <ConfirmRemoveDialog open={confirm_remove}
+                             selection={selection}
+                             onProceed={this.proceed_with_remove}
+                             onCancel={this.cancel_remove}
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
@@ -233,6 +261,11 @@ class Storage extends Component {
           </Grid>
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
+          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeStorageLocation}
+               disabled={!isValidSelection(selection)}>
+            <RemoveCircleIcon sx={{mr: 1}}/>
+            Remove Storage Location
+          </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
                disabled={!changed}>
             <SaveIcon sx={{mr: 1}}/>

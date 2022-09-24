@@ -47,6 +47,7 @@ const AMP = lazy(() => import('./pages/maintenance/AMP'));
 const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
 const ImportICENSPersonnel = lazy(() => import('./pages/packages/icens/ImportICENSPersonnel'));
 const ImportICENSControlledMaterialManufacturers = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialManufacturers'));
+const ImportICENSControlledMaterialStorageLocations = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialStorageLocations'));
 const ImportICENSMonitors = lazy(() => import('./pages/packages/icens/ImportICENSMonitors'));
 
 const drawerWidth = 300;
@@ -105,6 +106,16 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
       properties={properties}
     />)
   }
+  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS) {
+    return (<ImportICENSControlledMaterialStorageLocations
+      ref={crefs["ImportICENSControlledMaterialStorageLocations"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
   else if (actionid === Constants.PRO_IMPORT_ICENS_MONITORS) {
     return (<ImportICENSMonitors
       ref={crefs["ImportICENSMonitors"]}
@@ -151,6 +162,7 @@ class App extends React.Component {
       "ViewSSCRecords": React.createRef(),
       "ImportICENSPersonnel": React.createRef(),
       "ImportICENSControlledMaterialManufacturers": React.createRef(),
+      "ImportICENSControlledMaterialStorageLocations": React.createRef(),
     };
   }
 
