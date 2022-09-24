@@ -34,61 +34,6 @@ import {
 
 const MODULE = "Material";
 
-// function ConfirmRemoveDialog(props) {
-//   return (
-//     <div>
-//       <Dialog
-//         open={props.open}
-//         onClose={props.onCancel}
-//         aria-labelledby="alert-dialog-title"
-//         aria-describedby="alert-dialog-description"
-//       >
-//         <DialogTitle id="alert-dialog-title">
-//           {`Delete record for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-//         </DialogTitle>
-//         <DialogContent>
-//           <DialogContentText id="alert-dialog-description">
-//             Are you sure you want to delete the record
-//             for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} (
-//             {props.person.hasOwnProperty("item_id") ? props.person["item_id"] : ""})?
-//           </DialogContentText>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={props.onCancel}>No</Button>
-//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </div>
-//   );
-// }
-
-// function ConfirmSelectionChangeDialog(props) {
-//   return (
-//     <div>
-//       <Dialog
-//         open={props.open}
-//         onClose={props.onCancel}
-//         aria-labelledby="alert-dialog-title"
-//         aria-describedby="alert-dialog-description"
-//       >
-//         <DialogTitle id="alert-dialog-title">
-//           {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-//         </DialogTitle>
-//         <DialogContent>
-//           <DialogContentText id="alert-dialog-description">
-//             The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
-//             changed without being saved. Do you want to continue without saving the details and loose the changes ?
-//           </DialogContentText>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={props.onCancel}>No</Button>
-//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </div>
-//   );
-// }
-
 class Material extends Component {
   constructor(props) {
     super(props);

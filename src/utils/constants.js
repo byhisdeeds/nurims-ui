@@ -16,6 +16,7 @@ module.exports = Object.freeze({
   PRO_IMPORT_ICENS_PERSONNEL: 'sysadmin.import.icens.personnel',
   PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS: 'sysadmin.import.icens.controlled.material.manufacturers',
   PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS: 'sysadmin.import.icens.controlled.material.storage.locations',
+  PRO_IMPORT_ICENS_CONTROLLED_MATERIALS: 'sysadmin.import.icens.controlled.materials',
   PRO_IMPORT_ICENS_MONITORS: 'sysadmin.import.icens.monitors',
 
   CMD_GET_PUBLIC_KEY: 'get_public_key',

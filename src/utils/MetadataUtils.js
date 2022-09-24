@@ -21,7 +21,7 @@ export function setMetadataValue(obj, key, value) {
     if (Array.isArray(metadata)) {
       for (const m of metadata) {
         for (const [k, v] of Object.entries(m)) {
-          console.log(`${k}: ${v}`);
+          // console.log(`${k}: ${v}`);
           if (k === key) {
             m[k] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
             return;

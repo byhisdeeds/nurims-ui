@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import {Card, CardContent, FormControl, Grid, InputLabel, Select, MenuItem, ButtonBase, Icon} from "@mui/material";
-import {DatePicker, LocalizationProvider} from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import {
+  Card,
+  CardContent,
+  Grid,
+} from "@mui/material";
 import {
   getMetadataValue,
   setMetadataValue,
@@ -32,7 +33,6 @@ import {
   NURIMS_TITLE,
   NURIMS_DESCRIPTION,
   NURIMS_MATERIAL_REGISTRATION_DATE,
-  NURIMS_MATERIAL_MANUFACTURER,
   NURIMS_MATERIAL_STORAGE_LOCATION_RECORD,
   NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY,
   NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY,
@@ -40,27 +40,10 @@ import {
   NURIMS_MATERIAL_NUCLIDES,
   NURIMS_MATERIAL_QUANTITY_UNITS,
   BLANK_IMAGE_OBJECT,
-  ITEM_ID, NURIMS_MATERIAL_MANUFACTURER_RECORD
+  ITEM_ID,
+  NURIMS_MATERIAL_MANUFACTURER_RECORD
 } from "../../utils/constants";
 import {SelectFormControlWithTooltip, TextFieldWithTooltip, DatePickerWithTooltip} from "../../components/CommonComponents";
-
-// function Content(closeFn) {
-//   return (
-//     <Box padding="xl" position="relative" radius="md" variant="white" width="90vw">
-//       <h4 align="center">
-//         I'm a custom component acting as modal. No arrow and centered
-//       </h4>
-//       <ButtonBase
-//         onClick={closeFn}
-//         padding="sm"
-//         style={{ position: 'absolute', right: 16, top: 16 }}
-//       >
-//         <Icon name="close" size={24} />
-//       </ButtonBase>
-//
-//     </Box>
-//   );
-// }
 
 class MaterialMetadata extends Component {
   constructor(props) {
@@ -139,14 +122,6 @@ class MaterialMetadata extends Component {
       }
     })
   }
-
-  // renderNuclideSelectionCell = (params) => {
-  //   return <SelectField options={getPropertyValue(this.state.properties, "nurims.material.nuclides", "")} {...params} />;
-  // }
-
-  // renderUnitsSelectionCell = (params) => {
-  //   return <SelectField options={getPropertyValue(this.state.properties, "nurims.material.quantityunits", "")} {...params} />;
-  // }
 
   componentDidMount() {
     console.log("componentDidMount - MaterialMetadata.properties", this.state.properties)
@@ -269,36 +244,6 @@ class MaterialMetadata extends Component {
     this.props.onChange(true);
   }
 
-  // handleWholeBodyDateRangeChange = (range) => {
-  //   console.log("WHOLEBODY DATE-RANGE", range);
-  //   const p = this.state.person;
-  //   const dosimeterId = getDoseRecordDosimeterId(p, "WholeBody", "");
-  //   setDoseRecordMetadataValue(p, dosimeterId, "WholeBody", "nurims.dosimeter.monitorperiod", `${range[0].toISOString().substring(0, 10)}|${range[1].toISOString().substring(0, 10)}`);
-  //   this.setState({person: p, has_changed: true})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
-  // handleExtremityDateRangeChange = (range) => {
-  //   console.log("EXTREMITY DATE-RANGE", range);
-  //   const p = this.state.person;
-  //   const dosimeterId = getDoseRecordDosimeterId(p, "Extremity", "");
-  //   setDoseRecordMetadataValue(p, dosimeterId, "Extremity", "nurims.dosimeter.monitorperiod", `${range[0].toISOString().substring(0, 10)}|${range[1].toISOString().substring(0, 10)}`);
-  //   this.setState({person: p, has_changed: true})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
-  // handleWristDateRangeChange = (range) => {
-  //   console.log("WRIST DATE-RANGE", range);
-  //   const p = this.state.person;
-  //   const dosimeterId = getDoseRecordDosimeterId(p, "Wrist", "");
-  //   setDoseRecordMetadataValue(p, dosimeterId, "Wrist", "nurims.dosimeter.monitorperiod", `${range[0].toISOString().substring(0, 10)}|${range[1].toISOString().substring(0, 10)}`);
-  //   this.setState({person: p, has_changed: true})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
   setGlossaryTerms = (terms) => {
     console.log("MaterialMetadata.setGlossaryTerms", terms)
     for (const term of terms) {
@@ -328,14 +273,6 @@ class MaterialMetadata extends Component {
     }
     this.forceUpdate();
   }
-
-  // set_person_object = (person) => {
-  //   // person["changed"] = false;
-  //   console.log("PersonMetadata.set_person_object", person)
-  //   this.person = person;
-  //   // signal to parent that metadata has changed
-  //   this.props.onChange(false);
-  // }
 
   setMaterialMetadata = (material) => {
     console.log("MaterialMetadata.setMaterialMetadata", material)

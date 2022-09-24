@@ -47,6 +47,7 @@ const AMP = lazy(() => import('./pages/maintenance/AMP'));
 const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
 const ImportICENSPersonnel = lazy(() => import('./pages/packages/icens/ImportICENSPersonnel'));
 const ImportICENSControlledMaterialManufacturers = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialManufacturers'));
+const ImportICENSControlledMaterials = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterials'));
 const ImportICENSControlledMaterialStorageLocations = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialStorageLocations'));
 const ImportICENSMonitors = lazy(() => import('./pages/packages/icens/ImportICENSMonitors'));
 
@@ -116,6 +117,16 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
       properties={properties}
     />)
   }
+  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIALS) {
+    return (<ImportICENSControlledMaterials
+      ref={crefs["ImportICENSControlledMaterials"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
   else if (actionid === Constants.PRO_IMPORT_ICENS_MONITORS) {
     return (<ImportICENSMonitors
       ref={crefs["ImportICENSMonitors"]}
@@ -163,6 +174,7 @@ class App extends React.Component {
       "ImportICENSPersonnel": React.createRef(),
       "ImportICENSControlledMaterialManufacturers": React.createRef(),
       "ImportICENSControlledMaterialStorageLocations": React.createRef(),
+      "ImportICENSControlledMaterials": React.createRef(),
     };
   }
 
