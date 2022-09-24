@@ -127,6 +127,12 @@ class Storage extends Component {
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_STORAGE_LOCATION_RECORD) {
           toast.success(`Successfully updated storage location record for ${message[NURIMS_TITLE]}.`);
+          const stores = this.slref.current.getStores()
+          for (const store of stores) {
+            if (store.item_id === response.storage_location.item_id) {
+              store.changed = false;
+            }
+          }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_DELETE_STORAGE_LOCATION_RECORD) {
           toast.success(`Successfully deleted storage location record for ${message[NURIMS_TITLE]}.`);
           if (this.slref.current) {

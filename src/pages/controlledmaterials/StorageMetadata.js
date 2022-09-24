@@ -124,8 +124,8 @@ class StorageMetadata extends Component {
       const storage = this.state.storage;
       storage["changed"] = true;
       const coverageLocation = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, {});
-      coverageLocation["easting"] = parseFloat(e.lng);
-      coverageLocation["northing"] = parseFloat(e.lat);
+      coverageLocation["easting"] = +parseFloat(e.lng).toPrecision(4) ;
+      coverageLocation["northing"] = +parseFloat(e.lat).toPrecision(4);
       setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, coverageLocation);
       this.setState({storage: storage})
       this.props.onChange(true);
