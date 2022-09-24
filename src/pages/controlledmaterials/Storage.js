@@ -27,61 +27,6 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
 const MODULE = "Storage";
 
-// function ConfirmRemoveDialog(props) {
-//   return (
-//     <div>
-//       <Dialog
-//         open={props.open}
-//         onClose={props.onCancel}
-//         aria-labelledby="alert-dialog-title"
-//         aria-describedby="alert-dialog-description"
-//       >
-//         <DialogTitle id="alert-dialog-title">
-//           {`Delete record for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-//         </DialogTitle>
-//         <DialogContent>
-//           <DialogContentText id="alert-dialog-description">
-//             Are you sure you want to delete the record
-//             for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} (
-//             {props.person.hasOwnProperty("item_id") ? props.person["item_id"] : ""})?
-//           </DialogContentText>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={props.onCancel}>No</Button>
-//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </div>
-//   );
-// }
-
-// function ConfirmSelectionChangeDialog(props) {
-//   return (
-//     <div>
-//       <Dialog
-//         open={props.open}
-//         onClose={props.onCancel}
-//         aria-labelledby="alert-dialog-title"
-//         aria-describedby="alert-dialog-description"
-//       >
-//         <DialogTitle id="alert-dialog-title">
-//           {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-//         </DialogTitle>
-//         <DialogContent>
-//           <DialogContentText id="alert-dialog-description">
-//             The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
-//             changed without being saved. Do you want to continue without saving the details and loose the changes ?
-//           </DialogContentText>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={props.onCancel}>No</Button>
-//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </div>
-//   );
-// }
-
 class Storage extends Component {
   constructor(props) {
     super(props);
@@ -182,22 +127,6 @@ class Storage extends Component {
   onStorageMetadataChanged = (state) => {
     this.setState({changed: state});
   }
-
-  // proceed_with_selection_change = () => {
-  //   // set new selection and load details
-  //   // console.log("#### saving personnel details ###", this.state.previous_selection)
-  //   const selection = this.state.selection;
-  //   const previous_selection = this.state.previous_selection;
-  //   selection.has_changed = false;
-  //   previous_selection.has_changed = false;
-  //   this.setState({alert: false, selection: selection, previous_selection: previous_selection});
-  //   if (this.slref.current) {
-  //     this.slref.current.setSelection(selection)
-  //   }
-  //   if (this.smref.current) {
-  //     this.smref.current.setDoseMetadata(selection)
-  //   }
-  // }
 
   removeStorageLocation = () => {
     this.setState({confirm_remove: true,});

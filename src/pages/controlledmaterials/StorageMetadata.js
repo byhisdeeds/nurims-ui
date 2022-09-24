@@ -111,10 +111,6 @@ class StorageMetadata extends Component {
   }
 
   setStorageMetadata = (storage) => {
-    // console.log("StorageMetadata.setStorageMetadata", storage)
-    // if (storage.hasOwnProperty("metadata")) {
-    //   const metadata = storage.metadata;
-    // }
     this.setState({storage: storage})
     this.props.onChange(false);
   }
@@ -291,7 +287,7 @@ class StorageMetadata extends Component {
                     required
                     id="marker"
                     label="Marker"
-                    value={storageLocation.hasOwnProperty("marker") ? storageLocation.marker : "/images/markers/center-marker.png#64#32#32"}
+                    value={storageLocation.hasOwnProperty("marker") ? storageLocation.marker : "images/markers/center-marker.png#64#32#32"}
                     onChange={this.handleCoverageLocationMarkerChange}
                   >
                     {markers.map((mark) => {
