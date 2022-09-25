@@ -164,9 +164,14 @@ class ImportICENSControlledMaterials extends Component {
           };
           if (d.hasOwnProperty("name")) {
             material[NURIMS_TITLE] = d.name;
+          }
+          if (d.hasOwnProperty("dc.identifier.uri")) {
+            setMetadataValue(material, NURIMS_SOURCE, d["dc.identifier.uri"])
             for (const m of that.materials_list) {
-              if (m[NURIMS_TITLE] === d.name) {
+              if (getMetadataValue(m, NURIMS_SOURCE, "-") === d["dc.identifier.uri"]) {
                 material.item_id = m.item_id;
+                material[NURIMS_TITLE] = m[NURIMS_TITLE];
+                break;
               }
             }
           }
