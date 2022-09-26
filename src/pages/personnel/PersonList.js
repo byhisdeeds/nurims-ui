@@ -15,8 +15,7 @@ class PersonList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: {},
-      previous_selection: {},
+      selection: {},
       include_archived: props.include_archived,
     };
     this.rows = [];
@@ -25,8 +24,8 @@ class PersonList extends Component {
   handleRowSelection = (row) => {
     // only do something if selection has changed
     console.log("@@@@@@ HANDLE_ROW_SELECTION", row)
-    if (this.state.selected !== row) {
-      this.setState({selected: row});
+    if (this.state.selection !== row) {
+      this.setState({selection: row});
       this.props.onPersonSelection(row);
     }
   };
@@ -35,7 +34,7 @@ class PersonList extends Component {
     for(let i = 0; i < this.rows.length; i++){
       if (this.rows[i] === person) {
         this.rows.splice(i, 1);
-        this.setState({ selected: {}} );
+        this.setState({ selection: {}} );
         return;
       }
     }
@@ -106,7 +105,7 @@ class PersonList extends Component {
   }
 
   includeArchivedRecords = (e) => {
-    this.props.requestPersonsList(e.target.checked)
+    this.props.requestListUpdate(e.target.checked)
   }
 
   render() {

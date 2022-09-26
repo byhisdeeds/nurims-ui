@@ -1,24 +1,36 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import {Virtuoso} from "react-virtuoso";
-import Typography from '@mui/material/Typography';
-import {Stack} from "@mui/material";
+import {Switch} from "@mui/material";
 import {withTheme} from "@mui/styles";
-import {NURIMS_TITLE} from "../../utils/constants";
+import {ITEM_ID, METADATA, NURIMS_TITLE, NURIMS_WITHDRAWN} from "../../utils/constants";
+import Paper from "@mui/material/Paper";
+import {PageableTable} from "../../components/CommonComponents";
+import TableCell from "@mui/material/TableCell";
+
+const TABLE_ROW_HEIGHT = 24;
 
 class SSCList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedRowIndex: -1,
+      selection: {},
+      include_archived: props.include_archived,
     };
     this.rows = [];
   }
 
-  removePerson = (person) => {
+  handleRowSelection = (row) => {
+    // only do something if selection has changed
+    console.log("@@@@@@ HANDLE_ROW_SELECTION", row)
+    if (this.state.selection !== row) {
+      this.setState({selection: row});
+      this.props.onSSCSelection(row);
+    }
+  };
+
+  removeSSC = (ssc) => {
     for(let i = 0; i < this.rows.length; i++){
-      if (this.rows[i] === person) {
+      if (this.rows[i] === ssc) {
         this.rows.splice(i, 1);
         this.setState({ selected: {}} );
         return;
@@ -55,8 +67,26 @@ class SSCList extends React.Component {
     return this.rows;
   }
 
-  refresh = () => {
-    this.forceUpdate();
+  // refresh = () => {
+  //   this.forceUpdate();
+  // }
+
+  update = (ssc) => {
+    console.log("SSCList.update", ssc)
+    for (const row of this.rows) {
+      if (row.item_id === -1 && row.record_key === ssc.record_key) {
+        row.item_id = ssc[ITEM_ID]
+        row[NURIMS_TITLE] = ssc[NURIMS_TITLE];
+        row[NURIMS_WITHDRAWN] = ssc[NURIMS_WITHDRAWN];
+        row["changed"] = false;
+        row[METADATA] = [...ssc[METADATA]]
+      } else if (row.item_id !== -1 && row.item_id === ssc[ITEM_ID]) {
+        row[NURIMS_TITLE] = ssc[NURIMS_TITLE];
+        row[NURIMS_WITHDRAWN] = ssc[NURIMS_WITHDRAWN];
+        row["changed"] = false;
+        row[METADATA] = [...ssc[METADATA]]
+      }
+    }
   }
 
   setSSCs = (sscs) => {
@@ -71,55 +101,73 @@ class SSCList extends React.Component {
     this.forceUpdate();
   }
 
-  onRowSelected = (e) => {
-    this.props.onRowSelection(parseInt(e.target.dataset.rowIndex));
-    this.setState({ selectedRowIndex: parseInt(e.target.dataset.rowIndex) });
-  }
-
-  renderList = (index) => {
-    const row = this.rows[index];
-    const bgcolor = this.state.selectedRowIndex === index ?
-      this.props.theme.palette.action.selected :
-      this.props.theme.palette.background.paper;
+  renderCell = (row, cell) => {
     return (
-      <Box
-        data-row-index={index}
-        onClick={this.onRowSelected}
-        sx={{backgroundColor: bgcolor, color: this.props.theme.palette.text.primary }}
-        >
-        {row[NURIMS_TITLE]}
-      </Box>
+      <TableCell
+        align={cell.align}
+        padding={cell.disablePadding ? 'none' : 'normal'}
+        style={{color: row[NURIMS_WITHDRAWN] === 0 ?
+            this.props.theme.palette.primary.light :
+            this.props.theme.palette.text.disabled}}
+      >
+        {row[cell.id]} {(cell.id === NURIMS_TITLE && row[NURIMS_WITHDRAWN] === 1) && "<- archived"}
+      </TableCell>
     )
   }
 
+  includeArchivedRecords = (e) => {
+    this.props.requestListUpdate(e.target.checked)
+  }
+
   render() {
-    // const {selectedRowIndex} = this.state;
-    console.log("THEME ", this.props.theme)
+    const {include_archived} = this.state;
     return (
-      <Stack spacing={1} sx={{width: '100%'}}>
-        <Typography sx={{pl: 1}}>SSC's List</Typography>
-        <Box sx={{
-          p: 1,
-          borderColor: this.props.theme.palette.divider,
-          borderRadius: 1,
-          borderWidth: 1,
-          borderStyle: 'solid',
-        }}>
-        <Virtuoso
-          style={{ height: '500px' }}
-          data={this.rows}
-          totalCount={this.rows.length}
-          itemContent={this.renderList}
-        />
-        </Box>
-      </Stack>
+      <Box sx={{width: '100%'}}>
+        <Paper sx={{width: '100%', mb: 2}}>
+          <PageableTable
+            minWidth={350}
+            cells={[
+              {
+                id: ITEM_ID,
+                align: 'center',
+                disablePadding: true,
+                label: 'ID',
+                width: '10%',
+                sortField: true,
+              },
+              {
+                id: NURIMS_TITLE,
+                align: 'left',
+                disablePadding: true,
+                label: 'Name',
+                width: '90%',
+                sortField: true,
+              },
+            ]}
+            theme={this.props.theme}
+            rowHeight={TABLE_ROW_HEIGHT}
+            order={'asc'}
+            orderBy={NURIMS_TITLE}
+            title={"SSC's"}
+            disabled={false}
+            rows={this.rows}
+            onRowSelection={this.handleRowSelection}
+            renderCell={this.renderCell}
+            filterElement={ <Switch
+              inputProps={{'aria-labelledby': 'include-archived-records-switch'}}
+              onChange={this.includeArchivedRecords}
+              checked={include_archived}
+            />}
+          />
+        </Paper>
+      </Box>
     );
   }
 
 }
 
 SSCList.defaultProps = {
-  onRowSelection: (index) => {
+  onRowSelection: (row) => {
   },
 };
 

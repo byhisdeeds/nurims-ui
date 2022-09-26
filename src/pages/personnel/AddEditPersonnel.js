@@ -34,6 +34,7 @@ import {
   ConfirmRemoveDialog,
   isValidSelection
 } from "../../utils/UtilityDialogs";
+import {isRecordArchived} from "../../utils/MetadataUtils";
 
 const MODULE = "AddEditPersonnel";
 
@@ -69,9 +70,9 @@ const MODULE = "AddEditPersonnel";
 //   return (person.hasOwnProperty(ITEM_ID) && person.item_id !== -1);
 // }
 
-function isPersonArchived(person) {
-  return (person.hasOwnProperty(NURIMS_WITHDRAWN) && person[NURIMS_WITHDRAWN] === 1);
-}
+// function isPersonArchived(person) {
+//   return (person.hasOwnProperty(NURIMS_WITHDRAWN) && person[NURIMS_WITHDRAWN] === 1);
+// }
 
 class AddEditPersonnel extends Component {
   constructor(props) {
@@ -322,7 +323,7 @@ class AddEditPersonnel extends Component {
             <PersonList
               ref={this.plref}
               onPersonSelection={this.onPersonSelected}
-              requestPersonsList={this.requestPersonnelList}
+              requestListUpdate={this.requestPersonnelList}
               includeArchived={include_archived}
               properties={this.props.properties}
             />
@@ -343,7 +344,7 @@ class AddEditPersonnel extends Component {
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
                onClick={this.changeRecordArchivalStatus} disabled={!isValidSelection(selection)}>
-            {isPersonArchived(selection) ?
+            {isRecordArchived(selection) ?
               <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Personnel Record"</React.Fragment> :
               <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Personnel Record"</React.Fragment>}
           </Fab>

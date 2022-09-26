@@ -1,3 +1,9 @@
+import {NURIMS_WITHDRAWN} from "./constants";
+
+export function isRecordArchived(record) {
+  return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
+}
+
 export function getMetadataValue(obj, key, missingValue) {
   if (obj.hasOwnProperty("metadata")) {
     const metadata = obj.metadata;

@@ -130,7 +130,7 @@ export const MenuData = [
         authmodlevel: 'basic',
         items: [
           {
-            name: '   - Add SSC Record',
+            name: '   - Add/Edit SSC Record',
             link: 'ssc.add.edit.ssc',
             title: 'Add/Edit Structures, Systems, and Components',
             tooltip: 'Add/Edit structures systems and components.',

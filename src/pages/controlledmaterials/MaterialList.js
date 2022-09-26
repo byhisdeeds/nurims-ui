@@ -65,7 +65,6 @@ class MaterialList extends Component {
       order: 'asc',
       orderBy: NURIMS_TITLE,
       selection: {},
-      previous_selection: -1,
       page: 0,
       dense: false,
       rowsPerPage: 10,
@@ -107,19 +106,13 @@ class MaterialList extends Component {
     if (Array.isArray(materials)) {
       this.rows.length = 0;
       for (const material of materials) {
-        console.log("MaterialList.setMaterials", material)
+        // console.log("MaterialList.setMaterials", material)
         material.changed = false;
         this.rows.push(material);
       }
     }
-    this.setState({selection: -1, previous_selection: -1})
+    this.setState({selection: -1})
   }
-
-  // rowClicked = (e, index, rowData) => {
-  //   console.log("row clicked", index, rowData)
-  //   this.setState({selection: index})
-  //   this.props.onRowClicked(rowData);
-  // }
 
   handleRowSelection = (row) => {
     // only do something if selection has changed

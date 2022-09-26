@@ -17,12 +17,13 @@ import {
   CMD_GET_MANUFACTURER_RECORDS,
   CMD_GET_MATERIAL_RECORDS,
   CMD_GET_STORAGE_LOCATION_RECORDS,
-  CMD_UPDATE_MATERIAL_RECORD,
+  CMD_UPDATE_MATERIAL_RECORD, INCLUDE_METADATA, METADATA,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
 } from "../../utils/constants";
 import {withTheme} from "@mui/styles";
 import {
+  getMatchingResponseObject,
   isCommandResponse,
   messageHasResponse,
   messageStatusOk
@@ -43,8 +44,8 @@ class Material extends Component {
       selection: {},
       title: props.title,
     };
-    this.mlref = React.createRef();
-    this.mmref = React.createRef();
+    this.listRef = React.createRef();
+    this.metadataRef = React.createRef();
   }
 
   componentDidMount() {
@@ -60,13 +61,13 @@ class Material extends Component {
       cmd: CMD_GET_STORAGE_LOCATION_RECORDS,
       module: MODULE,
     });
-    this.onRefreshMaterialsList();
+    this.onRefreshMaterialsList(false);
   }
 
-  onRefreshMaterialsList = () => {
+  onRefreshMaterialsList = (include_metadata) => {
     this.props.send({
       cmd: CMD_GET_MATERIAL_RECORDS,
-      "include.metadata": "true",
+      "include.metadata": (include_metadata) ? ""+include_metadata : "false",
       module: MODULE,
     });
   }
@@ -77,30 +78,39 @@ class Material extends Component {
       const response = message.response;
       if (messageStatusOk(message)) {
         if (isCommandResponse(message, CMD_GET_GLOSSARY_TERMS)) {
-          if (this.mmref.current) {
-            this.mmref.current.setGlossaryTerms(response.terms)
+          if (this.metadataRef.current) {
+            this.metadataRef.current.setGlossaryTerms(response.terms)
           }
         } else if (isCommandResponse(message, CMD_GET_MANUFACTURER_RECORDS)) {
-          if (this.mlref.current) {
-            this.mmref.current.setManufacturers(response.manufacturer)
+          if (this.listRef.current) {
+            this.metadataRef.current.setManufacturers(response.manufacturer)
           }
         } else if (isCommandResponse(message, CMD_GET_STORAGE_LOCATION_RECORDS)) {
-          if (this.mlref.current) {
-            this.mmref.current.setStorageLocations(response.storage_location)
+          if (this.listRef.current) {
+            this.metadataRef.current.setStorageLocations(response.storage_location)
           }
         } else if (isCommandResponse(message, CMD_GET_MATERIAL_RECORDS)) {
-          if (this.mlref.current) {
-            this.mlref.current.setMaterials(response.material)
+          if (message.hasOwnProperty(INCLUDE_METADATA) && message[INCLUDE_METADATA] === "true") {
+            const selection = this.state.selection;
+            const material = getMatchingResponseObject(message, "response.material", "item_id", selection["item_id"]);
+            selection[METADATA] = [...material[METADATA]]
+            if (this.metadataRef.current) {
+              this.metadataRef.current.setMaterialMetadata(selection);
+            }
+          } else {
+            if (this.listRef.current) {
+              this.listRef.current.setMaterials(response.material)
+            }
           }
         } else if (isCommandResponse(message, CMD_UPDATE_MATERIAL_RECORD)) {
           toast.success(`Successfully updated material record for ${message[NURIMS_TITLE]}.`);
         } else if (isCommandResponse(message, CMD_DELETE_MATERIAL_RECORD)) {
           toast.success(`Material record (id: ${response.item_id}) deleted successfully`)
-          if (this.mlref.current) {
-            this.mlref.current.removeMaterial(this.state.selection)
+          if (this.listRef.current) {
+            this.listRef.current.removeMaterial(this.state.selection)
           }
-          if (this.mmref.current) {
-            this.mmref.current.setMaterialMetadata({})
+          if (this.metadataRef.current) {
+            this.metadataRef.current.setMaterialMetadata({})
           }
           this.setState({selection: {}, metadata_changed: false})
         }
@@ -111,18 +121,18 @@ class Material extends Component {
   }
 
   onMaterialSelected = (material) => {
-    // console.log("-- onMaterialSelected (previous selection) --", previous_material)
-    console.log("-- onMaterialSelected (selection) --", material)
-    if (this.mmref.current) {
-      this.mmref.current.setMaterialMetadata(material)
-    }
+    // console.log("-- onMaterialSelected (selection) --", material)
+    // if (this.metadataRef.current) {
+    //   this.metadataRef.current.setMaterialMetadata(material)
+    // }
+    this.onRefreshMaterialsList(true);
     this.setState({selection: material})
   }
 
   saveChanges = () => {
     console.log("saving changes")
-    if (this.mlref.current) {
-      const materials = this.mlref.current.getMaterials()
+    if (this.listRef.current) {
+      const materials = this.listRef.current.getMaterials()
       console.log("ALL MATERIALS", materials)
       for (const material of materials) {
         if (material.changed) {
@@ -170,8 +180,8 @@ class Material extends Component {
   }
 
   addMaterial = () => {
-    if (this.mlref.current) {
-      this.mlref.current.add([{
+    if (this.listRef.current) {
+      this.listRef.current.add([{
         "changed": true,
         "item_id": -1,
         "nurims.title": "New Material",
@@ -202,7 +212,7 @@ class Material extends Component {
           </Grid>
           <Grid item xs={4}>
             <MaterialList
-              ref={this.mlref}
+              ref={this.listRef}
               height={400}
               properties={this.props.properties}
               onRowClicked={this.onMaterialSelected}
@@ -212,7 +222,7 @@ class Material extends Component {
           </Grid>
           <Grid item xs={8}>
             <MaterialMetadata
-              ref={this.mmref}
+              ref={this.metadataRef}
               properties={this.props.properties}
               onChange={this.onMaterialMetadataChanged}
             />

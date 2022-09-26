@@ -70,9 +70,6 @@ class AMPMetadata extends Component {
     this.glossary = {};
   }
 
-  componentDidMount() {
-  }
-
   setGlossaryTerms = (terms) => {
     // console.log("AMPMetadata.setGlossaryTerms", terms)
     for (const term of terms) {
@@ -106,7 +103,7 @@ class AMPMetadata extends Component {
   //   this.props.onChange(true);
   // }
 
-  setAMPMetadata = (ssc) => {
+  setSSCMetadata = (ssc) => {
     console.log("AMPMetadata.setAMPMetadata", ssc)
     // if (ssc.hasOwnProperty("metadata")) {
     //   const metadata = storage.metadata;
@@ -118,28 +115,6 @@ class AMPMetadata extends Component {
   getAMPMetadata = () => {
     return this.state.ssc;
   }
-
-  // handleStorageMapImageUpload = (e) => {
-  //   const selectedFile = e.target.files[0];
-  //   // console.log("file uploaded", selectedFile)
-  //   const that = this;
-  //   const fileReader = new FileReader();
-  //   fileReader.onerror = function () {
-  //     toast.error(`Error occurred reading file: ${selectedFile.name}`)
-  //   };
-  //   fileReader.readAsDataURL(selectedFile);
-  //   // fileReader.readAsText(selectedFile);
-  //   fileReader.onload = function (event) {
-  //     // console.log(">>>>>", event.target.result);
-  //     const storage = that.state.storage;
-  //     storage["changed"] = true;
-  //     setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, {file: selectedFile.name, url: event.target.result});
-  //     // setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, event.target.result);
-  //     that.forceUpdate();
-  //     // signal to parent that metadata has changed
-  //     that.props.onChange(true);
-  //   };
-  // }
 
   handleSSCAgingMechanismChange = (e) => {
     console.log("handleSSCAgingMechanismChange", e.target.value);

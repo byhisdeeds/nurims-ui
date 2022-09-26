@@ -41,8 +41,9 @@ module.exports = Object.freeze({
   CMD_UPDATE_STORAGE_LOCATION_RECORD: "update_storage_location_record",
   CMD_GET_STORAGE_LOCATION_RECORDS: "get_storage_location_records",
   CMD_GET_SSC_RECORDS: "get_ssc_records",
-  CMD_GET_SSC_RECORD: "get_ssc_record",
+  // CMD_GET_SSC_RECORD: "get_ssc_record",
   CMD_UPDATE_SSC_RECORD: "update_ssc_record",
+  CMD_DELETE_SSC_RECORD: "delete_ssc_record",
   CMD_GENERATE_SSC_RECORDS_PDF: "generate_ssc_records_pdf",
 
   METADATA: 'metadata',
