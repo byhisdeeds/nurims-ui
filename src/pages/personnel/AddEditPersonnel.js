@@ -34,44 +34,9 @@ import {
   ConfirmRemoveDialog,
   isValidSelection
 } from "../../utils/UtilityDialogs";
+import {isRecordArchived} from "../../utils/MetadataUtils";
 
 const MODULE = "AddEditPersonnel";
-
-// function ConfirmRemoveDialog(props) {
-//   return (
-//     <div>
-//       <Dialog
-//         open={props.open}
-//         onClose={props.onCancel}
-//         aria-labelledby="alert-dialog-title"
-//         aria-describedby="alert-dialog-description"
-//       >
-//         <DialogTitle id="alert-dialog-title">
-//           {`Delete record for ${props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""}`}
-//         </DialogTitle>
-//         <DialogContent>
-//           <DialogContentText id="alert-dialog-description">
-//             Are you sure you want to delete the record
-//             for {props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""} (
-//             {props.person.hasOwnProperty(ITEM_ID) ? props.person[ITEM_ID] : ""})?
-//           </DialogContentText>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={props.onCancel}>No</Button>
-//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </div>
-//   );
-// }
-
-// function isPerson(person) {
-//   return (person.hasOwnProperty(ITEM_ID) && person.item_id !== -1);
-// }
-
-function isPersonArchived(person) {
-  return (person.hasOwnProperty(NURIMS_WITHDRAWN) && person[NURIMS_WITHDRAWN] === 1);
-}
 
 class AddEditPersonnel extends Component {
   constructor(props) {
@@ -102,8 +67,6 @@ class AddEditPersonnel extends Component {
           if (message.hasOwnProperty(INCLUDE_METADATA)) {
             const selection = this.state.selection;
             const personnel = getMatchingResponseObject(message, "response.personnel", "item_id", selection["item_id"]);
-            // selection[NURIMS_TITLE] = personnel[NURIMS_TITLE];
-            // selection[NURIMS_WITHDRAWN] = personnel[NURIMS_WITHDRAWN];
             selection[METADATA] = [...personnel[METADATA]]
             if (this.pmref.current) {
               this.pmref.current.set_person_object(selection);
@@ -151,9 +114,6 @@ class AddEditPersonnel extends Component {
         this.pmref.current.set_person_object(selection)
       }
     } else {
-      // this.setState(pstate => {
-      //   return { selection: selection }
-      // });
       this.props.send({
         cmd: CMD_GET_PERSONNEL_RECORDS,
         item_id: selection.item_id,
@@ -227,65 +187,6 @@ class AddEditPersonnel extends Component {
       });
     }
   }
-  //
-  // handleFileUpload = (e) => {
-  //   const selectedFile = e.target.files[0];
-  //   console.log("file uploaded", selectedFile)
-  //   const that = this;
-  //   const fileReader = new FileReader();
-  //   fileReader.onerror = function () {
-  //     alert('Unable to read ' + selectedFile.name);
-  //     toast.error(`Error occurred reading file: ${selectedFile.name}`)
-  //   };
-  //   fileReader.readAsText(selectedFile);
-  //   fileReader.onload = function (event) {
-  //     // console.log(">>>>>", event.target.result);
-  //     const data = JSON.parse(event.target.result);
-  //     console.log(data)
-  //     if (data.hasOwnProperty("dosereport")) {
-  //       const dr = data.dosereport;
-  //       if (dr.hasOwnProperty("badges")) {
-  //         const badges = dr.badges;
-  //         if (typeof badges === "object") {
-  //           if (badges.hasOwnProperty("badge")) {
-  //             const badge = badges.badge;
-  //             if (Array.isArray(badge)) {
-  //               const persons = []
-  //               for (const b of badge) {
-  //                 const name = b["tld.employee.name"];
-  //                 const id = b["tld.dosimeter.employee"].split("/")[1];
-  //                 console.log("EMPLOYEE", name, b["tld.dosimeter.employee"], id);
-  //                 if (!name.toLowerCase().includes("area monitor")) {
-  //                   persons.push({
-  //                     "changed": true,
-  //                     "item_id": -1,
-  //                     "nurims.title": name,
-  //                     "nurims.withdrawn": 0,
-  //                     "metadata": [
-  //                       {"nurims.entity.doseproviderid": `icens|${id}`}
-  //                     ]
-  //                   });
-  //                   that.setState({ changed: true });
-  //                 }
-  //               }
-  //               if (that.plref.current) {
-  //                 that.plref.current.add(persons, true)
-  //               }
-  //             } else {
-  //               toast.warn(`Incorrect dosereport.badges.badge type in dose report data file. Expecting an array but found ${typeof badge}`)
-  //             }
-  //           }
-  //         } else {
-  //           toast.warn(`Incorrect dosereport.badges type in dose report data file. Expecting an object but found ${typeof badges}`)
-  //         }
-  //       } else {
-  //         toast.warn('Missing dosereport.badges field in dose report data file')
-  //       }
-  //     } else {
-  //       toast.warn('Unknown file format')
-  //     }
-  //   };
-  // }
 
   changeRecordArchivalStatus = () => {
     console.log("changeRecordArchivalStatus", this.state.selection)
@@ -322,7 +223,7 @@ class AddEditPersonnel extends Component {
             <PersonList
               ref={this.plref}
               onPersonSelection={this.onPersonSelected}
-              requestPersonsList={this.requestPersonnelList}
+              requestListUpdate={this.requestPersonnelList}
               includeArchived={include_archived}
               properties={this.props.properties}
             />
@@ -343,7 +244,7 @@ class AddEditPersonnel extends Component {
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
                onClick={this.changeRecordArchivalStatus} disabled={!isValidSelection(selection)}>
-            {isPersonArchived(selection) ?
+            {isRecordArchived(selection) ?
               <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Personnel Record"</React.Fragment> :
               <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Personnel Record"</React.Fragment>}
           </Fab>

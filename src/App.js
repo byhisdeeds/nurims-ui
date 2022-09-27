@@ -45,8 +45,11 @@ const ViewMaterialsList = lazy(() => import('./pages/controlledmaterials/ViewMat
 const SSC = lazy(() => import('./pages/maintenance/SSC'));
 const AMP = lazy(() => import('./pages/maintenance/AMP'));
 const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
+const AddEditMonitors = lazy(() => import('./pages/radiationprotection/AddEditMonitor'));
 const ImportICENSPersonnel = lazy(() => import('./pages/packages/icens/ImportICENSPersonnel'));
 const ImportICENSControlledMaterialManufacturers = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialManufacturers'));
+const ImportICENSControlledMaterials = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterials'));
+const ImportICENSControlledMaterialStorageLocations = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialStorageLocations'));
 const ImportICENSMonitors = lazy(() => import('./pages/packages/icens/ImportICENSMonitors'));
 
 const drawerWidth = 300;
@@ -84,6 +87,59 @@ const Puller = styled(Box)(({theme}) => ({
   left: 'calc(50% - 15px)',
 }));
 
+const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+  if (actionid === Constants.BASIC_RP_ADD_EDIT_MONITORS) {
+    return (<AddEditMonitors
+      ref={crefs["AddEditMonitors"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS) {
+    return (<ImportICENSControlledMaterialManufacturers
+      ref={crefs["ImportICENSControlledMaterialManufacturers"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS) {
+    return (<ImportICENSControlledMaterialStorageLocations
+      ref={crefs["ImportICENSControlledMaterialStorageLocations"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIALS) {
+    return (<ImportICENSControlledMaterials
+      ref={crefs["ImportICENSControlledMaterials"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.PRO_IMPORT_ICENS_MONITORS) {
+    return (<ImportICENSMonitors
+      ref={crefs["ImportICENSMonitors"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+}
+
 const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
   if (actionid === Constants.PRO_IMPORT_ICENS_PERSONNEL) {
     return (<ImportICENSPersonnel
@@ -98,6 +154,26 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
   else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS) {
     return (<ImportICENSControlledMaterialManufacturers
       ref={crefs["ImportICENSControlledMaterialManufacturers"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS) {
+    return (<ImportICENSControlledMaterialStorageLocations
+      ref={crefs["ImportICENSControlledMaterialStorageLocations"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIALS) {
+    return (<ImportICENSControlledMaterials
+      ref={crefs["ImportICENSControlledMaterials"]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -149,8 +225,11 @@ class App extends React.Component {
       "SSC": React.createRef(),
       "AMP": React.createRef(),
       "ViewSSCRecords": React.createRef(),
+      "AddEditMonitors": React.createRef(),
       "ImportICENSPersonnel": React.createRef(),
       "ImportICENSControlledMaterialManufacturers": React.createRef(),
+      "ImportICENSControlledMaterialStorageLocations": React.createRef(),
+      "ImportICENSControlledMaterials": React.createRef(),
     };
   }
 
@@ -447,16 +526,8 @@ class App extends React.Component {
                     send={this.send}
                     properties={this.properties}
                   />}
+                {RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                 {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                {/*{actionid === Constants.PRO_IMPORT_ICENS_PERSONNEL &&*/}
-                {/*  <ImportICENSPersonnel*/}
-                {/*    ref={this.crefs["ImportICENSPersonnel"]}*/}
-                {/*    title={this.menuTitle}*/}
-                {/*    user={this.user}*/}
-                {/*    onClick={this.handleMenuAction}*/}
-                {/*    send={this.send}*/}
-                {/*    properties={this.properties}*/}
-                {/*  />}*/}
                 <Typography paragraph>
                   {actionid}
                 </Typography>

@@ -13,13 +13,19 @@ module.exports = Object.freeze({
   SSC_ADD_EDIT_SSC_AMP: 'ssc.add.edit.ssc.amp',
   SSC_VIEW_SSC_RECORDS: 'ssc.view.ssc.records',
 
+  BASIC_RP_ADD_EDIT_MONITORS: "rp.add.edit.monitors",
+
   PRO_IMPORT_ICENS_PERSONNEL: 'sysadmin.import.icens.personnel',
   PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS: 'sysadmin.import.icens.controlled.material.manufacturers',
+  PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS: 'sysadmin.import.icens.controlled.material.storage.locations',
+  PRO_IMPORT_ICENS_CONTROLLED_MATERIALS: 'sysadmin.import.icens.controlled.materials',
   PRO_IMPORT_ICENS_MONITORS: 'sysadmin.import.icens.monitors',
 
   CMD_GET_PUBLIC_KEY: 'get_public_key',
   CMD_VERIFY_USER_PASSWORD: 'verify_user_password',
 
+  CMD_GET_MONITOR_RECORDS: "get_monitor_records",
+  CMD_DELETE_MONITOR_RECORD: "delete_monitor_record",
   CMD_DELETE_PERSONNEL_RECORD: "delete_personnel_record",
   CMD_UPDATE_PERSONNEL_RECORD: "update_personnel_record",
   CMD_GET_PERSONNEL_RECORDS: "get_personnel_records",
@@ -35,11 +41,13 @@ module.exports = Object.freeze({
   CMD_SET_SYSTEM_PROPERTIES: "set_system_properties",
   CMD_GENERATE_PERSONNEL_RECORDS_PDF: "generate_personnel_records_pdf",
   CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF: "generate_controlled_materials_list_pdf",
+  CMD_DELETE_STORAGE_LOCATION_RECORD: "delete_storage_location_record",
   CMD_UPDATE_STORAGE_LOCATION_RECORD: "update_storage_location_record",
   CMD_GET_STORAGE_LOCATION_RECORDS: "get_storage_location_records",
   CMD_GET_SSC_RECORDS: "get_ssc_records",
-  CMD_GET_SSC_RECORD: "get_ssc_record",
+  // CMD_GET_SSC_RECORD: "get_ssc_record",
   CMD_UPDATE_SSC_RECORD: "update_ssc_record",
+  CMD_DELETE_SSC_RECORD: "delete_ssc_record",
   CMD_GENERATE_SSC_RECORDS_PDF: "generate_ssc_records_pdf",
 
   METADATA: 'metadata',
@@ -47,6 +55,7 @@ module.exports = Object.freeze({
   ITEM_ID: "item_id",
 
   NURIMS_TITLE: 'nurims.title',
+  NURIMS_SOURCE: 'nurims.source',
   NURIMS_WITHDRAWN: 'nurims.withdrawn',
   NURIMS_DESCRIPTION: 'nurims.description',
   NURIMS_SURVEILLANCE_FREQUENCY: 'nurims.surveillancefrequency',

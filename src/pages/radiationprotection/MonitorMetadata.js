@@ -7,6 +7,7 @@ import {toast} from "react-toastify";
 import Avatar from "@mui/material/Avatar";
 import PersonIcon from '@mui/icons-material/Person';
 import {
+  BlobObject,
   getMetadataValue,
   setMetadataValue
 } from "../../utils/MetadataUtils";
@@ -122,7 +123,7 @@ class MonitorMetadata extends Component {
       // console.log(">>>>>", event.target.result);
       const monitor = that.monitor;
       monitor["changed"] = true;
-      setMetadataValue(monitor, NURIMS_ENTITY_AVATAR, {file: selectedFile.name, url: event.target.result});
+      setMetadataValue(monitor, NURIMS_ENTITY_AVATAR, BlobObject(selectedFile.name, event.target.result));
       that.forceUpdate();
       // signal to parent that metadata has changed
       that.props.onChange(true);

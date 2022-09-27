@@ -5,18 +5,12 @@ import {
   Card,
   CardContent,
   FormControl,
-  FormControlLabel,
   Grid,
   InputLabel,
   Select,
   Switch
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import {MapContainer, Marker, ImageOverlay} from 'react-leaflet';
-import L from 'leaflet';
-import defaultMarkerIcon from 'leaflet/dist/images/marker-icon.png';
-import MouseCoordinates from "../../components/MouseCoordinates";
-import LocationFinder from "../../components/LocationFinder";
 import "leaflet/dist/leaflet.css";
 import {
   getDateFromDateString,
@@ -28,7 +22,6 @@ import {
   getPropertyValue,
 } from "../../utils/PropertyUtils";
 import {
-  NURIMS_MATERIAL_STORAGE_LOCATION,
   NURIMS_DESCRIPTION,
   NURIMS_TITLE,
   NURIMS_SSC_TYPE,
@@ -38,10 +31,8 @@ import {
   NURIMS_SSC_SURVEILLANCE_FREQUENCY,
   NURIMS_SSC_COMMISSIONING_DATE,
   NURIMS_SSC_ID,
-  NURIMS_ENTITY_DATE_OF_BIRTH,
   NURIMS_SSC_MAINTAINABILITY,
   NURIMS_SURVEILLANCE_FREQUENCY,
-  NURIMS_MATERIAL_NUCLIDES,
   NURIMS_SSC_MAINTENANCE_SCOPE,
   NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA, NURIMS_SSC_MAINTENANCE_TASK,
 } from "../../utils/constants";
@@ -107,9 +98,6 @@ class SSCMetadata extends Component {
         return this.sscSurveillanceFields[2].options.push({ label: t[1], value: t[0] });
       }
     })
-  }
-
-  componentDidMount() {
   }
 
   setGlossaryTerms = (terms) => {

@@ -130,7 +130,7 @@ export const MenuData = [
         authmodlevel: 'basic',
         items: [
           {
-            name: '   - Add SSC Record',
+            name: '   - Add/Edit SSC Record',
             link: 'ssc.add.edit.ssc',
             title: 'Add/Edit Structures, Systems, and Components',
             tooltip: 'Add/Edit structures systems and components.',
@@ -287,20 +287,20 @@ export const MenuData = [
     root: true,
     name: 'Radiation Protection',
     link: 'radiation.protection',
-    tooltip: 'Human resource actions',
+    tooltip: 'Radiation protection resource actions',
     authmodlevel: 'basic',
     Icon: IconPeople,
     items: [
       {
         name: '‣ Monitors',
-        tooltip: 'Human resource actions',
+        tooltip: 'Radiation protection resource actions',
         authmodlevel: 'basic',
         items: [
           {
-            name: '   - Add/Edit Monitor',
-            link: 'rp.add.edit.monitor',
+            name: '   - Add/Edit Monitors',
+            link: 'rp.add.edit.monitors',
             title: 'Add/Edit Monitor Records',
-            tooltip: 'Add/Edit monitor details including area, contamination, waste, and other types of monitors.',
+            tooltip: 'Add/Edit radiation monitor details including area, contamination, waste, and other types of monitors.',
             authmodlevel: 'basic',
           },
           {
@@ -606,6 +606,20 @@ export const MenuData = [
         link: 'sysadmin.import.icens.controlled.material.manufacturers',
         title: 'Import Controlled Material Manufacturers',
         tooltip: 'Batch import of controlled material manufacturers',
+        authmodlevel: 'sysadmin',
+      },
+      {
+        name: '- Import Material Store.',
+        link: 'sysadmin.import.icens.controlled.material.storage.locations',
+        title: 'Import Controlled Material Storage Locations',
+        tooltip: 'Batch import of controlled material storage locations',
+        authmodlevel: 'sysadmin',
+      },
+      {
+        name: '- Import Materials.',
+        link: 'sysadmin.import.icens.controlled.materials',
+        title: 'Import Controlled Materials',
+        tooltip: 'Batch import of controlled materials',
         authmodlevel: 'sysadmin',
       },
       {

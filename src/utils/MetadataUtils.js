@@ -1,3 +1,9 @@
+import {NURIMS_WITHDRAWN} from "./constants";
+
+export function isRecordArchived(record) {
+  return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
+}
+
 export function getMetadataValue(obj, key, missingValue) {
   if (obj.hasOwnProperty("metadata")) {
     const metadata = obj.metadata;
@@ -21,7 +27,7 @@ export function setMetadataValue(obj, key, value) {
     if (Array.isArray(metadata)) {
       for (const m of metadata) {
         for (const [k, v] of Object.entries(m)) {
-          console.log(`${k}: ${v}`);
+          // console.log(`${k}: ${v}`);
           if (k === key) {
             m[k] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
             return;
@@ -159,4 +165,14 @@ export function getDoseRecordMetadataValue(person_record, dosimeter, dosimeterTy
   return missingValue;
 }
 
+export function BlobObject(name, blob) {
+  return {file: name, url: blob};
+}
 
+export function markerBounds(location) {
+  const fac = .025;
+  // [ll corner[lat,lng], ur corner[lat,lng]]
+  return (location) ?
+    [[location.northing-fac, location.easting-fac], [location.northing+fac, location.easting+fac]] :
+    [[-fac, -fac], [fac, fac]];
+}
