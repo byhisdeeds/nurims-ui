@@ -29,61 +29,6 @@ import {
 
 const MODULE = "Manufacturer";
 
-// function ConfirmRemoveDialog(props) {
-//   return (
-//     <div>
-//       <Dialog
-//         open={props.open}
-//         onClose={props.onCancel}
-//         aria-labelledby="alert-dialog-title"
-//         aria-describedby="alert-dialog-description"
-//       >
-//         <DialogTitle id="alert-dialog-title">
-//           {`Delete record for ${props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""}`}
-//         </DialogTitle>
-//         <DialogContent>
-//           <DialogContentText id="alert-dialog-description">
-//             Are you sure you want to delete the record
-//             for {props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""} (
-//             {props.selection.hasOwnProperty(ITEM_ID) ? props.selection[ITEM_ID] : ""})?
-//           </DialogContentText>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={props.onCancel}>No</Button>
-//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </div>
-//   );
-// }
-
-// function ConfirmSelectionChangeDialog(props) {
-//   return (
-//     <div>
-//       <Dialog
-//         open={props.open}
-//         onClose={props.onCancel}
-//         aria-labelledby="alert-dialog-title"
-//         aria-describedby="alert-dialog-description"
-//       >
-//         <DialogTitle id="alert-dialog-title">
-//           {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-//         </DialogTitle>
-//         <DialogContent>
-//           <DialogContentText id="alert-dialog-description">
-//             The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
-//             changed without being saved. Do you want to continue without saving the details and loose the changes ?
-//           </DialogContentText>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={props.onCancel}>No</Button>
-//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </div>
-//   );
-// }
-
 class Manufacturer extends Component {
   constructor(props) {
     super(props);
@@ -92,10 +37,11 @@ class Manufacturer extends Component {
       confirm_remove: false,
       previous_selection: {},
       selection: {},
+      include_archived: false,
       title: props.title,
     };
-    this.mlref = React.createRef();
-    this.mmref = React.createRef();
+    this.listRef = React.createRef();
+    this.metadataRef = React.createRef();
   }
 
   componentDidMount() {
@@ -117,18 +63,18 @@ class Manufacturer extends Component {
       const response = message.response;
       if (messageStatusOk(message)) {
         if (isCommandResponse(message, CMD_GET_MANUFACTURER_RECORDS)) {
-          if (this.mlref.current) {
-            this.mlref.current.setManufacturers(response.manufacturer)
+          if (this.listRef.current) {
+            this.listRef.current.setRecords(response.manufacturer)
           }
         } else if (isCommandResponse(message, CMD_UPDATE_MANUFACTURER_RECORD)) {
           toast.success(`Manufacturer record for ${response.manufacturer[NURIMS_TITLE]} updated successfully`)
         } else if (isCommandResponse(message, CMD_DELETE_MANUFACTURER_RECORD)) {
           toast.success(`Manufacturer record (id: ${response.item_id}) deleted successfully`);
-          if (this.mlref.current) {
-            this.mlref.current.removeManufacturer(this.state.selection)
+          if (this.listRef.current) {
+            this.listRef.current.removeRecord(this.state.selection)
           }
-          if (this.mmref.current) {
-            this.mmref.current.set_manufacturer_object({})
+          if (this.metadataRef.current) {
+            this.metadataRef.current.set_manufacturer_object({})
           }
           this.setState({selection: {}, metadata_changed: false})
         }
@@ -141,16 +87,16 @@ class Manufacturer extends Component {
   onManufacturerSelected = (previous_manufacturer, manufacturer) => {
     console.log("-- onManufacturerSelected (previous selection) --", previous_manufacturer)
     console.log("-- onManufacturerSelected (selection) --", manufacturer)
-    if (this.mmref.current) {
-      this.mmref.current.setManufacturerMetadata(manufacturer)
+    if (this.metadataRef.current) {
+      this.metadataRef.current.setManufacturerMetadata(manufacturer)
     }
     this.setState({previous_selection: previous_manufacturer, selection: manufacturer})
   }
 
   saveChanges = () => {
     console.log("saving changes")
-    if (this.mlref.current) {
-      const manufacturers = this.mlref.current.getManufacturers()
+    if (this.listRef.current) {
+      const manufacturers = this.listRef.current.getRecords()
       console.log("ALL MANUFACTURERS", manufacturers)
       for (const manufacturer of manufacturers) {
         if (manufacturer.changed) {
@@ -173,32 +119,9 @@ class Manufacturer extends Component {
     this.setState({changed: state});
   }
 
-  // proceed_with_selection_change = () => {
-  //   // set new selection and load details
-  //   // console.log("#### saving personnel details ###", this.state.previous_selection)
-  //   const selection = this.state.selection;
-  //   const previous_selection = this.state.previous_selection;
-  //   selection.has_changed = false;
-  //   previous_selection.has_changed = false;
-  //   this.setState({alert: false, selection: selection, previous_selection: previous_selection});
-  //   if (this.mlref.current) {
-  //     this.mlref.current.setSelection(selection)
-  //   }
-  //   if (this.mmref.current) {
-  //     this.mmref.current.setDoseMetadata(selection)
-  //   }
-  // }
-
-  // cancel_selection_change = () => {
-  //   this.setState({alert: false,});
-  //   if (this.mlref.current) {
-  //     this.mlref.current.setSelection(this.state.previous_selection)
-  //   }
-  // }
-
   addManufacturer = () => {
-    if (this.mlref.current) {
-      this.mlref.current.add([{
+    if (this.listRef.current) {
+      this.listRef.current.addRecords([{
         "changed": true,
         "item_id": -1,
         "nurims.title": "New Manufacturer",
@@ -220,8 +143,8 @@ class Manufacturer extends Component {
     this.setState({confirm_remove: false,});
     console.log("REMOVE MANUFACTURER", this.state.selection);
     if (this.state.selection.item_id === -1) {
-      if (this.plref.current) {
-        this.plref.current.removePerson(this.state.selection)
+      if (this.listRef.current) {
+        this.listRef.current.removeRecord(this.state.selection)
       }
     } else {
       this.props.send({
@@ -233,7 +156,7 @@ class Manufacturer extends Component {
   }
 
   render() {
-    const {changed, confirm_remove, selection, title, } = this.state;
+    const {changed, confirm_remove, selection, title, include_archived} = this.state;
     return (
       <React.Fragment>
         <ConfirmRemoveDialog open={confirm_remove}
@@ -247,16 +170,16 @@ class Manufacturer extends Component {
           </Grid>
           <Grid item xs={4}>
             <ManufacturerList
-              ref={this.mlref}
+              ref={this.listRef}
+              title={"Manufacturers"}
               properties={this.props.properties}
-              onRowSelection={this.onManufacturerSelected}
-              onClick={this.onManufacturerSelected}
-              onRefresh={this.onRefreshManufacturersList}
+              onSelection={this.onManufacturerSelected}
+              includeArchived={include_archived}
             />
           </Grid>
           <Grid item xs={8}>
             <ManufacturerMetadata
-              ref={this.mmref}
+              ref={this.metadataRef}
               properties={this.props.properties}
               onChange={this.onManufacturerMetadataChanged}
             />

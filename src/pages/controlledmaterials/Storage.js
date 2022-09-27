@@ -35,9 +35,10 @@ class Storage extends Component {
       confirm_remove: false,
       selection: {},
       title: props.title,
+      include_archived: false,
     };
-    this.slref = React.createRef();
-    this.smref = React.createRef();
+    this.listRef = React.createRef();
+    this.metadataRef = React.createRef();
   }
 
   componentDidMount() {
@@ -63,16 +64,16 @@ class Storage extends Component {
       const response = message.response;
       if (response.hasOwnProperty("status") && response.status === 0) {
         if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_STORAGE_LOCATION_RECORDS) {
-          if (this.slref.current) {
-            this.slref.current.setStorageLocations(response.storage_location)
+          if (this.listRef.current) {
+            this.listRef.current.setListRecords(response.storage_location)
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_GLOSSARY_TERMS) {
-          if (this.smref.current) {
-            this.smref.current.setGlossaryTerms(response.terms)
+          if (this.metadataRef.current) {
+            this.metadataRef.current.setGlossaryTerms(response.terms)
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_STORAGE_LOCATION_RECORD) {
           toast.success(`Successfully updated storage location record for ${message[NURIMS_TITLE]}.`);
-          const stores = this.slref.current.getStores()
+          const stores = this.listRef.current.getRecords()
           for (const store of stores) {
             if (store.item_id === response.storage_location.item_id) {
               store.changed = false;
@@ -80,11 +81,11 @@ class Storage extends Component {
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_DELETE_STORAGE_LOCATION_RECORD) {
           toast.success(`Successfully deleted storage location record for ${message[NURIMS_TITLE]}.`);
-          if (this.slref.current) {
-            this.slref.current.removeStorageLocations(this.state.selection)
+          if (this.listRef.current) {
+            this.listRef.current.removeRecord(this.state.selection)
           }
-          if (this.smref.current) {
-            this.smref.current.setStorageMetadata({})
+          if (this.metadataRef.current) {
+            this.metadataRef.current.setStorageMetadata({})
           }
           this.setState({selection: {}, metadata_changed: false})
         }
@@ -96,16 +97,16 @@ class Storage extends Component {
 
   onStorageSelected = (storage) => {
     console.log("-- onStorageSelected (selection) --", storage)
-    if (this.smref.current) {
-      this.smref.current.setStorageMetadata(storage)
+    if (this.metadataRef.current) {
+      this.metadataRef.current.setStorageMetadata(storage)
     }
     this.setState({selection: storage})
   }
 
   saveChanges = () => {
     console.log("saving changes")
-    if (this.slref.current) {
-      const stores = this.slref.current.getStores()
+    if (this.listRef.current) {
+      const stores = this.listRef.current.getRecords()
       for (const store of stores) {
         if (store.changed) {
           this.props.send({
@@ -152,8 +153,8 @@ class Storage extends Component {
   }
 
   addStorage = () => {
-    if (this.slref.current) {
-      this.slref.current.add([{
+    if (this.listRef.current) {
+      this.listRef.current.addRecords([{
         "changed": true,
         "item_id": -1,
         "nurims.title": "New Storage",
@@ -165,7 +166,7 @@ class Storage extends Component {
   }
 
   render() {
-    const {changed, confirm_remove, selection, title, } = this.state;
+    const {changed, confirm_remove, selection, title, include_archived} = this.state;
     return (
       <React.Fragment>
         <ConfirmRemoveDialog open={confirm_remove}
@@ -179,16 +180,17 @@ class Storage extends Component {
           </Grid>
           <Grid item xs={4}>
             <StorageList
-              ref={this.slref}
+              ref={this.listRef}
+              title={"Storage Locations"}
               properties={this.props.properties}
-              onRowSelection={this.onStorageSelected}
-              onClick={this.onStorageSelected}
-              onRefresh={this.onRefreshStoragesList}
+              onSelection={this.onStorageSelected}
+              includeArchived={include_archived}
+              // requestListUpdate={this.requestListUpdate}
             />
           </Grid>
           <Grid item xs={8}>
             <StorageMetadata
-              ref={this.smref}
+              ref={this.metadataRef}
               properties={this.props.properties}
               onChange={this.onStorageMetadataChanged}
             />

@@ -12,11 +12,13 @@ import AMPList from "./AMPList";
 import AMPMetadata from "./AMPMetadata";
 import AddIcon from "@mui/icons-material/Add";
 import {
-  CMD_DELETE_PERSONNEL_RECORD, CMD_DELETE_SSC_RECORD,
+  CMD_DELETE_SSC_RECORD,
   CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_SSC_RECORD,
   CMD_GET_SSC_RECORDS,
-  CMD_UPDATE_SSC_RECORD, INCLUDE_METADATA, ITEM_ID, METADATA,
+  CMD_UPDATE_SSC_RECORD,
+  INCLUDE_METADATA,
+  ITEM_ID,
+  METADATA,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
@@ -27,7 +29,10 @@ import {
   messageHasResponse,
   messageStatusOk
 } from "../../utils/WebsocketUtils";
-import {ConfirmRemoveDialog, isValidSelection} from "../../utils/UtilityDialogs";
+import {
+  ConfirmRemoveDialog,
+  isValidSelection
+} from "../../utils/UtilityDialogs";
 import {isRecordArchived} from "../../utils/MetadataUtils";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
@@ -75,7 +80,7 @@ class AMP extends Component {
             }
           } else {
             if (this.listRef.current) {
-              this.listRef.current.setSSCs(response.structures_systems_components);
+              this.listRef.current.setRecords(response.structures_systems_components);
             }
           }
         } else if (isCommandResponse(message, CMD_GET_GLOSSARY_TERMS)) {
@@ -86,7 +91,15 @@ class AMP extends Component {
           // toast.success(`Successfully updated SSC record for '${message[NURIMS_TITLE]}'.`);
           toast.success(`SSC record for ${response.structures_systems_components[NURIMS_TITLE]} updated successfully`)
           if (this.listRef.current) {
-            this.listRef.current.update(response.personnel);
+            this.listRef.current.updateRecord(response.structures_systems_components);
+          }
+        } else if (isCommandResponse(message, CMD_DELETE_SSC_RECORD)) {
+          toast.success(`SSC record (id: ${response.item_id}) deleted successfully`)
+          if (this.listRef.current) {
+            this.listRef.current.removeRecord(this.state.selection)
+          }
+          if (this.metadataRef.current) {
+            this.metadataRef.current.setSSCMetadata({});
           }
         }
       } else {
@@ -114,9 +127,8 @@ class AMP extends Component {
   }
 
   saveChanges = () => {
-    console.log("saving changes")
     if (this.listRef.current) {
-      const sscs = this.listRef.current.getSSCs()
+      const sscs = this.listRef.current.getRecords()
       for (const ssc of sscs) {
         if (ssc.changed) {
           console.log(">>>>>", ssc)
@@ -162,7 +174,7 @@ class AMP extends Component {
 
   addAMP = () => {
     if (this.listRef.current) {
-      this.listRef.current.add([{
+      this.listRef.current.addRecords([{
         "changed": true,
         "item_id": -1,
         "nurims.title": "New AMP",
@@ -213,8 +225,9 @@ class AMP extends Component {
           <Grid item xs={3}>
             <AMPList
               ref={this.listRef}
+              title={"SSC's"}
               properties={this.props.properties}
-              onSSCSelection={this.onSSCSelected}
+              onSelection={this.onSSCSelected}
               includeArchived={include_archived}
               requestListUpdate={this.requestListUpdate}
             />

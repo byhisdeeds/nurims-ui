@@ -1,51 +1,18 @@
 import * as React from "react";
 import {withTheme} from "@mui/styles";
 import PropTypes from "prop-types";
-import TableCell from "@mui/material/TableCell";
-import {ITEM_ID, NURIMS_TITLE, NURIMS_WITHDRAWN} from "../utils/constants";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import {
+  ITEM_ID, METADATA,
+  NURIMS_TITLE,
+  NURIMS_WITHDRAWN
+} from "../utils/constants";
+import {
+  Box,
+  Paper,
+  Switch,
+  TableCell
+} from "@mui/material";
 import {PageableTable} from "./CommonComponents";
-import {Switch} from "@mui/material";
-
-PagedRecordList.propTypes = {
-  title: PropTypes.string.isRequired,
-  rowHeight: PropTypes.number,
-  minWidth: PropTypes.number,
-  properties: PropTypes.object.isRequired,
-  onListItemSelection: PropTypes.func,
-  requestListUpdate: PropTypes.func,
-  cells: PropTypes.array
-}
-
-PagedRecordList.defaultProps = {
-  rowHeight: 24,
-  minWidth: 350,
-  onListItemSelection: (item) => {
-  },
-  requestListUpdate: (include_archived) => {
-  },
-  cells: [
-    {
-      id: ITEM_ID,
-      align: 'center',
-      disablePadding: true,
-      label: 'ID',
-      width: '10%',
-      sortField: true,
-    },
-    {
-      id: NURIMS_TITLE,
-      align: 'left',
-      disablePadding: true,
-      label: 'Name',
-      width: '90%',
-      sortField: true,
-    },
-  ],
-  onListItddemSelection: (row) => {
-  },
-};
 
 class PagedRecordList extends React.Component {
   constructor(props) {
@@ -57,9 +24,78 @@ class PagedRecordList extends React.Component {
     this.rows = [];
   }
 
+  removeRecord = (record) => {
+    for(let i = 0; i < this.rows.length; i++){
+      if (this.rows[i] === record) {
+        this.rows.splice(i, 1);
+        this.setState({ selected: {}} );
+        return;
+      }
+    }
+  }
+
+  addRecords = (records, skipIfRecordInList) => {
+    let refresh = false;
+    if (Array.isArray(records)) {
+      for (const record of records) {
+        let add_to_list = true;
+        if (skipIfRecordInList && skipIfRecordInList === true) {
+          for (const row of this.rows) {
+            if (row[NURIMS_TITLE] === record[NURIMS_TITLE]) {
+              add_to_list = false;
+              break;
+            }
+          }
+        }
+        if (add_to_list) {
+          this.rows.push(record);
+          refresh = true;
+        }
+      }
+    }
+    if (refresh) {
+      this.forceUpdate();
+    }
+  }
+
+  setRecords = (records) => {
+    if (Array.isArray(records)) {
+      this.rows.length = 0;
+      for (const record of records) {
+        console.log("PagedRecordList.setRecords", records)
+        record.changed = false;
+        this.rows.push(record);
+      }
+    }
+    this.forceUpdate();
+  }
+
+  getRecords = () => {
+    return this.rows;
+  }
+
+  updateRecord = (record) => {
+    console.log("SSCList.update", record)
+    if (record) {
+      for (const row of this.rows) {
+        if (row.item_id === -1 && row.record_key === record.record_key) {
+          row.item_id = record[ITEM_ID]
+          row[NURIMS_TITLE] = record[NURIMS_TITLE];
+          row[NURIMS_WITHDRAWN] = record[NURIMS_WITHDRAWN];
+          row["changed"] = false;
+          row[METADATA] = [...record[METADATA]]
+        } else if (row.item_id !== -1 && row.item_id === record[ITEM_ID]) {
+          row[NURIMS_TITLE] = record[NURIMS_TITLE];
+          row[NURIMS_WITHDRAWN] = record[NURIMS_WITHDRAWN];
+          row["changed"] = false;
+          row[METADATA] = [...record[METADATA]]
+        }
+      }
+    }
+  }
+
   handleListItemSelection = (item) => {
     // only do something if selection has changed
-    console.log("@@@@@@ HANDLE_LIST_ITEM_SELECTION", item)
     if (this.state.selection !== item) {
       this.setState({selection: item});
       this.props.onListItemSelection(item);
@@ -86,7 +122,7 @@ class PagedRecordList extends React.Component {
     this.props.requestListUpdate(e.target.checked)
   }
 
-  render() {
+  render () {
     const {include_archived} = this.state;
     return (
       <Box sx={{width: '100%'}}>
@@ -97,13 +133,13 @@ class PagedRecordList extends React.Component {
             theme={this.props.theme}
             rowHeight={this.props.rowHeight}
             order={'asc'}
-            orderBy={this.props.cells[1].id}
+            orderBy={NURIMS_TITLE}
             title={this.props.title}
             disabled={false}
             rows={this.rows}
             onRowSelection={this.handleListItemSelection}
             renderCell={this.renderCell}
-            filterElement={<Switch
+            filterElement={this.props.enableRecordArchiveSwitch && <Switch
               inputProps={{'aria-labelledby': 'include-archived-records-switch'}}
               onChange={this.includeArchivedRecords}
               checked={include_archived}
@@ -115,5 +151,44 @@ class PagedRecordList extends React.Component {
   }
 
 }
+
+PagedRecordList.propTypes = {
+  title: PropTypes.string.isRequired,
+  rowHeight: PropTypes.number.isRequired,
+  minWidth: PropTypes.number.isRequired,
+  onListItemSelection: PropTypes.func.isRequired,
+  requestListUpdate: PropTypes.func.isRequired,
+  enableRecordArchiveSwitch: PropTypes.bool.isRequired,
+  includeArchived: PropTypes.bool,
+}
+
+PagedRecordList.defaultProps = {
+  includeArchived: false,
+  enableRecordArchiveSwitch: false,
+  rowHeight: 24,
+  minWidth: 350,
+  cells: [
+    {
+      id: ITEM_ID,
+      align: 'center',
+      disablePadding: true,
+      label: 'ID',
+      width: '10%',
+      sortField: true,
+    },
+    {
+      id: NURIMS_TITLE,
+      align: 'left',
+      disablePadding: true,
+      label: 'Name',
+      width: '90%',
+      sortField: true,
+    },
+  ],
+  onListItemSelection: (item) => {
+  },
+  requestListUpdate: (include_archived) => {
+  },
+};
 
 export default withTheme(PagedRecordList)
