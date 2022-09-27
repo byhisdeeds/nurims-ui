@@ -13,6 +13,8 @@ module.exports = Object.freeze({
   SSC_ADD_EDIT_SSC_AMP: 'ssc.add.edit.ssc.amp',
   SSC_VIEW_SSC_RECORDS: 'ssc.view.ssc.records',
 
+  BASIC_RP_ADD_EDIT_MONITORS: "rp.add.edit.monitors",
+
   PRO_IMPORT_ICENS_PERSONNEL: 'sysadmin.import.icens.personnel',
   PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS: 'sysadmin.import.icens.controlled.material.manufacturers',
   PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS: 'sysadmin.import.icens.controlled.material.storage.locations',
@@ -22,6 +24,8 @@ module.exports = Object.freeze({
   CMD_GET_PUBLIC_KEY: 'get_public_key',
   CMD_VERIFY_USER_PASSWORD: 'verify_user_password',
 
+  CMD_GET_MONITOR_RECORDS: "get_monitor_records",
+  CMD_DELETE_MONITOR_RECORD: "delete_monitor_record",
   CMD_DELETE_PERSONNEL_RECORD: "delete_personnel_record",
   CMD_UPDATE_PERSONNEL_RECORD: "update_personnel_record",
   CMD_GET_PERSONNEL_RECORDS: "get_personnel_records",

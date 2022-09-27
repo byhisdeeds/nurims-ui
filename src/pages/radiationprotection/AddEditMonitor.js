@@ -25,90 +25,97 @@ import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
-import {isCommandResponse, messageHasMetadata, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+
+import {
+  isCommandResponse,
+  messageHasMetadata,
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
 import {v4 as uuid} from "uuid";
+import BaseRecordManager from "../../components/BaseRecordManager";
+import {ConfirmRemoveDialog, ConfirmRemoveDialog1, isValidSelection} from "../../utils/UtilityDialogs";
 
-const MODULE = "AddEditMonitor";
 
-function ConfirmRemoveDialog(props) {
-  return (
-    <div>
-      <Dialog
-        open={props.open}
-        onClose={props.onCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {`Delete record for ${props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""}`}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete the record
-            for {props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""} (
-            {props.person.hasOwnProperty("item_id") ? props.person["item_id"] : ""})?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onCancel}>No</Button>
-          <Button onClick={props.onProceed} autoFocus>Yes</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
 
-function ConfirmSelectionChangeDialog(props) {
-  return (
-    <div>
-      <Dialog
-        open={props.open}
-        onClose={props.onCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {`Save Previous Changed for ${props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""}`}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            The details for {props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""} have
-            changed without being saved. Do you want to continue without saving the details and loose the changes ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onCancel}>No</Button>
-          <Button onClick={props.onProceed} autoFocus>Yes</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
+// function ConfirmRemoveDialog(props) {
+//   return (
+//     <div>
+//       <Dialog
+//         open={false}
+//         // onClose={props.onCancel}
+//         aria-labelledby="alert-dialog-title"
+//         aria-describedby="alert-dialog-description"
+//       >
+//         <DialogTitle id="alert-dialog-title">
+//           {`Delete record for `}
+//         </DialogTitle>
+//         <DialogContent>
+//           <DialogContentText id="alert-dialog-description">
+//             Are you sure you want to delete the record
+//             for  (
+//            )?
+//           </DialogContentText>
+//         </DialogContent>
+//         <DialogActions>
+//           <Button >No</Button>
+//           <Button  autoFocus>Yes</Button>
+//         </DialogActions>
+//       </Dialog>
+//     </div>
+//   );
+// }
 
-class AddEditMonitor extends Component {
+// function ConfirmSelectionChangeDialog(props) {
+//   return (
+//     <div>
+//       <Dialog
+//         open={false}
+//         // onClose={props.onCancel}
+//         aria-labelledby="alert-dialog-title"
+//         aria-describedby="alert-dialog-description"
+//       >
+//         <DialogTitle id="alert-dialog-title">
+//           {`Save Previous Changed for `}
+//         </DialogTitle>
+//         <DialogContent>
+//           <DialogContentText id="alert-dialog-description">
+//             The details for have
+//             changed without being saved. Do you want to continue without saving the details and loose the changes ?
+//           </DialogContentText>
+//         </DialogContent>
+//         <DialogActions>
+//           <Button >No</Button>
+//           <Button autoFocus>Yes</Button>
+//         </DialogActions>
+//       </Dialog>
+//     </div>
+//   );
+// }
+
+class AddEditMonitor extends BaseRecordManager {
   constructor(props) {
     super(props);
-    this.state = {
-      metadata_changed: false,
-      alert: false,
-      confirm_remove: false,
-      previous_selection: {},
-      selection: {},
-      title: props.title,
-    };
-    this.mlref = React.createRef();
-    this.mmref = React.createRef();
+    this.Module = "AddEditMonitors";
+    // this.state = {
+    //   metadata_changed: false,
+    //   alert: false,
+    //   confirm_remove: false,
+    //   previous_selection: {},
+    //   selection: {},
+    //   title: props.title,
+    // };
   }
 
   componentDidMount() {
     this.props.send({
       cmd: CMD_GET_MONITOR_RECORDS,
-      module: MODULE,
+      module: this.Module,
     })
   }
 
   ws_message = (message) => {
-    console.log("ON_WS_MESSAGE", MODULE, message)
+    console.log("ON_WS_MESSAGE", this.Module, message)
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
@@ -171,7 +178,7 @@ class AddEditMonitor extends Component {
         cmd: CMD_GET_MONITOR_RECORDS,
         item_id: selection.item_id,
         "include.metadata": "true",
-        module: MODULE,
+        module: this.Module,
       })
     }
     this.setState({ selection: selection })
@@ -193,7 +200,7 @@ class AddEditMonitor extends Component {
             "nurims.title": monitor[NURIMS_TITLE],
             metadata: monitor.metadata,
             record_key: monitor.record_key,
-            module: MODULE,
+            module: this.Module,
           })
         }
       }
@@ -235,7 +242,7 @@ class AddEditMonitor extends Component {
         cmd: CMD_GET_PERSONNEL_RECORDS,
         "include.metadata": "true",
         item_id: this.state.selection.item_id,
-        module: MODULE,
+        module: this.Module,
       });
     }
   }
@@ -266,92 +273,21 @@ class AddEditMonitor extends Component {
       this.props.send({
         cmd: CMD_DISABLE_MONITOR_RECORD,
         item_id: this.state.selection.item_id,
-        module: MODULE,
+        module: this.Module,
       });
     }
   }
 
-  handleFileUpload = (e) => {
-    const selectedFile = e.target.files[0];
-    console.log("file uploaded", selectedFile)
-    const that = this;
-    const fileReader = new FileReader();
-    fileReader.onerror = function () {
-      alert('Unable to read ' + selectedFile.name);
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
-    };
-    fileReader.readAsText(selectedFile);
-    fileReader.onload = function (event) {
-      // console.log(">>>>>", event.target.result);
-      const data = JSON.parse(event.target.result);
-      console.log(data)
-      if (data.hasOwnProperty("dosereport")) {
-        const dr = data.dosereport;
-        if (dr.hasOwnProperty("badges")) {
-          const badges = dr.badges;
-          if (typeof badges === "object") {
-            if (badges.hasOwnProperty("badge")) {
-              const badge = badges.badge;
-              if (Array.isArray(badge)) {
-                const persons = []
-                for (const b of badge) {
-                  const name = b["tld.employee.name"];
-                  const id = b["tld.dosimeter.employee"].split("/")[1];
-                  console.log("EMPLOYEE", name, b["tld.dosimeter.employee"], id);
-                  if (!name.toLowerCase().includes("area monitor")) {
-                    persons.push({
-                      "changed": true,
-                      "item_id": -1,
-                      "nurims.title": name,
-                      "nurims.withdrawn": 0,
-                      "metadata": [
-                        {"nurims.entity.doseproviderid": `icens|${id}`}
-                      ]
-
-                    });
-                    that.setState({ changed: true });
-                  }
-                }
-                if (that.mlref.current) {
-                  that.mlref.current.add(persons, true)
-                }
-              } else {
-                toast.warn(`Incorrect dosereport.badges.badge type in dose report data file. Expecting an array but found ${typeof badge}`)
-              }
-            }
-          } else {
-            toast.warn(`Incorrect dosereport.badges type in dose report data file. Expecting an object but found ${typeof badges}`)
-          }
-        } else {
-          toast.warn('Missing dosereport.badges field in dose report data file')
-        }
-      } else {
-        toast.warn('Unknown file format')
-      }
-    };
-  }
-
   render() {
-    const {metadata_changed, alert, confirm_remove, previous_selection, selection, title} = this.state;
+    const {metadata_changed, confirm_remove, selection, title, include_archived} = this.state;
+    console.log("render");
     return (
       <React.Fragment>
-        <ConfirmSelectionChangeDialog open={alert}
-                                      person={previous_selection}
-                                      onProceed={this.proceed_with_selection_change}
-                                      onCancel={this.cancel_selection_change}
-        />
-        <ConfirmRemoveDialog open={confirm_remove}
-                             person={selection}
-                             onProceed={this.proceed_with_remove}
-                             onCancel={this.cancel_remove}
-        />
-        <input
-          accept="*.csv, *.txt, text/plain"
-          // className={classes.input}
-          id="import-file-uploader"
-          style={{display: 'none',}}
-          onChange={this.handleFileUpload}
-          type="file"
+        <ConfirmRemoveDialog1 open={confirm_remove}
+                             selection={selection}
+                             recordType={"MONITOR_RECORD"}
+                             onProceed={this.proceedWithRemove}
+                             onCancel={this.cancelRemove}
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
@@ -373,18 +309,12 @@ class AddEditMonitor extends Component {
           </Grid>
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
-          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeMonitor}
+          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
                // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
-               disabled={!selection.hasOwnProperty("item_id")}>
+               disabled={!isValidSelection(selection)}>
             <PersonRemoveIcon sx={{mr: 1}}/>
             Remove Monitor
           </Fab>
-          <label htmlFor="import-file-uploader">
-            <Fab variant="extended" size="small" color="primary" aria-label="import" component={"span"}>
-              <UploadIcon sx={{mr: 1}}/>
-              Import From Dose Report
-            </Fab>
-          </label>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
                disabled={!metadata_changed}>
             <SaveIcon sx={{mr: 1}}/>

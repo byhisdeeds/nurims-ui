@@ -287,20 +287,20 @@ export const MenuData = [
     root: true,
     name: 'Radiation Protection',
     link: 'radiation.protection',
-    tooltip: 'Human resource actions',
+    tooltip: 'Radiation protection resource actions',
     authmodlevel: 'basic',
     Icon: IconPeople,
     items: [
       {
         name: '‣ Monitors',
-        tooltip: 'Human resource actions',
+        tooltip: 'Radiation protection resource actions',
         authmodlevel: 'basic',
         items: [
           {
-            name: '   - Add/Edit Monitor',
-            link: 'rp.add.edit.monitor',
+            name: '   - Add/Edit Monitors',
+            link: 'rp.add.edit.monitors',
             title: 'Add/Edit Monitor Records',
-            tooltip: 'Add/Edit monitor details including area, contamination, waste, and other types of monitors.',
+            tooltip: 'Add/Edit radiation monitor details including area, contamination, waste, and other types of monitors.',
             authmodlevel: 'basic',
           },
           {
