@@ -27,28 +27,36 @@ module.exports = Object.freeze({
   CMD_GET_MONITOR_RECORDS: "get_monitor_records",
   CMD_DELETE_MONITOR_RECORD: "delete_monitor_record",
   CMD_UPDATE_MONITOR_RECORD: "update_monitor_record",
+
   CMD_DELETE_PERSONNEL_RECORD: "delete_personnel_record",
   CMD_UPDATE_PERSONNEL_RECORD: "update_personnel_record",
   CMD_GET_PERSONNEL_RECORDS: "get_personnel_records",
+
   CMD_GET_GLOSSARY_TERMS: "get_glossary_terms",
+
   CMD_GET_MANUFACTURER_RECORDS: "get_manufacturer_records",
   CMD_UPDATE_MANUFACTURER_RECORD: "update_manufacturer_record",
   CMD_DELETE_MANUFACTURER_RECORD: "delete_manufacturer_record",
+
   CMD_GET_MATERIAL_RECORDS: "get_material_records",
   CMD_UPDATE_MATERIAL_RECORD: "update_material_record",
   CMD_DELETE_MATERIAL_RECORD: "delete_material_record",
+
   CMD_GET_ORGANISATION: "get_organisation",
   CMD_GET_SYSTEM_PROPERTIES: "get_system_properties",
   CMD_SET_SYSTEM_PROPERTIES: "set_system_properties",
+
   CMD_GENERATE_PERSONNEL_RECORDS_PDF: "generate_personnel_records_pdf",
   CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF: "generate_controlled_materials_list_pdf",
+
   CMD_DELETE_STORAGE_LOCATION_RECORD: "delete_storage_location_record",
   CMD_UPDATE_STORAGE_LOCATION_RECORD: "update_storage_location_record",
   CMD_GET_STORAGE_LOCATION_RECORDS: "get_storage_location_records",
+
   CMD_GET_SSC_RECORDS: "get_ssc_records",
-  // CMD_GET_SSC_RECORD: "get_ssc_record",
   CMD_UPDATE_SSC_RECORD: "update_ssc_record",
   CMD_DELETE_SSC_RECORD: "delete_ssc_record",
+
   CMD_GENERATE_SSC_RECORDS_PDF: "generate_ssc_records_pdf",
 
   METADATA: 'metadata',
