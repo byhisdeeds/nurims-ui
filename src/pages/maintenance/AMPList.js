@@ -42,7 +42,7 @@ class AMPList extends React.Component {
         onListItemSelection={this.props.onSelection}
         requestListUpdate={this.props.requestListUpdate}
         includeArchived={this.props.includeArchived}
-        title={"SSC's"}
+        title={this.props.title}
         enableRecordArchiveSwitch={true}
       />
     )

@@ -15,7 +15,7 @@ import {
   CMD_DELETE_MATERIAL_RECORD,
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_MANUFACTURER_RECORDS,
-  CMD_GET_MATERIAL_RECORDS,
+  CMD_GET_MATERIAL_RECORDS, CMD_GET_SSC_RECORDS,
   CMD_GET_STORAGE_LOCATION_RECORDS,
   CMD_UPDATE_MATERIAL_RECORD, INCLUDE_METADATA, METADATA,
   NURIMS_TITLE,
@@ -43,6 +43,7 @@ class Material extends Component {
       confirm_remove: false,
       selection: {},
       title: props.title,
+      include_archived: false,
     };
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
@@ -72,6 +73,16 @@ class Material extends Component {
     });
   }
 
+  onRequestListUpdate = (include_archived) => {
+    console.log("requestListUpdate switch func", include_archived)
+    this.props.send({
+      cmd: CMD_GET_MATERIAL_RECORDS,
+      "include.withdrawn": include_archived ? "true" : "false",
+      module: MODULE,
+    })
+    this.setState({include_archived: include_archived});
+  }
+
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", MODULE, message)
     if (messageHasResponse(message)) {
@@ -82,11 +93,11 @@ class Material extends Component {
             this.metadataRef.current.setGlossaryTerms(response.terms)
           }
         } else if (isCommandResponse(message, CMD_GET_MANUFACTURER_RECORDS)) {
-          if (this.listRef.current) {
+          if (this.metadataRef.current) {
             this.metadataRef.current.setManufacturers(response.manufacturer)
           }
         } else if (isCommandResponse(message, CMD_GET_STORAGE_LOCATION_RECORDS)) {
-          if (this.listRef.current) {
+          if (this.metadataRef.current) {
             this.metadataRef.current.setStorageLocations(response.storage_location)
           }
         } else if (isCommandResponse(message, CMD_GET_MATERIAL_RECORDS)) {
@@ -99,7 +110,7 @@ class Material extends Component {
             }
           } else {
             if (this.listRef.current) {
-              this.listRef.current.setMaterials(response.material)
+              this.listRef.current.setRecords(response.material)
             }
           }
         } else if (isCommandResponse(message, CMD_UPDATE_MATERIAL_RECORD)) {
@@ -107,7 +118,7 @@ class Material extends Component {
         } else if (isCommandResponse(message, CMD_DELETE_MATERIAL_RECORD)) {
           toast.success(`Material record (id: ${response.item_id}) deleted successfully`)
           if (this.listRef.current) {
-            this.listRef.current.removeMaterial(this.state.selection)
+            this.listRef.current.removeRecord(this.state.selection)
           }
           if (this.metadataRef.current) {
             this.metadataRef.current.setMaterialMetadata({})
@@ -121,10 +132,6 @@ class Material extends Component {
   }
 
   onMaterialSelected = (material) => {
-    // console.log("-- onMaterialSelected (selection) --", material)
-    // if (this.metadataRef.current) {
-    //   this.metadataRef.current.setMaterialMetadata(material)
-    // }
     this.onRefreshMaterialsList(true);
     this.setState({selection: material})
   }
@@ -193,14 +200,9 @@ class Material extends Component {
   }
 
   render() {
-    const {changed, confirm_remove, selection, title, } = this.state;
+    const {changed, confirm_remove, selection, title, include_archived} = this.state;
     return (
       <React.Fragment>
-        {/*<ConfirmSelectionChangeDialog open={alert}*/}
-        {/*                              person={previous_selection}*/}
-        {/*                              onProceed={this.proceed_with_selection_change}*/}
-        {/*                              onCancel={this.cancel_selection_change}*/}
-        {/*/>*/}
         <ConfirmRemoveDialog open={confirm_remove}
                              selection={selection}
                              onProceed={this.proceed_with_remove}
@@ -213,11 +215,12 @@ class Material extends Component {
           <Grid item xs={4}>
             <MaterialList
               ref={this.listRef}
-              height={400}
+              title={"Materials"}
               properties={this.props.properties}
-              onRowClicked={this.onMaterialSelected}
-              // onClick={this.onMaterialSelected}
-              onRefresh={this.onRefreshMaterialsList}
+              onSelection={this.onMaterialSelected}
+              includeArchived={include_archived}
+              requestListUpdate={this.onRequestListUpdate}
+              enableRecordArchiveSwitch={true}
             />
           </Grid>
           <Grid item xs={8}>

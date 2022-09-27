@@ -19,17 +19,17 @@ class StorageList extends React.Component {
     }
   }
 
-  getListRecords = () => {
+  getRecords = () => {
     return (this.ref.current) ? this.ref.current.getRecords() : [];
   }
 
-  updateListRecord = (record) => {
+  updateRecord = (record) => {
     if (this.ref.current) {
       this.ref.current.updateRecord(record);
     }
   }
 
-  setListRecords = (records) => {
+  setRecords = (records) => {
     if (this.ref.current) {
       this.ref.current.setRecords(records);
     }
@@ -43,7 +43,7 @@ class StorageList extends React.Component {
         // requestListUpdate={this.props.requestListUpdate}
         includeArchived={this.props.includeArchived}
         title={this.props.title}
-        enableRecordArchiveSwitch={true}
+        enableRecordArchiveSwitch={false}
       />
     )
   }

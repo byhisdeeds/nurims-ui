@@ -65,7 +65,7 @@ class Storage extends Component {
       if (response.hasOwnProperty("status") && response.status === 0) {
         if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_STORAGE_LOCATION_RECORDS) {
           if (this.listRef.current) {
-            this.listRef.current.setListRecords(response.storage_location)
+            this.listRef.current.setRecords(response.storage_location)
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_GET_GLOSSARY_TERMS) {
           if (this.metadataRef.current) {

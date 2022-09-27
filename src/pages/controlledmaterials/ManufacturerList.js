@@ -40,10 +40,8 @@ class ManufactuerList extends React.Component {
       <PagedRecordList
         ref={this.ref}
         onListItemSelection={this.props.onSelection}
-        requestListUpdate={this.props.requestListUpdate}
-        includeArchived={this.props.includeArchived}
         title={this.props.title}
-        enableRecordArchiveSwitch={true}
+        enableRecordArchiveSwitch={false}
       />
     )
   }

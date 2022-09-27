@@ -75,7 +75,7 @@ class PagedRecordList extends React.Component {
   }
 
   updateRecord = (record) => {
-    console.log("SSCList.update", record)
+    console.log("PagedRecordList.updateRecord", record)
     if (record) {
       for (const row of this.rows) {
         if (row.item_id === -1 && row.record_key === record.record_key) {
@@ -125,7 +125,7 @@ class PagedRecordList extends React.Component {
   render () {
     const {include_archived} = this.state;
     return (
-      <Box sx={{width: '100%'}}>
+      <Box sx={{width: '100%', height: this.props.height}}>
         <Paper sx={{width: '100%', mb: 2}}>
           <PageableTable
             minWidth={this.props.minWidth}
@@ -167,6 +167,7 @@ PagedRecordList.defaultProps = {
   enableRecordArchiveSwitch: false,
   rowHeight: 24,
   minWidth: 350,
+  height: 400,
   cells: [
     {
       id: ITEM_ID,

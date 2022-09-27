@@ -68,6 +68,9 @@ class Manufacturer extends Component {
           }
         } else if (isCommandResponse(message, CMD_UPDATE_MANUFACTURER_RECORD)) {
           toast.success(`Manufacturer record for ${response.manufacturer[NURIMS_TITLE]} updated successfully`)
+          if (this.listRef.current) {
+            this.listRef.current.updateRecord(response.manufacturer);
+          }
         } else if (isCommandResponse(message, CMD_DELETE_MANUFACTURER_RECORD)) {
           toast.success(`Manufacturer record (id: ${response.item_id}) deleted successfully`);
           if (this.listRef.current) {
@@ -84,13 +87,11 @@ class Manufacturer extends Component {
     }
   }
 
-  onManufacturerSelected = (previous_manufacturer, manufacturer) => {
-    console.log("-- onManufacturerSelected (previous selection) --", previous_manufacturer)
-    console.log("-- onManufacturerSelected (selection) --", manufacturer)
+  onManufacturerSelected = (manufacturer) => {
     if (this.metadataRef.current) {
       this.metadataRef.current.setManufacturerMetadata(manufacturer)
     }
-    this.setState({previous_selection: previous_manufacturer, selection: manufacturer})
+    this.setState({selection: manufacturer})
   }
 
   saveChanges = () => {
@@ -174,7 +175,7 @@ class Manufacturer extends Component {
               title={"Manufacturers"}
               properties={this.props.properties}
               onSelection={this.onManufacturerSelected}
-              includeArchived={include_archived}
+              // includeArchived={include_archived}
             />
           </Grid>
           <Grid item xs={8}>
