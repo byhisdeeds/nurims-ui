@@ -160,7 +160,7 @@ class AddEditPersonnel extends Component {
     }
   }
 
-  onMetadataChanged = (state) => {
+  onRecordMetadataChanged = (state) => {
     this.setState({metadata_changed: state});
   }
 
@@ -231,7 +231,7 @@ class AddEditPersonnel extends Component {
           <Grid item xs={8}>
             <PersonMetadata
               ref={this.pmref}
-              onChange={this.onMetadataChanged}
+              onChange={this.onRecordMetadataChanged}
               properties={this.props.properties}
             />
           </Grid>

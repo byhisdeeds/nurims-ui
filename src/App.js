@@ -42,8 +42,8 @@ const Manufacturer = lazy(() => import('./pages/controlledmaterials/Manufacturer
 const Storage = lazy(() => import('./pages/controlledmaterials/Storage'));
 const Material = lazy(() => import('./pages/controlledmaterials/Material'));
 const ViewMaterialsList = lazy(() => import('./pages/controlledmaterials/ViewMaterialsList'));
-const SSC = lazy(() => import('./pages/maintenance/SSC'));
-const AMP = lazy(() => import('./pages/maintenance/AMP'));
+const AddEditSSC = lazy(() => import('./pages/maintenance/AddEditSSC'));
+const AddEditAMP = lazy(() => import('./pages/maintenance/AddEditAMP'));
 const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
 const AddEditMonitors = lazy(() => import('./pages/radiationprotection/AddEditMonitor'));
 const ImportICENSPersonnel = lazy(() => import('./pages/packages/icens/ImportICENSPersonnel'));
@@ -222,8 +222,8 @@ class App extends React.Component {
       "Storage": React.createRef(),
       "Material": React.createRef(),
       "ViewMaterialsList": React.createRef(),
-      "SSC": React.createRef(),
-      "AMP": React.createRef(),
+      "AddEditSSC": React.createRef(),
+      "AddEditAMP": React.createRef(),
       "ViewSSCRecords": React.createRef(),
       "AddEditMonitors": React.createRef(),
       "ImportICENSPersonnel": React.createRef(),
@@ -500,8 +500,8 @@ class App extends React.Component {
                     properties={this.properties}
                   />}
                 {actionid === Constants.SSC_ADD_EDIT_SSC &&
-                  <SSC
-                    ref={this.crefs["SSC"]}
+                  <AddEditSSC
+                    ref={this.crefs["AddEditSSC"]}
                     title={this.menuTitle}
                     user={this.user}
                     onClick={this.handleMenuAction}
@@ -509,8 +509,8 @@ class App extends React.Component {
                     properties={this.properties}
                   />}
                 {actionid === Constants.SSC_ADD_EDIT_SSC_AMP &&
-                  <AMP
-                    ref={this.crefs["AMP"]}
+                  <AddEditAMP
+                    ref={this.crefs["AddEditAMP"]}
                     title={this.menuTitle}
                     user={this.user}
                     onClick={this.handleMenuAction}

@@ -103,7 +103,7 @@ class AMPMetadata extends Component {
   //   this.props.onChange(true);
   // }
 
-  setSSCMetadata = (ssc) => {
+  setRecordMetadata = (ssc) => {
     console.log("AMPMetadata.setAMPMetadata", ssc)
     // if (ssc.hasOwnProperty("metadata")) {
     //   const metadata = storage.metadata;
@@ -112,7 +112,7 @@ class AMPMetadata extends Component {
     this.props.onChange(false);
   }
 
-  getAMPMetadata = () => {
+  getRecordMetadata = () => {
     return this.state.ssc;
   }
 

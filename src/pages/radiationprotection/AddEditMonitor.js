@@ -8,7 +8,6 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import UploadIcon from '@mui/icons-material/Upload';
 import MonitorList from "./MonitorList";
 import MonitorMetadata from "./MonitorMetadata";
 import {
@@ -46,27 +45,6 @@ class AddEditMonitor extends BaseRecordManager {
   //   ]);
   // }
 
-  // onMonitorSelected = (selection) => {
-  //   // console.log("-- onMonitorSelected (previous selection) --", previous_selection)
-  //   console.log("-- onMonitorSelected (selection) --", selection)
-  //   if (selection.hasOwnProperty("item_id") && selection.item_id === -1) {
-  //     if (this.metadataRef.current) {
-  //       this.metadataRef.current.set_monitor_object(selection)
-  //     }
-  //   } else {
-  //     this.setState(pstate => {
-  //       return { selection: selection }
-  //     });
-  //     this.props.send({
-  //       cmd: CMD_GET_MONITOR_RECORDS,
-  //       item_id: selection.item_id,
-  //       "include.metadata": "true",
-  //       module: this.Module,
-  //     })
-  //   }
-  //   this.setState({ selection: selection })
-  // }
-
   render() {
     const {metadata_changed, confirm_remove, selection, title, include_archived} = this.state;
     console.log("render - RECORD_TYPE", this.recordType);
@@ -92,7 +70,7 @@ class AddEditMonitor extends BaseRecordManager {
           <Grid item xs={7}>
             <MonitorMetadata
               ref={this.metadataRef}
-              onChange={this.onMetadataChanged}
+              onChange={this.onRecordMetadataChanged}
               properties={this.props.properties}
             />
           </Grid>

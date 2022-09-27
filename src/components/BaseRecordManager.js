@@ -87,10 +87,10 @@ class BaseRecordManager extends Component {
       } else if (mode === "delete") {
         return CMD_DELETE_MATERIAL_RECORD;
       }
-    } else if (this.recordType === "ssc") {
+    } else if (this.recordType === "structures_systems_components") {
       if (mode === "update") {
         return CMD_UPDATE_SSC_RECORD;
-      } else if (mode === "delete") {
+      } else if (mode === "get") {
         return CMD_GET_SSC_RECORDS;
       } else if (mode === "delete") {
         return CMD_DELETE_SSC_RECORD;
@@ -101,10 +101,10 @@ class BaseRecordManager extends Component {
 
   onRecordSelection = (selection) => {
     // console.log("-- onMonitorSelected (previous selection) --", previous_selection)
-    console.log("onRecordSelected (selection) --", selection)
+    console.log("onRecordSelection (selection) --", selection)
     if (selection.hasOwnProperty("item_id") && selection.item_id === -1) {
       if (this.metadataRef.current) {
-        this.metadataRef.current.set_monitor_object(selection)
+        this.metadataRef.current.setRecordMetadata(selection)
       }
     } else {
       this.setState(pstate => {
@@ -124,7 +124,11 @@ class BaseRecordManager extends Component {
     return (selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
   }
 
-  onMetadataChanged = (state) => {
+  isRecordArchived = (record) => {
+    return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
+  }
+
+  onRecordMetadataChanged = (state) => {
     this.setState({metadata_changed: state});
   }
 
@@ -155,7 +159,7 @@ class BaseRecordManager extends Component {
 
   addRecord = () => {
     if (this.listRef.current) {
-      this.listRef.current.add([{
+      this.listRef.current.addRecords([{
         "changed": true,
         "item_id": -1,
         "nurims.title": "New Record",
@@ -164,6 +168,15 @@ class BaseRecordManager extends Component {
       }], false);
       this.setState({metadata_changed: true});
     }
+  }
+
+  requestGetRecords = (include_archived) => {
+    this.props.send({
+      cmd: this.recordCommand("get"),
+      "include.withdrawn": include_archived ? "true" : "false",
+      module: this.Module,
+    })
+    this.setState({include_archived: include_archived});
   }
 
   saveChanges = () => {
@@ -180,6 +193,7 @@ class BaseRecordManager extends Component {
             cmd: this.recordCommand("update"),
             item_id: record.item_id,
             "nurims.title": record[NURIMS_TITLE],
+            "nurims.withdrawn": record[NURIMS_WITHDRAWN],
             metadata: record.metadata,
             record_key: record.record_key,
             module: this.Module,
@@ -274,6 +288,15 @@ class BaseRecordManager extends Component {
     }
   }
 
+  changeRecordArchivalStatus = () => {
+    console.log("changeRecordArchivalStatus - selection", this.state.selection)
+    const selection = this.state.selection;
+    if (selection.hasOwnProperty(NURIMS_WITHDRAWN)) {
+      selection[NURIMS_WITHDRAWN] = selection[NURIMS_WITHDRAWN] === 0 ? 1 : 0;
+      selection.changed = true;
+      this.setState({selection: selection, metadata_changed: selection.changed});
+    }
+  }
 }
 
 export default BaseRecordManager

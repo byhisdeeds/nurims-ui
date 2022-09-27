@@ -7,8 +7,7 @@ import {
   FormControl,
   Grid,
   InputLabel,
-  Select,
-  Switch
+  Select
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import "leaflet/dist/leaflet.css";
@@ -33,16 +32,9 @@ import {
   NURIMS_SSC_ID,
   NURIMS_SSC_MAINTAINABILITY,
   NURIMS_SURVEILLANCE_FREQUENCY,
-  NURIMS_SSC_MAINTENANCE_SCOPE,
-  NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA, NURIMS_SSC_MAINTENANCE_TASK,
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
-import Avatar from "@mui/material/Avatar";
-import ImageIcon from '@mui/icons-material/Image';
-import {toast} from "react-toastify";
-import IconButton from "@mui/material/IconButton";
-import {PhotoCamera} from "@mui/icons-material";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import EditableTable from "../../components/EditableTable";
@@ -135,8 +127,8 @@ class SSCMetadata extends Component {
     this.props.onChange(true);
   }
 
-  setSSCMetadata = (ssc) => {
-    console.log("SSCMetadata.setSSCMetadata", ssc)
+  setRecordMetadata = (ssc) => {
+    console.log("SSCMetadata.setRecordMetadata", ssc)
     if (this.ref.current) {
       this.ref.current.setRowData(getMetadataValue(ssc, NURIMS_SSC_MAINTENANCE_SCOPE, []));
     }
@@ -144,7 +136,7 @@ class SSCMetadata extends Component {
     this.props.onChange(false);
   }
 
-  getSSCMetadata = () => {
+  getRecordMetadata = () => {
     return this.state.ssc;
   }
 
