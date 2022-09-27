@@ -26,6 +26,7 @@ module.exports = Object.freeze({
 
   CMD_GET_MONITOR_RECORDS: "get_monitor_records",
   CMD_DELETE_MONITOR_RECORD: "delete_monitor_record",
+  CMD_UPDATE_MONITOR_RECORD: "update_monitor_record",
   CMD_DELETE_PERSONNEL_RECORD: "delete_personnel_record",
   CMD_UPDATE_PERSONNEL_RECORD: "update_personnel_record",
   CMD_GET_PERSONNEL_RECORDS: "get_personnel_records",

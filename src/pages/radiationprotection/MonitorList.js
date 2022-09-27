@@ -256,7 +256,7 @@ class MonitorList extends Component {
     }
   }
 
-  add = (monitors, skipIfMonitorInList) => {
+  setRecords = (monitors, skipIfMonitorInList) => {
     let refresh = false;
     if (Array.isArray(monitors)) {
       for (const person of monitors) {
@@ -281,7 +281,7 @@ class MonitorList extends Component {
     }
   }
 
-  update = (monitor) => {
+  updateRecord = (monitor) => {
     console.log("MonitorList.update", monitor)
     for (const row of this.rows) {
       if (row.item_id === -1 && row.record_key === monitor.record_key) {
@@ -299,7 +299,7 @@ class MonitorList extends Component {
     }
   }
 
-  getMonitors = () => {
+  getRecords = () => {
     return this.rows;
   }
 

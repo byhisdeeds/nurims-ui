@@ -12,7 +12,7 @@ import {
   NURIMS_TITLE
 } from "./constants";
 
-export const ConfirmRemoveDialog1 = (props) => (
+export const ConfirmRemoveRecordDialog = (props) => (
   <div>
     <Dialog
       open={props.open}
@@ -32,7 +32,7 @@ export const ConfirmRemoveDialog1 = (props) => (
       </DialogContent>
       <DialogActions>
         <Button onClick={props.onCancel}>No</Button>
-        <Button onClick={() => props.onProceed(props.recordType)} autoFocus>Yes</Button>
+        <Button onClick={props.onProceed} autoFocus>Yes</Button>
       </DialogActions>
     </Dialog>
   </div>

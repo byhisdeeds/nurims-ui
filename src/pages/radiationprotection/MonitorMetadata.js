@@ -38,6 +38,9 @@ class MonitorMetadata extends Component {
   componentDidMount() {
   }
 
+  setGlossaryTerms = (params) => {
+    console.log("@@@@@@", params)
+  }
   handleChange = (e) => {
     console.log(">>>", e.target.id)
     const p = this.monitor;
@@ -97,7 +100,7 @@ class MonitorMetadata extends Component {
     this.props.onChange(true);
   }
 
-  set_monitor_object = (monitor) => {
+  setRecordMetadata = (monitor) => {
     monitor["changed"] = false;
     console.log("MonitorMetadata.set_monitor_object", monitor)
     this.monitor = monitor;
