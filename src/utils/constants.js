@@ -111,6 +111,9 @@ module.exports = Object.freeze({
   NURIMS_SSC_SAFETY_FUNCTION: "nurims.ssc.safetyfunction",
   NURIMS_SSC_MAINTAINABILITY: "nurims.ssc.maintainability",
   NURIMS_SSC_SURVEILLANCE_FREQUENCY: "nurims.ssc.surveillancefrequency",
+  NURIMS_SSC_MAINTENANCE_TASK: "nurims.ssc.maintenancetask",
+  NURIMS_SSC_MAINTENANCE_SCOPE: "nurims.ssc.maintenancescope",
+  NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA: "nurims.ssc.maintenanceacceptancecriteria",
 
   NURIMS_AMP_AGEING_MECHANISM: "nurims.amp.ageingmechanism",
   NURIMS_AMP_AGEING_EFFECT: "nurims.amp.ageingeffect",

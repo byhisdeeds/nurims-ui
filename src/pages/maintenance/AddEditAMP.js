@@ -69,6 +69,7 @@ class AddEditAMP extends BaseRecordManager {
               onSelection={this.onRecordSelection}
               includeArchived={include_archived}
               requestListUpdate={this.requestGetRecords}
+              enableRecordArchiveSwitch={true}
             />
           </Grid>
           <Grid item xs={9}>

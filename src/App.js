@@ -264,7 +264,7 @@ class App extends React.Component {
     this.ws.onmessage = (event) => {
       // console.log("RESPONSE >>>", event.data)
       const data = JSON.parse(event.data);
-      console.log("RESPONSE-DATA >>>", data)
+      console.log("APP.WS.ONMESSAGE >>>", data)
       if (data.hasOwnProperty('module')) {
         for (const [k, v] of Object.entries(this.crefs)) {
           if (k === data.module) {

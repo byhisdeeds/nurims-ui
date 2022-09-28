@@ -249,7 +249,6 @@ class MaterialMetadata extends Component {
     for (const term of terms) {
       this.glossary[term.name] = term.value;
     }
-    this.forceUpdate();
   }
 
   setManufacturers = (manufacturers) => {
@@ -274,7 +273,7 @@ class MaterialMetadata extends Component {
     this.forceUpdate();
   }
 
-  setMaterialMetadata = (material) => {
+  setRecordMetadata = (material) => {
     console.log("MaterialMetadata.setMaterialMetadata", material)
     const nuclideData = getMetadataValue(material, NURIMS_MATERIAL_NUCLIDES, []);
     if (this.ref.current) {
@@ -287,7 +286,7 @@ class MaterialMetadata extends Component {
     this.props.onChange(false);
   }
 
-  getMaterialMetadata = () => {
+  getRecordMetadata = () => {
     return this.state.manufacturer;
   }
 
@@ -358,7 +357,7 @@ class MaterialMetadata extends Component {
 
   render() {
     const {material, properties} = this.state;
-    console.log("MaterialMetadata.RENDER - material", material)
+    // console.log("MaterialMetadata.RENDER - material", material)
     // console.log("MaterialMetadata.RENDER - table_rows", this.table_rows)
     // console.log("MaterialMetadata.RENDER - glossary", this.glossary)
     const disabled = Object.entries(material).length === 0;

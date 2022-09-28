@@ -11,6 +11,8 @@ import {
   ITEM_ID,
   NURIMS_TITLE
 } from "./constants";
+import PropTypes from "prop-types";
+
 
 export const ConfirmRemoveRecordDialog = (props) => (
   <div>
@@ -37,6 +39,13 @@ export const ConfirmRemoveRecordDialog = (props) => (
     </Dialog>
   </div>
 )
+
+ConfirmRemoveRecordDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  selection: PropTypes.object.isRequired,
+  onProceed: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+}
 
 export const ConfirmRemoveDialog = (props) => (
   <div>

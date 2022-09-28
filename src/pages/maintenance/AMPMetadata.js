@@ -27,21 +27,6 @@ import {
   getPropertyValue,
 } from "../../utils/PropertyUtils";
 import {
-  NURIMS_MATERIAL_STORAGE_LOCATION,
-  NURIMS_DESCRIPTION,
-  NURIMS_TITLE,
-  NURIMS_MATERIAL_STORAGE_LOCATION_MARKERS,
-  NURIMS_MATERIAL_STORAGE_IMAGE,
-  NURIMS_MATERIAL_STORAGE_MAP_IMAGE,
-  NURIMS_ENTITY_AVATAR,
-  BLANK_IMAGE_OBJECT,
-  NURIMS_MATERIAL_TYPE,
-  NURIMS_SSC_TYPE,
-  NURIMS_SSC_CLASSIFICATION,
-  NURIMS_MATERIAL_CLASSIFICATION,
-  NURIMS_SSC_SAFETY_FUNCTION,
-  NURIMS_SSC_SAFETY_CATEGORY,
-  NURIMS_SSC_SURVEILLANCE_FREQUENCY,
   NURIMS_AMP_AGEING_MECHANISM,
   NURIMS_AMP_AGEING_EFFECT,
   NURIMS_AMP_AGEING_DETECTION_METHOD,
@@ -53,11 +38,6 @@ import {
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
-import Avatar from "@mui/material/Avatar";
-import ImageIcon from '@mui/icons-material/Image';
-import {toast} from "react-toastify";
-import IconButton from "@mui/material/IconButton";
-import {PhotoCamera} from "@mui/icons-material";
 
 
 class AMPMetadata extends Component {
@@ -77,31 +57,6 @@ class AMPMetadata extends Component {
     }
     this.forceUpdate();
   }
-
-  // handleChange = (e) => {
-  //   // console.log(">>>", e.target.id)
-  //   const ssc = this.state.ssc;
-  //   if (e.target.id === "name") {
-  //     ssc["changed"] = true;
-  //     ssc[NURIMS_TITLE] = e.target.value;
-  //   } else if (e.target.id === "description") {
-  //     ssc["changed"] = true;
-  //     setMetadataValue(ssc, NURIMS_DESCRIPTION, e.target.value)
-  //   } else if (e.target.id === "easting") {
-  //     ssc["changed"] = true;
-  //     const coverageLocation = getMetadataValue(ssc, NURIMS_MATERIAL_STORAGE_LOCATION, {});
-  //     coverageLocation["easting"] = parseFloat(e.target.value);
-  //     setMetadataValue(ssc, NURIMS_MATERIAL_STORAGE_LOCATION, coverageLocation);
-  //   } else if (e.target.id === "northing") {
-  //     ssc["changed"] = true;
-  //     const coverageLocation = getMetadataValue(ssc, NURIMS_MATERIAL_STORAGE_LOCATION, {});
-  //     coverageLocation["northing"] = parseFloat(e.target.value);
-  //     setMetadataValue(ssc, NURIMS_MATERIAL_STORAGE_LOCATION, coverageLocation);
-  //   }
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
 
   setRecordMetadata = (ssc) => {
     console.log("AMPMetadata.setAMPMetadata", ssc)

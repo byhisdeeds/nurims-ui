@@ -71,7 +71,7 @@ class BaseRecordManager extends Component {
       } else if (mode === "delete") {
         return CMD_DELETE_MANUFACTURER_RECORD;
       }
-    } else if (this.recordType === "storage") {
+    } else if (this.recordType === "storage_location") {
       if (mode === "update") {
         return CMD_UPDATE_STORAGE_LOCATION_RECORD;
       } else if (mode === "get") {
@@ -233,8 +233,6 @@ class BaseRecordManager extends Component {
           if (Array.isArray(commandHandlers)) {
             for (const handler of commandHandlers) {
               if (handler.hasOwnProperty("cmd") && handler.hasOwnProperty("func") && handler.hasOwnProperty("params")) {
-                console.log("%%%%%%%", handler)
-                console.log("%%%%%%%", this.metadataRef.current)
                 if (isCommandResponse(message, handler.cmd)) {
                   if (this.metadataRef.current && this.metadataRef.current.hasOwnProperty(handler.func)) {
                     this.metadataRef.current[handler.func](response[handler.params]);
@@ -248,16 +246,19 @@ class BaseRecordManager extends Component {
           CMD_GET_MONITOR_RECORDS, CMD_GET_PERSONNEL_RECORDS, CMD_GET_SSC_RECORDS, CMD_GET_STORAGE_LOCATION_RECORDS,
           CMD_GET_MATERIAL_RECORDS, CMD_GET_MANUFACTURER_RECORDS])) {
           // Branch if GET_XXXXX_RECORDS request included a request for metadata
-          if (this.recordHasMetadata(message)) {
+          if (Object.keys(this.state.selection).length === 0) {
+            if (this.listRef.current) {
+              this.listRef.current.setRecords(response[this.recordType], false);
+            }
+            if (this.metadataRef.current) {
+              this.metadataRef.current.setRecordMetadata({})
+            }
+          } else {
             const selection = this.state.selection;
             const record = getMatchingResponseObject(message, "response." + this.recordType, "item_id", selection["item_id"]);
             selection[METADATA] = [...record[METADATA]]
             if (this.metadataRef.current) {
               this.metadataRef.current.setRecordMetadata(selection);
-            }
-          } else {
-            if (this.listRef.current) {
-              this.listRef.current.setRecords(response[this.recordType], false);
             }
           }
         } else if (this.isCommand(message, [

@@ -32,6 +32,9 @@ import {
   NURIMS_SSC_ID,
   NURIMS_SSC_MAINTAINABILITY,
   NURIMS_SURVEILLANCE_FREQUENCY,
+  NURIMS_SSC_MAINTENANCE_TASK,
+  NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
+  NURIMS_SSC_MAINTENANCE_SCOPE,
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";

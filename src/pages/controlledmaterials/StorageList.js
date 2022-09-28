@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PagedRecordList from "../../components/PagedRecordList";
+import PropTypes from "prop-types";
 
 class StorageList extends React.Component {
   constructor(props) {
@@ -47,6 +48,13 @@ class StorageList extends React.Component {
       />
     )
   }
+}
+
+StorageList.propTypes = {
+  ref: PropTypes.element.isRequired,
+  title: PropTypes.string.isRequired,
+  onSelection: PropTypes.func.isRequired,
+  properties: PropTypes.func.isRequired,
 }
 
 export default StorageList

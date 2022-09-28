@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PagedRecordList from "../../components/PagedRecordList";
+import PropTypes from "prop-types";
 
 class MaterialList extends React.Component {
   constructor(props) {
@@ -44,10 +45,18 @@ class MaterialList extends React.Component {
         requestListUpdate={this.props.requestListUpdate}
         includeArchived={this.props.includeArchived}
         title={this.props.title}
-        enableRecordArchiveSwitch={true}
+        enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}
       />
     )
   }
+}
+
+MaterialList.propTypes = {
+  ref: PropTypes.element.isRequired,
+  title: PropTypes.string.isRequired,
+  onSelection: PropTypes.func.isRequired,
+  properties: PropTypes.func.isRequired,
+  enableRecordArchiveSwitch: PropTypes.bool.isRequired,
 }
 
 export default MaterialList

@@ -119,7 +119,7 @@ class StorageMetadata extends Component {
     this.props.onChange(true);
   }
 
-  setStorageMetadata = (storage) => {
+  setRecordMetadata = (storage) => {
     if (this.markerRef.current) {
       const storageLocation = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, DEFAULT_STORAGE_LOCATION);
       this.markerRef.current.setBounds(markerBounds(storageLocation));

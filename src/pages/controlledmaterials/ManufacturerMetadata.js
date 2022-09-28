@@ -13,43 +13,8 @@ import {
   NURIMS_ENTITY_CONTACT,
   NURIMS_TITLE
 } from "../../utils/constants";
+import PropTypes from "prop-types";
 
-
-// function getMetadataValue(obj, key, missingValue) {
-//   if (obj.hasOwnProperty("metadata")) {
-//     const metadata = obj.metadata;
-//     if (Array.isArray(metadata)) {
-//       for (const m of metadata) {
-//         for (const [k, v] of Object.entries(m)) {
-//           if (k === key) {
-//             return v;
-//           }
-//         }
-//       }
-//     }
-//   }
-//   return missingValue;
-// }
-//
-// function setMetadataValue(obj, key, value) {
-//   if (obj.hasOwnProperty("metadata")) {
-//     const metadata = obj.metadata;
-//     if (Array.isArray(metadata)) {
-//       for (const m of metadata) {
-//         for (const [k, v] of Object.entries(m)) {
-//           // console.log(`${k}: ${v}`);
-//           if (k === key) {
-//             m[k] = value;
-//             return;
-//           }
-//         }
-//       }
-//       const v = {};
-//       v[key] = value;
-//       metadata.push(v);
-//     }
-//   }
-// }
 
 class ManufacturerMetadata extends Component {
   constructor(props) {
@@ -179,63 +144,12 @@ class ManufacturerMetadata extends Component {
     this.props.onChange(true);
   }
 
-  // update_metadata = (person) => {
-  //   console.log("ManufacturerMetadata.update_metadata", person)
-  //   // initialise personnel details object
-  //   // const person = {
-  //   //   ...{
-  //   //     item_id: details["item_id"],
-  //   //     "nurims.title": details["nurims.title"],
-  //   //     "nurims.withdrawn": details["nurims.withdrawn"]
-  //   //   }
-  //   // }
-  //   if (person.hasOwnProperty("metadata")) {
-  //     const metadata = person.metadata;
-  //     for (const m of metadata) {
-  //       if (m.hasOwnProperty("nurims.dosimeter.monitorperiod")) {
-  //         const period = m["nurims.dosimeter.monitorperiod"];
-  //         if (typeof period === "string") {
-  //           // if (period.length <= 10) {
-  //           //   let parts = period.substring(0, 10).split('-');
-  //           //   if (parts.length === 3) {
-  //           //     // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
-  //           //     // January - 0, February - 1, etc.
-  //           //     person["nurims.entity.dob"] = new Date(parts[0], parts[1] - 1, parts[2]);
-  //           //   } else {
-  //           //     person["nurims.entity.dob"] = new Date();
-  //           //   }
-  //           person["nurims.dosimeter.monitorperiod"] = [new Date(), new Date()];
-  //         }
-  //       }
-  //     }
-  //   }
-  //   // fixup known date fields
-  //   // if (details.hasOwnProperty("nurims.entity.dob")) {
-  //   //   if (details["nurims.entity.dob"].length <= 10) {
-  //   //     let parts = details["nurims.entity.dob"].substring(0, 10).split('-');
-  //   //     if (parts.length === 3) {
-  //   //       // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
-  //   //       // January - 0, February - 1, etc.
-  //   //       details["nurims.entity.dob"] = new Date(parts[0], parts[1] - 1, parts[2]);
-  //   //     } else {
-  //   //       details["nurims.entity.dob"] = new Date();
-  //   //     }
-  //   //   } else {
-  //   //     details["nurims.entity.dob"] = new Date();
-  //   //   }
-  //   // }
-  //   console.log("+++++++++++++++++++++++++")
-  //   console.log(person)
-  //   console.log("+++++++++++++++++++++++++")
-  //   this.setState({person: person, has_changed: false})
-  //   this.props.onChange(false);
-  // }
   set_manufacturer_object = (manufacturer) => {
     console.log("ManufacturerMetadata.set_manufacturer_object", manufacturer)
     this.setState({manufacturer: manufacturer});
   }
 
-  setManufacturerMetadata = (manufacturer) => {
+  setRecordMetadata = (manufacturer) => {
     console.log("ManufacturerMetadata.setManufacturerMetadata", manufacturer)
     if (manufacturer.hasOwnProperty("metadata")) {
       const metadata = manufacturer.metadata;
@@ -331,6 +245,12 @@ class ManufacturerMetadata extends Component {
       </Box>
     );
   }
+}
+
+ManufacturerMetadata.propTypes = {
+  ref: PropTypes.element.isRequired,
+  onChange: PropTypes.func.isRequired,
+  properties: PropTypes.func.isRequired,
 }
 
 ManufacturerMetadata.defaultProps = {

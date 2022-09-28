@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PagedRecordList from "../../components/PagedRecordList";
+import PropTypes from "prop-types";
 
 class ManufactuerList extends React.Component {
   constructor(props) {
@@ -45,6 +46,13 @@ class ManufactuerList extends React.Component {
       />
     )
   }
+}
+
+ManufactuerList.propTypes = {
+  ref: PropTypes.element.isRequired,
+  title: PropTypes.string.isRequired,
+  onSelection: PropTypes.func.isRequired,
+  properties: PropTypes.func.isRequired,
 }
 
 export default ManufactuerList

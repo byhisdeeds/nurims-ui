@@ -11,7 +11,6 @@ import {
   Box,
   CircularProgress,
   ButtonBase,
-  Icon, Switch
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -20,9 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import Checkbox from "@mui/material/Checkbox";
-import Floater from "react-floater";
 import {Person} from "@mui/icons-material";
-import MonitorMetadata from "../pages/radiationprotection/MonitorMetadata";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -38,6 +35,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import TableHead from "@mui/material/TableHead";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import {visuallyHidden} from "@mui/utils";
+import Floater from 'react-floater';
 // import {getDateFromDateString, getMetadataValue} from "../utils/MetadataUtils";
 // import {NURIMS_DESCRIPTION, NURIMS_MATERIAL_REGISTRATION_DATE} from "../utils/constants";
 // import {getMetadataValue} from "../utils/MetadataUtils";
