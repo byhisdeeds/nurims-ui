@@ -60,14 +60,19 @@ class PagedRecordList extends React.Component {
 
   setRecords = (records) => {
     if (Array.isArray(records)) {
-      this.rows.length = 0;
-      for (const record of records) {
-        console.log("PagedRecordList.setRecords", records)
-        record.changed = false;
-        this.rows.push(record);
+      this.rows = [...records];
+      for (const r of this.rows) {
+        r["changed"] = false;
       }
+      console.log("PagedRecordList.setRecords", records)
+      // this.rows.length = 0;
+      // for (const record of records) {
+      //   console.log("PagedRecordList.setRecords", record)
+      //   record.changed = false;
+      //   this.rows.push(record);
+      // }
     }
-    this.forceUpdate();
+    // this.forceUpdate();
   }
 
   getRecords = () => {

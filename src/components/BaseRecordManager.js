@@ -246,15 +246,16 @@ class BaseRecordManager extends Component {
           CMD_GET_MONITOR_RECORDS, CMD_GET_PERSONNEL_RECORDS, CMD_GET_SSC_RECORDS, CMD_GET_STORAGE_LOCATION_RECORDS,
           CMD_GET_MATERIAL_RECORDS, CMD_GET_MANUFACTURER_RECORDS])) {
           // Branch if GET_XXXXX_RECORDS request included a request for metadata
-          if (Object.keys(this.state.selection).length === 0) {
+          const selection = this.state.selection;
+          if (Object.keys(selection).length === 0) {
             if (this.listRef.current) {
               this.listRef.current.setRecords(response[this.recordType], false);
             }
             if (this.metadataRef.current) {
-              this.metadataRef.current.setRecordMetadata({})
+              this.metadataRef.current.setRecordMetadata(selection);
             }
           } else {
-            const selection = this.state.selection;
+            console.log("BaseRecordManager.ws_message - selection", selection)
             const record = getMatchingResponseObject(message, "response." + this.recordType, "item_id", selection["item_id"]);
             selection[METADATA] = [...record[METADATA]]
             if (this.metadataRef.current) {

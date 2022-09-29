@@ -100,7 +100,6 @@ class SSCMetadata extends Component {
     for (const term of terms) {
       this.glossary[term.name] = term.value;
     }
-    this.forceUpdate();
   }
 
   handleChange = (e) => {

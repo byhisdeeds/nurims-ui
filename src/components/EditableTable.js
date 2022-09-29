@@ -433,6 +433,7 @@ class EditableTable extends React.Component {
       initWithoutHead
     } = this.props;
     const {allRowsData = [], isAdding, editingIndex, isEditing} = this.state;
+    console.log("EditableTable.render - allRowsData", allRowsData)
     let headRow = [
       ...fieldsArr.map(item => ({label: item.label, name: item.name, align: item.align})), {label: "Actions", name: "actions", align: 'left'}
     ];
