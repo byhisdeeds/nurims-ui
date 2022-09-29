@@ -129,12 +129,12 @@ class SSCMetadata extends Component {
     this.props.onChange(true);
   }
 
-  setRecordMetadata = (ssc) => {
-    console.log("SSCMetadata.setRecordMetadata", ssc)
+  setRecordMetadata = (record) => {
+    console.log("SSCMetadata.setRecordMetadata", record)
     if (this.ref.current) {
-      this.ref.current.setRowData(getMetadataValue(ssc, NURIMS_SSC_MAINTENANCE_SCOPE, []));
+      this.ref.current.setRowData(getMetadataValue(record, NURIMS_SSC_MAINTENANCE_SCOPE, []));
     }
-    this.setState({ssc: ssc})
+    this.setState({ssc: record})
     this.props.onChange(false);
   }
 
@@ -213,7 +213,7 @@ class SSCMetadata extends Component {
 
   render() {
     const {ssc, properties} = this.state;
-    console.log("SSCMetadata.RENDER - ssc", ssc)
+    console.log("SSCMetadata.RENDER -", ssc)
     const disabled = Object.entries(ssc).length === 0;
     // console.log("SSCMetadata.RENDER - properties", properties)
 

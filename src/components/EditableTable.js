@@ -18,13 +18,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./EditableTable.css";
-import classNames from "classnames";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
-import {getDateFromDateString, getMetadataValue} from "../utils/MetadataUtils";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import {isDisabled} from "@testing-library/user-event/dist/utils";
 
 const Input = ({
                  name,
@@ -326,34 +323,57 @@ class EditableTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      allRowsData: (this.props.defaultData || []).map(item => ({
-        isEditing: false,
-        rowData: item
-      })),
+      allRowsData: this.initRowData(props.defaultData),
       isAdding: false,
       isEditing: false,
       editingIndex: null
     };
   }
 
+  initRowData(defaultData) {
+    const data = [];
+    if (defaultData) {
+      for (const item of defaultData) {
+        data.push({
+          isEditing: false,
+          rowData: item
+        });
+      }
+    }
+    return data;
+  }
+
   setRowData = (data) => {
-    const allRowsData = this.state.allRowsData;
-    allRowsData.length = 0;
+    // const allRowsData = this.state.allRowsData;
+    // allRowsData.length = 0;
+    // for (const d of data) {
+    //   allRowsData.push({
+    //     isEditing: false,
+    //     rowData: d
+    //   });
+    // }
+    // // allRowsData = (data || []).map(item => ({
+    // //   isEditing: false,
+    // //   rowData: item
+    // // }));
+    // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    // console.log(data)
+    // console.log(allRowsData)
+    // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    // this.setState({ allRowsData: allRowsData });
+
+    const allRowsData = [];
     for (const d of data) {
       allRowsData.push({
         isEditing: false,
         rowData: d
       });
     }
-    // allRowsData = (data || []).map(item => ({
-    //   isEditing: false,
-    //   rowData: item
-    // }));
     console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
     console.log(data)
     console.log(allRowsData)
     console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-    this.setState({ allRowsData: allRowsData });
+    this.setState({allRowsData: allRowsData});
   }
 
   handleSave = row => {
@@ -432,13 +452,13 @@ class EditableTable extends React.Component {
       addRowBtnText,
       initWithoutHead
     } = this.props;
-    const {allRowsData = [], isAdding, editingIndex, isEditing} = this.state;
+    const {allRowsData, isAdding, editingIndex, isEditing} = this.state;
     console.log("EditableTable.render - allRowsData", allRowsData)
     let headRow = [
       ...fieldsArr.map(item => ({label: item.label, name: item.name, align: item.align})), {label: "Actions", name: "actions", align: 'left'}
     ];
     const showHeader =
-      initWithoutHead && !allRowsData.length && !isAdding ? false : true;
+      !(initWithoutHead && !allRowsData.length && !isAdding);
     return (
       <>
         {/*<Table className={classNames(classes.table, `table_${tableName}`)}>*/}

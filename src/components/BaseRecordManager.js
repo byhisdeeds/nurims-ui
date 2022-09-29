@@ -280,7 +280,7 @@ class BaseRecordManager extends Component {
             this.listRef.current.removeRecord(this.state.selection)
           }
           if (this.metadataRef.current) {
-            this.metadataRef.current.setMaterialMetadata({})
+            this.metadataRef.current.setRecordMetadata({})
           }
           this.setState({selection: {}, metadata_changed: false});
         }
