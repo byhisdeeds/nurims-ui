@@ -54,7 +54,6 @@ class AddEditMonitor extends BaseRecordManager {
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}
                                    selection={selection}
-                                   recordType={"MONITOR_RECORD"}
                                    onProceed={this.proceedWithRemove}
                                    onCancel={this.cancelRemove}
         />

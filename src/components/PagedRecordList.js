@@ -137,6 +137,7 @@ class PagedRecordList extends React.Component {
             title={this.props.title}
             disabled={false}
             rows={this.rows}
+            rowsPerPage={this.props.rowsPerPage}
             onRowSelection={this.handleListItemSelection}
             renderCell={this.renderCell}
             filterElement={this.props.enableRecordArchiveSwitch && <Switch
@@ -166,6 +167,7 @@ PagedRecordList.defaultProps = {
   includeArchived: false,
   enableRecordArchiveSwitch: false,
   rowHeight: 24,
+  rowsPerPage: 20,
   minWidth: 350,
   height: 400,
   cells: [

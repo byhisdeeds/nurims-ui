@@ -35,12 +35,9 @@ class MonitorMetadata extends Component {
     this.monitor = {};
   }
 
-  componentDidMount() {
+  setGlossaryTerms = (params) => {
   }
 
-  setGlossaryTerms = (params) => {
-    console.log("@@@@@@", params)
-  }
   handleChange = (e) => {
     console.log(">>>", e.target.id)
     const p = this.monitor;

@@ -54,8 +54,8 @@ class AddEditAMP extends BaseRecordManager {
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}
                                    selection={selection}
-                                   onProceed={this.proceed_with_remove}
-                                   onCancel={this.cancel_remove}
+                                   onProceed={this.proceedWithRemove}
+                                   onCancel={this.cancelRemove}
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>

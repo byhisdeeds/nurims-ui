@@ -322,7 +322,7 @@ class Material extends BaseRecordManager {
   }
 
   render() {
-    const {metadata_changed, confirm_remove, selection, title} = this.state;
+    const {metadata_changed, confirm_remove, selection, title, include_archived} = this.state;
     console.log("render - RECORD_TYPE", this.recordType);
     return (
       <React.Fragment>
@@ -341,6 +341,8 @@ class Material extends BaseRecordManager {
               title={"Materials"}
               onSelection={this.onRecordSelection}
               properties={this.props.properties}
+              includeArchived={include_archived}
+              requestListUpdate={this.requestGetRecords}
               enableRecordArchiveSwitch={false}
             />
           </Grid>
@@ -354,7 +356,6 @@ class Material extends BaseRecordManager {
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
-            // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
                disabled={!this.isValidSelection(selection)}>
             <PersonRemoveIcon sx={{mr: 1}}/>
             Remove Monitor

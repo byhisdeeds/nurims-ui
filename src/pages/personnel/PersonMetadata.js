@@ -100,6 +100,14 @@ class PersonMetadata extends Component {
     this.props.onChange(false);
   }
 
+  setRecordMetadata = (record) => {
+    record["changed"] = false;
+    console.log("PersonMetadata.setRecordMetadata", record)
+    this.person = record;
+    // signal to parent that metadata has changed
+    this.props.onChange(false);
+  }
+
   getMetadata = () => {
     return this.person;
   }
