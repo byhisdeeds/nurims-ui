@@ -132,7 +132,7 @@ class SSCMetadata extends Component {
   setRecordMetadata = (record) => {
     console.log("SSCMetadata.setRecordMetadata", record)
     if (this.ref.current) {
-      this.ref.current.setRowData(getMetadataValue(record, NURIMS_SSC_MAINTENANCE_SCOPE, []));
+      this.ref.current.setRowData(getMetadataValue(record, NURIMS_SSC_MAINTENANCE_SCOPE, []), true);
     }
     this.setState({ssc: record})
     this.props.onChange(false);

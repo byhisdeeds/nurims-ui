@@ -412,12 +412,12 @@ DateRangePicker.propTypes = {
 
 
 export function PageableTable({theme, title, minWidth, cells, defaultOrder, defaultOrderBy, rows, rowsPerPage,
-                               rowHeight, onRowSelection, disabled, renderCell, filterElement}) {
+                               rowHeight, onRowSelection, selectedRow, disabled, renderCell, filterElement}) {
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState(defaultOrder);
   const [orderBy, setOrderBy] = useState(defaultOrderBy);
-  const [selected, setSelected] = useState(false);
+  const [selected, setSelected] = useState(selectedRow);
 
   function PageableTableHead(props) {
     const {rowCount, onRequestSort, cells} = props;
@@ -538,7 +538,7 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
             {/*{this.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).sort(getComparator(order, orderBy))*/}
             {rows.sort(getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const isItemSelected = selected === row;
+                const isItemSelected = selected.hasOwnProperty("item_id") && selected.item_id === row.item_id;
                 return (
                   <TableRow
                     hover
@@ -587,6 +587,7 @@ PageableTable.defaultProps = {
   order: "asc",
   rowsPerPage: 20,
   rowHeight: 24,
+  selectedRow: {},
   onRowSelection: (row) => {},
   rows: [],
   renderCell: (row, cell) => { return (
@@ -606,6 +607,7 @@ PageableTable.propTypes = {
   rows: PropTypes.array,
   rowsPerPage: PropTypes.number,
   rowHeight: PropTypes.number,
+  selectedRow: PropTypes.object,
   onRowSelection: PropTypes.func,
   renderCell: PropTypes.func,
   filterElement: PropTypes.object,

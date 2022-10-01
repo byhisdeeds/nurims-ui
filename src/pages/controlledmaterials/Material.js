@@ -74,7 +74,7 @@
 //   }
 //
 //   onRequestListUpdate = (include_archived) => {
-//     console.log("requestListUpdate switch func", include_archived)
+//     console.log("requestGetRecords switch func", include_archived)
 //     this.props.send({
 //       cmd: CMD_GET_MATERIAL_RECORDS,
 //       "include.withdrawn": include_archived ? "true" : "false",
@@ -219,7 +219,7 @@
 //               properties={this.props.properties}
 //               onSelection={this.onMaterialSelected}
 //               includeArchived={include_archived}
-//               requestListUpdate={this.onRequestListUpdate}
+//               requestGetRecords={this.onRequestListUpdate}
 //               enableRecordArchiveSwitch={true}
 //             />
 //           </Grid>
@@ -342,7 +342,7 @@ class Material extends BaseRecordManager {
               onSelection={this.onRecordSelection}
               properties={this.props.properties}
               includeArchived={include_archived}
-              requestListUpdate={this.requestGetRecords}
+              requestGetRecords={this.requestGetRecords}
               enableRecordArchiveSwitch={false}
             />
           </Grid>

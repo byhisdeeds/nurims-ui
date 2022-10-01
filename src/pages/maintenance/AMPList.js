@@ -41,7 +41,7 @@ class AMPList extends React.Component {
       <PagedRecordList
         ref={this.ref}
         onListItemSelection={this.props.onSelection}
-        requestListUpdate={this.props.requestListUpdate}
+        requestGetRecords={this.props.requestGetRecords}
         includeArchived={this.props.includeArchived}
         title={this.props.title}
         enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}

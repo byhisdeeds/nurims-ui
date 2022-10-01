@@ -105,7 +105,7 @@
 //   }
 //
 //   includeArchivedRecords = (e) => {
-//     this.props.requestListUpdate(e.target.checked)
+//     this.props.requestGetRecords(e.target.checked)
 //   }
 //
 //   render() {
@@ -199,7 +199,7 @@ class PersonList extends React.Component {
         ref={this.ref}
         rowsPerPage={15}
         onListItemSelection={this.props.onSelection}
-        requestListUpdate={this.props.requestListUpdate}
+        requestGetRecords={this.props.requestGetRecords}
         includeArchived={this.props.includeArchived}
         title={this.props.title}
         enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}

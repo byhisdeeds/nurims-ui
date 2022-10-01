@@ -22,9 +22,11 @@ import {
 } from "../../utils/UtilityDialogs";
 import SSCList from "./SSCList";
 import SSCMetadata from "./SSCMetadata";
-
+import {UserContext} from "../../utils/UserContext";
 
 class AddEditSSC extends BaseRecordManager {
+  static contextType = UserContext;
+
   constructor(props) {
     super(props);
     this.Module = "AddEditSSC";
@@ -50,6 +52,7 @@ class AddEditSSC extends BaseRecordManager {
 
   render() {
     const {metadata_changed, confirm_remove, include_archived, selection, title} = this.state;
+    console.log("AddEditSSC.RENDER - context", this.context);
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}
@@ -68,7 +71,7 @@ class AddEditSSC extends BaseRecordManager {
               properties={this.props.properties}
               onSelection={this.onRecordSelection}
               includeArchived={include_archived}
-              requestListUpdate={this.requestGetRecords}
+              requestGetRecords={this.requestGetRecords}
               enableRecordArchiveSwitch={true}
             />
           </Grid>

@@ -68,7 +68,7 @@ class AddEditAMP extends BaseRecordManager {
               properties={this.props.properties}
               onSelection={this.onRecordSelection}
               includeArchived={include_archived}
-              requestListUpdate={this.requestGetRecords}
+              requestGetRecords={this.requestGetRecords}
               enableRecordArchiveSwitch={true}
             />
           </Grid>

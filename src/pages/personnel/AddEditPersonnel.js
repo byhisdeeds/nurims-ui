@@ -223,7 +223,7 @@
 //             <PersonList
 //               ref={this.plref}
 //               onSelection={this.onPersonSelected}
-//               requestListUpdate={this.requestPersonnelList}
+//               requestGetRecords={this.requestPersonnelList}
 //               includeArchived={include_archived}
 //               properties={this.props.properties}
 //             />
@@ -338,7 +338,7 @@ class AddEditPersonnel extends BaseRecordManager {
               onSelection={this.onRecordSelection}
               properties={this.props.properties}
               includeArchived={include_archived}
-              requestListUpdate={this.requestGetRecords}
+              requestGetRecords={this.requestGetRecords}
               enableRecordArchiveSwitch={true}
             />
           </Grid>

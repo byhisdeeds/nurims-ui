@@ -344,36 +344,39 @@ class EditableTable extends React.Component {
   }
 
   setRowData = (data) => {
+    const allRowsData = [];
     // const allRowsData = this.state.allRowsData;
     // allRowsData.length = 0;
-    // for (const d of data) {
-    //   allRowsData.push({
-    //     isEditing: false,
-    //     rowData: d
-    //   });
-    // }
-    // // allRowsData = (data || []).map(item => ({
-    // //   isEditing: false,
-    // //   rowData: item
-    // // }));
-    // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-    // console.log(data)
-    // console.log(allRowsData)
-    // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-    // this.setState({ allRowsData: allRowsData });
-
-    const allRowsData = [];
     for (const d of data) {
       allRowsData.push({
         isEditing: false,
         rowData: d
       });
     }
+    // allRowsData = (data || []).map(item => ({
+    //   isEditing: false,
+    //   rowData: item
+    // }));
     console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
     console.log(data)
     console.log(allRowsData)
     console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-    this.setState({allRowsData: allRowsData});
+    this.setState({ allRowsData: allRowsData });
+
+    // const allRowsData = [];
+    // for (const d of data) {
+    //   allRowsData.push({
+    //     isEditing: false,
+    //     rowData: d
+    //   });
+    // }
+    // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    // console.log(data)
+    // console.log(allRowsData)
+    // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    // if (refresh) {
+    //   this.setState({allRowsData: allRowsData});
+    // }
   }
 
   handleSave = row => {
@@ -400,12 +403,14 @@ class EditableTable extends React.Component {
       );
     }
   };
+
   setToParent = () => {
     const formatedData = this.state.allRowsData.map(
       ({rowData}, i) => rowData
     );
     this.props.getData(formatedData);
   };
+
   handleCancel = index => {
     if (this.state.isEditing) {
       const arr = this.state.allRowsData.map((item, i) => {
@@ -431,6 +436,7 @@ class EditableTable extends React.Component {
       this.setToParent
     );
   };
+
   handleEditRow = index => {
     const arr = this.state.allRowsData.map((item, i) => {
       if (i === index) {

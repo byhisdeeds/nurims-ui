@@ -40,6 +40,7 @@ class BaseRecordManager extends Component {
       title: props.title,
       include_archived: false,
     };
+    this.Module = "";
     this.recordType = "";
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
@@ -256,11 +257,22 @@ class BaseRecordManager extends Component {
             }
           } else {
             console.log("BaseRecordManager.ws_message - selection", selection)
-            const record = getMatchingResponseObject(message, "response." + this.recordType, "item_id", selection["item_id"]);
-            selection[METADATA] = [...record[METADATA]]
-            if (this.metadataRef.current) {
-              this.metadataRef.current.setRecordMetadata(selection);
+            console.log("BaseRecordManager.ws_message - item_id present", message.hasOwnProperty("item_id"))
+            if (!message.hasOwnProperty("item_id") && this.listRef.current) {
+              this.listRef.current.setRecords(response[this.recordType], true);
             }
+            if (message.hasOwnProperty("item_id")) {
+              const record = getMatchingResponseObject(message, "response." + this.recordType, "item_id", selection["item_id"]);
+              selection[METADATA] = [...record[METADATA]]
+              if (this.metadataRef.current) {
+                this.metadataRef.current.setRecordMetadata(selection);
+              }
+            }
+            // const record = getMatchingResponseObject(message, "response." + this.recordType, "item_id", selection["item_id"]);
+            // selection[METADATA] = [...record[METADATA]]
+            // if (this.metadataRef.current) {
+            //   this.metadataRef.current.setRecordMetadata(selection);
+            // }
           }
         } else if (this.isCommand(message, [
           CMD_UPDATE_MONITOR_RECORD, CMD_UPDATE_PERSONNEL_RECORD, CMD_UPDATE_SSC_RECORD, CMD_UPDATE_STORAGE_LOCATION_RECORD,

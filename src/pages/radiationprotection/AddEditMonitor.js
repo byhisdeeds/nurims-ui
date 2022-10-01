@@ -67,7 +67,7 @@ class AddEditMonitor extends BaseRecordManager {
               title={"Monitors"}
               onSelection={this.onRecordSelection}
               includeArchived={include_archived}
-              requestListUpdate={this.requestGetRecords}
+              requestGetRecords={this.requestGetRecords}
               properties={this.props.properties}
               enableRecordArchiveSwitch={true}
             />

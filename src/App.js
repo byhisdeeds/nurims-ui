@@ -29,6 +29,7 @@ import {
   CMD_GET_ORGANISATION,
   CMD_SET_SYSTEM_PROPERTIES
 } from "./utils/constants";
+import {UserContext} from "./utils/UserContext";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -87,6 +88,125 @@ const Puller = styled(Box)(({theme}) => ({
   left: 'calc(50% - 15px)',
 }));
 
+const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+  if (actionid === Constants.HR_ADD_EDIT_PERSONNEL) {
+    return (<AddEditPersonnel
+      ref={crefs["AddEditPersonnel"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.HR_UPDATE_MONITORING_STATUS) {
+    return (<UpdateMonitoringStatus
+      ref={crefs["UpdateMonitoringStatus"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.HR_VIEW_PERSONNEL_RECORDS) {
+    return (<ViewPersonnelRecords
+      ref={crefs["ViewPersonnelRecords"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+}
+
+const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+  if (actionid === Constants.CM_VIEW_CONTROLLED_MATERIALS_LIST) {
+    return (<ViewMaterialsList
+      ref={crefs["ViewMaterialsList"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL) {
+    return (<Material
+      ref={crefs["Material"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION) {
+    return (<Storage
+      ref={crefs["Storage"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER) {
+    return (<Manufacturer
+      ref={crefs["Manufacturer"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+}
+
+const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+  if (actionid === Constants.SSC_VIEW_SSC_RECORDS) {
+    return (<ViewSSCRecords
+      ref={crefs["ViewSSCRecords"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.SSC_ADD_EDIT_SSC_AMP) {
+    return (<AddEditAMP
+      ref={crefs["AddEditAMP"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.SSC_ADD_EDIT_SSC) {
+    return (<AddEditSSC
+      ref={crefs["AddEditSSC"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER) {
+    return (<Manufacturer
+      ref={crefs["Manufacturer"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+}
+
 const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
   if (actionid === Constants.BASIC_RP_ADD_EDIT_MONITORS) {
     return (<AddEditMonitors
@@ -98,39 +218,9 @@ const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMen
       properties={properties}
     />)
   }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS) {
-    return (<ImportICENSControlledMaterialManufacturers
-      ref={crefs["ImportICENSControlledMaterialManufacturers"]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS) {
-    return (<ImportICENSControlledMaterialStorageLocations
-      ref={crefs["ImportICENSControlledMaterialStorageLocations"]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIALS) {
-    return (<ImportICENSControlledMaterials
-      ref={crefs["ImportICENSControlledMaterials"]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_MONITORS) {
-    return (<ImportICENSMonitors
-      ref={crefs["ImportICENSMonitors"]}
+  else if (actionid === Constants.RP_ADD_DOSIMETRY_MEASUREMENT) {
+    return (<AddDosimetryMeasurement
+      ref={crefs["AddDosimetryMeasurement"]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -192,7 +282,6 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
     />)
   }
 }
-
 
 class App extends React.Component {
   constructor(props) {
@@ -304,7 +393,6 @@ class App extends React.Component {
         uuid: uuid(),
         ...msg
       }));
-      // this.setState({ busy: this.state.busy + 1 });
       this.setState(pstate => {
         return {busy: pstate.busy + 1}
       });
@@ -354,188 +442,94 @@ class App extends React.Component {
   render() {
     const {theme, org, ready, menuData, actionid, open, busy} = this.state;
     return (
-      <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-        <Box sx={{flexGrow: 1}}>
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            theme={'dark'}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-          <AppBar position="static">
-            <Toolbar>
-              <IconButton
-                onClick={this.toggleMenuDrawer}
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{mr: 2}}
-              >
-                <MenuIcon/>
-              </IconButton>
-              <Tooltip
-                title={`Build ${metadata.buildMajor}.${metadata.buildMinor}.${metadata.buildRevision} ${metadata.buildTag}`}
-                placement={"bottom-start"}
-                arrow
-              >
-                <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                  NURIMS
+      <UserContext.Provider value={{debug: true, user: this.user}}>
+        <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+          <Box sx={{flexGrow: 1}}>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              theme={'dark'}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+            <AppBar position="static">
+              <Toolbar>
+                <IconButton
+                  onClick={this.toggleMenuDrawer}
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{mr: 2}}
+                >
+                  <MenuIcon/>
+                </IconButton>
+                <Tooltip
+                  title={`Build ${metadata.buildMajor}.${metadata.buildMinor}.${metadata.buildRevision} ${metadata.buildTag}`}
+                  placement={"bottom-start"}
+                  arrow
+                >
+                  <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                    NURIMS
+                  </Typography>
+                </Tooltip>
+                <Typography variant="h6" component="div">
+                  Organisation: {org.name.toUpperCase()}
                 </Typography>
-              </Tooltip>
-              <Typography variant="h6" component="div">
-                Organisation: {org.name.toUpperCase()}
-              </Typography>
-              <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
-              <Tooltip title="Network connection to system server">
-                <NetworkCheck sx={{
-                  color: ready ? '#4CAF50' : '#F44336',
-                  paddingLeft: '10px',
-                  marginLeft: '10px',
-                  width: 32,
-                  height: 32
-                }}/>
-              </Tooltip>
-            </Toolbar>
-          </AppBar>
-          <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
-                      organisation={org}>
-            <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
-              <Box sx={{p: 3}}>
-                <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
-                {actionid === Constants.MY_ACCOUNT &&
-                  <MyAccount
-                    ref={this.crefs["MyAccount"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.SETTINGS &&
-                  <Settings
-                    ref={this.crefs["Settings"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    theme={theme}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.HR_ADD_EDIT_PERSONNEL &&
-                  <AddEditPersonnel
-                    ref={this.crefs["AddEditPersonnel"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.RP_ADD_DOSIMETRY_MEASUREMENT &&
-                  <AddDosimetryMeasurement
-                    ref={this.crefs["AddDosimetryMeasurement"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.HR_UPDATE_MONITORING_STATUS &&
-                  <UpdateMonitoringStatus
-                    ref={this.crefs["UpdateMonitoringStatus"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.HR_VIEW_PERSONNEL_RECORDS &&
-                  <ViewPersonnelRecords
-                    ref={this.crefs["ViewPersonnelRecords"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER &&
-                  <Manufacturer
-                    ref={this.crefs["Manufacturer"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION &&
-                  <Storage
-                    ref={this.crefs["Storage"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL &&
-                  <Material
-                    ref={this.crefs["Material"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.CM_VIEW_CONTROLLED_MATERIALS_LIST &&
-                  <ViewMaterialsList
-                    ref={this.crefs["ViewMaterialsList"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.SSC_ADD_EDIT_SSC &&
-                  <AddEditSSC
-                    ref={this.crefs["AddEditSSC"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.SSC_ADD_EDIT_SSC_AMP &&
-                  <AddEditAMP
-                    ref={this.crefs["AddEditAMP"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {actionid === Constants.SSC_VIEW_SSC_RECORDS &&
-                  <ViewSSCRecords
-                    ref={this.crefs["ViewSSCRecords"]}
-                    title={this.menuTitle}
-                    user={this.user}
-                    onClick={this.handleMenuAction}
-                    send={this.send}
-                    properties={this.properties}
-                  />}
-                {RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                <Typography paragraph>
-                  {actionid}
-                </Typography>
-              </Box>
-            </Suspense>
-          </MenuDrawer>
-        </Box>
-      </ThemeProvider>
+                <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
+                <Tooltip title="Network connection to system server">
+                  <NetworkCheck sx={{
+                    color: ready ? '#4CAF50' : '#F44336',
+                    paddingLeft: '10px',
+                    marginLeft: '10px',
+                    width: 32,
+                    height: 32
+                  }}/>
+                </Tooltip>
+              </Toolbar>
+            </AppBar>
+            <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
+                        organisation={org}>
+              <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
+                <Box sx={{p: 3}}>
+                  <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
+                  {actionid === Constants.MY_ACCOUNT &&
+                    <MyAccount
+                      ref={this.crefs["MyAccount"]}
+                      title={this.menuTitle}
+                      user={this.user}
+                      send={this.send}
+                      properties={this.properties}
+                    />}
+                  {actionid === Constants.SETTINGS &&
+                    <Settings
+                      ref={this.crefs["Settings"]}
+                      title={this.menuTitle}
+                      user={this.user}
+                      theme={theme}
+                      onClick={this.handleMenuAction}
+                      send={this.send}
+                      properties={this.properties}
+                    />}
+                  {SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                  {ControlledMaterialPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                  {HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                  {RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                  {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                  <Typography paragraph>
+                    {actionid}
+                  </Typography>
+                </Box>
+              </Suspense>
+            </MenuDrawer>
+          </Box>
+        </ThemeProvider>
+      </UserContext.Provider>
     )
   }
 }

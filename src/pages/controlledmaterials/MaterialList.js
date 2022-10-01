@@ -42,7 +42,7 @@ class MaterialList extends React.Component {
         ref={this.ref}
         height={this.props.height}
         onListItemSelection={this.props.onSelection}
-        requestListUpdate={this.props.requestListUpdate}
+        requestGetRecords={this.props.requestGetRecords}
         includeArchived={this.props.includeArchived}
         title={this.props.title}
         enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}

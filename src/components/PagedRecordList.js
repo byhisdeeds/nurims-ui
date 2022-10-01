@@ -59,20 +59,31 @@ class PagedRecordList extends React.Component {
   }
 
   setRecords = (records) => {
+    console.log("PagedRecordList.setRecords - selection",this.state.selection)
     if (Array.isArray(records)) {
+      let selection = {};
       this.rows = [...records];
+      const s_item_id = Object.keys(this.state.selection).length === 0 ? -1 : this.state.selection.item_id;
+      console.log("PagedRecordList.setRecords - s_item_id", s_item_id)
       for (const r of this.rows) {
         r["changed"] = false;
+        if (s_item_id > 0) {
+          if (r.item_id === s_item_id) {
+            console.log("PagedRecordList.setRecords - SELECTION ", r)
+            selection = r;
+          }
+        }
       }
       console.log("PagedRecordList.setRecords", records)
+      this.setState({selection: selection});
       // this.rows.length = 0;
       // for (const record of records) {
       //   console.log("PagedRecordList.setRecords", record)
       //   record.changed = false;
       //   this.rows.push(record);
       // }
+      // this.forceUpdate();
     }
-    // this.forceUpdate();
   }
 
   getRecords = () => {
@@ -124,11 +135,12 @@ class PagedRecordList extends React.Component {
   }
 
   includeArchivedRecords = (e) => {
-    this.props.requestListUpdate(e.target.checked)
+    this.props.requestGetRecords(e.target.checked)
   }
 
   render () {
-    const {include_archived} = this.state;
+    const {include_archived, selection} = this.state;
+    console.log("PagedRecordList RENDER - selection", selection)
     return (
       <Box sx={{width: '100%', height: this.props.height}}>
         <Paper sx={{width: '100%', mb: 2}}>
@@ -143,6 +155,7 @@ class PagedRecordList extends React.Component {
             disabled={false}
             rows={this.rows}
             rowsPerPage={this.props.rowsPerPage}
+            selectedRow={selection}
             onRowSelection={this.handleListItemSelection}
             renderCell={this.renderCell}
             filterElement={this.props.enableRecordArchiveSwitch && <Switch
@@ -162,8 +175,8 @@ PagedRecordList.propTypes = {
   title: PropTypes.string.isRequired,
   rowHeight: PropTypes.number.isRequired,
   minWidth: PropTypes.number.isRequired,
-  onListItemSelection: PropTypes.func.isRequired,
-  requestListUpdate: PropTypes.func.isRequired,
+  onListItemSelection: PropTypes.func,
+  requestGetRecords: PropTypes.func.isRequired,
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
   includeArchived: PropTypes.bool,
 }
@@ -195,7 +208,7 @@ PagedRecordList.defaultProps = {
   ],
   onListItemSelection: (item) => {
   },
-  requestListUpdate: (include_archived) => {
+  requestGetRecords: (include_archived) => {
   },
 };
 

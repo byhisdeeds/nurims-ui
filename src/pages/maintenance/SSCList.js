@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 class SSCList extends React.Component {
   constructor(props) {
     super(props);
+    this.selection = {};
     this.pref=React.createRef();
   }
 
@@ -36,12 +37,17 @@ class SSCList extends React.Component {
     }
   }
 
+  // onSelection = (selection) => {
+  //   this.selection = selection;
+  //   this.props.onSelection(selection);
+  // }
+
   render() {
     return (
       <PagedRecordList
         ref={this.pref}
         onListItemSelection={this.props.onSelection}
-        requestListUpdate={this.props.requestListUpdate}
+        requestGetRecords={this.props.requestGetRecords}
         includeArchived={this.props.includeArchived}
         title={this.props.title}
         enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}

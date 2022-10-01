@@ -185,7 +185,7 @@
 //               properties={this.props.properties}
 //               onSelection={this.onStorageSelected}
 //               includeArchived={include_archived}
-//               // requestListUpdate={this.requestListUpdate}
+//               // requestGetRecords={this.requestGetRecords}
 //             />
 //           </Grid>
 //           <Grid item xs={8}>
