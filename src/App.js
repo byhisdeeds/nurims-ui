@@ -29,7 +29,7 @@ import {
   CMD_GET_ORGANISATION,
   CMD_SET_SYSTEM_PROPERTIES
 } from "./utils/constants";
-import {UserContext} from "./utils/UserContext";
+import {ConsoleLog, UserDebugContext} from "./utils/UserDebugContext";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -43,18 +43,21 @@ const Manufacturer = lazy(() => import('./pages/controlledmaterials/Manufacturer
 const Storage = lazy(() => import('./pages/controlledmaterials/Storage'));
 const Material = lazy(() => import('./pages/controlledmaterials/Material'));
 const ViewMaterialsList = lazy(() => import('./pages/controlledmaterials/ViewMaterialsList'));
+const GenerateMaterialSurveillanceSheet = lazy(() => import('./pages/controlledmaterials/GenerateMaterialSurveillanceSheet'));
 const AddEditSSC = lazy(() => import('./pages/maintenance/AddEditSSC'));
 const AddEditAMP = lazy(() => import('./pages/maintenance/AddEditAMP'));
 const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
-const AddEditMonitors = lazy(() => import('./pages/radiationprotection/AddEditMonitor'));
+const AddEditMonitors = lazy(() => import('./pages/radiationprotection/AddEditMonitors'));
+const ManageUsers = lazy(() => import('./pages/sysadmin/ManageUsers'));
 const ImportICENSPersonnel = lazy(() => import('./pages/packages/icens/ImportICENSPersonnel'));
 const ImportICENSControlledMaterialManufacturers = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialManufacturers'));
 const ImportICENSControlledMaterials = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterials'));
 const ImportICENSControlledMaterialStorageLocations = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialStorageLocations'));
 const ImportICENSMonitors = lazy(() => import('./pages/packages/icens/ImportICENSMonitors'));
+const AddEditReactorOperatingRuns = lazy(() => import('./pages/packages/icens/AddEditReactorOperatingRuns'));
 
 const drawerWidth = 300;
-
+const DEBUG_LEVEL = 9;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -87,6 +90,19 @@ const Puller = styled(Box)(({theme}) => ({
   top: 8,
   left: 'calc(50% - 15px)',
 }));
+
+const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+  if (actionid === Constants.SYSADMIN_MANAGE_USERS) {
+    return (<ManageUsers
+      ref={crefs["ManageUsers"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+}
 
 const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
   if (actionid === Constants.HR_ADD_EDIT_PERSONNEL) {
@@ -162,6 +178,26 @@ const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenu
       properties={properties}
     />)
   }
+  // else if (actionid === Constants.CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET) {
+  //   return (<Manufacturer
+  //     ref={crefs["Manufacturer"]}
+  //     title={menuTitle}
+  //     user={user}
+  //     onClick={handleMenuAction}
+  //     send={send}
+  //     properties={properties}
+  //   />)
+  // }
+  else if (actionid === Constants.CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET) {
+    return (<GenerateMaterialSurveillanceSheet
+      ref={crefs["GenerateMaterialSurveillanceSheet"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
 }
 
 const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
@@ -188,16 +224,6 @@ const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, p
   else if (actionid === Constants.SSC_ADD_EDIT_SSC) {
     return (<AddEditSSC
       ref={crefs["AddEditSSC"]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER) {
-    return (<Manufacturer
-      ref={crefs["Manufacturer"]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -281,6 +307,16 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
       properties={properties}
     />)
   }
+  else if (actionid === Constants.RO_ADD_EDIT_REACTOR_OPERATING_RUN_DATA) {
+    return (<AddEditReactorOperatingRuns
+      ref={crefs["AddEditReactorOperatingRuns"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
 }
 
 class App extends React.Component {
@@ -303,6 +339,7 @@ class App extends React.Component {
     this.crefs = {
       "MyAccount": React.createRef(),
       "Settings": React.createRef(),
+      "ManageUsers": React.createRef(),
       "AddEditPersonnel": React.createRef(),
       "UpdateMonitoringStatus": React.createRef(),
       "ViewPersonnelRecords": React.createRef(),
@@ -311,6 +348,7 @@ class App extends React.Component {
       "Storage": React.createRef(),
       "Material": React.createRef(),
       "ViewMaterialsList": React.createRef(),
+      "GenerateMaterialSurveillanceSheet": React.createRef(),
       "AddEditSSC": React.createRef(),
       "AddEditAMP": React.createRef(),
       "ViewSSCRecords": React.createRef(),
@@ -319,6 +357,7 @@ class App extends React.Component {
       "ImportICENSControlledMaterialManufacturers": React.createRef(),
       "ImportICENSControlledMaterialStorageLocations": React.createRef(),
       "ImportICENSControlledMaterials": React.createRef(),
+      "AddEditReactorOperatingRuns": React.createRef(),
     };
   }
 
@@ -329,7 +368,9 @@ class App extends React.Component {
     // this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}/nurimsws`);
     this.ws = new ReconnectingWebSocket(this.props.wsep);
     this.ws.onopen = (event) => {
-      console.log('websocket connection established.');
+      if (DEBUG_LEVEL > 2) {
+        ConsoleLog("App", "ws.onopen", "websocket connection established");
+      }
       this.setState({ready: true});
       // load organisation database on server
       this.send({
@@ -341,19 +382,22 @@ class App extends React.Component {
       })
     };
     this.ws.onerror = (error) => {
-      console.log(`websocket error - ${JSON.stringify(error)}`);
+      ConsoleLog("App", "ws.onerror", error);
       this.setState({ready: false});
     };
     this.ws.onclose = (event) => {
-      console.log('websocket connection closed.', JSON.stringify(event));
+      if (DEBUG_LEVEL > 2) {
+        ConsoleLog("App", "ws.onclose", "websocket connection closed", event);
+      }
       if (this.mounted) {
         this.setState({ready: false, busy: 0});
       }
     };
     this.ws.onmessage = (event) => {
-      // console.log("RESPONSE >>>", event.data)
       const data = JSON.parse(event.data);
-      console.log("APP.WS.ONMESSAGE >>>", data)
+      if (DEBUG_LEVEL > 5) {
+        ConsoleLog("App", "onmessage", data);
+      }
       if (data.hasOwnProperty('module')) {
         for (const [k, v] of Object.entries(this.crefs)) {
           if (k === data.module) {
@@ -442,7 +486,7 @@ class App extends React.Component {
   render() {
     const {theme, org, ready, menuData, actionid, open, busy} = this.state;
     return (
-      <UserContext.Provider value={{debug: true, user: this.user}}>
+      <UserDebugContext.Provider value={{debug: DEBUG_LEVEL, user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
           <Box sx={{flexGrow: 1}}>
             <ToastContainer
@@ -516,6 +560,7 @@ class App extends React.Component {
                       send={this.send}
                       properties={this.properties}
                     />}
+                  {SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {ControlledMaterialPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
@@ -529,7 +574,7 @@ class App extends React.Component {
             </MenuDrawer>
           </Box>
         </ThemeProvider>
-      </UserContext.Provider>
+      </UserDebugContext.Provider>
     )
   }
 }

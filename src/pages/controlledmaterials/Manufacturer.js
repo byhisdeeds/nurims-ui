@@ -24,7 +24,7 @@ class AddEditMonitor extends BaseRecordManager {
   constructor(props) {
     super(props);
     this.Module = "Manufacturer";
-    this.recordType = "manufacturer";
+    this.recordTopic = "manufacturer";
   }
 
   componentDidMount() {
@@ -48,7 +48,7 @@ class AddEditMonitor extends BaseRecordManager {
 
   render() {
     const {metadata_changed, confirm_remove, selection, title} = this.state;
-    console.log("render - RECORD_TYPE", this.recordType);
+    console.log("render - RECORD_TYPE", this.recordTopic);
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}

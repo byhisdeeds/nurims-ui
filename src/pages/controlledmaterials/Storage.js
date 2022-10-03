@@ -467,7 +467,7 @@ class Storage extends BaseRecordManager {
   constructor(props) {
     super(props);
     this.Module = "Storage";
-    this.recordType = "storage_location";
+    this.recordTopic = "storage_location";
   }
 
   componentDidMount() {
@@ -495,7 +495,7 @@ class Storage extends BaseRecordManager {
 
   render() {
     const {metadata_changed, confirm_remove, selection, title} = this.state;
-    console.log("render - RECORD_TYPE", this.recordType);
+    console.log("render - RECORD_TYPE", this.recordTopic);
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}

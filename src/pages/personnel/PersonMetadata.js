@@ -20,8 +20,11 @@ import {
   NURIMS_ENTITY_CONTACT, NURIMS_ENTITY_DATE_OF_BIRTH, NURIMS_ENTITY_NATIONAL_ID, NURIMS_ENTITY_SEX,
   NURIMS_TITLE, NURIMS_WITHDRAWN, NURIMS_ENTITY_WORK_DETAILS, NURIMS_ENTITY_DOSE_PROVIDER_ID, BLANK_IMAGE_OBJECT,
 } from "../../utils/constants";
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 
 class PersonMetadata extends Component {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -139,6 +142,9 @@ class PersonMetadata extends Component {
     const person = this.person;
     const assignedRole = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
     const avatar = getMetadataValue(person, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT);
+    if (this.context.debug > 5) {
+      ConsoleLog("PersonMetadata", "render", "personnel", person, "assignedRole", assignedRole);
+    }
     return (
       <Box
         component="form"

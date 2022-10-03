@@ -176,3 +176,13 @@ export function markerBounds(location) {
     [[location.northing-fac, location.easting-fac], [location.northing+fac, location.easting+fac]] :
     [[-fac, -fac], [fac, fac]];
 }
+
+export function getUserRecordMetadataValue(obj, key, missingValue) {
+  if (obj.hasOwnProperty("metadata")) {
+    const metadata = obj.metadata;
+    if (metadata.hasOwnProperty(key)) {
+      return metadata[key];
+    }
+  }
+  return missingValue;
+}

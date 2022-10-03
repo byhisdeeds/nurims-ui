@@ -286,7 +286,7 @@ class Material extends BaseRecordManager {
   constructor(props) {
     super(props);
     this.Module = "Material";
-    this.recordType = "material";
+    this.recordTopic = "material";
   }
 
   componentDidMount() {
@@ -323,7 +323,7 @@ class Material extends BaseRecordManager {
 
   render() {
     const {metadata_changed, confirm_remove, selection, title, include_archived} = this.state;
-    console.log("render - RECORD_TYPE", this.recordType);
+    console.log("render - RECORD_TYPE", this.recordTopic);
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}

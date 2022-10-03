@@ -21,13 +21,14 @@ import {
 } from "../../utils/UtilityDialogs";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
+import {ConsoleLog} from "../../utils/UserDebugContext";
 
 
-class AddEditMonitor extends BaseRecordManager {
+class AddEditMonitors extends BaseRecordManager {
   constructor(props) {
     super(props);
     this.Module = "AddEditMonitors";
-    this.recordType = "monitor";
+    this.recordTopic = "monitor";
   }
 
   componentDidMount() {
@@ -49,7 +50,10 @@ class AddEditMonitor extends BaseRecordManager {
 
   render() {
     const {metadata_changed, confirm_remove, selection, title, include_archived} = this.state;
-    console.log("render - RECORD_TYPE", this.recordType);
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
+        "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
+    }
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}
@@ -108,10 +112,10 @@ class AddEditMonitor extends BaseRecordManager {
   }
 }
 
-AddEditMonitor.defaultProps = {
+AddEditMonitors.defaultProps = {
   send: (msg) => {
   },
   user: {},
 };
 
-export default AddEditMonitor;
+export default AddEditMonitors;

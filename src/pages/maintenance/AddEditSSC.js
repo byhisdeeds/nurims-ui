@@ -1,5 +1,4 @@
 import React from 'react';
-import {withTheme} from "@mui/styles";
 import {
   Fab,
   Grid,
@@ -22,15 +21,13 @@ import {
 } from "../../utils/UtilityDialogs";
 import SSCList from "./SSCList";
 import SSCMetadata from "./SSCMetadata";
-import {UserContext} from "../../utils/UserContext";
+import {ConsoleLog} from "../../utils/UserDebugContext";
 
 class AddEditSSC extends BaseRecordManager {
-  static contextType = UserContext;
-
   constructor(props) {
     super(props);
     this.Module = "AddEditSSC";
-    this.recordType = "structures_systems_components";
+    this.recordTopic = "structures_systems_components";
   }
 
   componentDidMount() {
@@ -46,13 +43,16 @@ class AddEditSSC extends BaseRecordManager {
 
   ws_message = (message) => {
     super.ws_message(message, [
-      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
+      {cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms"}
     ]);
   }
 
   render() {
     const {metadata_changed, confirm_remove, include_archived, selection, title} = this.state;
-    console.log("AddEditSSC.RENDER - context", this.context);
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
+        "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
+    }
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}
@@ -116,4 +116,4 @@ AddEditSSC.defaultProps = {
   user: {},
 };
 
-export default withTheme(AddEditSSC);
+export default AddEditSSC;

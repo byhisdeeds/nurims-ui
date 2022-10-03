@@ -3,50 +3,50 @@ import PagedRecordList from "../../components/PagedRecordList";
 import PropTypes from "prop-types";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 
-class SSCList extends React.Component {
+class PersonnelAndMonitorsList extends React.Component {
   static contextType = UserDebugContext;
 
   constructor(props) {
     super(props);
-    this.selection = {};
-    this.pref=React.createRef();
+    this.ref=React.createRef();
   }
 
   removeRecord = (record) => {
-    if (this.pref.current) {
-      this.pref.current.removeRecord(record);
+    if (this.ref.current) {
+      this.ref.current.removeRecord(record);
     }
   }
 
   addRecords = (records, skipIfRecordInList) => {
-    if (this.pref.current) {
-      this.pref.current.addRecords(records, skipIfRecordInList);
+    if (this.ref.current) {
+      this.ref.current.addRecords(records, skipIfRecordInList);
     }
   }
 
   getRecords = () => {
-    return (this.pref.current) ? this.pref.current.getRecords() : [];
+    return (this.ref.current) ? this.ref.current.getRecords() : [];
   }
 
   updateRecord = (record) => {
-    if (this.pref.current) {
-      this.pref.current.updateRecord(record);
+    if (this.ref.current) {
+      this.ref.current.updateRecord(record);
     }
   }
 
   setRecords = (records) => {
-    if (this.pref.current) {
-      this.pref.current.setRecords(records);
+    if (this.ref.current) {
+      this.ref.current.setRecords(records);
     }
   }
 
   render() {
     if (this.context.debug > 5) {
-      ConsoleLog("SSCList", "render");
+      ConsoleLog("PersonnelAndMonitorsList", "render");
     }
     return (
       <PagedRecordList
-        ref={this.pref}
+        ref={this.ref}
+        rowsPerPage={15}
         onListItemSelection={this.props.onSelection}
         requestGetRecords={this.props.requestGetRecords}
         includeArchived={this.props.includeArchived}
@@ -57,7 +57,7 @@ class SSCList extends React.Component {
   }
 }
 
-SSCList.propTypes = {
+PersonnelAndMonitorsList.propTypes = {
   ref: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
   onSelection: PropTypes.func.isRequired,
@@ -65,4 +65,4 @@ SSCList.propTypes = {
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
 }
 
-export default SSCList
+export default PersonnelAndMonitorsList;

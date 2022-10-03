@@ -22,6 +22,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
+import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
 
 const Input = ({
                  name,
@@ -320,6 +321,8 @@ const Row = ({
 };
 
 class EditableTable extends React.Component {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -357,10 +360,10 @@ class EditableTable extends React.Component {
     //   isEditing: false,
     //   rowData: item
     // }));
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-    console.log(data)
-    console.log(allRowsData)
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    // console.log(data)
+    // console.log(allRowsData)
+    // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
     this.setState({ allRowsData: allRowsData });
 
     // const allRowsData = [];
@@ -459,7 +462,10 @@ class EditableTable extends React.Component {
       initWithoutHead
     } = this.props;
     const {allRowsData, isAdding, editingIndex, isEditing} = this.state;
-    console.log("EditableTable.render - allRowsData", allRowsData)
+    if (this.context.debug > 5) {
+      ConsoleLog("EditableTable", "render", "isAdding", isAdding, "editingIndex", editingIndex,
+        "isEditing", isEditing, "allRowsData", allRowsData);
+    }
     let headRow = [
       ...fieldsArr.map(item => ({label: item.label, name: item.name, align: item.align})), {label: "Actions", name: "actions", align: 'left'}
     ];

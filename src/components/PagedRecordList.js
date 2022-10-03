@@ -13,13 +13,16 @@ import {
   TableCell
 } from "@mui/material";
 import {PageableTable} from "./CommonComponents";
+import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
 
 class PagedRecordList extends React.Component {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
     this.state = {
       selection: {},
-      include_archived: props.include_archived,
+      include_archived: props.includeArchived,
     };
     this.rows = [];
   }
@@ -59,30 +62,22 @@ class PagedRecordList extends React.Component {
   }
 
   setRecords = (records) => {
-    console.log("PagedRecordList.setRecords - selection",this.state.selection)
+    if (this.context.debug > 5) {
+      ConsoleLog("PagedRecordList", "setRecords", "records", records);
+    }
     if (Array.isArray(records)) {
       let selection = {};
       this.rows = [...records];
       const s_item_id = Object.keys(this.state.selection).length === 0 ? -1 : this.state.selection.item_id;
-      console.log("PagedRecordList.setRecords - s_item_id", s_item_id)
       for (const r of this.rows) {
         r["changed"] = false;
         if (s_item_id > 0) {
           if (r.item_id === s_item_id) {
-            console.log("PagedRecordList.setRecords - SELECTION ", r)
             selection = r;
           }
         }
       }
-      console.log("PagedRecordList.setRecords", records)
       this.setState({selection: selection});
-      // this.rows.length = 0;
-      // for (const record of records) {
-      //   console.log("PagedRecordList.setRecords", record)
-      //   record.changed = false;
-      //   this.rows.push(record);
-      // }
-      // this.forceUpdate();
     }
   }
 
@@ -91,7 +86,9 @@ class PagedRecordList extends React.Component {
   }
 
   updateRecord = (record) => {
-    console.log("PagedRecordList.updateRecord", record)
+    if (this.context.debug > 5) {
+      ConsoleLog("PagedRecordList", "updateRecord", "record", record);
+    }
     if (record) {
       for (const row of this.rows) {
         if (row.item_id === -1 && row.record_key === record.record_key) {
@@ -140,7 +137,9 @@ class PagedRecordList extends React.Component {
 
   render () {
     const {include_archived, selection} = this.state;
-    console.log("PagedRecordList RENDER - selection", selection)
+    if (this.context.debug > 5) {
+      ConsoleLog("PagedRecordList", "render", "include_archived", include_archived, "selection", selection);
+    }
     return (
       <Box sx={{width: '100%', height: this.props.height}}>
         <Paper sx={{width: '100%', mb: 2}}>

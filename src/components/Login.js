@@ -58,20 +58,6 @@ class Login extends React.Component {
       remember: false,
       online: false,
     }
-    // Call it once in your app. At the root of your app is the best place
-    // toast.configure({
-    //   className: 'naa-toast',
-    //   autoClose: 3000,
-    //   draggable: false,
-    //   position: "top-center",
-    //   hideProgressBar: true,
-    //   closeOnClick: true,
-    //   pauseOnVisibilityChange: true,
-    //   rtl: false,
-    //   newestOnTop: true,
-    //   pauseOnHover: true,
-    //   transition: Zoom,
-    // });
   }
 
   onUsernameChange = (event) => {

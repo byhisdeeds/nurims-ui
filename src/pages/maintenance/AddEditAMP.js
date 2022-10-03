@@ -22,13 +22,14 @@ import {
 } from "../../utils/UtilityDialogs";
 import AMPList from "./AMPList";
 import AMPMetadata from "./AMPMetadata";
+import {ConsoleLog} from "../../utils/UserDebugContext";
 
 
 class AddEditAMP extends BaseRecordManager {
   constructor(props) {
     super(props);
     this.Module = "AddEditAMP";
-    this.recordType = "structures_systems_components";
+    this.recordTopic = "structures_systems_components";
   }
 
   componentDidMount() {
@@ -50,6 +51,10 @@ class AddEditAMP extends BaseRecordManager {
 
   render() {
     const {metadata_changed, confirm_remove, include_archived, selection, title} = this.state;
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
+        "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
+    }
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}

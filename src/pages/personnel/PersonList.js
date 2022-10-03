@@ -158,8 +158,11 @@
 import * as React from 'react';
 import PagedRecordList from "../../components/PagedRecordList";
 import PropTypes from "prop-types";
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 
 class PersonList extends React.Component {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
     this.ref=React.createRef();
@@ -194,6 +197,9 @@ class PersonList extends React.Component {
   }
 
   render() {
+    if (this.context.debug > 5) {
+      ConsoleLog("PersonList", "render");
+    }
     return (
       <PagedRecordList
         ref={this.ref}

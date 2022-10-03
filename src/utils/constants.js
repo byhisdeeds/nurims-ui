@@ -8,10 +8,14 @@ module.exports = Object.freeze({
   CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER: 'cm.register.update.material.manufacturer',
   CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION: 'cm.register.update.material.storage.location',
   CM_REGISTER_CONTROLLED_MATERIAL: 'cm.register.update.material',
+  CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET: 'cm.generate.material.surveillance.sheet',
   CM_VIEW_CONTROLLED_MATERIALS_LIST: 'cm.view.controlled.materials.list',
   SSC_ADD_EDIT_SSC: 'ssc.add.edit.ssc',
   SSC_ADD_EDIT_SSC_AMP: 'ssc.add.edit.ssc.amp',
   SSC_VIEW_SSC_RECORDS: 'ssc.view.ssc.records',
+  RO_ADD_EDIT_REACTOR_OPERATING_RUN_DATA: 'ro.add.edit.reactor.operating.run.data',
+
+  SYSADMIN_MANAGE_USERS: 'sysadmin.manage.users',
 
   BASIC_RP_ADD_EDIT_MONITORS: "rp.add.edit.monitors",
 
@@ -46,8 +50,13 @@ module.exports = Object.freeze({
   CMD_GET_SYSTEM_PROPERTIES: "get_system_properties",
   CMD_SET_SYSTEM_PROPERTIES: "set_system_properties",
 
+  CMD_GET_USER_RECORDS: "get_user_records",
+  CMD_UPDATE_USER_RECORD: "update_user_record",
+  CMD_DELETE_USER_RECORD: "delete_user_record",
+
   CMD_GENERATE_PERSONNEL_RECORDS_PDF: "generate_personnel_records_pdf",
   CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF: "generate_controlled_materials_list_pdf",
+  CMD_GENERATE_CONTROLLED_MATERIALS_SURVEILLANCE_SHEET_PDF: "generate_controlled_materials_surveillance_sheet_pdf",
 
   CMD_DELETE_STORAGE_LOCATION_RECORD: "delete_storage_location_record",
   CMD_UPDATE_STORAGE_LOCATION_RECORD: "update_storage_location_record",

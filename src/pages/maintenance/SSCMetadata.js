@@ -41,9 +41,11 @@ import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import EditableTable from "../../components/EditableTable";
-
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 
 class SSCMetadata extends Component {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -130,7 +132,9 @@ class SSCMetadata extends Component {
   }
 
   setRecordMetadata = (record) => {
-    console.log("SSCMetadata.setRecordMetadata", record)
+    if (this.context.debug > 5) {
+      ConsoleLog("SSCMetadata", "setRecordMetadata", "record", record);
+    }
     if (this.ref.current) {
       this.ref.current.setRowData(getMetadataValue(record, NURIMS_SSC_MAINTENANCE_SCOPE, []), true);
     }
@@ -213,10 +217,10 @@ class SSCMetadata extends Component {
 
   render() {
     const {ssc, properties} = this.state;
-    console.log("SSCMetadata.RENDER -", ssc)
     const disabled = Object.entries(ssc).length === 0;
-    // console.log("SSCMetadata.RENDER - properties", properties)
-
+    if (this.context.debug > 5) {
+      ConsoleLog("SSCMetadata", "render", "ssc", ssc);
+    }
     return (
       <Box
         component="form"
