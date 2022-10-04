@@ -207,7 +207,7 @@ class AddEditIrradiatedSamples extends Component {
                   align: 'left',
                   disablePadding: true,
                   label: 'Timestamp In',
-                  width: '90%',
+                  width: '15%',
                   sortField: true,
                 },
                 {
@@ -215,7 +215,7 @@ class AddEditIrradiatedSamples extends Component {
                   align: 'left',
                   disablePadding: true,
                   label: 'Timestamp Out',
-                  width: '90%',
+                  width: '15%',
                   sortField: true,
                 },
                 {
@@ -223,7 +223,7 @@ class AddEditIrradiatedSamples extends Component {
                   align: 'left',
                   disablePadding: true,
                   label: 'ID',
-                  width: '90%',
+                  width: '15%',
                   sortField: true,
                 },
                 {
@@ -231,7 +231,7 @@ class AddEditIrradiatedSamples extends Component {
                   align: 'left',
                   disablePadding: true,
                   label: 'Label',
-                  width: '90%',
+                  width: '25%',
                   sortField: true,
                 },
                 {
@@ -239,7 +239,7 @@ class AddEditIrradiatedSamples extends Component {
                   align: 'left',
                   disablePadding: true,
                   label: 'Type',
-                  width: '90%',
+                  width: '10%',
                   sortField: true,
                 },
                 {
@@ -247,7 +247,7 @@ class AddEditIrradiatedSamples extends Component {
                   align: 'left',
                   disablePadding: true,
                   label: 'Type',
-                  width: '90%',
+                  width: '10%',
                   sortField: true,
                 },
               ]}
