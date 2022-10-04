@@ -55,6 +55,7 @@ const ImportICENSControlledMaterials = lazy(() => import('./pages/packages/icens
 const ImportICENSControlledMaterialStorageLocations = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialStorageLocations'));
 const ImportICENSMonitors = lazy(() => import('./pages/packages/icens/ImportICENSMonitors'));
 const AddEditReactorOperatingRuns = lazy(() => import('./pages/packages/icens/AddEditReactorOperatingRuns'));
+const AddEditIrradiatedSamples = lazy(() => import('./pages/packages/icens/AddEditIrradiatedSamples'));
 
 const drawerWidth = 300;
 const DEBUG_LEVEL = 9;
@@ -178,16 +179,6 @@ const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenu
       properties={properties}
     />)
   }
-  // else if (actionid === Constants.CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET) {
-  //   return (<Manufacturer
-  //     ref={crefs["Manufacturer"]}
-  //     title={menuTitle}
-  //     user={user}
-  //     onClick={handleMenuAction}
-  //     send={send}
-  //     properties={properties}
-  //   />)
-  // }
   else if (actionid === Constants.CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET) {
     return (<GenerateMaterialSurveillanceSheet
       ref={crefs["GenerateMaterialSurveillanceSheet"]}
@@ -310,6 +301,16 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
   else if (actionid === Constants.RO_ADD_EDIT_REACTOR_OPERATING_RUN_DATA) {
     return (<AddEditReactorOperatingRuns
       ref={crefs["AddEditReactorOperatingRuns"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA) {
+    return (<AddEditIrradiatedSamples
+      ref={crefs["AddEditIrradiatedSamples"]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}

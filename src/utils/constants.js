@@ -14,6 +14,7 @@ module.exports = Object.freeze({
   SSC_ADD_EDIT_SSC_AMP: 'ssc.add.edit.ssc.amp',
   SSC_VIEW_SSC_RECORDS: 'ssc.view.ssc.records',
   RO_ADD_EDIT_REACTOR_OPERATING_RUN_DATA: 'ro.add.edit.reactor.operating.run.data',
+  RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA: 'ro.add.edit.irradiated.samples',
 
   SYSADMIN_MANAGE_USERS: 'sysadmin.manage.users',
 
@@ -53,6 +54,8 @@ module.exports = Object.freeze({
   CMD_GET_USER_RECORDS: "get_user_records",
   CMD_UPDATE_USER_RECORD: "update_user_record",
   CMD_DELETE_USER_RECORD: "delete_user_record",
+
+  CMD_GET_REACTOR_OPERATION_RUN_RECORDS: "get_reactor_operation_run_records",
 
   CMD_GENERATE_PERSONNEL_RECORDS_PDF: "generate_personnel_records_pdf",
   CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF: "generate_controlled_materials_list_pdf",

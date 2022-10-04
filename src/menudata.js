@@ -555,10 +555,10 @@ export const MenuData = [
             authmodlevel: 'basic',
           },
           {
-            name: '   - Monitoring Status',
-            link: 'hr.update.personnel.monitoring.status',
-            title: 'Update Personnel Monitoring Status',
-            tooltip: 'Update dosimeter types and surveillance frequency used to monitor organisation staff and external contractors',
+            name: '   - Add/Edit Irrad. Samples',
+            link: 'ro.add.edit.irradiated.samples',
+            title: 'Add/Edit Irradiated Sample Records',
+            tooltip: 'Add and edit irradiated sample records',
             authmodlevel: 'basic',
           },
           {

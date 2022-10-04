@@ -1,24 +1,32 @@
 import React, {Component} from 'react';
 import {withTheme} from "@mui/styles";
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import {
   setMetadataValue,
   getUserRecordMetadataValue,
-} from "../../utils/MetadataUtils";
+} from "../../../utils/MetadataUtils";
 import {
-  NURIMS_ENTITY_ADDRESS, NURIMS_MATERIAL_TYPE,
   NURIMS_TITLE
-} from "../../utils/constants";
+} from "../../../utils/constants";
 import PropTypes from "prop-types";
-import {getGlossaryValue} from "../../utils/GlossaryUtils";
-import {SelectFormControlWithTooltip} from "../../components/CommonComponents";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
-import {getPropertyValue} from "../../utils/PropertyUtils";
-import {Grid} from "@mui/material";
+import {getGlossaryValue} from "../../../utils/GlossaryUtils";
+import {
+  SelectFormControlWithTooltip
+} from "../../../components/CommonComponents";
+import {
+  ConsoleLog,
+  UserDebugContext
+} from "../../../utils/UserDebugContext";
+import {
+  getPropertyValue
+} from "../../../utils/PropertyUtils";
+import {
+  Grid,
+  Box,
+  TextField
+} from "@mui/material";
 
 
-class UserMetadata extends Component {
+class OperatingRunMetadata extends Component {
   static contextType = UserDebugContext;
 
   constructor(props) {
@@ -168,15 +176,15 @@ class UserMetadata extends Component {
   }
 }
 
-UserMetadata.propTypes = {
+OperatingRunMetadata.propTypes = {
   ref: PropTypes.element.isRequired,
   onChange: PropTypes.func.isRequired,
   properties: PropTypes.func.isRequired,
 }
 
-UserMetadata.defaultProps = {
+OperatingRunMetadata.defaultProps = {
   onChange: (msg) => {
   },
 };
 
-export default withTheme(UserMetadata);
+export default withTheme(OperatingRunMetadata);
