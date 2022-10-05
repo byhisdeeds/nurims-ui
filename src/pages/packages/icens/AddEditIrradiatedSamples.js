@@ -173,7 +173,7 @@ class AddEditIrradiatedSamples extends Component {
       <React.Fragment>
         <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
         <input
-          accept="*.json"
+          accept="text/csv"
           // className={classes.input}
           id="import-file-uploader"
           style={{display: 'none',}}
