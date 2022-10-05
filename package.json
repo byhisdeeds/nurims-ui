@@ -36,6 +36,7 @@
     "react-json-pretty": "^2.2.0",
     "react-json-view": "^1.21.3",
     "react-leaflet": "^4.1.0",
+    "react-papaparse": "^4.1.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "react-spinners": "^0.11.0",

@@ -56,6 +56,7 @@ module.exports = Object.freeze({
   CMD_DELETE_USER_RECORD: "delete_user_record",
 
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS: "get_reactor_operation_run_records",
+  CMD_UPDATE_IRRADIATED_SAMPLE_RECORDS: "update_irradiated_sample_records",
 
   CMD_GENERATE_PERSONNEL_RECORDS_PDF: "generate_personnel_records_pdf",
   CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF: "generate_controlled_materials_list_pdf",

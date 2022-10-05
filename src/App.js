@@ -359,6 +359,7 @@ class App extends React.Component {
       "ImportICENSControlledMaterialStorageLocations": React.createRef(),
       "ImportICENSControlledMaterials": React.createRef(),
       "AddEditReactorOperatingRuns": React.createRef(),
+      "AddEditIrradiatedSamples": React.createRef(),
     };
   }
 

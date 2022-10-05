@@ -9,14 +9,9 @@ import UploadIcon from '@mui/icons-material/Upload';
 import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
 import {
-  CMD_GET_STORAGE_LOCATION_RECORDS,
-  CMD_UPDATE_STORAGE_LOCATION_RECORD, ITEM_ID,
-  NURIMS_DESCRIPTION,
-  NURIMS_MATERIAL_STORAGE_IMAGE,
-  NURIMS_MATERIAL_STORAGE_LOCATION,
-  NURIMS_SOURCE,
+  CMD_UPDATE_IRRADIATED_SAMPLE_RECORDS,
+  ITEM_ID,
   NURIMS_TITLE,
-  NURIMS_WITHDRAWN,
 } from "../../../utils/constants";
 import {
   isCommandResponse,
@@ -24,65 +19,40 @@ import {
   messageStatusOk
 } from "../../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
-import ReactJson from "react-json-view";
-import {BlobObject, setMetadataValue} from "../../../utils/MetadataUtils";
 import BusyIndicator from "../../../components/BusyIndicator";
 import PagedCsvTable from "../../../components/PagedCsvTable";
-
-const MODULE = "AddEditIrradiatedSamples";
-
-function isPersonMonitored(status) {
-  if (Array.isArray(status)) {
-    return status.length === 0 ? "false" : status[0] === "" ? "false" : "true";
-  }
-  return status === "" ? "false" : "true";
-}
+import {readString} from "react-papaparse";
+import {ConsoleLog} from "../../../utils/UserDebugContext";
 
 class AddEditIrradiatedSamples extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      storage_locations: [],
       busy: 0,
-      metadata_changed: false,
+      data_changed: false,
       messages: [],
-      alert: false,
-      confirm_remove: false,
-      previous_selection: {},
-      selection: {},
       title: props.title,
     };
-    this.storage_locations_list = [];
+    this.Module = "AddEditIrradiatedSamples";
     this.tableRef = React.createRef();
-    this.pmref = React.createRef();
+    this.recordsToSave = [];
   }
 
   componentDidMount() {
-    this.props.send({
-      cmd: CMD_GET_STORAGE_LOCATION_RECORDS,
-      "include.withdrawn": "false",
-      "include.metadata": "true",
-      module: MODULE,
-    })
   }
 
   ws_message = (message) => {
-    console.log("ON_WS_MESSAGE", MODULE, message)
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "ws_message", message);
+    }
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_UPDATE_STORAGE_LOCATION_RECORD)) {
+        if (isCommandResponse(message, CMD_UPDATE_IRRADIATED_SAMPLE_RECORDS)) {
           const messages = this.state.messages;
-          messages.push(`Storage location record for ${response.storage_location[NURIMS_TITLE]} updated successfully`);
+          messages.push(`Irradiated sample record updated successfully`);
           this.setState({messages: messages});
-        } else if (isCommandResponse(message, CMD_GET_STORAGE_LOCATION_RECORDS)) {
-          if (Array.isArray(response.storage_location)) {
-            this.storage_locations_list.length = 0;
-            for (const location of response.storage_location) {
-              location.changed = false;
-              this.storage_locations_list.push(location);
-            }
-          }
+          this.saveNextRecord();
         }
       } else {
         toast.error(response.message);
@@ -90,86 +60,116 @@ class AddEditIrradiatedSamples extends Component {
     }
   }
 
-  saveChanges = () => {
-    const storage_locations = this.state.storage_locations;
-    for (const location of storage_locations) {
-      console.log("SAVING STORAGE LOCATION CHANGED METADATA ", location)
-      // only save storage_locations with changed metadata
+  saveNextRecord = () => {
+    const record = this.recordsToSave.pop();
+    if (record) {
       this.props.send({
-        cmd: CMD_UPDATE_STORAGE_LOCATION_RECORD,
-        item_id: location.item_id,
-        "nurims.title": location[NURIMS_TITLE],
-        "nurims.withdrawn": location[NURIMS_WITHDRAWN],
-        metadata: location.metadata,
-        module: MODULE,
+        cmd: CMD_UPDATE_IRRADIATED_SAMPLE_RECORDS,
+        record: record,
+        module: this.Module,
       })
     }
-
-    this.setState({metadata_changed: false})
   }
 
-  handleFileUpload = (e) => {
-    const selectedFile = e.target.files[0];
-    console.log("file uploaded", selectedFile)
+  saveChanges = () => {
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "saveChanges");
+    }
+    if (this.tableRef.current) {
+      this.recordsToSave = this.tableRef.current.getRecords().slice();
+      console.log(".....recordsToSave....", this.recordsToSave)
+      this.saveNextRecord();
+    }
+    // const storage_locations = this.state.storage_locations;
+    // for (const location of storage_locations) {
+    //   if (this.context.debug > 5) {
+    //     ConsoleLog("PagedRecordList", "render", "include_archived", include_archived, "selection", selection);
+    //   }
+    //   console.log("SAVING STORAGE LOCATION CHANGED METADATA ", location)
+    //   // only save storage_locations with changed metadata
+    //   this.props.send({
+    //     cmd: CMD_UPDATE_STORAGE_LOCATION_RECORD,
+    //     item_id: location.item_id,
+    //     "nurims.title": location[NURIMS_TITLE],
+    //     "nurims.withdrawn": location[NURIMS_WITHDRAWN],
+    //     metadata: location.metadata,
+    //     module: MODULE,
+    //   })
+    // }
+
+    this.setState({data_changed: false})
+  }
+
+  handleFileUpload = (event) => {
+    const selectedFile = event.target.files[0];
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "handleFileUpload", "selectedFile", selectedFile);
+    }
     const that = this;
     const fileReader = new FileReader();
     fileReader.onerror = function () {
-      alert('Unable to read ' + selectedFile.name);
       toast.error(`Error occurred reading file: ${selectedFile.name}`)
     };
     this.setState({busy: 1});
     fileReader.readAsText(selectedFile);
     fileReader.onload = function (event) {
-      const data = JSON.parse(event.target.result);
-      if (Array.isArray(data)) {
-        const storage_locations = [];
-        for (const d of data) {
-          const storage_location = {
-            item_id: -1,
-            "nurims.title": "",
-            "nurims.wihdrawn": 0,
-            metadata: []
-          };
-          if (d.hasOwnProperty("name")) {
-            storage_location[NURIMS_TITLE] = d.name;
-            for (const l of that.storage_locations_list) {
-              if (l[NURIMS_TITLE] === d.name) {
-                storage_location.item_id = l.item_id;
+      // const data = JSON.parse(event.target.result);
+      const results = readString(event.target.result);
+      const header = {};
+      const ts_column = [];
+      let parseHeader = true;
+      if (results.hasOwnProperty("data")) {
+        const table_data = [];
+        for (const row of results.data) {
+          if (parseHeader) {
+            parseHeader = false;
+            for (const index in row) {
+              const column = row[index].trim().toLowerCase();
+              if (column === "timestamp_in") {
+                header[index] = "nurims.operation.data.irradiatedsample.timestampin";
+                ts_column[index] = true;
+              } else if (column === "timestamp_out") {
+                header[index] = "nurims.operation.data.irradiatedsample.timestampout";
+                ts_column[index] = true;
+              } else if (column === "id") {
+                header[index] = "nurims.operation.data.irradiatedsample.id";
+                ts_column[index] = false;
+              } else if (column === "sample_type") {
+                header[index] = "nurims.operation.data.irradiatedsample.type";
+                ts_column[index] = false;
+              } else if (column === "label") {
+                header[index] = "nurims.operation.data.irradiatedsample.label";
+                ts_column[index] = false;
+              } else if (column === "site") {
+                header[index] = "nurims.operation.data.irradiatedsample.site";
+                ts_column[index] = false;
               }
             }
-          }
-          if (d.hasOwnProperty("dc.description")) {
-            setMetadataValue(storage_location, NURIMS_DESCRIPTION, d["dc.description"])
-          }
-          if (d.hasOwnProperty("dc.coverage.spatial")) {
-            // "dc.coverage.spatial": "{'projection':'EPSG:32663','coordinates':[231,188],'marker':'/images/marker/nuclear-store-circle.png'}",
-            // {'marker':'/images/markers/nuclear-store-circle.png#64#32#32','easting':1,'northing':1}"
-            const coverage = JSON.parse(d["dc.coverage.spatial"].replaceAll("'", "\""));
-            console.log(">>>", coverage)
-            const c = {marker: "/images/markers/nuclear-store-circle.png#64#32#32", easting: 0, northing: 0};
-            if (coverage.hasOwnProperty("coordinates") && Array.isArray(coverage.coordinates)) {
-              c.easting = coverage.coordinates[0];
-              c.northing = coverage.coordinates[1];
+          } else {
+            const cell_data = {item_id: -1};
+            for (const index in row) {
+              if (ts_column[index]) {
+                cell_data[header[index]] = row[index].trim().substring(0,19);
+              } else {
+                cell_data[header[index]] = row[index].trim();
+              }
             }
-            setMetadataValue(storage_location, NURIMS_MATERIAL_STORAGE_LOCATION, c);
+            table_data.push(cell_data);
           }
-          if (d.hasOwnProperty("dc.identifier.uri")) {
-            setMetadataValue(storage_location, NURIMS_SOURCE, d["dc.identifier.uri"])
-          }
-          if (d.hasOwnProperty("image")) {
-            const blob = JSON.parse(d["image"].replaceAll("'", "\""));
-            setMetadataValue(storage_location, NURIMS_MATERIAL_STORAGE_IMAGE, BlobObject(blob.file, blob.url))
-          }
-          storage_locations.push(storage_location);
         }
-        that.setState({storage_locations: storage_locations, busy: 0, metadata_changed: true});
+        if (that.tableRef.current) {
+          that.tableRef.current.setRecords(table_data);
+        }
       }
+      that.setState({busy: 0, data_changed: true});
     };
   }
 
   render() {
-    const {storage_locations, busy, metadata_changed, messages, title} = this.state;
-    return (
+    const {busy, data_changed, messages, title} = this.state;
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "render", "data_changed", data_changed);
+    }    return (
       <React.Fragment>
         <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
         <input
@@ -184,9 +184,9 @@ class AddEditIrradiatedSamples extends Component {
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
-          <Grid item xs={12} sx={{height: 300, overflowY: 'auto', paddingTop: 10}}>
+          <Grid item xs={12} sx={{overflowY: 'auto', paddingTop: 10}}>
             <PagedCsvTable
-              ref={this.listRef}
+              ref={this.tableRef}
               title={"Irradiated Samples"}
               properties={this.props.properties}
               onSelection={this.onRecordSelection}
@@ -269,7 +269,7 @@ class AddEditIrradiatedSamples extends Component {
             </Fab>
           </label>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
-               disabled={!metadata_changed}>
+               disabled={!data_changed}>
             <SaveIcon sx={{mr: 1}}/>
             Save Changes
           </Fab>
