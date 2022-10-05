@@ -49,9 +49,11 @@ class AddEditIrradiatedSamples extends Component {
       const response = message.response;
       if (messageStatusOk(message)) {
         if (isCommandResponse(message, CMD_UPDATE_IRRADIATED_SAMPLE_RECORDS)) {
-          const messages = this.state.messages;
-          messages.push(`Irradiated sample record updated successfully`);
-          this.setState({messages: messages});
+          if (response.operation.hasOwnProperty("irradiated_sample_record")) {
+            const messages = this.state.messages;
+            messages.push(`Irradiated sample record for ${response.operation.irradiated_sample_record["nurims.operation.data.irradiatedsample.id"]} updated successfully`);
+            this.setState({messages: messages});
+          }
           this.saveNextRecord();
         }
       } else {
@@ -76,27 +78,10 @@ class AddEditIrradiatedSamples extends Component {
       ConsoleLog(this.Module, "saveChanges");
     }
     if (this.tableRef.current) {
-      this.recordsToSave = this.tableRef.current.getRecords().slice();
+      this.recordsToSave = [...this.tableRef.current.getRecords()];
       console.log(".....recordsToSave....", this.recordsToSave)
       this.saveNextRecord();
     }
-    // const storage_locations = this.state.storage_locations;
-    // for (const location of storage_locations) {
-    //   if (this.context.debug > 5) {
-    //     ConsoleLog("PagedRecordList", "render", "include_archived", include_archived, "selection", selection);
-    //   }
-    //   console.log("SAVING STORAGE LOCATION CHANGED METADATA ", location)
-    //   // only save storage_locations with changed metadata
-    //   this.props.send({
-    //     cmd: CMD_UPDATE_STORAGE_LOCATION_RECORD,
-    //     item_id: location.item_id,
-    //     "nurims.title": location[NURIMS_TITLE],
-    //     "nurims.withdrawn": location[NURIMS_WITHDRAWN],
-    //     metadata: location.metadata,
-    //     module: MODULE,
-    //   })
-    // }
-
     this.setState({data_changed: false})
   }
 
@@ -121,40 +106,42 @@ class AddEditIrradiatedSamples extends Component {
       if (results.hasOwnProperty("data")) {
         const table_data = [];
         for (const row of results.data) {
-          if (parseHeader) {
-            parseHeader = false;
-            for (const index in row) {
-              const column = row[index].trim().toLowerCase();
-              if (column === "timestamp_in") {
-                header[index] = "nurims.operation.data.irradiatedsample.timestampin";
-                ts_column[index] = true;
-              } else if (column === "timestamp_out") {
-                header[index] = "nurims.operation.data.irradiatedsample.timestampout";
-                ts_column[index] = true;
-              } else if (column === "id") {
-                header[index] = "nurims.operation.data.irradiatedsample.id";
-                ts_column[index] = false;
-              } else if (column === "sample_type") {
-                header[index] = "nurims.operation.data.irradiatedsample.type";
-                ts_column[index] = false;
-              } else if (column === "label") {
-                header[index] = "nurims.operation.data.irradiatedsample.label";
-                ts_column[index] = false;
-              } else if (column === "site") {
-                header[index] = "nurims.operation.data.irradiatedsample.site";
-                ts_column[index] = false;
+          if (row.length > 5) {
+            if (parseHeader) {
+              parseHeader = false;
+              for (const index in row) {
+                const column = row[index].trim().toLowerCase();
+                if (column === "timestamp_in") {
+                  header[index] = "nurims.operation.data.irradiatedsample.timestampin";
+                  ts_column[index] = true;
+                } else if (column === "timestamp_out") {
+                  header[index] = "nurims.operation.data.irradiatedsample.timestampout";
+                  ts_column[index] = true;
+                } else if (column === "id") {
+                  header[index] = "nurims.operation.data.irradiatedsample.id";
+                  ts_column[index] = false;
+                } else if (column === "sample_type") {
+                  header[index] = "nurims.operation.data.irradiatedsample.type";
+                  ts_column[index] = false;
+                } else if (column === "label") {
+                  header[index] = "nurims.operation.data.irradiatedsample.label";
+                  ts_column[index] = false;
+                } else if (column === "site") {
+                  header[index] = "nurims.operation.data.irradiatedsample.site";
+                  ts_column[index] = false;
+                }
               }
-            }
-          } else {
-            const cell_data = {item_id: -1};
-            for (const index in row) {
-              if (ts_column[index]) {
-                cell_data[header[index]] = row[index].trim().substring(0,19);
-              } else {
-                cell_data[header[index]] = row[index].trim();
+            } else {
+              const cell_data = {item_id: -1};
+              for (const index in row) {
+                if (ts_column[index]) {
+                  cell_data[header[index]] = row[index].trim().substring(0,19);
+                } else {
+                  cell_data[header[index]] = row[index].trim();
+                }
               }
+              table_data.push(cell_data);
             }
-            table_data.push(cell_data);
           }
         }
         if (that.tableRef.current) {
@@ -184,7 +171,7 @@ class AddEditIrradiatedSamples extends Component {
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
-          <Grid item xs={12} sx={{overflowY: 'auto', paddingTop: 10}}>
+          <Grid item xs={12} sx={{height: 300, overflowY: 'auto', paddingTop: 10}}>
             <PagedCsvTable
               ref={this.tableRef}
               title={"Irradiated Samples"}
