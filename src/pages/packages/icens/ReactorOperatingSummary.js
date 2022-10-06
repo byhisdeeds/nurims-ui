@@ -63,7 +63,9 @@ class ReactorOperatingSummary extends Component {
           if (response.message !== "") {
             toast.info(response.message);
           }
-          // this.setState({pdf: message.data.pdf});
+          if (message.hasOwnProperty("data") ** message.data.hasOwnProperty("pdf")) {
+            this.setState({pdf: message.data.pdf});
+          }
         }
       } else {
         toast.error(response.message);
