@@ -31,8 +31,7 @@ import {
   getDoseRecordMetadataValue, setDoseRecordMetadataValue
 } from "../../../utils/MetadataUtils";
 import TextField from "@mui/material/TextField";
-import {DateRangePicker} from "../../../components/CommonComponents";
-import {LocalizationProvider} from "@mui/lab";
+import {SameYearDateRangePicker} from "../../../components/CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -47,6 +46,7 @@ class ReactorOperatingSummary extends Component {
       access: 'restricted',
       startDate: null,
       endDate: null,
+      year: null,
     };
     this.Module = "ReactorOperatingSummary";
   }
@@ -60,7 +60,10 @@ class ReactorOperatingSummary extends Component {
       const response = message.response;
       if (messageStatusOk(message)) {
         if (isCommandResponse(message, CMD_GENERATE_REACTOR_OPERATING_SUMMARY_PDF)) {
-          this.setState({pdf: message.data.pdf});
+          if (response.message !== "") {
+            toast.info(response.message);
+          }
+          // this.setState({pdf: message.data.pdf});
         }
       } else {
         toast.error(response.message);
@@ -75,9 +78,8 @@ class ReactorOperatingSummary extends Component {
   onSubmit = () => {
     this.props.send({
       cmd: CMD_GENERATE_REACTOR_OPERATING_SUMMARY_PDF,
-      startDate: this.state.startDate,
-      endDate: this.state.endDate,
-      access: this.state.access,
+      startDate: `${this.state.year.getFullYear()}-${String(this.state.startDate.getMonth()+1).padStart(2, "0")}`,
+      endDate: `${this.state.year.getFullYear()}-${String(this.state.endDate.getMonth()+1).padStart(2, "0")}`,
       module: this.Module,
     });
   }
@@ -96,8 +98,15 @@ class ReactorOperatingSummary extends Component {
     this.setState({startDate: range});
   }
 
+  handleYearDateRangeChange = (range) => {
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "handleYearDateRangeChange", range);
+    }
+    this.setState({year: range});
+  }
+
   render() {
-    const {title, pdf, access, startDate, endDate} = this.state;
+    const {title, pdf, year, startDate, endDate} = this.state;
     return (
       <React.Fragment>
         <Grid container spacing={2}>
@@ -106,15 +115,14 @@ class ReactorOperatingSummary extends Component {
           </Grid>
           <Grid item xs={12}>
             <Stack direction="row" spacing={1}>
-              <DateRangePicker
-                width={"20ch"}
+              <SameYearDateRangePicker
                 startText="Start Date"
                 endText="End Date"
                 from={startDate}
                 to={endDate}
+                year={year}
                 disabled={false}
-                inputFormat={'yyyy-MM'}
-                views={['year', 'month']}
+                onYearChange={this.handleYearDateRangeChange}
                 onToChange={this.handleToDateRangeChange}
                 onFromChange={this.handleFromDateRangeChange}
                 renderInput={(startProps, endProps) => (

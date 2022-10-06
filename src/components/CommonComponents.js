@@ -420,6 +420,54 @@ DateRangePicker.propTypes = {
   views: PropTypes.array,
 }
 
+export function SameYearDateRangePicker({year, from, to, disabled, onYearChange, onToChange, onFromChange}) {
+  return (
+    <Box sx={{display: 'flex'}}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DatePicker
+          renderInput={(props) => <TextField
+            style={{width: "15ch", paddingRight: 8, marginTop: 8}} {...props} />}
+          label=" Year "
+          value={year}
+          views={["year"]}
+          inputFormat={"yyyy"}
+          onChange={onYearChange}
+          disabled={disabled}
+        />
+        <DatePicker
+          renderInput={(props) => <TextField
+            style={{width: "20ch", paddingRight: 8, marginTop: 8}} {...props} />}
+          label=" Start Month "
+          value={from}
+          views={["month"]}
+          inputFormat={"MMMM"}
+          onChange={onFromChange}
+          disabled={disabled}
+        />
+        <DatePicker
+          renderInput={(props) => <TextField
+            style={{width: "20ch", paddingRight: 8, marginTop: 8}} {...props} />}
+          label=" End Month "
+          value={to}
+          views={["month"]}
+          inputFormat={"MMMM"}
+          onChange={onToChange}
+          disabled={disabled}
+        />
+      </LocalizationProvider>
+    </Box>
+  )
+}
+
+SameYearDateRangePicker.propTypes = {
+  year: PropTypes.object.isRequired,
+  from: PropTypes.object.isRequired,
+  to: PropTypes.object.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onToChange: PropTypes.func.isRequired,
+  onFromChange: PropTypes.func.isRequired,
+}
+
 
 export function PageableTable({theme, title, minWidth, cells, defaultOrder, defaultOrderBy, rows, rowsPerPage,
                                rowHeight, onRowSelection, selectedRow, disabled, renderCell, filterElement}) {
