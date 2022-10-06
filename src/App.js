@@ -56,6 +56,7 @@ const ImportICENSControlledMaterialStorageLocations = lazy(() => import('./pages
 const ImportICENSMonitors = lazy(() => import('./pages/packages/icens/ImportICENSMonitors'));
 const AddEditReactorOperatingRuns = lazy(() => import('./pages/packages/icens/AddEditReactorOperatingRuns'));
 const AddEditIrradiatedSamples = lazy(() => import('./pages/packages/icens/AddEditIrradiatedSamples'));
+const ReactorOperatingSummary = lazy(() => import('./pages/packages/icens/ReactorOperatingSummary'));
 
 const drawerWidth = 300;
 const DEBUG_LEVEL = 9;
@@ -318,6 +319,16 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
       properties={properties}
     />)
   }
+  else if (actionid === Constants.RO_REACTOR_OPERATING_SUMMARY) {
+    return (<ReactorOperatingSummary
+      ref={crefs["ReactorOperatingSummary"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
 }
 
 class App extends React.Component {
@@ -360,6 +371,7 @@ class App extends React.Component {
       "ImportICENSControlledMaterials": React.createRef(),
       "AddEditReactorOperatingRuns": React.createRef(),
       "AddEditIrradiatedSamples": React.createRef(),
+      "ReactorOperatingSummary": React.createRef(),
     };
   }
 

@@ -9,9 +9,8 @@ import UploadIcon from '@mui/icons-material/Upload';
 import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
 import {
-  CMD_UPDATE_IRRADIATED_SAMPLE_RECORDS,
+  CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD,
   ITEM_ID,
-  NURIMS_TITLE,
 } from "../../../utils/constants";
 import {
   isCommandResponse,
@@ -22,9 +21,11 @@ import {withTheme} from "@mui/styles";
 import BusyIndicator from "../../../components/BusyIndicator";
 import PagedCsvTable from "../../../components/PagedCsvTable";
 import {readString} from "react-papaparse";
-import {ConsoleLog} from "../../../utils/UserDebugContext";
+import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 
 class AddEditIrradiatedSamples extends Component {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -48,12 +49,14 @@ class AddEditIrradiatedSamples extends Component {
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_UPDATE_IRRADIATED_SAMPLE_RECORDS)) {
-          if (response.operation.hasOwnProperty("irradiated_sample_record")) {
-            const messages = this.state.messages;
+        if (isCommandResponse(message, CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD)) {
+          const messages = this.state.messages;
+          if (response.message !== "") {
+            messages.push(response.message);
+          } else if (response.hasOwnProperty("operation") && response.operation.hasOwnProperty("irradiated_sample_log_record")) {
             messages.push(`Irradiated sample record for ${response.operation.irradiated_sample_record["nurims.operation.data.irradiatedsample.id"]} updated successfully`);
-            this.setState({messages: messages});
           }
+          this.setState({messages: messages});
           this.saveNextRecord();
         }
       } else {
@@ -66,7 +69,7 @@ class AddEditIrradiatedSamples extends Component {
     const record = this.recordsToSave.pop();
     if (record) {
       this.props.send({
-        cmd: CMD_UPDATE_IRRADIATED_SAMPLE_RECORDS,
+        cmd: CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD,
         record: record,
         module: this.Module,
       })

@@ -375,25 +375,27 @@ MonitorTypeSelect.propTypes = {
   monitorTypes: PropTypes.array.isRequired
 }
 
-export function DateRangePicker({from, to, disabled, onToChange, onFromChange}) {
+export function DateRangePicker({from, to, disabled, onToChange, onFromChange, inputFormat, width, views}) {
   return (
-    <Box>
+    <Box sx={{display: 'flex'}}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           renderInput={(props) => <TextField
-            style={{width: '17ch', paddingRight: 8, marginTop: 8}} {...props} />}
+            style={{width: width, paddingRight: 8, marginTop: 8}} {...props} />}
           label=" Start Date "
           value={from}
-          inputFormat={'yyyy-MM-dd'}
+          views={views}
+          inputFormat={inputFormat}
           onChange={onFromChange}
           disabled={disabled}
         />
         <DatePicker
           renderInput={(props) => <TextField
-            style={{width: '17ch', paddingRight: 8, marginTop: 8}} {...props} />}
+            style={{width: width, paddingRight: 8, marginTop: 8}} {...props} />}
           label=" End Date "
           value={to}
-          inputFormat={'yyyy-MM-dd'}
+          views={views}
+          inputFormat={inputFormat}
           onChange={onToChange}
           disabled={disabled}
         />
@@ -402,12 +404,20 @@ export function DateRangePicker({from, to, disabled, onToChange, onFromChange}) 
   )
 }
 
+DateRangePicker.defaultProps = {
+  inputFormat: "yyyy-MM-dd",
+  width: "20ch",
+  views: ['year', 'month', 'day']
+};
+
 DateRangePicker.propTypes = {
   from: PropTypes.object.isRequired,
   to: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
   onToChange: PropTypes.func.isRequired,
   onFromChange: PropTypes.func.isRequired,
+  inputFormat: PropTypes.string,
+  views: PropTypes.array,
 }
 
 
