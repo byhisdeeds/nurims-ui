@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
   BLANK_PDF,
-  CMD_GENERATE_REACTOR_OPERATING_SUMMARY_PDF,
+  CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF,
 } from "../../../utils/constants";
 import {
   Fab,
@@ -43,10 +43,10 @@ class ReactorOperatingSummary extends Component {
     this.state = {
       title: props.title,
       pdf: BLANK_PDF,
-      access: 'restricted',
       startDate: null,
       endDate: null,
       year: null,
+      reportType: "summary",
     };
     this.Module = "ReactorOperatingSummary";
   }
@@ -59,7 +59,7 @@ class ReactorOperatingSummary extends Component {
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_GENERATE_REACTOR_OPERATING_SUMMARY_PDF)) {
+        if (isCommandResponse(message, CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF)) {
           if (response.message !== "") {
             toast.info(response.message);
           }
@@ -73,15 +73,16 @@ class ReactorOperatingSummary extends Component {
     }
   }
 
-  handleChange = (e) => {
-    this.setState({access: e.target.value});
+  handleReportTypeChange = (e) => {
+    this.setState({reportType: e.target.value});
   }
 
   onSubmit = () => {
     this.props.send({
-      cmd: CMD_GENERATE_REACTOR_OPERATING_SUMMARY_PDF,
+      cmd: CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF,
       startDate: `${this.state.year.getFullYear()}-${String(this.state.startDate.getMonth()+1).padStart(2, "0")}`,
       endDate: `${this.state.year.getFullYear()}-${String(this.state.endDate.getMonth()+1).padStart(2, "0")}`,
+      reportType: this.state.reportType,
       module: this.Module,
     });
   }
@@ -108,7 +109,7 @@ class ReactorOperatingSummary extends Component {
   }
 
   render() {
-    const {title, pdf, year, startDate, endDate} = this.state;
+    const {title, pdf, year, startDate, endDate, reportType} = this.state;
     return (
       <React.Fragment>
         <Grid container spacing={2}>
@@ -135,6 +136,19 @@ class ReactorOperatingSummary extends Component {
                   </React.Fragment>
                 )}
               />
+              <FormControl fullWidth>
+                <InputLabel id="report-type-select-label">Report Type</InputLabel>
+                <Select
+                  labelId="report-type-select-label"
+                  id="report-access"
+                  value={reportType}
+                  label="Report Type"
+                  onChange={this.handleReportTypeChange}
+                >
+                  <MenuItem value={'summary'}>Reactor Operations Summary</MenuItem>
+                  <MenuItem value={'detailed'}>Detailed Reactor Operations</MenuItem>
+                </Select>
+              </FormControl>
               <div style={{flexGrow: 1}}/>
               <Fab variant="extended" size="medium" color="primary" aria-label="submit" onClick={this.onSubmit}
                    style={{marginTop: 16}}>

@@ -54,7 +54,7 @@ class AddEditIrradiatedSamples extends Component {
           if (response.message !== "") {
             messages.push(response.message);
           } else if (response.hasOwnProperty("operation") && response.operation.hasOwnProperty("irradiated_sample_log_record")) {
-            messages.push(`Irradiated sample record for ${response.operation.irradiated_sample_record["nurims.operation.data.irradiatedsample.id"]} updated successfully`);
+            messages.push(`Irradiated sample record for ${response.operation.irradiated_sample_log_record["metadata"]["nurims.operation.data.irradiatedsample.id"]} updated successfully`);
           }
           this.setState({messages: messages});
           this.saveNextRecord();
