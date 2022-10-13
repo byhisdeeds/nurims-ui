@@ -178,6 +178,7 @@ PagedRecordList.propTypes = {
   requestGetRecords: PropTypes.func.isRequired,
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
   includeArchived: PropTypes.bool,
+  cells: PropTypes.array,
 }
 
 PagedRecordList.defaultProps = {

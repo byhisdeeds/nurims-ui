@@ -675,14 +675,14 @@ PageableTable.propTypes = {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-export function IrradiationDateSelect({value, onChange, disabled}) {
+export function DateSelect({value, onChange, disabled, label}) {
   return (
     <Box>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           renderInput={(props) => <TextField
-            style={{width: '17ch', paddingRight: 8, marginTop: 8}} {...props} />}
-          label="Irrad. Date"
+            style={{width: '20ch', paddingRight: 8, marginTop: 8}} {...props} />}
+          label={label}
           value={value}
           inputFormat={'yyyy-MM-dd'}
           onChange={onChange}
@@ -693,7 +693,8 @@ export function IrradiationDateSelect({value, onChange, disabled}) {
   )
 }
 
-IrradiationDateSelect.propTypes = {
+DateSelect.propTypes = {
+  label: PropTypes.string.isRequired,
   value: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,

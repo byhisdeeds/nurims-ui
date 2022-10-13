@@ -15,7 +15,8 @@ module.exports = Object.freeze({
   SSC_VIEW_SSC_RECORDS: 'ssc.view.ssc.records',
   RO_ADD_EDIT_REACTOR_OPERATING_RUN_DATA: 'ro.add.edit.reactor.operating.run.data',
   RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA: 'ro.add.edit.irradiated.samples',
-  RO_REACTOR_OPERATING_SUMMARY: 'ro.reactor.operating.summary',
+  RO_REACTOR_OPERATIONS_REPORT: 'ro.reactor.operations.report',
+  RO_ADD_EDIT_REACTOR_WATER_SAMPLES: 'ro.add.edit.reactor.water.samples',
 
   SYSADMIN_MANAGE_USERS: 'sysadmin.manage.users',
 
@@ -60,6 +61,7 @@ module.exports = Object.freeze({
   CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD: "update_sample_irradiation_log_record",
 
   CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF: "generate_reactor_operation_report_pdf",
+  CMD_GET_REACTOR_WATER_SAMPLE_RECORDS: "get_reactor_water_sample_records",
 
   CMD_GENERATE_PERSONNEL_RECORDS_PDF: "generate_personnel_records_pdf",
   CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF: "generate_controlled_materials_list_pdf",
@@ -83,6 +85,7 @@ module.exports = Object.freeze({
   NURIMS_SOURCE: 'nurims.source',
   NURIMS_WITHDRAWN: 'nurims.withdrawn',
   NURIMS_DESCRIPTION: 'nurims.description',
+  NURIMS_AVAILABLE: 'nurims.available',
   NURIMS_SURVEILLANCE_FREQUENCY: 'nurims.surveillancefrequency',
   NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY: 'nurims.inventorysurveillancefrequency',
   NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY: 'nurims.leaktestsurveillancefrequency',
@@ -139,6 +142,10 @@ module.exports = Object.freeze({
   NURIMS_AMP_ACCEPTANCE_CRITERIA: "nurims.amp.acceptancecriteria",
   NURIMS_AMP_MITIGATION_STEPS: "nurims.amp.mitigationsteps",
   NURIMS_AMP_SURVEILLANCE_FREQUENCY: "nurims.amp.surveillancefrequency",
+
+  NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDES: "nurims.operation.data.reactorwaterchemistry.nuclides",
+  NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS: "nurims.operation.data.reactorwaterchemistry.nuclideunits",
+  NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS: "nurims.operation.data.reactorwaterchemistry.analysis",
 
   BLANK_PDF: 'data:application/pdf;base64,JVBERi0xLjQKJb/3ov4KMSAwIG9iago8PCAvUGFnZXMgMiAwIFIgL1R5cGUgL0NhdGFsb2cgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL0NvdW50IDEgL0tpZHMgWyAzIDAgUiBdIC9UeXBlIC9QYWdlcyA+PgplbmRvYmoKMyAwIG9iago8PCAvQ29udGVudHMgNCAwIFIgL0dyb3VwIDw8IC9DUyAvRGV2aWNlUkdCIC9JIHRydWUgL1MgL1RyYW5zcGFyZW5jeSAvVHlwZSAvR3JvdXAgPj4gL01lZGlhQm94IFsgMCAwIDYxMiA3OTEuMjUgXSAvUGFyZW50IDIgMCBSIC9SZXNvdXJjZXMgNSAwIFIgL1R5cGUgL1BhZ2UgPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0ZpbHRlciAvRmxhdGVEZWNvZGUgL0xlbmd0aCAzMCA+PgpzdHJlYW0KeJwzVDAAQl1DIGFuaahnZKqQnMtVyBXIBQA6LATGZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8ID4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDA2NCAwMDAwMCBuIAowMDAwMDAwMTIzIDAwMDAwIG4gCjAwMDAwMDAyOTggMDAwMDAgbiAKMDAwMDAwMDM5OCAwMDAwMCBuIAp0cmFpbGVyIDw8IC9Sb290IDEgMCBSIC9TaXplIDYgL0lEIFs8YzhjZDFmYzFhMWNiODBlZTgyNzI1ZjIyMTYyMTU2NDE+PGM4Y2QxZmMxYTFjYjgwZWU4MjcyNWYyMjE2MjE1NjQxPl0gPj4Kc3RhcnR4cmVmCjQxOQolJUVPRgo=',
 

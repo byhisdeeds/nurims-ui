@@ -15,27 +15,19 @@ import {
 import {toast} from "react-toastify";
 import PdfViewer from "../../../components/PdfViewer";
 import MenuItem from "@mui/material/MenuItem";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import IconButton from "@mui/material/IconButton";
 import {withTheme} from "@mui/styles";
 import {
   isCommandResponse,
   messageHasResponse,
   messageStatusOk
 } from "../../../utils/WebsocketUtils";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import Box from "@mui/material/Box";
-import {
-  getDateRangeFromDateString,
-  getDoseRecordDosimeterId,
-  getDoseRecordMetadataValue, setDoseRecordMetadataValue
-} from "../../../utils/MetadataUtils";
 import TextField from "@mui/material/TextField";
 import {SameYearDateRangePicker} from "../../../components/CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 import AddIcon from "@mui/icons-material/Add";
 
-class ReactorOperatingSummary extends Component {
+class ReactorOperationsReport extends Component {
   static contextType = UserDebugContext;
 
   constructor(props) {
@@ -48,14 +40,13 @@ class ReactorOperatingSummary extends Component {
       year: null,
       reportType: "summary",
     };
-    this.Module = "ReactorOperatingSummary";
+    this.Module = "ReactorOperationsReport";
   }
 
   ws_message = (message) => {
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "ws_message", message);
     }
-    console.log("ON_WS_MESSAGE", this.Module, message)
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
@@ -74,6 +65,9 @@ class ReactorOperatingSummary extends Component {
   }
 
   handleReportTypeChange = (e) => {
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "handleReportTypeChange", e.target.value);
+    }
     this.setState({reportType: e.target.value});
   }
 
@@ -136,7 +130,7 @@ class ReactorOperatingSummary extends Component {
                   </React.Fragment>
                 )}
               />
-              <FormControl fullWidth>
+              <FormControl style={{paddingRight: 8, marginTop: 8,}} variant="outlined">
                 <InputLabel id="report-type-select-label">Report Type</InputLabel>
                 <Select
                   labelId="report-type-select-label"
@@ -167,6 +161,6 @@ class ReactorOperatingSummary extends Component {
   }
 }
 
-ReactorOperatingSummary.defaultProps = {};
+ReactorOperationsReport.defaultProps = {};
 
-export default withTheme(ReactorOperatingSummary);
+export default withTheme(ReactorOperationsReport);

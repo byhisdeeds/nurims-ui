@@ -56,7 +56,8 @@ const ImportICENSControlledMaterialStorageLocations = lazy(() => import('./pages
 const ImportICENSMonitors = lazy(() => import('./pages/packages/icens/ImportICENSMonitors'));
 const AddEditReactorOperatingRuns = lazy(() => import('./pages/packages/icens/AddEditReactorOperatingRuns'));
 const AddEditIrradiatedSamples = lazy(() => import('./pages/packages/icens/AddEditIrradiatedSamples'));
-const ReactorOperatingSummary = lazy(() => import('./pages/packages/icens/ReactorOperatingSummary'));
+const ReactorOperationsReport = lazy(() => import('./pages/packages/icens/ReactorOperationsReport'));
+const AddEditReactorWaterSamples = lazy(() => import('./pages/packages/icens/AddEditReactorWaterSamples'));
 
 const drawerWidth = 300;
 const DEBUG_LEVEL = 9;
@@ -319,9 +320,19 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
       properties={properties}
     />)
   }
-  else if (actionid === Constants.RO_REACTOR_OPERATING_SUMMARY) {
-    return (<ReactorOperatingSummary
-      ref={crefs["ReactorOperatingSummary"]}
+  else if (actionid === Constants.RO_REACTOR_OPERATIONS_REPORT) {
+    return (<ReactorOperationsReport
+      ref={crefs["ReactorOperationsReport"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.RO_ADD_EDIT_REACTOR_WATER_SAMPLES) {
+    return (<AddEditReactorWaterSamples
+      ref={crefs["AddEditReactorWaterSamples"]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -371,7 +382,8 @@ class App extends React.Component {
       "ImportICENSControlledMaterials": React.createRef(),
       "AddEditReactorOperatingRuns": React.createRef(),
       "AddEditIrradiatedSamples": React.createRef(),
-      "ReactorOperatingSummary": React.createRef(),
+      "ReactorOperationsReport": React.createRef(),
+      "AddEditReactorWaterSamples": React.createRef(),
     };
   }
 

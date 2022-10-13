@@ -38,6 +38,7 @@ class OperatingRunMetadata extends Component {
       password_check: "",
       properties: props.properties,
     };
+    this.Module = "OperatingRunMetadata";
   }
 
   componentDidMount() {

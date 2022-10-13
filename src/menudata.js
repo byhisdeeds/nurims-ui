@@ -543,7 +543,7 @@ export const MenuData = [
     authmodlevel: 'basic',
     items: [
       {
-        name: '‣ Operating Runs',
+        name: '‣ Operating Data',
         tooltip: 'Data on the reactor operating runs',
         authmodlevel: 'basic',
         items: [
@@ -561,6 +561,13 @@ export const MenuData = [
             tooltip: 'Add and edit irradiated sample records',
             authmodlevel: 'basic',
           },
+          {
+            name: '   - Add/Edit Water Samples',
+            link: 'ro.add.edit.reactor.water.samples',
+            title: 'Add/Edit Reactor Water Records',
+            tooltip: 'Add and edit reactor water chemistry records',
+            authmodlevel: 'basic',
+          },
         ],
       },
       {
@@ -569,10 +576,10 @@ export const MenuData = [
         authmodlevel: 'basic',
         items: [
           {
-            name: '   - Operating Summary',
-            link: 'ro.reactor.operating.summary',
-            title: 'Reactor Operating Summary',
-            tooltip: 'Summary report of reactor operations',
+            name: '   - Reactor Operations',
+            link: 'ro.reactor.operations.report',
+            title: 'Reactor Operations Report',
+            tooltip: 'Report on reactor operations',
             authmodlevel: 'basic',
           }
         ],
