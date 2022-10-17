@@ -71,22 +71,22 @@ class WaterSampleMetadata extends Component {
         error: "Haha"
       },
       {
-        label: "Units",
-        name: "units",
-        type: "select",
-        width: '8ch',
+        label: "Uncert.",
+        name: "uncert",
+        width: '18ch',
         align: 'center',
-        options: [],
         validation: (e, a) => {
           return true;
         },
         error: "go home kid"
       },
       {
-        label: "Uncert.",
-        name: "uncert",
-        width: '18ch',
+        label: "Units",
+        name: "units",
+        type: "select",
+        width: '8ch',
         align: 'center',
+        options: [],
         validation: (e, a) => {
           return true;
         },
@@ -114,12 +114,9 @@ class WaterSampleMetadata extends Component {
       "").split('|').map((n) => {
       const t = n.split(',');
       if (t.length === 2) {
-        return this.nuclideTableFields[2].options.push({ label: t[1], value: t[0] });
+        return this.nuclideTableFields[3].options.push({ label: t[1], value: t[0] });
       }
     })
-  }
-
-  componentDidMount() {
   }
 
   handleChange = (e) => {
@@ -146,10 +143,10 @@ class WaterSampleMetadata extends Component {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
     this.setState({
-      record: record,
-      disabled: false,
+      record: (record) ? record : [],
+      disabled: (!record),
     })
-    if (this.ref.current) {
+    if (this.ref.current && (record)) {
       console.log("######", getMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
       this.ref.current.setRowData(getMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
     }
@@ -196,7 +193,7 @@ class WaterSampleMetadata extends Component {
   render() {
     const {record, disabled} = this.state;
     if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "render", "record", disabled, "record", record);
+      ConsoleLog(this.Module, "render", "disabled", disabled, "record", record);
     }
     // const authorized_module_levels = getPropertyValue(properties, "system.authorizedmodulelevels", "").split('|');
     // const user_roles = getPropertyValue(properties, "system.userrole", "").split('|');
@@ -212,6 +209,7 @@ class WaterSampleMetadata extends Component {
         <Grid container spacing={2}>
           <Grid item xs={4}>
             <TextField
+              disabled={disabled}
               required
               fullWidth
               id="name"
@@ -220,8 +218,9 @@ class WaterSampleMetadata extends Component {
               onChange={this.handleChange}
             />
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={5}>
             <TextField
+              disabled={disabled}
               id={"description"}
               label="Description"
               fullWidth
@@ -229,16 +228,17 @@ class WaterSampleMetadata extends Component {
               onChange={this.handleChange}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={2}>
             <DateSelect
               disabled={disabled}
               label="Analysis Date"
-              value={getMetadataValue(record, NURIMS_AVAILABLE, "")}
+              value={getMetadataValue(record, NURIMS_AVAILABLE, null)}
               onChange={this.handleDateAvailableChange}
             />
           </Grid>
           <Grid item xs={12}>
             <EditableTable
+              tableName={"editable"}
               disable={disabled}
               ref={this.ref}
               addRowBtnText={"Add Nuclide"}
@@ -247,6 +247,12 @@ class WaterSampleMetadata extends Component {
               getData={this.saveTableData}
               fieldsArr={this.nuclideTableFields}
             />
+          </Grid>
+          <Grid item xs={6}>
+            <p>sdfsfsfsf</p>
+          </Grid>
+          <Grid item xs={6}>
+            <p>sdfsfsfsf</p>
           </Grid>
         </Grid>
       </Box>

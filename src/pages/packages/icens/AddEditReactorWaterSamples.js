@@ -135,7 +135,7 @@ class AddEditReactorWaterSamples extends React.Component {
     this.props.send({
       cmd: CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
       "include.disabled": include_archived ? "true" : "false",
-      "include.metadata.subtitle": "nurims.available",
+      "include.metadata.subtitle": "nurims.sampledate",
       module: this.Module,
     })
     this.setState({include_archived: include_archived});
@@ -183,7 +183,7 @@ class AddEditReactorWaterSamples extends React.Component {
               this.listRef.current.setRecords(response.operation);
             }
             if (this.metadataRef.current) {
-              this.metadataRef.current.setRecordMetadata(selection);
+              this.metadataRef.current.setRecordMetadata();
             }
           } else {
             if (!message.hasOwnProperty("item_id") && this.listRef.current) {

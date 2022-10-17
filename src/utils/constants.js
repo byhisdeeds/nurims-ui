@@ -86,6 +86,7 @@ module.exports = Object.freeze({
   NURIMS_WITHDRAWN: 'nurims.withdrawn',
   NURIMS_DESCRIPTION: 'nurims.description',
   NURIMS_AVAILABLE: 'nurims.available',
+  NURIMS_SAMPLEDATE: 'nurims.sampledate',
   NURIMS_SURVEILLANCE_FREQUENCY: 'nurims.surveillancefrequency',
   NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY: 'nurims.inventorysurveillancefrequency',
   NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY: 'nurims.leaktestsurveillancefrequency',

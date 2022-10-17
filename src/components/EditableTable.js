@@ -9,7 +9,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  Select,
+  Select, IconButton,
 } from "@mui/material";
 import {withStyles} from '@mui/styles';
 import AddIcon from "@mui/icons-material/Add";
@@ -18,6 +18,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./EditableTable.css";
+import classNames from "classnames";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import TextField from "@mui/material/TextField";
@@ -51,18 +52,18 @@ const Input = ({
   return (
     <>
       <div
-        // className={classNames(
-        //   classes.inputWrapperDiv,
-        //   `inputWrapperDiv${tableName}`
-        // )}
+        className={classNames(
+          classes.inputWrapperDiv,
+          `inputWrapperDiv${tableName}`
+        )}
       >
         <input
-          // className={classNames(classes.input, `input${tableName}`)}
+          className={classNames(classes.input, `input${tableName}`)}
           name={name}
           value={value || ""}
           onChange={handleOnChange}
         />
-        {/*<p className={classNames(classes.error, `error${tableName}`)}>*/}
+        {<p className={classNames(classes.error, `error${tableName}`)} />}
         <p>
           {hasError && error}
         </p>
@@ -78,23 +79,23 @@ const OurSelect = ({name, value, selectMessage, options,  classes, width, tableN
   return (
     <FormControl
       sx={{minWidth: width}}
-      // className={classNames(
-      //   classes.selectFormControl,
-      //   `selectFormControl_${tableName}`
-      // )}
+      className={classNames(
+        classes.selectFormControl,
+        `selectFormControl_${tableName}`
+      )}
     >
       <InputLabel
-        // className={classNames(
-        //   classes.selectInputLabel,
-        //   `selectInputLabel_${tableName}`
-        // )}
+        className={classNames(
+          classes.selectInputLabel,
+          `selectInputLabel_${tableName}`
+        )}
         htmlFor={name}
       >
         {selectMessage}
       </InputLabel>
       <Select
         disabled={disabled}
-        // className={classNames(classes.select, `select_${tableName}`)}
+        className={classNames(classes.select, `select_${tableName}`)}
         value={value || ""}
         onChange={handleSelect}
         inputProps={{
@@ -105,10 +106,10 @@ const OurSelect = ({name, value, selectMessage, options,  classes, width, tableN
         {(options || []).map(item => {
           return (
             <MenuItem
-              // className={classNames(
-              //   classes.selectMenuItem,
-              //   `selectMenutItem_${tableName}`
-              // )}
+              className={classNames(
+                classes.selectMenuItem,
+                `selectMenutItem_${tableName}`
+              )}
               key={item.value}
               value={item.value}
             >
@@ -165,15 +166,15 @@ const EditableRow = ({
   };
   return (
     <TableRow
-      // className={classNames(classes.tableBodyRow, `tableBodyRow_${tableName}`)}
+      className={classNames(classes.tableBodyRow, `tableBodyRow_${tableName}`)}
     >
       {fieldsArr.map((item, i) => {
         return (
           <TableCell
-            // className={classNames(
-            //   classes.tableBodyCell,
-            //   `tableBodyCell_${tableName}`
-            // )}
+            className={classNames(
+              classes.tableBodyCell,
+              `tableBodyCell_${tableName}`
+            )}
             key={i}
           >
             {item.type === "select" ? (
@@ -181,9 +182,9 @@ const EditableRow = ({
                 disabled={disabled}
                 tableName={tableName}
                 width={item.width}
-                // classes={{
-                //   ...selectClasses
-                // }}
+                classes={{
+                  ...selectClasses
+                }}
                 name={item.name}
                 onChange={handleOnChange}
                 options={item.options}
@@ -216,7 +217,7 @@ const EditableRow = ({
                 )}
                 tableName={tableName}
                 sx={{minWidth: item.width}}
-                // classes={{...inputClasses}}
+                classes={{...inputClasses}}
                 type={item.type}
                 name={item.name}
                 onChange={handleOnChange}
@@ -231,27 +232,32 @@ const EditableRow = ({
         );
       })}
       <TableCell
-        // className={classNames(
-        //   classes.tableBodyCell,
-        //   `tableBodyCell_${tableName}`
-        // )}
+        className={classNames(
+          classes.tableBodyCell,
+          `tableBodyCell_${tableName}`
+        )}
       >
-        <Button
-          // className={classNames(classes.saveBtn, `saveBtn${tableName}`)}
+        <IconButton
+          color={"primary"}
+          size={"small"}
+          aria-label="save"
+          className={classNames(classes.saveBtn, `saveBtn${tableName}`)}
           disabled={rowHasError || disabled}
-          type="button"
           onClick={handleSave}
         >
           <SaveIcon />
-        </Button>
+        </IconButton>
 
-        <Button
+        <IconButton
+          color={"primary"}
+          size={"small"}
+          aria-label="cancel"
           disabled={disabled}
-          // className={classNames(classes.cancelBtn, `cancelBtn${tableName}`)}
+          className={classNames(classes.cancelBtn, `cancelBtn${tableName}`)}
           onClick={handleCancel}
         >
           <CancelIcon />
-        </Button>
+        </IconButton>
       </TableCell>
     </TableRow>
   );
@@ -270,7 +276,7 @@ const Row = ({
              }) => {
   return (
     <TableRow
-      // className={classNames(classes.tableBodyRow, `tableBodyRow_${tableName}`)}
+      className={classNames(classes.tableBodyRow, `tableBodyRow_${tableName}`)}
     >
       {Object.keys(data).map(key => {
         // console.log("FIELDS-ATTR", fieldsArr)
@@ -285,36 +291,42 @@ const Row = ({
         return (
           <TableCell
             sx={{minWidth: width}}
-            // className={classNames(
-            //   classes.tableBodyCell,
-            //   `tableBodyCell_${tableName}`
-            // )}
+            className={classNames(
+              classes.tableBodyCell,
+              `tableBodyCell_${tableName}`
+            )}
           >
             {data[key]}
           </TableCell>
         );
       })}
       <TableCell
-        // className={classNames(
-        //   classes.tableBodyCell,
-        //   `tableBodyCell_${tableName}`
-        // )}
+        className={classNames(
+          classes.tableBodyCell,
+          `tableBodyCell_${tableName}`
+        )}
       >
-        <Button
+        <IconButton
+          color={"primary"}
+          size={"small"}
+          aria-label="edit"
           disabled={isAdding || isEditing || disabled}
-          // className={classNames(classes.editBtn, `editBtn_${tableName}`)}
+          className={classNames(classes.editBtn, `editBtn_${tableName}`)}
           onClick={handleEditRow}
         >
           <EditIcon />
-        </Button>
+        </IconButton>
 
-        <Button
+        <IconButton
+          color={"primary"}
+          size={"small"}
+          aria-label="delete"
           disabled={isAdding || isEditing || disabled}
-          // className={classNames(classes.deleteBtn, `deleteBtn_${tableName}`)}
+          className={classNames(classes.deleteBtn, `deleteBtn_${tableName}`)}
           onClick={handleDeleteRow}
         >
           <DeleteIcon />
-        </Button>
+        </IconButton>
       </TableCell>
     </TableRow>
   );
@@ -473,25 +485,23 @@ class EditableTable extends React.Component {
       !(initWithoutHead && !allRowsData.length && !isAdding);
     return (
       <>
-        {/*<Table className={classNames(classes.table, `table_${tableName}`)}>*/}
-        <Table>
+        <Table className={classNames(classes.table, `table_${tableName}`)}>
           {showHeader && (
-            // <TableHead className={classNames(classes.tableHead)}>
-            <TableHead>
+            <TableHead className={classNames(classes.tableHead)}>
               <TableRow
-                // className={classNames(
-                //   classes.tableHeadRow,
-                //   `tableHeadRow_${tableName}`
-                // )}
+                className={classNames(
+                  classes.tableHeadRow,
+                  `tableHeadRow_${tableName}`
+                )}
               >
                 {headRow.map(({label, name, align}, i) => (
                   <TableCell
                     sx={{textAlign: align}}
-                    // className={classNames(
-                    //   classes.tableHeadCell,
-                    //   classes[`tableHeadCell${name}`],
-                    //   `tableHeadCell_${tableName} tableHeadCell_${name}`
-                    // )}
+                    className={classNames(
+                      classes.tableHeadCell,
+                      classes[`tableHeadCell${name}`],
+                      `tableHeadCell_${tableName} tableHeadCell_${name}`
+                    )}
                     key={i}
                   >
                     {label}
@@ -501,7 +511,7 @@ class EditableTable extends React.Component {
             </TableHead>
           )}
           <TableBody
-            // className={classNames(classes.tableBody, `tableBody_${tableName}`)}
+            className={classNames(classes.tableBody, `tableBody_${tableName}`)}
           >
             {!!allRowsData.length && allRowsData.map(({isEditing, rowData}, i) => {
               return isEditing ? (
@@ -510,24 +520,24 @@ class EditableTable extends React.Component {
                   tableName={tableName}
                   isEditing={isEditing}
                   editingIndex={editingIndex}
-                  // selectClasses={{
-                  //   selectFormControl: classes.selectFormControl,
-                  //   selectInputLabel: classes.selectInputLabel,
-                  //   select: classes.select,
-                  //   selectMenuItem: classes.selectMenuItem
-                  // }}
-                  // inputClasses={{
-                  //   inputWrapperDiv: classes.inputWrapperDiv,
-                  //   input: classes.input,
-                  //   error: classes.error
-                  // }}
-                  // classes={{
-                  //   tableBodyRow: classes.tableBodyRow,
-                  //   tableBodyCell: classes.tableBodyCell,
-                  //   tableCellRow: classes.tableCellRow,
-                  //   saveBtn: classes.saveBtn,
-                  //   cancelBtn: classes.cancelBtn
-                  // }}
+                  selectClasses={{
+                    selectFormControl: classes.selectFormControl,
+                    selectInputLabel: classes.selectInputLabel,
+                    select: classes.select,
+                    selectMenuItem: classes.selectMenuItem
+                  }}
+                  inputClasses={{
+                    inputWrapperDiv: classes.inputWrapperDiv,
+                    input: classes.input,
+                    error: classes.error
+                  }}
+                  classes={{
+                    tableBodyRow: classes.tableBodyRow,
+                    tableBodyCell: classes.tableBodyCell,
+                    tableCellRow: classes.tableCellRow,
+                    saveBtn: classes.saveBtn,
+                    cancelBtn: classes.cancelBtn
+                  }}
                   allRowsData={this.state.allRowsData}
                   editData={rowData}
                   handleSave={this.handleSave}
@@ -540,13 +550,13 @@ class EditableTable extends React.Component {
                   key={i}
                   tableName={tableName}
                   fieldsArr={fieldsArr}
-                  // classes={{
-                  //   tableBodyRow: classes.tableBodyRow,
-                  //   tableBodyCell: classes.tableBodyCell,
-                  //   tableCellRow: classes.tableCellRow,
-                  //   editBtn: classes.editBtn,
-                  //   deleteBtn: classes.deleteBtn
-                  // }}
+                  classes={{
+                    tableBodyRow: classes.tableBodyRow,
+                    tableBodyCell: classes.tableBodyCell,
+                    tableCellRow: classes.tableCellRow,
+                    editBtn: classes.editBtn,
+                    deleteBtn: classes.deleteBtn
+                  }}
                   isAdding={isAdding}
                   isEditing={this.state.isEditing}
                   handleEditRow={() => this.handleEditRow(i)}
@@ -560,24 +570,24 @@ class EditableTable extends React.Component {
                 disabled={disabled}
                 tableName={tableName}
                 allRowsData={this.state.allRowsData}
-                // selectClasses={{
-                //   selectFormControl: classes.selectFormControl,
-                //   selectInputLabel: classes.selectInputLabel,
-                //   select: classes.select,
-                //   selectMenuItem: classes.selectMenuItem
-                // }}
-                // inputClasses={{
-                //   inputWrapperDiv: classes.inputWrapperDiv,
-                //   input: classes.input,
-                //   error: classes.error
-                // }}
-                // classes={{
-                //   tableBodyRow: classes.tableBodyRow,
-                //   tableBodyCell: classes.tableBodyCell,
-                //   saveBtn: classes.saveBtn,
-                //   cancelBtn: classes.cancelBtn,
-                //   tableCellRow: classes.tableCellRow
-                // }}
+                selectClasses={{
+                  selectFormControl: classes.selectFormControl,
+                  selectInputLabel: classes.selectInputLabel,
+                  select: classes.select,
+                  selectMenuItem: classes.selectMenuItem
+                }}
+                inputClasses={{
+                  inputWrapperDiv: classes.inputWrapperDiv,
+                  input: classes.input,
+                  error: classes.error
+                }}
+                classes={{
+                  tableBodyRow: classes.tableBodyRow,
+                  tableBodyCell: classes.tableBodyCell,
+                  saveBtn: classes.saveBtn,
+                  cancelBtn: classes.cancelBtn,
+                  tableCellRow: classes.tableCellRow
+                }}
                 handleSave={this.handleSave}
                 handleCancel={this.handleCancel}
                 fieldsArr={fieldsArr}
@@ -589,7 +599,7 @@ class EditableTable extends React.Component {
           <Button
             variant="contained"
             startIcon={<AddIcon small />}
-            // className={classNames(classes.addBtn, `addBtn_${tableName}`)}
+            className={classNames(classes.addBtn, `addBtn_${tableName}`)}
             disabled={isAdding || isEditing || disabled}
             onClick={() => this.setState({isAdding: true})}
           >
@@ -604,23 +614,23 @@ class EditableTable extends React.Component {
 const styles = () => ({
   table: {},
   tableHead: {},
-  tableHeadRow: {},
+  tableHeadRow: {height: 32},
   tableHeadCell: {},
   tableBody: {},
   tableBodyRow: {},
-  tableBodyCell: {},
-  inputWrapperDiv: {},
-  input: {},
+  tableBodyCell: {textAlign: 'center!important'},
+  inputWrapperDiv: {height: 32},
+  input: {height: 32},
   error: {},
   selectFormControl: {},
   selectInputLabel: {},
-  select: {},
+  select: {height: 36},
   selectMenuItem: {},
-  saveBtn: {},
-  cancelBtn: {},
+  saveBtn: {minWidth: '12px!important'},
+  cancelBtn: {minWidth: '12px!important'},
   addBtn: {},
-  deleteBtn: {},
-  editBtn: {}
+  deleteBtn: {minWidth: '12px!important'},
+  editBtn: {minWidth: '12px!important'},
 });
 
 export default withStyles(styles)(EditableTable);
