@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "/nurims",
   "dependencies": {
+    "@cyntler/react-doc-viewer": "^1.8.0",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.3.1",
@@ -33,6 +34,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-floater": "^0.8.2",
+    "react-frame-component": "^5.2.3",
     "react-json-pretty": "^2.2.0",
     "react-json-view": "^1.21.3",
     "react-leaflet": "^4.1.0",

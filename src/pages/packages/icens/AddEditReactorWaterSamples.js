@@ -9,9 +9,10 @@ import {
 import {
   CMD_DELETE_USER_RECORD,
   CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
+  CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
   CMD_UPDATE_USER_RECORD,
   ITEM_ID,
-  METADATA,
+  METADATA, NURIMS_SAMPLEDATE,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../../utils/constants";
@@ -26,7 +27,6 @@ import {
   Save as SaveIcon,
   RemoveCircle as RemoveCircleIcon,
 } from "@mui/icons-material";
-
 import {v4 as uuid} from "uuid";
 import {
   getMatchingResponseObject,
@@ -40,6 +40,7 @@ import {
 import {toast} from "react-toastify";
 import WaterSamplesList from "./WaterSamplesList";
 import WaterSampleMetadata from "./WaterSampleMetadata";
+import {getMetadataValue} from "../../../utils/MetadataUtils";
 
 class AddEditReactorWaterSamples extends React.Component {
   static contextType = UserDebugContext;
@@ -135,7 +136,7 @@ class AddEditReactorWaterSamples extends React.Component {
     this.props.send({
       cmd: CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
       "include.disabled": include_archived ? "true" : "false",
-      "include.metadata.subtitle": "nurims.sampledate",
+      "include.metadata.subtitle": NURIMS_SAMPLEDATE,
       module: this.Module,
     })
     this.setState({include_archived: include_archived});
@@ -153,11 +154,22 @@ class AddEditReactorWaterSamples extends React.Component {
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
             record["record_key"] = uuid();
           }
+          // Only update then changed metadata fields
+          console.log("CHANGED METADATA", record["changed.metadata"])
+          const metadata_entries = [];
+          for (const md of record["changed.metadata"]) {
+            const entry = {};
+            entry[md] = getMetadataValue(record, md, "");
+            metadata_entries.push(entry)
+          }
+          record["metadata"] = metadata_entries;
+          console.log("SAVING RECORD", record)
           this.props.send({
-            cmd: CMD_UPDATE_USER_RECORD,
+            cmd: CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
             item_id: record.item_id,
             "nurims.title": record[NURIMS_TITLE],
             "nurims.withdrawn": record[NURIMS_WITHDRAWN],
+            "include.metadata.subtitle": NURIMS_SAMPLEDATE,
             metadata: record.metadata,
             record_key: record.record_key,
             module: this.Module,
@@ -166,7 +178,7 @@ class AddEditReactorWaterSamples extends React.Component {
       }
     }
 
-    this.setState({metadata_changed: false})
+    // this.setState({metadata_changed: false})
   }
 
   ws_message(message) {
@@ -199,12 +211,21 @@ class AddEditReactorWaterSamples extends React.Component {
               }
             }
           }
-        } else if (isCommandResponse(message, CMD_UPDATE_USER_RECORD)) {
+        } else if (isCommandResponse(message, CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD)) {
           toast.success(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
+          const selection = this.state.selection;
+          const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
+          selection[METADATA] = [...record[METADATA]]
           if (this.listRef.current) {
-            // this.listRef.current.updateRecord(response[this.recordTopic]);
-            this.listRef.current.updateRecord(response.users);
+            this.listRef.current.updateRecord(response.operation);
           }
+          if (this.metadataRef.current) {
+            this.metadataRef.current.setRecordMetadata(selection);
+          }
+          // if (this.listRef.current) {
+          //   // this.listRef.current.updateRecord(response[this.recordTopic]);
+          //   this.listRef.current.updateRecord(response.operation);
+          // }
         } else if (isCommandResponse(message, CMD_DELETE_USER_RECORD)) {
           toast.success(`Record (id: ${response.item_id}) deleted successfully`)
           if (this.listRef.current) {

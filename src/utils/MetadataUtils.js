@@ -1,4 +1,4 @@
-import {NURIMS_WITHDRAWN} from "./constants";
+import {NURIMS_SAMPLEDATE, NURIMS_WITHDRAWN} from "./constants";
 
 export function isRecordArchived(record) {
   return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
@@ -20,6 +20,17 @@ export function getMetadataValue(obj, key, missingValue) {
   return missingValue;
 }
 
+
+export function getMetadataValueAsISODateString(obj, key, missingValue) {
+  const value = getMetadataValue(obj, key, missingValue);
+  if (missingValue) {
+    if (value.length < 11) {
+      return value + "T00:00:00";
+    }
+    return value;
+  }
+  return (value.length < 11) ? value + "T00:00:00" : value;
+}
 
 export function setMetadataValue(obj, key, value) {
   if (obj.hasOwnProperty("metadata")) {
@@ -185,4 +196,13 @@ export function getUserRecordMetadataValue(obj, key, missingValue) {
     }
   }
   return missingValue;
+}
+
+export function appendMetadataChangedField(obj, field) {
+  for (const f of obj) {
+    if (f === field) {
+      return;
+    }
+  }
+  obj.push(field);
 }

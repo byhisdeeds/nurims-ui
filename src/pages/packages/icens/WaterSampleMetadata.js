@@ -2,20 +2,22 @@ import React, {Component} from 'react';
 import {withTheme} from "@mui/styles";
 import {
   setMetadataValue,
-  getUserRecordMetadataValue, getMetadataValue,
+  getMetadataValue,
+  appendMetadataChangedField,
+  getMetadataValueAsISODateString,
 } from "../../../utils/MetadataUtils";
 import {
-  NURIMS_AVAILABLE,
   NURIMS_DESCRIPTION,
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS,
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDES,
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS,
+  NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE,
+  NURIMS_SAMPLEDATE,
   NURIMS_TITLE
 } from "../../../utils/constants";
 import PropTypes from "prop-types";
 import {
   DateSelect,
-  SelectFormControlWithTooltip
 } from "../../../components/CommonComponents";
 import {
   ConsoleLog,
@@ -30,6 +32,8 @@ import {
   TextField
 } from "@mui/material";
 import EditableTable from "../../../components/EditableTable";
+import Frame from "react-frame-component";
+import TextFileViewer from "../../../components/TextFileViewer";
 
 
 class WaterSampleMetadata extends Component {
@@ -117,6 +121,7 @@ class WaterSampleMetadata extends Component {
         return this.nuclideTableFields[3].options.push({ label: t[1], value: t[0] });
       }
     })
+    this.doc = { uri: "data:text/plain,test.txt\nwtewrw\nwqrwrwqr\n" };
   }
 
   handleChange = (e) => {
@@ -127,10 +132,9 @@ class WaterSampleMetadata extends Component {
     if (e.target.id === "name") {
       record["changed"] = true;
       record[NURIMS_TITLE] = e.target.value;
-      // user.metadata["username"] = e.target.value;
       this.setState({record: record})
     } else if (e.target.id === "description") {
-      record["changed"] = true;
+      appendMetadataChangedField(record["changed.metadata"], NURIMS_DESCRIPTION);
       setMetadataValue(record, NURIMS_DESCRIPTION, e.target.value, "");
       this.setState({record: record})
     }
@@ -141,6 +145,11 @@ class WaterSampleMetadata extends Component {
   setRecordMetadata = (record) => {
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
+    }
+    if (record) {
+      record["changed"] = false;
+      record["changed.metadata"] = [];
+      this.doc = {uri: getMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE, "").url};
     }
     this.setState({
       record: (record) ? record : [],
@@ -172,7 +181,8 @@ class WaterSampleMetadata extends Component {
     }
     const record = this.state.record;
     record["changed"] = true;
-    setMetadataValue(record, NURIMS_AVAILABLE, e.toISOString().substring(0,10), "");
+    appendMetadataChangedField(record["changed.metadata"], NURIMS_SAMPLEDATE);
+    setMetadataValue(record, NURIMS_SAMPLEDATE, e.toISOString().substring(0,10), "");
     this.setState({record: record})
     // signal to parent that details have changed
     this.props.onChange(true);
@@ -195,6 +205,7 @@ class WaterSampleMetadata extends Component {
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "render", "disabled", disabled, "record", record);
     }
+    console.log("$$$$$", getMetadataValueAsISODateString(record, NURIMS_SAMPLEDATE, ""))
     // const authorized_module_levels = getPropertyValue(properties, "system.authorizedmodulelevels", "").split('|');
     // const user_roles = getPropertyValue(properties, "system.userrole", "").split('|');
     return (
@@ -232,7 +243,7 @@ class WaterSampleMetadata extends Component {
             <DateSelect
               disabled={disabled}
               label="Analysis Date"
-              value={getMetadataValue(record, NURIMS_AVAILABLE, null)}
+              value={getMetadataValueAsISODateString(record, NURIMS_SAMPLEDATE, "")}
               onChange={this.handleDateAvailableChange}
             />
           </Grid>
@@ -248,10 +259,58 @@ class WaterSampleMetadata extends Component {
               fieldsArr={this.nuclideTableFields}
             />
           </Grid>
-          <Grid item xs={6}>
-            <p>sdfsfsfsf</p>
+          <Grid item xs={12}>
+            <TextFileViewer
+              style={{
+                fontFamily: 'Monospace',
+                fontSize: 20,
+                backgroundColor: "#565656",
+                whiteSpace: "pre",
+              }}
+              file={this.doc}
+            />
+            {/*<Frame*/}
+            {/*  style={{width: '100%', backgroundColor: "#565656"}}*/}
+            {/*  head={<style>{'#arrow_left{width: 32px}'}</style>}*/}
+            {/*>*/}
+            {/*  <TextFileViewer*/}
+            {/*      style={{*/}
+            {/*        fontFamily: 'Monospace',*/}
+            {/*        fontSize: 20,*/}
+            {/*        backgroundColor: "#565656",*/}
+            {/*        whiteSpace: "pre",*/}
+            {/*      }}*/}
+            {/*      file={this.doc}*/}
+            {/*  />*/}
+            {/*  /!*<DocViewer*!/*/}
+            {/*  /!*  style={{*!/*/}
+            {/*  /!*    fontFamily: 'Monospace',*!/*/}
+            {/*  /!*    fontSize: 20,*!/*/}
+            {/*  /!*    backgroundColor: "#565656",*!/*/}
+            {/*  /!*    whiteSpace: "pre",*!/*/}
+            {/*  /!*  }}*!/*/}
+            {/*  /!*  documents={this.docs}*!/*/}
+            {/*  /!*  pluginRenderers={DocViewerRenderers}*!/*/}
+            {/*  /!*  theme={{*!/*/}
+            {/*  /!*    primary: "#5296d8",*!/*/}
+            {/*  /!*    secondary: "#ffffff",*!/*/}
+            {/*  /!*    tertiary: "#5296d899",*!/*/}
+            {/*  /!*    textPrimary: "#bebebe",*!/*/}
+            {/*  /!*    textSecondary: "#858f9b",*!/*/}
+            {/*  /!*    textTertiary: "rgb(150,121,121)",*!/*/}
+            {/*  /!*    disableThemeScrollbar: false,*!/*/}
+            {/*  /!*  }}*!/*/}
+            {/*  /!*  config={{*!/*/}
+            {/*  /!*    header: {*!/*/}
+            {/*  /!*      disableHeader: false,*!/*/}
+            {/*  /!*      disableFileName: true,*!/*/}
+            {/*  /!*      retainURLParams: false,*!/*/}
+            {/*  /!*    },*!/*/}
+            {/*  /!*  }}*!/*/}
+            {/* !/*/}
+            {/*</Frame>*/}
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <p>sdfsfsfsf</p>
           </Grid>
         </Grid>
