@@ -262,53 +262,12 @@ class WaterSampleMetadata extends Component {
           <Grid item xs={12}>
             <TextFileViewer
               style={{
-                fontFamily: 'Monospace',
-                fontSize: 20,
+                fontSize: 16,
                 backgroundColor: "#565656",
-                whiteSpace: "pre",
+                height: 400,
               }}
               file={this.doc}
             />
-            {/*<Frame*/}
-            {/*  style={{width: '100%', backgroundColor: "#565656"}}*/}
-            {/*  head={<style>{'#arrow_left{width: 32px}'}</style>}*/}
-            {/*>*/}
-            {/*  <TextFileViewer*/}
-            {/*      style={{*/}
-            {/*        fontFamily: 'Monospace',*/}
-            {/*        fontSize: 20,*/}
-            {/*        backgroundColor: "#565656",*/}
-            {/*        whiteSpace: "pre",*/}
-            {/*      }}*/}
-            {/*      file={this.doc}*/}
-            {/*  />*/}
-            {/*  /!*<DocViewer*!/*/}
-            {/*  /!*  style={{*!/*/}
-            {/*  /!*    fontFamily: 'Monospace',*!/*/}
-            {/*  /!*    fontSize: 20,*!/*/}
-            {/*  /!*    backgroundColor: "#565656",*!/*/}
-            {/*  /!*    whiteSpace: "pre",*!/*/}
-            {/*  /!*  }}*!/*/}
-            {/*  /!*  documents={this.docs}*!/*/}
-            {/*  /!*  pluginRenderers={DocViewerRenderers}*!/*/}
-            {/*  /!*  theme={{*!/*/}
-            {/*  /!*    primary: "#5296d8",*!/*/}
-            {/*  /!*    secondary: "#ffffff",*!/*/}
-            {/*  /!*    tertiary: "#5296d899",*!/*/}
-            {/*  /!*    textPrimary: "#bebebe",*!/*/}
-            {/*  /!*    textSecondary: "#858f9b",*!/*/}
-            {/*  /!*    textTertiary: "rgb(150,121,121)",*!/*/}
-            {/*  /!*    disableThemeScrollbar: false,*!/*/}
-            {/*  /!*  }}*!/*/}
-            {/*  /!*  config={{*!/*/}
-            {/*  /!*    header: {*!/*/}
-            {/*  /!*      disableHeader: false,*!/*/}
-            {/*  /!*      disableFileName: true,*!/*/}
-            {/*  /!*      retainURLParams: false,*!/*/}
-            {/*  /!*    },*!/*/}
-            {/*  /!*  }}*!/*/}
-            {/* !/*/}
-            {/*</Frame>*/}
           </Grid>
           <Grid item xs={12}>
             <p>sdfsfsfsf</p>

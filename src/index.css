@@ -68,6 +68,11 @@
 }
 
 @font-face {
+  font-family: 'ledger';
+  src: local('Ledger'), url(./fonts/Ledger-Regular.ttf) format('truetype');
+}
+
+@font-face {
   font-family: 'cabin';
   src: local('Cabin'), url(./fonts/Cabin-Regular.ttf) format('truetype');
 }
@@ -112,6 +117,11 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+pre {
+  font-family: ledger, Consolas, monospace;
+  border: 1px solid red;
 }
 
 .leaflet-container {

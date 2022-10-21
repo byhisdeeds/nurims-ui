@@ -46,7 +46,14 @@ class TextFileViewer extends Component {
     }
     return (
       <div
-        style={style}
+        style={Object.assign({
+          fontSize: 12,
+          backgroundColor: "#000000",
+          color: "#cbcbcb",
+          whiteSpace: "pre",
+          overflowX: "hidden",
+          overflowY: "auto"
+        }, style)}
         dangerouslySetInnerHTML={{__html: this.getText(this.props.file)}}
       />
     )

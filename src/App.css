@@ -1,5 +1,66 @@
 /* App.css */
 
+
+@font-face {
+  font-family: 'ledger';
+  src: local('Ledger'), url(./fonts/Ledger-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'cabin';
+  src: local('Cabin'), url(./fonts/Cabin-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'cascadia';
+  src: local('Cascadia'), url(./fonts/Cascadia.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'segoeui';
+  src: local('Segoeui'), url(./fonts/Segoeui.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'robotoslabregular';
+  src: local('RobotoSlabRegular'), url(./fonts/RobotoSlabRegular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'patua';
+  src: local('Patua'), url(./fonts/PatuaOne-Regular.otf) format('truetype');
+}
+
+@font-face {
+  font-family: 'london';
+  src: local('London'), url(./fonts/london.fill-bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'trustno1';
+  src: local('TrustNo1'), url(./fonts/TRUSTNO1.TTF) format('truetype');
+}
+
+body {
+  margin: 0;
+  font-family: RobotoSlabRegular, Segoeui, Cabin,  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+pre {
+  font-family: TrustNo1, Consolas, 'Courier New', monospace;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
+}
+
 .Toastify__toast-container {
   width: 700px;
 }
