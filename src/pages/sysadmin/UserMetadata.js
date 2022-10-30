@@ -3,15 +3,12 @@ import {withTheme} from "@mui/styles";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import {
-  setMetadataValue,
   getUserRecordMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
-  NURIMS_ENTITY_ADDRESS, NURIMS_MATERIAL_TYPE,
   NURIMS_TITLE
 } from "../../utils/constants";
 import PropTypes from "prop-types";
-import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import {SelectFormControlWithTooltip} from "../../components/CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {getPropertyValue} from "../../utils/PropertyUtils";

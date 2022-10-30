@@ -11,7 +11,6 @@ import {toast} from "react-toastify";
 // import PersonMetadata from "./PersonMetadata";
 import Box from "@mui/material/Box";
 import {
-  CMD_GET_PERSONNEL_RECORDS,
   CMD_UPDATE_PERSONNEL_RECORD,
   NURIMS_ENTITY_CONTACT,
   NURIMS_ENTITY_DATE_OF_BIRTH,

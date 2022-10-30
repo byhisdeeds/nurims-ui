@@ -8,12 +8,11 @@ import {
   DialogTitle, Grid
 } from "@mui/material";
 import {
-  ITEM_ID, NURIMS_SAMPLEDATE,
+  ITEM_ID,
   NURIMS_TITLE
 } from "./constants";
 import PropTypes from "prop-types";
-import {DateSelect, SameYearDateRangePicker} from "../components/CommonComponents";
-import {getMetadataValueAsISODateString} from "./MetadataUtils";
+import {SameYearDateRangePicker} from "../components/CommonComponents";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 

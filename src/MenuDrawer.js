@@ -8,7 +8,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import AppMenuItem from "./AppMenuItem";
 import PropTypes from 'prop-types'
-import App from "./App";
 
 const drawerWidth = 300;
 

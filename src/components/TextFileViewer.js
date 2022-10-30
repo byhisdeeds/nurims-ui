@@ -35,7 +35,7 @@ class TextFileViewer extends Component {
   }
 
   renderHtml(line) {
-    return "<pre>" + line.replace(/\\n/g,"<br/>") + "<br/>" + "</pre>";
+    return "<pre>" + line.replace(/\\n/g,"<br/>") + "<br/></pre>";
   }
 
   render() {

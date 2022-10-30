@@ -26,20 +26,13 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TablePagination from "@mui/material/TablePagination";
-import {alpha} from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import TableHead from "@mui/material/TableHead";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import {visuallyHidden} from "@mui/utils";
 import Floater from 'react-floater';
-// import {getDateFromDateString, getMetadataValue} from "../utils/MetadataUtils";
-// import {NURIMS_DESCRIPTION, NURIMS_MATERIAL_REGISTRATION_DATE} from "../utils/constants";
-// import {getMetadataValue} from "../utils/MetadataUtils";
-// import {NURIMS_MATERIAL_CLASSIFICATION} from "../utils/constants";
 
 
 function TooltipContent(closeFn) {

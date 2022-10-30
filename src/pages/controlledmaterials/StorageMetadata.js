@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import {
   MapContainer,
-  Marker,
   ImageOverlay,
 } from 'react-leaflet';
 import L from 'leaflet';

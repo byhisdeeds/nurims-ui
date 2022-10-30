@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
-import {createStyles, styled} from '@mui/material/styles'
+import {createStyles} from '@mui/material/styles'
 import {makeStyles} from '@mui/styles';
 import List from '@mui/material/List'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider'
 import Collapse from '@mui/material/Collapse'
 import IconExpandLess from '@mui/icons-material/ExpandLess'
 import IconExpandMore from '@mui/icons-material/ExpandMore'
-import {ListItemButton, Tooltip, Typography} from "@mui/material";
+import {ListItemButton, Tooltip} from "@mui/material";
 import eventBus from "./EventBus";
 
 

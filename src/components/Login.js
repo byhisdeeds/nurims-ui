@@ -2,7 +2,6 @@ import React from 'react';
 import {Navigate} from "react-router-dom";
 import PropTypes from 'prop-types'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
-import {withTheme} from "@mui/styles";
 import {darkTheme, lightTheme} from "../utils/Theme";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';

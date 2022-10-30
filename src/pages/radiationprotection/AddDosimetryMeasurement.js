@@ -347,8 +347,7 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {
-  CMD_GET_GLOSSARY_TERMS, CMD_GET_PERSONNEL_RECORDS,
-  CMD_GET_SSC_RECORDS,
+  CMD_GET_GLOSSARY_TERMS,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";

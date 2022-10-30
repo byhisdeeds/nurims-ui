@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
 import {
   BLANK_PDF,
-  CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF,
   CMD_GENERATE_CONTROLLED_MATERIALS_SURVEILLANCE_SHEET_PDF,
 } from "../../utils/constants";
 import {
-  Fab,
   FormControl,
   Grid,
   InputLabel,

@@ -24,7 +24,6 @@ import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import BusyIndicator from "./components/BusyIndicator";
 import "./App.css"
-import {grey} from "@mui/material/colors";
 import {setPropertyValue} from "./utils/PropertyUtils";
 import {
   CMD_GET_SYSTEM_PROPERTIES,

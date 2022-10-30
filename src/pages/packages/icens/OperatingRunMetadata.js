@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {withTheme} from "@mui/styles";
 import {
-  setMetadataValue,
-  getUserRecordMetadataValue,
   getRecordMetadataValue,
   formatISODateString,
 } from "../../../utils/MetadataUtils";

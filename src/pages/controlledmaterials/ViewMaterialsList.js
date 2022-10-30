@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import {
   BLANK_PDF,
-  CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF, CMD_GET_PERSONNEL_RECORDS,
+  CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF,
 } from "../../utils/constants";
 import {
-  Fab,
   FormControl,
   Grid,
   InputLabel,
@@ -12,7 +11,6 @@ import {
   Stack,
   Typography
 } from "@mui/material";
-import Box from "@mui/material/Box";
 import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import MenuItem from "@mui/material/MenuItem";

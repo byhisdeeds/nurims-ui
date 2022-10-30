@@ -32,7 +32,6 @@ import {
   TextField
 } from "@mui/material";
 import EditableTable from "../../../components/EditableTable";
-import Frame from "react-frame-component";
 import TextFileViewer from "../../../components/TextFileViewer";
 
 
