@@ -13,7 +13,7 @@ module.exports = Object.freeze({
   SSC_ADD_EDIT_SSC: 'ssc.add.edit.ssc',
   SSC_ADD_EDIT_SSC_AMP: 'ssc.add.edit.ssc.amp',
   SSC_VIEW_SSC_RECORDS: 'ssc.view.ssc.records',
-  RO_ADD_EDIT_REACTOR_OPERATING_RUN_DATA: 'ro.add.edit.reactor.operating.run.data',
+  RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS: 'ro.add.edit.reactor.operating.run.records',
   RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA: 'ro.add.edit.irradiated.samples',
   RO_REACTOR_OPERATIONS_REPORT: 'ro.reactor.operations.report',
   RO_ADD_EDIT_REACTOR_WATER_SAMPLES: 'ro.add.edit.reactor.water.samples',
@@ -53,10 +53,13 @@ module.exports = Object.freeze({
   CMD_GET_SYSTEM_PROPERTIES: "get_system_properties",
   CMD_SET_SYSTEM_PROPERTIES: "set_system_properties",
 
+  CMD_BACKGROUND_TASKS: "background_tasks",
+
   CMD_GET_USER_RECORDS: "get_user_records",
   CMD_UPDATE_USER_RECORD: "update_user_record",
   CMD_DELETE_USER_RECORD: "delete_user_record",
 
+  CMD_DISCOVER_REACTOR_OPERATION_RUNS: "discover_reactor_operation_runs",
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS: "get_reactor_operation_run_records",
   CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD: "update_sample_irradiation_log_record",
 
@@ -150,6 +153,7 @@ module.exports = Object.freeze({
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS: "nurims.operation.data.reactorwaterchemistry.nuclideunits",
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS: "nurims.operation.data.reactorwaterchemistry.analysis",
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE: "nurims.operation.data.reactorwaterchemistry.reportfile",
+  NURIMS_OPERATION_DATA_STATS: "nurims.operation.data.stats",
 
   BLANK_PDF: 'data:application/pdf;base64,JVBERi0xLjQKJb/3ov4KMSAwIG9iago8PCAvUGFnZXMgMiAwIFIgL1R5cGUgL0NhdGFsb2cgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL0NvdW50IDEgL0tpZHMgWyAzIDAgUiBdIC9UeXBlIC9QYWdlcyA+PgplbmRvYmoKMyAwIG9iago8PCAvQ29udGVudHMgNCAwIFIgL0dyb3VwIDw8IC9DUyAvRGV2aWNlUkdCIC9JIHRydWUgL1MgL1RyYW5zcGFyZW5jeSAvVHlwZSAvR3JvdXAgPj4gL01lZGlhQm94IFsgMCAwIDYxMiA3OTEuMjUgXSAvUGFyZW50IDIgMCBSIC9SZXNvdXJjZXMgNSAwIFIgL1R5cGUgL1BhZ2UgPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0ZpbHRlciAvRmxhdGVEZWNvZGUgL0xlbmd0aCAzMCA+PgpzdHJlYW0KeJwzVDAAQl1DIGFuaahnZKqQnMtVyBXIBQA6LATGZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8ID4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDA2NCAwMDAwMCBuIAowMDAwMDAwMTIzIDAwMDAwIG4gCjAwMDAwMDAyOTggMDAwMDAgbiAKMDAwMDAwMDM5OCAwMDAwMCBuIAp0cmFpbGVyIDw8IC9Sb290IDEgMCBSIC9TaXplIDYgL0lEIFs8YzhjZDFmYzFhMWNiODBlZTgyNzI1ZjIyMTYyMTU2NDE+PGM4Y2QxZmMxYTFjYjgwZWU4MjcyNWYyMjE2MjE1NjQxPl0gPj4Kc3RhcnR4cmVmCjQxOQolJUVPRgo=',
 

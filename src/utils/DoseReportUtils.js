@@ -1,6 +1,6 @@
 import {toast} from "react-toastify";
 import {
-  getMetadataValue,
+  getRecordMetadataValue,
   setDoseRecordMetadataValue
 } from "./MetadataUtils";
 
@@ -53,10 +53,10 @@ export function importIcensDoseReport (data, persons, doseUnit) {
             console.log("EMPLOYEE", name, b["tld.dosimeter.employee"], id);
             // find person
             for (const person of persons) {
-              const doseProvider = getMetadataValue(person, "nurims.entity.doseproviderid", "|").split("|");
-              const wholeBodyMonitor = getMetadataValue(person, "nurims.entity.iswholebodymonitored", "false");
-              const extremityMonitor = getMetadataValue(person, "nurims.entity.isextremitymonitored", "false");
-              const wristMonitor = getMetadataValue(person, "nurims.entity.iswristmonitored", "false");
+              const doseProvider = getRecordMetadataValue(person, "nurims.entity.doseproviderid", "|").split("|");
+              const wholeBodyMonitor = getRecordMetadataValue(person, "nurims.entity.iswholebodymonitored", "false");
+              const extremityMonitor = getRecordMetadataValue(person, "nurims.entity.isextremitymonitored", "false");
+              const wristMonitor = getRecordMetadataValue(person, "nurims.entity.iswristmonitored", "false");
               if (doseProvider.length === 2) {
                 const doseProviderId = doseProvider[1];
                 if (id === doseProviderId) {

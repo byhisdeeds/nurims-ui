@@ -13,7 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import "leaflet/dist/leaflet.css";
 import {
   getDateFromDateString,
-  getMetadataValue,
+  getRecordMetadataValue,
   setMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
@@ -136,7 +136,7 @@ class SSCMetadata extends Component {
       ConsoleLog("SSCMetadata", "setRecordMetadata", "record", record);
     }
     if (this.ref.current) {
-      this.ref.current.setRowData(getMetadataValue(record, NURIMS_SSC_MAINTENANCE_SCOPE, []), true);
+      this.ref.current.setRowData(getRecordMetadataValue(record, NURIMS_SSC_MAINTENANCE_SCOPE, []), true);
     }
     this.setState({ssc: record})
     this.props.onChange(false);
@@ -259,7 +259,7 @@ class SSCMetadata extends Component {
                   <TextField
                     id="description"
                     label="SSC Description"
-                    value={getMetadataValue(ssc, NURIMS_DESCRIPTION, "")}
+                    value={getRecordMetadataValue(ssc, NURIMS_DESCRIPTION, "")}
                     onChange={this.handleChange}
                   />
                 </HtmlTooltip>
@@ -274,7 +274,7 @@ class SSCMetadata extends Component {
                   <TextField
                     id="ssc-id"
                     label="SSC ID"
-                    value={getMetadataValue(ssc, NURIMS_SSC_ID, "")}
+                    value={getRecordMetadataValue(ssc, NURIMS_SSC_ID, "")}
                     onChange={this.handleChange}
                   />
                 </HtmlTooltip>
@@ -284,7 +284,7 @@ class SSCMetadata extends Component {
                   <DatePicker
                     label="SSC Commissioning Date"
                     inputFormat={"yyyy-MM-dd"}
-                    value={getDateFromDateString(getMetadataValue(ssc, NURIMS_SSC_COMMISSIONING_DATE, "1970-01-01"), null)}
+                    value={getDateFromDateString(getRecordMetadataValue(ssc, NURIMS_SSC_COMMISSIONING_DATE, "1970-01-01"), null)}
                     onChange={this.handleCommissioningDateChange}
                     renderInput={(params) => <TextField {...params} />}
                   />
@@ -306,7 +306,7 @@ class SSCMetadata extends Component {
                       labelId="type"
                       label="SSC Type"
                       id="type"
-                      value={getMetadataValue(ssc, NURIMS_SSC_TYPE, "")}
+                      value={getRecordMetadataValue(ssc, NURIMS_SSC_TYPE, "")}
                       onChange={this.handleSSCTypeChange}
                     >
                       <MenuItem value='structure'>Structure</MenuItem>
@@ -339,7 +339,7 @@ class SSCMetadata extends Component {
                       labelId="classification"
                       label="SSC Classification"
                       id="classification"
-                      value={getMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, [])}
+                      value={getRecordMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, [])}
                       onChange={this.handleSSCClassificationChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_SSC_CLASSIFICATION)}
@@ -363,7 +363,7 @@ class SSCMetadata extends Component {
                       labelId="safety-category"
                       label="SSC Safety Category"
                       id="safety-category"
-                      value={getMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, "")}
+                      value={getRecordMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, "")}
                       onChange={this.handleSSCSafetyCategoryChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_SSC_SAFETY_CATEGORY)}
@@ -387,7 +387,7 @@ class SSCMetadata extends Component {
                       labelId="safety-function"
                       label="SSC Safety Function"
                       id="safety-function"
-                      value={getMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, "")}
+                      value={getRecordMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, "")}
                       onChange={this.handleSSCSafetyFunctionChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_SSC_SAFETY_FUNCTION)}
@@ -411,7 +411,7 @@ class SSCMetadata extends Component {
                       labelId="maintainability"
                       label="SSC Maintainability"
                       id="maintainability"
-                      value={getMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, "")}
+                      value={getRecordMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, "")}
                       onChange={this.handleSSCMaintainabilityChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_SSC_MAINTAINABILITY)}

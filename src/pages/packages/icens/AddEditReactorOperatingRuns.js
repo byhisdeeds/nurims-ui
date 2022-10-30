@@ -4,15 +4,17 @@ import {
   UserDebugContext
 } from "../../../utils/UserDebugContext";
 import {
+  ConfirmOperatingRunDiscoveryDialog,
   ConfirmRemoveRecordDialog
 } from "../../../utils/UtilityDialogs";
 import {
   CMD_DELETE_USER_RECORD,
+  CMD_DISCOVER_REACTOR_OPERATION_RUNS,
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
-  CMD_GET_USER_RECORDS,
   CMD_UPDATE_USER_RECORD,
   ITEM_ID,
   METADATA,
+  NURIMS_OPERATION_DATA_STATS,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../../utils/constants";
@@ -50,6 +52,7 @@ class AddEditReactorOperatingRuns extends React.Component {
     this.state = {
       metadata_changed: false,
       confirm_remove: false,
+      confirm_discovery: false,
       selection: {},
       title: props.title,
       include_archived: false,
@@ -108,25 +111,30 @@ class AddEditReactorOperatingRuns extends React.Component {
     }
   }
 
-  addRecord = () => {
+  discoverOperatingRuns = () => {
     if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "addRecord");
+      ConsoleLog(this.Module, "discoverOperatingRuns");
     }
-    if (this.listRef.current) {
-      this.listRef.current.addRecords([{
-        "changed": true,
-        "item_id": -1,
-        "nurims.title": "New Record",
-        "nurims.withdrawn": 0,
-        "metadata": {
-          username: "New Record",
-          password: "",
-          authorized_module_level: "",
-          role: "",
-        }
-      }], false);
-      this.setState({metadata_changed: true});
+    this.setState({confirm_discovery: true,});
+  }
+
+  cancelDiscovery = () => {
+    this.setState({confirm_discovery: false,});
+  }
+
+  proceedWithDiscovery = (year, startMonth, endMonth) => {
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "proceedWithDiscovery", "year", year, "startMonth", startMonth, "endMonth", endMonth);
     }
+    this.setState({confirm_discovery: false,});
+    this.props.send({
+      cmd: CMD_DISCOVER_REACTOR_OPERATION_RUNS,
+      year: year.getFullYear(),
+      startMonth: startMonth.getMonth()+1,
+      endMonth: endMonth.getMonth()+1,
+      "run_in_background": "true",
+      module: this.Module,
+    });
   }
 
   requestGetRecords = (include_archived) => {
@@ -136,6 +144,7 @@ class AddEditReactorOperatingRuns extends React.Component {
     this.props.send({
       cmd: CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
       "include.disabled": include_archived ? "true" : "false",
+      "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
       module: this.Module,
     })
     this.setState({include_archived: include_archived});
@@ -180,31 +189,30 @@ class AddEditReactorOperatingRuns extends React.Component {
           const selection = this.state.selection;
           if (Object.keys(selection).length === 0) {
             if (this.listRef.current) {
-              this.listRef.current.setRecords(response.users);
+              this.listRef.current.setRecords(response.operation);
             }
             if (this.metadataRef.current) {
               this.metadataRef.current.setRecordMetadata(selection);
             }
           } else {
             if (!message.hasOwnProperty("item_id") && this.listRef.current) {
-              // this.listRef.current.setRecords(response[this.recordTopic], true);
-              this.listRef.current.setRecords(response.users);
+              this.listRef.current.setRecords(response.operation);
             }
             if (message.hasOwnProperty("item_id")) {
-              // const record = getMatchingResponseObject(message, "response." + this.recordTopic, "item_id", selection["item_id"]);
-              const record = getMatchingResponseObject(message, "response.users", "item_id", selection["item_id"]);
+              const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
               selection[METADATA] = [...record[METADATA]]
               if (this.metadataRef.current) {
                 this.metadataRef.current.setRecordMetadata(selection);
               }
             }
           }
-        } else if (isCommandResponse(message, CMD_UPDATE_USER_RECORD)) {
-          toast.success(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
-          if (this.listRef.current) {
-            // this.listRef.current.updateRecord(response[this.recordTopic]);
-            this.listRef.current.updateRecord(response.users);
-          }
+        } else if (isCommandResponse(message, CMD_DISCOVER_REACTOR_OPERATION_RUNS)) {
+          // toast.success(response.message);
+          toast.success(response.message, {autoClose: !response.hasOwnProperty("persist_message")});
+          // if (this.listRef.current) {
+          //   // this.listRef.current.updateRecord(response[this.recordTopic]);
+          //   this.listRef.current.updateRecord(response.users);
+          // }
         } else if (isCommandResponse(message, CMD_DELETE_USER_RECORD)) {
           toast.success(`Record (id: ${response.item_id}) deleted successfully`)
           if (this.listRef.current) {
@@ -228,16 +236,27 @@ class AddEditReactorOperatingRuns extends React.Component {
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
     }
-    if (selection.hasOwnProperty("item_id")) {
+    if (selection.hasOwnProperty("item_id") && selection.item_id === -1) {
       if (this.metadataRef.current) {
         this.metadataRef.current.setRecordMetadata(selection)
       }
+    } else {
+      this.setState(pstate => {
+        return {selection: selection}
+      });
+      this.props.send({
+        cmd: CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
+        item_id: selection.item_id,
+        "include.metadata": "true",
+        "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
+        module: this.Module,
+      })
     }
     this.setState({selection: selection})
   }
 
   render() {
-    const {metadata_changed, confirm_remove, include_archived, selection, title} = this.state;
+    const {metadata_changed, confirm_remove, confirm_discovery, include_archived, selection, title} = this.state;
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
@@ -248,6 +267,10 @@ class AddEditReactorOperatingRuns extends React.Component {
                                    selection={selection}
                                    onProceed={this.proceedWithRemove}
                                    onCancel={this.cancelRemove}
+        />
+        <ConfirmOperatingRunDiscoveryDialog open={confirm_discovery}
+                                            onProceed={this.proceedWithDiscovery}
+                                            onCancel={this.cancelDiscovery}
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
@@ -287,9 +310,9 @@ class AddEditReactorOperatingRuns extends React.Component {
             <SaveIcon sx={{mr: 1}}/>
             Save Changes
           </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>
+          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.discoverOperatingRuns}>
             <AddIcon sx={{mr: 1}}/>
-            Add SSC
+            Update Operating Runs
           </Fab>
         </Box>
       </React.Fragment>

@@ -1,25 +1,16 @@
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import {
   Card,
   CardContent,
   FormControl,
-  FormControlLabel,
   Grid,
   InputLabel,
   Select,
-  Switch
 } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import {MapContainer, Marker, ImageOverlay} from 'react-leaflet';
-import L from 'leaflet';
-import defaultMarkerIcon from 'leaflet/dist/images/marker-icon.png';
-import MouseCoordinates from "../../components/MouseCoordinates";
-import LocationFinder from "../../components/LocationFinder";
 import "leaflet/dist/leaflet.css";
 import {
-  getMetadataValue,
+  getRecordMetadataValue,
   setMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
@@ -185,7 +176,7 @@ class AMPMetadata extends Component {
                       labelId="ageing-mechanism"
                       label="SSC Ageing Mechanism"
                       id="ageing-mechanism"
-                      value={getMetadataValue(ssc, NURIMS_AMP_AGEING_MECHANISM, [])}
+                      value={getRecordMetadataValue(ssc, NURIMS_AMP_AGEING_MECHANISM, [])}
                       onChange={this.handleSSCAgingMechanismChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_AGEING_MECHANISM)}
@@ -210,7 +201,7 @@ class AMPMetadata extends Component {
                       labelId="ageing-effect"
                       label="SSC Ageing Effect"
                       id="ageing-effect"
-                      value={getMetadataValue(ssc, NURIMS_AMP_AGEING_EFFECT, [])}
+                      value={getRecordMetadataValue(ssc, NURIMS_AMP_AGEING_EFFECT, [])}
                       onChange={this.handleSSCAgeingEffectChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_AGEING_EFFECT)}
@@ -235,7 +226,7 @@ class AMPMetadata extends Component {
                       labelId="ageing-detection-method"
                       label="SSC Ageing Detection Method"
                       id="ageing-detection-method"
-                      value={getMetadataValue(ssc, NURIMS_AMP_AGEING_DETECTION_METHOD, [])}
+                      value={getRecordMetadataValue(ssc, NURIMS_AMP_AGEING_DETECTION_METHOD, [])}
                       onChange={this.handleSSCAgeingDetectionMethodChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_AGEING_DETECTION_METHOD)}
@@ -260,7 +251,7 @@ class AMPMetadata extends Component {
                       labelId="ageing-degradation"
                       label="SSC Ageing Degradation"
                       id="ageing-degradation"
-                      value={getMetadataValue(ssc, NURIMS_AMP_AGEING_DEGRADATION, [])}
+                      value={getRecordMetadataValue(ssc, NURIMS_AMP_AGEING_DEGRADATION, [])}
                       onChange={this.handleSSCAgeingDegradationChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_AGEING_DEGRADATION)}
@@ -291,7 +282,7 @@ class AMPMetadata extends Component {
                       labelId="ageing-materials"
                       label="SSC Ageing Materials"
                       id="ageing-materials"
-                      value={getMetadataValue(ssc, NURIMS_AMP_MATERIALS, [])}
+                      value={getRecordMetadataValue(ssc, NURIMS_AMP_MATERIALS, [])}
                       onChange={this.handleSSCAgingMaterialsChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_MATERIALS)}
@@ -316,7 +307,7 @@ class AMPMetadata extends Component {
                       labelId="acceptance-criteria"
                       label="Ageing Acceptance Criteria"
                       id="acceptance-criteria"
-                      value={getMetadataValue(ssc, NURIMS_AMP_ACCEPTANCE_CRITERIA, [])}
+                      value={getRecordMetadataValue(ssc, NURIMS_AMP_ACCEPTANCE_CRITERIA, [])}
                       onChange={this.handleSSCAgeingAcceptanceCriteriaChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_ACCEPTANCE_CRITERIA)}
@@ -341,7 +332,7 @@ class AMPMetadata extends Component {
                       labelId="mitigation-steps"
                       label="Ageing Mitigation Steps"
                       id="mitigation-steps"
-                      value={getMetadataValue(ssc, NURIMS_AMP_MITIGATION_STEPS, [])}
+                      value={getRecordMetadataValue(ssc, NURIMS_AMP_MITIGATION_STEPS, [])}
                       onChange={this.handleSSCAgeingMitigationStepsChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_AMP_MITIGATION_STEPS)}
@@ -365,7 +356,7 @@ class AMPMetadata extends Component {
                       labelId="ageing-surveillance-frequency"
                       label="Ageing Surveillance Frequency"
                       id="ageing-surveillance-frequency"
-                      value={getMetadataValue(ssc, NURIMS_AMP_SURVEILLANCE_FREQUENCY, "")}
+                      value={getRecordMetadataValue(ssc, NURIMS_AMP_SURVEILLANCE_FREQUENCY, "")}
                       onChange={this.handleSSCAgeingSurveillanceFrequencyChange}
                     >
                       {getPropertyAsMenuitems(properties, NURIMS_SURVEILLANCE_FREQUENCY)}

@@ -6,7 +6,7 @@ import {
   Grid,
 } from "@mui/material";
 import {
-  getMetadataValue,
+  getRecordMetadataValue,
   setMetadataValue,
   getDateFromDateString, BlobObject
 } from "../../utils/MetadataUtils";
@@ -139,7 +139,7 @@ class MaterialMetadata extends Component {
     } else if (e.target.id === "type") {
       material["changed"] = true;
       setMetadataValue(material, NURIMS_MATERIAL_TYPE, e.target.value)
-      const nuclideData = getMetadataValue(material, NURIMS_MATERIAL_NUCLIDES, []);
+      const nuclideData = getRecordMetadataValue(material, NURIMS_MATERIAL_NUCLIDES, []);
       if (this.ref.current) {
         this.ref.current.setRowData(nuclideData);
       }
@@ -275,7 +275,7 @@ class MaterialMetadata extends Component {
 
   setRecordMetadata = (material) => {
     console.log("MaterialMetadata.setMaterialMetadata", material)
-    const nuclideData = getMetadataValue(material, NURIMS_MATERIAL_NUCLIDES, []);
+    const nuclideData = getRecordMetadataValue(material, NURIMS_MATERIAL_NUCLIDES, []);
     if (this.ref.current) {
       this.ref.current.setRowData(nuclideData);
     }
@@ -366,8 +366,8 @@ class MaterialMetadata extends Component {
     const inventoryStatus = getPropertyValue(properties, NURIMS_MATERIAL_INVENTORY_STATUS, "").split('|');
     const physicalForm = getPropertyValue(properties, NURIMS_MATERIAL_PHYSICAL_FORM, "").split('|');
     const surveillanceFrequency = getPropertyValue(properties, NURIMS_SURVEILLANCE_FREQUENCY, "").split('|');
-    const image = getMetadataValue(material, NURIMS_MATERIAL_IMAGE, BLANK_IMAGE_OBJECT);
-    const documentPdf = getMetadataValue(material, NURIMS_MATERIAL_DOCUMENTS, BLANK_IMAGE_OBJECT);
+    const image = getRecordMetadataValue(material, NURIMS_MATERIAL_IMAGE, BLANK_IMAGE_OBJECT);
+    const documentPdf = getRecordMetadataValue(material, NURIMS_MATERIAL_DOCUMENTS, BLANK_IMAGE_OBJECT);
     return (
       <Box
         component="form"
@@ -414,7 +414,7 @@ class MaterialMetadata extends Component {
                     id={"id"}
                     label="Material ID"
                     required={true}
-                    value={getMetadataValue(material, NURIMS_MATERIAL_ID, "")}
+                    value={getRecordMetadataValue(material, NURIMS_MATERIAL_ID, "")}
                     onChange={this.handleChange}
                     disabled={disabled}
                     tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_ID, "")}
@@ -442,7 +442,7 @@ class MaterialMetadata extends Component {
                     id={"type"}
                     label="Material Type"
                     required={true}
-                    value={getMetadataValue(material, NURIMS_MATERIAL_TYPE, "")}
+                    value={getRecordMetadataValue(material, NURIMS_MATERIAL_TYPE, "")}
                     onChange={this.handleMaterialTypeChange}
                     options={materialTypes}
                     disabled={disabled}
@@ -489,7 +489,7 @@ class MaterialMetadata extends Component {
                   <TextFieldWithTooltip
                     id={"description"}
                     label="Material Description"
-                    value={getMetadataValue(material, NURIMS_DESCRIPTION, "")}
+                    value={getRecordMetadataValue(material, NURIMS_DESCRIPTION, "")}
                     onChange={this.handleChange}
                     disabled={disabled}
                     tooltip={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")}
@@ -515,7 +515,7 @@ class MaterialMetadata extends Component {
                   <SelectFormControlWithTooltip
                     id={"classification"}
                     label="Material Classification"
-                    value={getMetadataValue(material, NURIMS_MATERIAL_CLASSIFICATION, "")}
+                    value={getRecordMetadataValue(material, NURIMS_MATERIAL_CLASSIFICATION, "")}
                     onChange={this.handleMaterialClassificationChange}
                     options={materialClassification}
                     disabled={disabled}
@@ -557,7 +557,7 @@ class MaterialMetadata extends Component {
                 <Grid item xs={4}>
                   <DatePickerWithTooltip
                     label="Registration Date"
-                    value={getDateFromDateString(getMetadataValue(material, NURIMS_MATERIAL_REGISTRATION_DATE, "1970-01-01"), null)}
+                    value={getDateFromDateString(getRecordMetadataValue(material, NURIMS_MATERIAL_REGISTRATION_DATE, "1970-01-01"), null)}
                     onChange={this.handleRegistrationDateChange}
                     disabled={disabled}
                     tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_REGISTRATION_DATE, "")}
@@ -589,7 +589,7 @@ class MaterialMetadata extends Component {
                   <SelectFormControlWithTooltip
                     id={"manufacturer"}
                     label="Manufacturer"
-                    value={getMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER_RECORD, "")}
+                    value={getRecordMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER_RECORD, "")}
                     onChange={this.handleMaterialManufacturerChange}
                     options={this.manufacturers}
                     disabled={disabled}
@@ -627,7 +627,7 @@ class MaterialMetadata extends Component {
                   <SelectFormControlWithTooltip
                     id={"inventorystatus"}
                     label="Inventory Status"
-                    value={getMetadataValue(material, NURIMS_MATERIAL_INVENTORY_STATUS, "")}
+                    value={getRecordMetadataValue(material, NURIMS_MATERIAL_INVENTORY_STATUS, "")}
                     onChange={this.handleInventoryStatusChange}
                     options={inventoryStatus}
                     disabled={disabled}
@@ -668,7 +668,7 @@ class MaterialMetadata extends Component {
                   <SelectFormControlWithTooltip
                     id={"physicalform"}
                     label="Physical Form"
-                    value={getMetadataValue(material, NURIMS_MATERIAL_PHYSICAL_FORM, "")}
+                    value={getRecordMetadataValue(material, NURIMS_MATERIAL_PHYSICAL_FORM, "")}
                     onChange={this.handlePhysicalFormChange}
                     options={physicalForm}
                     disabled={disabled}
@@ -711,7 +711,7 @@ class MaterialMetadata extends Component {
                   <SelectFormControlWithTooltip
                     id={"storage"}
                     label="Storage Location"
-                    value={getMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")}
+                    value={getRecordMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")}
                     onChange={this.handleStorageLocationRecordChange}
                     options={this.storageLocations}
                     disabled={disabled}
@@ -748,7 +748,7 @@ class MaterialMetadata extends Component {
               </Grid>
             </CardContent>
           </Card>
-          {getMetadataValue(material, NURIMS_MATERIAL_TYPE, "") !== "controlled_item" &&
+          {getRecordMetadataValue(material, NURIMS_MATERIAL_TYPE, "") !== "controlled_item" &&
           <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
             <CardContent>
               <Grid container spacing={2}>
@@ -774,7 +774,7 @@ class MaterialMetadata extends Component {
                   <SelectFormControlWithTooltip
                     id={"leaktest"}
                     label="Leak Testing Surveillance Frequency"
-                    value={getMetadataValue(material, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")}
+                    value={getRecordMetadataValue(material, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")}
                     onChange={this.handleLeakTestSurveillanceFrequencyChange}
                     options={surveillanceFrequency}
                     disabled={disabled}
@@ -815,7 +815,7 @@ class MaterialMetadata extends Component {
                   <SelectFormControlWithTooltip
                     id={"inventory"}
                     label="Inventory Surveillance Frequency"
-                    value={getMetadataValue(material, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")}
+                    value={getRecordMetadataValue(material, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")}
                     onChange={this.handleInventorySurveillanceFrequencyChange}
                     options={surveillanceFrequency}
                     disabled={disabled}
@@ -856,7 +856,7 @@ class MaterialMetadata extends Component {
                   <SelectFormControlWithTooltip
                     id={"activity"}
                     label="Activity Surveillance Frequency"
-                    value={getMetadataValue(material, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")}
+                    value={getRecordMetadataValue(material, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")}
                     onChange={this.handleActivitySurveillanceFrequencyChange}
                     options={surveillanceFrequency}
                     disabled={disabled}

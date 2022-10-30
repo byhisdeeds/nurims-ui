@@ -33,7 +33,7 @@ import {
 import {withTheme} from "@mui/styles";
 import ReactJson from "react-json-view";
 import {
-  BlobObject, getMetadataValue,
+  BlobObject, getRecordMetadataValue,
   setMetadataValue
 } from "../../../utils/MetadataUtils";
 import BusyIndicator from "../../../components/BusyIndicator";
@@ -168,7 +168,7 @@ class ImportICENSControlledMaterials extends Component {
           if (d.hasOwnProperty("dc.identifier.uri")) {
             setMetadataValue(material, NURIMS_SOURCE, d["dc.identifier.uri"])
             for (const m of that.materials_list) {
-              if (getMetadataValue(m, NURIMS_SOURCE, "-") === d["dc.identifier.uri"]) {
+              if (getRecordMetadataValue(m, NURIMS_SOURCE, "-") === d["dc.identifier.uri"]) {
                 material.item_id = m.item_id;
                 material[NURIMS_TITLE] = m[NURIMS_TITLE];
                 break;
@@ -181,7 +181,7 @@ class ImportICENSControlledMaterials extends Component {
           // match storage location records
           if (d.hasOwnProperty("nrims.material.storagelocation")) {
             for (const s of that.storage_locations_list) {
-              if (getMetadataValue(s, NURIMS_SOURCE, "-") === d["nrims.material.storagelocation"]) {
+              if (getRecordMetadataValue(s, NURIMS_SOURCE, "-") === d["nrims.material.storagelocation"]) {
                 setMetadataValue(material, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, s.item_id);
                 break;
               }
@@ -190,7 +190,7 @@ class ImportICENSControlledMaterials extends Component {
           // match manufacturers records
           if (d.hasOwnProperty("nrims.material.manufacturer")) {
             for (const m of that.manufacturers_list) {
-              if (getMetadataValue(m, NURIMS_SOURCE, "-") === d["nrims.material.manufacturer"]) {
+              if (getRecordMetadataValue(m, NURIMS_SOURCE, "-") === d["nrims.material.manufacturer"]) {
                 setMetadataValue(material, NURIMS_MATERIAL_MANUFACTURER_RECORD, m.item_id);
                 break;
               }

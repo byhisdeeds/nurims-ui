@@ -11,6 +11,8 @@ import {
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountMenu from "./user/AccountMenu";
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import HourglassFullIcon from '@mui/icons-material/HourglassFull';
 import {styled} from '@mui/material/styles';
 import MenuDrawer from "./MenuDrawer";
 import {darkTheme, lightTheme} from "./utils/Theme";
@@ -27,7 +29,8 @@ import {setPropertyValue} from "./utils/PropertyUtils";
 import {
   CMD_GET_SYSTEM_PROPERTIES,
   CMD_GET_ORGANISATION,
-  CMD_SET_SYSTEM_PROPERTIES
+  CMD_SET_SYSTEM_PROPERTIES,
+  CMD_BACKGROUND_TASKS
 } from "./utils/constants";
 import {ConsoleLog, UserDebugContext} from "./utils/UserDebugContext";
 
@@ -80,19 +83,35 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const StyledBox = styled(Box)(({theme}) => ({
-  backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
-}));
+const NetworkConnection = (ready) => {
+  return (
+    <Tooltip title="Network connection to system server">
+      <NetworkCheck sx={{
+        color: ready ? '#4CAF50' : '#F44336',
+        paddingLeft: '10px',
+        marginLeft: '10px',
+        width: 32,
+        height: 32
+      }}/>
+    </Tooltip>
+  )
+}
 
-const Puller = styled(Box)(({theme}) => ({
-  width: 30,
-  height: 6,
-  backgroundColor: theme.palette.mode === 'light' ? grey[300] : grey[900],
-  borderRadius: 3,
-  position: 'absolute',
-  top: 8,
-  left: 'calc(50% - 15px)',
-}));
+const BackgroundTasks = (background_tasks_active) => {
+  if (background_tasks_active) {
+    return (
+      <Tooltip title="Background tasks active.">
+        { <HourglassFullIcon sx={{color: '#ffb431', paddingLeft: '10px', marginLeft: '10px', width: 32, height: 32}}/> }
+      </Tooltip>
+    )
+  } else {
+    return (
+      <Tooltip title="No background tasks active.">
+        { <HourglassEmptyIcon sx={{color: '#838383', paddingLeft: '10px', marginLeft: '10px', width: 32, height: 32}}/> }
+      </Tooltip>
+    )
+  }
+}
 
 const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
   if (actionid === Constants.SYSADMIN_MANAGE_USERS) {
@@ -300,7 +319,7 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
       properties={properties}
     />)
   }
-  else if (actionid === Constants.RO_ADD_EDIT_REACTOR_OPERATING_RUN_DATA) {
+  else if (actionid === Constants.RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS) {
     return (<AddEditReactorOperatingRuns
       ref={crefs["AddEditReactorOperatingRuns"]}
       title={menuTitle}
@@ -353,6 +372,7 @@ class App extends React.Component {
       org: {name: "", authorized_module_level: ""},
       ready: false,
       busy: 0,
+      background_tasks_active: false,
     };
     this.properties = [];
     this.menuTitle = "";
@@ -445,6 +465,9 @@ class App extends React.Component {
           const property = data.response.property;
           setPropertyValue(this.properties, property.name, property.value);
         }
+      } else if (data.cmd === CMD_BACKGROUND_TASKS) {
+        this.setState({background_tasks_active: data.hasOwnProperty("tasks_active")});
+        return;
       }
       this.setState({busy: this.state.busy - 1});
     };
@@ -510,7 +533,7 @@ class App extends React.Component {
   // };
 
   render() {
-    const {theme, org, ready, menuData, actionid, open, busy} = this.state;
+    const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active} = this.state;
     return (
       <UserDebugContext.Provider value={{debug: DEBUG_LEVEL, user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
@@ -552,15 +575,17 @@ class App extends React.Component {
                   Organisation: {org.name.toUpperCase()}
                 </Typography>
                 <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
-                <Tooltip title="Network connection to system server">
-                  <NetworkCheck sx={{
-                    color: ready ? '#4CAF50' : '#F44336',
-                    paddingLeft: '10px',
-                    marginLeft: '10px',
-                    width: 32,
-                    height: 32
-                  }}/>
-                </Tooltip>
+                { BackgroundTasks(background_tasks_active) }
+                { NetworkConnection(ready) }
+                {/*<Tooltip title="Network connection to system server">*/}
+                {/*  <NetworkCheck sx={{*/}
+                {/*    color: ready ? '#4CAF50' : '#F44336',*/}
+                {/*    paddingLeft: '10px',*/}
+                {/*    marginLeft: '10px',*/}
+                {/*    width: 32,*/}
+                {/*    height: 32*/}
+                {/*  }}/>*/}
+                {/*</Tooltip>*/}
               </Toolbar>
             </AppBar>
             <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}

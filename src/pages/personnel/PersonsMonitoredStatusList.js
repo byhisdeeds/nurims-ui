@@ -7,7 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 import {Component} from "react";
 import "../../utils/MetadataUtils"
 import {
-  getMetadataValue,
+  getRecordMetadataValue,
   setMetadataValue
 } from "../../utils/MetadataUtils";
 import {
@@ -86,7 +86,7 @@ class PersonsMonitoredStatusList extends Component {
 
   renderCell = (row, cell) => {
     if (cell.id === NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED) {
-      const status = getMetadataValue(row, cell.id, "false");
+      const status = getRecordMetadataValue(row, cell.id, "false");
       return (
         <TableCell align={cell.align} padding={cell.disablePadding ? 'none' : 'normal'}>{
           <Checkbox
@@ -102,7 +102,7 @@ class PersonsMonitoredStatusList extends Component {
         }</TableCell>
       )
     } else if (cell.id === NURIMS_ENTITY_IS_EXTREMITY_MONITORED) {
-      const status = getMetadataValue(row, cell.id, "false");
+      const status = getRecordMetadataValue(row, cell.id, "false");
       return (
         <TableCell align={cell.align} padding={cell.disablePadding ? 'none' : 'normal'}>{
           <Checkbox
@@ -118,7 +118,7 @@ class PersonsMonitoredStatusList extends Component {
         }</TableCell>
       )
     } else if (cell.id === NURIMS_ENTITY_IS_WRIST_MONITORED) {
-      const status = getMetadataValue(row, cell.id, "false");
+      const status = getRecordMetadataValue(row, cell.id, "false");
       return (
         <TableCell
           align={cell.align}

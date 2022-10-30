@@ -8,7 +8,7 @@ import Avatar from "@mui/material/Avatar";
 import PersonIcon from '@mui/icons-material/Person';
 import {
   BlobObject,
-  getMetadataValue,
+  getRecordMetadataValue,
   setMetadataValue
 } from "../../utils/MetadataUtils";
 import {getPropertyValue} from "../../utils/PropertyUtils";
@@ -135,7 +135,7 @@ class MonitorMetadata extends Component {
     const monitor = this.monitor;
     const assignedRole = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
     const monitorTypes = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
-    const avatar = getMetadataValue(monitor, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT);
+    const avatar = getRecordMetadataValue(monitor, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT);
     return (
       <Box
         component="form"
@@ -173,7 +173,7 @@ class MonitorMetadata extends Component {
           <TextField
             id="nid"
             label="National ID"
-            value={getMetadataValue(monitor, NURIMS_ENTITY_NATIONAL_ID, "")}
+            value={getRecordMetadataValue(monitor, NURIMS_ENTITY_NATIONAL_ID, "")}
             onChange={this.handleChange}
           />
           {/*<LocalizationProvider dateAdapter={AdapterDateFns}>*/}
@@ -190,7 +190,7 @@ class MonitorMetadata extends Component {
             <Select
               labelId="mtype"
               id="mtype"
-              value={getMetadataValue(monitor, NURIMS_ENTITY_SEX, "")}
+              value={getRecordMetadataValue(monitor, NURIMS_ENTITY_SEX, "")}
               label="Monitor Type"
               onChange={this.handleMonitorTypeChange}
             >
@@ -212,7 +212,7 @@ class MonitorMetadata extends Component {
           {/*  </Select>*/}
           {/*</FormControl>*/}
           <MonitorTypeSelect
-            value={getMetadataValue(monitor, NURIMS_ENTITY_NATIONAL_ID, "")}
+            value={getRecordMetadataValue(monitor, NURIMS_ENTITY_NATIONAL_ID, "")}
             // value={Object.keys(selectedAnalysisSystem).length === 0 ? '' : selectedAnalysisSystem}
             onChange={this.handleMonitorTypeChange}
             monitorTypes={monitorTypes}
@@ -222,7 +222,7 @@ class MonitorMetadata extends Component {
             <Select
               labelId="roles"
               id="roles"
-              value={getMetadataValue(monitor, NURIMS_ENTITY_ASSIGNED_ROLE, [])}
+              value={getRecordMetadataValue(monitor, NURIMS_ENTITY_ASSIGNED_ROLE, [])}
               label="Assigned Roles"
               multiple
               onChange={this.handleRoleChange}
@@ -243,7 +243,7 @@ class MonitorMetadata extends Component {
             multiline
             maxRows={4}
             minRows={4}
-            value={getMetadataValue(monitor, NURIMS_ENTITY_CONTACT, "")}
+            value={getRecordMetadataValue(monitor, NURIMS_ENTITY_CONTACT, "")}
             onChange={this.handleChange}
           />
           <TextField
@@ -252,7 +252,7 @@ class MonitorMetadata extends Component {
             multiline
             maxRows={4}
             minRows={4}
-            value={getMetadataValue(monitor, NURIMS_ENTITY_WORK_DETAILS, "")}
+            value={getRecordMetadataValue(monitor, NURIMS_ENTITY_WORK_DETAILS, "")}
             onChange={this.handleChange}
           />
           <TextField
@@ -261,7 +261,7 @@ class MonitorMetadata extends Component {
             multiline
             maxRows={2}
             minRows={2}
-            value={getMetadataValue(monitor, NURIMS_ENTITY_DOSE_PROVIDER_ID, "")}
+            value={getRecordMetadataValue(monitor, NURIMS_ENTITY_DOSE_PROVIDER_ID, "")}
             onChange={this.handleChange}
           />
         </div>

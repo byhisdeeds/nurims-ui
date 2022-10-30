@@ -3,27 +3,24 @@ import {withTheme} from "@mui/styles";
 import {
   setMetadataValue,
   getUserRecordMetadataValue,
+  getRecordMetadataValue,
+  formatISODateString,
 } from "../../../utils/MetadataUtils";
 import {
+  NURIMS_OPERATION_DATA_STATS,
   NURIMS_TITLE
 } from "../../../utils/constants";
 import PropTypes from "prop-types";
-import {getGlossaryValue} from "../../../utils/GlossaryUtils";
-import {
-  SelectFormControlWithTooltip
-} from "../../../components/CommonComponents";
 import {
   ConsoleLog,
   UserDebugContext
 } from "../../../utils/UserDebugContext";
 import {
-  getPropertyValue
-} from "../../../utils/PropertyUtils";
-import {
   Grid,
   Box,
   TextField
 } from "@mui/material";
+import { duration } from "duration-pretty";
 
 
 class OperatingRunMetadata extends Component {
@@ -32,11 +29,8 @@ class OperatingRunMetadata extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {},
+      record: {},
       disabled: true,
-      password: "",
-      password_check: "",
-      properties: props.properties,
     };
     this.Module = "OperatingRunMetadata";
   }
@@ -68,7 +62,7 @@ class OperatingRunMetadata extends Component {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
     this.setState({
-      user: record,
+      record: record,
       disabled: false,
       password: "", // record.metadata.password,
       password_check: "", // record.metadata.password
@@ -80,31 +74,18 @@ class OperatingRunMetadata extends Component {
     return this.state.user;
   }
 
-  handleModuleAuthorizationLevelChange = (e) => {
-    const user = this.state.user;
-    user["changed"] = true;
-    user.metadata["authorized_module_level"] = e.target.value;
-    this.setState({user: user})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
-
-  handleUserRoleChange = (e) => {
-    const user = this.state.user;
-    user["changed"] = true;
-    user.metadata["role"] = e.target.value;
-    this.setState({user: user})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
-
   render() {
-    const {user, properties, disabled, password, password_check} = this.state;
+    const {record, disabled} = this.state;
     if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "setRecordMetadata", "disabled", disabled, "user", user);
+      ConsoleLog(this.Module, "render", "record",
+        getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, ""));
     }
-    const authorized_module_levels = getPropertyValue(properties, "system.authorizedmodulelevels", "").split('|');
-    const user_roles = getPropertyValue(properties, "system.userrole", "").split('|');
+    let stats = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, {});
+    if (Object.keys(stats).length > 0) {
+      if (stats.hasOwnProperty("url")) {
+        stats = stats.url;
+      }
+    }
     return (
       <Box
         component="form"
@@ -115,60 +96,81 @@ class OperatingRunMetadata extends Component {
         autoComplete="off"
       >
         <Grid container spacing={2}>
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <TextField
-              required
+              inputProps={
+                { readOnly: true, }
+              }
               fullWidth
-              id="username"
-              label="Username/Email"
-              value={getUserRecordMetadataValue(user, "username", "")}
-              onChange={this.handleChange}
+              id="name"
+              label="Run"
+              value={record[NURIMS_TITLE] || ""}
             />
           </Grid>
-          <Grid item xs={4}>
-            <SelectFormControlWithTooltip
-              id={"authorized_module_level"}
-              label="Module Authorization Level"
-              value={getUserRecordMetadataValue(user, "authorized_module_level", "")}
-              onChange={this.handleModuleAuthorizationLevelChange}
-              options={authorized_module_levels}
-              disabled={disabled}
-              tooltip={""}
-              // target={this.tooltipRef}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <SelectFormControlWithTooltip
-              id={"user_role"}
-              label="User Role"
-              value={getUserRecordMetadataValue(user, "role", "")}
-              onChange={this.handleUserRoleChange}
-              options={user_roles}
-              disabled={disabled}
-              tooltip={""}
-              // target={this.tooltipRef}
-            />
-          </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <TextField
-              required
+              inputProps={
+                { readOnly: true, }
+              }
               fullWidth
-              type={"password"}
-              id="password1"
-              label="Password"
-              value={password}
-              onChange={this.handleChange}
+              id="start-date"
+              label="Start Date"
+              value={stats.hasOwnProperty("start") ? formatISODateString(stats["start"]) : ""}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <TextField
-              required
+              inputProps={
+                { readOnly: true, }
+              }
               fullWidth
-              id="password2"
-              type={"password"}
-              label="Password (again)"
-              value={password_check}
-              onChange={this.handleChange}
+              id="end-date"
+              label="End Date"
+              value={stats.hasOwnProperty("end") ? formatISODateString(stats["end"]) : ""}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              inputProps={
+                { readOnly: true, }
+              }
+              fullWidth
+              id="duration"
+              label="Duration (HH:MM)"
+              value={stats.hasOwnProperty("duration") ? duration(stats["duration"], 'seconds').format('HH:mm') : 0}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              inputProps={
+                { readOnly: true, }
+              }
+              fullWidth
+              id="flux_hours"
+              label="Flux Hours"
+              value={stats.hasOwnProperty("flux_hours") ? stats["flux_hours"].toFixed(2) : 0}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              inputProps={
+                { readOnly: true, }
+              }
+              fullWidth
+              id="flux_runs"
+              label="Flux Runs"
+              value={stats.hasOwnProperty("flux") ? stats["flux"].reduce(function(acc, cur) {return acc.concat(cur["flux"].toFixed(1))},[]).join(", ") : ""}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              inputProps={
+                { readOnly: true, }
+              }
+              fullWidth
+              id="excess_reactivity"
+              label="Excess Reactivity Runs"
+              value={stats.hasOwnProperty("excess_reactivity") ? stats["excess_reactivity"].toFixed(2) : ""}
             />
           </Grid>
         </Grid>
@@ -184,8 +186,6 @@ OperatingRunMetadata.propTypes = {
 }
 
 OperatingRunMetadata.defaultProps = {
-  onChange: (msg) => {
-  },
 };
 
 export default withTheme(OperatingRunMetadata);

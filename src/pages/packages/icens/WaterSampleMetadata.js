@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withTheme} from "@mui/styles";
 import {
   setMetadataValue,
-  getMetadataValue,
+  getRecordMetadataValue,
   appendMetadataChangedField,
   getMetadataValueAsISODateString,
 } from "../../../utils/MetadataUtils";
@@ -149,15 +149,15 @@ class WaterSampleMetadata extends Component {
     if (record) {
       record["changed"] = false;
       record["changed.metadata"] = [];
-      this.doc = {uri: getMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE, "").url};
+      this.doc = {uri: getRecordMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE, "").url};
     }
     this.setState({
       record: (record) ? record : [],
       disabled: (!record),
     })
     if (this.ref.current && (record)) {
-      console.log("######", getMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
-      this.ref.current.setRowData(getMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
+      console.log("######", getRecordMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
+      this.ref.current.setRowData(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
     }
     this.props.onChange(false);
   }
@@ -235,7 +235,7 @@ class WaterSampleMetadata extends Component {
               id={"description"}
               label="Description"
               fullWidth
-              value={getMetadataValue(record, NURIMS_DESCRIPTION, "")}
+              value={getRecordMetadataValue(record, NURIMS_DESCRIPTION, "")}
               onChange={this.handleChange}
             />
           </Grid>

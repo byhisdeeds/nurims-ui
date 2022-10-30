@@ -24,7 +24,7 @@ import LocationFinder from "../../components/LocationFinder";
 import "leaflet/dist/leaflet.css";
 import {
   BlobObject,
-  getMetadataValue, markerBounds,
+  getRecordMetadataValue, markerBounds,
   setMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
@@ -83,7 +83,7 @@ class StorageMetadata extends Component {
       setMetadataValue(storage, NURIMS_DESCRIPTION, e.target.value)
     } else if (e.target.id === "easting") {
       storage["changed"] = true;
-      const storageLocation = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, DEFAULT_STORAGE_LOCATION);
+      const storageLocation = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, DEFAULT_STORAGE_LOCATION);
       storageLocation["easting"] = parseFloat(e.target.value);
       setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, storageLocation);
       if (this.markerRef.current) {
@@ -91,7 +91,7 @@ class StorageMetadata extends Component {
       }
     } else if (e.target.id === "northing") {
       storage["changed"] = true;
-      const storageLocation = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, DEFAULT_STORAGE_LOCATION);
+      const storageLocation = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, DEFAULT_STORAGE_LOCATION);
       storageLocation["northing"] = parseFloat(e.target.value);
       setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, storageLocation);
       if (this.markerRef.current) {
@@ -108,7 +108,7 @@ class StorageMetadata extends Component {
     // images/markers/center-marker.png
     console.log("handleCoverageLocationMarkerChange", e.target.value)
     storage["changed"] = true;
-    const storageLocation = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, DEFAULT_STORAGE_LOCATION);
+    const storageLocation = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, DEFAULT_STORAGE_LOCATION);
     storageLocation["marker"] = e.target.value;
     setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, storageLocation);
     if (this.markerRef.current) {
@@ -121,7 +121,7 @@ class StorageMetadata extends Component {
 
   setRecordMetadata = (storage) => {
     if (this.markerRef.current) {
-      const storageLocation = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, DEFAULT_STORAGE_LOCATION);
+      const storageLocation = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, DEFAULT_STORAGE_LOCATION);
       this.markerRef.current.setBounds(markerBounds(storageLocation));
       this.markerRef.current.setUrl(storageLocation.marker);
     }
@@ -133,7 +133,7 @@ class StorageMetadata extends Component {
     if (this.state.mapclick) {
       const storage = this.state.storage;
       storage["changed"] = true;
-      const storageLocation = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, DEFAULT_STORAGE_LOCATION);
+      const storageLocation = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, DEFAULT_STORAGE_LOCATION);
       storageLocation["easting"] = +parseFloat(e.lng).toPrecision(4) ;
       storageLocation["northing"] = +parseFloat(e.lat).toPrecision(4);
       setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, storageLocation);
@@ -201,12 +201,12 @@ class StorageMetadata extends Component {
     const {storage, properties, marker_bounds} = this.state;
     console.log("StorageMetadata.RENDER - storage", storage)
     // console.log("StorageMetadata.RENDER - properties", properties)
-    const storageLocation = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, {easting: 0,
+    const storageLocation = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, {easting: 0,
                                                                                                     northing: 0,
                                                                                                     marker: defaultMarkerIcon});
     const markers = getPropertyValue(properties, NURIMS_MATERIAL_STORAGE_LOCATION_MARKERS, "").split('|');
-    const storageImage = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, BLANK_IMAGE_OBJECT);
-    const storageMapImage = getMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, BLANK_IMAGE_OBJECT);
+    const storageImage = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, BLANK_IMAGE_OBJECT);
+    const storageMapImage = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, BLANK_IMAGE_OBJECT);
     // const storageLocationMarker = storageLocation.marker.split("#");
     // const storageMarkerIcon = L.icon({
     //   iconUrl: storageLocationMarker[0],
@@ -253,7 +253,7 @@ class StorageMetadata extends Component {
                   <TextField
                     id="description"
                     label="Description"
-                    value={getMetadataValue(storage, NURIMS_DESCRIPTION, "")}
+                    value={getRecordMetadataValue(storage, NURIMS_DESCRIPTION, "")}
                     onChange={this.handleChange}
                   />
                 </HtmlTooltip>

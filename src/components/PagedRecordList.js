@@ -122,6 +122,10 @@ class PagedRecordList extends React.Component {
   };
 
   renderCell = (row, cell) => {
+    let value = row[cell.id];
+    if (cell.hasOwnProperty("format")) {
+      value = cell.format(value)
+    }
     return (
       <TableCell
         align={cell.align}
@@ -132,7 +136,7 @@ class PagedRecordList extends React.Component {
             this.props.theme.palette.text.disabled
         }}
       >
-        {row[cell.id]} {(cell.id === NURIMS_TITLE && row[NURIMS_WITHDRAWN] === 1) && "<- archived"}
+        {value} {(cell.id === NURIMS_TITLE && row[NURIMS_WITHDRAWN] === 1) && "<- archived"}
       </TableCell>
     )
   }

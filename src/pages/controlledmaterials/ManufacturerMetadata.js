@@ -3,7 +3,7 @@ import {withTheme} from "@mui/styles";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import {
-  getMetadataValue,
+  getRecordMetadataValue,
   setMetadataValue,
   getDoseRecordDosimeterId,
   setDoseRecordMetadataValue,
@@ -73,7 +73,7 @@ class ManufacturerMetadata extends Component {
   handleDoseProviderChange = (e) => {
     console.log("handleDoseProviderChange", e.target.value);
     const p = this.state.person;
-    const id = getMetadataValue(p, "nurims.entity.doseproviderid", "|").split('|');
+    const id = getRecordMetadataValue(p, "nurims.entity.doseproviderid", "|").split('|');
     setMetadataValue(p, "nurims.entity.doseproviderid", `${e.target.value}|${id[1]}`);
     this.setState({person: p, has_changed: true})
     // signal to parent that details have changed
@@ -83,7 +83,7 @@ class ManufacturerMetadata extends Component {
   handleDoseProviderIdChange = (e) => {
     console.log("handleDoseProviderIdChange", e.target.value);
     const p = this.state.person;
-    const id = getMetadataValue(p, "nurims.entity.doseproviderid", "|").split('|');
+    const id = getRecordMetadataValue(p, "nurims.entity.doseproviderid", "|").split('|');
     setMetadataValue(p, "nurims.entity.doseproviderid", `${id[0]}|${e.target.value}`);
     this.setState({person: p, has_changed: true})
     // signal to parent that details have changed
@@ -229,7 +229,7 @@ class ManufacturerMetadata extends Component {
             multiline
             maxRows={5}
             minRows={5}
-            value={getMetadataValue(manufacturer, NURIMS_ENTITY_ADDRESS, "")}
+            value={getRecordMetadataValue(manufacturer, NURIMS_ENTITY_ADDRESS, "")}
             onChange={this.handleChange}
           />
           <TextField
@@ -238,7 +238,7 @@ class ManufacturerMetadata extends Component {
             multiline
             maxRows={5}
             minRows={5}
-            value={getMetadataValue(manufacturer, NURIMS_ENTITY_CONTACT, "")}
+            value={getRecordMetadataValue(manufacturer, NURIMS_ENTITY_CONTACT, "")}
             onChange={this.handleChange}
           />
         </div>

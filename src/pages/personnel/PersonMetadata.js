@@ -11,7 +11,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import {
   BlobObject,
   getDateFromDateString,
-  getMetadataValue,
+  getRecordMetadataValue,
   setMetadataValue
 } from "../../utils/MetadataUtils";
 import {getPropertyValue} from "../../utils/PropertyUtils";
@@ -141,7 +141,7 @@ class PersonMetadata extends Component {
     const {properties} = this.state;
     const person = this.person;
     const assignedRole = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
-    const avatar = getMetadataValue(person, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT);
+    const avatar = getRecordMetadataValue(person, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT);
     if (this.context.debug > 5) {
       ConsoleLog("PersonMetadata", "render", "personnel", person, "assignedRole", assignedRole);
     }
@@ -182,14 +182,14 @@ class PersonMetadata extends Component {
           <TextField
             id="nid"
             label="National ID"
-            value={getMetadataValue(person, NURIMS_ENTITY_NATIONAL_ID, "")}
+            value={getRecordMetadataValue(person, NURIMS_ENTITY_NATIONAL_ID, "")}
             onChange={this.handleChange}
           />
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="Date Of Birth"
               inputFormat={"yyyy-MM-dd"}
-              value={getDateFromDateString(getMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), null)}
+              value={getDateFromDateString(getRecordMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), null)}
               onChange={this.handleDobChange}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -199,7 +199,7 @@ class PersonMetadata extends Component {
             <Select
               labelId="sex"
               id="sex"
-              value={getMetadataValue(person, NURIMS_ENTITY_SEX, "")}
+              value={getRecordMetadataValue(person, NURIMS_ENTITY_SEX, "")}
               label="Sex"
               onChange={this.handleSexChange}
             >
@@ -225,7 +225,7 @@ class PersonMetadata extends Component {
             <Select
               labelId="roles"
               id="roles"
-              value={getMetadataValue(person, NURIMS_ENTITY_ASSIGNED_ROLE, [])}
+              value={getRecordMetadataValue(person, NURIMS_ENTITY_ASSIGNED_ROLE, [])}
               label="Assigned Roles"
               multiple
               onChange={this.handleRoleChange}
@@ -246,7 +246,7 @@ class PersonMetadata extends Component {
             multiline
             maxRows={4}
             minRows={4}
-            value={getMetadataValue(person, NURIMS_ENTITY_CONTACT, "")}
+            value={getRecordMetadataValue(person, NURIMS_ENTITY_CONTACT, "")}
             onChange={this.handleChange}
           />
           <TextField
@@ -255,7 +255,7 @@ class PersonMetadata extends Component {
             multiline
             maxRows={4}
             minRows={4}
-            value={getMetadataValue(person, NURIMS_ENTITY_WORK_DETAILS, "")}
+            value={getRecordMetadataValue(person, NURIMS_ENTITY_WORK_DETAILS, "")}
             onChange={this.handleChange}
           />
           <TextField
@@ -264,7 +264,7 @@ class PersonMetadata extends Component {
             multiline
             maxRows={2}
             minRows={2}
-            value={getMetadataValue(person, NURIMS_ENTITY_DOSE_PROVIDER_ID, "")}
+            value={getRecordMetadataValue(person, NURIMS_ENTITY_DOSE_PROVIDER_ID, "")}
             onChange={this.handleChange}
           />
         </div>

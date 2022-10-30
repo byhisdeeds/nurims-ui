@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {
-  BLANK_PDF, CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF,
-  CMD_GENERATE_SSC_MAINTENANCE_SCHEDULE_PDF,
+  BLANK_PDF,
 } from "../../utils/constants";
 import {
   Grid,
@@ -16,9 +15,6 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {withTheme} from "@mui/styles";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
-import {getGlossaryValue} from "../../utils/GlossaryUtils";
-import {getDateFromDateString, getMetadataValue} from "../../utils/MetadataUtils";
 import TextField from "@mui/material/TextField";
 
 const MODULE = "MaintenanceSchedule";

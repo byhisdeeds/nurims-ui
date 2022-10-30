@@ -7,7 +7,7 @@ import {LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DateRangePicker from '@mui/lab/DateRangePicker';
 import {
-  getMetadataValue,
+  getRecordMetadataValue,
   setMetadataValue,
   getDoseRecordMetadataValue,
   getDoseRecordDosimeterId,
@@ -112,7 +112,7 @@ class DosimetryMetadata extends Component {
   handleDoseProviderChange = (e) => {
     console.log("handleDoseProviderChange", e.target.value);
     const p = this.state.person;
-    const id = getMetadataValue(p, "nurims.entity.doseproviderid", "|").split('|');
+    const id = getRecordMetadataValue(p, "nurims.entity.doseproviderid", "|").split('|');
     setMetadataValue(p, "nurims.entity.doseproviderid", `${e.target.value}|${id[1]}`);
     this.setState({person: p, has_changed: true})
     // signal to parent that details have changed
@@ -122,7 +122,7 @@ class DosimetryMetadata extends Component {
   handleDoseProviderIdChange = (e) => {
     console.log("handleDoseProviderIdChange", e.target.value);
     const p = this.state.person;
-    const id = getMetadataValue(p, "nurims.entity.doseproviderid", "|").split('|');
+    const id = getRecordMetadataValue(p, "nurims.entity.doseproviderid", "|").split('|');
     setMetadataValue(p, "nurims.entity.doseproviderid", `${id[0]}|${e.target.value}`);
     this.setState({person: p, has_changed: true})
     // signal to parent that details have changed
@@ -287,10 +287,10 @@ class DosimetryMetadata extends Component {
   render() {
     const {person, properties} = this.state;
     console.log("DosimetryMetadata.RENDER - person", person)
-    const doseProviderId = getMetadataValue(person, "nurims.entity.doseproviderid", "|").split('|');
-    const wholeBodyMonitor = getMetadataValue(person, "nurims.entity.iswholebodymonitored", "false");
-    const extremityMonitor = getMetadataValue(person, "nurims.entity.isextremitymonitored", "false");
-    const wristMonitor = getMetadataValue(person, "nurims.entity.iswristmonitored", "false");
+    const doseProviderId = getRecordMetadataValue(person, "nurims.entity.doseproviderid", "|").split('|');
+    const wholeBodyMonitor = getRecordMetadataValue(person, "nurims.entity.iswholebodymonitored", "false");
+    const extremityMonitor = getRecordMetadataValue(person, "nurims.entity.isextremitymonitored", "false");
+    const wristMonitor = getRecordMetadataValue(person, "nurims.entity.iswristmonitored", "false");
     const defaultUnits = getPropertyValue(properties, "nurims.dosimeter.units", "");
     return (
       <Box

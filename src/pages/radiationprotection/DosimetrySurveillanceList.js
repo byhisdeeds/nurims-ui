@@ -21,7 +21,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import {visuallyHidden} from '@mui/utils';
 import {Component} from "react";
 import {
-  getMetadataValue
+  getRecordMetadataValue
 } from "../../utils/MetadataUtils";
 import {
   isIcensDoseReport,
@@ -433,8 +433,8 @@ export default class DosimetrySurveillanceList extends Component {
                     // const doseBatchID = "255-20211006-20211108-0";
                     // const doseMonitorType = "B";
                     const doseMonitorPeriod = getMonitorPeriod(row, "nurims.dosimeter.monitorperiod", "")
-                    const doseMonitorType = getMetadataValue(row, "nurims.dosimeter.monitortype", "b")
-                    const doseBatchID = getMetadataValue(row, "nurims.dosimeter.batchid", "")
+                    const doseMonitorType = getRecordMetadataValue(row, "nurims.dosimeter.monitortype", "b")
+                    const doseBatchID = getRecordMetadataValue(row, "nurims.dosimeter.batchid", "")
                     return (
                       <TableRow
                         hover

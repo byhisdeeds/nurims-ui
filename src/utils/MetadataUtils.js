@@ -1,17 +1,18 @@
-import {NURIMS_SAMPLEDATE, NURIMS_WITHDRAWN} from "./constants";
+import {NURIMS_WITHDRAWN} from "./constants";
 
 export function isRecordArchived(record) {
   return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
 }
 
-export function getMetadataValue(obj, key, missingValue) {
+export function getRecordMetadataValue(obj, key, missingValue) {
   if (obj.hasOwnProperty("metadata")) {
     const metadata = obj.metadata;
     if (Array.isArray(metadata)) {
       for (const m of metadata) {
         for (const [k, v] of Object.entries(m)) {
           if (k === key) {
-            return (typeof v === "number") ? v : (v.charAt(0) === "[" || v.charAt(0) === "{") ? JSON.parse(v.replaceAll("'", "\"")) : v;
+            return (typeof v === "number") ? v : (v.charAt(0) === "[" || v.charAt(0) === "{") ?
+                   JSON.parse(v.replaceAll("'", "\"").replaceAll("NaN", "0")) : v;
           }
         }
       }
@@ -20,9 +21,18 @@ export function getMetadataValue(obj, key, missingValue) {
   return missingValue;
 }
 
+export function getUserRecordMetadataValue(obj, key, missingValue) {
+  if (obj.hasOwnProperty("metadata")) {
+    const metadata = obj.metadata;
+    if (metadata.hasOwnProperty(key)) {
+      return metadata[key];
+    }
+  }
+  return missingValue;
+}
 
 export function getMetadataValueAsISODateString(obj, key, missingValue) {
-  const value = getMetadataValue(obj, key, missingValue);
+  const value = getRecordMetadataValue(obj, key, missingValue);
   if (missingValue) {
     if (value.length < 11) {
       return value + "T00:00:00";
@@ -62,7 +72,7 @@ export function getDateRangeFromDateString(range, missingValue) {
     const parts = range.split("|");
     if (parts.length === 2) {
       const data = [];
-      for (let i=0; i<2; i++) {
+      for (let i = 0; i < 2; i++) {
         let d = parts[i].substring(0, 10).split('-');
         if (d.length === 3) {
           // Please pay attention to the month (d[1]); JavaScript counts months from 0:
@@ -184,18 +194,8 @@ export function markerBounds(location) {
   const fac = .025;
   // [ll corner[lat,lng], ur corner[lat,lng]]
   return (location) ?
-    [[location.northing-fac, location.easting-fac], [location.northing+fac, location.easting+fac]] :
+    [[location.northing - fac, location.easting - fac], [location.northing + fac, location.easting + fac]] :
     [[-fac, -fac], [fac, fac]];
-}
-
-export function getUserRecordMetadataValue(obj, key, missingValue) {
-  if (obj.hasOwnProperty("metadata")) {
-    const metadata = obj.metadata;
-    if (metadata.hasOwnProperty(key)) {
-      return metadata[key];
-    }
-  }
-  return missingValue;
 }
 
 export function appendMetadataChangedField(obj, field) {
@@ -205,4 +205,8 @@ export function appendMetadataChangedField(obj, field) {
     }
   }
   obj.push(field);
+}
+
+export function formatISODateString(dateString) {
+  return dateString.replaceAll("T", " ").substring(0, 19);
 }

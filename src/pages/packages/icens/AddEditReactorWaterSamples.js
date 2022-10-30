@@ -40,7 +40,7 @@ import {
 import {toast} from "react-toastify";
 import WaterSamplesList from "./WaterSamplesList";
 import WaterSampleMetadata from "./WaterSampleMetadata";
-import {getMetadataValue} from "../../../utils/MetadataUtils";
+import {getRecordMetadataValue} from "../../../utils/MetadataUtils";
 
 class AddEditReactorWaterSamples extends React.Component {
   static contextType = UserDebugContext;
@@ -159,7 +159,7 @@ class AddEditReactorWaterSamples extends React.Component {
           const metadata_entries = [];
           for (const md of record["changed.metadata"]) {
             const entry = {};
-            entry[md] = getMetadataValue(record, md, "");
+            entry[md] = getRecordMetadataValue(record, md, "");
             metadata_entries.push(entry)
           }
           record["metadata"] = metadata_entries;

@@ -14,7 +14,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
 import PersonsMonitoredStatusList from "./PersonsMonitoredStatusList";
-import {getMetadataValue} from "../../utils/MetadataUtils";
+import {getRecordMetadataValue} from "../../utils/MetadataUtils";
 import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
