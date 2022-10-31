@@ -458,7 +458,7 @@ import {
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
-} from "../../utils/UtilityDialogs";
+} from "../../components/UtilityDialogs";
 import StorageList from "./StorageList";
 import StorageMetadata from "./StorageMetadata";
 

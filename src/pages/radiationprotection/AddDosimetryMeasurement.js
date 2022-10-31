@@ -353,7 +353,7 @@ import {
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
-} from "../../utils/UtilityDialogs";
+} from "../../components/UtilityDialogs";
 import SSCMetadata from "./../maintenance/SSCMetadata";
 import {ConsoleLog} from "../../utils/UserDebugContext";
 import PersonnelAndMonitorsList from "./PersonnelAndMonitorsList";

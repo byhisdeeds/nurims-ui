@@ -6,7 +6,7 @@ import {
 import {
   ConfirmOperatingRunDiscoveryDialog,
   ConfirmRemoveRecordDialog
-} from "../../../utils/UtilityDialogs";
+} from "../../../components/UtilityDialogs";
 import {
   CMD_DELETE_USER_RECORD,
   CMD_DISCOVER_REACTOR_OPERATION_RUNS,

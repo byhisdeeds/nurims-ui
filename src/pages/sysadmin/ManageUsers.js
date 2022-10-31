@@ -1,6 +1,6 @@
 import React from 'react';
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
-import {ConfirmRemoveRecordDialog} from "../../utils/UtilityDialogs";
+import {ConfirmRemoveRecordDialog} from "../../components/UtilityDialogs";
 import {
   Box,
   Fab,

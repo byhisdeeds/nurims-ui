@@ -10,9 +10,9 @@ import {
 import {
   ITEM_ID,
   NURIMS_TITLE
-} from "./constants";
+} from "../utils/constants";
 import PropTypes from "prop-types";
-import {SameYearDateRangePicker} from "../components/CommonComponents";
+import {SameYearDateRangePicker} from "./CommonComponents";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 

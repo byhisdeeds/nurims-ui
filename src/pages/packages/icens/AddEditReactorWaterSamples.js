@@ -5,7 +5,7 @@ import {
 } from "../../../utils/UserDebugContext";
 import {
   ConfirmRemoveRecordDialog
-} from "../../../utils/UtilityDialogs";
+} from "../../../components/UtilityDialogs";
 import {
   CMD_DELETE_USER_RECORD,
   CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,

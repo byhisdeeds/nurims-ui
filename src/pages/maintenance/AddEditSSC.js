@@ -18,7 +18,7 @@ import {
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
-} from "../../utils/UtilityDialogs";
+} from "../../components/UtilityDialogs";
 import SSCList from "./SSCList";
 import SSCMetadata from "./SSCMetadata";
 import {ConsoleLog} from "../../utils/UserDebugContext";

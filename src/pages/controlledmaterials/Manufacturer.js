@@ -15,7 +15,7 @@ import {
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
-} from "../../utils/UtilityDialogs";
+} from "../../components/UtilityDialogs";
 import ManufacturerList from "./ManufacturerList";
 import ManufacturerMetadata from "./ManufacturerMetadata";
 

@@ -18,7 +18,7 @@ import {
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
-} from "../../utils/UtilityDialogs";
+} from "../../components/UtilityDialogs";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog} from "../../utils/UserDebugContext";

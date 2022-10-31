@@ -19,7 +19,7 @@ import {
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
-} from "../../utils/UtilityDialogs";
+} from "../../components/UtilityDialogs";
 import AMPList from "./AMPList";
 import AMPMetadata from "./AMPMetadata";
 import {ConsoleLog} from "../../utils/UserDebugContext";

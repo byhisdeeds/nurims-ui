@@ -283,7 +283,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
-} from "../../utils/UtilityDialogs";
+} from "../../components/UtilityDialogs";
 import PersonList from "./PersonList";
 import PersonMetadata from "./PersonMetadata";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";

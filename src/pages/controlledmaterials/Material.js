@@ -277,7 +277,7 @@ import {
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
-} from "../../utils/UtilityDialogs";
+} from "../../components/UtilityDialogs";
 import MaterialList from "./MaterialList";
 import MaterialMetadata from "./MaterialMetadata";
 
