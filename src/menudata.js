@@ -548,10 +548,10 @@ export const MenuData = [
         authmodlevel: 'basic',
         items: [
           {
-            name: '   - Add/Edit Run Records',
+            name: '   - Discover Run Events',
             link: 'ro.add.edit.reactor.operating.run.records',
             title: 'Add/Edit Operating Run Records',
-            tooltip: 'Update the operating run records from the YOKOGAWA operating parameters data files (*.GTE)',
+            tooltip: 'Update the reactor operation run records from the YOKOGAWA operating parameters data files (*.GTE)',
             authmodlevel: 'basic',
           },
           {

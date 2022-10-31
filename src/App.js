@@ -576,15 +576,6 @@ class App extends React.Component {
                 <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
                 { BackgroundTasks(background_tasks_active) }
                 { NetworkConnection(ready) }
-                {/*<Tooltip title="Network connection to system server">*/}
-                {/*  <NetworkCheck sx={{*/}
-                {/*    color: ready ? '#4CAF50' : '#F44336',*/}
-                {/*    paddingLeft: '10px',*/}
-                {/*    marginLeft: '10px',*/}
-                {/*    width: 32,*/}
-                {/*    height: 32*/}
-                {/*  }}/>*/}
-                {/*</Tooltip>*/}
               </Toolbar>
             </AppBar>
             <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}

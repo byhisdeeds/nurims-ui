@@ -76,20 +76,20 @@ export default function AppMenuItem(props) {
   }, []);
 
   const MenuItemRoot = isVisible ? (
-    <ListItemButton className={classes.menuItem} disabled={menu_disabled(props.organisation, authmodlevel, isSysadmin)} onClick={()=>handleClick(title, link)}>
-      {/* Display an icon if any */}
-      {!!Icon && (
-        <ListItemIcon className={classes.menuItemIcon}>
-          <Icon />
-        </ListItemIcon>
-      )}
-      <Tooltip title={tooltip} placement={'right-end'} arrow>
+    <Tooltip title={tooltip} placement={'right-end'} arrow>
+      <ListItemButton className={classes.menuItem} disabled={menu_disabled(props.organisation, authmodlevel, isSysadmin)} onClick={()=>handleClick(title, link)}>
+        {/* Display an icon if any */}
+        {!!Icon && (
+          <ListItemIcon className={classes.menuItemIcon}>
+            <Icon />
+          </ListItemIcon>
+        )}
         <ListItemText primary={name} inset={!Icon} style={{whiteSpace: 'pre'}}/>
-      </Tooltip>
-      {/* Display the expand menu if the item has children */}
-      {isExpandable && !open && <IconExpandMore />}
-      {isExpandable && open && <IconExpandLess />}
-    </ListItemButton>
+        {/* Display the expand menu if the item has children */}
+        {isExpandable && !open && <IconExpandMore />}
+        {isExpandable && open && <IconExpandLess />}
+      </ListItemButton>
+    </Tooltip>
   ) : null
 
   const MenuItemChildren = isExpandable ? (

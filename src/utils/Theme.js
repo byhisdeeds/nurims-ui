@@ -85,6 +85,14 @@ export const lightTheme = createTheme({
         },
       },
     },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          fontSize: 16,
+          color: '#c2dffa',
+        },
+      },
+    },
     MuiBox: {
       styleOverrides: {
         root: {
@@ -356,6 +364,14 @@ export const darkTheme = createTheme({
           backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))',
           backgroundColor: 'rgb(40, 44, 52)',
           color: '#eeeeee',
+        },
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          fontSize: 16,
+          color: '#c2dffa',
         },
       },
     },
