@@ -419,7 +419,7 @@ export function SameYearDateRangePicker({year, from, to, disabled, onYearChange,
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           renderInput={(props) => <TextField
-            style={{width: "15ch", paddingRight: 8, marginTop: 8}} {...props} />}
+            style={{width: "12ch", paddingRight: 8, marginTop: 8}} {...props} />}
           label=" Year "
           value={year}
           views={["year"]}
@@ -429,7 +429,7 @@ export function SameYearDateRangePicker({year, from, to, disabled, onYearChange,
         />
         <DatePicker
           renderInput={(props) => <TextField
-            style={{width: "20ch", paddingRight: 8, marginTop: 8}} {...props} />}
+            style={{width: "18ch", paddingRight: 8, marginTop: 8}} {...props} />}
           label=" Start Month "
           value={from}
           views={["month"]}
@@ -439,7 +439,7 @@ export function SameYearDateRangePicker({year, from, to, disabled, onYearChange,
         />
         <DatePicker
           renderInput={(props) => <TextField
-            style={{width: "20ch", paddingRight: 8, marginTop: 8}} {...props} />}
+            style={{width: "18ch", paddingRight: 8, marginTop: 8}} {...props} />}
           label=" End Month "
           value={to}
           views={["month"]}

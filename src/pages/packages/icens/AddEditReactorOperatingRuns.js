@@ -122,9 +122,10 @@ class AddEditReactorOperatingRuns extends React.Component {
     this.setState({confirm_discovery: false,});
   }
 
-  proceedWithDiscovery = (year, startMonth, endMonth) => {
+  proceedWithDiscovery = (year, startMonth, endMonth, forceOverwrite) => {
     if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "proceedWithDiscovery", "year", year, "startMonth", startMonth, "endMonth", endMonth);
+      ConsoleLog(this.Module, "proceedWithDiscovery", "year", year, "startMonth", startMonth,
+        "endMonth", endMonth, "forceOverwrite", forceOverwrite);
     }
     this.setState({confirm_discovery: false,});
     this.props.send({
@@ -132,6 +133,7 @@ class AddEditReactorOperatingRuns extends React.Component {
       year: year.getFullYear(),
       startMonth: startMonth.getMonth()+1,
       endMonth: endMonth.getMonth()+1,
+      forceOverwrite: forceOverwrite,
       "run_in_background": "true",
       module: this.Module,
     });

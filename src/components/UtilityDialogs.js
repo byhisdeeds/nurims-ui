@@ -5,7 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle, Grid
+  DialogTitle, FormControlLabel, Grid, Stack, Switch, Typography
 } from "@mui/material";
 import {
   ITEM_ID,
@@ -85,6 +85,7 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
   const [year, setYear] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [forceOverwrite, setForceOverwrite] = useState(false);
 
   const handleToDateRangeChange = (range) => {
     console.log("handleToDateRangeChange", range)
@@ -101,6 +102,10 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
     setYear(year);
   }
 
+  const onForceOverwriteChange = (e) => {
+    setForceOverwrite(e.target.checked)
+  }
+
   return (
     <div>
       <Dialog
@@ -114,11 +119,11 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Reactor operation parameters are available via the YOKOGAWA digital chart recorder dta which
+            Reactor operation parameters are available via the YOKOGAWA digital chart recorder, which
             provides information on a per second basis for the control rod movement, neutron flux,
             inlet and outlet temperatures, and gamma radiation area monitors.
             <p/>
-            Select a year, month range to extract the operating runs that ocurred during the period.
+            Select a year, month range to extract the operating runs that occurred during the period.
             <p/>
           </DialogContentText>
           <Grid container spacing={2}>
@@ -142,11 +147,17 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
                 )}
               />
             </Grid>
-          </Grid>
+            </Grid>
         </DialogContent>
         <DialogActions>
+          <FormControlLabel
+            control={<Switch onChange={onForceOverwriteChange} checked={forceOverwrite} color="primary" />}
+            label="Overwrite existing run data"
+            labelPlacement="start"
+          />
+          <Box sx={{flexGrow: 1}} />
           <Button onClick={props.onCancel}>Cancel</Button>
-          <Button onClick={() => props.onProceed(year, startDate, endDate)} autoFocus>Continue</Button>
+          <Button onClick={() => props.onProceed(year, startDate, endDate, forceOverwrite)} autoFocus>Continue</Button>
         </DialogActions>
       </Dialog>
     </div>
