@@ -4,6 +4,31 @@ export function isRecordArchived(record) {
   return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
 }
 
+export function setRecordMetadataValue(obj, key, value) {
+  if (obj.hasOwnProperty("metadata")) {
+    const metadata = obj.metadata;
+    if (Array.isArray(metadata)) {
+      for (const m of metadata) {
+        for (const [k, v] of Object.entries(m)) {
+          // console.log(`${k}: ${v}`);
+          if (k === key) {
+            m[k] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
+            return;
+          }
+        }
+      }
+      const v = {};
+      v[key] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
+      metadata.push(v);
+    }
+  } else {
+    const v = {};
+    v[key] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
+    obj["metadata"] = [v];
+    // obj.metadata.push(v);
+  }
+}
+
 export function getRecordMetadataValue(obj, key, missingValue) {
   if (obj.hasOwnProperty("metadata")) {
     const metadata = obj.metadata;

@@ -11,6 +11,7 @@ import {toast} from "react-toastify";
 // import PersonMetadata from "./PersonMetadata";
 import Box from "@mui/material/Box";
 import {
+  CMD_UPDATE_MONITOR_RECORD,
   CMD_UPDATE_PERSONNEL_RECORD,
   NURIMS_ENTITY_CONTACT,
   NURIMS_ENTITY_DATE_OF_BIRTH,
@@ -31,15 +32,16 @@ import {
 } from "../../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
 import ReactJson from "react-json-view";
-import {setMetadataValue} from "../../../utils/MetadataUtils";
+import {getRecordMetadataValue, setMetadataValue} from "../../../utils/MetadataUtils";
 import BusyIndicator from "../../../components/BusyIndicator";
+import {readString} from "react-papaparse";
 
 const MODULE = "ImportICENSPersonnel";
 
 function isPersonMonitored(status) {
-  if (Array.isArray(status)) {
-    return status.length === 0 ? "false" : status[0] === "" ? "false" : "true";
-  }
+  // if (Array.isArray(status)) {
+  //   return status.length === 0 ? "false" : status[0] === "" ? "false" : "true";
+  // }
   return status === "" ? "false" : "true";
 }
 
@@ -49,7 +51,7 @@ class ImportICENSPersonnel extends Component {
     this.state = {
       persons: [],
       busy: 0,
-      metadata_changed: false,
+      data_changed: false,
       messages: [],
       alert: false,
       confirm_remove: false,
@@ -59,6 +61,7 @@ class ImportICENSPersonnel extends Component {
     };
     this.plref = React.createRef();
     this.pmref = React.createRef();
+    this.persons = [];
   }
 
   ws_message = (message) => {
@@ -78,21 +81,32 @@ class ImportICENSPersonnel extends Component {
   }
 
   saveChanges = () => {
-    const persons = this.state.persons;
+    const persons = this.persons;
     for (const person of persons) {
       console.log("SAVING PERSONS WITH CHANGED METADATA ", person)
       // only save personnel with changed metadata
-      this.props.send({
-        cmd: CMD_UPDATE_PERSONNEL_RECORD,
-        item_id: person.item_id,
-        "nurims.title": person[NURIMS_TITLE],
-        "nurims.withdrawn": person[NURIMS_WITHDRAWN],
-        metadata: person.metadata,
-        module: MODULE,
-      })
+      if (person.record_type === "employee_record") {
+        this.props.send({
+          cmd: CMD_UPDATE_PERSONNEL_RECORD,
+          item_id: person.item_id,
+          "nurims.title": person[NURIMS_TITLE],
+          "nurims.withdrawn": person[NURIMS_WITHDRAWN],
+          metadata: person.metadata,
+          module: MODULE,
+        })
+      } else if (person.record_type === "monitor_record") {
+        this.props.send({
+          cmd: CMD_UPDATE_MONITOR_RECORD,
+          item_id: person.item_id,
+          "nurims.title": person[NURIMS_TITLE],
+          "nurims.withdrawn": person[NURIMS_WITHDRAWN],
+          metadata: person.metadata,
+          module: MODULE,
+        })
+      }
     }
 
-    this.setState({metadata_changed: false})
+    this.setState({data_changed: false})
   }
 
   handleFileUpload = (e) => {
@@ -106,56 +120,66 @@ class ImportICENSPersonnel extends Component {
     };
     this.setState({busy: 1});
     fileReader.readAsText(selectedFile);
-    fileReader.onload = function (event) {
-      const data = JSON.parse(event.target.result);
-      if (Array.isArray(data)) {
-        const persons = [];
-        for (const d of data) {
-          const person = {
-            item_id: -1,
-            "nurims.title": "",
-            "nurims.withdrawn": 0,
-            metadata: []
-          };
-          if (d.hasOwnProperty("name")) {
-            person[NURIMS_TITLE] = d.name;
+    fileReader.onload = function (e) {
+      const results = readString(e.target.result, {header: true});
+      console.log("RECORDS", that.persons)
+      console.log("RESULT", results)
+      const header = results.meta.fields;
+      const ts_column = results.meta.fields;
+      let parseHeader = true;
+      if (results.hasOwnProperty("data")) {
+        const table_data = [];
+        for (const row of results.data) {
+          let found = false;
+          for (const person of that.persons) {
+            if (row.hasOwnProperty("Id") && row.Id === getRecordMetadataValue(person, NURIMS_ENTITY_DOSE_PROVIDER_ID, null)) {
+              found = true;
+              break;
+            }
           }
-          if (d.hasOwnProperty("dob")) {
-            setMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, d.dob)
+          if (!found) {
+            const p = {
+              item_id: -1,
+              "nurims.title": row.Name,
+              "nurims.withdrawn": 0,
+              "record_type": row.Type === "employee_record" ? "employee_record" : row.Type === "fixed_location_monitor_record" ? "monitor_record" : "",
+              metadata: []
+            };
+            if (row.hasOwnProperty("DateOfBirth")) {
+              setMetadataValue(p, NURIMS_ENTITY_DATE_OF_BIRTH, row.DateOfBirth)
+            }
+            if (row.hasOwnProperty("WorkDetails")) {
+              setMetadataValue(p, NURIMS_ENTITY_WORK_DETAILS, row.WorkDetails)
+            }
+            if (row.hasOwnProperty("Sex")) {
+              setMetadataValue(p, NURIMS_ENTITY_SEX, row.Sex)
+            }
+            if (row.hasOwnProperty("NID")) {
+              setMetadataValue(p, NURIMS_ENTITY_NATIONAL_ID, row.NID)
+            }
+            if (row.hasOwnProperty("Id")) {
+              setMetadataValue(p, NURIMS_ENTITY_DOSE_PROVIDER_ID, row.Id)
+            }
+            if (row.hasOwnProperty("IsWholeBodyMonitored")) {
+              setMetadataValue(p, NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, isPersonMonitored(row.IsWholeBodyMonitored))
+            }
+            if (row.hasOwnProperty("IsExtremityMonitored")) {
+              setMetadataValue(p, NURIMS_ENTITY_IS_EXTREMITY_MONITORED, isPersonMonitored(row.IsExtremityMonitored))
+            }
+            if (row.hasOwnProperty("IsWristMonitored")) {
+              setMetadataValue(p, NURIMS_ENTITY_IS_WRIST_MONITORED, isPersonMonitored(row.IsWristMonitored))
+            }
+            that.persons.push(p);
           }
-          if (d.hasOwnProperty("work")) {
-            setMetadataValue(person, NURIMS_ENTITY_WORK_DETAILS, d.work)
-          }
-          if (d.hasOwnProperty("sex")) {
-            setMetadataValue(person, NURIMS_ENTITY_SEX, d.sex)
-          }
-          if (d.hasOwnProperty("contact")) {
-            setMetadataValue(person, NURIMS_ENTITY_CONTACT, d.contact)
-          }
-          if (d.hasOwnProperty("nid")) {
-            setMetadataValue(person, NURIMS_ENTITY_NATIONAL_ID, d.nid)
-          }
-          if (d.hasOwnProperty("handle")) {
-            setMetadataValue(person, NURIMS_ENTITY_DOSE_PROVIDER_ID, d.handle)
-          }
-          if (d.hasOwnProperty("iswholebodymonitored")) {
-            setMetadataValue(person, NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, isPersonMonitored(d.iswholebodymonitored))
-          }
-          if (d.hasOwnProperty("isextremitymonitored")) {
-            setMetadataValue(person, NURIMS_ENTITY_IS_EXTREMITY_MONITORED, isPersonMonitored(d.isextremitymonitored))
-          }
-          if (d.hasOwnProperty("iswristmonitored")) {
-            setMetadataValue(person, NURIMS_ENTITY_IS_WRIST_MONITORED, isPersonMonitored(d.iswristmonitored))
-          }
-          persons.push(person);
         }
-        that.setState({persons: persons, busy: 0, metadata_changed: true});
       }
+      console.log("PERSONS", that.persons)
+      that.setState({busy: 0, data_changed: true});
     };
   }
 
   render() {
-    const {persons, busy, metadata_changed, messages, title} = this.state;
+    const {persons, busy, data_changed, messages, title} = this.state;
     return (
       <React.Fragment>
         <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
@@ -190,11 +214,11 @@ class ImportICENSPersonnel extends Component {
           <label htmlFor="import-file-uploader">
             <Fab variant="extended" size="small" color="primary" aria-label="import" component={"span"}>
               <UploadIcon sx={{mr: 1}}/>
-              Import ICENS Personnel From .json File
+              Import ICENS Personnel From .csv File
             </Fab>
           </label>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
-               disabled={!metadata_changed}>
+               disabled={!data_changed}>
             <SaveIcon sx={{mr: 1}}/>
             Save Changes
           </Fab>

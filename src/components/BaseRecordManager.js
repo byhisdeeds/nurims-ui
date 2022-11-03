@@ -43,7 +43,7 @@ class BaseRecordManager extends Component {
       title: props.title,
       include_archived: false,
     };
-    this.Module = "";
+    this.Module = "BaseRecordManager";
     this.recordTopic = "";
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();

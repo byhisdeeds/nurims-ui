@@ -111,6 +111,16 @@ module.exports = Object.freeze({
   NURIMS_ENTITY_IS_EXTREMITY_MONITORED: 'nurims.entity.isextremitymonitored',
   NURIMS_ENTITY_IS_WRIST_MONITORED: 'nurims.entity.iswristmonitored',
 
+  NURIMS_DOSIMETRY_MEASUREMENTS: "nurims.dosimetry.measurements",
+  NURIMS_DOSIMETRY_BATCH_ID: "nurims.dosimeter.batchid",
+  NURIMS_DOSIMETRY_ID: "nurims.dosimeter.id",
+  NURIMS_DOSIMETRY_TYPE: "nurims.dosimeter.type",
+  NURIMS_DOSIMETRY_TIMESTAMP: "nurims.dosimeter.timestamp",
+  NURIMS_DOSIMETRY_UNITS: "nurims.dosimeter.units",
+  NURIMS_DOSIMETRY_MONITOR_PERIOD: "nurims.dosimeter.monitorperiod",
+  NURIMS_DOSIMETRY_SHALLOW_DOSE: "nurims.dosimeter.shallowdose",
+  NURIMS_DOSIMETRY_DEEP_DOSE: "nurims.dosimeter.deepdose",
+
   NURIMS_MATERIAL_DOCUMENTS: 'nurims.material.documents',
   NURIMS_MATERIAL_IMAGE: 'nurims.material.image',
   NURIMS_MATERIAL_TYPE: 'nurims.material.type',

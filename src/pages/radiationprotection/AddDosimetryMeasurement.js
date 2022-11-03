@@ -1,339 +1,3 @@
-// import React, {Component} from 'react';
-// import {
-//   Fab,
-//   Grid,
-//   Button,
-//   Dialog,
-//   DialogActions,
-//   DialogContent,
-//   DialogTitle,
-//   DialogContentText,
-//   Typography
-// } from "@mui/material";
-// import SaveIcon from '@mui/icons-material/Save';
-// import UploadIcon from '@mui/icons-material/Upload';
-// import {toast} from "react-toastify";
-// import Box from "@mui/material/Box";
-// import DosimetryMetadata from "./DosimetryMetadata";
-// import DosimetrySurveillanceList from "./DosimetrySurveillanceList";
-// import {withTheme} from "@mui/styles";
-//
-// const MODULE = "AddDosimetryMeasurement";
-//
-// function ConfirmRemoveDialog(props) {
-//   return (
-//     <div>
-//       <Dialog
-//         open={props.open}
-//         onClose={props.onCancel}
-//         aria-labelledby="alert-dialog-title"
-//         aria-describedby="alert-dialog-description"
-//       >
-//         <DialogTitle id="alert-dialog-title">
-//           {`Delete record for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-//         </DialogTitle>
-//         <DialogContent>
-//           <DialogContentText id="alert-dialog-description">
-//             Are you sure you want to delete the record
-//             for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} (
-//             {props.person.hasOwnProperty("item_id") ? props.person["item_id"] : ""})?
-//           </DialogContentText>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={props.onCancel}>No</Button>
-//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </div>
-//   );
-// }
-//
-// function ConfirmSelectionChangeDialog(props) {
-//   return (
-//     <div>
-//       <Dialog
-//         open={props.open}
-//         onClose={props.onCancel}
-//         aria-labelledby="alert-dialog-title"
-//         aria-describedby="alert-dialog-description"
-//       >
-//         <DialogTitle id="alert-dialog-title">
-//           {`Save Previous Changed for ${props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""}`}
-//         </DialogTitle>
-//         <DialogContent>
-//           <DialogContentText id="alert-dialog-description">
-//             The details for {props.person.hasOwnProperty("nurims.title") ? props.person["nurims.title"] : ""} have
-//             changed without being saved. Do you want to continue without saving the details and loose the changes ?
-//           </DialogContentText>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={props.onCancel}>No</Button>
-//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </div>
-//   );
-// }
-//
-// class AddDosimetryMeasurement extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       metadata_changed: false,
-//       alert: false,
-//       previous_selection: {},
-//       selection: {},
-//       title: props.title,
-//     };
-//     this.plref = React.createRef();
-//     this.pdref = React.createRef();
-//   }
-//
-//   componentDidMount() {
-//     this.props.send({
-//       cmd: 'get_personnel_with_metadata',
-//       module: MODULE,
-//       metadata: [
-//         'nurims.entity.doseproviderid',
-//         'nurims.entity.iswholebodymonitored',
-//         'nurims.entity.isextremitymonitored',
-//         'nurims.entity.iswristmonitored',
-//       ]
-//     })
-//   }
-//
-//   onRefreshSurveillanceList = () => {
-//     this.props.send({
-//       cmd: 'get_personnel_with_metadata',
-//       module: MODULE,
-//       metadata: [
-//         'nurims.entity.doseproviderid',
-//         'nurims.entity.iswholebodymonitored',
-//         'nurims.entity.isextremitymonitored',
-//         'nurims.entity.iswristmonitored',
-//       ]
-//     });
-//   }
-//
-//   ws_message = (message) => {
-//     console.log("ON_WS_MESSAGE", MODULE, message)
-//     if (message.hasOwnProperty("response")) {
-//       const response = message.response;
-//       if (response.hasOwnProperty("status") && response.status === 0) {
-//         if (message.hasOwnProperty("cmd") && message.cmd === "get_personnel_with_metadata") {
-//           if (this.plref.current) {
-//             // this.plref.current.update_personnel(response.personnel, true)
-//             this.plref.current.set_personnel(response.personnel)
-//           }
-//         } else if (message.hasOwnProperty("cmd") && message.cmd === "get_personnel_metadata") {
-//           if (this.pdref.current) {
-//             this.pdref.current.update_personnel_details(response.personnel)
-//           }
-//         } else if (message.hasOwnProperty("cmd") && message.cmd === "update_personnel_record") {
-//           // toast.success("Personnel details updated successfully")
-//           // if (this.plref.current) {
-//           //   this.plref.current.update_selected_person(response.personnel)
-//           // }
-//           // if (this.pdref.current) {
-//           //   this.pdref.current.update_personnel_record(response.personnel)
-//           // }
-//         } else if (message.hasOwnProperty("cmd") && message.cmd === "permanently_delete_person") {
-//           // toast.success("Personnel record deleted successfully")
-//           // if (this.plref.current) {
-//           //   this.plref.current.removePerson(this.state.selection)
-//           // }
-//           // // if (this.plref.current) {
-//           // //   this.plref.current.update_selected_person(response.personnel)
-//           // // }
-//           // if (this.pdref.current) {
-//           //   this.pdref.current.update_personnel_details({})
-//           // }
-//         }
-//       } else {
-//         toast.error(response.message);
-//       }
-//     }
-//   }
-//
-//   on_person_selected = (previous_person, person) => {
-//     console.log("-- on_person_selected (previous selection) --", previous_person)
-//     console.log("-- on_person_selected (selection) --", person)
-//     if (previous_person.has_changed) {
-//       // toast.info("details have changed");
-//       this.setState({alert: true})
-//     } else {
-//       if (this.pdref.current) {
-//         this.pdref.current.setDoseMetadata(person)
-//       }
-//     }
-//     this.setState({previous_selection: previous_person, selection: person})
-//   }
-//
-//   saveChanges = () => {
-//     console.log("saving changes")
-//     if (this.pdref.current) {
-//       const details = this.pdref.current.get_person_details()
-//       console.log("DETAILS", details)
-//       // prepare person object
-//       const person = {
-//         ...{
-//           item_id: details.item_id,
-//           "nurims.title": details["nurims.title"],
-//           "nurims.withdrawn": details["nurims.withdrawn"],
-//           metadata: [],
-//         }
-//       };
-//       if (details.hasOwnProperty("nurims.entity.nid")) {
-//         person.metadata.push({"nurims.entity.nid": details["nurims.entity.nid"]});
-//       }
-//       if (details.hasOwnProperty("nurims.entity.sex")) {
-//         person.metadata.push({"nurims.entity.sex": details["nurims.entity.sex"]});
-//       }
-//       if (details.hasOwnProperty("nurims.entity.dob")) {
-//         person.metadata.push({"nurims.entity.dob": details["nurims.entity.dob"].toISOString().substring(0,10)});
-//       }
-//       if (details.hasOwnProperty("nurims.entity.contact")) {
-//         person.metadata.push({"nurims.entity.contact": details["nurims.entity.contact"]});
-//       }
-//       if (details.hasOwnProperty("nurims.entity.workdetails")) {
-//         person.metadata.push({"nurims.entity.workdetails": details["nurims.entity.workdetails"]});
-//       }
-//       if (details.hasOwnProperty("nurims.entity.doseproviderid")) {
-//         person.metadata.push({"nurims.entity.doseproviderid": details["nurims.entity.doseproviderid"]});
-//       }
-//       // this.props.send({
-//       //   cmd: 'update_personnel_details',
-//       //   item_id: person.item_id,
-//       //   "nurims.title": person["nurims.title"],
-//       //   "nurims.withdrawn": person["nurims.withdrawn"],
-//       //   metadata: person.metadata,
-//       //   module: MODULE,
-//       // })
-//     }
-//
-//     // this.setState({details_changed: false})
-//   }
-//
-//   // addPerson = () => {
-//   //   if (this.plref.current) {
-//   //     this.plref.current.update_personnel([{
-//   //       "item_id": -1,
-//   //       "nurims.title": "New Person",
-//   //       "nurims.withdrawn": 0
-//   //     }], false)
-//   //   }
-//   // }
-//
-//   onDoseMetadataChanged = (state) => {
-//     this.setState({metadata_changed: state});
-//   }
-//
-//   proceed_with_selection_change = () => {
-//     // set new selection and load details
-//     // console.log("#### saving personnel details ###", this.state.previous_selection)
-//     const selection = this.state.selection;
-//     const previous_selection = this.state.previous_selection;
-//     selection.has_changed = false;
-//     previous_selection.has_changed = false;
-//     this.setState({alert: false, selection: selection, previous_selection: previous_selection});
-//     if (this.plref.current) {
-//       this.plref.current.setSelection(selection)
-//     }
-//     if (this.pdref.current) {
-//       this.pdref.current.setDoseMetadata(selection)
-//     }
-//   }
-//
-//   cancel_selection_change = () => {
-//     this.setState({alert: false,});
-//     if (this.plref.current) {
-//       this.plref.current.setSelection(this.state.previous_selection)
-//     }
-//   }
-//
-//   handleFileUpload = (e) => {
-//     const selectedFile = e.target.files[0];
-//     console.log("file uploaded", selectedFile)
-//     const plref = this.plref;
-//     const state = this.setState;
-//     const fileReader = new FileReader();
-//     fileReader.onerror = function () {
-//       toast.error(`Error occurred reading file: ${selectedFile.name}`)
-//     };
-//     fileReader.readAsText(selectedFile);
-//     fileReader.onload = function (event) {
-//       // console.log(">>>>>", event.target.result);
-//       const data = JSON.parse(event.target.result);
-//       console.log(data)
-//       if (plref.current) {
-//         plref.current.importDoseReport(data);
-//       }
-//     };
-//   }
-//
-//   render() {
-//     const {metadata_changed, alert, previous_selection, selection, title, } = this.state;
-//     return (
-//       <React.Fragment>
-//         <ConfirmSelectionChangeDialog open={alert}
-//                                       person={previous_selection}
-//                                       onProceed={this.proceed_with_selection_change}
-//                                       onCancel={this.cancel_selection_change}
-//         />
-//         <input
-//           accept="*.csv, *.txt, text/plain"
-//           // className={classes.input}
-//           id="import-file-uploader"
-//           style={{display: 'none',}}
-//           onChange={this.handleFileUpload}
-//           type="file"
-//         />
-//         <Grid container spacing={2}>
-//           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-//             <Typography variant="h5" component="div">{title}</Typography>
-//           </Grid>
-//           <Grid item xs={7} style={{border: '1px solid red'}}>
-//             <DosimetrySurveillanceList
-//               ref={this.plref}
-//               properties={this.props.properties}
-//               onChange={this.onDoseMetadataChanged}
-//               onClick={this.on_person_selected}
-//               onRefresh={this.onRefreshSurveillanceList}
-//             />
-//           </Grid>
-//           <Grid item xs={5}>
-//             <DosimetryMetadata
-//               ref={this.pdref}
-//               properties={this.props.properties}
-//               onChange={this.onDoseMetadataChanged}
-//             />
-//           </Grid>
-//         </Grid>
-//         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
-//           <label htmlFor="import-file-uploader">
-//             <Fab variant="extended" size="small" color="primary" aria-label="import" component={"span"}>
-//               <UploadIcon sx={{mr: 1}}/>
-//               Import From Dose Report
-//             </Fab>
-//           </label>
-//           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
-//                disabled={!metadata_changed}>
-//             <SaveIcon sx={{mr: 1}}/>
-//             Save Changes
-//           </Fab>
-//         </Box>
-//       </React.Fragment>
-//     );
-//   }
-// }
-//
-// AddDosimetryMeasurement.defaultProps = {
-//   send: (msg) => {
-//   },
-//   user: {},
-// };
-//
-// export default withTheme(AddDosimetryMeasurement);
 import React from 'react';
 import {
   Fab,
@@ -348,34 +12,101 @@ import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {
   CMD_GET_GLOSSARY_TERMS,
+  NURIMS_DOSIMETRY_BATCH_ID, NURIMS_DOSIMETRY_DEEP_DOSE,
+  NURIMS_DOSIMETRY_ID,
+  NURIMS_DOSIMETRY_MEASUREMENTS,
+  NURIMS_DOSIMETRY_MONITOR_PERIOD, NURIMS_DOSIMETRY_SHALLOW_DOSE,
+  NURIMS_DOSIMETRY_TIMESTAMP,
+  NURIMS_DOSIMETRY_TYPE,
+  NURIMS_DOSIMETRY_UNITS,
+  NURIMS_ENTITY_DOSE_PROVIDER_ID,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
 } from "../../components/UtilityDialogs";
-import SSCMetadata from "./../maintenance/SSCMetadata";
-import {ConsoleLog} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import PersonnelAndMonitorsList from "./PersonnelAndMonitorsList";
+import DosimetryMeasurementMetadata from "./DosimetryMeasurementMetadata";
+import BusyIndicator from "../../components/BusyIndicator";
+import {toast} from "react-toastify";
+import {readString} from "react-papaparse";
+import {getRecordMetadataValue, setDosimetryDataValue, setRecordMetadataValue} from "../../utils/MetadataUtils";
+import {transformDose} from "../../utils/DoseReportUtils";
+
+
+function assignDosimetryRecord(dosimetry, records) {
+  for (const record of records) {
+    // console.log("++Id", dosimetry.hasOwnProperty("Id") && dosimetry.Id)
+    // console.log("++", NURIMS_ENTITY_DOSE_PROVIDER_ID, getRecordMetadataValue(record, NURIMS_ENTITY_DOSE_PROVIDER_ID, null))
+    if (dosimetry.hasOwnProperty("Id") && (getRecordMetadataValue(record, NURIMS_ENTITY_DOSE_PROVIDER_ID, null) === dosimetry.Id)) {
+      // get existing dosimetry metadata
+      const measurements = getRecordMetadataValue(record, NURIMS_DOSIMETRY_MEASUREMENTS, []);
+      let exists = false;
+      for (const measurement of measurements) {
+        if (measurement[NURIMS_DOSIMETRY_BATCH_ID] === dosimetry.Barcode) {
+          exists = true;
+          break;
+        }
+      }
+      if (!exists) {
+        const measurement = {};
+        measurement[NURIMS_DOSIMETRY_BATCH_ID] = dosimetry.BatchId;
+        measurement[NURIMS_DOSIMETRY_ID] = dosimetry.Barcode;
+        measurement[NURIMS_DOSIMETRY_TYPE] = "WholeBody";
+        measurement[NURIMS_DOSIMETRY_TIMESTAMP] = dosimetry.Timestamp;
+        measurement[NURIMS_DOSIMETRY_UNITS] = "msv";
+        measurement[NURIMS_DOSIMETRY_MONITOR_PERIOD] = dosimetry.monitorPeriod;
+        measurement[NURIMS_DOSIMETRY_SHALLOW_DOSE] = transformDose(dosimetry.R2, dosimetry.Units.toLowerCase(), 'msv');
+        measurement[NURIMS_DOSIMETRY_DEEP_DOSE] = transformDose(dosimetry.R3, dosimetry.Units.toLowerCase(), 'msv');
+        measurements.push(measurement);
+        setRecordMetadataValue(record, NURIMS_DOSIMETRY_MEASUREMENTS, measurements);
+      }
+      return null;
+    }
+  }
+  return `Did'nt find any entity with ${NURIMS_ENTITY_DOSE_PROVIDER_ID}=${dosimetry.hasOwnProperty("Id") ? dosimetry.Id : ""}`
+}
 
 class AddDosimetryMeasurement extends BaseRecordManager {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
+    this.state = {
+      busy: 0,
+      data_changed: false,
+      selection: {},
+    }
     this.Module = "AddDosimetryMeasurement";
     this.recordTopic = "measurement";
+    this.topics = ["personnel", "monitor"];
+    this.importFileRef = React.createRef();
   }
 
   componentDidMount() {
+    document.addEventListener("keydown", this.ctrlIKeyPress, false);
     this.props.send({
       cmd: CMD_GET_GLOSSARY_TERMS,
       module: this.Module,
     });
-    // this.props.send({
-    //   cmd: CMD_GET_PERSONNEL_RECORDS,
-    //   module: this.Module,
-    // });
-    this.requestGetRecords(false, ["personnel", "monitor"]);
+    this.requestGetRecords(false);
   }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.ctrlIKeyPress, false);
+  }
+
+  ctrlIKeyPress = (event) => {
+    console.log(`Key: ${event.key} with keycode ${event.keyCode} has been pressed`)
+    if (event.key === 'i' && event.keyCode === 73) {
+      console.log("==>", "CTRL I KEY PRESSED");
+      event.preventDefault();
+      this.importFileRef.current.click();
+    }
+  }
+
 
   // ws_message = (message) => {
   //   super.ws_message(message, [
@@ -383,45 +114,78 @@ class AddDosimetryMeasurement extends BaseRecordManager {
   //   ]);
   // }
 
-  requestGetRecords = (include_archived, recordTopic) => {
+  requestGetRecords = (include_archived) => {
     if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "requestGetRecords", "recordTopic", recordTopic,
-        "include_archived", include_archived);
+      ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
     }
-    if (Array.isArray(recordTopic)) {
-      let add = false;
-      for (const topic of recordTopic) {
-        const props = {
-          cmd: this.recordCommand("get", topic),
-          "include.withdrawn": include_archived ? "true" : "false",
-          module: this.Module,
-        };
-        if (add) {
-          props["append.records"] = "true"
-        }
-        add = true;
-        this.props.send(props);
-        // this.props.send({
-        //   cmd: this.recordCommand("get", topic),
-        //   "include.withdrawn": include_archived ? "true" : "false",
-        //   ""
-        //   module: this.Module,
-        // })
-      }
-    } else {
-      this.props.send({
-        cmd: this.recordCommand("get", recordTopic),
+    let add = false;
+    for (const topic of this.topics) {
+      const props = {
+        cmd: this.recordCommand("get", topic),
         "include.withdrawn": include_archived ? "true" : "false",
+        "include.metadata": "true",
         module: this.Module,
-      })
+      };
+      if (add) {
+        props["append.records"] = "true"
+      }
+      add = true;
+      this.props.send(props);
     }
     this.setState({include_archived: include_archived});
   }
 
-  render() {
-    const {metadata_changed, confirm_remove, include_archived, selection, title} = this.state;
+  onSelection = (selection) => {
     if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
+      ConsoleLog(this.Module, "onSelection", "selection", selection);
+    }
+    if (this.metadataRef.current) {
+      this.metadataRef.current.setRecordMetadata(selection)
+    }
+    this.setState({selection: selection})
+  }
+
+  handleFileUpload = (event) => {
+    const selectedFile = event.target.files[0];
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "handleFileUpload", "selectedFile", selectedFile);
+    }
+    const records = (this.listRef.current) ? this.listRef.current.getRecords() : [];
+    const that = this;
+    const fileReader = new FileReader();
+    fileReader.onerror = function () {
+      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+    };
+    this.setState({busy: 1});
+    fileReader.readAsText(selectedFile);
+    fileReader.onload = function (e) {
+      // const data = JSON.parse(event.target.result);
+      const results = readString(e.target.result, {header: true});
+      console.log("RESULT", results)
+      const header = results.meta.fields;
+      const ts_column = results.meta.fields;
+      let parseHeader = true;
+      if (results.hasOwnProperty("data")) {
+        const table_data = [];
+        for (const row of results.data) {
+          const msg = assignDosimetryRecord(row, records)
+          if (msg) {
+            console.log(">>>>", msg, row);
+          }
+        }
+        console.log("RECORDS", records)
+        // if (that.tableRef.current) {
+        //   that.tableRef.current.setRecords(table_data);
+        // }
+      }
+      that.setState({busy: 0, data_changed: true});
+    };
+  }
+
+  render() {
+    const {data_changed, confirm_remove, include_archived, selection, title, busy} = this.state;
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "render", "data_changed", data_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
     }
     return (
@@ -431,23 +195,32 @@ class AddDosimetryMeasurement extends BaseRecordManager {
                                    onProceed={this.proceedWithRemove}
                                    onCancel={this.cancelRemove}
         />
+        <BusyIndicator open={busy > 0} loader={"bar"} size={40}/>
+        <input
+          ref={this.importFileRef}
+          accept="text/csv"
+          id="import-file-uploader"
+          style={{display: 'none',}}
+          onChange={this.handleFileUpload}
+          type="file"
+        />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <PersonnelAndMonitorsList
               ref={this.listRef}
               title={"Personnel and Monitors"}
               properties={this.props.properties}
-              onSelection={this.onRecordSelection}
+              onSelection={this.onSelection}
               includeArchived={include_archived}
               requestGetRecords={this.requestGetRecords}
-              enableRecordArchiveSwitch={false}
+              enableRecordArchiveSwitch={true}
             />
           </Grid>
-          <Grid item xs={8}>
-            <SSCMetadata
+          <Grid item xs={9}>
+            <DosimetryMeasurementMetadata
               ref={this.metadataRef}
               properties={this.props.properties}
               onChange={this.onRecordMetadataChanged}
@@ -467,7 +240,7 @@ class AddDosimetryMeasurement extends BaseRecordManager {
               <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive SSC Record"</React.Fragment>}
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
-               disabled={!metadata_changed}>
+               disabled={!data_changed}>
             <SaveIcon sx={{mr: 1}}/>
             Save Changes
           </Fab>

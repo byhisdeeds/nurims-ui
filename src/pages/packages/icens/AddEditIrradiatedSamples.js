@@ -101,11 +101,13 @@ class AddEditIrradiatedSamples extends Component {
     this.setState({busy: 1});
     fileReader.readAsText(selectedFile);
     fileReader.onload = function (event) {
+      const csvData = event.target.result;
       // const data = JSON.parse(event.target.result);
-      const results = readString(event.target.result);
+      const results = readString(csvData);
       const header = {};
       const ts_column = [];
       let parseHeader = true;
+      console.log("RESULT", results)
       if (results.hasOwnProperty("data")) {
         const table_data = [];
         for (const row of results.data) {

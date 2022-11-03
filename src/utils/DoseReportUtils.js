@@ -62,7 +62,7 @@ export function importIcensDoseReport (data, persons, doseUnit) {
                 if (id === doseProviderId) {
                   // found match
                   const dosimeter = b["dc.title"];
-                  const fac = (doseUnit) ? transformDose(responseUnits, doseUnit) : 1;
+                  const fac = (doseUnit) ? transformDoseFactor(responseUnits, doseUnit) : 1;
                   if (status === "read") {
                     if (wholeBodyMonitor === "true" && b["dc.type"] === "Whole Body Dose Record") {
                       const r3 = b["tld.dosimeter.r3"];
@@ -107,11 +107,21 @@ export function importIcensDoseReport (data, persons, doseUnit) {
   }
 }
 
-export function transformDose(_from, _to) {
+export function transformDoseFactor(_from, _to) {
   const transformKey = _from+"-"+_to;
 
   if (DOSE_TRANSFORM_TABLE.hasOwnProperty(transformKey)) {
     return DOSE_TRANSFORM_TABLE[transformKey];
   }
   return -1.0
+}
+
+
+export function transformDose(dose, _from, _to) {
+  const transformKey = _from+"-"+_to;
+
+  if (DOSE_TRANSFORM_TABLE.hasOwnProperty(transformKey)) {
+    return dose * DOSE_TRANSFORM_TABLE[transformKey];
+  }
+  return -1.0 * dose;
 }

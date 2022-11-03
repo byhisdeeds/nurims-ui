@@ -9,6 +9,7 @@ class PersonnelAndMonitorsList extends React.Component {
   constructor(props) {
     super(props);
     this.ref=React.createRef();
+    this.Module = "PersonnelAndMonitorsList";
   }
 
   removeRecord = (record) => {
@@ -41,7 +42,7 @@ class PersonnelAndMonitorsList extends React.Component {
 
   render() {
     if (this.context.debug > 5) {
-      ConsoleLog("PersonnelAndMonitorsList", "render");
+      ConsoleLog(this.Module, "render");
     }
     return (
       <PagedRecordList

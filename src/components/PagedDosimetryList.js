@@ -16,7 +16,7 @@ import {PageableTable} from "./CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
 import {getRecordMetadataValue} from "../utils/MetadataUtils";
 
-class PagedRecordList extends React.Component {
+class PagedDosimetryList extends React.Component {
   static contextType = UserDebugContext;
 
   constructor(props) {
@@ -124,7 +124,6 @@ class PagedRecordList extends React.Component {
   };
 
   renderCell = (row, cell) => {
-    // let value = row[cell.id];
     let value = "";
     if (row.hasOwnProperty(cell.id)) {
       value = row[cell.id];
@@ -133,9 +132,6 @@ class PagedRecordList extends React.Component {
       if (value === "__@@@__") {
         value = "";
       }
-    }
-    if (cell.hasOwnProperty("format")) {
-      value = cell.format(value)
     }
     return (
       <TableCell
@@ -192,7 +188,7 @@ class PagedRecordList extends React.Component {
 
 }
 
-PagedRecordList.propTypes = {
+PagedDosimetryList.propTypes = {
   title: PropTypes.string.isRequired,
   rowHeight: PropTypes.number.isRequired,
   minWidth: PropTypes.number.isRequired,
@@ -203,7 +199,7 @@ PagedRecordList.propTypes = {
   cells: PropTypes.array,
 }
 
-PagedRecordList.defaultProps = {
+PagedDosimetryList.defaultProps = {
   includeArchived: false,
   enableRecordArchiveSwitch: false,
   rowHeight: 24,
@@ -212,15 +208,7 @@ PagedRecordList.defaultProps = {
   height: 400,
   cells: [
     {
-      id: ITEM_ID,
-      align: 'center',
-      disablePadding: true,
-      label: 'ID',
-      width: '10%',
-      sortField: true,
-    },
-    {
-      id: NURIMS_TITLE,
+      id: "NURIMS_TITLE",
       align: 'left',
       disablePadding: true,
       label: 'Name',
@@ -234,4 +222,4 @@ PagedRecordList.defaultProps = {
   },
 };
 
-export default withTheme(PagedRecordList)
+export default withTheme(PagedDosimetryList)
