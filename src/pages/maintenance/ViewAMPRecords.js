@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {
-  BLANK_PDF, CMD_GENERATE_AMP_RECORDS_PDF,
+  BLANK_PDF,
 } from "../../utils/constants";
 import {Grid, Typography} from "@mui/material";
 import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import PropTypes from "prop-types";
+import {TitleComponent} from "../../components/CommonComponents";
 
 const MODULE = "ViewAMPRecords";
 
@@ -13,7 +14,6 @@ class ViewAMPRecords extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: props.title,
       pdf: BLANK_PDF,
     };
   }
@@ -45,7 +45,7 @@ class ViewAMPRecords extends Component {
       <React.Fragment>
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={12}>
             <PdfViewer height={"800px"} source={ pdf } />

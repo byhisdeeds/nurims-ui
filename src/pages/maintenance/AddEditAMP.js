@@ -23,6 +23,7 @@ import {
 import AMPList from "./AMPList";
 import AMPMetadata from "./AMPMetadata";
 import {ConsoleLog} from "../../utils/UserDebugContext";
+import {TitleComponent} from "../../components/CommonComponents";
 
 
 class AddEditAMP extends BaseRecordManager {
@@ -50,7 +51,7 @@ class AddEditAMP extends BaseRecordManager {
   }
 
   render() {
-    const {metadata_changed, confirm_remove, include_archived, selection, title} = this.state;
+    const {metadata_changed, confirm_remove, include_archived, selection} = this.state;
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
@@ -64,7 +65,7 @@ class AddEditAMP extends BaseRecordManager {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={3}>
             <AMPList

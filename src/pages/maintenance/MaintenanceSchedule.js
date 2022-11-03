@@ -5,7 +5,6 @@ import {
 import {
   Grid,
   Stack,
-  Typography,
   IconButton,
   Slider
 } from "@mui/material";
@@ -16,6 +15,7 @@ import {withTheme} from "@mui/styles";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TextField from "@mui/material/TextField";
+import {TitleComponent} from "../../components/CommonComponents";
 
 const MODULE = "MaintenanceSchedule";
 
@@ -61,7 +61,6 @@ class MaintenanceSchedule extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: props.title,
       pdf: BLANK_PDF,
       year: new Date(),
       period: [0, 11],
@@ -104,12 +103,12 @@ class MaintenanceSchedule extends Component {
   }
 
   render() {
-    const { title, pdf, year, period, } = this.state;
+    const { pdf, year, period, } = this.state;
     return (
       <React.Fragment>
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={12}>
             <Stack direction="row" spacing={1}>

@@ -18,6 +18,7 @@ import {
 } from "../../components/UtilityDialogs";
 import ManufacturerList from "./ManufacturerList";
 import ManufacturerMetadata from "./ManufacturerMetadata";
+import {TitleComponent} from "../../components/CommonComponents";
 
 
 class AddEditMonitor extends BaseRecordManager {
@@ -47,7 +48,7 @@ class AddEditMonitor extends BaseRecordManager {
   // }
 
   render() {
-    const {metadata_changed, confirm_remove, selection, title} = this.state;
+    const {metadata_changed, confirm_remove, selection} = this.state;
     console.log("render - RECORD_TYPE", this.recordTopic);
     return (
       <React.Fragment>
@@ -58,7 +59,7 @@ class AddEditMonitor extends BaseRecordManager {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={5}>
             <ManufacturerList

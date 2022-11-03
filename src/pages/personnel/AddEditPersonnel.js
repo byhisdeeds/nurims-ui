@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Fab,
   Grid,
-  Typography,
   Box
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
@@ -17,6 +16,7 @@ import PersonMetadata from "./PersonMetadata";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {TitleComponent} from "../../components/CommonComponents";
 
 
 class AddEditPersonnel extends BaseRecordManager {
@@ -33,7 +33,7 @@ class AddEditPersonnel extends BaseRecordManager {
   }
 
   render() {
-    const {metadata_changed, confirm_remove, selection, title, include_archived} = this.state;
+    const {metadata_changed, confirm_remove, selection, include_archived} = this.state;
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
@@ -47,7 +47,7 @@ class AddEditPersonnel extends BaseRecordManager {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={5}>
             <PersonList

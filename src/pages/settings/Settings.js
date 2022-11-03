@@ -7,6 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import {toast} from "react-toastify";
 import {getPropertyValue} from "../../utils/PropertyUtils";
 import {withTheme} from "@mui/styles";
+import {TitleComponent} from "../../components/CommonComponents";
 
 const MODULE = "Settings";
 
@@ -15,7 +16,6 @@ class Settings extends Component {
     super(props);
     this.state = {
       theme: props.theme,
-      title: props.title,
       user: props.user,
       properties: props.properties,
     };
@@ -61,11 +61,11 @@ class Settings extends Component {
   }
 
   render() {
-    const { theme, title, properties } = this.state;
+    const { theme, properties } = this.state;
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-          <Typography variant="h5" component="div">{title}</Typography>
+          <TitleComponent title={this.props.title} />
         </Grid>
         <Grid item xs={12}>
           <List

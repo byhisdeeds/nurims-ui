@@ -22,6 +22,7 @@ import {
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog} from "../../utils/UserDebugContext";
+import {TitleComponent} from "../../components/CommonComponents";
 
 
 class AddEditMonitors extends BaseRecordManager {
@@ -63,7 +64,7 @@ class AddEditMonitors extends BaseRecordManager {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={5}>
             <MonitorList

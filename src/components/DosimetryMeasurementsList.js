@@ -2,7 +2,7 @@ import * as React from "react";
 import {withTheme} from "@mui/styles";
 import PropTypes from "prop-types";
 import {
-  ITEM_ID, METADATA,
+  ITEM_ID, METADATA, NURIMS_DOSIMETRY_BATCH_ID,
   NURIMS_TITLE, NURIMS_TITLE_SUBTITLE,
   NURIMS_WITHDRAWN
 } from "../utils/constants";
@@ -14,9 +14,8 @@ import {
 } from "@mui/material";
 import {PageableTable} from "./CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
-import {getRecordMetadataValue} from "../utils/MetadataUtils";
 
-class PagedDosimetryList extends React.Component {
+class DosimetryMeasurementsList extends React.Component {
   static contextType = UserDebugContext;
 
   constructor(props) {
@@ -25,7 +24,7 @@ class PagedDosimetryList extends React.Component {
       selection: {},
       include_archived: props.includeArchived,
     };
-    this.__Component__ = "PagedRecordList";
+    this.Module = "DosimetryMeasurementsList";
     this.rows = [];
   }
 
@@ -65,20 +64,20 @@ class PagedDosimetryList extends React.Component {
 
   setRecords = (records) => {
     if (this.context.debug > 5) {
-      ConsoleLog(this.__Component__, "setRecords", "records", records);
+      ConsoleLog(this.Module, "setRecords", "records", records);
     }
     if (Array.isArray(records)) {
       let selection = {};
-      this.rows = [...records];
-      const s_item_id = Object.keys(this.state.selection).length === 0 ? -1 : this.state.selection.item_id;
-      for (const r of this.rows) {
-        r["changed"] = false;
-        if (s_item_id > 0) {
-          if (r.item_id === s_item_id) {
-            selection = r;
-          }
-        }
-      }
+      this.rows = records;
+      // const s_item_id = Object.keys(this.state.selection).length === 0 ? -1 : this.state.selection.item_id;
+      // for (const r of this.rows) {
+      //   r["changed"] = false;
+      //   if (s_item_id > 0) {
+      //     if (r.item_id === s_item_id) {
+      //       selection = r;
+      //     }
+      //   }
+      // }
       this.setState({selection: selection});
     }
   }
@@ -89,7 +88,7 @@ class PagedDosimetryList extends React.Component {
 
   updateRecord = (record) => {
     if (this.context.debug > 5) {
-      ConsoleLog(this.__Component__, "updateRecord", "record", record);
+      ConsoleLog(this.Module, "updateRecord", "record", record);
     }
     if (record) {
       for (const row of this.rows) {
@@ -124,26 +123,16 @@ class PagedDosimetryList extends React.Component {
   };
 
   renderCell = (row, cell) => {
-    let value = "";
-    if (row.hasOwnProperty(cell.id)) {
-      value = row[cell.id];
-    } else {
-      value = getRecordMetadataValue(row, cell.id, "__@@@__");
-      if (value === "__@@@__") {
-        value = "";
-      }
-    }
+    const value = row.hasOwnProperty(cell.id) ? row[cell.id] : "";
     return (
       <TableCell
         align={cell.align}
         padding={cell.disablePadding ? 'none' : 'normal'}
         style={{
-          color: row[NURIMS_WITHDRAWN] === 0 ?
-            this.props.theme.palette.primary.light :
-            this.props.theme.palette.text.disabled
+          color: this.props.theme.palette.primary.light
         }}
       >
-        {value} {(cell.id === NURIMS_TITLE && row[NURIMS_WITHDRAWN] === 1) && "<- archived"}
+        {value}
       </TableCell>
     )
   }
@@ -167,13 +156,14 @@ class PagedDosimetryList extends React.Component {
             theme={this.props.theme}
             rowHeight={this.props.rowHeight}
             order={'asc'}
-            orderBy={NURIMS_TITLE}
+            orderBy={NURIMS_DOSIMETRY_BATCH_ID}
             title={this.props.title}
             disabled={false}
             rows={this.rows}
             rowsPerPage={this.props.rowsPerPage}
             selectedRow={selection}
             onRowSelection={this.handleListItemSelection}
+            selectionMetadataField={NURIMS_DOSIMETRY_BATCH_ID}
             renderCell={this.renderCell}
             filterElement={this.props.enableRecordArchiveSwitch && <Switch
               inputProps={{'aria-labelledby': 'include-archived-records-switch'}}
@@ -188,7 +178,7 @@ class PagedDosimetryList extends React.Component {
 
 }
 
-PagedDosimetryList.propTypes = {
+DosimetryMeasurementsList.propTypes = {
   title: PropTypes.string.isRequired,
   rowHeight: PropTypes.number.isRequired,
   minWidth: PropTypes.number.isRequired,
@@ -199,7 +189,7 @@ PagedDosimetryList.propTypes = {
   cells: PropTypes.array,
 }
 
-PagedDosimetryList.defaultProps = {
+DosimetryMeasurementsList.defaultProps = {
   includeArchived: false,
   enableRecordArchiveSwitch: false,
   rowHeight: 24,
@@ -208,7 +198,7 @@ PagedDosimetryList.defaultProps = {
   height: 400,
   cells: [
     {
-      id: "NURIMS_TITLE",
+      id: NURIMS_DOSIMETRY_BATCH_ID,
       align: 'left',
       disablePadding: true,
       label: 'Name',
@@ -222,4 +212,4 @@ PagedDosimetryList.defaultProps = {
   },
 };
 
-export default withTheme(PagedDosimetryList)
+export default withTheme(DosimetryMeasurementsList)

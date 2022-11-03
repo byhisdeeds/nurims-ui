@@ -22,6 +22,7 @@ import {
 import SSCList from "./SSCList";
 import SSCMetadata from "./SSCMetadata";
 import {ConsoleLog} from "../../utils/UserDebugContext";
+import {TitleComponent} from "../../components/CommonComponents";
 
 class AddEditSSC extends BaseRecordManager {
   constructor(props) {
@@ -62,7 +63,7 @@ class AddEditSSC extends BaseRecordManager {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={3}>
             <SSCList

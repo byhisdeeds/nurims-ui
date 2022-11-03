@@ -5,7 +5,6 @@ import {
   Box,
   Fab,
   Grid,
-  Typography
 } from "@mui/material";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
@@ -31,6 +30,7 @@ import {
 } from "../../utils/WebsocketUtils";
 import {toast} from "react-toastify";
 import UserMetadata from "./UserMetadata";
+import {TitleComponent} from "../../components/CommonComponents";
 
 class ManageUsers extends React.Component {
   static contextType = UserDebugContext;
@@ -41,7 +41,6 @@ class ManageUsers extends React.Component {
       metadata_changed: false,
       confirm_remove: false,
       selection: {},
-      title: props.title,
       include_archived: false,
     };
     this.Module = "ManageUsers";
@@ -245,7 +244,7 @@ class ManageUsers extends React.Component {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={3}>
             <UserList

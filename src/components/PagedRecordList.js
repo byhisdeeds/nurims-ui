@@ -178,6 +178,7 @@ class PagedRecordList extends React.Component {
             rowsPerPage={this.props.rowsPerPage}
             selectedRow={selection}
             onRowSelection={this.handleListItemSelection}
+            selectionMetadataField={"item_id"}
             renderCell={this.renderCell}
             filterElement={this.props.enableRecordArchiveSwitch && <Switch
               inputProps={{'aria-labelledby': 'include-archived-records-switch'}}

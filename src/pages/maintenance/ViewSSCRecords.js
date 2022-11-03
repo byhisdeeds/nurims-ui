@@ -3,11 +3,12 @@ import {
   BLANK_PDF,
   CMD_GENERATE_SSC_RECORDS_PDF,
 } from "../../utils/constants";
-import {Grid, Typography} from "@mui/material";
+import {Grid} from "@mui/material";
 import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import PropTypes from "prop-types";
 import {withTheme} from "@mui/styles";
+import {TitleComponent} from "../../components/CommonComponents";
 
 const MODULE = "ViewSSCRecords";
 
@@ -15,7 +16,6 @@ class ViewSSCRecords extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: props.title,
       pdf: BLANK_PDF,
     };
   }
@@ -47,7 +47,7 @@ class ViewSSCRecords extends Component {
       <React.Fragment>
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={12}>
             <PdfViewer height={"800px"} source={ pdf } />

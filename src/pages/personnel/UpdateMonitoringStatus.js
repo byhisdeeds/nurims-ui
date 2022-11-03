@@ -27,6 +27,7 @@ import {
   messageHasResponse,
   messageStatusOk
 } from "../../utils/WebsocketUtils";
+import {TitleComponent} from "../../components/CommonComponents";
 
 const MODULE = "UpdateMonitoringStatus";
 
@@ -94,7 +95,6 @@ class UpdateMonitoringStatus extends Component {
       confirm_remove: false,
       previous_selection: {},
       selection: {},
-      title: props.title,
     };
     this.plref = React.createRef();
   }
@@ -185,7 +185,7 @@ class UpdateMonitoringStatus extends Component {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={12}>
             <PersonsMonitoredStatusList ref={this.plref} onChange={this.on_details_changed}/>

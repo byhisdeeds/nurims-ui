@@ -40,7 +40,8 @@ const Settings = lazy(() => import('./pages/settings/Settings'));
 const AddEditPersonnel = lazy(() => import('./pages/personnel/AddEditPersonnel'));
 const UpdateMonitoringStatus = lazy(() => import('./pages/personnel/UpdateMonitoringStatus'));
 const ViewPersonnelRecords = lazy(() => import('./pages/personnel/ViewPersonnelRecords'));
-const AddDosimetryMeasurement = lazy(() => import('./pages/radiationprotection/AddDosimetryMeasurement'));
+const PersonnelDosimetryMeasurement = lazy(() => import('./pages/radiationprotection/PersonnelDosimetryMeasurement'));
+const MonitorDosimetryMeasurement = lazy(() => import('./pages/radiationprotection/MonitorDosimetryMeasurement'));
 const Manufacturer = lazy(() => import('./pages/controlledmaterials/Manufacturer'));
 const Storage = lazy(() => import('./pages/controlledmaterials/Storage'));
 const Material = lazy(() => import('./pages/controlledmaterials/Material'));
@@ -255,9 +256,19 @@ const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMen
       properties={properties}
     />)
   }
-  else if (actionid === Constants.RP_ADD_DOSIMETRY_MEASUREMENT) {
-    return (<AddDosimetryMeasurement
-      ref={crefs["AddDosimetryMeasurement"]}
+  else if (actionid === Constants.RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS) {
+    return (<PersonnelDosimetryMeasurement
+      ref={crefs["PersonnelDosimetryMeasurement"]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS) {
+    return (<MonitorDosimetryMeasurement
+      ref={crefs["MonitorDosimetryMeasurement"]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -385,7 +396,8 @@ class App extends React.Component {
       "AddEditPersonnel": React.createRef(),
       "UpdateMonitoringStatus": React.createRef(),
       "ViewPersonnelRecords": React.createRef(),
-      "AddDosimetryMeasurement": React.createRef(),
+      "MonitorDosimetryMeasurement": React.createRef(),
+      "PersonnelDosimetryMeasurement": React.createRef(),
       "Manufacturer": React.createRef(),
       "Storage": React.createRef(),
       "Material": React.createRef(),

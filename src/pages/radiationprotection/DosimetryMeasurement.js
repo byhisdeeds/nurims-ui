@@ -34,6 +34,8 @@ import {toast} from "react-toastify";
 import {readString} from "react-papaparse";
 import {getRecordMetadataValue, setDosimetryDataValue, setRecordMetadataValue} from "../../utils/MetadataUtils";
 import {transformDose} from "../../utils/DoseReportUtils";
+import PropTypes from "prop-types";
+import {TitleComponent} from "../../components/CommonComponents";
 
 
 function assignDosimetryRecord(dosimetry, records) {
@@ -69,7 +71,7 @@ function assignDosimetryRecord(dosimetry, records) {
   return `Did'nt find any entity with ${NURIMS_ENTITY_DOSE_PROVIDER_ID}=${dosimetry.hasOwnProperty("Id") ? dosimetry.Id : ""}`
 }
 
-class AddDosimetryMeasurement extends BaseRecordManager {
+class DosimetryMeasurement extends BaseRecordManager {
   static contextType = UserDebugContext;
 
   constructor(props) {
@@ -79,9 +81,8 @@ class AddDosimetryMeasurement extends BaseRecordManager {
       data_changed: false,
       selection: {},
     }
-    this.Module = "AddDosimetryMeasurement";
+    this.Module = "DosimetryMeasurement";
     this.recordTopic = "measurement";
-    this.topics = ["personnel", "monitor"];
     this.importFileRef = React.createRef();
   }
 
@@ -107,31 +108,16 @@ class AddDosimetryMeasurement extends BaseRecordManager {
     }
   }
 
-
-  // ws_message = (message) => {
-  //   super.ws_message(message, [
-  //     {cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms"}
-  //   ]);
-  // }
-
   requestGetRecords = (include_archived) => {
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
     }
-    let add = false;
-    for (const topic of this.topics) {
-      const props = {
-        cmd: this.recordCommand("get", topic),
-        "include.withdrawn": include_archived ? "true" : "false",
-        "include.metadata": "true",
-        module: this.Module,
-      };
-      if (add) {
-        props["append.records"] = "true"
-      }
-      add = true;
-      this.props.send(props);
-    }
+    this.props.send({
+      cmd: this.recordCommand("get", this.topic),
+      "include.withdrawn": include_archived ? "true" : "false",
+      "include.metadata": "true",
+      module: this.Module,
+    });
     this.setState({include_archived: include_archived});
   }
 
@@ -206,12 +192,12 @@ class AddDosimetryMeasurement extends BaseRecordManager {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={3}>
             <PersonnelAndMonitorsList
               ref={this.listRef}
-              title={"Personnel and Monitors"}
+              title={this.listTitle}
               properties={this.props.properties}
               onSelection={this.onSelection}
               includeArchived={include_archived}
@@ -254,10 +240,27 @@ class AddDosimetryMeasurement extends BaseRecordManager {
   }
 }
 
-AddDosimetryMeasurement.defaultProps = {
+// ref={crefs["DosimetryMeasurement"]}
+//       title={menuTitle}
+//       user={user}
+//       onClick={handleMenuAction}
+//       send={send}
+//       properties={properties}
+//       topic={"personnel"}
+// DosimetryMeasurement.propTypes = {
+//   title: PropTypes.string.isRequired,
+//   user: PropTypes.object.isRequired,
+//   onClick: PropTypes.func.isRequired,
+//   send: PropTypes.func.isRequired,
+//   properties: PropTypes.object.isRequired,
+//   topic: PropTypes.string.isRequired,
+// }
+
+DosimetryMeasurement.defaultProps = {
   send: (msg) => {
   },
   user: {},
+  topic: "",
 };
 
-export default AddDosimetryMeasurement;
+export default DosimetryMeasurement;

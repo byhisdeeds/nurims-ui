@@ -22,6 +22,7 @@ import {
   messageHasResponse,
   messageStatusOk
 } from "../../utils/WebsocketUtils";
+import {TitleComponent} from "../../components/CommonComponents";
 
 const MODULE = "GenerateMaterialSurveillanceSheet";
 
@@ -29,7 +30,6 @@ class GenerateMaterialSurveillanceSheet extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: props.title,
       pdf: BLANK_PDF,
       access: 'restricted',
     };
@@ -62,12 +62,12 @@ class GenerateMaterialSurveillanceSheet extends Component {
   }
 
   render() {
-    const { title, pdf, access, } = this.state;
+    const { pdf, access, } = this.state;
     return (
       <React.Fragment>
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={12}>
             <Stack direction="row" spacing={1}>

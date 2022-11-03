@@ -40,7 +40,7 @@ class BaseRecordManager extends Component {
       metadata_changed: false,
       confirm_remove: false,
       selection: {},
-      title: props.title,
+      // title: props.title,
       include_archived: false,
     };
     this.Module = "BaseRecordManager";

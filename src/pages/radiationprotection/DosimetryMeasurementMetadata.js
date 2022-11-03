@@ -17,14 +17,20 @@ import {
 import {
   getPropertyValue,
 } from "../../utils/PropertyUtils";
-import PagedRecordList from "../../components/PagedRecordList";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
-import {toast} from "react-toastify";
-import {readString} from "react-papaparse";
-import BusyIndicator from "../../components/BusyIndicator";
-import {ITEM_ID, NURIMS_DOSIMETRY_BATCH_ID, NURIMS_TITLE} from "../../utils/constants";
-import PagedDosimetryList from "../../components/PagedDosimetryList";
+import {
+  NURIMS_DOSIMETRY_BATCH_ID, NURIMS_DOSIMETRY_DEEP_DOSE,
+  NURIMS_DOSIMETRY_ID,
+  NURIMS_DOSIMETRY_MEASUREMENTS,
+  NURIMS_DOSIMETRY_MONITOR_PERIOD, NURIMS_DOSIMETRY_SHALLOW_DOSE, NURIMS_DOSIMETRY_UNITS,
+} from "../../utils/constants";
+import DosimetryMeasurementsList from "../../components/DosimetryMeasurementsList";
 
+
+function getMonitorPeriod(selection, field, missingValue) {
+  const period = selection.hasOwnProperty(field) ? selection[field] : "1900-01-01 to 1900-01-01";
+  return getDateRangeFromDateString(period.replaceAll(" to ", "|"), missingValue);
+}
 
 class DosimetryMeasurementMetadata extends Component {
   static contextType = UserDebugContext;
@@ -36,6 +42,8 @@ class DosimetryMeasurementMetadata extends Component {
       properties: props.properties,
       busy: 0,
       data_changed: false,
+      selection: {},
+      readonly: true,
     };
     this.ref = React.createRef();
     this.Module = "DosimetryMeasurementMetadata";
@@ -43,33 +51,29 @@ class DosimetryMeasurementMetadata extends Component {
 
   handleChange = (e) => {
     console.log(">>>", e.target.id)
-    const p = this.state.measurements;
-    if (e.target.id === "wholebody-badgeid") {
-      const dosimeterId = getDoseRecordDosimeterId(p, "WholeBody", "");
-      setDoseRecordMetadataValue(p, dosimeterId, "WholeBody", "nurims.dosimeter.batchid", e.target.value);
-    } else if (e.target.id === "wholebody-batchid") {
-      const value = getDoseRecordDosimeterId(p, "WholeBody", "");
-      setDoseRecordMetadataValue(p, value, "WholeBody", "nurims.dosimeter.batchid", e.target.value);
+    const selection = this.state.selection;
+    if (e.target.id === "card-id") {
+      selection[NURIMS_DOSIMETRY_ID] = e.target.value;
+    } else if (e.target.id === "batch-id") {
+      selection[NURIMS_DOSIMETRY_BATCH_ID] = e.target.value;
     } else if (e.target.id === "extremity-batchid") {
-      const value = getDoseRecordDosimeterId(p, "Extremity", "");
-      setDoseRecordMetadataValue(p, value, "Extremity", "nurims.dosimeter.batchid", e.target.value);
+      const value = getDoseRecordDosimeterId(selection, "Extremity", "");
+      setDoseRecordMetadataValue(selection, value, "Extremity", "nurims.dosimeter.batchid", e.target.value);
     } else if (e.target.id === "wrist-batchid") {
-      const value = getDoseRecordDosimeterId(p, "Wrist", "");
-      setDoseRecordMetadataValue(p, value, "Wrist", "nurims.dosimeter.batchid", e.target.value);
-    } else if (e.target.id === "shallowdose") {
-      const value = getDoseRecordDosimeterId(p, "WholeBody", "");
-      setDoseRecordMetadataValue(p, value, "WholeBody", "nurims.dosimeter.shallowdose", e.target.value);
-    } else if (e.target.id === "deepdose") {
-      const value = getDoseRecordDosimeterId(p, "WholeBody", "");
-      setDoseRecordMetadataValue(p, value, "WholeBody", "nurims.dosimeter.deepdose", e.target.value);
+      const value = getDoseRecordDosimeterId(selection, "Wrist", "");
+      setDoseRecordMetadataValue(selection, value, "Wrist", "nurims.dosimeter.batchid", e.target.value);
+    } else if (e.target.id === "shallow-dose") {
+      selection[NURIMS_DOSIMETRY_SHALLOW_DOSE] = e.target.value;
+    } else if (e.target.id === "deep-dose") {
+      selection[NURIMS_DOSIMETRY_DEEP_DOSE] = e.target.value;
     } else if (e.target.id === "extremitydose") {
-      const value = getDoseRecordDosimeterId(p, "Extremity", "");
-      setDoseRecordMetadataValue(p, value, "Extremity", "nurims.dosimeter.extremitydose", e.target.value);
+      const value = getDoseRecordDosimeterId(selection, "Extremity", "");
+      setDoseRecordMetadataValue(selection, value, "Extremity", "nurims.dosimeter.extremitydose", e.target.value);
     } else if (e.target.id === "wristdose") {
-      const value = getDoseRecordDosimeterId(p, "Wrist", "");
-      setDoseRecordMetadataValue(p, value, "Wrist", "nurims.dosimeter.wristdose", e.target.value);
+      const value = getDoseRecordDosimeterId(selection, "Wrist", "");
+      setDoseRecordMetadataValue(selection, value, "Wrist", "nurims.dosimeter.wristdose", e.target.value);
     }
-    this.setState({measurements: p, has_changed: true})
+    this.setState({selection: selection, has_changed: true})
     // signal to parent that details have changed
     this.props.onChange(true);
   }
@@ -103,10 +107,20 @@ class DosimetryMeasurementMetadata extends Component {
     this.props.onChange(true);
   }
 
-  handleWholeBodyUnitsChange = (e) => {
+  handleDosimeterIdChange = (e) => {
+    console.log("handleDosimeterIdChange", e.target.value);
     const p = this.state.measurements;
-    setMetadataValue(p, "nurims.dosimeter.units", e.target.value);
+    const id = getRecordMetadataValue(p, "nurims.entity.doseproviderid", "|").split('|');
+    setMetadataValue(p, "nurims.entity.doseproviderid", `${id[0]}|${e.target.value}`);
     this.setState({measurements: p, has_changed: true})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handleDoseUnitsChange = (e) => {
+    const selection = this.state.selection;
+    selection[NURIMS_DOSIMETRY_UNITS] = e.target.value;
+    this.setState({selection: selection, has_changed: true})
     // signal to parent that details have changed
     this.props.onChange(true);
   }
@@ -127,12 +141,14 @@ class DosimetryMeasurementMetadata extends Component {
     this.props.onChange(true);
   }
 
-  handleWholeBodyDateRangeChange = (range) => {
-    console.log("WHOLEBODY DATE-RANGE", range);
+  handleDateRangeChange = (range) => {
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "handleDateRangeChange", "range", range);
+    }
     const p = this.state.measurements;
-    const dosimeterId = getDoseRecordDosimeterId(p, "WholeBody", "");
-    setDoseRecordMetadataValue(p, dosimeterId, "WholeBody", "nurims.dosimeter.monitorperiod", `${range[0].toISOString().substring(0, 10)}|${range[1].toISOString().substring(0, 10)}`);
-    this.setState({measurements: p, has_changed: true})
+    // const dosimeterId = getDoseRecordDosimeterId(p, "WholeBody", "");
+    // setDoseRecordMetadataValue(p, dosimeterId, "WholeBody", "nurims.dosimeter.monitorperiod", `${range[0].toISOString().substring(0, 10)}|${range[1].toISOString().substring(0, 10)}`);
+    // this.setState({measurements: p, has_changed: true})
     // signal to parent that details have changed
     this.props.onChange(true);
   }
@@ -157,127 +173,31 @@ class DosimetryMeasurementMetadata extends Component {
     this.props.onChange(true);
   }
 
-  // update_metadata = (measurements) => {
-  //   console.log("DosimetryMeasurementMetadata.update_metadata", measurements)
-  //   // initialise measurementsnel details object
-  //   // const measurements = {
-  //   //   ...{
-  //   //     item_id: details["item_id"],
-  //   //     "nurims.title": details["nurims.title"],
-  //   //     "nurims.withdrawn": details["nurims.withdrawn"]
-  //   //   }
-  //   // }
-  //   if (measurements.hasOwnProperty("metadata")) {
-  //     const metadata = measurements.metadata;
-  //     for (const m of metadata) {
-  //       if (m.hasOwnProperty("nurims.dosimeter.monitorperiod")) {
-  //         const period = m["nurims.dosimeter.monitorperiod"];
-  //         if (typeof period === "string") {
-  //           // if (period.length <= 10) {
-  //           //   let parts = period.substring(0, 10).split('-');
-  //           //   if (parts.length === 3) {
-  //           //     // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
-  //           //     // January - 0, February - 1, etc.
-  //           //     measurements["nurims.entity.dob"] = new Date(parts[0], parts[1] - 1, parts[2]);
-  //           //   } else {
-  //           //     measurements["nurims.entity.dob"] = new Date();
-  //           //   }
-  //           measurements["nurims.dosimeter.monitorperiod"] = [new Date(), new Date()];
-  //         }
-  //       }
-  //     }
-  //   }
-  //   // fixup known date fields
-  //   // if (details.hasOwnProperty("nurims.entity.dob")) {
-  //   //   if (details["nurims.entity.dob"].length <= 10) {
-  //   //     let parts = details["nurims.entity.dob"].substring(0, 10).split('-');
-  //   //     if (parts.length === 3) {
-  //   //       // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
-  //   //       // January - 0, February - 1, etc.
-  //   //       details["nurims.entity.dob"] = new Date(parts[0], parts[1] - 1, parts[2]);
-  //   //     } else {
-  //   //       details["nurims.entity.dob"] = new Date();
-  //   //     }
-  //   //   } else {
-  //   //     details["nurims.entity.dob"] = new Date();
-  //   //   }
-  //   // }
-  //   console.log("+++++++++++++++++++++++++")
-  //   console.log(measurements)
-  //   console.log("+++++++++++++++++++++++++")
-  //   this.setState({measurements: measurements, has_changed: false})
-  //   this.props.onChange(false);
-  // }
-
   setRecordMetadata = (record) => {
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
     if (this.ref.current) {
-      this.ref.current.setRecords(record);
+      this.ref.current.setRecords(getRecordMetadataValue(record, NURIMS_DOSIMETRY_MEASUREMENTS, []));
     }
     this.setState({measurements: record})
     this.props.onChange(false);
   }
 
-  setDoseMetadata = (measurements) => {
-    console.log("DosimetryMeasurementMetadata.setDoseMetadata", measurements)
-    if (measurements.hasOwnProperty("metadata")) {
-      const metadata = measurements.metadata;
-      for (const m of metadata) {
-        if (m.hasOwnProperty("nurims.dosimeter.monitorperiod")) {
-          const period = m["nurims.dosimeter.monitorperiod"];
-          if (typeof period === "string") {
-            // if (period.length <= 10) {
-            //   let parts = period.substring(0, 10).split('-');
-            //   if (parts.length === 3) {
-            //     // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
-            //     // January - 0, February - 1, etc.
-            //     measurements["nurims.entity.dob"] = new Date(parts[0], parts[1] - 1, parts[2]);
-            //   } else {
-            //     measurements["nurims.entity.dob"] = new Date();
-            //   }
-            measurements["nurims.dosimeter.monitorperiod"] = [new Date(), new Date()];
-          }
-        }
-      }
-    }
-
-    // fixup known date fields
-    // if (details.hasOwnProperty("nurims.entity.dob")) {
-    //   if (details["nurims.entity.dob"].length <= 10) {
-    //     let parts = details["nurims.entity.dob"].substring(0, 10).split('-');
-    //     if (parts.length === 3) {
-    //       // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
-    //       // January - 0, February - 1, etc.
-    //       details["nurims.entity.dob"] = new Date(parts[0], parts[1] - 1, parts[2]);
-    //     } else {
-    //       details["nurims.entity.dob"] = new Date();
-    //     }
-    //   } else {
-    //     details["nurims.entity.dob"] = new Date();
-    //   }
-    // }
-    console.log("+++++++++++++++++++++++++")
-    console.log(measurements)
-    console.log("+++++++++++++++++++++++++")
-    this.setState({measurements: measurements, has_changed: false})
-    this.props.onChange(false);
-  }
-
-
-  onMeasurementSelection = () => {
-
+  onMeasurementSelection = (item) => {
+    this.setState({selection: item, readonly: true})
   }
 
   render() {
-    const {measurements, properties, busy, data_changed} = this.state;
+    const {measurements, properties, busy, data_changed, selection, readonly} = this.state;
     console.log("DosimetryMeasurementMetadata.RENDER - measurements", measurements)
+    const monitorPeriod = getMonitorPeriod(selection, NURIMS_DOSIMETRY_MONITOR_PERIOD, [null, null]);
+    console.log("MONITOR PERIOD", monitorPeriod)
     const doseProviderId = getRecordMetadataValue(measurements, "nurims.entity.doseproviderid", "|").split('|');
     const wholeBodyMonitor = getRecordMetadataValue(measurements, "nurims.entity.iswholebodymonitored", "false");
     const extremityMonitor = getRecordMetadataValue(measurements, "nurims.entity.isextremitymonitored", "false");
     const wristMonitor = getRecordMetadataValue(measurements, "nurims.entity.iswristmonitored", "false");
-    const defaultUnits = getPropertyValue(properties, "nurims.dosimeter.units", "");
+    const defaultUnits = getPropertyValue(properties, "nurims.dosimetry.units", "");
     return (
       <Box
         component="form"
@@ -287,13 +207,13 @@ class DosimetryMeasurementMetadata extends Component {
         noValidate
         autoComplete="off"
       >
-        <Grid container spacing={2}>
-          <Grid item xs={2} style={{paddingLeft: 0, paddingTop: 0}}>
-            <PagedDosimetryList
+        <Grid container spacing={0}>
+          <Grid item xs={2} style={{paddingLeft: 0, paddingTop: 0, paddingRight: 2}}>
+            <DosimetryMeasurementsList
               ref={this.ref}
               rowsPerPage={15}
               onListItemSelection={this.onMeasurementSelection}
-              title={"Measurement"}
+              title={"Measurements"}
               enableRecordArchiveSwitch={false}
               cells={[
               {
@@ -310,51 +230,43 @@ class DosimetryMeasurementMetadata extends Component {
             <div>
               <Card variant="outlined" sx={{mb: 1, minWidth: 275}}>
                 <CardContent>
-                  {/*<Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>*/}
-                  {/*  Word of the Day*/}
-                  {/*</Typography>*/}
-                  <FormControl sx={{m: 1, minWidth: 250}}>
-                    <InputLabel id="doseprovider">Dose Provider</InputLabel>
-                    <Select
-                      labelId="doseprovider"
-                      id="doseprovider"
-                      value={doseProviderId[0]}
-                      label="Dose Provider"
-                      onChange={this.handleDoseProviderChange}
-                    >
-                      <MenuItem value={doseProviderId[0]}>{doseProviderId[0]}</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <Box sx={{'& .MuiTextField-root': {m: 1, width: '15ch'}}}>
-                    <TextField
-                      id="doseproviderid"
-                      label="Dose Provider ID"
-                      value={doseProviderId[1]}
-                      onChange={this.handleDoseProviderIdChange}
-                    />
-                  </Box>
-                </CardContent>
-              </Card>
-              {wholeBodyMonitor === "true" &&
-                <Card variant="outlined" sx={{mb: 1, minWidth: 275}}>
-                  <CardContent>
-                    <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                      Whole Body Data
-                    </Typography>
-                    <TextField
-                      id="wholebody-batchid"
-                      label="Batch ID"
-                      value={getDoseRecordMetadataValue(measurements, getDoseRecordDosimeterId(measurements, "WholeBody", ""), "WholeBody", "nurims.dosimeter.batchid", "")}
-                      onChange={this.handleChange}
-                    />
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <Box sx={{'& .MuiTextField-root': {m: 1, width: '12ch'}}}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={2} style={{paddingLeft: 0, paddingTop: 0}}>
+                      <TextField
+                        id="batch-id"
+                        label="Batch ID"
+                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_BATCH_ID) ? selection[NURIMS_DOSIMETRY_BATCH_ID] : ""}
+                        onChange={this.handleChange}
+                        disabled={readonly}
+                      />
+                    </Grid>
+                    <Grid item xs={2} style={{paddingLeft: 0, paddingTop: 0}}>
+                      <TextField
+                        id="dose-provider-id"
+                        label="Dose Provider ID"
+                        value={"123"}
+                        onChange={this.handleDoseProviderIdChange}
+                        disabled={readonly}
+                      />
+                    </Grid>
+                    <Grid item xs={2} style={{paddingLeft: 0, paddingTop: 0}}>
+                      <TextField
+                        id="card-id"
+                        label="Dosimeter ID"
+                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_ID) ? selection[NURIMS_DOSIMETRY_ID] : ""}
+                        onChange={this.handleDosimeterIdChange}
+                        disabled={readonly}
+                      />
+                    </Grid>
+                    <Grid item xs={6} style={{paddingLeft: 0, paddingTop: 0}}>
+                      <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DateRangePicker
                           startText="Wear Start"
                           endText="Wear End"
-                          value={getDateRangeFromDateString(getDoseRecordMetadataValue(measurements, getDoseRecordDosimeterId(measurements, "WholeBody", ""), "WholeBody", "nurims.dosimeter.monitorperiod", ""), [null, null])}
+                          value={monitorPeriod}
                           inputFormat={'yyyy-MM-dd'}
-                          onChange={this.handleWholeBodyDateRangeChange}
+                          disabled={readonly}
+                          onChange={this.handleDateRangeChange}
                           renderInput={(startProps, endProps) => (
                             <React.Fragment>
                               <TextField {...startProps}/>
@@ -363,45 +275,47 @@ class DosimetryMeasurementMetadata extends Component {
                             </React.Fragment>
                           )}
                         />
-                      </Box>
-                    </LocalizationProvider>
+                      </LocalizationProvider>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+              {wholeBodyMonitor === "true" &&
+                <Card variant="outlined" sx={{mb: 1, minWidth: 275}}>
+                  <CardContent>
+                    <Typography sx={{fontSize: 14, paddingLeft: 1}} color="text.secondary" gutterBottom>
+                      Whole Body Data
+                    </Typography>
                     <Box sx={{'& .MuiTextField-root': {m: 1, width: '12ch'}}}>
+                      <FormControl sx={{m: 1, minWidth: 250}}>
+                        <InputLabel id="dose-units">Dose Units</InputLabel>
+                        <Select
+                          labelId="dose-units"
+                          id="dose-units"
+                          value={selection.hasOwnProperty(NURIMS_DOSIMETRY_UNITS) ? selection[NURIMS_DOSIMETRY_UNITS] : defaultUnits}
+                          label="Dose Units"
+                          onChange={this.handleDoseUnitsChange}
+                        >
+                          <MenuItem value={"mr"}>Milli Rems</MenuItem>
+                          <MenuItem value={"msv"}>Milli Sieverts</MenuItem>
+                          <MenuItem value={"usv"}>Micro Sieverts</MenuItem>
+                        </Select>
+                      </FormControl>
                       <TextField
                         required
-                        id="wholebody-badgeid"
-                        label="Badge ID"
-                        value={getDoseRecordDosimeterId(measurements, "WholeBody", "")}
-                        onChange={this.handleChange}
-                      />
-                      <TextField
-                        required
-                        id="shallowdose"
+                        id="shallow-dose"
                         label="Shallow Dose"
-                        value={getDoseRecordMetadataValue(measurements, getDoseRecordDosimeterId(measurements, "WholeBody", ""), "WholeBody", "nurims.dosimeter.shallowdose", "")}
+                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_SHALLOW_DOSE) ? selection[NURIMS_DOSIMETRY_SHALLOW_DOSE] : "0"}
                         onChange={this.handleChange}
                       />
                       <TextField
                         required
-                        id="deepdose"
+                        id="deep-dose"
                         label="Deep Dose"
-                        value={getDoseRecordMetadataValue(measurements, getDoseRecordDosimeterId(measurements, "WholeBody", ""), "WholeBody", "nurims.dosimeter.deepdose", "")}
+                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_DEEP_DOSE) ? selection[NURIMS_DOSIMETRY_DEEP_DOSE] : "0"}
                         onChange={this.handleChange}
                       />
                     </Box>
-                    <FormControl sx={{m: 1, minWidth: 250}}>
-                      <InputLabel id="wholebody-doseunits">Dose Units</InputLabel>
-                      <Select
-                        labelId="wholebody-doseunits"
-                        id="wholebody-doseunits"
-                        value={getDoseRecordMetadataValue(measurements, getDoseRecordDosimeterId(measurements, "WholeBody", ""), "WholeBody", "nurims.dosimeter.units", defaultUnits)}
-                        label="Dose Units"
-                        onChange={this.handleWholeBodyUnitsChange}
-                      >
-                        <MenuItem value={"mr"}>Milli Rems</MenuItem>
-                        <MenuItem value={"msv"}>Milli Sieverts</MenuItem>
-                        <MenuItem value={"usv"}>Micro Sieverts</MenuItem>
-                      </Select>
-                    </FormControl>
                   </CardContent>
                 </Card>
               }

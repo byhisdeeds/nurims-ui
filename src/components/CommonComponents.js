@@ -34,6 +34,16 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import {visuallyHidden} from "@mui/utils";
 import Floater from 'react-floater';
 
+export function TitleComponent({title}) {
+  return (
+    <Typography variant="h5" component="div" sx={{paddingLeft: 2}}>{title}</Typography>
+  );
+}
+
+TitleComponent.propTypes = {
+  title: PropTypes.string.isRequired
+}
+
 
 function TooltipContent(closeFn) {
   return (
@@ -463,7 +473,8 @@ SameYearDateRangePicker.propTypes = {
 
 
 export function PageableTable({theme, title, minWidth, cells, defaultOrder, defaultOrderBy, rows, rowsPerPage,
-                               rowHeight, onRowSelection, selectedRow, disabled, renderCell, filterElement}) {
+                               rowHeight, onRowSelection, selectedRow, disabled, renderCell, filterElement,
+                               selectionMetadataField}) {
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState(defaultOrder);
@@ -589,7 +600,9 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
             {/*{this.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).sort(getComparator(order, orderBy))*/}
             {rows.sort(getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const isItemSelected = selected.hasOwnProperty("item_id") && selected.item_id === row.item_id;
+                // const isItemSelected = selected.hasOwnProperty("item_id") && selected.item_id === row.item_id;
+                const isItemSelected = selected.hasOwnProperty(selectionMetadataField) &&
+                                       selected[selectionMetadataField] === row[selectionMetadataField];
                 return (
                   <TableRow
                     hover
@@ -662,6 +675,7 @@ PageableTable.propTypes = {
   onRowSelection: PropTypes.func,
   renderCell: PropTypes.func,
   filterElement: PropTypes.object,
+  selectionMetadataField: PropTypes.string.isRequired,
 }
 
 
