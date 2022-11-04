@@ -19,9 +19,9 @@ import {
 } from "../../components/UtilityDialogs";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import PersonnelList from "./PersonnelList";
-import DosimetryMeasurementMetadata from "./DosimetryMeasurementMetadata";
 import BusyIndicator from "../../components/BusyIndicator";
 import {TitleComponent} from "../../components/CommonComponents";
+import PersonnelDosimetryEvaluationDataView from "./PersonnelDosimetryEvaluationDataView";
 
 export const PERSONNELDOSIMETRYEVALUATION_REF = "PersonnelDosimetryEvaluation";
 
@@ -39,7 +39,7 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
     this.listTitle = "Personnel";
     this.Module = PERSONNELDOSIMETRYEVALUATION_REF;
     this.listRef = React.createRef();
-    this.metadataRef = React.createRef();
+    this.dataRef = React.createRef();
   }
 
   componentDidMount() {
@@ -70,8 +70,8 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "onSelection", "selection", selection);
     }
-    if (this.metadataRef.current) {
-      this.metadataRef.current.setRecordMetadata(selection)
+    if (this.dataRef.current) {
+      this.dataRef.current.setRecordMetadata(selection)
     }
     this.setState({selection: selection})
   }
@@ -114,8 +114,8 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
             />
           </Grid>
           <Grid item xs={9}>
-            <DosimetryMeasurementMetadata
-              ref={this.metadataRef}
+            <PersonnelDosimetryEvaluationDataView
+              ref={this.dataRef}
               properties={this.props.properties}
               onChange={this.onRecordMetadataChanged}
             />

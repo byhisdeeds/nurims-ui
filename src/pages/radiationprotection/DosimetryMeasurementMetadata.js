@@ -1,7 +1,15 @@
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import {Card, CardContent, FormControl, Grid, InputLabel, Select, Tooltip, Typography} from "@mui/material";
+import {
+  Card,
+  CardContent,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  InputLabel,
+  Select,
+} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import {LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -9,8 +17,6 @@ import DateRangePicker from '@mui/lab/DateRangePicker';
 import {
   getRecordMetadataValue,
   setMetadataValue,
-  getDoseRecordDosimeterId,
-  setDoseRecordMetadataValue,
   getDateRangeFromDateString
 } from "../../utils/MetadataUtils";
 import {
@@ -30,6 +36,7 @@ import {
   NURIMS_DOSIMETRY_WRIST_DOSE,
 } from "../../utils/constants";
 import DosimetryMeasurementsList from "../../components/DosimetryMeasurementsList";
+import Checkbox from "@mui/material/Checkbox";
 
 
 function getMonitorPeriod(selection, field, missingValue) {
@@ -56,19 +63,25 @@ class DosimetryMeasurementMetadata extends Component {
 
   handleChange = (e) => {
     if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "handleChange", "target.value", e.target.value);
+      ConsoleLog(this.Module, "handleChange", "target.id", e.target.id, "target.value", e.target.value);
     }
     const selection = this.state.selection;
     if (e.target.id === "card-id") {
       selection[NURIMS_DOSIMETRY_ID] = e.target.value;
     } else if (e.target.id === "batch-id") {
       selection[NURIMS_DOSIMETRY_BATCH_ID] = e.target.value;
-    } else if (e.target.id === "extremity-batchid") {
-      const value = getDoseRecordDosimeterId(selection, "Extremity", "");
-      setDoseRecordMetadataValue(selection, value, "Extremity", "nurims.dosimeter.batchid", e.target.value);
-    } else if (e.target.id === "wrist-batchid") {
-      const value = getDoseRecordDosimeterId(selection, "Wrist", "");
-      setDoseRecordMetadataValue(selection, value, "Wrist", "nurims.dosimeter.batchid", e.target.value);
+    } else if (e.target.id === "whole-body-record") {
+      if (e.target.checked) {
+        selection[NURIMS_DOSIMETRY_TYPE] =  "wholebody";
+      }
+    } else if (e.target.id === "extremity-record") {
+      if (e.target.checked) {
+        selection[NURIMS_DOSIMETRY_TYPE] =  "extremity";
+      }
+    } else if (e.target.id === "wrist-record") {
+      if (e.target.checked) {
+        selection[NURIMS_DOSIMETRY_TYPE] =  "wrist";
+      }
     } else if (e.target.id === "shallow-dose") {
       selection[NURIMS_DOSIMETRY_SHALLOW_DOSE] = e.target.value;
     } else if (e.target.id === "deep-dose") {
@@ -182,7 +195,10 @@ class DosimetryMeasurementMetadata extends Component {
     // const extremityMonitor = getRecordMetadataValue(measurements, "nurims.entity.isextremitymonitored", "false");
     // const wristMonitor = getRecordMetadataValue(measurements, "nurims.entity.iswristmonitored", "false");
     const defaultUnits = getPropertyValue(properties, "nurims.dosimetry.units", "");
-    const dosimetryType = selection.hasOwnProperty(NURIMS_DOSIMETRY_TYPE) ? selection[NURIMS_DOSIMETRY_TYPE] : "wholebody";
+    const dosimetryType = selection.hasOwnProperty(NURIMS_DOSIMETRY_TYPE) ? selection[NURIMS_DOSIMETRY_TYPE] : "";
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "render", "dosimetryType", dosimetryType);
+    }
     return (
       <Box
         component="form"
@@ -192,8 +208,8 @@ class DosimetryMeasurementMetadata extends Component {
         noValidate
         autoComplete="off"
       >
-        <Grid container spacing={0}>
-          <Grid item xs={2} style={{paddingTop: 0, paddingRight: 2}}>
+        <Grid container spacing={2}>
+          <Grid item xs={2} style={{paddingRight: 0}}>
             <DosimetryMeasurementsList
               ref={this.ref}
               rowsPerPage={15}
@@ -211,78 +227,104 @@ class DosimetryMeasurementMetadata extends Component {
               }]}
             />
           </Grid>
-          <Grid item xs={10} style={{paddingTop: 0}}>
-            <div>
-              <Card variant="outlined" sx={{mb: 1, minWidth: 275}}>
-                <CardContent>
-                  <Grid container spacing={2}>
-                    <Grid item xs={3} style={{paddingTop: 0}}>
-                      <Box sx={{'& .MuiTextField-root': {m: 1, width: '100%'}}}>
-                        <TextField
-                          id="batch-id"
-                          label="Batch ID"
-                          value={selection.hasOwnProperty(NURIMS_DOSIMETRY_BATCH_ID) ? selection[NURIMS_DOSIMETRY_BATCH_ID] : ""}
-                          onChange={this.handleChange}
-                          disabled={readonly}
-                        />
-                      </Box>
-                    </Grid>
-                    <Grid item xs={2} style={{paddingTop: 0}}>
-                      <Box sx={{'& .MuiTextField-root': {m: 1, width: '12ch'}}}>
-                        <TextField
-                          id="dose-provider-id"
-                          label="Dose Provider ID"
-                          value={"123"}
-                          onChange={this.handleDoseProviderIdChange}
-                          disabled={readonly}
-                        />
-                      </Box>
-                    </Grid>
-                    <Grid item xs={2} style={{paddingTop: 0}}>
-                      <Box sx={{'& .MuiTextField-root': {m: 1, width: '12ch'}}}>
-                        <TextField
-                          id="card-id"
-                          label="Dosimeter ID"
-                          value={selection.hasOwnProperty(NURIMS_DOSIMETRY_ID) ? selection[NURIMS_DOSIMETRY_ID] : ""}
-                          onChange={this.handleDosimeterIdChange}
-                          disabled={readonly}
-                        />
-                      </Box>
-                    </Grid>
-                    <Grid item xs={5} style={{paddingTop: 0}}>
-                      <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DateRangePicker
-                          startText="Wear Start"
-                          endText="Wear End"
-                          value={monitorPeriod}
-                          inputFormat={'yyyy-MM-dd'}
-                          disabled={readonly}
-                          onChange={this.handleDateRangeChange}
-                          renderInput={(startProps, endProps) => (
-                            <React.Fragment>
-                              <TextField {...startProps}/>
-                              <Box sx={{mx: 1}}>to</Box>
-                              <TextField {...endProps}/>
-                            </React.Fragment>
-                          )}
-                        />
-                      </LocalizationProvider>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-              {dosimetryType === "wholebody" &&
+          <Grid item xs={10}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
                 <Card variant="outlined" sx={{mb: 1, minWidth: 275}}>
                   <CardContent>
-                    <Typography sx={{fontSize: 14, paddingLeft: 1}} color="text.secondary" gutterBottom>
-                      Whole Body Data
-                    </Typography>
+                    <Grid container spacing={2}>
+                      <Grid item xs={3} style={{paddingTop: 0}}>
+                        <Box sx={{'& .MuiTextField-root': {m: 1, width: '100%'}}}>
+                          <TextField
+                            id="batch-id"
+                            label="Batch ID"
+                            value={selection.hasOwnProperty(NURIMS_DOSIMETRY_BATCH_ID) ? selection[NURIMS_DOSIMETRY_BATCH_ID] : ""}
+                            onChange={this.handleChange}
+                            disabled={readonly}
+                          />
+                        </Box>
+                      </Grid>
+                      <Grid item xs={2} style={{paddingTop: 0}}>
+                        <Box sx={{'& .MuiTextField-root': {m: 1, width: '12ch'}}}>
+                          <TextField
+                            id="dose-provider-id"
+                            label="Dose Provider ID"
+                            value={"123"}
+                            onChange={this.handleDoseProviderIdChange}
+                            disabled={readonly}
+                          />
+                        </Box>
+                      </Grid>
+                      <Grid item xs={2} style={{paddingTop: 0}}>
+                        <Box sx={{'& .MuiTextField-root': {m: 1, width: '12ch'}}}>
+                          <TextField
+                            id="card-id"
+                            label="Dosimeter ID"
+                            value={selection.hasOwnProperty(NURIMS_DOSIMETRY_ID) ? selection[NURIMS_DOSIMETRY_ID] : ""}
+                            onChange={this.handleDosimeterIdChange}
+                            disabled={readonly}
+                          />
+                        </Box>
+                      </Grid>
+                      <Grid item xs={5} style={{paddingTop: 0}}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                          <DateRangePicker
+                            startText="Wear Start"
+                            endText="Wear End"
+                            value={monitorPeriod}
+                            inputFormat={'yyyy-MM-dd'}
+                            disabled={readonly}
+                            onChange={this.handleDateRangeChange}
+                            renderInput={(startProps, endProps) => (
+                              <React.Fragment>
+                                <TextField {...startProps}/>
+                                <Box sx={{mx: 1}}>to</Box>
+                                <TextField {...endProps}/>
+                              </React.Fragment>
+                            )}
+                          />
+                        </LocalizationProvider>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={4} style={{paddingRight: 0}}>
+                <Card variant="outlined" sx={{mb: 1, minWidth: 275}}>
+                  <CardContent>
+                    <FormControlLabel
+                      control={
+                      <Checkbox
+                        id={"whole-body-record"}
+                        checked={dosimetryType === "wholebody"}
+                        onChange={this.handleChange}
+                      />
+                    }
+                      label="Whole Body Data"
+                    />
                     <Box sx={{'& .MuiTextField-root': {m: 1, width: '15ch'}}}>
+                      <TextField
+                        required
+                        disabled={dosimetryType !== "wholebody"}
+                        id="shallow-dose"
+                        label="Shallow Dose"
+                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_SHALLOW_DOSE) ? selection[NURIMS_DOSIMETRY_SHALLOW_DOSE] : "0"}
+                        onChange={this.handleChange}
+                      />
+                      <TextField
+                        required
+                        disabled={dosimetryType !== "wholebody"}
+                        id="deep-dose"
+                        label="Deep Dose"
+                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_DEEP_DOSE) ? selection[NURIMS_DOSIMETRY_DEEP_DOSE] : "0"}
+                        onChange={this.handleChange}
+                      />
                       <FormControl sx={{m: 1, minWidth: 250}}>
                         <InputLabel id="dose-units">Dose Units</InputLabel>
                         <Select
                           labelId="dose-units"
                           id="dose-units"
+                          disabled={dosimetryType !== "wholebody"}
                           value={selection.hasOwnProperty(NURIMS_DOSIMETRY_UNITS) ? selection[NURIMS_DOSIMETRY_UNITS] : defaultUnits}
                           label="Dose Units"
                           onChange={this.handleDoseUnitsChange}
@@ -292,36 +334,30 @@ class DosimetryMeasurementMetadata extends Component {
                           <MenuItem value={"usv"}>Micro Sieverts</MenuItem>
                         </Select>
                       </FormControl>
-                      <TextField
-                        required
-                        id="shallow-dose"
-                        label="Shallow Dose"
-                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_SHALLOW_DOSE) ? selection[NURIMS_DOSIMETRY_SHALLOW_DOSE] : "0"}
-                        onChange={this.handleChange}
-                      />
-                      <TextField
-                        required
-                        id="deep-dose"
-                        label="Deep Dose"
-                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_DEEP_DOSE) ? selection[NURIMS_DOSIMETRY_DEEP_DOSE] : "0"}
-                        onChange={this.handleChange}
-                      />
                     </Box>
                   </CardContent>
                 </Card>
-              }
-              {dosimetryType === "extremity" &&
+              </Grid>
+              <Grid item xs={4} style={{paddingRight: 0}}>
                 <Card variant="outlined" sx={{mb: 1, minWidth: 275}}>
                   <CardContent>
-                    <Typography sx={{fontSize: 14, paddingLeft: 1}} color="text.secondary" gutterBottom>
-                      Extremity Data
-                    </Typography>
-                    <Box sx={{'& .MuiTextField-root': {m: 1, width: '12ch'}}}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          id={"extremity-record"}
+                          checked={dosimetryType === "extremity"}
+                          onChange={this.handleChange}
+                        />
+                      }
+                      label="Extremity Data"
+                    />
+                    <Box sx={{'& .MuiTextField-root': {m: 1, width: '15ch'}}}>
                       <TextField
                         required
+                        disabled={dosimetryType !== "extremity"}
                         id="extremity-dose"
                         label="Extremity Dose"
-                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_DEEP_DOSE) ? selection[NURIMS_DOSIMETRY_DEEP_DOSE] : "0"}
+                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_EXTREMITY_DOSE) ? selection[NURIMS_DOSIMETRY_EXTREMITY_DOSE] : "0"}
                         onChange={this.handleChange}
                       />
                     </Box>
@@ -330,6 +366,7 @@ class DosimetryMeasurementMetadata extends Component {
                       <Select
                         labelId="extremity-doseunits"
                         id="extremity-doseunits"
+                        disabled={dosimetryType !== "extremity"}
                         value={selection.hasOwnProperty(NURIMS_DOSIMETRY_UNITS) ? selection[NURIMS_DOSIMETRY_UNITS] : defaultUnits}
                         label="Dose Units"
                         onChange={this.handleDoseUnitsChange}
@@ -341,19 +378,27 @@ class DosimetryMeasurementMetadata extends Component {
                     </FormControl>
                   </CardContent>
                 </Card>
-              }
-              {dosimetryType === "wrist" &&
+              </Grid>
+              <Grid item xs={4} style={{paddingRight: 0}}>
                 <Card variant="outlined" sx={{mb: 1, minWidth: 275}}>
                   <CardContent>
-                    <Typography sx={{fontSize: 14, paddingLeft: 1}} color="text.secondary" gutterBottom>
-                      Wrist Data
-                    </Typography>
-                    <Box sx={{'& .MuiTextField-root': {m: 1, width: '12ch'}}}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          id={"wrist-record"}
+                          checked={dosimetryType === "wrist"}
+                          onChange={this.handleChange}
+                        />
+                      }
+                      label="Wrist Data"
+                    />
+                    <Box sx={{'& .MuiTextField-root': {m: 1, width: '15ch'}}}>
                       <TextField
                         required
+                        disabled={dosimetryType !== "wrist"}
                         id="wrist-dose"
                         label="Wrist Dose"
-                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_DEEP_DOSE) ? selection[NURIMS_DOSIMETRY_DEEP_DOSE] : "0"}
+                        value={selection.hasOwnProperty(NURIMS_DOSIMETRY_WRIST_DOSE) ? selection[NURIMS_DOSIMETRY_WRIST_DOSE] : "0"}
                         onChange={this.handleChange}
                       />
                     </Box>
@@ -362,6 +407,7 @@ class DosimetryMeasurementMetadata extends Component {
                       <Select
                         labelId="wrist-doseunits"
                         id="wrist-doseunits"
+                        disabled={dosimetryType !== "wrist"}
                         value={selection.hasOwnProperty(NURIMS_DOSIMETRY_UNITS) ? selection[NURIMS_DOSIMETRY_UNITS] : defaultUnits}
                         label="Dose Units"
                         onChange={this.handleDoseUnitsChange}
@@ -373,8 +419,8 @@ class DosimetryMeasurementMetadata extends Component {
                     </FormControl>
                   </CardContent>
                 </Card>
-              }
-            </div>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Box>

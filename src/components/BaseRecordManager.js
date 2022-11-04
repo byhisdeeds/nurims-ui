@@ -40,11 +40,9 @@ class BaseRecordManager extends Component {
       metadata_changed: false,
       confirm_remove: false,
       selection: {},
-      // title: props.title,
       include_archived: false,
     };
     this.Module = "BaseRecordManager";
-    this.recordTopic = "";
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
     this.ws_message = this.ws_message.bind(this);
@@ -214,7 +212,7 @@ class BaseRecordManager extends Component {
     if (this.listRef.current) {
       const records = this.listRef.current.getRecords();
       for (const record of records) {
-        // only save monitor record with changed metadata
+        // only save record with changed metadata
         if (record.changed) {
           if (this.context.debug > 5) {
             ConsoleLog(this.Module, "saveChanges", record);
@@ -223,7 +221,7 @@ class BaseRecordManager extends Component {
             record["record_key"] = uuid();
           }
           this.props.send({
-            cmd: this.recordCommand("update"),
+            cmd: this.recordCommand("update", this.topic),
             item_id: record.item_id,
             "nurims.title": record[NURIMS_TITLE],
             "nurims.withdrawn": record[NURIMS_WITHDRAWN],

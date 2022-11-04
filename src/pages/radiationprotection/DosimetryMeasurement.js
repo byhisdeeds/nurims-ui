@@ -11,13 +11,13 @@ import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {
   CMD_GET_GLOSSARY_TERMS,
-  NURIMS_DOSIMETRY_BATCH_ID, NURIMS_DOSIMETRY_DEEP_DOSE,
+  NURIMS_DOSIMETRY_BATCH_ID, NURIMS_DOSIMETRY_DEEP_DOSE, NURIMS_DOSIMETRY_EXTREMITY_DOSE,
   NURIMS_DOSIMETRY_ID,
   NURIMS_DOSIMETRY_MEASUREMENTS,
   NURIMS_DOSIMETRY_MONITOR_PERIOD, NURIMS_DOSIMETRY_SHALLOW_DOSE,
   NURIMS_DOSIMETRY_TIMESTAMP,
   NURIMS_DOSIMETRY_TYPE,
-  NURIMS_DOSIMETRY_UNITS,
+  NURIMS_DOSIMETRY_UNITS, NURIMS_DOSIMETRY_WRIST_DOSE,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
 } from "../../utils/constants";
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -55,14 +55,23 @@ function assignDosimetryRecord(dosimetry, records) {
         measurement[NURIMS_ENTITY_DOSE_PROVIDER_ID] = dosimetry.Id;
         measurement[NURIMS_DOSIMETRY_BATCH_ID] = dosimetry.BatchId;
         measurement[NURIMS_DOSIMETRY_ID] = dosimetry.Barcode;
-        measurement[NURIMS_DOSIMETRY_TYPE] = "wholebody";
+        measurement[NURIMS_DOSIMETRY_TYPE] = dosimetry.recordType;
         measurement[NURIMS_DOSIMETRY_TIMESTAMP] = dosimetry.Timestamp;
         measurement[NURIMS_DOSIMETRY_UNITS] = "msv";
         measurement[NURIMS_DOSIMETRY_MONITOR_PERIOD] = dosimetry.monitorPeriod;
-        measurement[NURIMS_DOSIMETRY_SHALLOW_DOSE] = transformDose(dosimetry.R2, dosimetry.Units.toLowerCase(), 'msv');
-        measurement[NURIMS_DOSIMETRY_DEEP_DOSE] = transformDose(dosimetry.R3, dosimetry.Units.toLowerCase(), 'msv');
+        measurement["badge.date.available"] = dosimetry.dateAvailable;
+        measurement["badge.return.timestamp"] = dosimetry.returnTimestamp;
+        if (dosimetry.recordType === "wholebody") {
+          measurement[NURIMS_DOSIMETRY_SHALLOW_DOSE] = transformDose(dosimetry.R2, dosimetry.Units.toLowerCase(), 'msv');
+          measurement[NURIMS_DOSIMETRY_DEEP_DOSE] = transformDose(dosimetry.R3, dosimetry.Units.toLowerCase(), 'msv');
+        } else if (dosimetry.recordType === "extremity") {
+          measurement[NURIMS_DOSIMETRY_EXTREMITY_DOSE] = transformDose(dosimetry.R3, dosimetry.Units.toLowerCase(), 'msv');
+        } else if (dosimetry.recordType === "wrist") {
+          measurement[NURIMS_DOSIMETRY_WRIST_DOSE] = transformDose(dosimetry.R3, dosimetry.Units.toLowerCase(), 'msv');
+        }
         measurements.push(measurement);
         setRecordMetadataValue(record, NURIMS_DOSIMETRY_MEASUREMENTS, measurements);
+        record["changed"] = true;
       }
       return null;
     }
@@ -83,7 +92,6 @@ class DosimetryMeasurement extends BaseRecordManager {
       selection: {},
     }
     this.Module = DOSIMETRYMEASUREMENT_REF;
-    this.recordTopic = "measurement";
     this.importFileRef = React.createRef();
   }
 
