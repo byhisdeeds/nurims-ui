@@ -27,6 +27,8 @@ import {SameYearDateRangePicker} from "../../../components/CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 import AddIcon from "@mui/icons-material/Add";
 
+export const REACTOROPERATIONSREPORT_REF = "ReactorOperationsReport";
+
 class ReactorOperationsReport extends Component {
   static contextType = UserDebugContext;
 
@@ -40,7 +42,7 @@ class ReactorOperationsReport extends Component {
       year: null,
       reportType: "summary",
     };
-    this.Module = "ReactorOperationsReport";
+    this.Module = REACTOROPERATIONSREPORT_REF;
   }
 
   ws_message = (message) => {

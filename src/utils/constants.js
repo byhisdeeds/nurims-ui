@@ -6,6 +6,7 @@ module.exports = Object.freeze({
   HR_UPDATE_MONITORING_STATUS: 'hr.update.personnel.monitoring.status',
   RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS: 'rp.add.edit.personnel.dosimetry.measurements',
   RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS: 'rp.add.edit.monitor.dosimetry.measurements',
+  RP_PERSONNEL_DOSIMETRY_EVALUATION: 'rp.personnel.dosimetry.evaluation',
   CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER: 'cm.register.update.material.manufacturer',
   CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION: 'cm.register.update.material.storage.location',
   CM_REGISTER_CONTROLLED_MATERIAL: 'cm.register.update.material',
@@ -121,6 +122,9 @@ module.exports = Object.freeze({
   NURIMS_DOSIMETRY_MONITOR_PERIOD: "nurims.dosimetry.monitorperiod",
   NURIMS_DOSIMETRY_SHALLOW_DOSE: "nurims.dosimetry.shallowdose",
   NURIMS_DOSIMETRY_DEEP_DOSE: "nurims.dosimetry.deepdose",
+  NURIMS_DOSIMETRY_EXTREMITY_DOSE: "nurims.dosimetry.extremitydose",
+  NURIMS_DOSIMETRY_WRIST_DOSE: "nurims.dosimetry.wristdose",
+  NURIMS_DOSIMETRY_INTERNAL_DOSE: "nurims.dosimetry.internaldose",
 
   NURIMS_MATERIAL_DOCUMENTS: 'nurims.material.documents',
   NURIMS_MATERIAL_IMAGE: 'nurims.material.image',

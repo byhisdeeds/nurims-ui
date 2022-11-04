@@ -42,6 +42,8 @@ import WaterSamplesList from "./WaterSamplesList";
 import WaterSampleMetadata from "./WaterSampleMetadata";
 import {getRecordMetadataValue} from "../../../utils/MetadataUtils";
 
+export const ADDEDITREACTORWATERSAMPLES_REF = "AddEditReactorWaterSamples";
+
 class AddEditReactorWaterSamples extends React.Component {
   static contextType = UserDebugContext;
 
@@ -54,7 +56,7 @@ class AddEditReactorWaterSamples extends React.Component {
       title: props.title,
       include_archived: false,
     };
-    this.Module = "AddEditReactorWaterSamples";
+    this.Module = ADDEDITREACTORWATERSAMPLES_REF;
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
   }

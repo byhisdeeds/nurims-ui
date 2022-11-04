@@ -54,9 +54,10 @@ function assignDosimetryRecord(dosimetry, records) {
       }
       if (!exists) {
         const measurement = {};
+        measurement[NURIMS_ENTITY_DOSE_PROVIDER_ID] = dosimetry.Id;
         measurement[NURIMS_DOSIMETRY_BATCH_ID] = dosimetry.BatchId;
         measurement[NURIMS_DOSIMETRY_ID] = dosimetry.Barcode;
-        measurement[NURIMS_DOSIMETRY_TYPE] = "WholeBody";
+        measurement[NURIMS_DOSIMETRY_TYPE] = "wholebody";
         measurement[NURIMS_DOSIMETRY_TIMESTAMP] = dosimetry.Timestamp;
         measurement[NURIMS_DOSIMETRY_UNITS] = "msv";
         measurement[NURIMS_DOSIMETRY_MONITOR_PERIOD] = dosimetry.monitorPeriod;

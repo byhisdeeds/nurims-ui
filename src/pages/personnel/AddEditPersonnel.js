@@ -18,13 +18,14 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {TitleComponent} from "../../components/CommonComponents";
 
+export const ADDEDITPERSONNEL_REF = "AddEditPersonnel";
 
 class AddEditPersonnel extends BaseRecordManager {
   static contextType = UserDebugContext;
 
   constructor(props) {
     super(props);
-    this.Module = "AddEditPersonnel";
+    this.Module = ADDEDITPERSONNEL_REF;
     this.recordTopic = "personnel";
   }
 

@@ -29,7 +29,7 @@ import {
 } from "../../utils/WebsocketUtils";
 import {TitleComponent} from "../../components/CommonComponents";
 
-const MODULE = "UpdateMonitoringStatus";
+export const UPDATEMONITORINGSTATUS_REF = "UpdateMonitoringStatus";
 
 // function ConfirmRemoveDialog(props) {
 //   return (
@@ -97,6 +97,7 @@ class UpdateMonitoringStatus extends Component {
       selection: {},
     };
     this.plref = React.createRef();
+    this.Module = UPDATEMONITORINGSTATUS_REF;
   }
 
   componentDidMount() {
@@ -104,12 +105,12 @@ class UpdateMonitoringStatus extends Component {
       cmd: CMD_GET_PERSONNEL_RECORDS,
       "include.withdrawn": "false",
       "include.metadata": "true",
-      module: MODULE,
+      module: this.Module,
     })
   }
 
   ws_message = (message) => {
-    console.log("ON_WS_MESSAGE", MODULE, message)
+    console.log("ON_WS_MESSAGE", this.Module, message)
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
@@ -145,7 +146,7 @@ class UpdateMonitoringStatus extends Component {
             "nurims.title": person[NURIMS_TITLE],
             "nurims.withdrawn": person[NURIMS_WITHDRAWN],
             metadata: person[METADATA],
-            module: MODULE,
+            module: this.Module,
           })
         }
       }

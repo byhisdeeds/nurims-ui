@@ -19,12 +19,16 @@ import {
 import MaterialList from "./MaterialList";
 import MaterialMetadata from "./MaterialMetadata";
 import {TitleComponent} from "../../components/CommonComponents";
+import {UserDebugContext} from "../../utils/UserDebugContext";
 
+export const MATERIAL_REF = "Material";
 
 class Material extends BaseRecordManager {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
-    this.Module = "Material";
+    this.Module = MATERIAL_REF;
     this.recordTopic = "material";
   }
 

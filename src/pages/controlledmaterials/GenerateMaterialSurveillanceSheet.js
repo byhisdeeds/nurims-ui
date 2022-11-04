@@ -9,7 +9,6 @@ import {
   InputLabel,
   Select,
   Stack,
-  Typography
 } from "@mui/material";
 import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
@@ -24,7 +23,7 @@ import {
 } from "../../utils/WebsocketUtils";
 import {TitleComponent} from "../../components/CommonComponents";
 
-const MODULE = "GenerateMaterialSurveillanceSheet";
+export const GENERATEMATERIALSURVEILLANCESHEET_REF = "GenerateMaterialSurveillanceSheet";
 
 class GenerateMaterialSurveillanceSheet extends Component {
   constructor(props) {
@@ -33,10 +32,11 @@ class GenerateMaterialSurveillanceSheet extends Component {
       pdf: BLANK_PDF,
       access: 'restricted',
     };
+    this.Module = GENERATEMATERIALSURVEILLANCESHEET_REF;
   }
 
   ws_message = (message) => {
-    console.log("ON_WS_MESSAGE", MODULE, message)
+    console.log("ON_WS_MESSAGE", this.Module, message)
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
@@ -57,7 +57,7 @@ class GenerateMaterialSurveillanceSheet extends Component {
     this.props.send({
       cmd: CMD_GENERATE_CONTROLLED_MATERIALS_SURVEILLANCE_SHEET_PDF,
       access: this.state.access,
-      module: MODULE,
+      module: this.Module,
     });
   }
 

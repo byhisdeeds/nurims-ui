@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import {withTheme} from "@mui/styles";
 import {TitleComponent} from "../../components/CommonComponents";
 
-const MODULE = "ViewSSCRecords";
+export const VIEWSSCRECORDS_REF = "ViewSSCRecords";
 
 class ViewSSCRecords extends Component {
   constructor(props) {
@@ -18,17 +18,18 @@ class ViewSSCRecords extends Component {
     this.state = {
       pdf: BLANK_PDF,
     };
+    this.Module = VIEWSSCRECORDS_REF;
   }
 
   componentDidMount() {
     this.props.send({
       cmd: CMD_GENERATE_SSC_RECORDS_PDF,
-      module: MODULE,
+      module: this.Module,
     });
   }
 
   ws_message = (message) => {
-    console.log("ON_WS_MESSAGE", MODULE, message)
+    console.log("ON_WS_MESSAGE", this.Module, message)
     if (message.hasOwnProperty("response")) {
       const response = message.response;
       if (response.hasOwnProperty("status") && response.status === 0) {
@@ -42,7 +43,7 @@ class ViewSSCRecords extends Component {
   }
 
   render() {
-    const { title, pdf, } = this.state;
+    const { pdf, } = this.state;
     return (
       <React.Fragment>
         <Grid container spacing={2}>

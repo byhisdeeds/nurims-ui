@@ -32,6 +32,25 @@ import {
   CMD_BACKGROUND_TASKS
 } from "./utils/constants";
 import {ConsoleLog, UserDebugContext} from "./utils/UserDebugContext";
+import {MONITORDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/MonitorDosimetryMeasurement";
+import {PERSONNELDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/PersonnelDosimetryMeasurement";
+import {MANUFACTURER_REF} from "./pages/controlledmaterials/Manufacturer";
+import {MATERIAL_REF} from "./pages/controlledmaterials/Material";
+import {STORAGE_REF} from "./pages/controlledmaterials/Storage";
+import {ADDEDITPERSONNEL_REF} from "./pages/personnel/AddEditPersonnel";
+import {VIEWPERSONNELRECORDS_REF} from "./pages/personnel/ViewPersonnelRecords";
+import {ADDEDITSSC_REF} from "./pages/maintenance/AddEditSSC";
+import {ADDEDITAMP_REF} from "./pages/maintenance/AddEditAMP";
+import {VIEWSSCRECORDS_REF} from "./pages/maintenance/ViewSSCRecords";
+import {GENERATEMATERIALSURVEILLANCESHEET_REF} from "./pages/controlledmaterials/GenerateMaterialSurveillanceSheet";
+import {ADDEDITREACTORWATERSAMPLES_REF} from "./pages/packages/icens/AddEditReactorWaterSamples";
+import {ADDEDITIRRADIATEDSAMPLES_REF} from "./pages/packages/icens/AddEditIrradiatedSamples";
+import {REACTOROPERATIONSREPORT_REF} from "./pages/packages/icens/ReactorOperationsReport";
+import {ADDEDITREACTOROPERATINGRUNS_REF} from "./pages/packages/icens/AddEditReactorOperatingRuns";
+import {UPDATEMONITORINGSTATUS_REF} from "./pages/personnel/UpdateMonitoringStatus";
+import {ADDEDITMONITORS_REF} from "./pages/radiationprotection/AddEditMonitors";
+import {PERSONNELDOSIMETRYEVALUATION_REF} from "./pages/radiationprotection/PersonnelDosimetryEvaluation";
+import {VIEWMATERIALSLIST_REF} from "./pages/controlledmaterials/ViewMaterialsList";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -61,6 +80,7 @@ const AddEditReactorOperatingRuns = lazy(() => import('./pages/packages/icens/Ad
 const AddEditIrradiatedSamples = lazy(() => import('./pages/packages/icens/AddEditIrradiatedSamples'));
 const ReactorOperationsReport = lazy(() => import('./pages/packages/icens/ReactorOperationsReport'));
 const AddEditReactorWaterSamples = lazy(() => import('./pages/packages/icens/AddEditReactorWaterSamples'));
+const PersonnelDosimetryEvaluation = lazy(() => import('./pages/radiationprotection/PersonnelDosimetryEvaluation'));
 
 const drawerWidth = 300;
 const DEBUG_LEVEL = 9;
@@ -129,7 +149,7 @@ const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAc
 const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
   if (actionid === Constants.HR_ADD_EDIT_PERSONNEL) {
     return (<AddEditPersonnel
-      ref={crefs["AddEditPersonnel"]}
+      ref={crefs[ADDEDITPERSONNEL_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -139,7 +159,7 @@ const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMenuActio
   }
   else if (actionid === Constants.HR_UPDATE_MONITORING_STATUS) {
     return (<UpdateMonitoringStatus
-      ref={crefs["UpdateMonitoringStatus"]}
+      ref={crefs[UPDATEMONITORINGSTATUS_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -149,7 +169,7 @@ const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMenuActio
   }
   else if (actionid === Constants.HR_VIEW_PERSONNEL_RECORDS) {
     return (<ViewPersonnelRecords
-      ref={crefs["ViewPersonnelRecords"]}
+      ref={crefs[VIEWPERSONNELRECORDS_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -162,7 +182,7 @@ const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMenuActio
 const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
   if (actionid === Constants.CM_VIEW_CONTROLLED_MATERIALS_LIST) {
     return (<ViewMaterialsList
-      ref={crefs["ViewMaterialsList"]}
+      ref={crefs[VIEWMATERIALSLIST_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -172,7 +192,7 @@ const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenu
   }
   else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL) {
     return (<Material
-      ref={crefs["Material"]}
+      ref={crefs[MATERIAL_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -182,7 +202,7 @@ const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenu
   }
   else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION) {
     return (<Storage
-      ref={crefs["Storage"]}
+      ref={crefs[STORAGE_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -192,7 +212,7 @@ const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenu
   }
   else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER) {
     return (<Manufacturer
-      ref={crefs["Manufacturer"]}
+      ref={crefs[MANUFACTURER_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -202,7 +222,7 @@ const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenu
   }
   else if (actionid === Constants.CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET) {
     return (<GenerateMaterialSurveillanceSheet
-      ref={crefs["GenerateMaterialSurveillanceSheet"]}
+      ref={crefs[GENERATEMATERIALSURVEILLANCESHEET_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -215,7 +235,7 @@ const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenu
 const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
   if (actionid === Constants.SSC_VIEW_SSC_RECORDS) {
     return (<ViewSSCRecords
-      ref={crefs["ViewSSCRecords"]}
+      ref={crefs[VIEWSSCRECORDS_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -225,7 +245,7 @@ const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, p
   }
   else if (actionid === Constants.SSC_ADD_EDIT_SSC_AMP) {
     return (<AddEditAMP
-      ref={crefs["AddEditAMP"]}
+      ref={crefs[ADDEDITAMP_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -235,7 +255,7 @@ const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, p
   }
   else if (actionid === Constants.SSC_ADD_EDIT_SSC) {
     return (<AddEditSSC
-      ref={crefs["AddEditSSC"]}
+      ref={crefs[ADDEDITSSC_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -248,7 +268,7 @@ const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, p
 const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
   if (actionid === Constants.BASIC_RP_ADD_EDIT_MONITORS) {
     return (<AddEditMonitors
-      ref={crefs["AddEditMonitors"]}
+      ref={crefs[ADDEDITMONITORS_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -258,7 +278,7 @@ const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMen
   }
   else if (actionid === Constants.RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS) {
     return (<PersonnelDosimetryMeasurement
-      ref={crefs["PersonnelDosimetryMeasurement"]}
+      ref={crefs[PERSONNELDOSIMETRYMEASUREMENT_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -268,7 +288,17 @@ const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMen
   }
   else if (actionid === Constants.RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS) {
     return (<MonitorDosimetryMeasurement
-      ref={crefs["MonitorDosimetryMeasurement"]}
+      ref={crefs[MONITORDOSIMETRYMEASUREMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.RP_PERSONNEL_DOSIMETRY_EVALUATION) {
+    return (<PersonnelDosimetryEvaluation
+      ref={crefs[PERSONNELDOSIMETRYEVALUATION_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -331,7 +361,7 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
   }
   else if (actionid === Constants.RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS) {
     return (<AddEditReactorOperatingRuns
-      ref={crefs["AddEditReactorOperatingRuns"]}
+      ref={crefs[ADDEDITREACTOROPERATINGRUNS_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -341,7 +371,7 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
   }
   else if (actionid === Constants.RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA) {
     return (<AddEditIrradiatedSamples
-      ref={crefs["AddEditIrradiatedSamples"]}
+      ref={crefs[ADDEDITIRRADIATEDSAMPLES_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -351,7 +381,7 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
   }
   else if (actionid === Constants.RO_REACTOR_OPERATIONS_REPORT) {
     return (<ReactorOperationsReport
-      ref={crefs["ReactorOperationsReport"]}
+      ref={crefs[REACTOROPERATIONSREPORT_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -361,7 +391,7 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
   }
   else if (actionid === Constants.RO_ADD_EDIT_REACTOR_WATER_SAMPLES) {
     return (<AddEditReactorWaterSamples
-      ref={crefs["AddEditReactorWaterSamples"]}
+      ref={crefs[ADDEDITREACTORWATERSAMPLES_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -393,29 +423,30 @@ class App extends React.Component {
       "MyAccount": React.createRef(),
       "Settings": React.createRef(),
       "ManageUsers": React.createRef(),
-      "AddEditPersonnel": React.createRef(),
-      "UpdateMonitoringStatus": React.createRef(),
-      "ViewPersonnelRecords": React.createRef(),
-      "MonitorDosimetryMeasurement": React.createRef(),
-      "PersonnelDosimetryMeasurement": React.createRef(),
-      "Manufacturer": React.createRef(),
-      "Storage": React.createRef(),
-      "Material": React.createRef(),
-      "ViewMaterialsList": React.createRef(),
-      "GenerateMaterialSurveillanceSheet": React.createRef(),
-      "AddEditSSC": React.createRef(),
-      "AddEditAMP": React.createRef(),
-      "ViewSSCRecords": React.createRef(),
-      "AddEditMonitors": React.createRef(),
       "ImportICENSPersonnel": React.createRef(),
       "ImportICENSControlledMaterialManufacturers": React.createRef(),
       "ImportICENSControlledMaterialStorageLocations": React.createRef(),
       "ImportICENSControlledMaterials": React.createRef(),
-      "AddEditReactorOperatingRuns": React.createRef(),
-      "AddEditIrradiatedSamples": React.createRef(),
-      "ReactorOperationsReport": React.createRef(),
-      "AddEditReactorWaterSamples": React.createRef(),
     };
+    this.crefs[MONITORDOSIMETRYMEASUREMENT_REF] = React.createRef();
+    this.crefs[PERSONNELDOSIMETRYMEASUREMENT_REF] = React.createRef();
+    this.crefs[MANUFACTURER_REF] = React.createRef();
+    this.crefs[MATERIAL_REF] = React.createRef();
+    this.crefs[STORAGE_REF] = React.createRef();
+    this.crefs[ADDEDITPERSONNEL_REF] = React.createRef();
+    this.crefs[VIEWPERSONNELRECORDS_REF] = React.createRef();
+    this.crefs[ADDEDITSSC_REF] = React.createRef();
+    this.crefs[ADDEDITAMP_REF] = React.createRef();
+    this.crefs[VIEWSSCRECORDS_REF] = React.createRef();
+    this.crefs[GENERATEMATERIALSURVEILLANCESHEET_REF] = React.createRef();
+    this.crefs[ADDEDITREACTORWATERSAMPLES_REF] = React.createRef();
+    this.crefs[ADDEDITIRRADIATEDSAMPLES_REF] = React.createRef();
+    this.crefs[REACTOROPERATIONSREPORT_REF] = React.createRef();
+    this.crefs[ADDEDITREACTOROPERATINGRUNS_REF] = React.createRef();
+    this.crefs[UPDATEMONITORINGSTATUS_REF] = React.createRef();
+    this.crefs[ADDEDITMONITORS_REF] = React.createRef();
+    this.crefs[PERSONNELDOSIMETRYEVALUATION_REF] = React.createRef();
+    this.crefs[VIEWMATERIALSLIST_REF] = React.createRef();
   }
 
 

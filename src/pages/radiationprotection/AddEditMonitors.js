@@ -24,11 +24,12 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog} from "../../utils/UserDebugContext";
 import {TitleComponent} from "../../components/CommonComponents";
 
+export const ADDEDITMONITORS_REF = "AddEditMonitors";
 
 class AddEditMonitors extends BaseRecordManager {
   constructor(props) {
     super(props);
-    this.Module = "AddEditMonitors";
+    this.Module = ADDEDITMONITORS_REF;
     this.recordTopic = "monitor";
   }
 

@@ -19,12 +19,16 @@ import {
 import ManufacturerList from "./ManufacturerList";
 import ManufacturerMetadata from "./ManufacturerMetadata";
 import {TitleComponent} from "../../components/CommonComponents";
+import {UserDebugContext} from "../../utils/UserDebugContext";
 
+export const MANUFACTURER_REF = "Manufacturer";
 
-class AddEditMonitor extends BaseRecordManager {
+class Manufacturer extends BaseRecordManager {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
-    this.Module = "Manufacturer";
+    this.Module = MANUFACTURER_REF;
     this.recordTopic = "manufacturer";
   }
 
@@ -99,10 +103,10 @@ class AddEditMonitor extends BaseRecordManager {
   }
 }
 
-AddEditMonitor.defaultProps = {
+Manufacturer.defaultProps = {
   send: (msg) => {
   },
   user: {},
 };
 
-export default AddEditMonitor;
+export default Manufacturer;

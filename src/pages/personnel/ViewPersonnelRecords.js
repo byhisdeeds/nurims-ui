@@ -8,26 +8,32 @@ import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import {withTheme} from "@mui/styles";
 import {TitleComponent} from "../../components/CommonComponents";
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 
-const MODULE = "ViewPersonnelRecords";
+export const VIEWPERSONNELRECORDS_REF = "ViewPersonnelRecords";
 
 class ViewPersonnelRecords extends Component {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
     this.state = {
       pdf: BLANK_PDF,
     };
+    this.Module = VIEWPERSONNELRECORDS_REF;
   }
 
   componentDidMount() {
     this.props.send({
       cmd: CMD_GENERATE_PERSONNEL_RECORDS_PDF,
-      module: MODULE,
+      module: this.Module,
     });
   }
 
   ws_message = (message) => {
-    console.log("ON_WS_MESSAGE", MODULE, message)
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "ws_message", "message", message);
+    }
     if (message.hasOwnProperty("response")) {
       const response = message.response;
       if (response.hasOwnProperty("status") && response.status === 0) {

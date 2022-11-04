@@ -21,13 +21,17 @@ import {
 } from "../../components/UtilityDialogs";
 import SSCList from "./SSCList";
 import SSCMetadata from "./SSCMetadata";
-import {ConsoleLog} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {TitleComponent} from "../../components/CommonComponents";
 
+export const ADDEDITSSC_REF = "AddEditSSC";
+
 class AddEditSSC extends BaseRecordManager {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
-    this.Module = "AddEditSSC";
+    this.Module = ADDEDITSSC_REF;
     this.recordTopic = "structures_systems_components";
   }
 

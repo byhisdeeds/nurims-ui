@@ -22,14 +22,17 @@ import {
 } from "../../components/UtilityDialogs";
 import AMPList from "./AMPList";
 import AMPMetadata from "./AMPMetadata";
-import {ConsoleLog} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {TitleComponent} from "../../components/CommonComponents";
 
+export const ADDEDITAMP_REF = "AddEditAMP";
 
 class AddEditAMP extends BaseRecordManager {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
-    this.Module = "AddEditAMP";
+    this.Module = ADDEDITAMP_REF;
     this.recordTopic = "structures_systems_components";
   }
 

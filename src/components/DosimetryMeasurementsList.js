@@ -67,18 +67,8 @@ class DosimetryMeasurementsList extends React.Component {
       ConsoleLog(this.Module, "setRecords", "records", records);
     }
     if (Array.isArray(records)) {
-      let selection = {};
       this.rows = records;
-      // const s_item_id = Object.keys(this.state.selection).length === 0 ? -1 : this.state.selection.item_id;
-      // for (const r of this.rows) {
-      //   r["changed"] = false;
-      //   if (s_item_id > 0) {
-      //     if (r.item_id === s_item_id) {
-      //       selection = r;
-      //     }
-      //   }
-      // }
-      this.setState({selection: selection});
+      this.setState({selection: {}});
     }
   }
 
@@ -194,7 +184,7 @@ DosimetryMeasurementsList.defaultProps = {
   enableRecordArchiveSwitch: false,
   rowHeight: 24,
   rowsPerPage: 20,
-  minWidth: 350,
+  minWidth: 100,
   height: 400,
   cells: [
     {

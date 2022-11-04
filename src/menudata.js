@@ -464,7 +464,7 @@ export const MenuData = [
       },
       {
         name: '‣ Reports',
-        tooltip: 'Human resource actions',
+        tooltip: 'Radiation protection resource actions',
         authmodlevel: 'basic',
         items: [
           {
@@ -483,9 +483,9 @@ export const MenuData = [
           },
           {
             name: '   - Personnel Dose Evaluation',
-            link: 'rp.personnel.dose.evaluation.report',
-            title: '',
-            tooltip: 'Human resource actions',
+            link: 'rp.personnel.dosimetry.evaluation',
+            title: 'Evaluate Personnel Dosimetry',
+            tooltip: 'Evaluate personnel dosimetry measurements',
             authmodlevel: 'basic',
           },
           {

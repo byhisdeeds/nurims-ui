@@ -23,6 +23,8 @@ import PagedCsvTable from "../../../components/PagedCsvTable";
 import {readString} from "react-papaparse";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 
+export const ADDEDITIRRADIATEDSAMPLES_REF = "AddEditIrradiatedSamples";
+
 class AddEditIrradiatedSamples extends Component {
   static contextType = UserDebugContext;
 
@@ -34,7 +36,7 @@ class AddEditIrradiatedSamples extends Component {
       messages: [],
       title: props.title,
     };
-    this.Module = "AddEditIrradiatedSamples";
+    this.Module = ADDEDITIRRADIATEDSAMPLES_REF;
     this.tableRef = React.createRef();
     this.recordsToSave = [];
   }

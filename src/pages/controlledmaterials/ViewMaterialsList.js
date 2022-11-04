@@ -9,7 +9,6 @@ import {
   InputLabel,
   Select,
   Stack,
-  Typography
 } from "@mui/material";
 import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
@@ -20,7 +19,7 @@ import {withTheme} from "@mui/styles";
 import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 import {TitleComponent} from "../../components/CommonComponents";
 
-const MODULE = "ViewMaterialsList";
+export const VIEWMATERIALSLIST_REF = "ViewMaterialsList";
 
 class ViewMaterialsList extends Component {
   constructor(props) {
@@ -29,10 +28,11 @@ class ViewMaterialsList extends Component {
       pdf: BLANK_PDF,
       access: 'restricted',
     };
+    this.Module = VIEWMATERIALSLIST_REF;
   }
 
   ws_message = (message) => {
-    console.log("ON_WS_MESSAGE", MODULE, message)
+    console.log("ON_WS_MESSAGE", this.Module, message)
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
@@ -53,7 +53,7 @@ class ViewMaterialsList extends Component {
     this.props.send({
       cmd: CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF,
       access: this.state.access,
-      module: MODULE,
+      module: this.Module,
     });
   }
 

@@ -21,13 +21,14 @@ import StorageMetadata from "./StorageMetadata";
 import {UserDebugContext} from "../../utils/UserDebugContext";
 import {TitleComponent} from "../../components/CommonComponents";
 
+export const STORAGE_REF = "Storage";
 
 class Storage extends BaseRecordManager {
   static contextType = UserDebugContext;
 
   constructor(props) {
     super(props);
-    this.Module = "Storage";
+    this.Module = STORAGE_REF;
     this.recordTopic = "storage_location";
   }
 

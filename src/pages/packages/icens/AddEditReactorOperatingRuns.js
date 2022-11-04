@@ -44,6 +44,8 @@ import {toast} from "react-toastify";
 import OperatingRunList from "./OperatingRunList";
 import OperatingRunMetadata from "./OperatingRunMetadata";
 
+export const ADDEDITREACTOROPERATINGRUNS_REF = "AddEditReactorOperatingRuns";
+
 class AddEditReactorOperatingRuns extends React.Component {
   static contextType = UserDebugContext;
 
@@ -57,7 +59,7 @@ class AddEditReactorOperatingRuns extends React.Component {
       title: props.title,
       include_archived: false,
     };
-    this.Module = "AddEditReactorOperatingRuns";
+    this.Module = ADDEDITREACTOROPERATINGRUNS_REF;
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
   }
