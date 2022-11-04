@@ -32,6 +32,8 @@ import {toast} from "react-toastify";
 import UserMetadata from "./UserMetadata";
 import {TitleComponent} from "../../components/CommonComponents";
 
+export const MANAGEUSERS_REF = "ManageUsers";
+
 class ManageUsers extends React.Component {
   static contextType = UserDebugContext;
 
@@ -43,7 +45,7 @@ class ManageUsers extends React.Component {
       selection: {},
       include_archived: false,
     };
-    this.Module = "ManageUsers";
+    this.Module = MANAGEUSERS_REF;
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
   }

@@ -3,13 +3,13 @@ import PagedRecordList from "../../components/PagedRecordList";
 import PropTypes from "prop-types";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 
-class PersonnelAndMonitorsList extends React.Component {
+class PersonnelList extends React.Component {
   static contextType = UserDebugContext;
 
   constructor(props) {
     super(props);
     this.ref=React.createRef();
-    this.Module = "PersonnelAndMonitorsList";
+    this.Module = "PersonnelList";
   }
 
   removeRecord = (record) => {
@@ -58,7 +58,7 @@ class PersonnelAndMonitorsList extends React.Component {
   }
 }
 
-PersonnelAndMonitorsList.propTypes = {
+PersonnelList.propTypes = {
   ref: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
   onSelection: PropTypes.func.isRequired,
@@ -66,4 +66,4 @@ PersonnelAndMonitorsList.propTypes = {
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
 }
 
-export default PersonnelAndMonitorsList;
+export default PersonnelList;

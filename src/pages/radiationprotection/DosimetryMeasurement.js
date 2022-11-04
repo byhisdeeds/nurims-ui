@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Fab,
   Grid,
-  Typography,
   Box
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
@@ -21,18 +20,17 @@ import {
   NURIMS_DOSIMETRY_UNITS,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
 } from "../../utils/constants";
-
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
 } from "../../components/UtilityDialogs";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
-import PersonnelAndMonitorsList from "./PersonnelAndMonitorsList";
+import PersonnelList from "./PersonnelList";
 import DosimetryMeasurementMetadata from "./DosimetryMeasurementMetadata";
 import BusyIndicator from "../../components/BusyIndicator";
 import {toast} from "react-toastify";
 import {readString} from "react-papaparse";
-import {getRecordMetadataValue, setDosimetryDataValue, setRecordMetadataValue} from "../../utils/MetadataUtils";
+import {getRecordMetadataValue, setRecordMetadataValue} from "../../utils/MetadataUtils";
 import {transformDose} from "../../utils/DoseReportUtils";
 import PropTypes from "prop-types";
 import {TitleComponent} from "../../components/CommonComponents";
@@ -72,6 +70,8 @@ function assignDosimetryRecord(dosimetry, records) {
   return `Did'nt find any entity with ${NURIMS_ENTITY_DOSE_PROVIDER_ID}=${dosimetry.hasOwnProperty("Id") ? dosimetry.Id : ""}`
 }
 
+export const DOSIMETRYMEASUREMENT_REF = "DosimetryMeasurement";
+
 class DosimetryMeasurement extends BaseRecordManager {
   static contextType = UserDebugContext;
 
@@ -82,7 +82,7 @@ class DosimetryMeasurement extends BaseRecordManager {
       data_changed: false,
       selection: {},
     }
-    this.Module = "DosimetryMeasurement";
+    this.Module = DOSIMETRYMEASUREMENT_REF;
     this.recordTopic = "measurement";
     this.importFileRef = React.createRef();
   }
@@ -196,7 +196,7 @@ class DosimetryMeasurement extends BaseRecordManager {
             <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={3}>
-            <PersonnelAndMonitorsList
+            <PersonnelList
               ref={this.listRef}
               title={this.listTitle}
               properties={this.props.properties}
@@ -240,22 +240,6 @@ class DosimetryMeasurement extends BaseRecordManager {
     );
   }
 }
-
-// ref={crefs["DosimetryMeasurement"]}
-//       title={menuTitle}
-//       user={user}
-//       onClick={handleMenuAction}
-//       send={send}
-//       properties={properties}
-//       topic={"personnel"}
-// DosimetryMeasurement.propTypes = {
-//   title: PropTypes.string.isRequired,
-//   user: PropTypes.object.isRequired,
-//   onClick: PropTypes.func.isRequired,
-//   send: PropTypes.func.isRequired,
-//   properties: PropTypes.object.isRequired,
-//   topic: PropTypes.string.isRequired,
-// }
 
 DosimetryMeasurement.defaultProps = {
   send: (msg) => {

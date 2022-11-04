@@ -20,7 +20,6 @@ import {
   Box,
   Fab,
   Grid,
-  Typography
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -41,6 +40,7 @@ import {toast} from "react-toastify";
 import WaterSamplesList from "./WaterSamplesList";
 import WaterSampleMetadata from "./WaterSampleMetadata";
 import {getRecordMetadataValue} from "../../../utils/MetadataUtils";
+import {TitleComponent} from "../../../components/CommonComponents";
 
 export const ADDEDITREACTORWATERSAMPLES_REF = "AddEditReactorWaterSamples";
 
@@ -171,7 +171,6 @@ class AddEditReactorWaterSamples extends React.Component {
             item_id: record.item_id,
             "nurims.title": record[NURIMS_TITLE],
             "nurims.withdrawn": record[NURIMS_WITHDRAWN],
-            "include.metadata.subtitle": NURIMS_SAMPLEDATE,
             metadata: record.metadata,
             record_key: record.record_key,
             module: this.Module,
@@ -263,6 +262,7 @@ class AddEditReactorWaterSamples extends React.Component {
         cmd: CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
         item_id: selection.item_id,
         "include.metadata": "true",
+        "include.metadata.subtitle": NURIMS_SAMPLEDATE,
         module: this.Module,
       })
     }
@@ -282,7 +282,7 @@ class AddEditReactorWaterSamples extends React.Component {
   // }
 
   render() {
-    const {metadata_changed, confirm_remove, include_archived, selection, title} = this.state;
+    const {metadata_changed, confirm_remove, include_archived, selection} = this.state;
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
@@ -296,7 +296,7 @@ class AddEditReactorWaterSamples extends React.Component {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={4}>
             <WaterSamplesList

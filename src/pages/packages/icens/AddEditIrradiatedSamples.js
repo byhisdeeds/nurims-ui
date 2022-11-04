@@ -22,6 +22,7 @@ import BusyIndicator from "../../../components/BusyIndicator";
 import PagedCsvTable from "../../../components/PagedCsvTable";
 import {readString} from "react-papaparse";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
+import {TitleComponent} from "../../../components/CommonComponents";
 
 export const ADDEDITIRRADIATEDSAMPLES_REF = "AddEditIrradiatedSamples";
 
@@ -160,7 +161,7 @@ class AddEditIrradiatedSamples extends Component {
   }
 
   render() {
-    const {busy, data_changed, messages, title} = this.state;
+    const {busy, data_changed, messages} = this.state;
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "render", "data_changed", data_changed);
     }    return (
@@ -176,7 +177,7 @@ class AddEditIrradiatedSamples extends Component {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <Typography variant="h5" component="div">{title}</Typography>
+            <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={12} sx={{height: 300, overflowY: 'auto', paddingTop: 10}}>
             <PagedCsvTable

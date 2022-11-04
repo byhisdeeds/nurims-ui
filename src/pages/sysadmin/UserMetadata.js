@@ -3,7 +3,7 @@ import {withTheme} from "@mui/styles";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import {
-  getUserRecordMetadataValue,
+  getUserRecordMetadataValue, setRecordMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
   NURIMS_TITLE
@@ -38,7 +38,7 @@ class UserMetadata extends Component {
     if (e.target.id === "username") {
       user["changed"] = true;
       user[NURIMS_TITLE] = e.target.value;
-      user.metadata["username"] = e.target.value;
+      setRecordMetadataValue(user, "username", e.target.value);
       this.setState({user: user})
     } else if (e.target.id === "password") {
       user["changed"] = true;

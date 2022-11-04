@@ -51,6 +51,7 @@ import {UPDATEMONITORINGSTATUS_REF} from "./pages/personnel/UpdateMonitoringStat
 import {ADDEDITMONITORS_REF} from "./pages/radiationprotection/AddEditMonitors";
 import {PERSONNELDOSIMETRYEVALUATION_REF} from "./pages/radiationprotection/PersonnelDosimetryEvaluation";
 import {VIEWMATERIALSLIST_REF} from "./pages/controlledmaterials/ViewMaterialsList";
+import {MANAGEUSERS_REF} from "./pages/sysadmin/ManageUsers";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -136,7 +137,7 @@ const BackgroundTasks = (background_tasks_active) => {
 const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
   if (actionid === Constants.SYSADMIN_MANAGE_USERS) {
     return (<ManageUsers
-      ref={crefs["ManageUsers"]}
+      ref={crefs[MANAGEUSERS_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -422,7 +423,6 @@ class App extends React.Component {
     this.crefs = {
       "MyAccount": React.createRef(),
       "Settings": React.createRef(),
-      "ManageUsers": React.createRef(),
       "ImportICENSPersonnel": React.createRef(),
       "ImportICENSControlledMaterialManufacturers": React.createRef(),
       "ImportICENSControlledMaterialStorageLocations": React.createRef(),
@@ -447,6 +447,7 @@ class App extends React.Component {
     this.crefs[ADDEDITMONITORS_REF] = React.createRef();
     this.crefs[PERSONNELDOSIMETRYEVALUATION_REF] = React.createRef();
     this.crefs[VIEWMATERIALSLIST_REF] = React.createRef();
+    this.crefs[MANAGEUSERS_REF] = React.createRef();
   }
 
 

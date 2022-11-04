@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React, {Component} from "react";
 import PagedRecordList from "../../../components/PagedRecordList";
 import PropTypes from "prop-types";
 import {ITEM_ID, NURIMS_TITLE, NURIMS_TITLE_SUBTITLE} from "../../../utils/constants";
 
-class WaterSamplesList extends React.Component {
+class WaterSamplesList extends Component {
   constructor(props) {
     super(props);
     this.ref = React.createRef();
@@ -34,6 +34,7 @@ class WaterSamplesList extends React.Component {
   setRecords = (records) => {
     // fixup subtitle date field
     for (const record of records) {
+      console.log("==>", record)
       record[NURIMS_TITLE_SUBTITLE] = record[NURIMS_TITLE_SUBTITLE].substring(0, 10);
     }
     if (this.ref.current) {
