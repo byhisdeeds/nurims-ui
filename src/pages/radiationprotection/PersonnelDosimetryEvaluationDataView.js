@@ -34,19 +34,30 @@ import {withTheme} from "@mui/styles";
 import Charts from "react-apexcharts";
 import * as ss from "simple-statistics"
 
+const doseUnits = "mSv";
+
 function getMonitorPeriod(selection, field, missingValue) {
   const period = selection.hasOwnProperty(field) ? selection[field] : "1900-01-01 to 1900-01-01";
   return getDateRangeFromDateString(period.replaceAll(" to ", "|"), missingValue);
-}
-
-function getDescriptiveStatsDatset() {
-  return [54, 66, 69, 75, 88];
 }
 
 function filterRecordsByRecordType(rawData, recordType) {
   const rows = [];
   for (const d of rawData) {
     if (d[NURIMS_DOSIMETRY_TYPE] === recordType) {
+      if (recordType === "wholebody") {
+        if (d[NURIMS_DOSIMETRY_SHALLOW_DOSE] === 0 && d[NURIMS_DOSIMETRY_DEEP_DOSE] === 0) {
+          d["use"] = false;
+        }
+      } else if (recordType === "extremity") {
+        if (d[NURIMS_DOSIMETRY_EXTREMITY_DOSE] === 0) {
+          d["use"] = false;
+        }
+      } else if (recordType === "wrist") {
+        if (d[NURIMS_DOSIMETRY_WRIST_DOSE] === 0) {
+          d["use"] = false;
+        }
+      }
       rows.push(d);
     }
   }
@@ -83,6 +94,13 @@ class PersonnelDosimetryEvaluationDataView extends Component {
           height: 200,
           foreColor: props.theme.palette.text.secondary
         },
+        yaxis: {
+          forceNiceScale: true,
+          min: 0,
+        },
+        tooltip : {
+          theme: 'dark',
+        },
         title: {
           text: 'Data from 2017-01-01 to 2022-04-23',
           align: 'left'
@@ -94,8 +112,8 @@ class PersonnelDosimetryEvaluationDataView extends Component {
           },
           boxPlot: {
             colors: {
-              upper: '#e9ecef',
-              lower: '#f8f9fa'
+              upper: '#7fb1ff',
+              lower: '#b6dbf8'
             }
           }
         },
@@ -108,7 +126,21 @@ class PersonnelDosimetryEvaluationDataView extends Component {
           id: "basic-bar",
           foreColor: props.theme.palette.text.secondary
         },
+        tooltip : {
+          theme: 'dark',
+        },
+        yaxis: {
+          title: {
+            text: 'Count'
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
         xaxis: {
+          title: {
+            text: `Dose\n(${doseUnits})`,
+          },
           categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
         }
       },
@@ -134,7 +166,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
         id: NURIMS_DOSIMETRY_BATCH_ID,
         align: 'left',
         disablePadding: true,
-        label: 'Batch ID',
+        label: <Typography>Batch ID</Typography>,
         width: '15%',
         sortField: true,
       },
@@ -142,7 +174,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
         id: NURIMS_DOSIMETRY_TIMESTAMP,
         align: 'left',
         disablePadding: true,
-        label: 'Timestamp',
+        label: <Typography>Timestamp</Typography>,
         width: '15%',
         sortField: true,
       },
@@ -150,42 +182,43 @@ class PersonnelDosimetryEvaluationDataView extends Component {
         id: NURIMS_DOSIMETRY_MONITOR_PERIOD,
         align: 'left',
         disablePadding: true,
-        label: 'Monitor Period',
+        label: <Typography>Monitor Period</Typography>,
         width: '15%',
         sortField: true,
       },
       {
         id: NURIMS_DOSIMETRY_SHALLOW_DOSE,
-        align: 'left',
+        align: 'center',
         disablePadding: true,
-        label: 'Shallow',
-        width: '10%',
+        label: <span><Typography>Shallow</Typography><Typography>({doseUnits})</Typography></span>,
+        width: '8%',
         sortField: true,
+        format: (data) => {return data ? data.toFixed(2) : data},
       },
       {
         id: NURIMS_DOSIMETRY_DEEP_DOSE,
-        align: 'left',
+        align: 'center',
         disablePadding: true,
-        label: 'Deep',
-        width: '10%',
+        label: <span><Typography>Deep</Typography><Typography>({doseUnits})</Typography></span>,
+        width: '8%',
         sortField: true,
         format: (data) => {return data ? data.toFixed(2) : data},
       },
       {
         id: NURIMS_DOSIMETRY_EXTREMITY_DOSE,
-        align: 'left',
+        align: 'center',
         disablePadding: true,
-        label: 'Extremity',
-        width: '10%',
+        label: <span><Typography>Extremity</Typography><Typography>({doseUnits})</Typography></span>,
+        width: '8%',
         sortField: true,
         format: (data) => {return data ? data.toFixed(2) : data},
       },
       {
         id: NURIMS_DOSIMETRY_WRIST_DOSE,
-        align: 'left',
+        align: 'center',
         disablePadding: true,
-        label: 'Wrist',
-        width: '10%',
+        label: <span><Typography>Wrist</Typography><Typography>({doseUnits})</Typography></span>,
+        width: '8%',
         sortField: true,
         format: (data) => {return data ? data.toFixed(2) : data},
       },
@@ -198,40 +231,36 @@ class PersonnelDosimetryEvaluationDataView extends Component {
     if (X.length < 3) {
       return [];
     }
+
     const bins = [];
     const extent = ss.extent(X);
-    const interval = (extent[1] - extent[0]) / (nbins + 1);
+    const interval = (extent[1] - extent[0]) / nbins;
 
-      console.log("MIN,MAX,INTERVAL", extent, interval)
     //Setup Bins
     let binCount = 0;
     for (let i = extent[0]; i < extent[1]; i += interval) {
       bins.push({
-        label: binCount++,
+        label: (i + (interval / 2)).toFixed(2).replaceAll("0.", "."),
         min: i,
         max: i + interval,
         count: 0
       });
     }
 
-    console.log(">>>>BINS", bins)
-
     // Loop through data and add to bin's count
     for (const item of X) {
       for (const bin of bins) {
-        if (item > bin.min && item <= bin.max) {
-          bin.count++;
+        if (item >= bin.min && item < bin.max) {
+          bin.count += 1;
           break;
         }
       }
+      // count the value of X == bin[last bin].max
+      if (item === extent[1]) {
+        bins[bins.length-1].count++;
+      }
     }
-    console.log(">>>>X", X)
-    console.log(">>>>BINS", bins)
 
-    // const _bins = [];
-    // for (const b of bins) {
-    //   _bins.push(b.count);
-    // }
     return bins;
   }
 
@@ -263,12 +292,11 @@ class PersonnelDosimetryEvaluationDataView extends Component {
       }
     }
     const series_data = [];
+    const h_series_data = [];
     let q0 = [];
     let q1 = [];
     let b0 = [];
     let b1 = [];
-    let extent0 = [0, 0];
-    let extent1 = [0, 0];
     let d0_mean = 0;
     let d1_mean = 0;
     let d0_std = 0;
@@ -276,10 +304,8 @@ class PersonnelDosimetryEvaluationDataView extends Component {
     let d0_skewness = 0;
     let d1_skewness = 0;
     if (dosimetryType === "wholebody") {
-      q0 = d0.length > 4 ? ss.quantile(d0, [0.25, 0.5, 0.75]) : [0,0,0];
-      q1 = d1.length > 4 ? ss.quantile(d1, [0.25, 0.5, 0.75]) : [0,0,0];
-      extent0 = d0.length > 4 ? ss.extent(d0) : [0, 0];
-      extent1 = d1.length > 4 ? ss.extent(d1) : [0, 0];
+      q0 = d0.length > 4 ? ss.quantile(d0, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
+      q1 = d1.length > 4 ? ss.quantile(d1, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
       d0_mean = d0.length > 1 ? ss.mean(d0) : 0;
       d1_mean = d1.length > 1 ? ss.mean(d1) : 0;
       d0_std = d0.length > 4 ? ss.standardDeviation(d0) : 0;
@@ -291,41 +317,75 @@ class PersonnelDosimetryEvaluationDataView extends Component {
       series_data.push(
         {
           x: 'Shallow',
-          y: [extent0[0], q0[0], q0[1], q0[2], extent0[1]]
+          y: [parseFloat(q0[0].toFixed(2)),
+              parseFloat(q0[1].toFixed(2)),
+              parseFloat(q0[2].toFixed(2)),
+              parseFloat(q0[3].toFixed(2)),
+              parseFloat(q0[4].toFixed(2))]
         },
         {
           x: 'Deep',
-          y: [extent1[0], q1[0], q1[1], q1[2], extent1[1]]
+          y: [parseFloat(q1[0].toFixed(2)),
+              parseFloat(q1[1].toFixed(2)),
+              parseFloat(q1[2].toFixed(2)),
+              parseFloat(q1[3].toFixed(2)),
+              parseFloat(q1[4].toFixed(2))]
         },
       );
+      h_series_data.push(
+        {
+          name: "Shallow",
+          data: b0.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
+        },
+        {
+          name: "Deep",
+          data: b1.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
+        }
+      );
     } else if (dosimetryType === "extremity") {
-      q0 = d0.length > 4 ? ss.quantile(d0, [0.25, 0.5, 0.75]) : [0,0,0];
-      extent0 = d0.length > 4 ? ss.extent(d0) : [0, 0];
+      q0 = d0.length > 4 ? ss.quantile(d0, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
       d0_mean = d0.length > 1 ? ss.mean(d0) : 0;
       d0_std = d0.length > 4 ? ss.standardDeviation(d0) : 0;
       d0_skewness = d0.length > 4 ? ss.sampleSkewness(d0) : 0;
       series_data.push(
         {
           x: 'Extremity',
-          y: [extent0[0], q0[0], q0[1], q0[2], extent0[1]]
+          y: [parseFloat(q0[0].toFixed(2)),
+            parseFloat(q0[1].toFixed(2)),
+            parseFloat(q0[2].toFixed(2)),
+            parseFloat(q0[3].toFixed(2)),
+            parseFloat(q0[4].toFixed(2))]
         }
       );
+      h_series_data.push(
+        {
+          name: "Extremity",
+          data: b0.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
+        },
+      );
     } else if (dosimetryType === "wrist") {
-      q0 = d0.length > 4 ? ss.quantile(d0, [0.25, 0.5, 0.75]) : [0,0,0];
-      extent0 = d0.length > 4 ? ss.extent(d0) : [0, 0];
+      q0 = d0.length > 4 ? ss.quantile(d0, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
       d0_mean = d0.length > 1 ? ss.mean(d0) : 0;
       d0_std = d0.length > 4 ? ss.standardDeviation(d0) : 0;
       d0_skewness = d0.length > 4 ? ss.sampleSkewness(d0) : 0;
       series_data.push(
         {
           x: 'Wrist',
-          y: [extent0[0], q0[0], q0[1], q0[2], extent0[1]]
+          y: [parseFloat(q0[0].toFixed(2)),
+            parseFloat(q0[1].toFixed(2)),
+            parseFloat(q0[2].toFixed(2)),
+            parseFloat(q0[3].toFixed(2)),
+            parseFloat(q0[4].toFixed(2))]
         }
+      );
+      h_series_data.push(
+        {
+          name: "Wrist",
+          data: b0.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
+        },
       );
     }
     console.log("FROM", ts_min, "TO", ts_max)
-    console.log("EXTENT0", extent0)
-    console.log("EXTENT1", extent1)
     console.log("MEAN0", d0_mean)
     console.log("MEAN1", d1_mean)
     console.log("QUANTILE0", q0)
@@ -339,10 +399,10 @@ class PersonnelDosimetryEvaluationDataView extends Component {
     this.setState(pstate => {
       return {
         nobs: d0.length,
-        d0_min: extent0[0],
-        d0_max: extent0[1],
-        d1_min: extent1[0],
-        d1_max: extent1[1],
+        d0_min: q0[0],
+        d0_max: q0[4],
+        d1_min: q1[0],
+        d1_max: q1[4],
         d0_mean: d0_mean,
         d1_mean: d1_mean,
         d0_std: d0_std,
@@ -364,19 +424,10 @@ class PersonnelDosimetryEvaluationDataView extends Component {
         hoptions: {
           ...this.state.hoptions,
           xaxis: {
-            categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            categories: b0.reduce((prev, obj) => {prev.push(obj.label); return prev;}, [])
           }
         },
-        hseries: [
-          {
-            name: "Shallow",
-            data: b0.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
-          },
-          {
-            name: "Deep",
-            data: b1.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
-          }
-        ]
+        hseries: h_series_data
       }
     });
   }
@@ -518,7 +569,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
               title={"Dosimetry Data"}
               disabled={false}
               rows={this.rows}
-              rowsPerPage={10}
+              rowsPerPage={8}
               selectedRow={selection}
               selectionMetadataField={""}
               // onRowSelection={this.handleListItemSelection}
