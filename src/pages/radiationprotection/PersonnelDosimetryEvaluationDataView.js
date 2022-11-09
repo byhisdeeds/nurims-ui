@@ -10,7 +10,7 @@ import {
 import {parseISO, format} from "date-fns";
 import {
   getRecordMetadataValue,
-  getDateRangeFromDateString
+  getDateRangeFromDateString, getDateRangeAsDays
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
@@ -33,6 +33,7 @@ import {PageableTable} from "../../components/CommonComponents";
 import {withTheme} from "@mui/styles";
 import Charts from "react-apexcharts";
 import * as ss from "simple-statistics"
+import {doseStats} from "../../utils/StatsUtils";
 
 const doseUnits = "mSv";
 
@@ -98,7 +99,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
           forceNiceScale: true,
           min: 0,
         },
-        tooltip : {
+        tooltip: {
           theme: 'dark',
         },
         title: {
@@ -126,7 +127,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
           id: "basic-bar",
           foreColor: props.theme.palette.text.secondary
         },
-        tooltip : {
+        tooltip: {
           theme: 'dark',
         },
         yaxis: {
@@ -159,7 +160,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
         align: 'center',
         disablePadding: true,
         label: '',
-        width: '5%',
+        width: '10px',
         sortField: true,
       },
       {
@@ -167,7 +168,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
         align: 'left',
         disablePadding: true,
         label: <Typography>Batch ID</Typography>,
-        width: '15%',
+        width: '10px',
         sortField: true,
       },
       {
@@ -175,227 +176,232 @@ class PersonnelDosimetryEvaluationDataView extends Component {
         align: 'left',
         disablePadding: true,
         label: <Typography>Timestamp</Typography>,
-        width: '15%',
+        width: '10px',
         sortField: true,
+        format: (row, cell) => {
+          return row[cell] ? format(parseISO(row[cell]), "yyyy-MM-dd HH:mm:ss") : row[cell]
+        },
       },
       {
         id: NURIMS_DOSIMETRY_MONITOR_PERIOD,
         align: 'left',
         disablePadding: true,
         label: <Typography>Monitor Period</Typography>,
-        width: '15%',
+        width: '10px',
         sortField: true,
+        format: (row, cell) => {
+          return row[cell] ?
+            <span>
+            <Typography>{row[cell]}</Typography>
+            <Typography>{getDateRangeAsDays(row[cell].replaceAll(" to ", "|"), 0)} days</Typography>
+          </span> : row[cell]
+        },
       },
       {
         id: NURIMS_DOSIMETRY_SHALLOW_DOSE,
-        align: 'center',
+        align: 'left',
         disablePadding: true,
         label: <span><Typography>Shallow</Typography><Typography>({doseUnits})</Typography></span>,
-        width: '8%',
+        width: '10px',
         sortField: true,
-        format: (data) => {return data ? data.toFixed(2) : data},
+        format: (row, cell) => {
+          return row[cell] ?
+            <span>
+            <Typography>{row[cell].toFixed(2)}</Typography>
+            <Typography>{(row[cell] / row["days"]).toFixed(3)} / day</Typography>
+          </span> : row[cell]
+        },
       },
       {
         id: NURIMS_DOSIMETRY_DEEP_DOSE,
-        align: 'center',
+        align: 'left',
         disablePadding: true,
         label: <span><Typography>Deep</Typography><Typography>({doseUnits})</Typography></span>,
-        width: '8%',
+        width: '10px',
         sortField: true,
-        format: (data) => {return data ? data.toFixed(2) : data},
+        format: (row, cell) => {
+          return row[cell] ? row[cell].toFixed(2) : row[cell]
+        },
       },
       {
         id: NURIMS_DOSIMETRY_EXTREMITY_DOSE,
-        align: 'center',
+        align: 'left',
         disablePadding: true,
         label: <span><Typography>Extremity</Typography><Typography>({doseUnits})</Typography></span>,
-        width: '8%',
+        width: '10px',
         sortField: true,
-        format: (data) => {return data ? data.toFixed(2) : data},
+        format: (row, cell) => {
+          return row[cell] ? row[cell].toFixed(2) : row[cell]
+        },
       },
       {
         id: NURIMS_DOSIMETRY_WRIST_DOSE,
-        align: 'center',
+        align: 'left',
         disablePadding: true,
         label: <span><Typography>Wrist</Typography><Typography>({doseUnits})</Typography></span>,
-        width: '8%',
+        width: '10px',
         sortField: true,
-        format: (data) => {return data ? data.toFixed(2) : data},
+        format: (row, cell) => {
+          return row[cell] ? row[cell].toFixed(2) : row[cell]
+        },
       },
     ];
     this.rows = [];
     this.rawData = [];
   }
 
-  histogram = (X, nbins) => {
-    if (X.length < 3) {
-      return [];
-    }
-
-    const bins = [];
-    const extent = ss.extent(X);
-    const interval = (extent[1] - extent[0]) / nbins;
-
-    //Setup Bins
-    let binCount = 0;
-    for (let i = extent[0]; i < extent[1]; i += interval) {
-      bins.push({
-        label: (i + (interval / 2)).toFixed(2).replaceAll("0.", "."),
-        min: i,
-        max: i + interval,
-        count: 0
-      });
-    }
-
-    // Loop through data and add to bin's count
-    for (const item of X) {
-      for (const bin of bins) {
-        if (item >= bin.min && item < bin.max) {
-          bin.count += 1;
-          break;
-        }
-      }
-      // count the value of X == bin[last bin].max
-      if (item === extent[1]) {
-        bins[bins.length-1].count++;
-      }
-    }
-
-    return bins;
-  }
-
   updateStatistics = (rows, dosimetryType) => {
-    let ts_min = null;
-    let ts_max = null;
-    const d0 = [];
-    const d1 = [];
-    // re-calculate descriptive statistics dataset
-    for (const row of rows) {
-      if (row.use) {
-        const ts = parseISO(row[NURIMS_DOSIMETRY_TIMESTAMP]);
-        if (ts_min === null || ts_max === null) {
-          ts_min = ts;
-          ts_max = ts;
-        } else if (ts.getTime() <= ts_min.getTime()) {
-          ts_min = ts;
-        } else if (ts.getTime() >= ts_max.getTime()) {
-          ts_max = ts;
-        }
-        if (row[NURIMS_DOSIMETRY_TYPE] === "wholebody" && dosimetryType === "wholebody") {
-          d0.push(row[NURIMS_DOSIMETRY_SHALLOW_DOSE]);
-          d1.push(row[NURIMS_DOSIMETRY_DEEP_DOSE]);
-        } else if (row[NURIMS_DOSIMETRY_TYPE] === "extremity" && dosimetryType === "extremity") {
-          d0.push(row[NURIMS_DOSIMETRY_EXTREMITY_DOSE]);
-        } else if (row[NURIMS_DOSIMETRY_TYPE] === "wrist" && dosimetryType === "wrist") {
-          d0.push(row[NURIMS_DOSIMETRY_WRIST_DOSE]);
-        }
-      }
-    }
-    const series_data = [];
-    const h_series_data = [];
-    let q0 = [];
-    let q1 = [];
-    let b0 = [];
-    let b1 = [];
-    let d0_mean = 0;
-    let d1_mean = 0;
-    let d0_std = 0;
-    let d1_std = 0;
-    let d0_skewness = 0;
-    let d1_skewness = 0;
-    if (dosimetryType === "wholebody") {
-      q0 = d0.length > 4 ? ss.quantile(d0, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
-      q1 = d1.length > 4 ? ss.quantile(d1, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
-      d0_mean = d0.length > 1 ? ss.mean(d0) : 0;
-      d1_mean = d1.length > 1 ? ss.mean(d1) : 0;
-      d0_std = d0.length > 4 ? ss.standardDeviation(d0) : 0;
-      d1_std = d1.length > 4 ? ss.standardDeviation(d1) : 0;
-      d0_skewness = d0.length > 4 ? ss.sampleSkewness(d0) : 0;
-      d1_skewness = d1.length > 4 ? ss.sampleSkewness(d1) : 0;
-      b0 = d0.length > 2 ? this.histogram(d0, 10) : [];
-      b1 = d1.length > 2 ? this.histogram(d1, 10) : [];
-      series_data.push(
-        {
-          x: 'Shallow',
-          y: [parseFloat(q0[0].toFixed(2)),
-              parseFloat(q0[1].toFixed(2)),
-              parseFloat(q0[2].toFixed(2)),
-              parseFloat(q0[3].toFixed(2)),
-              parseFloat(q0[4].toFixed(2))]
-        },
-        {
-          x: 'Deep',
-          y: [parseFloat(q1[0].toFixed(2)),
-              parseFloat(q1[1].toFixed(2)),
-              parseFloat(q1[2].toFixed(2)),
-              parseFloat(q1[3].toFixed(2)),
-              parseFloat(q1[4].toFixed(2))]
-        },
-      );
-      h_series_data.push(
-        {
-          name: "Shallow",
-          data: b0.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
-        },
-        {
-          name: "Deep",
-          data: b1.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
-        }
-      );
-    } else if (dosimetryType === "extremity") {
-      q0 = d0.length > 4 ? ss.quantile(d0, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
-      d0_mean = d0.length > 1 ? ss.mean(d0) : 0;
-      d0_std = d0.length > 4 ? ss.standardDeviation(d0) : 0;
-      d0_skewness = d0.length > 4 ? ss.sampleSkewness(d0) : 0;
-      series_data.push(
-        {
-          x: 'Extremity',
-          y: [parseFloat(q0[0].toFixed(2)),
-            parseFloat(q0[1].toFixed(2)),
-            parseFloat(q0[2].toFixed(2)),
-            parseFloat(q0[3].toFixed(2)),
-            parseFloat(q0[4].toFixed(2))]
-        }
-      );
-      h_series_data.push(
-        {
-          name: "Extremity",
-          data: b0.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
-        },
-      );
-    } else if (dosimetryType === "wrist") {
-      q0 = d0.length > 4 ? ss.quantile(d0, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
-      d0_mean = d0.length > 1 ? ss.mean(d0) : 0;
-      d0_std = d0.length > 4 ? ss.standardDeviation(d0) : 0;
-      d0_skewness = d0.length > 4 ? ss.sampleSkewness(d0) : 0;
-      series_data.push(
-        {
-          x: 'Wrist',
-          y: [parseFloat(q0[0].toFixed(2)),
-            parseFloat(q0[1].toFixed(2)),
-            parseFloat(q0[2].toFixed(2)),
-            parseFloat(q0[3].toFixed(2)),
-            parseFloat(q0[4].toFixed(2))]
-        }
-      );
-      h_series_data.push(
-        {
-          name: "Wrist",
-          data: b0.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
-        },
-      );
-    }
-    console.log("FROM", ts_min, "TO", ts_max)
-    console.log("MEAN0", d0_mean)
-    console.log("MEAN1", d1_mean)
-    console.log("QUANTILE0", q0)
-    console.log("QUANTILE1", q1)
-    console.log("STD0", d0_std)
-    console.log("STD1", d1_std)
-    console.log("SKEWNESS0", d0_skewness)
-    console.log("SKEWNESS1", d1_skewness)
-    console.log("BINS0", b0)
-    console.log("BINS1", b1)
+
+    // let ts_min = null;
+    // let ts_max = null;
+    // const d0 = [];
+    // const d1 = [];
+    // // re-calculate descriptive statistics dataset
+    // for (const row of rows) {
+    //   if (row.use) {
+    //     const ts = parseISO(row[NURIMS_DOSIMETRY_TIMESTAMP]);
+    //     if (ts_min === null || ts_max === null) {
+    //       ts_min = ts;
+    //       ts_max = ts;
+    //     } else if (ts.getTime() <= ts_min.getTime()) {
+    //       ts_min = ts;
+    //     } else if (ts.getTime() >= ts_max.getTime()) {
+    //       ts_max = ts;
+    //     }
+    //     if (row[NURIMS_DOSIMETRY_TYPE] === "wholebody" && dosimetryType === "wholebody") {
+    //       d0.push(row[NURIMS_DOSIMETRY_SHALLOW_DOSE]);
+    //       d1.push(row[NURIMS_DOSIMETRY_DEEP_DOSE]);
+    //     } else if (row[NURIMS_DOSIMETRY_TYPE] === "extremity" && dosimetryType === "extremity") {
+    //       d0.push(row[NURIMS_DOSIMETRY_EXTREMITY_DOSE]);
+    //     } else if (row[NURIMS_DOSIMETRY_TYPE] === "wrist" && dosimetryType === "wrist") {
+    //       d0.push(row[NURIMS_DOSIMETRY_WRIST_DOSE]);
+    //     }
+    //   }
+    // }
+    // const series_data = [];
+    // const h_series_data = [];
+    // let q0 = [];
+    // let q1 = [];
+    // let b0 = [];
+    // let b1 = [];
+    // let d0_mean = 0;
+    // let d1_mean = 0;
+    // let d0_std = 0;
+    // let d1_std = 0;
+    // let d0_skewness = 0;
+    // let d1_skewness = 0;
+    // if (dosimetryType === "wholebody") {
+    //   q0 = d0.length > 4 ? ss.quantile(d0, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
+    //   q1 = d1.length > 4 ? ss.quantile(d1, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
+    //   d0_mean = d0.length > 1 ? ss.mean(d0) : 0;
+    //   d1_mean = d1.length > 1 ? ss.mean(d1) : 0;
+    //   d0_std = d0.length > 4 ? ss.standardDeviation(d0) : 0;
+    //   d1_std = d1.length > 4 ? ss.standardDeviation(d1) : 0;
+    //   d0_skewness = d0.length > 4 ? ss.sampleSkewness(d0) : 0;
+    //   d1_skewness = d1.length > 4 ? ss.sampleSkewness(d1) : 0;
+    //   b0 = d0.length > 2 ? histogram(d0, 10) : [];
+    //   b1 = d1.length > 2 ? histogram(d1, 10) : [];
+    //   series_data.push(
+    //     {
+    //       x: 'Shallow',
+    //       y: [parseFloat(q0[0].toFixed(2)),
+    //           parseFloat(q0[1].toFixed(2)),
+    //           parseFloat(q0[2].toFixed(2)),
+    //           parseFloat(q0[3].toFixed(2)),
+    //           parseFloat(q0[4].toFixed(2))]
+    //     },
+    //     {
+    //       x: 'Deep',
+    //       y: [parseFloat(q1[0].toFixed(2)),
+    //           parseFloat(q1[1].toFixed(2)),
+    //           parseFloat(q1[2].toFixed(2)),
+    //           parseFloat(q1[3].toFixed(2)),
+    //           parseFloat(q1[4].toFixed(2))]
+    //     },
+    //   );
+    //   h_series_data.push(
+    //     {
+    //       name: "Shallow",
+    //       data: b0.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
+    //     },
+    //     {
+    //       name: "Deep",
+    //       data: b1.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
+    //     }
+    //   );
+    // } else if (dosimetryType === "extremity") {
+    //   q0 = d0.length > 4 ? ss.quantile(d0, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
+    //   d0_mean = d0.length > 1 ? ss.mean(d0) : 0;
+    //   d0_std = d0.length > 4 ? ss.standardDeviation(d0) : 0;
+    //   d0_skewness = d0.length > 4 ? ss.sampleSkewness(d0) : 0;
+    //   series_data.push(
+    //     {
+    //       x: 'Extremity',
+    //       y: [parseFloat(q0[0].toFixed(2)),
+    //         parseFloat(q0[1].toFixed(2)),
+    //         parseFloat(q0[2].toFixed(2)),
+    //         parseFloat(q0[3].toFixed(2)),
+    //         parseFloat(q0[4].toFixed(2))]
+    //     }
+    //   );
+    //   h_series_data.push(
+    //     {
+    //       name: "Extremity",
+    //       data: b0.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
+    //     },
+    //   );
+    // } else if (dosimetryType === "wrist") {
+    //   q0 = d0.length > 4 ? ss.quantile(d0, [0.01, 0.25, 0.5, 0.75, 0.99]) : [0,0,0,0,0];
+    //   d0_mean = d0.length > 1 ? ss.mean(d0) : 0;
+    //   d0_std = d0.length > 4 ? ss.standardDeviation(d0) : 0;
+    //   d0_skewness = d0.length > 4 ? ss.sampleSkewness(d0) : 0;
+    //   series_data.push(
+    //     {
+    //       x: 'Wrist',
+    //       y: [parseFloat(q0[0].toFixed(2)),
+    //         parseFloat(q0[1].toFixed(2)),
+    //         parseFloat(q0[2].toFixed(2)),
+    //         parseFloat(q0[3].toFixed(2)),
+    //         parseFloat(q0[4].toFixed(2))]
+    //     }
+    //   );
+    //   h_series_data.push(
+    //     {
+    //       name: "Wrist",
+    //       data: b0.reduce((prev, obj) => {prev.push(obj.count); return prev;}, [])
+    //     },
+    //   );
+    // }
+    // console.log("FROM", ts_min, "TO", ts_max)
+    // console.log("MEAN0", d0_mean)
+    // console.log("MEAN1", d1_mean)
+    // console.log("QUANTILE0", q0)
+    // console.log("QUANTILE1", q1)
+    // console.log("STD0", d0_std)
+    // console.log("STD1", d1_std)
+    // console.log("SKEWNESS0", d0_skewness)
+    // console.log("SKEWNESS1", d1_skewness)
+    // console.log("BINS0", b0)
+    // console.log("BINS1", b1)
+    // this.setState(pstate => {
+    //   return doseStats(rows, dosimetryType);
+    // });
+    const {
+      d0,
+      q0,
+      q1,
+      d0_mean,
+      d1_mean,
+      d0_std,
+      d1_std,
+      d0_skewness,
+      d1_skewness,
+      series_data,
+      ts_min,
+      ts_max,
+      b0,
+      h_series_data
+    } = doseStats(rows, dosimetryType);
     this.setState(pstate => {
       return {
         nobs: d0.length,
@@ -424,7 +430,10 @@ class PersonnelDosimetryEvaluationDataView extends Component {
         hoptions: {
           ...this.state.hoptions,
           xaxis: {
-            categories: b0.reduce((prev, obj) => {prev.push(obj.label); return prev;}, [])
+            categories: b0.reduce((prev, obj) => {
+              prev.push(obj.label);
+              return prev;
+            }, [])
           }
         },
         hseries: h_series_data
@@ -475,6 +484,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
     this.rawData = getRecordMetadataValue(record, NURIMS_DOSIMETRY_MEASUREMENTS, []);
     for (const r of this.rawData) {
       r["use"] = true;
+      r["days"] = getDateRangeAsDays(r[NURIMS_DOSIMETRY_MONITOR_PERIOD].replaceAll(" to ", "|"), 1);
     }
     // filter data based on default record type
     this.rows = filterRecordsByRecordType(this.rawData, dosimetryType)
@@ -498,15 +508,18 @@ class PersonnelDosimetryEvaluationDataView extends Component {
             this.props.theme.palette.text.disabled
         }}
       >
-        {cell.id === "use" && <Checkbox id={`data-filter-${row[NURIMS_DOSIMETRY_BATCH_ID]}`} checked={row[cell.id]} onChange={this.handleChange} />}
-        {cell.id !== "use" && (cell.hasOwnProperty("format") ? cell.format(row[cell.id]) : row[cell.id])}
+        {cell.id === "use" && <Checkbox id={`data-filter-${row[NURIMS_DOSIMETRY_BATCH_ID]}`} checked={row[cell.id]}
+                                        onChange={this.handleChange}/>}
+        {cell.id !== "use" && (cell.hasOwnProperty("format") ? cell.format(row, cell.id) : row[cell.id])}
       </TableCell>
     )
   }
 
   render() {
-    const {properties, busy, selection, dosimetryType, options, series, nobs, d0_min, d0_max, d1_min, d1_max,
-      d0_mean, d1_mean, d0_std, d1_std, d0_skewness, d1_skewness, hoptions, hseries} = this.state;
+    const {
+      properties, busy, selection, dosimetryType, options, series, nobs, d0_min, d0_max, d1_min, d1_max,
+      d0_mean, d1_mean, d0_std, d1_std, d0_skewness, d1_skewness, hoptions, hseries
+    } = this.state;
     const monitorPeriod = getMonitorPeriod(selection, NURIMS_DOSIMETRY_MONITOR_PERIOD, [null, null]);
     // const doseProviderId = getRecordMetadataValue(measurements, "nurims.entity.doseproviderid", "|").split('|');
     // const wholeBodyMonitor = getRecordMetadataValue(measurements, "nurims.entity.iswholebodymonitored", "false");
@@ -514,7 +527,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
     // const wristMonitor = getRecordMetadataValue(measurements, "nurims.entity.iswristmonitored", "false");
     const defaultUnits = getPropertyValue(properties, "nurims.dosimetry.units", "");
     if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "render", "dosimetryType", dosimetryType, "options", options);
+      ConsoleLog(this.Module, "render", "dosimetryType", dosimetryType, "options", options, "rows", this.rows);
     }
     return (
       <Box
@@ -586,62 +599,89 @@ class PersonnelDosimetryEvaluationDataView extends Component {
                   <Grid item xs={2} style={{textAlign: "end", paddingRight: 8, paddingTop: 8}}>
                     N :
                   </Grid>
-                  <Grid item xs={2} style={{textAlign: "start", backgroundColor: this.props.theme.palette.action.disabledBackground}}>
+                  <Grid item xs={2} style={{
+                    textAlign: "start",
+                    backgroundColor: this.props.theme.palette.action.disabledBackground
+                  }}>
                     {nobs}
                   </Grid>
                   <Grid item xs={2} style={{textAlign: "end", paddingRight: 8}}>
                     Mean :
                   </Grid>
-                  <Grid item xs={2} style={{textAlign: "start", backgroundColor: this.props.theme.palette.action.disabledBackground}}>
+                  <Grid item xs={2} style={{
+                    textAlign: "start",
+                    backgroundColor: this.props.theme.palette.action.disabledBackground
+                  }}>
                     <Typography>{d0_mean.toFixed(2)} (S)</Typography>
                     {dosimetryType === "wholebody" && <Typography>{d1_mean.toFixed(2)} (D)</Typography>}
                   </Grid>
                   <Grid item xs={2} style={{textAlign: "end", paddingRight: 8}}>
                     Min. :
                   </Grid>
-                  <Grid item xs={2} style={{textAlign: "start", backgroundColor: this.props.theme.palette.action.disabledBackground}}>
+                  <Grid item xs={2} style={{
+                    textAlign: "start",
+                    backgroundColor: this.props.theme.palette.action.disabledBackground
+                  }}>
                     <Typography>{d0_min.toFixed(2)} (S)</Typography>
                     {dosimetryType === "wholebody" && <Typography>{d1_min.toFixed(2)} (D)</Typography>}
                   </Grid>
                   <Grid item xs={2} style={{textAlign: "end", paddingRight: 8}}>
                     Max. :
                   </Grid>
-                  <Grid item xs={2} style={{textAlign: "start", backgroundColor: this.props.theme.palette.action.disabledBackground}}>
+                  <Grid item xs={2} style={{
+                    textAlign: "start",
+                    backgroundColor: this.props.theme.palette.action.disabledBackground
+                  }}>
                     <Typography>{d0_max.toFixed(2)} (S)</Typography>
                     {dosimetryType === "wholebody" && <Typography>{d1_max.toFixed(2)} (D)</Typography>}
                   </Grid>
                   <Grid item xs={2} style={{textAlign: "end", paddingRight: 8}}>
                     Std. :
                   </Grid>
-                  <Grid item xs={2} style={{textAlign: "start", backgroundColor: this.props.theme.palette.action.disabledBackground}}>
+                  <Grid item xs={2} style={{
+                    textAlign: "start",
+                    backgroundColor: this.props.theme.palette.action.disabledBackground
+                  }}>
                     <Typography>{d0_std.toFixed(2)} (S)</Typography>
                     {dosimetryType === "wholebody" && <Typography>{d1_std.toFixed(2)} (D)</Typography>}
                   </Grid>
                   <Grid item xs={2} style={{textAlign: "end", paddingRight: 8}}>
                     Skew. :
                   </Grid>
-                  <Grid item xs={2} style={{textAlign: "start", backgroundColor: this.props.theme.palette.action.disabledBackground}}>
+                  <Grid item xs={2} style={{
+                    textAlign: "start",
+                    backgroundColor: this.props.theme.palette.action.disabledBackground
+                  }}>
                     <Typography>{d0_skewness.toFixed(2)} (S)</Typography>
                     {dosimetryType === "wholebody" && <Typography>{d1_skewness.toFixed(2)} (D)</Typography>}
                   </Grid>
                   <Grid item xs={2} style={{textAlign: "end", paddingRight: 8}}>
                     Last Dose :
                   </Grid>
-                  <Grid item xs={2} style={{textAlign: "start", backgroundColor: this.props.theme.palette.action.disabledBackground}}>
+                  <Grid item xs={2} style={{
+                    textAlign: "start",
+                    backgroundColor: this.props.theme.palette.action.disabledBackground
+                  }}>
                     <Typography>{d0_skewness.toFixed(2)} (S)</Typography>
                     {dosimetryType === "wholebody" && <Typography>{d1_skewness.toFixed(2)} (D)</Typography>}
                   </Grid>
                   <Grid item xs={2} style={{textAlign: "end", paddingRight: 8}}>
                     Year Dose :
                   </Grid>
-                  <Grid item xs={2} style={{textAlign: "start", backgroundColor: this.props.theme.palette.action.disabledBackground}}>
+                  <Grid item xs={2} style={{
+                    textAlign: "start",
+                    backgroundColor: this.props.theme.palette.action.disabledBackground
+                  }}>
                     <Typography>{d0_skewness.toFixed(2)} (S)</Typography>
                     {dosimetryType === "wholebody" && <Typography>{d1_skewness.toFixed(2)} (D)</Typography>}
                   </Grid>
                   <Grid item xs={2} style={{textAlign: "end", paddingRight: 8}}>
                     Total Dose :
                   </Grid>
-                  <Grid item xs={2} style={{textAlign: "start", backgroundColor: this.props.theme.palette.action.disabledBackground}}>
+                  <Grid item xs={2} style={{
+                    textAlign: "start",
+                    backgroundColor: this.props.theme.palette.action.disabledBackground
+                  }}>
                     <Typography>{d0_skewness.toFixed(2)} (S)</Typography>
                     {dosimetryType === "wholebody" && <Typography>{d1_skewness.toFixed(2)} (D)</Typography>}
                   </Grid>

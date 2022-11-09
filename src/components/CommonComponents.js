@@ -495,7 +495,7 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
             <TableCell
               style={{width: cell.width}}
               key={cell.id}
-              align={cell.align}
+              align={"center"} // {cell.align}
               padding={cell.disablePadding ? 'none' : 'normal'}
               sortDirection={cell.sortField ? order : false}
             >

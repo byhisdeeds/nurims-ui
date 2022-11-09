@@ -1,4 +1,6 @@
 import {NURIMS_WITHDRAWN} from "./constants";
+import {differenceInDays} from "date-fns";
+
 
 export function isRecordArchived(record) {
   return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
@@ -123,6 +125,27 @@ export function getDateFromDateString(dateString, missingValue) {
     }
   }
   return (missingValue) ? missingValue : null;
+}
+
+export function getDateRangeAsDays(range, missingValue) {
+  if (range.includes('|')) {
+    const parts = range.split("|");
+    if (parts.length === 2) {
+      const data = [];
+      for (let i = 0; i < 2; i++) {
+        let d = parts[i].substring(0, 10).split('-');
+        if (d.length === 3) {
+          // Please pay attention to the month (d[1]); JavaScript counts months from 0:
+          // January - 0, February - 1, etc.
+          data.push(new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2])));
+        } else {
+          data.push(new Date());
+        }
+      }
+      return differenceInDays(data[1], data[0]);
+    }
+  }
+  return (missingValue) ? missingValue : 0;
 }
 
 export function setDoseRecordMetadataValue(person_record, dosimeter, dosimeterType, key, value) {
