@@ -11,6 +11,7 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {
+  CMD_GENERATE_PERSONNEL_DOSE_EVALUATION_PDF,
   CMD_GET_GLOSSARY_TERMS,
 } from "../../utils/constants";
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -22,6 +23,7 @@ import PersonnelList from "./PersonnelList";
 import BusyIndicator from "../../components/BusyIndicator";
 import {TitleComponent} from "../../components/CommonComponents";
 import PersonnelDosimetryEvaluationDataView from "./PersonnelDosimetryEvaluationDataView";
+import {isCommandResponse, messageHasResponse} from "../../utils/WebsocketUtils";
 
 export const PERSONNELDOSIMETRYEVALUATION_REF = "PersonnelDosimetryEvaluation";
 
@@ -64,6 +66,15 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
       module: this.Module,
     });
     this.setState({include_archived: include_archived});
+  }
+  ws_message(message) {
+    if (isCommandResponse(message, CMD_GENERATE_PERSONNEL_DOSE_EVALUATION_PDF)) {
+      if (this.dataRef.current) {
+        this.dataRef.current.ws_message(message);
+      }
+    } else {
+      super.ws_message(message);
+    }
   }
 
   onSelection = (selection) => {
@@ -116,6 +127,7 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
           <Grid item xs={9}>
             <PersonnelDosimetryEvaluationDataView
               ref={this.dataRef}
+              send={this.props.send}
               properties={this.props.properties}
               onChange={this.onRecordMetadataChanged}
             />

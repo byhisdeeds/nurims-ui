@@ -5,16 +5,22 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle, FormControlLabel, Grid, Stack, Switch, Typography
+  DialogTitle,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  Switch,
 } from "@mui/material";
 import {
   ITEM_ID,
   NURIMS_TITLE
 } from "../utils/constants";
+import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from "prop-types";
 import {SameYearDateRangePicker} from "./CommonComponents";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
+import PdfViewer from "./PdfViewer";
 
 
 export const ConfirmRemoveRecordDialog = (props) => (
@@ -168,4 +174,31 @@ ConfirmOperatingRunDiscoveryDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onProceed: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
+}
+
+
+export const PdfViewerDialog = (props) => (
+  <div>
+    <Dialog
+      open={props.open}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      sx={{ '& .MuiDialog-paper': { width: '80%', maxWidth: '80%' } }}
+    >
+      <DialogTitle id="alert-dialog-title" style={{display: 'flex'}}>
+        {props.title}
+        <div style={{flexGrow: 1}} />
+        <IconButton onClick={props.onClose} component={"span"}><CloseIcon/></IconButton>
+      </DialogTitle>
+      <DialogContent>
+        <PdfViewer height={"800px"} source={props.pdf} />
+      </DialogContent>
+    </Dialog>
+  </div>
+)
+PdfViewerDialog.propTypes = {
+  title: PropTypes.string.isRequired,
+  open: PropTypes.bool.isRequired,
+  pdf: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired,
 }
