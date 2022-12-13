@@ -10,7 +10,7 @@ import {
   TextField,
   Box,
   CircularProgress,
-  ButtonBase,
+  ButtonBase, FormControlLabel, Switch,
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -33,6 +33,7 @@ import TableHead from "@mui/material/TableHead";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import {visuallyHidden} from "@mui/utils";
 import Floater from 'react-floater';
+import {toBoolean} from "../utils/MetadataUtils";
 
 export function TitleComponent({title}) {
   return (
@@ -105,9 +106,9 @@ SelectFormControl.propTypes = {
   children: PropTypes.element.isRequired
 }
 
-export function SelectFormControlWithTooltip({id, label, value, onChange, options, disabled, tooltip, placement}) {
+export function SelectFormControlWithTooltip({id, label, value, onChange, options, disabled, tooltip, placement, padding}) {
   return (
-    <FormControl style={{paddingRight: 8, marginTop: 8, width: '100%'}} variant="outlined">
+    <FormControl style={{paddingRight: padding, marginTop: padding, width: '100%'}} variant="outlined">
       <Floater
         // callback={cb}
         // component={TooltipContent}
@@ -183,6 +184,7 @@ export function SelectFormControlWithTooltip({id, label, value, onChange, option
 
 SelectFormControlWithTooltip.defaultProps = {
   placement: "left-start",
+  padding: 8,
 };
 
 SelectFormControlWithTooltip.propTypes = {
@@ -194,15 +196,18 @@ SelectFormControlWithTooltip.propTypes = {
   disabled: PropTypes.bool.isRequired,
   tooltip: PropTypes.string.isRequired,
   placement: PropTypes.string,
+  padding: PropTypes.number,
 }
 
-export function TextFieldWithTooltip({id, label, value, onChange, disabled, tooltip, placement, required}) {
+export function TextFieldWithTooltip({id, label, value, onChange, disabled, tooltip, placement, required, lines, padding}) {
   return (
-    <Box style={{paddingRight: 8, marginTop: 8, width: '100%'}}>
+    <Box style={{paddingRight: padding, marginTop: padding, width: '100%'}}>
       <TextField
         disabled={disabled}
         required={required}
         fullWidth
+        multiline={lines > 1}
+        minRows={lines}
         id={id}
         label={
           <Floater
@@ -261,6 +266,8 @@ export function TextFieldWithTooltip({id, label, value, onChange, disabled, tool
 TextFieldWithTooltip.defaultProps = {
   placement: "left-start",
   required: false,
+  lines: 1,
+  padding: 8,
 };
 
 TextFieldWithTooltip.propTypes = {
@@ -272,6 +279,8 @@ TextFieldWithTooltip.propTypes = {
   tooltip: PropTypes.string.isRequired,
   placement: PropTypes.string,
   required: PropTypes.bool,
+  lines: PropTypes.number,
+  padding: PropTypes.number,
 }
 
 export function DatePickerWithTooltip({label, value, onChange, disabled, tooltip, placement}) {
@@ -474,12 +483,13 @@ SameYearDateRangePicker.propTypes = {
 
 export function PageableTable({theme, title, minWidth, cells, defaultOrder, defaultOrderBy, rows, rowsPerPage,
                                rowHeight, onRowSelection, selectedRow, disabled, renderCell, filterElement,
-                               selectionMetadataField}) {
+                               selectionMetadataField, filterRows, enableRowFilter}) {
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState(defaultOrder);
   const [orderBy, setOrderBy] = useState(defaultOrderBy);
   const [selected, setSelected] = useState(selectedRow);
+  const [rowFilterValue, setRowFilterValue] = useState("");
 
   function PageableTableHead(props) {
     const {rowCount, onRequestSort, cells} = props;
@@ -554,6 +564,12 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
     setPage(newPage);
   }
 
+  function onFilterRows(event) {
+    console.log("@@@ onFilterRows @@@", event.target.value);
+    setRowFilterValue(event.target.value);
+    filterRows(event.target.value);
+  }
+
   return (
     <Box>
       <Toolbar
@@ -573,6 +589,24 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
         >
           {title}
         </Typography>
+
+        {enableRowFilter && <TextField
+          id={"name-filter"}
+          label={"Filter"}
+          onChange={onFilterRows}
+          value={rowFilterValue}
+          defaultValue={""}
+          InputLabelProps={{
+            shrink: true,
+            transform: 'translate(14px, 4px) scale(1)',
+          }}
+          inputProps={{
+            style: {
+              height: 32,
+              padding: '0 8px',
+            },
+          }}
+        />}
 
         <Tooltip title="Include archived records">
           <IconButton>
@@ -658,6 +692,8 @@ PageableTable.defaultProps = {
     <TableCell align={cell.align} padding={cell.disablePadding ? 'none' : 'normal'}>{row[cell.id]}</TableCell>
   )},
   filterElement: <div/>,
+  enableRowFilter: true,
+  filterRows: (value) => {},
 };
 
 PageableTable.propTypes = {
@@ -675,7 +711,33 @@ PageableTable.propTypes = {
   onRowSelection: PropTypes.func,
   renderCell: PropTypes.func,
   filterElement: PropTypes.object,
+  enableRowFilter: PropTypes.bool,
+  filterRows: PropTypes.func,
   selectionMetadataField: PropTypes.string.isRequired,
+}
+
+export function SwitchComponent({id, label, placement, onChange, value}) {
+  return (
+    <Box display="flex" justifyContent="flex-end" sx={{flexGrow: 1, height: '100%'}}>
+      <FormControlLabel
+        control={<Switch id={id} checked={toBoolean(value)} color="primary" onChange={onChange}/>}
+        label={label}
+        labelPlacement={placement}
+      />
+    </Box>
+  )
+}
+
+SwitchComponent.defaultProps = {
+  placement: "start",
+}
+
+SwitchComponent.propTypes = {
+  value: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  placement: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
 }
 
 

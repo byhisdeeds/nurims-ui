@@ -52,6 +52,7 @@ import {ADDEDITMONITORS_REF} from "./pages/radiationprotection/AddEditMonitors";
 import {PERSONNELDOSIMETRYEVALUATION_REF} from "./pages/radiationprotection/PersonnelDosimetryEvaluation";
 import {VIEWMATERIALSLIST_REF} from "./pages/controlledmaterials/ViewMaterialsList";
 import {MANAGEUSERS_REF} from "./pages/sysadmin/ManageUsers";
+import AddEditMaintenanceRecord, {ADD_EDIT_MAINTENANCE_RECORD_REF} from "./pages/maintenance/AddEditMaintenanceRecord";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -264,6 +265,16 @@ const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, p
       properties={properties}
     />)
   }
+  else if (actionid === Constants.SSC_ADD_EDIT_SSC_MAINTENANCE_RECORD) {
+    return (<AddEditMaintenanceRecord
+      ref={crefs[ADD_EDIT_MAINTENANCE_RECORD_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
 }
 
 const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
@@ -436,6 +447,7 @@ class App extends React.Component {
     this.crefs[ADDEDITPERSONNEL_REF] = React.createRef();
     this.crefs[VIEWPERSONNELRECORDS_REF] = React.createRef();
     this.crefs[ADDEDITSSC_REF] = React.createRef();
+    this.crefs[ADD_EDIT_MAINTENANCE_RECORD_REF] = React.createRef();
     this.crefs[ADDEDITAMP_REF] = React.createRef();
     this.crefs[VIEWSSCRECORDS_REF] = React.createRef();
     this.crefs[GENERATEMATERIALSURVEILLANCESHEET_REF] = React.createRef();

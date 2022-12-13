@@ -43,6 +43,8 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import EditableTable from "../../components/EditableTable";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 
+export const SSCMETADATA_REF = "SSCMetadata";
+
 class SSCMetadata extends Component {
   static contextType = UserDebugContext;
 
@@ -52,6 +54,7 @@ class SSCMetadata extends Component {
       ssc: {},
       properties: props.properties,
     };
+    this.module = SSCMETADATA_REF;
     this.ref = React.createRef();
     this.glossary = {};
     this.sscSurveillanceData = [];
@@ -133,7 +136,7 @@ class SSCMetadata extends Component {
 
   setRecordMetadata = (record) => {
     if (this.context.debug > 5) {
-      ConsoleLog("SSCMetadata", "setRecordMetadata", "record", record);
+      ConsoleLog(this.module, "setRecordMetadata", "record", record);
     }
     if (this.ref.current) {
       this.ref.current.setRowData(getRecordMetadataValue(record, NURIMS_SSC_MAINTENANCE_SCOPE, []), true);
@@ -219,7 +222,7 @@ class SSCMetadata extends Component {
     const {ssc, properties} = this.state;
     const disabled = Object.entries(ssc).length === 0;
     if (this.context.debug > 5) {
-      ConsoleLog("SSCMetadata", "render", "ssc", ssc);
+      ConsoleLog(this.module, "render", "ssc", ssc);
     }
     return (
       <Box

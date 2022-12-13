@@ -3,6 +3,8 @@ import PagedRecordList from "../../components/PagedRecordList";
 import PropTypes from "prop-types";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 
+export const SSCLIST_REF = "SSCList";
+
 class SSCList extends React.Component {
   static contextType = UserDebugContext;
 
@@ -10,6 +12,7 @@ class SSCList extends React.Component {
     super(props);
     this.selection = {};
     this.pref=React.createRef();
+    this.module = SSCLIST_REF;
   }
 
   removeRecord = (record) => {
@@ -42,7 +45,7 @@ class SSCList extends React.Component {
 
   render() {
     if (this.context.debug > 5) {
-      ConsoleLog("SSCList", "render");
+      ConsoleLog(this.module, "render");
     }
     return (
       <PagedRecordList
@@ -52,9 +55,14 @@ class SSCList extends React.Component {
         includeArchived={this.props.includeArchived}
         title={this.props.title}
         enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}
+        enableRowFilter={this.props.enableRowFilter}
       />
     )
   }
+}
+
+SSCList.defaultProps = {
+  enableRowFilter: true,
 }
 
 SSCList.propTypes = {
@@ -63,6 +71,7 @@ SSCList.propTypes = {
   onSelection: PropTypes.func.isRequired,
   properties: PropTypes.func.isRequired,
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
+  enableRowFilter: PropTypes.bool,
 }
 
 export default SSCList

@@ -359,6 +359,27 @@ export const MenuData = [
         ]
       },
       {
+        name: '‣ Maintenance',
+        tooltip: 'Maintenance records.',
+        authmodlevel: 'basic',
+        items: [
+          {
+            name: '   - Add/Edit Maint. Record',
+            link: 'ssc.add.edit.ssc.maintenance.record',
+            title: 'Add/Edit SSC Maintenance Record',
+            tooltip: 'Add or Edit an SSC corrective maintenance record.',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - View Maint. Record',
+            link: 'ssc.view.ssc.maintenance.records',
+            title: 'View SSC Maintenance Records',
+            tooltip: 'View an SSC corrective maintenance records.',
+            authmodlevel: 'basic',
+          },
+        ]
+      },
+      {
         name: '‣ Reports',
         tooltip: 'Reports.',
         authmodlevel: 'basic',

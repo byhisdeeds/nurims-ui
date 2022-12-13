@@ -6,6 +6,23 @@ export function isRecordArchived(record) {
   return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
 }
 
+export function removeMetadataField(obj, key) {
+  if (obj.hasOwnProperty("metadata")) {
+    const metadata = obj.metadata;
+    if (Array.isArray(metadata)) {
+      for (const m of metadata) {
+        for (const [k, v] of Object.entries(m)) {
+          // console.log(`${k}: ${v}`);
+          if (k === key) {
+            delete m[k];
+            return;
+          }
+        }
+      }
+    }
+  }
+}
+
 export function setRecordMetadataValue(obj, key, value) {
   if (obj.hasOwnProperty("metadata")) {
     const metadata = obj.metadata;
@@ -116,7 +133,7 @@ export function getDateRangeFromDateString(range, missingValue) {
 }
 
 export function getDateFromDateString(dateString, missingValue) {
-  if (dateString.includes('-')) {
+  if (dateString && dateString.includes('-')) {
     let d = dateString.substring(0, 10).split('-');
     if (d.length === 3) {
       // Please pay attention to the month (d[1]); JavaScript counts months from 0:
@@ -257,4 +274,33 @@ export function appendMetadataChangedField(obj, field) {
 
 export function formatISODateString(dateString) {
   return dateString.replaceAll("T", " ").substring(0, 19);
+}
+
+export function getNextItemId(records) {
+  let item_id = 0;
+  for (const r of records) {
+    item_id = Math.max(item_id, r.item_id);
+  }
+  return item_id + 1;
+}
+
+/*
+ * Converts a string to a bool.
+ *
+ * This conversion will:
+ *
+ *  - match 'true', 'on', or '1' as true.
+ *  - ignore all white-space padding
+ *  - ignore capitalization (case).
+ *
+ * '  tRue  ','ON', and '1   ' will all evaluate as true.
+ *
+ */
+export function toBoolean(s)
+{
+  // will match one and only one of the string 'true','1', or 'on' regardless
+  // of capitalization and regardless off surrounding white-space.
+  //
+  const regex = new RegExp(/^\s*(true|1|on)\s*$/i);
+  return regex.test(s);
 }

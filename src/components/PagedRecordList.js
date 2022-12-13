@@ -16,6 +16,17 @@ import {PageableTable} from "./CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
 import {getRecordMetadataValue} from "../utils/MetadataUtils";
 
+function filterRowsByName(rows, value) {
+  const regex = new RegExp(value);
+  const filteredRows = [];
+  for (const r of rows) {
+    if (r.hasOwnProperty("nurims.title") && regex.test(r["nurims.title"])) {
+      filteredRows.push(r);
+    }
+  }
+  return filteredRows;
+}
+
 class PagedRecordList extends React.Component {
   static contextType = UserDebugContext;
 
@@ -24,9 +35,11 @@ class PagedRecordList extends React.Component {
     this.state = {
       selection: {},
       include_archived: props.includeArchived,
+      filterValue: "",
     };
     this.__Component__ = "PagedRecordList";
     this.rows = [];
+    this.allRows = [];
   }
 
   removeRecord = (record) => {
@@ -69,7 +82,8 @@ class PagedRecordList extends React.Component {
     }
     if (Array.isArray(records)) {
       let selection = {};
-      this.rows = [...records];
+      this.allRows = [...records];
+      this.rows = filterRowsByName(this.allRows, this.state.filterValue);
       const s_item_id = Object.keys(this.state.selection).length === 0 ? -1 : this.state.selection.item_id;
       for (const r of this.rows) {
         r["changed"] = false;
@@ -157,6 +171,12 @@ class PagedRecordList extends React.Component {
     this.setState({include_archived: e.target.checked});
   }
 
+  filterRows = (value) => {
+    console.log("%%% PagedRecordList.filterRows %%%", value)
+    this.setState({filterValue: value});
+    this.rows = filterRowsByName(this.allRows, value);
+  }
+
   render () {
     const {include_archived, selection} = this.state;
     if (this.context.debug > 5) {
@@ -185,6 +205,8 @@ class PagedRecordList extends React.Component {
               onChange={this.includeArchivedRecords}
               checked={include_archived}
             />}
+            enableRowFilter={this.props.enableRowFilter}
+            filterRows={this.filterRows}
           />
         </Paper>
       </Box>
@@ -200,12 +222,14 @@ PagedRecordList.propTypes = {
   onListItemSelection: PropTypes.func,
   requestGetRecords: PropTypes.func.isRequired,
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
+  enableRowFilter: PropTypes.bool.isRequired,
   includeArchived: PropTypes.bool,
   cells: PropTypes.array,
 }
 
 PagedRecordList.defaultProps = {
   includeArchived: false,
+  enableRowFilter: true,
   enableRecordArchiveSwitch: false,
   rowHeight: 24,
   rowsPerPage: 20,

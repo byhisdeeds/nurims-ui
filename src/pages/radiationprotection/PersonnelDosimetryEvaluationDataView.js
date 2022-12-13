@@ -17,7 +17,10 @@ import {
 import {
   getPropertyValue,
 } from "../../utils/PropertyUtils";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {
+  ConsoleLog,
+  UserDebugContext
+} from "../../utils/UserDebugContext";
 import {
   NURIMS_DOSIMETRY_BATCH_ID,
   NURIMS_DOSIMETRY_DEEP_DOSE,

@@ -43,7 +43,11 @@ import {
   ITEM_ID,
   NURIMS_MATERIAL_MANUFACTURER_RECORD
 } from "../../utils/constants";
-import {SelectFormControlWithTooltip, TextFieldWithTooltip, DatePickerWithTooltip} from "../../components/CommonComponents";
+import {
+  SelectFormControlWithTooltip,
+  TextFieldWithTooltip,
+  DatePickerWithTooltip
+} from "../../components/CommonComponents";
 
 class MaterialMetadata extends Component {
   constructor(props) {
