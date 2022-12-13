@@ -43,7 +43,9 @@ import {
   NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE,
   NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE,
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_ACTIONS,
-  NURIMS_SSC_MAINTENANCE_RECORD_DOCUMENTS, NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE,
+  NURIMS_SSC_MAINTENANCE_RECORD_DOCUMENTS,
+  NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE,
+  NURIMS_MATERIAL_REGISTRATION_DATE, NURIMS_WITHDRAWN,
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
@@ -338,6 +340,14 @@ class SSCMaintenanceRecords extends Component {
     this.setState({confirm_remove: false, metadata_changed: true});
   }
 
+  renderCellStyle = (row, cell, theme) => {
+    const openIssue = getRecordMetadataValue(row, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, null) === null;
+    return {
+      color: openIssue ? theme.palette.primary.contrastText : theme.palette.primary.light,
+      backgroundColor: openIssue ? theme.palette.warning.light : theme.components.MuiTableRow.styleOverrides.root.backgroundColor,
+    }
+  }
+
   render() {
     const {confirm_remove, ssc, selection, metadata_changed, properties} = this.state;
     const no_selection = Object.entries(selection).length === 0;
@@ -363,6 +373,8 @@ class SSCMaintenanceRecords extends Component {
               enableRecordArchiveSwitch={false}
               enableRowFilter={true}
               height={'100%'}
+              rowsPerPage={10}
+              renderCellStyle={this.renderCellStyle}
             />
           </Grid>
           <Grid item xs={12}>
@@ -403,28 +415,24 @@ class SSCMaintenanceRecords extends Component {
                       />
                     </Grid>
                     <Grid item xs={12} sm={3}>
-                      <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                          label="Removed From Service"
-                          disabled={no_selection}
-                          inputFormat={"yyyy-MM-dd"}
-                          value={getDateFromDateString(getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, null), null)}
-                          onChange={this.removedFromServiceDateChange}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </LocalizationProvider>
+                      <DatePickerWithTooltip
+                        label="Removed From Service"
+                        inputFormat={"yyyy-MM-dd"}
+                        value={getDateFromDateString(getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, null), null)}
+                        onChange={this.removedFromServiceDateChange}
+                        disabled={no_selection}
+                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, "")}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={3}>
-                      <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                          label="Returned To Service"
-                          disabled={no_selection}
-                          inputFormat={"yyyy-MM-dd"}
-                          value={getDateFromDateString(getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, null), null)}
-                          onChange={this.returnedToServiceDateChange}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </LocalizationProvider>
+                      <DatePickerWithTooltip
+                        label="Removed From Service"
+                        inputFormat={"yyyy-MM-dd"}
+                        value={getDateFromDateString(getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, null), null)}
+                        onChange={this.returnedToServiceDateChange}
+                        disabled={no_selection}
+                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, "")}
+                      />
                     </Grid>
                     <Grid item xs={12} sm={2}>
                       <SwitchComponent

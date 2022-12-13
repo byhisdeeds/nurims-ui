@@ -155,11 +155,7 @@ class PagedRecordList extends React.Component {
       <TableCell
         align={cell.align}
         padding={cell.disablePadding ? 'none' : 'normal'}
-        style={{
-          color: row[NURIMS_WITHDRAWN] === 0 ?
-            this.props.theme.palette.primary.light :
-            this.props.theme.palette.text.disabled
-        }}
+        style={this.props.renderCellStyle(row, cell, this.props.theme)}
       >
         {value} {(cell.id === NURIMS_TITLE && row[NURIMS_WITHDRAWN] === 1) && "<- archived"}
       </TableCell>
@@ -225,6 +221,8 @@ PagedRecordList.propTypes = {
   enableRowFilter: PropTypes.bool.isRequired,
   includeArchived: PropTypes.bool,
   cells: PropTypes.array,
+  rowsPerPage: PropTypes.number,
+  renderCellStyle: PropTypes.func,
 }
 
 PagedRecordList.defaultProps = {
@@ -256,6 +254,11 @@ PagedRecordList.defaultProps = {
   onListItemSelection: (item) => {
   },
   requestGetRecords: (include_archived) => {
+  },
+  renderCellStyle: (row, cell, theme) => {
+    return {
+      color: row[NURIMS_WITHDRAWN] === 0 ? theme.palette.primary.light : theme.palette.text.disabled
+    }
   },
 };
 

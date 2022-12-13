@@ -283,9 +283,9 @@ TextFieldWithTooltip.propTypes = {
   padding: PropTypes.number,
 }
 
-export function DatePickerWithTooltip({label, value, onChange, disabled, tooltip, placement}) {
+export function DatePickerWithTooltip({label, value, onChange, disabled, tooltip, placement, inputFormat, padding}) {
   return (
-    <Box style={{paddingRight: 8, marginTop: 8, width: '100%'}}>
+    <Box style={{paddingRight: padding, marginTop: padding, width: '100%'}}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Box sx={{'& .MuiTextField-root': {width: '18ch'}}}>
           <DatePicker
@@ -336,7 +336,7 @@ export function DatePickerWithTooltip({label, value, onChange, disabled, tooltip
                 {label}
               </Floater>
             }
-            inputFormat={"yyyy-MM-dd"}
+            inputFormat={inputFormat}
             value={value}
             onChange={onChange}
             renderInput={(params) => <TextField {...params} />}
@@ -349,6 +349,8 @@ export function DatePickerWithTooltip({label, value, onChange, disabled, tooltip
 
 DatePickerWithTooltip.defaultProps = {
   placement: "left-start",
+  inputFormat: "yyyy-MM-dd",
+  padding: 0,
 };
 
 DatePickerWithTooltip.propTypes = {
@@ -359,6 +361,8 @@ DatePickerWithTooltip.propTypes = {
   disabled: PropTypes.bool.isRequired,
   tooltip: PropTypes.string.isRequired,
   placement: PropTypes.string,
+  inputFormat: PropTypes.string,
+  padding: PropTypes.number,
 }
 
 export function MonitorTypeSelect({value, onChange, monitorTypes}) {
