@@ -60,6 +60,7 @@ import {
 } from "../../utils/UserDebugContext";
 import PagedRecordList from "../../components/PagedRecordList";
 import {
+  CheckboxWithTooltip,
   DatePickerWithTooltip,
   SelectFormControlWithTooltip,
   SwitchComponent,
@@ -160,7 +161,7 @@ class SSCMaintenanceRecords extends Component {
     } else if (e.target.id === "documents") {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_DOCUMENTS, e.target.value);
       changed = true;
-    } else if (e.target.id === "impact-reactor-usage") {
+    } else if (e.target.name === "impact-reactor-usage") {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE, ""+e.target.checked);
       changed = true;
     } else if (e.target.id === "acceptance-criteria") {
@@ -470,9 +471,46 @@ class SSCMaintenanceRecords extends Component {
                         id={"impact-reactor-usage"}
                         label={"Impact Reactor"}
                         disabled={no_selection}
-                        value={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE, "false")}
+                        padding={8}
+                        checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE, "false")}
                         onChange={this.handleChange}
                       />
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={2}>
+                          <CheckboxWithTooltip
+                            id={"impact-reactor-usage"}
+                            label={"Impact Reactor"}
+                            onChange={this.handleChange}
+                            required={true}
+                            disabled={no_selection}
+                            checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE, "false")}
+                            tooltip={"hg gugtt "}
+                            padding={8}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                          <CheckboxWithTooltip
+                            id={"obsolescence"}
+                            label={"Obsolescence Issue"}
+                            onChange={this.handleChange}
+                            disabled={no_selection}
+                            tooltip={"hg gugtt "}
+                            padding={8}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={2}>
+                          <CheckboxWithTooltip
+                            id={"obsolescence"}
+                            label={"Obsolescence Issue"}
+                            onChange={this.handleChange}
+                            disabled={no_selection}
+                            tooltip={"hg gugtt "}
+                            padding={8}
+                          />
+                        </Grid>
+                      </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
                       <TextFieldWithTooltip

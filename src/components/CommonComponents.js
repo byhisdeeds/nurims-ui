@@ -106,6 +106,44 @@ SelectFormControl.propTypes = {
   children: PropTypes.element.isRequired
 }
 
+export function CheckboxWithTooltip({id, label, checked, onChange, disabled, tooltip, padding, required}) {
+  return (
+    <FormControl style={{paddingLeft: padding, marginTop: padding, width: '100%'}} variant="outlined">
+      <FormControlLabel
+        control={
+          <Checkbox
+            required={required}
+            checked={toBoolean(checked)}
+            onChange={onChange}
+            name={id}
+            disabled={disabled}
+          />
+        }
+        label={label}
+      />
+    </FormControl>
+  );
+}
+
+CheckboxWithTooltip.defaultProps = {
+  padding: 8,
+  tooltip: "",
+  disabled: false,
+  checked: false,
+  required: false,
+};
+
+CheckboxWithTooltip.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  required: PropTypes.bool,
+  checked: PropTypes.bool,
+  tooltip: PropTypes.string,
+  disabled: PropTypes.bool,
+  padding: PropTypes.number,
+}
+
 export function SelectFormControlWithTooltip({id, label, value, onChange, options, disabled, tooltip, placement, padding, multiple}) {
   return (
     <FormControl style={{paddingRight: padding, marginTop: padding, width: '100%'}} variant="outlined">
