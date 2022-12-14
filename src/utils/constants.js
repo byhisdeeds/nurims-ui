@@ -91,6 +91,7 @@ module.exports = Object.freeze({
   ITEM_ID: "item_id",
 
   NURIMS_TITLE: 'nurims.title',
+  NURIMS_CREATED_BY: 'nurims.createdby',
   NURIMS_TITLE_SUBTITLE: 'nurims.title.subtitle',
   NURIMS_SOURCE: 'nurims.source',
   NURIMS_WITHDRAWN: 'nurims.withdrawn',
@@ -157,6 +158,7 @@ module.exports = Object.freeze({
   NURIMS_SSC_MAINTENANCE_TASK: "nurims.ssc.maintenancetask",
   NURIMS_SSC_MAINTENANCE_SCOPE: "nurims.ssc.maintenancescope",
   NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA: "nurims.ssc.maintenanceacceptancecriteria",
+  NURIMS_SSC_MAINTENANCE_RECORD_ACCEPTANCE_CRITERIA: "nurims.ssc.maintenancerecord.acceptancecriteria",
   NURIMS_SSC_MAINTENANCE_RECORDS: "nurims.ssc.maintenancerecords",
   NURIMS_SSC_MAINTENANCE_RECORD_NAME: "nurims.ssc.maintenancerecord.name",
   NURIMS_SSC_MAINTENANCE_RECORD_ISSUE: "nurims.ssc.maintenancerecord.issue",
@@ -165,6 +167,7 @@ module.exports = Object.freeze({
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_ACTIONS: "nurims.ssc.maintenancerecord.correctiveactions",
   NURIMS_SSC_MAINTENANCE_RECORD_DOCUMENTS: "nurims.ssc.maintenancerecord.documents",
   NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE: "nurims.ssc.maintenancerecord.impactreactorusage",
+  NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL: "nurims.ssc.maintenancerecord.personnel",
 
   NURIMS_AMP_AGEING_MECHANISM: "nurims.amp.ageingmechanism",
   NURIMS_AMP_AGEING_EFFECT: "nurims.amp.ageingeffect",

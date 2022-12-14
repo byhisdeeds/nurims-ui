@@ -73,7 +73,6 @@ class Login extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log("HANDLE-SUBMIT")
     if (this.state.online) {
       console.log(JSON.stringify({
         uuid:this.uuid,
@@ -104,6 +103,8 @@ class Login extends React.Component {
       console.log(`${MODULE} websocket connection established.`);
       // get public key as base64 string
       this.ws.send(JSON.stringify({uuid:this.uuid, cmd: Constants.CMD_GET_PUBLIC_KEY}));
+      // get list of all registered users
+      this.ws.send(JSON.stringify({uuid:this.uuid, cmd: Constants.CMD_GET_USER_RECORDS}));
     };
     this.ws.onerror = (error) => {
       console.log(`${MODULE} websocket error - ${error}`);
@@ -119,6 +120,12 @@ class Login extends React.Component {
       if (commandResponseEquals(ev_data, Constants.CMD_GET_PUBLIC_KEY) && ev_data.data.status === 0) {
         this.puk = ev_data.data.public_key;
         this.setState({ online: true });
+      } else if (commandResponseEquals(ev_data, Constants.CMD_GET_USER_RECORDS) && ev_data.response.status === 0) {
+        for (const u of ev_data.response.users) {
+          if (u.hasOwnProperty("metadata")) {
+            this.authService.users.push(u.metadata.username);
+          }
+        }
       } else if (commandResponseEquals(ev_data, Constants.CMD_VERIFY_USER_PASSWORD)) {
         console.log(ev_data)
         if (ev_data.hasOwnProperty("response") && ev_data.response.hasOwnProperty('status') && ev_data.response.status === 0) {

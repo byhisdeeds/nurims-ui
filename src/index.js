@@ -9,6 +9,7 @@ const AuthService = {
   isAuthenticated: false,
   from: '',
   profile: {},
+  users: [],
   authenticate(valid, profile) {
     this.isAuthenticated = valid;
     if (valid && profile) {
@@ -48,9 +49,6 @@ const routing = (
           </ProtectedRoute>
         }
       />
-      {/*<ProtectedRoute exact path="/nurims" component={<App />} />*/}
-      {/*<ProtectedRoute path="/onaa/spc" exact component={SpectrumAnalysis} />*/}
-      {/*<ProtectedRoute path="/onaa/nuclib" component={NuclideLibrary} />*/}
     </Routes>
   </BrowserRouter>
 );
@@ -61,18 +59,3 @@ ReactDOM.render(routing, document.getElementById('root'));
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 // serviceWorker.unregister();
-
-// ReactDOM.render(
-//   // <Auth0Provider
-//   //   domain="dev-43mavuar.us.auth0.com"
-//   //   clientId="s8Oz6WLIJkje52XZt2hKWFnpT3FvpEKH"
-//   //   redirectUri={window.location.origin}
-//   // >
-//   //   <React.StrictMode>
-//   //     <App />
-//   //   </React.StrictMode>
-//   // </Auth0Provider>
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>  , document.getElementById("root")
-// );

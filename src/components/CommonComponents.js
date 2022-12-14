@@ -10,7 +10,7 @@ import {
   TextField,
   Box,
   CircularProgress,
-  ButtonBase, FormControlLabel, Switch,
+  ButtonBase, FormControlLabel, Switch, OutlinedInput,
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -106,13 +106,10 @@ SelectFormControl.propTypes = {
   children: PropTypes.element.isRequired
 }
 
-export function SelectFormControlWithTooltip({id, label, value, onChange, options, disabled, tooltip, placement, padding}) {
+export function SelectFormControlWithTooltip({id, label, value, onChange, options, disabled, tooltip, placement, padding, multiple}) {
   return (
     <FormControl style={{paddingRight: padding, marginTop: padding, width: '100%'}} variant="outlined">
       <Floater
-        // callback={cb}
-        // component={TooltipContent}
-        // target={target}
         content={tooltip}
         showCloseButton={true}
         hideArrow
@@ -157,11 +154,14 @@ export function SelectFormControlWithTooltip({id, label, value, onChange, option
         disabled={disabled}
         required
         fullWidth
+        multiple={multiple}
         labelId={id}
         label={label}
         id={id}
-        value={value}
+        name={id}
+        value={typeof value === 'string' ? value.split(",") : value}
         onChange={onChange}
+        input={<OutlinedInput label={label} />}
       >
         {options.map((option) => {
           if (typeof option === 'object') {
@@ -170,7 +170,11 @@ export function SelectFormControlWithTooltip({id, label, value, onChange, option
             )
           } else {
             const t = option.split(',');
-            if (t.length === 2) {
+            if (t.length === 1) {
+              return (
+                <MenuItem value={t[0]}>{t[0]}</MenuItem>
+              )
+            } else if (t.length === 2) {
               return (
                 <MenuItem value={t[0]}>{t[1]}</MenuItem>
               )
@@ -185,6 +189,7 @@ export function SelectFormControlWithTooltip({id, label, value, onChange, option
 SelectFormControlWithTooltip.defaultProps = {
   placement: "left-start",
   padding: 8,
+  multiple: false,
 };
 
 SelectFormControlWithTooltip.propTypes = {
@@ -197,6 +202,7 @@ SelectFormControlWithTooltip.propTypes = {
   tooltip: PropTypes.string.isRequired,
   placement: PropTypes.string,
   padding: PropTypes.number,
+  multiple: PropTypes.bool,
 }
 
 export function TextFieldWithTooltip({id, label, value, onChange, disabled, tooltip, placement, required, lines, padding}) {
