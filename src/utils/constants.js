@@ -167,6 +167,9 @@ module.exports = Object.freeze({
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_ACTIONS: "nurims.ssc.maintenancerecord.correctiveactions",
   NURIMS_SSC_MAINTENANCE_RECORD_DOCUMENTS: "nurims.ssc.maintenancerecord.documents",
   NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE: "nurims.ssc.maintenancerecord.impactreactorusage",
+  NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE: "nurims.ssc.maintenancerecord.obsolescenceissue",
+  NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE: "nurims.ssc.maintenancerecord.preventivemaintenance",
+  NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE: "nurims.ssc.maintenancerecord.correctivemaintenance",
   NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL: "nurims.ssc.maintenancerecord.personnel",
 
   NURIMS_AMP_AGEING_MECHANISM: "nurims.amp.ageingmechanism",

@@ -47,7 +47,12 @@ import {
   NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE,
   NURIMS_MATERIAL_REGISTRATION_DATE,
   NURIMS_WITHDRAWN,
-  NURIMS_SSC_MAINTENANCE_RECORD_ACCEPTANCE_CRITERIA, NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL, NURIMS_MATERIAL_TYPE,
+  NURIMS_SSC_MAINTENANCE_RECORD_ACCEPTANCE_CRITERIA,
+  NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL,
+  NURIMS_MATERIAL_TYPE,
+  NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE,
+  NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE,
+  NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE,
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
@@ -164,8 +169,19 @@ class SSCMaintenanceRecords extends Component {
     } else if (e.target.name === "impact-reactor-usage") {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE, ""+e.target.checked);
       changed = true;
+    } else if (e.target.name === "obsolescence") {
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE, ""+e.target.checked);
+      changed = true;
+    } else if (e.target.name === "preventive-maintenance") {
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE, ""+e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE, ""+(!e.target.checked));
+      changed = true;
+    } else if (e.target.name === "corrective-maintenance") {
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE, ""+e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE, ""+(!e.target.checked));
+      changed = true;
     } else if (e.target.id === "acceptance-criteria") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_ACCEPTANCE_CRITERIA, ""+e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_ACCEPTANCE_CRITERIA, e.target.value);
       changed = true;
     } else if (e.target.name === "maintenance-personnel") {
       const values = [];
@@ -446,7 +462,7 @@ class SSCMaintenanceRecords extends Component {
                         padding={0}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={3}>
+                    <Grid item xs={12} sm={4}>
                       <DatePickerWithTooltip
                         label="Removed From Service"
                         inputFormat={"yyyy-MM-dd"}
@@ -456,7 +472,7 @@ class SSCMaintenanceRecords extends Component {
                         tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, "")}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={3}>
+                    <Grid item xs={12} sm={4}>
                       <DatePickerWithTooltip
                         label="Removed From Service"
                         inputFormat={"yyyy-MM-dd"}
@@ -466,22 +482,12 @@ class SSCMaintenanceRecords extends Component {
                         tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, "")}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={2}>
-                      <SwitchComponent
-                        id={"impact-reactor-usage"}
-                        label={"Impact Reactor"}
-                        disabled={no_selection}
-                        padding={8}
-                        checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE, "false")}
-                        onChange={this.handleChange}
-                      />
-                    </Grid>
                     <Grid item xs={12} sm={12}>
                       <Grid container spacing={0}>
-                        <Grid item xs={12} sm={2}>
+                        <Grid item xs={12} sm={3}>
                           <CheckboxWithTooltip
                             id={"impact-reactor-usage"}
-                            label={"Impact Reactor"}
+                            label={"Impact Reactor Operation"}
                             onChange={this.handleChange}
                             required={true}
                             disabled={no_selection}
@@ -495,16 +501,29 @@ class SSCMaintenanceRecords extends Component {
                             id={"obsolescence"}
                             label={"Obsolescence Issue"}
                             onChange={this.handleChange}
+                            checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE, "false")}
                             disabled={no_selection}
                             tooltip={"hg gugtt "}
                             padding={8}
                           />
                         </Grid>
-                        <Grid item xs={12} sm={2}>
+                        <Grid item xs={12} sm={3}>
                           <CheckboxWithTooltip
-                            id={"obsolescence"}
-                            label={"Obsolescence Issue"}
+                            id={"preventive-maintenance"}
+                            label={"Preventive Maintenance"}
                             onChange={this.handleChange}
+                            checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE, "false")}
+                            disabled={no_selection}
+                            tooltip={"hg gugtt "}
+                            padding={8}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                          <CheckboxWithTooltip
+                            id={"corrective-maintenance"}
+                            label={"Corrective Maintenance"}
+                            onChange={this.handleChange}
+                            checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE, "true")}
                             disabled={no_selection}
                             tooltip={"hg gugtt "}
                             padding={8}
@@ -576,17 +595,6 @@ class SSCMaintenanceRecords extends Component {
                         disabled={no_selection}
                         tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL, "")}
                       />
-                      {/*<TextFieldWithTooltip*/}
-                      {/*  id={"maintenance-personnel"}*/}
-                      {/*  label="Maintenance Personnel"*/}
-                      {/*  required={true}*/}
-                      {/*  value={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL, [])}*/}
-                      {/*  onChange={this.handleChange}*/}
-                      {/*  disabled={no_selection}*/}
-                      {/*  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL, "")}*/}
-                      {/*  padding={0}*/}
-                      {/*  lines={3}*/}
-                      {/*/>*/}
                     </Grid>
                   </Grid>
                 </CardContent>
