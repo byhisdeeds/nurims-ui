@@ -766,7 +766,7 @@ PageableTable.propTypes = {
 
 export function SwitchComponent({id, label, placement, onChange, value}) {
   return (
-    <Box display="flex" justifyContent="flex-end" sx={{flexGrow: 1, height: '100%'}}>
+    <Box display="flex" justifyContent="flex-end" sx={{height: '100%'}}>
       <FormControlLabel
         control={<Switch id={id} checked={toBoolean(value)} color="primary" onChange={onChange}/>}
         label={label}

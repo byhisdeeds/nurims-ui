@@ -52,7 +52,8 @@ import {ADDEDITMONITORS_REF} from "./pages/radiationprotection/AddEditMonitors";
 import {PERSONNELDOSIMETRYEVALUATION_REF} from "./pages/radiationprotection/PersonnelDosimetryEvaluation";
 import {VIEWMATERIALSLIST_REF} from "./pages/controlledmaterials/ViewMaterialsList";
 import {MANAGEUSERS_REF} from "./pages/sysadmin/ManageUsers";
-import AddEditMaintenanceRecord, {ADD_EDIT_MAINTENANCE_RECORD_REF} from "./pages/maintenance/AddEditMaintenanceRecord";
+import {ADD_EDIT_MAINTENANCE_RECORD_REF} from "./pages/maintenance/AddEditMaintenanceRecord";
+import {GENERATESSCMAINTENANCEREPORT_REF} from "./pages/maintenance/GenerateSSCMaintenanceReport";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -68,6 +69,8 @@ const Storage = lazy(() => import('./pages/controlledmaterials/Storage'));
 const Material = lazy(() => import('./pages/controlledmaterials/Material'));
 const ViewMaterialsList = lazy(() => import('./pages/controlledmaterials/ViewMaterialsList'));
 const GenerateMaterialSurveillanceSheet = lazy(() => import('./pages/controlledmaterials/GenerateMaterialSurveillanceSheet'));
+const GenerateSSCMaintenanceReport = lazy(() => import('./pages/maintenance/GenerateSSCMaintenanceReport'));
+const AddEditMaintenanceRecord = lazy(() => import('./pages/maintenance/AddEditMaintenanceRecord'));
 const AddEditSSC = lazy(() => import('./pages/maintenance/AddEditSSC'));
 const AddEditAMP = lazy(() => import('./pages/maintenance/AddEditAMP'));
 const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
@@ -275,6 +278,16 @@ const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, p
       properties={properties}
     />)
   }
+  else if (actionid === Constants.SSC_GENERATE_SSC_MAINTENANCE_REPORT) {
+    return (<GenerateSSCMaintenanceReport
+      ref={crefs[GENERATESSCMAINTENANCEREPORT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
 }
 
 const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
@@ -431,14 +444,13 @@ class App extends React.Component {
     this.ws = null;
     this.mounted = false;
     this.user = this.props.authService;
-    this.crefs = {
-      "MyAccount": React.createRef(),
-      "Settings": React.createRef(),
-      "ImportICENSPersonnel": React.createRef(),
-      "ImportICENSControlledMaterialManufacturers": React.createRef(),
-      "ImportICENSControlledMaterialStorageLocations": React.createRef(),
-      "ImportICENSControlledMaterials": React.createRef(),
-    };
+    this.crefs = {};
+    this.crefs["MyAccount"] = React.createRef();
+    this.crefs["Settings"] = React.createRef();
+    this.crefs["ImportICENSPersonnel"] = React.createRef();
+    this.crefs["ImportICENSControlledMaterialManufacturers"] = React.createRef();
+    this.crefs["ImportICENSControlledMaterialStorageLocations"] = React.createRef();
+    this.crefs["ImportICENSControlledMaterials"] = React.createRef();
     this.crefs[MONITORDOSIMETRYMEASUREMENT_REF] = React.createRef();
     this.crefs[PERSONNELDOSIMETRYMEASUREMENT_REF] = React.createRef();
     this.crefs[MANUFACTURER_REF] = React.createRef();
@@ -460,6 +472,7 @@ class App extends React.Component {
     this.crefs[PERSONNELDOSIMETRYEVALUATION_REF] = React.createRef();
     this.crefs[VIEWMATERIALSLIST_REF] = React.createRef();
     this.crefs[MANAGEUSERS_REF] = React.createRef();
+    this.crefs[GENERATESSCMAINTENANCEREPORT_REF] = React.createRef();
   }
 
 

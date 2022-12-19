@@ -16,6 +16,7 @@ module.exports = Object.freeze({
   SSC_ADD_EDIT_SSC_MAINTENANCE_RECORD: 'ssc.add.edit.ssc.maintenance.record',
   SSC_ADD_EDIT_SSC_AMP: 'ssc.add.edit.ssc.amp',
   SSC_VIEW_SSC_RECORDS: 'ssc.view.ssc.records',
+  SSC_GENERATE_SSC_MAINTENANCE_REPORT: 'ssc.generate.ssc.maintenance.report',
   RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS: 'ro.add.edit.reactor.operating.run.records',
   RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA: 'ro.add.edit.irradiated.samples',
   RO_REACTOR_OPERATIONS_REPORT: 'ro.reactor.operations.report',
@@ -83,6 +84,7 @@ module.exports = Object.freeze({
   CMD_DELETE_SSC_RECORD: "delete_ssc_record",
 
   CMD_GENERATE_SSC_RECORDS_PDF: "generate_ssc_records_pdf",
+  CMD_GENERATE_SSC_MAINTENANCE_REPORT_PDF: "generate_ssc_maintenance_report_pdf",
 
   CMD_GENERATE_PERSONNEL_DOSE_EVALUATION_PDF: "generate_personnel_dose_evaluation_pdf",
 

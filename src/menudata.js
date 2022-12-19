@@ -367,7 +367,7 @@ export const MenuData = [
             name: '   - Add/Edit Maint. Record',
             link: 'ssc.add.edit.ssc.maintenance.record',
             title: 'Add/Edit SSC Maintenance Record',
-            tooltip: 'Add or Edit an SSC corrective maintenance record.',
+            tooltip: 'Add or Edit an SSC corrective or preventive maintenance record.',
             authmodlevel: 'basic',
           },
           {
@@ -389,6 +389,13 @@ export const MenuData = [
             link: 'ssc.generate.maintenance.schedule',
             title: 'Generate Maintenance Schedule',
             tooltip: 'Generate a preventive maintenance schedule for structures, systems and components.',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - Maintenance Report',
+            link: 'ssc.generate.ssc.maintenance.report',
+            title: 'Generate SSC Maintenance Report',
+            tooltip: 'Generate a report on corrective or preventive maintenance carried out on structures, systems and components.',
             authmodlevel: 'basic',
           },
           {

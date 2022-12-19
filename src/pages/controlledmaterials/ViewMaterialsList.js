@@ -4,6 +4,7 @@ import {
   CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF,
 } from "../../utils/constants";
 import {
+  Button,
   FormControl,
   Grid,
   InputLabel,
@@ -18,6 +19,7 @@ import IconButton from "@mui/material/IconButton";
 import {withTheme} from "@mui/styles";
 import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 import {TitleComponent} from "../../components/CommonComponents";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
 export const VIEWMATERIALSLIST_REF = "ViewMaterialsList";
 
@@ -80,9 +82,14 @@ class ViewMaterialsList extends Component {
                   <MenuItem value={'unrestricted'}>Unrestricted Access</MenuItem>
                 </Select>
               </FormControl>
-              <IconButton onClick={this.onGenerateMaterialsListPdf}>
-                <FileDownloadIcon/>
-              </IconButton>
+              <Button
+                sx={{width: 300}}
+                variant={"contained"}
+                endIcon={<PictureAsPdfIcon />}
+                onClick={this.onGenerateMaterialsListPdf}
+              >
+                Generate PDF
+              </Button>
             </Stack>
           </Grid>
           <Grid item xs={12}>

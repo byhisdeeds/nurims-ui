@@ -34,12 +34,13 @@ class ReactorOperationsReport extends Component {
 
   constructor(props) {
     super(props);
+    const currentYear = new Date().getFullYear();
     this.state = {
       title: props.title,
       pdf: BLANK_PDF,
-      startDate: null,
-      endDate: null,
-      year: null,
+      startDate: new Date(`January 1, ${currentYear}`),
+      endDate: new Date(`December 1, ${currentYear}`),
+      year: new Date(`January 1, ${currentYear}`),
       reportType: "summary",
     };
     this.Module = REACTOROPERATIONSREPORT_REF;
