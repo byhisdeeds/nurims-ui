@@ -296,11 +296,23 @@ export function getNextItemId(records) {
  * '  tRue  ','ON', and '1   ' will all evaluate as true.
  *
  */
-export function toBoolean(s)
-{
+export function toBoolean(s) {
   // will match one and only one of the string 'true','1', or 'on' regardless
   // of capitalization and regardless off surrounding white-space.
   //
   const regex = new RegExp(/^\s*(true|1|on)\s*$/i);
   return regex.test(s);
+}
+
+export function new_record(item_id, title, withdrawn, createdby) {
+  return {
+    "changed": true,
+    "item_id": (item_id) ? item_id : -1,
+    "nurims.title": (title) ? title : "New Record",
+    "nurims.withdrawn": (withdrawn) ? withdrawn : 0,
+    "metadata": [
+      {"nurims.createdby": (createdby) ? createdby : ""},
+      {"nurims.creationdate": new Date().toISOString()}
+    ]
+  };
 }

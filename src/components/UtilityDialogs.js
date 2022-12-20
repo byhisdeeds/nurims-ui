@@ -56,6 +56,37 @@ ConfirmRemoveRecordDialog.propTypes = {
   onCancel: PropTypes.func.isRequired,
 }
 
+export const ConfirmBatchRemoveRecordDialog = (props) => (
+  <div>
+    <Dialog
+      open={props.open}
+      onClose={props.onCancel}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        {`Delete all ${props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""} records`}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          Are you sure you want to delete all the records?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onCancel}>No</Button>
+        <Button onClick={props.onProceed} autoFocus>Yes</Button>
+      </DialogActions>
+    </Dialog>
+  </div>
+)
+
+ConfirmBatchRemoveRecordDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  selection: PropTypes.object.isRequired,
+  onProceed: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+}
+
 export const ConfirmRemoveDialog = (props) => (
   <div>
     <Dialog

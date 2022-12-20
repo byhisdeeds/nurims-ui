@@ -27,7 +27,7 @@ class ViewSSCRecords extends Component {
     this.props.send({
       cmd: CMD_GENERATE_SSC_RECORDS_PDF,
       module: this.Module,
-      "include.withdrawn": this.state.include_archived ? "true" : "false",
+      "include.withdrawn": this.state.include_archived,
     });
   }
 

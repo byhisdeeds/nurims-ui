@@ -94,6 +94,7 @@ module.exports = Object.freeze({
 
   NURIMS_TITLE: 'nurims.title',
   NURIMS_CREATED_BY: 'nurims.createdby',
+  NURIMS_CREATION_DATE: 'nurims.creationdate',
   NURIMS_TITLE_SUBTITLE: 'nurims.title.subtitle',
   NURIMS_SOURCE: 'nurims.source',
   NURIMS_WITHDRAWN: 'nurims.withdrawn',

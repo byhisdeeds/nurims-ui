@@ -30,6 +30,7 @@ import {
 } from "../utils/WebsocketUtils";
 import {toast} from "react-toastify";
 import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
+import {getNextItemId, new_record} from "../utils/MetadataUtils";
 
 class BaseRecordManager extends Component {
   static contextType = UserDebugContext;
@@ -185,13 +186,19 @@ class BaseRecordManager extends Component {
       ConsoleLog(this.Module, "addRecord");
     }
     if (this.listRef.current) {
-      this.listRef.current.addRecords([{
-        "changed": true,
-        "item_id": -1,
-        "nurims.title": "New Record",
-        "nurims.withdrawn": 0,
-        "metadata": []
-      }], false);
+      // this.listRef.current.addRecords([{
+      //   "changed": true,
+      //   "item_id": -1,
+      //   "nurims.title": "New Record",
+      //   "nurims.withdrawn": 0,
+      //   "metadata": []
+      // }], false);
+      this.listRef.current.addRecords([new_record(
+        -1,
+        "New Record",
+        0,
+        this.context.user.profile.username
+      )], false);
       this.setState({metadata_changed: true});
     }
   }
@@ -316,15 +323,16 @@ class BaseRecordManager extends Component {
             this.listRef.current.updateRecord(response[this.cmdRecordTopic(message.cmd)]);
           }
         } else if (this.isCommand(message, [
-          CMD_DELETE_MONITOR_RECORD, CMD_DELETE_PERSONNEL_RECORD, CMD_DELETE_SSC_RECORD, CMD_DELETE_STORAGE_LOCATION_RECORD,
-          CMD_DELETE_MATERIAL_RECORD, CMD_DELETE_MANUFACTURER_RECORD])) {
+          CMD_DELETE_MONITOR_RECORD, CMD_DELETE_PERSONNEL_RECORD, CMD_DELETE_SSC_RECORD,
+          CMD_DELETE_STORAGE_LOCATION_RECORD, CMD_DELETE_MATERIAL_RECORD,
+          CMD_DELETE_MANUFACTURER_RECORD])) {
           toast.success(`Record (id: ${response.item_id}) deleted successfully`)
           if (this.listRef.current) {
             this.listRef.current.removeRecord(this.state.selection)
           }
-          if (this.listRef.current) {
-            this.listRef.current.removeRecord(this.state.selection)
-          }
+          // if (this.listRef.current) {
+          //   this.listRef.current.removeRecord(this.state.selection)
+          // }
           if (this.metadataRef.current) {
             this.metadataRef.current.setRecordMetadata({})
           }

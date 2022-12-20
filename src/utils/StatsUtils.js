@@ -1,5 +1,5 @@
 import * as ss from "simple-statistics";
-import {format, parseISO} from "date-fns";
+import {parseISO} from "date-fns";
 import {
   EXTREMITY,
   NURIMS_DOSIMETRY_DEEP_DOSE,

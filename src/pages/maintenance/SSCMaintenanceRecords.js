@@ -15,7 +15,7 @@ import "leaflet/dist/leaflet.css";
 import {
   getDateFromDateString,
   getNextItemId,
-  getRecordMetadataValue, removeMetadataField,
+  getRecordMetadataValue, new_record, removeMetadataField,
   setMetadataValue,
   toBoolean,
 } from "../../utils/MetadataUtils";
@@ -331,15 +331,21 @@ class SSCMaintenanceRecords extends Component {
       ConsoleLog(this.Module, "addMaintenanceRecord");
     }
     if (this.listRef.current) {
-      this.listRef.current.addRecords([{
-        "changed": true,
-        "item_id": getNextItemId(this.listRef.current.getRecords()),
-        "nurims.title": "New Maintenance Record",
-        "nurims.withdrawn": 0,
-        "metadata": [
-          {"nurims.createdby": this.context.user.profile.username}
-        ]
-      }], false);
+      // this.listRef.current.addRecords([{
+      //   "changed": true,
+      //   "item_id": getNextItemId(this.listRef.current.getRecords()),
+      //   "nurims.title": "New Maintenance Record",
+      //   "nurims.withdrawn": 0,
+      //   "metadata": [
+      //     {"nurims.createdby": this.context.user.profile.username}
+      //   ]
+      // }], false);
+      this.listRef.current.addRecords([new_record(
+        getNextItemId(this.listRef.current.getRecords()),
+        "New Maintenance Record",
+        0,
+        this.context.user.profile.username
+      )], false);
       this.setState({metadata_changed: true});
     }
   }
