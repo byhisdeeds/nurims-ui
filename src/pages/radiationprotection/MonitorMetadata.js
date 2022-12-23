@@ -234,6 +234,7 @@ class MonitorMetadata extends Component {
                     <MenuItem value={t[0]}>{t[1]}</MenuItem>
                   )
                 }
+                return null;
               })}
             </Select>
           </FormControl>

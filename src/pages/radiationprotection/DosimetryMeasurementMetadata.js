@@ -35,7 +35,7 @@ import {
   NURIMS_DOSIMETRY_UNITS,
   NURIMS_DOSIMETRY_WRIST_DOSE,
 } from "../../utils/constants";
-import DosimetryMeasurementsList from "../../components/DosimetryMeasurementsList";
+import DosimetryMeasurementsList from "./DosimetryMeasurementsList";
 import Checkbox from "@mui/material/Checkbox";
 
 

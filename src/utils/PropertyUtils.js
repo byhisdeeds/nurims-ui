@@ -41,5 +41,6 @@ export function getPropertyAsMenuitems(properties, key) {
           <MenuItem value={t[0]}>{t[1]}</MenuItem>
         )
       }
+      return null;
     }))
 }

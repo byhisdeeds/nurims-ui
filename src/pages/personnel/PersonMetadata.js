@@ -21,6 +21,7 @@ import {
   NURIMS_TITLE, NURIMS_ENTITY_WORK_DETAILS, NURIMS_ENTITY_DOSE_PROVIDER_ID, BLANK_IMAGE_OBJECT,
 } from "../../utils/constants";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {dateFromDateString} from "../../utils/dateUtils";
 
 class PersonMetadata extends Component {
   static contextType = UserDebugContext;
@@ -189,7 +190,8 @@ class PersonMetadata extends Component {
             <DatePicker
               label="Date Of Birth"
               inputFormat={"yyyy-MM-dd"}
-              value={getDateFromDateString(getRecordMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), null)}
+              // value={getDateFromDateString(getRecordMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), null)}
+              value={dateFromDateString(getRecordMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), "1970-01-01")}
               onChange={this.handleDobChange}
               renderInput={(params) => <TextField {...params} />}
             />

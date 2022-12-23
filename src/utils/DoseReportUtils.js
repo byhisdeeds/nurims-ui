@@ -48,7 +48,7 @@ export function importIcensDoseReport (data, persons, doseUnit) {
             const timestamp = b["tld.dosimeter.timestamp"];
             const monitorPeriod = b["tld.dosimeter.monitorperiod"].replace(" to ", "|");
             const status = b["tld.dosimeter.status"];
-            const hasNoControl = b["outofsyncwithcontrol"];
+            // const hasNoControl = b["outofsyncwithcontrol"];
             const responseUnits = b["tld.dosimeter.responseunit"].toLowerCase();
             console.log("EMPLOYEE", name, b["tld.dosimeter.employee"], id);
             // find person

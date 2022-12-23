@@ -190,6 +190,29 @@ module.exports = Object.freeze({
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE: "nurims.operation.data.reactorwaterchemistry.reportfile",
   NURIMS_OPERATION_DATA_STATS: "nurims.operation.data.stats",
 
+  EMPLOYEE_RECORD_TYPE: "employee_record",
+  MANUFACTURER_RECORD_TYPE: "manufacturer_record",
+  STORAGE_RECORD_TYPE:  "storage_record",
+  SSC_RECORD_TYPE:  "ssc_record",
+  MATERIAL_RECORD_TYPE: "material_record",
+  DOSIMETRY_RECORD_TYPE: "dosimetry_record",
+  REACTOR_OPERATING_RUN_RECORD_TYPE: "reactor_operating_run_record",
+  MONITOR_RECORD_TYPE: "monitor_record",
+  IRRADIATED_SAMPLE_LOG_RECORD_TYPE: "irradiated_sample_log_record",
+  REACTOR_WATER_CHEMISTRY_RECORD_TYPE: "reactor_water_chemistry_record",
+
+  EMPLOYEE_RECORD: "employee_record",
+  FIXED_LOCATION_MONITOR_RECORD: "fixed_location_monitor_record",
+
+  PERSONNEL_TOPIC: "personnel",
+  MONITOR_TOPIC: "monitor",
+  MANUFACTURER_TOPIC: "manufacturer",
+  MATERIAL_TOPIC: "material",
+  MEASUREMENT_TOPIC: "measurement",
+  STORAGE_LOCATION_TOPIC: "storage_location",
+  SSC_TOPIC: "structures_systems_components",
+  OPERATION_TOPIC: "operation",
+
   BLANK_PDF: 'data:application/pdf;base64,JVBERi0xLjQKJb/3ov4KMSAwIG9iago8PCAvUGFnZXMgMiAwIFIgL1R5cGUgL0NhdGFsb2cgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL0NvdW50IDEgL0tpZHMgWyAzIDAgUiBdIC9UeXBlIC9QYWdlcyA+PgplbmRvYmoKMyAwIG9iago8PCAvQ29udGVudHMgNCAwIFIgL0dyb3VwIDw8IC9DUyAvRGV2aWNlUkdCIC9JIHRydWUgL1MgL1RyYW5zcGFyZW5jeSAvVHlwZSAvR3JvdXAgPj4gL01lZGlhQm94IFsgMCAwIDYxMiA3OTEuMjUgXSAvUGFyZW50IDIgMCBSIC9SZXNvdXJjZXMgNSAwIFIgL1R5cGUgL1BhZ2UgPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0ZpbHRlciAvRmxhdGVEZWNvZGUgL0xlbmd0aCAzMCA+PgpzdHJlYW0KeJwzVDAAQl1DIGFuaahnZKqQnMtVyBXIBQA6LATGZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8ID4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDA2NCAwMDAwMCBuIAowMDAwMDAwMTIzIDAwMDAwIG4gCjAwMDAwMDAyOTggMDAwMDAgbiAKMDAwMDAwMDM5OCAwMDAwMCBuIAp0cmFpbGVyIDw8IC9Sb290IDEgMCBSIC9TaXplIDYgL0lEIFs8YzhjZDFmYzFhMWNiODBlZTgyNzI1ZjIyMTYyMTU2NDE+PGM4Y2QxZmMxYTFjYjgwZWU4MjcyNWYyMjE2MjE1NjQxPl0gPj4Kc3RhcnR4cmVmCjQxOQolJUVPRgo=',
 
   BLANK_IMAGE_OBJECT: {file: '', url: ''},

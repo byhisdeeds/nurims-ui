@@ -10,7 +10,7 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {
-  CMD_GET_GLOSSARY_TERMS,
+  CMD_GET_GLOSSARY_TERMS, EMPLOYEE_RECORD_TYPE,
   NURIMS_DOSIMETRY_BATCH_ID, NURIMS_DOSIMETRY_DEEP_DOSE, NURIMS_DOSIMETRY_EXTREMITY_DOSE,
   NURIMS_DOSIMETRY_ID,
   NURIMS_DOSIMETRY_MEASUREMENTS,
@@ -30,7 +30,12 @@ import DosimetryMeasurementMetadata from "./DosimetryMeasurementMetadata";
 import BusyIndicator from "../../components/BusyIndicator";
 import {toast} from "react-toastify";
 import {readString} from "react-papaparse";
-import {getRecordMetadataValue, setRecordMetadataValue} from "../../utils/MetadataUtils";
+import {
+  getMatchingEntityDoseProviderRecord,
+  getRecordMetadataValue, parseDosimetryMeasurementRecordFromLine,
+  parsePersonnelRecordFromLine,
+  setRecordMetadataValue
+} from "../../utils/MetadataUtils";
 import {transformDose} from "../../utils/DoseReportUtils";
 import PropTypes from "prop-types";
 import {TitleComponent} from "../../components/CommonComponents";
@@ -88,47 +93,58 @@ class DosimetryMeasurement extends BaseRecordManager {
     super(props);
     this.state = {
       busy: 0,
-      data_changed: false,
       selection: {},
     }
     this.Module = DOSIMETRYMEASUREMENT_REF;
     this.importFileRef = React.createRef();
+    this.importRecordType = props.importRecordType;
+    console.log("%%%%%%", this.importRecordType)
   }
 
   componentDidMount() {
-    document.addEventListener("keydown", this.ctrlIKeyPress, false);
+    document.addEventListener("keydown", this.ctrlKeyPress, false);
+    this.requestGetRecords(false, true);
     this.props.send({
       cmd: CMD_GET_GLOSSARY_TERMS,
       module: this.Module,
     });
-    this.requestGetRecords(false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.ctrlIKeyPress, false);
+    document.removeEventListener("keydown", this.ctrlKeyPress, false);
   }
 
-  ctrlIKeyPress = (event) => {
-    console.log(`Key: ${event.key} with keycode ${event.keyCode} has been pressed`)
-    if (event.key === 'i' && event.keyCode === 73) {
-      console.log("==>", "CTRL I KEY PRESSED");
-      event.preventDefault();
-      this.importFileRef.current.click();
-    }
-  }
-
-  requestGetRecords = (include_archived) => {
+  ctrlKeyPress = (event) => {
     if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
+      ConsoleLog(this.Module, "ctrlKeyPress", "key", event.key, "ctrlKey", event.ctrlKey);
     }
-    this.props.send({
-      cmd: this.recordCommand("get", this.topic),
-      "include.withdrawn": include_archived ? "true" : "false",
-      "include.metadata": "true",
-      module: this.Module,
-    });
-    this.setState({include_archived: include_archived});
+    if (event.key === 'i' && event.ctrlKey) {
+      // Ctrl+i
+      event.preventDefault();
+      if (this.importFileRef.current) {
+        this.importFileRef.current.click();
+      }
+    }
   }
+
+  ws_message = (message) => {
+    super.ws_message(message, [
+      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
+    ]);
+  }
+
+  // requestGetRecords = (include_archived) => {
+  //   if (this.context.debug > 5) {
+  //     ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
+  //   }
+  //   this.props.send({
+  //     cmd: this.recordCommand("get", this.topic),
+  //     "include.withdrawn": include_archived ? "true" : "false",
+  //     "include.metadata": "true",
+  //     module: this.Module,
+  //   });
+  //   this.setState({include_archived: include_archived});
+  // }
 
   onSelection = (selection) => {
     if (this.context.debug > 5) {
@@ -146,6 +162,7 @@ class DosimetryMeasurement extends BaseRecordManager {
       ConsoleLog(this.Module, "handleFileUpload", "selectedFile", selectedFile);
     }
     const records = (this.listRef.current) ? this.listRef.current.getRecords() : [];
+    const importRecordType = this.importRecordType;
     const that = this;
     const fileReader = new FileReader();
     fileReader.onerror = function () {
@@ -154,33 +171,55 @@ class DosimetryMeasurement extends BaseRecordManager {
     this.setState({busy: 1});
     fileReader.readAsText(selectedFile);
     fileReader.onload = function (e) {
-      // const data = JSON.parse(event.target.result);
       const results = readString(e.target.result, {header: true});
-      console.log("RESULT", results)
+      // console.log("RESULT", results)
       const header = results.meta.fields;
       const ts_column = results.meta.fields;
       let parseHeader = true;
       if (results.hasOwnProperty("data")) {
-        const table_data = [];
         for (const row of results.data) {
-          const msg = assignDosimetryRecord(row, records)
-          if (msg) {
-            console.log(">>>>", msg, row);
+          if (row.hasOwnProperty("Type") && row.Type === importRecordType) {
+            const r = getMatchingEntityDoseProviderRecord(records, row);
+            if (r) {
+              // get existing dosimetry measurements
+              const measurements = getRecordMetadataValue(r, NURIMS_DOSIMETRY_MEASUREMENTS, []);
+              // check if the measurement data in the line is already recorded
+              let add = true;
+              for (const measurement of measurements) {
+                if (measurement[NURIMS_DOSIMETRY_BATCH_ID] === row.Barcode) {
+                  add = false;
+                  break;
+                }
+              }
+              if (add) {
+                measurements.push(parseDosimetryMeasurementRecordFromLine(row));
+                setRecordMetadataValue(r, NURIMS_DOSIMETRY_MEASUREMENTS, measurements);
+                r["changed"] = true;
+              }
+            }
           }
         }
-        console.log("RECORDS", records)
+        // for (const row of results.data) {
+        //   const msg = assignDosimetryRecord(row, records)
+        //   if (msg) {
+        //     console.log(">>>>", msg, row);
+        //   }
+        // }
+        // console.log("RECORDS", records)
         // if (that.tableRef.current) {
         //   that.tableRef.current.setRecords(table_data);
         // }
       }
-      that.setState({busy: 0, data_changed: true});
+      that.setState({busy: 0});
     };
+    this.setState({busy: 1});
   }
 
   render() {
-    const {data_changed, confirm_remove, include_archived, selection, title, busy} = this.state;
+    const {confirm_remove, include_archived, selection, busy} = this.state;
+    const has_changed_records = this.hasChangedRecords();
     if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "render", "data_changed", data_changed,
+      ConsoleLog(this.Module, "render", "has_changed_records", has_changed_records,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
     }
     return (
@@ -235,7 +274,7 @@ class DosimetryMeasurement extends BaseRecordManager {
               <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive SSC Record"</React.Fragment>}
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
-               disabled={!data_changed}>
+               disabled={!has_changed_records}>
             <SaveIcon sx={{mr: 1}}/>
             Save Changes
           </Fab>
@@ -253,7 +292,7 @@ DosimetryMeasurement.defaultProps = {
   send: (msg) => {
   },
   user: {},
-  topic: "",
+  importRecordType: "",
 };
 
 export default DosimetryMeasurement;

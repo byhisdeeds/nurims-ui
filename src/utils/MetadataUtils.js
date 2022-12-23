@@ -1,5 +1,21 @@
-import {NURIMS_WITHDRAWN} from "./constants";
+import {
+  NURIMS_DOSIMETRY_BATCH_ID, NURIMS_DOSIMETRY_DEEP_DOSE, NURIMS_DOSIMETRY_EXTREMITY_DOSE,
+  NURIMS_DOSIMETRY_ID, NURIMS_DOSIMETRY_MEASUREMENTS, NURIMS_DOSIMETRY_MONITOR_PERIOD, NURIMS_DOSIMETRY_SHALLOW_DOSE,
+  NURIMS_DOSIMETRY_TIMESTAMP,
+  NURIMS_DOSIMETRY_TYPE,
+  NURIMS_DOSIMETRY_UNITS, NURIMS_DOSIMETRY_WRIST_DOSE,
+  NURIMS_ENTITY_DATE_OF_BIRTH,
+  NURIMS_ENTITY_DOSE_PROVIDER_ID,
+  NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
+  NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED,
+  NURIMS_ENTITY_IS_WRIST_MONITORED,
+  NURIMS_ENTITY_NATIONAL_ID,
+  NURIMS_ENTITY_SEX,
+  NURIMS_ENTITY_WORK_DETAILS,
+  NURIMS_WITHDRAWN
+} from "./constants";
 import {differenceInDays} from "date-fns";
+import {transformDose} from "./DoseReportUtils";
 
 
 export function isRecordArchived(record) {
@@ -315,4 +331,116 @@ export function new_record(item_id, title, withdrawn, createdby) {
       {"nurims.creationdate": new Date().toISOString()}
     ]
   };
+}
+
+export function parsePersonnelRecordFromLine(line, recordType, username) {
+  const p = {
+    item_id: -1,
+    "nurims.title": line.Name,
+    "nurims.withdrawn": 0,
+    "record_type": recordType,
+    "metadata": [
+      {"nurims.createdby": username},
+      {"nurims.creationdate": new Date().toISOString()}
+    ]
+  };
+  if (line.hasOwnProperty("DateOfBirth")) {
+    setMetadataValue(p, NURIMS_ENTITY_DATE_OF_BIRTH, line.DateOfBirth)
+  }
+  if (line.hasOwnProperty("WorkDetails")) {
+    setMetadataValue(p, NURIMS_ENTITY_WORK_DETAILS, line.WorkDetails)
+  }
+  if (line.hasOwnProperty("Sex")) {
+    setMetadataValue(p, NURIMS_ENTITY_SEX, line.Sex)
+  }
+  if (line.hasOwnProperty("NID")) {
+    setMetadataValue(p, NURIMS_ENTITY_NATIONAL_ID, line.NID)
+  }
+  if (line.hasOwnProperty("Id")) {
+    setMetadataValue(p, NURIMS_ENTITY_DOSE_PROVIDER_ID, line.Id)
+  }
+  if (line.hasOwnProperty("IsWholeBodyMonitored")) {
+    setMetadataValue(p, NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, line.IsWholeBodyMonitored === "" ? "false" : "true")
+  }
+  if (line.hasOwnProperty("IsExtremityMonitored")) {
+    setMetadataValue(p, NURIMS_ENTITY_IS_EXTREMITY_MONITORED, line.IsExtremityMonitored === "" ? "false" : "true")
+  }
+  if (line.hasOwnProperty("IsWristMonitored")) {
+    setMetadataValue(p, NURIMS_ENTITY_IS_WRIST_MONITORED, line.IsWristMonitored === "" ? "false" : "true")
+  }
+  console.log("$$$$", p)
+
+  return p;
+}
+
+export function parseMonitorRecordFromLine(line, recordType, username) {
+  const p = {
+    item_id: -1,
+    "nurims.title": line.Name,
+    "nurims.withdrawn": 0,
+    "record_type": recordType,
+    "metadata": [
+      {"nurims.createdby": username},
+      {"nurims.creationdate": new Date().toISOString()}
+    ]
+  };
+  if (line.hasOwnProperty("DateOfBirth")) {
+    setMetadataValue(p, NURIMS_ENTITY_DATE_OF_BIRTH, line.DateOfBirth)
+  }
+  if (line.hasOwnProperty("WorkDetails")) {
+    setMetadataValue(p, NURIMS_ENTITY_WORK_DETAILS, line.WorkDetails)
+  }
+  if (line.hasOwnProperty("Sex")) {
+    setMetadataValue(p, NURIMS_ENTITY_SEX, line.Sex)
+  }
+  if (line.hasOwnProperty("NID")) {
+    setMetadataValue(p, NURIMS_ENTITY_NATIONAL_ID, line.NID)
+  }
+  if (line.hasOwnProperty("Id")) {
+    setMetadataValue(p, NURIMS_ENTITY_DOSE_PROVIDER_ID, line.Id)
+  }
+  if (line.hasOwnProperty("IsWholeBodyMonitored")) {
+    setMetadataValue(p, NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, line.IsWholeBodyMonitored === "" ? "false" : "true")
+  }
+  if (line.hasOwnProperty("IsExtremityMonitored")) {
+    setMetadataValue(p, NURIMS_ENTITY_IS_EXTREMITY_MONITORED, line.IsExtremityMonitored === "" ? "false" : "true")
+  }
+  if (line.hasOwnProperty("IsWristMonitored")) {
+    setMetadataValue(p, NURIMS_ENTITY_IS_WRIST_MONITORED, line.IsWristMonitored === "" ? "false" : "true")
+  }
+  console.log("$$$$", p)
+
+  return p;
+}
+
+export function parseDosimetryMeasurementRecordFromLine(line) {
+  const measurement = {};
+  measurement[NURIMS_ENTITY_DOSE_PROVIDER_ID] = line.Id;
+  measurement[NURIMS_DOSIMETRY_BATCH_ID] = line.BatchId;
+  measurement[NURIMS_DOSIMETRY_ID] = line.Barcode;
+  measurement[NURIMS_DOSIMETRY_TYPE] = line.recordType;
+  measurement[NURIMS_DOSIMETRY_TIMESTAMP] = line.Timestamp;
+  measurement[NURIMS_DOSIMETRY_UNITS] = "msv";
+  measurement[NURIMS_DOSIMETRY_MONITOR_PERIOD] = line.monitorPeriod;
+  measurement["badge.date.available"] = line.dateAvailable;
+  measurement["badge.return.timestamp"] = line.returnTimestamp;
+  if (line.recordType === "wholebody") {
+    measurement[NURIMS_DOSIMETRY_SHALLOW_DOSE] = transformDose(line.R2, line.Units.toLowerCase(), 'msv');
+    measurement[NURIMS_DOSIMETRY_DEEP_DOSE] = transformDose(line.R3, line.Units.toLowerCase(), 'msv');
+  } else if (line.recordType === "extremity") {
+    measurement[NURIMS_DOSIMETRY_EXTREMITY_DOSE] = transformDose(line.R3, line.Units.toLowerCase(), 'msv');
+  } else if (line.recordType === "wrist") {
+    measurement[NURIMS_DOSIMETRY_WRIST_DOSE] = transformDose(line.R3, line.Units.toLowerCase(), 'msv');
+  }
+
+  return measurement;
+}
+
+export function getMatchingEntityDoseProviderRecord(records, line) {
+  for (const record of records) {
+    if (line.hasOwnProperty("Id") && line.Id === getRecordMetadataValue(record, NURIMS_ENTITY_DOSE_PROVIDER_ID, "-")) {
+      return record;
+    }
+  }
+  return null;
 }

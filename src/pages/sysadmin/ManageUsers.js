@@ -232,7 +232,7 @@ class ManageUsers extends React.Component {
   }
 
   render() {
-    const {metadata_changed, confirm_remove, include_archived, selection, title} = this.state;
+    const {metadata_changed, confirm_remove, include_archived, selection} = this.state;
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);

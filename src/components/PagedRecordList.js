@@ -253,7 +253,7 @@ PagedRecordList.defaultProps = {
   ],
   onListItemSelection: (item) => {
   },
-  requestGetRecords: (include_archived) => {
+  requestGetRecords: (include_archived, include_metadata) => {
   },
   renderCellStyle: (row, cell, theme) => {
     return {

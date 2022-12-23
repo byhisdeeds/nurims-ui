@@ -129,9 +129,9 @@ class BaseRecordManager extends Component {
         this.metadataRef.current.setRecordMetadata(selection)
       }
     } else {
-      this.setState(pstate => {
-        return {selection: selection}
-      });
+      // this.setState(pstate => {
+      //   return {selection: selection}
+      // });
       this.props.send({
         cmd: this.recordCommand("get"),
         item_id: selection.item_id,
@@ -152,6 +152,17 @@ class BaseRecordManager extends Component {
 
   onRecordMetadataChanged = (state) => {
     this.setState({metadata_changed: state});
+  }
+
+  hasChangedRecords = () => {
+    if (this.listRef.current) {
+      for (const record of this.listRef.current.getRecords()) {
+        if (record.hasOwnProperty("changed") && record.changed) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   removeRecord = () => {
@@ -186,13 +197,6 @@ class BaseRecordManager extends Component {
       ConsoleLog(this.Module, "addRecord");
     }
     if (this.listRef.current) {
-      // this.listRef.current.addRecords([{
-      //   "changed": true,
-      //   "item_id": -1,
-      //   "nurims.title": "New Record",
-      //   "nurims.withdrawn": 0,
-      //   "metadata": []
-      // }], false);
       this.listRef.current.addRecords([new_record(
         -1,
         "New Record",
@@ -203,13 +207,15 @@ class BaseRecordManager extends Component {
     }
   }
 
-  requestGetRecords = (include_archived) => {
+  requestGetRecords = (include_archived, include_metadata) => {
     if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
+      ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived,
+        "include_metadata", include_metadata);
     }
     this.props.send({
       cmd: this.recordCommand("get"),
       "include.withdrawn": include_archived ? "true" : "false",
+      "include.metadata": include_metadata ? "true" : "false",
       module: this.Module,
     })
     this.setState({include_archived: include_archived});

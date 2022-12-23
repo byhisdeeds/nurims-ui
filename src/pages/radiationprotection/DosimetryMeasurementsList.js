@@ -5,15 +5,15 @@ import {
   ITEM_ID, METADATA, NURIMS_DOSIMETRY_BATCH_ID,
   NURIMS_TITLE, NURIMS_TITLE_SUBTITLE,
   NURIMS_WITHDRAWN
-} from "../utils/constants";
+} from "../../utils/constants";
 import {
   Box,
   Paper,
   Switch,
   TableCell
 } from "@mui/material";
-import {PageableTable} from "./CommonComponents";
-import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
+import {PageableTable} from "../../components/CommonComponents";
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 
 class DosimetryMeasurementsList extends React.Component {
   static contextType = UserDebugContext;
@@ -155,11 +155,7 @@ class DosimetryMeasurementsList extends React.Component {
             onRowSelection={this.handleListItemSelection}
             selectionMetadataField={NURIMS_DOSIMETRY_BATCH_ID}
             renderCell={this.renderCell}
-            filterElement={this.props.enableRecordArchiveSwitch && <Switch
-              inputProps={{'aria-labelledby': 'include-archived-records-switch'}}
-              onChange={this.includeArchivedRecords}
-              checked={include_archived}
-            />}
+            enableRowFilter={false}
           />
         </Paper>
       </Box>
