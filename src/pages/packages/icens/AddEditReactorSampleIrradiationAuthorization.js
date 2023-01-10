@@ -181,28 +181,6 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
             Add Authorization
           </Button>
         </Box>
-        {/*<Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}
-        {/*       disabled={selection === -1}>*/}
-        {/*    <RemoveCircleIcon sx={{mr: 1}}/>*/}
-        {/*    Remove SSC*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}*/}
-        {/*       onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>*/}
-        {/*    {this.isRecordArchived(selection) ?*/}
-        {/*      <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore SSC Record"</React.Fragment> :*/}
-        {/*      <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive SSC Record"</React.Fragment>}*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}*/}
-        {/*       disabled={!metadata_changed}>*/}
-        {/*    <SaveIcon sx={{mr: 1}}/>*/}
-        {/*    Save Changes*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>*/}
-        {/*    <AddIcon sx={{mr: 1}}/>*/}
-        {/*    Add SSC*/}
-        {/*  </Fab>*/}
-        {/*</Box>*/}
       </React.Fragment>
     );
   }

@@ -9,18 +9,11 @@ import {
   Select,
 } from "@mui/material";
 import {
-  CMD_GET_GLOSSARY_TERMS,
   CMD_SUGGEST_ANALYSIS_JOBS,
-  NURIMS_DESCRIPTION,
-  NURIMS_MATERIAL_ID, NURIMS_MATERIAL_INVENTORY_STATUS,
-  NURIMS_MATERIAL_MANUFACTURER_RECORD,
-  NURIMS_MATERIAL_NUCLIDES,
-  NURIMS_MATERIAL_TYPE,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
   NURIMS_OPERATION_DATA_IRRADIATIONDURATION, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
   NURIMS_OPERATION_DATA_NEUTRONFLUX,
-  NURIMS_SSC_MAINTENANCE_RECORD_NAME,
   NURIMS_TITLE
 } from "../../../utils/constants";
 import {
@@ -32,8 +25,6 @@ import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./AddEditReactor
 import {
   analysisJobAsObject,
   getRecordData,
-  getRecordMetadataValue,
-  setMetadataValue,
   setRecordData
 } from "../../../utils/MetadataUtils";
 import {getGlossaryValue} from "../../../utils/GlossaryUtils";
@@ -57,6 +48,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     this.glossary = {};
     this.sampleTypes = [];
     this.timeout = null;
+    this.Module = "ReactorSampleIrradiationAuthorizationMetadata";
   }
 
   componentWillUnmount() {
@@ -128,7 +120,6 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   }
 
   getJobLabel = (job) => {
-    console.log("--- getJobLabel ---", job)
     return typeof job === "object" ? job.hasOwnProperty('name') ? job.name : '' : job;
   };
 
@@ -152,21 +143,12 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     this.props.onChange(true);
   }
 
-  // handleInventoryStatusChange = (e) => {
-  //   const material = this.state.material;
-  //   material["changed"] = true;
-  //   setMetadataValue(material, NURIMS_MATERIAL_INVENTORY_STATUS, e.target.value);
-  //   this.setState({material: material})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
   render() {
     const {record, properties, selected_job, jobs, searching, busy, ac_open} = this.state;
     const disabled = Object.entries(record).length === 0;
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "render", "disabled", disabled, "record", record, "selected_job", selected_job);
     }
-    console.log("@@@@@ USER @@@@@", this.context.user)
     const can_authorize = isValidUserRole(this.context.user, "irradiation_authorizer");
     const authorizer=[{
       id: can_authorize ? this.context.user.profile.username : "none",
