@@ -13,7 +13,7 @@ import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {
   CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_SSC_RECORDS,
+  CMD_GET_SSC_RECORDS, SSC_TOPIC,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -33,7 +33,7 @@ class AddEditAMP extends BaseRecordManager {
   constructor(props) {
     super(props);
     this.Module = ADDEDITAMP_REF;
-    this.recordTopic = "structures_systems_components";
+    this.recordTopic = SSC_TOPIC;
   }
 
   componentDidMount() {

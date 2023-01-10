@@ -12,7 +12,7 @@ import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {
   CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_SSC_RECORDS,
+  CMD_GET_SSC_RECORDS, SSC_TOPIC,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -22,17 +22,17 @@ import {
 import SSCList from "./SSCList";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {TitleComponent} from "../../components/CommonComponents";
-import SSCMaintenanceRecords from "./SSCMaintenanceRecords";
+import SSCCorrectiveMaintenanceRecords from "./SSCCorrectiveMaintenanceRecords";
 
-export const ADD_EDIT_MAINTENANCE_RECORD_REF = "AddEditMaintenanceRecord";
+export const ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF = "AddEditCorrectiveMaintenanceIssueRecord";
 
-class AddEditMaintenanceRecord extends BaseRecordManager {
+class AddEditCorrectiveMaintenanceIssueRecord extends BaseRecordManager {
   static contextType = UserDebugContext;
 
   constructor(props) {
     super(props);
-    this.Module = ADD_EDIT_MAINTENANCE_RECORD_REF;
-    this.recordTopic = "structures_systems_components";
+    this.Module = ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF;
+    this.recordTopic = SSC_TOPIC;
   }
 
   componentDidMount() {
@@ -88,7 +88,7 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
             />
           </Grid>
           <Grid item xs={9}>
-            <SSCMaintenanceRecords
+            <SSCCorrectiveMaintenanceRecords
               ref={this.metadataRef}
               properties={this.props.properties}
               onChange={this.onRecordMetadataChanged}
@@ -123,10 +123,10 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
   }
 }
 
-AddEditMaintenanceRecord.defaultProps = {
+AddEditCorrectiveMaintenanceIssueRecord.defaultProps = {
   send: (msg) => {
   },
   user: {},
 };
 
-export default AddEditMaintenanceRecord;
+export default AddEditCorrectiveMaintenanceIssueRecord;

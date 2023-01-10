@@ -359,15 +359,15 @@ export const MenuData = [
         ]
       },
       {
-        name: '‣ Maintenance',
-        tooltip: 'Maintenance records.',
+        name: '‣ Corr. Maintenance',
+        tooltip: 'Corrective maintenance issue records.',
         authmodlevel: 'basic',
         items: [
           {
-            name: '   - Add/Edit Maint. Record',
-            link: 'ssc.add.edit.ssc.maintenance.record',
-            title: 'Add/Edit SSC Maintenance Record',
-            tooltip: 'Add or Edit an SSC corrective or preventive maintenance record.',
+            name: '   - Add/Edit Issue Record',
+            link: 'ssc.add.edit.ssc.corrective.maintenance.issue.record',
+            title: 'Add/Edit SSC Corrective Maintenance Issue Record',
+            tooltip: 'Add or Edit an SSC corrective maintenance issue record.',
             authmodlevel: 'basic',
           },
           {
@@ -510,17 +510,17 @@ export const MenuData = [
             authmodlevel: 'pro',
           },
           {
-            name: '   - Personnel Dose Evaluation',
-            link: 'rp.personnel.dosimetry.evaluation',
-            title: 'Evaluate Personnel Dosimetry',
-            tooltip: 'Evaluate personnel dosimetry measurements',
+            name: '   - Personnel Dose Report',
+            link: 'rp.personnel.dosimetry.report',
+            title: 'Personnel Dosimetry Report',
+            tooltip: 'Evaluation of the personnel dosimetry measurements for a period.',
             authmodlevel: 'basic',
           },
           {
             name: '   - Personnel Dose Profile',
-            link: 'rp.personnel.dose.profile.report',
-            title: '',
-            tooltip: 'Human resource actions',
+            link: 'rp.personnel.dosimetry.evaluation',
+            title: 'Evaluate Personnel Dosimetry',
+            tooltip: 'Evaluate personnel dosimetry measurements',
             authmodlevel: 'pro',
           },
         ],
@@ -570,6 +570,20 @@ export const MenuData = [
     Icon: BusinessIcon,
     authmodlevel: 'basic',
     items: [
+      {
+        name: '‣ Authorizations',
+        tooltip: 'Authorizations for reactor utilization',
+        authmodlevel: 'basic',
+        items: [
+          {
+            name: '   - Reactor Sample Irradiation',
+            link: 'ro.add.edit.reactor.sample.irradiation.records',
+            title: 'Add/Edit Reactor Irradiation Authorization Records',
+            tooltip: 'Add or edit the irradiation requests and authorization records for samples to be irradiated in the reactor core.',
+            authmodlevel: 'basic',
+          },
+        ],
+      },
       {
         name: '‣ Operating Data',
         tooltip: 'Data on the reactor operating runs',

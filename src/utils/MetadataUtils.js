@@ -11,10 +11,10 @@ import {
   NURIMS_ENTITY_IS_WRIST_MONITORED,
   NURIMS_ENTITY_NATIONAL_ID,
   NURIMS_ENTITY_SEX,
-  NURIMS_ENTITY_WORK_DETAILS,
+  NURIMS_ENTITY_WORK_DETAILS, NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "./constants";
-import {differenceInDays} from "date-fns";
+import {differenceInDays, format} from "date-fns";
 import {transformDose} from "./DoseReportUtils";
 
 
@@ -64,6 +64,38 @@ export function setRecordMetadataValue(obj, key, value) {
   }
 }
 
+export function setRecordData(record, key, value) {
+  if (key === NURIMS_TITLE) {
+    record[NURIMS_TITLE] = value;
+    record["changed"] = true;
+  } else if (key === NURIMS_WITHDRAWN) {
+    record[NURIMS_WITHDRAWN] = value;
+    record["changed"] = true;
+  } else if (record.hasOwnProperty("metadata")) {
+    if (Array.isArray(record.metadata)) {
+      for (const m of record.metadata) {
+        for (const [k, v] of Object.entries(m)) {
+          // console.log(`${k}: ${v}`);
+          if (k === key) {
+            m[k] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
+            record["changed"] = true;
+            return;
+          }
+        }
+      }
+      const v = {};
+      v[key] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
+      record.metadata.push(v);
+      record["changed"] = true;
+    }
+  } else {
+    const v = {};
+    v[key] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
+    record["metadata"] = [v];
+    record["changed"] = true;
+  }
+}
+
 export function getRecordMetadataValue(obj, key, missingValue) {
   if (obj.hasOwnProperty("metadata")) {
     const metadata = obj.metadata;
@@ -81,6 +113,27 @@ export function getRecordMetadataValue(obj, key, missingValue) {
   return missingValue;
 }
 
+export function getRecordData(record, key, missingValue) {
+  if (key === NURIMS_TITLE) {
+    return record[NURIMS_TITLE];
+  } else if (key === NURIMS_WITHDRAWN) {
+    return record[NURIMS_WITHDRAWN];
+  } else if (record.hasOwnProperty("metadata")) {
+    const metadata = record.metadata;
+    if (Array.isArray(metadata)) {
+      for (const m of metadata) {
+        for (const [k, v] of Object.entries(m)) {
+          if (k === key) {
+            return (typeof v === "number") ? v : (v.charAt(0) === "[" || v.charAt(0) === "{") ?
+              JSON.parse(v.replaceAll("'", "\"").replaceAll("NaN", "0")) : v;
+          }
+        }
+      }
+    }
+  }
+  return missingValue;
+}
+
 export function getUserRecordMetadataValue(obj, key, missingValue) {
   if (obj.hasOwnProperty("metadata")) {
     const metadata = obj.metadata;
@@ -89,6 +142,36 @@ export function getUserRecordMetadataValue(obj, key, missingValue) {
     }
   }
   return missingValue;
+}
+
+export function getUserRecordData(record, key, missingValue) {
+  if (key === NURIMS_TITLE) {
+    return record[NURIMS_TITLE];
+  } else if (key === NURIMS_WITHDRAWN) {
+    return record[NURIMS_WITHDRAWN];
+  } else if (record.hasOwnProperty("metadata")) {
+    const metadata = record.metadata;
+    if (metadata.hasOwnProperty(key)) {
+      const v = metadata[key];
+      return (typeof v === "number") ? v : (v.charAt(0) === "[" || v.charAt(0) === "{") ?
+        JSON.parse(v.replaceAll("'", "\"").replaceAll("NaN", "0")) : v;
+    }
+  }
+  return missingValue;
+}
+
+export function setUserRecordData(record, key, value) {
+  if (key === NURIMS_TITLE) {
+    record[NURIMS_TITLE] = value;
+    record["changed"] = true;
+  } else if (key === NURIMS_WITHDRAWN) {
+    record[NURIMS_WITHDRAWN] = value;
+    record["changed"] = true;
+  } else if (record.hasOwnProperty("metadata")) {
+    record.metadata[key] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
+    record["changed"] = true;
+    return;
+  }
 }
 
 export function getMetadataValueAsISODateString(obj, key, missingValue) {
@@ -443,4 +526,19 @@ export function getMatchingEntityDoseProviderRecord(records, line) {
     }
   }
   return null;
+}
+
+export function analysisJobAsObject(name) {
+  return {
+    "jobid": 0,
+    "info": "",
+    "clientid": 0,
+    "contact": "",
+    "name": name,
+    "created": format(new Date(), 'yyyy-MM-dd'),
+    "jtype": "",
+    "lastmodification": "",
+    "info1": "",
+    "kml": ""
+  };
 }

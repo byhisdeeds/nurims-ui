@@ -2,12 +2,8 @@ import React, {Component} from 'react';
 import {withTheme} from "@mui/styles";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import {
-  getUserRecordMetadataValue, setRecordMetadataValue,
-} from "../../utils/MetadataUtils";
-import {
-  NURIMS_TITLE
-} from "../../utils/constants";
+import {getUserRecordData, setUserRecordData} from "../../utils/MetadataUtils";
+import {NURIMS_TITLE} from "../../utils/constants";
 import PropTypes from "prop-types";
 import {SelectFormControlWithTooltip} from "../../components/CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
@@ -27,6 +23,7 @@ class UserMetadata extends Component {
       password_check: "",
       properties: props.properties,
     };
+    this.Module = "UserMetadata";
   }
 
   componentDidMount() {
@@ -36,9 +33,8 @@ class UserMetadata extends Component {
     console.log(">>>", e.target.id)
     const user = this.state.user;
     if (e.target.id === "username") {
-      user["changed"] = true;
-      user[NURIMS_TITLE] = e.target.value;
-      setRecordMetadataValue(user, "username", e.target.value);
+      setUserRecordData(user, NURIMS_TITLE, e.target.value)
+      setUserRecordData(user, "username", e.target.value)
       this.setState({user: user})
     } else if (e.target.id === "password") {
       user["changed"] = true;
@@ -70,8 +66,6 @@ class UserMetadata extends Component {
 
   handleModuleAuthorizationLevelChange = (e) => {
     const user = this.state.user;
-    user["changed"] = true;
-    user.metadata["authorized_module_level"] = e.target.value;
     this.setState({user: user})
     // signal to parent that details have changed
     this.props.onChange(true);
@@ -79,8 +73,7 @@ class UserMetadata extends Component {
 
   handleUserRoleChange = (e) => {
     const user = this.state.user;
-    user["changed"] = true;
-    user.metadata["role"] = e.target.value;
+    setUserRecordData(user, "role", e.target.value)
     this.setState({user: user})
     // signal to parent that details have changed
     this.props.onChange(true);
@@ -109,7 +102,7 @@ class UserMetadata extends Component {
               fullWidth
               id="username"
               label="Username/Email"
-              value={getUserRecordMetadataValue(user, "username", "")}
+              value={getUserRecordData(user, "username", "")}
               onChange={this.handleChange}
             />
           </Grid>
@@ -117,7 +110,7 @@ class UserMetadata extends Component {
             <SelectFormControlWithTooltip
               id={"authorized_module_level"}
               label="Module Authorization Level"
-              value={getUserRecordMetadataValue(user, "authorized_module_level", "")}
+              value={getUserRecordData(user, "authorized_module_level", "")}
               onChange={this.handleModuleAuthorizationLevelChange}
               options={authorized_module_levels}
               disabled={disabled}
@@ -129,11 +122,12 @@ class UserMetadata extends Component {
             <SelectFormControlWithTooltip
               id={"user_role"}
               label="User Role"
-              value={getUserRecordMetadataValue(user, "role", "")}
+              value={getUserRecordData(user, "role", [])}
               onChange={this.handleUserRoleChange}
               options={user_roles}
               disabled={disabled}
               tooltip={""}
+              multiple={true}
               // target={this.tooltipRef}
             />
           </Grid>

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Fab,
   Grid,
-  Box
+  Box, Button
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
@@ -39,6 +39,7 @@ import {
 import {transformDose} from "../../utils/DoseReportUtils";
 import PropTypes from "prop-types";
 import {TitleComponent} from "../../components/CommonComponents";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
 
 function assignDosimetryRecord(dosimetry, records) {
@@ -242,7 +243,7 @@ class DosimetryMeasurement extends BaseRecordManager {
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
             <TitleComponent title={this.props.title} />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <PersonnelList
               ref={this.listRef}
               title={this.listTitle}
@@ -253,7 +254,7 @@ class DosimetryMeasurement extends BaseRecordManager {
               enableRecordArchiveSwitch={true}
             />
           </Grid>
-          <Grid item xs={9}>
+          <Grid item xs={8}>
             <DosimetryMeasurementMetadata
               ref={this.metadataRef}
               properties={this.props.properties}
@@ -261,28 +262,76 @@ class DosimetryMeasurement extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        <Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>
-          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
-               disabled={selection === -1}>
-            <RemoveCircleIcon sx={{mr: 1}}/>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            m: 1,
+          }}
+        >
+          <Button
+            variant={"contained"}
+            endIcon={<RemoveCircleIcon />}
+            onClick={this.removeRecord}
+            disabled={!this.isValidSelection(selection)}
+            size={"small"}color={"primary"}
+            aria-label={"remove"}
+          >
             Remove SSC
-          </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>
-            {this.isRecordArchived(selection) ?
-              <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore SSC Record"</React.Fragment> :
-              <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive SSC Record"</React.Fragment>}
-          </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
-               disabled={!has_changed_records}>
-            <SaveIcon sx={{mr: 1}}/>
+          </Button>
+          <Button
+            variant={"contained"}
+            endIcon={this.isRecordArchived(selection) ? <UnarchiveIcon /> : <ArchiveIcon />}
+            onClick={this.changeRecordArchivalStatus}
+            disabled={!this.isValidSelection(selection)}
+            size={"small"}color={"primary"}
+            aria-label={"archive"}
+          >
+            {this.isRecordArchived(selection) ? "Restore SSC Record" : "Archive SSC Record"}
+          </Button>
+          <Button
+            variant={"contained"}
+            endIcon={<SaveIcon />}
+            onClick={this.saveChanges}
+            disabled={!has_changed_records}
+            size={"small"}color={"primary"}
+            aria-label={"save"}
+          >
             Save Changes
-          </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>
-            <AddIcon sx={{mr: 1}}/>
+          </Button>
+          <Button
+            variant={"contained"}
+            endIcon={<AddIcon />}
+            onClick={this.addRecord}
+            size={"small"}color={"primary"}
+            aria-label={"add"}
+          >
             Add SSC
-          </Fab>
+          </Button>
         </Box>
+        {/*<Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}
+        {/*       disabled={selection === -1}>*/}
+        {/*    <RemoveCircleIcon sx={{mr: 1}}/>*/}
+        {/*    Remove SSC*/}
+        {/*  </Fab>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}*/}
+        {/*       onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>*/}
+        {/*    {this.isRecordArchived(selection) ?*/}
+        {/*      <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore SSC Record"</React.Fragment> :*/}
+        {/*      <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive SSC Record"</React.Fragment>}*/}
+        {/*  </Fab>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}*/}
+        {/*       disabled={!has_changed_records}>*/}
+        {/*    <SaveIcon sx={{mr: 1}}/>*/}
+        {/*    Save Changes*/}
+        {/*  </Fab>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>*/}
+        {/*    <AddIcon sx={{mr: 1}}/>*/}
+        {/*    Add SSC*/}
+        {/*  </Fab>*/}
+        {/*</Box>*/}
       </React.Fragment>
     );
   }

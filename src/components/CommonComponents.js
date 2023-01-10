@@ -10,7 +10,7 @@ import {
   TextField,
   Box,
   CircularProgress,
-  ButtonBase, FormControlLabel, Switch, OutlinedInput,
+  ButtonBase, FormControlLabel, Switch, OutlinedInput, createFilterOptions,
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -144,7 +144,8 @@ CheckboxWithTooltip.propTypes = {
   padding: PropTypes.number,
 }
 
-export function SelectFormControlWithTooltip({id, label, value, onChange, options, disabled, tooltip, placement, padding, multiple}) {
+export function SelectFormControlWithTooltip({id, label, value, onChange, options, disabled, tooltip, placement,
+                                              padding, multiple}) {
   return (
     <FormControl style={{paddingRight: padding, marginTop: padding, width: '100%'}} variant="outlined">
       <Floater
@@ -204,7 +205,7 @@ export function SelectFormControlWithTooltip({id, label, value, onChange, option
         {options.map((option) => {
           if (typeof option === 'object') {
             return (
-              <MenuItem value={option["id"]}>{option["title"]}</MenuItem>
+              <MenuItem disabled={option.disabled||false} value={option["id"]}>{option["title"]}</MenuItem>
             )
           } else {
             const t = option.split(',');
@@ -243,16 +244,19 @@ SelectFormControlWithTooltip.propTypes = {
   multiple: PropTypes.bool,
 }
 
-export function TextFieldWithTooltip({id, label, value, onChange, disabled, tooltip, placement, required, lines, padding}) {
+export function TextFieldWithTooltip({id, label, value, onChange, disabled, tooltip, placement, required, lines,
+                                       padding, readOnly}) {
   return (
     <Box style={{paddingRight: padding, marginTop: padding, width: '100%'}}>
       <TextField
+        defaultValue={" "}
         disabled={disabled}
         required={required}
         fullWidth
         multiline={lines > 1}
         minRows={lines}
         id={id}
+        InputProps={readOnly ? {readOnly: true} : {}}
         label={
           <Floater
             // callback={cb}
@@ -312,6 +316,7 @@ TextFieldWithTooltip.defaultProps = {
   required: false,
   lines: 1,
   padding: 8,
+  readOnly: false,
 };
 
 TextFieldWithTooltip.propTypes = {
@@ -325,13 +330,14 @@ TextFieldWithTooltip.propTypes = {
   required: PropTypes.bool,
   lines: PropTypes.number,
   padding: PropTypes.number,
+  readOnly: PropTypes.bool,
 }
 
-export function DatePickerWithTooltip({label, value, onChange, disabled, tooltip, placement, inputFormat, padding}) {
+export function DatePickerWithTooltip({label, value, onChange, disabled, tooltip, placement, inputFormat, padding, width}) {
   return (
     <Box style={{paddingRight: padding, marginTop: padding, width: '100%'}}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Box sx={{'& .MuiTextField-root': {width: '18ch'}}}>
+        <Box sx={{'& .MuiTextField-root': {width: width}}}>
           <DatePicker
             disabled={disabled}
             label={
@@ -395,6 +401,7 @@ DatePickerWithTooltip.defaultProps = {
   placement: "left-start",
   inputFormat: "yyyy-MM-dd",
   padding: 0,
+  width: "18ch",
 };
 
 DatePickerWithTooltip.propTypes = {
@@ -407,6 +414,7 @@ DatePickerWithTooltip.propTypes = {
   placement: PropTypes.string,
   inputFormat: PropTypes.string,
   padding: PropTypes.number,
+  width: PropTypes.string,
 }
 
 export function MonitorTypeSelect({value, onChange, monitorTypes}) {
@@ -788,6 +796,80 @@ SwitchComponent.propTypes = {
   onChange: PropTypes.func.isRequired,
 }
 
+export function AutoCompleteComponent({isOpen, onOpen, onClose, filterOptions, getOptionLabel, options, loading,
+                                        label, busy, onSelected, onChange, freeInput, defaultValue}) {
+  return (
+    <Autocomplete
+      style={{width: '40ch', paddingRight: 8, marginTop: 8}}
+      freeSolo={freeInput}
+      autoSelect={true}
+      value={defaultValue}
+      open={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+      filterOptions={filterOptions}
+      getOptionLabel={getOptionLabel}
+      options={options}
+      loading={loading}
+      openOnFocus={true}
+      onChange={onSelected}
+      renderOption={(p, option) => (
+        <Box component="li" {...p}>
+          {option.name}
+        </Box>
+      )}
+      renderInput={params => (
+        <TextField
+          {...params}
+          label={label}
+          fullWidth
+          variant="outlined"
+          onChange={onChange}
+          InputLabelProps={{className: 'autocomplete-input-label'}}
+          InputProps={{
+            ...params.InputProps,
+            className: 'autocomplete-input',
+            endAdornment: (
+              <React.Fragment>
+                {loading && busy > 0 ? <CircularProgress color="inherit" size={20}/> : null}
+                {params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
+        />
+      )}
+    />
+  )
+}
+
+AutoCompleteComponent.defaultProps = {
+  filterOptions: createFilterOptions({
+    matchFrom: 'start',
+    stringify: option => option.name,
+  }),
+  onChange: (event) => {},
+  onSelected: (event, value) => {},
+  freeInput: false,
+}
+
+AutoCompleteComponent.propTypes = {
+  // value: PropTypes.object.isRequired,
+  onOpen: PropTypes.func.isRequired,
+  isOpen: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  defaultValue: PropTypes.string.isRequired,
+  onSelected: PropTypes.func,
+  onChange: PropTypes.func,
+  getOptionLabel: PropTypes.func.isRequired,
+  filterOptions: PropTypes.func,
+  options: PropTypes.array.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
+  busy: PropTypes.bool.isRequired,
+  freeInput: PropTypes.bool,
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1062,64 +1144,6 @@ WpcTableSelect.propTypes = {
   onDelete: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   wpcTables: PropTypes.array.isRequired,
-}
-
-export function GammaRayAutoComplete(props) {
-  return (
-    <Autocomplete
-      style={{width: '40ch', paddingRight: 8, marginTop: 8}}
-      open={props.isOpen}
-      onOpen={props.onOpen}
-      onClose={props.onClose}
-      filterOptions={props.filterOptions}
-      getOptionLabel={props.getOptionLabel}
-      options={props.options}
-      loading={props.loading}
-      openOnFocus={true}
-      onChange={props.onNuclideSelected}
-      renderOption={(p, option) => (
-        <Box component="li" {...p}>
-          {option.name}
-        </Box>
-      )}
-      renderInput={params => (
-        <TextField
-          {...params}
-          label={"Nuclide's"}
-          fullWidth
-          variant="outlined"
-          onChange={props.onNuclideChange}
-          InputLabelProps={{className: 'autocomplete-input-label'}}
-          InputProps={{
-            ...params.InputProps,
-            className: 'autocomplete-input',
-            endAdornment: (
-              <React.Fragment>
-                {props.loading && props.busy > 0 ? <CircularProgress color="inherit" size={20}/> : null}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            ),
-          }}
-        />
-      )}
-    />
-  )
-}
-
-GammaRayAutoComplete.propTypes = {
-  // value: PropTypes.object.isRequired,
-  onOpen: PropTypes.func.isRequired,
-  isOpen: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onNuclideSelected: PropTypes.func.isRequired,
-  onNuclideChange: PropTypes.func.isRequired,
-  getOptionLabel: PropTypes.func.isRequired,
-  filterOptions: PropTypes.func.isRequired,
-  options: PropTypes.array.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  loading: PropTypes.bool.isRequired,
-  busy: PropTypes.bool.isRequired,
-  // wpcTables: PropTypes.array.isRequired,
 }
 
 export function AnalysisDataTypesSelect({value, onChange, dataTypes}) {

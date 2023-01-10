@@ -135,7 +135,7 @@ class DosimetryMeasurementsList extends React.Component {
   render () {
     const {include_archived, selection} = this.state;
     if (this.context.debug > 5) {
-      ConsoleLog("PagedRecordList", "render", "include_archived", include_archived, "selection", selection);
+      ConsoleLog(this.Module, "render", "include_archived", include_archived, "selection", selection);
     }
     return (
       <Box sx={{width: '100%', height: this.props.height}}>
@@ -181,7 +181,7 @@ DosimetryMeasurementsList.defaultProps = {
   rowHeight: 24,
   rowsPerPage: 20,
   minWidth: 100,
-  height: 400,
+  // height: 400,
   cells: [
     {
       id: NURIMS_DOSIMETRY_BATCH_ID,

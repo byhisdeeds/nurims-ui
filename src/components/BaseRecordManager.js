@@ -3,23 +3,31 @@ import {
   CMD_DELETE_MANUFACTURER_RECORD,
   CMD_DELETE_MATERIAL_RECORD,
   CMD_DELETE_MONITOR_RECORD,
-  CMD_DELETE_PERSONNEL_RECORD,
+  CMD_DELETE_PERSONNEL_RECORD, CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
   CMD_DELETE_SSC_RECORD,
   CMD_DELETE_STORAGE_LOCATION_RECORD,
   CMD_GET_MANUFACTURER_RECORDS,
   CMD_GET_MATERIAL_RECORDS,
   CMD_GET_MONITOR_RECORDS,
-  CMD_GET_PERSONNEL_RECORDS,
+  CMD_GET_PERSONNEL_RECORDS, CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS,
   CMD_GET_SSC_RECORDS,
   CMD_GET_STORAGE_LOCATION_RECORDS,
   CMD_UPDATE_MANUFACTURER_RECORD,
   CMD_UPDATE_MATERIAL_RECORD,
   CMD_UPDATE_MONITOR_RECORD,
-  CMD_UPDATE_PERSONNEL_RECORD,
+  CMD_UPDATE_PERSONNEL_RECORD, CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
   CMD_UPDATE_SSC_RECORD,
   CMD_UPDATE_STORAGE_LOCATION_RECORD,
-  ITEM_ID, METADATA,
-  NURIMS_TITLE, NURIMS_WITHDRAWN
+  ITEM_ID,
+  MANUFACTURER_TOPIC,
+  MATERIAL_TOPIC,
+  METADATA,
+  MONITOR_TOPIC,
+  NURIMS_TITLE,
+  NURIMS_WITHDRAWN,
+  PERSONNEL_TOPIC, REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
+  SSC_TOPIC,
+  STORAGE_LOCATION_TOPIC
 } from "../utils/constants";
 import {v4 as uuid} from "uuid";
 import {
@@ -51,24 +59,26 @@ class BaseRecordManager extends Component {
 
   cmdRecordTopic = (cmd) => {
     if (cmd === CMD_GET_MONITOR_RECORDS) {
-      return "monitor";
+      return MONITOR_TOPIC;
     } else if (cmd === CMD_GET_PERSONNEL_RECORDS) {
-      return "personnel";
+      return PERSONNEL_TOPIC;
     } else if (cmd === CMD_GET_SSC_RECORDS) {
-      return "structures_systems_components";
+      return SSC_TOPIC;
     } else if (cmd === CMD_GET_STORAGE_LOCATION_RECORDS) {
-      return "storage_location";
+      return STORAGE_LOCATION_TOPIC;
     } else if (cmd === CMD_GET_MATERIAL_RECORDS) {
-      return "material";
+      return MATERIAL_TOPIC;
     } else if (cmd === CMD_GET_MANUFACTURER_RECORDS) {
-      return "manufacturer";
+      return MANUFACTURER_TOPIC;
+    } else if (cmd === CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS) {
+      return REACTOR_IRRADIATION_AUTHORIZATION_TOPIC;
     }
     return "";
   }
 
   recordCommand = (mode, recordTopic) => {
     const topic = recordTopic ? recordTopic : this.recordTopic;
-    if (topic === "personnel") {
+    if (topic === PERSONNEL_TOPIC) {
       if (mode === "update") {
         return CMD_UPDATE_PERSONNEL_RECORD;
       } else if (mode === "get") {
@@ -76,7 +86,7 @@ class BaseRecordManager extends Component {
       } else if (mode === "delete") {
         return CMD_DELETE_PERSONNEL_RECORD;
       }
-    } else if (topic === "monitor") {
+    } else if (topic === MONITOR_TOPIC) {
       if (mode === "update") {
         return CMD_UPDATE_MONITOR_RECORD;
       } else if (mode === "get") {
@@ -84,7 +94,7 @@ class BaseRecordManager extends Component {
       } else if (mode === "delete") {
         return CMD_DELETE_MONITOR_RECORD;
       }
-    } else if (topic === "manufacturer") {
+    } else if (topic === MANUFACTURER_TOPIC) {
       if (mode === "update") {
         return CMD_UPDATE_MANUFACTURER_RECORD;
       } else if (mode === "get") {
@@ -92,7 +102,7 @@ class BaseRecordManager extends Component {
       } else if (mode === "delete") {
         return CMD_DELETE_MANUFACTURER_RECORD;
       }
-    } else if (topic === "storage_location") {
+    } else if (topic === STORAGE_LOCATION_TOPIC) {
       if (mode === "update") {
         return CMD_UPDATE_STORAGE_LOCATION_RECORD;
       } else if (mode === "get") {
@@ -100,7 +110,7 @@ class BaseRecordManager extends Component {
       } else if (mode === "delete") {
         return CMD_DELETE_STORAGE_LOCATION_RECORD;
       }
-    } else if (topic === "material") {
+    } else if (topic === MATERIAL_TOPIC) {
       if (mode === "update") {
         return CMD_UPDATE_MATERIAL_RECORD;
       } else if (mode === "get") {
@@ -108,13 +118,21 @@ class BaseRecordManager extends Component {
       } else if (mode === "delete") {
         return CMD_DELETE_MATERIAL_RECORD;
       }
-    } else if (topic === "structures_systems_components") {
+    } else if (topic === SSC_TOPIC) {
       if (mode === "update") {
         return CMD_UPDATE_SSC_RECORD;
       } else if (mode === "get") {
         return CMD_GET_SSC_RECORDS;
       } else if (mode === "delete") {
         return CMD_DELETE_SSC_RECORD;
+      }
+    } else if (topic === REACTOR_IRRADIATION_AUTHORIZATION_TOPIC) {
+      if (mode === "update") {
+        return CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD;
+      } else if (mode === "get") {
+        return CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS;
+      } else if (mode === "delete") {
+        return CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD;
       }
     }
     return "";
@@ -192,6 +210,10 @@ class BaseRecordManager extends Component {
     }
   }
 
+  getNewRecordName = () => {
+    return "New Record";
+  }
+
   addRecord = () => {
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "addRecord");
@@ -199,7 +221,7 @@ class BaseRecordManager extends Component {
     if (this.listRef.current) {
       this.listRef.current.addRecords([new_record(
         -1,
-        "New Record",
+        this.getNewRecordName(),
         0,
         this.context.user.profile.username
       )], false);
@@ -210,7 +232,7 @@ class BaseRecordManager extends Component {
   requestGetRecords = (include_archived, include_metadata) => {
     if (this.context.debug > 5) {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived,
-        "include_metadata", include_metadata);
+        "include_metadata", include_metadata, "recordTopic", this.recordTopic, this.recordCommand("get"));
     }
     this.props.send({
       cmd: this.recordCommand("get"),
@@ -291,7 +313,7 @@ class BaseRecordManager extends Component {
         }
         if (this.isCommand(message, [
           CMD_GET_MONITOR_RECORDS, CMD_GET_PERSONNEL_RECORDS, CMD_GET_SSC_RECORDS, CMD_GET_STORAGE_LOCATION_RECORDS,
-          CMD_GET_MATERIAL_RECORDS, CMD_GET_MANUFACTURER_RECORDS])) {
+          CMD_GET_MATERIAL_RECORDS, CMD_GET_MANUFACTURER_RECORDS, CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS])) {
           // Branch if GET_XXXXX_RECORDS request included a request for metadata
           const selection = this.state.selection;
           if (Object.keys(selection).length === 0) {

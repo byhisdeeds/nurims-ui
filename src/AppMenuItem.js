@@ -11,6 +11,7 @@ import IconExpandLess from '@mui/icons-material/ExpandLess'
 import IconExpandMore from '@mui/icons-material/ExpandMore'
 import {ListItemButton, Tooltip} from "@mui/material";
 import eventBus from "./EventBus";
+import {isValidUserRole} from "./utils/UserUtils";
 
 
 const useStyles = makeStyles(theme =>
@@ -34,7 +35,9 @@ export default function AppMenuItem(props) {
   const { name, link, title, root, Icon, tooltip, user, authmodlevel, items = []} = props
   const classes = useStyles()
   const isExpandable = items && items.length > 0
-  const isSysadmin = user.hasOwnProperty("profile") && (user.profile["role"] === "sysadmin");
+  const isSysadmin = isValidUserRole(user, "sysadmin");
+  // const isSysadmin = user.hasOwnProperty("profile") && (user.profile["role"].includes("'sysadmin'"));
+  // const isSysadmin = user.hasOwnProperty("profile") && (user.profile["role"] === "sysadmin");
   const isVisible = (isSysadmin) || (authmodlevel !== "sysadmin")
   const [open, setOpen] = React.useState(false)
 

@@ -2,8 +2,10 @@ import * as React from "react";
 import {withTheme} from "@mui/styles";
 import PropTypes from "prop-types";
 import {
-  ITEM_ID, METADATA,
-  NURIMS_TITLE, NURIMS_TITLE_SUBTITLE,
+  ITEM_ID,
+  METADATA,
+  NURIMS_TITLE,
+  NURIMS_TITLE_SUBTITLE,
   NURIMS_WITHDRAWN
 } from "../utils/constants";
 import {
@@ -179,7 +181,7 @@ class PagedRecordList extends React.Component {
       ConsoleLog("PagedRecordList", "render", "include_archived", include_archived, "selection", selection);
     }
     return (
-      <Box sx={{width: '100%', height: this.props.height}}>
+      <Box sx={{width: '100%'}}>
         <Paper sx={{width: '100%', mb: 2}}>
           <PageableTable
             minWidth={this.props.minWidth}

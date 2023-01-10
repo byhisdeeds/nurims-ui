@@ -7,13 +7,14 @@ module.exports = Object.freeze({
   RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS: 'rp.add.edit.personnel.dosimetry.measurements',
   RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS: 'rp.add.edit.monitor.dosimetry.measurements',
   RP_PERSONNEL_DOSIMETRY_EVALUATION: 'rp.personnel.dosimetry.evaluation',
+  RP_PERSONNEL_DOSIMETRY_REPORT: 'rp.personnel.dosimetry.report',
   CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER: 'cm.register.update.material.manufacturer',
   CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION: 'cm.register.update.material.storage.location',
   CM_REGISTER_CONTROLLED_MATERIAL: 'cm.register.update.material',
   CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET: 'cm.generate.material.surveillance.sheet',
   CM_VIEW_CONTROLLED_MATERIALS_LIST: 'cm.view.controlled.materials.list',
   SSC_ADD_EDIT_SSC: 'ssc.add.edit.ssc',
-  SSC_ADD_EDIT_SSC_MAINTENANCE_RECORD: 'ssc.add.edit.ssc.maintenance.record',
+  SSC_ADD_EDIT_SSC_CORRECTIVE_MAINTENANCE_ISSUE_RECORD: 'ssc.add.edit.ssc.corrective.maintenance.issue.record',
   SSC_ADD_EDIT_SSC_AMP: 'ssc.add.edit.ssc.amp',
   SSC_VIEW_SSC_RECORDS: 'ssc.view.ssc.records',
   SSC_GENERATE_SSC_MAINTENANCE_REPORT: 'ssc.generate.ssc.maintenance.report',
@@ -21,6 +22,7 @@ module.exports = Object.freeze({
   RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA: 'ro.add.edit.irradiated.samples',
   RO_REACTOR_OPERATIONS_REPORT: 'ro.reactor.operations.report',
   RO_ADD_EDIT_REACTOR_WATER_SAMPLES: 'ro.add.edit.reactor.water.samples',
+  RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION: 'ro.add.edit.reactor.sample.irradiation.records',
 
   SYSADMIN_MANAGE_USERS: 'sysadmin.manage.users',
 
@@ -83,10 +85,16 @@ module.exports = Object.freeze({
   CMD_UPDATE_SSC_RECORD: "update_ssc_record",
   CMD_DELETE_SSC_RECORD: "delete_ssc_record",
 
+  CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS: "get_reactor_sample_irradiation_authorization_records",
+  CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD: "update_reactor_sample_irradiation_authorization_record",
+  CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD: "delete_reactor_sample_irradiation_authorization_record",
+
   CMD_GENERATE_SSC_RECORDS_PDF: "generate_ssc_records_pdf",
   CMD_GENERATE_SSC_MAINTENANCE_REPORT_PDF: "generate_ssc_maintenance_report_pdf",
 
   CMD_GENERATE_PERSONNEL_DOSE_EVALUATION_PDF: "generate_personnel_dose_evaluation_pdf",
+
+  CMD_SUGGEST_ANALYSIS_JOBS: "suggest_analysis_jobs",
 
   METADATA: 'metadata',
   INCLUDE_METADATA: 'include.metadata',
@@ -184,11 +192,17 @@ module.exports = Object.freeze({
   NURIMS_AMP_MITIGATION_STEPS: "nurims.amp.mitigationsteps",
   NURIMS_AMP_SURVEILLANCE_FREQUENCY: "nurims.amp.surveillancefrequency",
 
+  NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER: "nurims.operation.data.irradiationauthorizer",
+  NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES: "nurims.operation.data.irradiationsampletypes",
+  NURIMS_OPERATION_DATA_IRRADIATIONDURATION: "nurims.operation.data.irradiationduration",
+  NURIMS_OPERATION_DATA_NEUTRONFLUX: "nurims.operation.data.neutronflux",
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDES: "nurims.operation.data.reactorwaterchemistry.nuclides",
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS: "nurims.operation.data.reactorwaterchemistry.nuclideunits",
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS: "nurims.operation.data.reactorwaterchemistry.analysis",
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE: "nurims.operation.data.reactorwaterchemistry.reportfile",
   NURIMS_OPERATION_DATA_STATS: "nurims.operation.data.stats",
+  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB: "nurims.operation.data.irradiatedsample.job",
+  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST: "nurims.operation.data.irradiatedsample.list",
 
   EMPLOYEE_RECORD_TYPE: "employee_record",
   MANUFACTURER_RECORD_TYPE: "manufacturer_record",
@@ -212,6 +226,7 @@ module.exports = Object.freeze({
   STORAGE_LOCATION_TOPIC: "storage_location",
   SSC_TOPIC: "structures_systems_components",
   OPERATION_TOPIC: "operation",
+  REACTOR_IRRADIATION_AUTHORIZATION_TOPIC: "reactor_irradiation_authorization",
 
   BLANK_PDF: 'data:application/pdf;base64,JVBERi0xLjQKJb/3ov4KMSAwIG9iago8PCAvUGFnZXMgMiAwIFIgL1R5cGUgL0NhdGFsb2cgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL0NvdW50IDEgL0tpZHMgWyAzIDAgUiBdIC9UeXBlIC9QYWdlcyA+PgplbmRvYmoKMyAwIG9iago8PCAvQ29udGVudHMgNCAwIFIgL0dyb3VwIDw8IC9DUyAvRGV2aWNlUkdCIC9JIHRydWUgL1MgL1RyYW5zcGFyZW5jeSAvVHlwZSAvR3JvdXAgPj4gL01lZGlhQm94IFsgMCAwIDYxMiA3OTEuMjUgXSAvUGFyZW50IDIgMCBSIC9SZXNvdXJjZXMgNSAwIFIgL1R5cGUgL1BhZ2UgPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0ZpbHRlciAvRmxhdGVEZWNvZGUgL0xlbmd0aCAzMCA+PgpzdHJlYW0KeJwzVDAAQl1DIGFuaahnZKqQnMtVyBXIBQA6LATGZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8ID4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDA2NCAwMDAwMCBuIAowMDAwMDAwMTIzIDAwMDAwIG4gCjAwMDAwMDAyOTggMDAwMDAgbiAKMDAwMDAwMDM5OCAwMDAwMCBuIAp0cmFpbGVyIDw8IC9Sb290IDEgMCBSIC9TaXplIDYgL0lEIFs8YzhjZDFmYzFhMWNiODBlZTgyNzI1ZjIyMTYyMTU2NDE+PGM4Y2QxZmMxYTFjYjgwZWU4MjcyNWYyMjE2MjE1NjQxPl0gPj4Kc3RhcnR4cmVmCjQxOQolJUVPRgo=',
 

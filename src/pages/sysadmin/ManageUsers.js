@@ -117,7 +117,7 @@ class ManageUsers extends React.Component {
           username: "New Record",
           password: "",
           authorized_module_level: "",
-          role: "",
+          role: "[]",
         }
       }], false);
       this.setState({metadata_changed: true});

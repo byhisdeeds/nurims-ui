@@ -209,7 +209,7 @@ class DosimetryMeasurementMetadata extends Component {
         autoComplete="off"
       >
         <Grid container spacing={2}>
-          <Grid item xs={2} style={{paddingRight: 0}}>
+          <Grid item xs={3} style={{paddingRight: 0}}>
             <DosimetryMeasurementsList
               ref={this.ref}
               rowsPerPage={15}
@@ -227,7 +227,7 @@ class DosimetryMeasurementMetadata extends Component {
               }]}
             />
           </Grid>
-          <Grid item xs={10}>
+          <Grid item xs={9}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Card variant="outlined" sx={{mb: 1, minWidth: 275}}>

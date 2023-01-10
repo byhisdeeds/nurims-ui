@@ -81,9 +81,9 @@ import {
   ConfirmRemoveRecordDialog
 } from "../../components/UtilityDialogs";
 
-export const SSCMAINTENANCERECORDS_REF = "SSCMaintenanceRecords";
+export const SSCMAINTENANCERECORDS_REF = "SSCCorrectiveMaintenanceRecords";
 
-class SSCMaintenanceRecords extends Component {
+class SSCCorrectiveMaintenanceRecords extends Component {
   static contextType = UserDebugContext;
 
   constructor(props) {
@@ -143,7 +143,7 @@ class SSCMaintenanceRecords extends Component {
   }
 
   setGlossaryTerms = (terms) => {
-    // console.log("SSCMaintenanceRecords.setGlossaryTerms", terms)
+    // console.log("SSCCorrectiveMaintenanceRecords.setGlossaryTerms", terms)
     for (const term of terms) {
       this.glossary[term.name] = term.value;
     }
@@ -468,8 +468,9 @@ class SSCMaintenanceRecords extends Component {
                         padding={0}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={4}>
+                    <Grid item xs={12} sm={4} style={{textAlign: 'center'}}>
                       <DatePickerWithTooltip
+                        width={"25ch"}
                         label="Removed From Service"
                         inputFormat={"yyyy-MM-dd"}
                         value={getDateFromDateString(getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, null), null)}
@@ -478,9 +479,10 @@ class SSCMaintenanceRecords extends Component {
                         tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, "")}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={4}>
+                    <Grid item xs={12} sm={4} style={{textAlign: 'center'}}>
                       <DatePickerWithTooltip
-                        label="Removed From Service"
+                        width={"25ch"}
+                        label="Returned To Service"
                         inputFormat={"yyyy-MM-dd"}
                         value={getDateFromDateString(getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, null), null)}
                         onChange={this.returnedToServiceDateChange}
@@ -513,28 +515,28 @@ class SSCMaintenanceRecords extends Component {
                             padding={8}
                           />
                         </Grid>
-                        <Grid item xs={12} sm={3}>
-                          <CheckboxWithTooltip
-                            id={"preventive-maintenance"}
-                            label={"Preventive Maintenance"}
-                            onChange={this.handleChange}
-                            checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE, "false")}
-                            disabled={no_selection}
-                            tooltip={"hg gugtt "}
-                            padding={8}
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={3}>
-                          <CheckboxWithTooltip
-                            id={"corrective-maintenance"}
-                            label={"Corrective Maintenance"}
-                            onChange={this.handleChange}
-                            checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE, "true")}
-                            disabled={no_selection}
-                            tooltip={"hg gugtt "}
-                            padding={8}
-                          />
-                        </Grid>
+                        {/*<Grid item xs={12} sm={3}>*/}
+                        {/*  <CheckboxWithTooltip*/}
+                        {/*    id={"preventive-maintenance"}*/}
+                        {/*    label={"Preventive Maintenance"}*/}
+                        {/*    onChange={this.handleChange}*/}
+                        {/*    checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE, "false")}*/}
+                        {/*    disabled={no_selection}*/}
+                        {/*    tooltip={"hg gugtt "}*/}
+                        {/*    padding={8}*/}
+                        {/*  />*/}
+                        {/*</Grid>*/}
+                        {/*<Grid item xs={12} sm={3}>*/}
+                        {/*  <CheckboxWithTooltip*/}
+                        {/*    id={"corrective-maintenance"}*/}
+                        {/*    label={"Corrective Maintenance"}*/}
+                        {/*    onChange={this.handleChange}*/}
+                        {/*    checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE, "true")}*/}
+                        {/*    disabled={no_selection}*/}
+                        {/*    tooltip={"hg gugtt "}*/}
+                        {/*    padding={8}*/}
+                        {/*  />*/}
+                        {/*</Grid>*/}
                       </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
@@ -613,18 +615,18 @@ class SSCMaintenanceRecords extends Component {
   }
 }
 
-SSCMaintenanceRecords.defaultProps = {
+SSCCorrectiveMaintenanceRecords.defaultProps = {
   onChange: (msg) => {
   },
   saveChanges: () => {
   },
 };
 
-SSCMaintenanceRecords.propTypes = {
+SSCCorrectiveMaintenanceRecords.propTypes = {
   ref: PropTypes.element.isRequired,
   properties: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   saveChanges: PropTypes.func.isRequired,
 }
 
-export default SSCMaintenanceRecords;
+export default SSCCorrectiveMaintenanceRecords;
