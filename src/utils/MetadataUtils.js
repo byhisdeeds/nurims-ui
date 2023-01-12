@@ -16,7 +16,11 @@ import {
 } from "./constants";
 import {differenceInDays, format} from "date-fns";
 import {transformDose} from "./DoseReportUtils";
+import {v4 as uuid} from "uuid";
 
+export function UUID() {
+  return uuid();
+}
 
 export function isRecordArchived(record) {
   return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);

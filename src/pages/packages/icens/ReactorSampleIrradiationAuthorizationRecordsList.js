@@ -45,9 +45,14 @@ class ReactorSampleIrradiationAuthorizationRecordsList extends React.Component {
         includeArchived={this.props.includeArchived}
         title={this.props.title}
         enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}
+        renderCellStyle={this.props.renderCellStyle}
       />
     )
   }
+}
+
+ReactorSampleIrradiationAuthorizationRecordsList.defaultProps = {
+  renderCellStyle: (row, cell, theme) => {},
 }
 
 ReactorSampleIrradiationAuthorizationRecordsList.propTypes = {
@@ -56,6 +61,7 @@ ReactorSampleIrradiationAuthorizationRecordsList.propTypes = {
   onSelection: PropTypes.func.isRequired,
   properties: PropTypes.func.isRequired,
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
+  renderCellStyle: PropTypes.func,
 }
 
 export default ReactorSampleIrradiationAuthorizationRecordsList

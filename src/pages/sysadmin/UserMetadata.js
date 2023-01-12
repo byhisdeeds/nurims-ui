@@ -33,15 +33,15 @@ class UserMetadata extends Component {
     console.log(">>>", e.target.id)
     const user = this.state.user;
     if (e.target.id === "username") {
-      setUserRecordData(user, NURIMS_TITLE, e.target.value)
-      setUserRecordData(user, "username", e.target.value)
-      this.setState({user: user})
+      setUserRecordData(user, NURIMS_TITLE, e.target.value);
+      setUserRecordData(user, "username", e.target.value);
+      this.setState({user: user});
+    } else if (e.target.id === "fullname") {
+      setUserRecordData(user, "fullname", e.target.value);
     } else if (e.target.id === "password") {
-      user["changed"] = true;
-      this.setState({user: user, password: e.target.value})
+      this.setState({user: user, password: e.target.value});
     } else if (e.target.id === "password2") {
-      user["changed"] = true;
-      this.setState({user: user, password_check: e.target.value})
+      this.setState({user: user, password_check: e.target.value});
     }
     // signal to parent that details have changed
     this.props.onChange(true);
@@ -107,6 +107,16 @@ class UserMetadata extends Component {
             />
           </Grid>
           <Grid item xs={4}>
+            <TextField
+              required
+              fullWidth
+              id="fullname"
+              label="Fullname"
+              value={getUserRecordData(user, "fullname", "")}
+              onChange={this.handleChange}
+            />
+          </Grid>
+          <Grid item xs={4}>
             <SelectFormControlWithTooltip
               id={"authorized_module_level"}
               label="Module Authorization Level"
@@ -131,7 +141,7 @@ class UserMetadata extends Component {
               // target={this.tooltipRef}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <TextField
               required
               fullWidth
@@ -142,7 +152,7 @@ class UserMetadata extends Component {
               onChange={this.handleChange}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <TextField
               required
               fullWidth

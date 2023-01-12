@@ -74,12 +74,12 @@ class Login extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.state.online) {
-      console.log(JSON.stringify({
-        uuid:this.uuid,
-        cmd: Constants.CMD_VERIFY_USER_PASSWORD,
-        username:this.state.username,
-        password:encryptPassword(this.puk, this.state.password),
-      }));
+      // console.log(JSON.stringify({
+      //   uuid:this.uuid,
+      //   cmd: Constants.CMD_VERIFY_USER_PASSWORD,
+      //   username:this.state.username,
+      //   password:encryptPassword(this.puk, this.state.password),
+      // }));
       this.ws.send(JSON.stringify({
         uuid:this.uuid,
         cmd: Constants.CMD_VERIFY_USER_PASSWORD,

@@ -21,7 +21,7 @@ import {
   NURIMS_TITLE, NURIMS_ENTITY_WORK_DETAILS, NURIMS_ENTITY_DOSE_PROVIDER_ID, BLANK_IMAGE_OBJECT,
 } from "../../utils/constants";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
-import {dateFromDateString} from "../../utils/dateUtils";
+import {dateFromDateString} from "../../utils/DateUtils";
 
 class PersonMetadata extends Component {
   static contextType = UserDebugContext;

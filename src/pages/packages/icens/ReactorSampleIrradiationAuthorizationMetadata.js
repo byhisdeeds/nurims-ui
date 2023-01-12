@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
 import {
+  Button,
   Card,
   CardContent,
   FormControl,
@@ -9,15 +10,18 @@ import {
   Select,
 } from "@mui/material";
 import {
-  CMD_SUGGEST_ANALYSIS_JOBS,
+  CMD_SUGGEST_ANALYSIS_JOBS, CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD, NURIMS_CREATED_BY,
+  NURIMS_CREATION_DATE,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
-  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
-  NURIMS_OPERATION_DATA_IRRADIATIONDURATION, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
+  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
+  NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
+  NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
+  NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
   NURIMS_OPERATION_DATA_NEUTRONFLUX,
-  NURIMS_TITLE
+  NURIMS_TITLE, NURIMS_WITHDRAWN
 } from "../../../utils/constants";
 import {
-  AutoCompleteComponent,
+  AutoCompleteComponent, DateRangePicker,
   SelectFormControlWithTooltip,
   TextFieldWithTooltip
 } from "../../../components/CommonComponents";
@@ -25,11 +29,19 @@ import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./AddEditReactor
 import {
   analysisJobAsObject,
   getRecordData,
-  setRecordData
+  setRecordData, UUID
 } from "../../../utils/MetadataUtils";
 import {getGlossaryValue} from "../../../utils/GlossaryUtils";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 import {isValidUserRole} from "../../../utils/UserUtils";
+import {addMonths, format, parseISO} from "date-fns";
+import TextField from "@mui/material/TextField";
+import {LocalizationProvider} from "@mui/lab";
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import UnarchiveIcon from "@mui/icons-material/Unarchive";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import {approveIrradiationMessageComponent} from "../../../utils/MessageUtils";
+import {withTheme} from "@mui/styles";
 
 
 class ReactorSampleIrradiationAuthorizationMetadata extends Component {
@@ -72,7 +84,9 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   }
 
   setRecordMetadata = (record) => {
-    console.log("ReactorSampleIrradiationAuthorizationMetadata.setRecordMetadata", record)
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "setRecordMetadata", "record", record);
+    }
     this.setState({record: record})
     this.props.onChange(false);
   }
@@ -135,25 +149,47 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
       setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, e.target.value);
     } else if (id === "sample-type") {
       setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, e.target.value);
-    } else if (id === "authorized-by") {
-      setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, e.target.value);
     }
     this.setState({record: record})
     // signal to parent that details have changed
     this.props.onChange(true);
   }
 
+  recordDisplayText = (record) => {
+    if (Object.keys(record).length === 0) return "";
+    const d = parseISO(getRecordData(record, NURIMS_CREATION_DATE, "1970-01-01 00:00:00"));
+    return getRecordData(record, NURIMS_TITLE, "") + " created by " +
+      getRecordData(record, NURIMS_CREATED_BY, "") + " on " +
+      format(d, "d MMMM, yyyy");
+  }
+
+  approveRequest = () => {
+    const record = this.state.record;
+    const user = this.context.user;
+    setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
+      `${user.profile.fullname} (${user.profile.username}) on ${new Date().toISOString()}`);
+    if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
+      record["record_key"] = UUID();
+    }
+    this.props.send({
+      cmd: CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
+      item_id: record.item_id,
+      "nurims.title": record[NURIMS_TITLE],
+      "nurims.withdrawn": record[NURIMS_WITHDRAWN],
+      metadata: record.metadata,
+      record_key: record.record_key,
+      module: ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF,
+    });
+  };
+
   render() {
     const {record, properties, selected_job, jobs, searching, busy, ac_open} = this.state;
     const disabled = Object.entries(record).length === 0;
-    if (this.context.debug > 5) {
-      ConsoleLog(this.Module, "render", "disabled", disabled, "record", record, "selected_job", selected_job);
-    }
     const can_authorize = isValidUserRole(this.context.user, "irradiation_authorizer");
-    const authorizer=[{
-      id: can_authorize ? this.context.user.profile.username : "none",
-      title: can_authorize ? this.context.user.profile.username : "Not authorized to approve request",
-      disabled: !can_authorize}];
+    if (this.context.debug > 5) {
+      ConsoleLog(this.Module, "render", "disabled", disabled, "record", record, "selected_job",
+        selected_job, "user", this.context.user, "can_authorize", can_authorize);
+    }
     return (
       <Box
         component="form"
@@ -166,18 +202,41 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={3}>
+              <Grid item xs={12} sm={10}>
                 <TextFieldWithTooltip
                   id={"record"}
                   label="Record"
-                  value={getRecordData(record, NURIMS_TITLE, "")}
+                  value={this.recordDisplayText(record)}
                   readOnly={true}
                   tooltip={"Authorisation record identifier."}
-                  // tooltip={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")}
+                  padding={0}
                 />
               </Grid>
-              <Grid item xs={12} sm={5}>
+              <Grid item xs={12} sm={2}>
+                <TextFieldWithTooltip
+                  id={"flux"}
+                  label="Neutron Flux"
+                  value={getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, "")}
+                  onChange={this.handleChange}
+                  disabled={disabled}
+                  tooltip={"ss"}
+                  padding={0}
+                />
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                <TextFieldWithTooltip
+                  id={"duration"}
+                  label="Duration"
+                  value={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "")}
+                  onChange={this.handleChange}
+                  disabled={disabled}
+                  tooltip={"ss"}
+                  padding={8}
+                />
+              </Grid>
+              <Grid item xs={12} sm={10}>
                 <AutoCompleteComponent
+                  disabled={disabled}
                   defaultValue={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name: "abc"})}
                   freeInput={true}
                   label={"Analysis Job"}
@@ -194,29 +253,6 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   padding={0}
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextFieldWithTooltip
-                  id={"flux"}
-                  label="Neutron Flux"
-                  value={getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, "")}
-                  onChange={this.handleChange}
-                  disabled={disabled}
-                  tooltip={"ss"}
-                  // tooltip={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")}
-                />
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                <TextFieldWithTooltip
-                  id={"duration"}
-                  label="Duration"
-                  value={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "")}
-                  onChange={this.handleChange}
-                  disabled={disabled}
-                  tooltip={"ss"}
-                  padding={0}
-                  // tooltip={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")}
-                />
-              </Grid>
               <Grid item xs={12} sm={6}>
                 <SelectFormControlWithTooltip
                   id={"sample-type"}
@@ -230,19 +266,27 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   // tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_INVENTORY_STATUS, "")}
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <SelectFormControlWithTooltip
-                  id={"authorized-by"}
-                  label="Authorized By"
-                  value={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "")}
-                  onChange={this.handleChange}
-                  options={authorizer}
-                  disabled={disabled}
-                  tooltip={"ss"}
-                  // tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_INVENTORY_STATUS, "")}
-                />
+              <Grid item xs={12} sm={6}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DateRangePicker
+                    fromLabel="Proposed Irradiation Start"
+                    toLabel="Proposed Irradiation End"
+                    from={new Date()}
+                    to={addMonths(new Date(), 1)}
+                    inputFormat={'yyyy-MM-dd'}
+                    disabled={disabled}
+                    // onChange={this.handleDateRangeChange}
+                    renderInput={(startProps, endProps) => (
+                      <React.Fragment>
+                        <TextField {...startProps}/>
+                        <Box sx={{mx: 1}}> to </Box>
+                        <TextField {...endProps}/>
+                      </React.Fragment>
+                    )}
+                  />
+                </LocalizationProvider>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <TextFieldWithTooltip
                   id={"samples"}
                   label="Samples To Irradiate"
@@ -252,117 +296,14 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   tooltip={"ss"}
                   lines={10}
                   padding={0}
-                  // tooltip={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")}
                 />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                {approveIrradiationMessageComponent(record, this.context.user, disabled, this.approveRequest, this.props.theme)}
               </Grid>
             </Grid>
           </CardContent>
         </Card>
-        {/*<Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>*/}
-        {/*  <CardContent>*/}
-        {/*    <Grid container spacing={2}>*/}
-        {/*      <Grid item xs={12}>*/}
-        {/*        <HtmlTooltip*/}
-        {/*          placement={'left'}*/}
-        {/*          title={*/}
-        {/*            <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_AMP_MATERIALS, "")} />*/}
-        {/*          }*/}
-        {/*        >*/}
-        {/*          <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>*/}
-        {/*            <InputLabel id="ageing-mechanism">SSC Ageing Materials</InputLabel>*/}
-        {/*            <Select*/}
-        {/*              disabled={disabled}*/}
-        {/*              required*/}
-        {/*              fullWidth*/}
-        {/*              multiple*/}
-        {/*              labelId="ageing-materials"*/}
-        {/*              label="SSC Ageing Materials"*/}
-        {/*              id="ageing-materials"*/}
-        {/*              value={getRecordMetadataValue(ssc, NURIMS_AMP_MATERIALS, [])}*/}
-        {/*              onChange={this.handleSSCAgingMaterialsChange}*/}
-        {/*            >*/}
-        {/*              {getPropertyAsMenuitems(properties, NURIMS_AMP_MATERIALS)}*/}
-        {/*            </Select>*/}
-        {/*          </FormControl>*/}
-        {/*        </HtmlTooltip>*/}
-        {/*      </Grid>*/}
-        {/*      <Grid item xs={12} sm={6}>*/}
-        {/*        <HtmlTooltip*/}
-        {/*          placement={'left'}*/}
-        {/*          title={*/}
-        {/*            <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_AMP_ACCEPTANCE_CRITERIA, "")} />*/}
-        {/*          }*/}
-        {/*        >*/}
-        {/*          <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>*/}
-        {/*            <InputLabel id="acceptance-criteria">Ageing Acceptance Criteria</InputLabel>*/}
-        {/*            <Select*/}
-        {/*              disabled={disabled}*/}
-        {/*              required*/}
-        {/*              fullWidth*/}
-        {/*              multiple*/}
-        {/*              labelId="acceptance-criteria"*/}
-        {/*              label="Ageing Acceptance Criteria"*/}
-        {/*              id="acceptance-criteria"*/}
-        {/*              value={getRecordMetadataValue(ssc, NURIMS_AMP_ACCEPTANCE_CRITERIA, [])}*/}
-        {/*              onChange={this.handleSSCAgeingAcceptanceCriteriaChange}*/}
-        {/*            >*/}
-        {/*              {getPropertyAsMenuitems(properties, NURIMS_AMP_ACCEPTANCE_CRITERIA)}*/}
-        {/*            </Select>*/}
-        {/*          </FormControl>*/}
-        {/*        </HtmlTooltip>*/}
-        {/*      </Grid>*/}
-        {/*      <Grid item xs={12} sm={6}>*/}
-        {/*        <HtmlTooltip*/}
-        {/*          placement={'left'}*/}
-        {/*          title={*/}
-        {/*            <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_AMP_MITIGATION_STEPS, "")} />*/}
-        {/*          }*/}
-        {/*        >*/}
-        {/*          <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>*/}
-        {/*            <InputLabel id="mitigation-steps">Ageing Mitigation Steps</InputLabel>*/}
-        {/*            <Select*/}
-        {/*              disabled={disabled}*/}
-        {/*              required*/}
-        {/*              fullWidth*/}
-        {/*              multiple*/}
-        {/*              labelId="mitigation-steps"*/}
-        {/*              label="Ageing Mitigation Steps"*/}
-        {/*              id="mitigation-steps"*/}
-        {/*              value={getRecordMetadataValue(ssc, NURIMS_AMP_MITIGATION_STEPS, [])}*/}
-        {/*              onChange={this.handleSSCAgeingMitigationStepsChange}*/}
-        {/*            >*/}
-        {/*              {getPropertyAsMenuitems(properties, NURIMS_AMP_MITIGATION_STEPS)}*/}
-        {/*            </Select>*/}
-        {/*          </FormControl>*/}
-        {/*        </HtmlTooltip>*/}
-        {/*      </Grid>*/}
-        {/*      <Grid item xs={12} sm={6}>*/}
-        {/*        <HtmlTooltip*/}
-        {/*          placement={'left'}*/}
-        {/*          title={*/}
-        {/*            <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SURVEILLANCE_FREQUENCY, "")} />*/}
-        {/*          }*/}
-        {/*        >*/}
-        {/*          <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>*/}
-        {/*            <InputLabel id="ageing-surveillance-frequency">Ageing Surveillance Frequency</InputLabel>*/}
-        {/*            <Select*/}
-        {/*              disabled={disabled}*/}
-        {/*              required*/}
-        {/*              fullWidth*/}
-        {/*              labelId="ageing-surveillance-frequency"*/}
-        {/*              label="Ageing Surveillance Frequency"*/}
-        {/*              id="ageing-surveillance-frequency"*/}
-        {/*              value={getRecordMetadataValue(ssc, NURIMS_AMP_SURVEILLANCE_FREQUENCY, "")}*/}
-        {/*              onChange={this.handleSSCAgeingSurveillanceFrequencyChange}*/}
-        {/*            >*/}
-        {/*              {getPropertyAsMenuitems(properties, NURIMS_SURVEILLANCE_FREQUENCY)}*/}
-        {/*            </Select>*/}
-        {/*          </FormControl>*/}
-        {/*        </HtmlTooltip>*/}
-        {/*      </Grid>*/}
-        {/*    </Grid>*/}
-        {/*  </CardContent>*/}
-        {/*</Card>*/}
       </Box>
     );
   }
@@ -375,4 +316,4 @@ ReactorSampleIrradiationAuthorizationMetadata.defaultProps = {
   },
 };
 
-export default ReactorSampleIrradiationAuthorizationMetadata;
+export default withTheme(ReactorSampleIrradiationAuthorizationMetadata);

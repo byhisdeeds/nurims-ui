@@ -443,14 +443,14 @@ MonitorTypeSelect.propTypes = {
   monitorTypes: PropTypes.array.isRequired
 }
 
-export function DateRangePicker({from, to, disabled, onToChange, onFromChange, inputFormat, width, views}) {
+export function DateRangePicker({from, to, fromLabel, toLabel, disabled, onToChange, onFromChange, inputFormat, width, views}) {
   return (
     <Box sx={{display: 'flex'}}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           renderInput={(props) => <TextField
             style={{width: width, paddingRight: 8, marginTop: 8}} {...props} />}
-          label=" Start Date "
+          label={fromLabel}
           value={from}
           views={views}
           inputFormat={inputFormat}
@@ -460,7 +460,7 @@ export function DateRangePicker({from, to, disabled, onToChange, onFromChange, i
         <DatePicker
           renderInput={(props) => <TextField
             style={{width: width, paddingRight: 8, marginTop: 8}} {...props} />}
-          label=" End Date "
+          label={toLabel}
           value={to}
           views={views}
           inputFormat={inputFormat}
@@ -475,16 +475,22 @@ export function DateRangePicker({from, to, disabled, onToChange, onFromChange, i
 DateRangePicker.defaultProps = {
   inputFormat: "yyyy-MM-dd",
   width: "20ch",
-  views: ['year', 'month', 'day']
+  views: ['year', 'month', 'day'],
+  fromLabel: " Start ",
+  endLabel: " End ",
+  onToChange: (date) => {},
+  onFromChange: (date) => {},
 };
 
 DateRangePicker.propTypes = {
   from: PropTypes.object.isRequired,
   to: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
-  onToChange: PropTypes.func.isRequired,
-  onFromChange: PropTypes.func.isRequired,
+  onToChange: PropTypes.func,
+  onFromChange: PropTypes.func,
   inputFormat: PropTypes.string,
+  fromLabel: PropTypes.string,
+  toLabel: PropTypes.string,
   views: PropTypes.array,
 }
 
@@ -797,10 +803,11 @@ SwitchComponent.propTypes = {
 }
 
 export function AutoCompleteComponent({isOpen, onOpen, onClose, filterOptions, getOptionLabel, options, loading,
-                                        label, busy, onSelected, onChange, freeInput, defaultValue}) {
+                                        label, busy, onSelected, onChange, freeInput, defaultValue, disabled}) {
   return (
     <Autocomplete
-      style={{width: '40ch', paddingRight: 8, marginTop: 8}}
+      disabled={disabled}
+      style={{width: '100%', paddingRight: 8, marginTop: 8}}
       freeSolo={freeInput}
       autoSelect={true}
       value={defaultValue}
@@ -822,6 +829,7 @@ export function AutoCompleteComponent({isOpen, onOpen, onClose, filterOptions, g
         <TextField
           {...params}
           label={label}
+          disabled={disabled}
           fullWidth
           variant="outlined"
           onChange={onChange}

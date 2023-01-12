@@ -157,7 +157,7 @@ class PagedRecordList extends React.Component {
       <TableCell
         align={cell.align}
         padding={cell.disablePadding ? 'none' : 'normal'}
-        style={this.props.renderCellStyle(row, cell, this.props.theme)}
+        style={this.props.renderCellStyle(row, cell, this.props.theme, this.state.selection === row)}
       >
         {value} {(cell.id === NURIMS_TITLE && row[NURIMS_WITHDRAWN] === 1) && "<- archived"}
       </TableCell>

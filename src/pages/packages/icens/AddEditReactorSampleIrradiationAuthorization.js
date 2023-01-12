@@ -16,8 +16,8 @@ import {
   CMD_SUGGEST_ANALYSIS_JOBS,
   CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
   ITEM_ID,
-  METADATA,
-  NURIMS_SAMPLEDATE,
+  METADATA, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
+  NURIMS_SAMPLEDATE, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
   OPERATION_TOPIC,
@@ -59,6 +59,8 @@ import BaseRecordManager from "../../../components/BaseRecordManager";
 import ReactorSampleIrradiationAuthorizationRecordsList from "./ReactorSampleIrradiationAuthorizationRecordsList";
 import ReactorSampleIrradiationAuthorizationMetadata from "./ReactorSampleIrradiationAuthorizationMetadata";
 import {format} from "date-fns";
+import {getRecordData, getRecordMetadataValue} from "../../../utils/MetadataUtils";
+import {withTheme} from "@mui/styles";
 
 export const ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF = "AddEditReactorSampleIrradiationAuthorization";
 
@@ -95,6 +97,16 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
     ]);
   }
 
+  renderCellStyle = (row, cell, theme, selected) => {
+    console.log("SELECTED ROW", row, selected)
+    const unauthorized = getRecordData(row, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, null) === null;
+    return {
+      mixBlendMode: selected ? 'lighten' : 'inherit',
+      color: unauthorized ? theme.palette.primary.contrastText : theme.palette.primary.light,
+      backgroundColor: unauthorized ? theme.palette.warning.dark : theme.components.MuiTableRow.styleOverrides.root.backgroundColor,
+    }
+  }
+
   render() {
     const {metadata_changed, confirm_remove, include_archived, selection} = this.state;
     const has_changed_records = this.hasChangedRecords();
@@ -122,6 +134,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
               includeArchived={include_archived}
               requestGetRecords={this.requestGetRecords}
               enableRecordArchiveSwitch={true}
+              renderCellStyle={this.renderCellStyle}
             />
           </Grid>
           <Grid item xs={8}>
@@ -146,7 +159,8 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
             endIcon={<RemoveCircleIcon />}
             onClick={this.removeRecord}
             disabled={!this.isValidSelection(selection)}
-            size={"small"}color={"primary"}
+            size={"small"}
+            color={"primary"}
             aria-label={"remove"}
           >
             Remove Authorization
@@ -156,7 +170,8 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
             endIcon={this.isRecordArchived(selection) ? <UnarchiveIcon /> : <ArchiveIcon />}
             onClick={this.changeRecordArchivalStatus}
             disabled={!this.isValidSelection(selection)}
-            size={"small"}color={"primary"}
+            size={"small"}
+            color={"primary"}
             aria-label={"archive"}
           >
             {this.isRecordArchived(selection) ? "Restore Authorization" : "Archive Authorization"}
@@ -166,7 +181,8 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
             endIcon={<SaveIcon />}
             onClick={this.saveChanges}
             disabled={!has_changed_records}
-            size={"small"}color={"primary"}
+            size={"small"}
+            color={"primary"}
             aria-label={"save"}
           >
             Save Authorization
@@ -175,7 +191,8 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
             variant={"contained"}
             endIcon={<AddIcon />}
             onClick={this.addRecord}
-            size={"small"}color={"primary"}
+            size={"small"}
+            color={"primary"}
             aria-label={"add"}
           >
             Add Authorization
@@ -198,4 +215,4 @@ AddEditReactorSampleIrradiationAuthorization.propTypes = {
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
 }
 
-export default AddEditReactorSampleIrradiationAuthorization;
+export default withTheme(AddEditReactorSampleIrradiationAuthorization);
