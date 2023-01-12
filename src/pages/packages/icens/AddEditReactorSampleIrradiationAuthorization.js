@@ -98,7 +98,6 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   }
 
   renderCellStyle = (row, cell, theme, selected) => {
-    console.log("SELECTED ROW", row, selected)
     const unauthorized = getRecordData(row, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, null) === null;
     return {
       mixBlendMode: selected ? 'lighten' : 'inherit',
