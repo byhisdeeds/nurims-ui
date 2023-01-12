@@ -55,6 +55,18 @@ module.exports = Object.freeze({
   CMD_UPDATE_MATERIAL_RECORD: "update_material_record",
   CMD_DELETE_MATERIAL_RECORD: "delete_material_record",
 
+  CMD_DELETE_STORAGE_LOCATION_RECORD: "delete_storage_location_record",
+  CMD_UPDATE_STORAGE_LOCATION_RECORD: "update_storage_location_record",
+  CMD_GET_STORAGE_LOCATION_RECORDS: "get_storage_location_records",
+
+  CMD_GET_SSC_RECORDS: "get_ssc_records",
+  CMD_UPDATE_SSC_RECORD: "update_ssc_record",
+  CMD_DELETE_SSC_RECORD: "delete_ssc_record",
+
+  CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS: "get_reactor_sample_irradiation_authorization_records",
+  CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD: "update_reactor_sample_irradiation_authorization_record",
+  CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD: "delete_reactor_sample_irradiation_authorization_record",
+
   CMD_GET_ORGANISATION: "get_organisation",
   CMD_GET_SYSTEM_PROPERTIES: "get_system_properties",
   CMD_SET_SYSTEM_PROPERTIES: "set_system_properties",
@@ -76,18 +88,6 @@ module.exports = Object.freeze({
   CMD_GENERATE_PERSONNEL_RECORDS_PDF: "generate_personnel_records_pdf",
   CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF: "generate_controlled_materials_list_pdf",
   CMD_GENERATE_CONTROLLED_MATERIALS_SURVEILLANCE_SHEET_PDF: "generate_controlled_materials_surveillance_sheet_pdf",
-
-  CMD_DELETE_STORAGE_LOCATION_RECORD: "delete_storage_location_record",
-  CMD_UPDATE_STORAGE_LOCATION_RECORD: "update_storage_location_record",
-  CMD_GET_STORAGE_LOCATION_RECORDS: "get_storage_location_records",
-
-  CMD_GET_SSC_RECORDS: "get_ssc_records",
-  CMD_UPDATE_SSC_RECORD: "update_ssc_record",
-  CMD_DELETE_SSC_RECORD: "delete_ssc_record",
-
-  CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS: "get_reactor_sample_irradiation_authorization_records",
-  CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD: "update_reactor_sample_irradiation_authorization_record",
-  CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD: "delete_reactor_sample_irradiation_authorization_record",
 
   CMD_GENERATE_SSC_RECORDS_PDF: "generate_ssc_records_pdf",
   CMD_GENERATE_SSC_MAINTENANCE_REPORT_PDF: "generate_ssc_maintenance_report_pdf",

@@ -58,22 +58,38 @@ class BaseRecordManager extends Component {
   }
 
   cmdRecordTopic = (cmd) => {
-    if (cmd === CMD_GET_MONITOR_RECORDS) {
-      return MONITOR_TOPIC;
-    } else if (cmd === CMD_GET_PERSONNEL_RECORDS) {
-      return PERSONNEL_TOPIC;
-    } else if (cmd === CMD_GET_SSC_RECORDS) {
-      return SSC_TOPIC;
-    } else if (cmd === CMD_GET_STORAGE_LOCATION_RECORDS) {
-      return STORAGE_LOCATION_TOPIC;
-    } else if (cmd === CMD_GET_MATERIAL_RECORDS) {
-      return MATERIAL_TOPIC;
-    } else if (cmd === CMD_GET_MANUFACTURER_RECORDS) {
-      return MANUFACTURER_TOPIC;
-    } else if (cmd === CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS) {
-      return REACTOR_IRRADIATION_AUTHORIZATION_TOPIC;
+    switch (cmd) {
+      case CMD_GET_MONITOR_RECORDS:
+      case CMD_UPDATE_MONITOR_RECORD:
+      case CMD_DELETE_MONITOR_RECORD:
+        return MONITOR_TOPIC;
+      case CMD_GET_PERSONNEL_RECORDS:
+      case CMD_UPDATE_PERSONNEL_RECORD:
+      case CMD_DELETE_PERSONNEL_RECORD:
+        return PERSONNEL_TOPIC;
+      case CMD_GET_SSC_RECORDS:
+      case CMD_UPDATE_SSC_RECORD:
+      case CMD_DELETE_SSC_RECORD:
+        return SSC_TOPIC;
+      case CMD_GET_STORAGE_LOCATION_RECORDS:
+      case CMD_UPDATE_STORAGE_LOCATION_RECORD:
+      case CMD_DELETE_STORAGE_LOCATION_RECORD:
+        return STORAGE_LOCATION_TOPIC;
+      case CMD_GET_MATERIAL_RECORDS:
+      case CMD_UPDATE_MATERIAL_RECORD:
+      case CMD_DELETE_MATERIAL_RECORD:
+        return MATERIAL_TOPIC;
+      case CMD_GET_MANUFACTURER_RECORDS:
+      case CMD_UPDATE_MANUFACTURER_RECORD:
+      case CMD_DELETE_MANUFACTURER_RECORD:
+        return MANUFACTURER_TOPIC;
+      case CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS:
+      case CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD:
+      case CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD:
+        return REACTOR_IRRADIATION_AUTHORIZATION_TOPIC;
+      default:
+        return "";
     }
-    return "";
   }
 
   recordCommand = (mode, recordTopic) => {
@@ -313,7 +329,8 @@ class BaseRecordManager extends Component {
         }
         if (this.isCommand(message, [
           CMD_GET_MONITOR_RECORDS, CMD_GET_PERSONNEL_RECORDS, CMD_GET_SSC_RECORDS, CMD_GET_STORAGE_LOCATION_RECORDS,
-          CMD_GET_MATERIAL_RECORDS, CMD_GET_MANUFACTURER_RECORDS, CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS])) {
+          CMD_GET_MATERIAL_RECORDS, CMD_GET_MANUFACTURER_RECORDS,
+          CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS])) {
           // Branch if GET_XXXXX_RECORDS request included a request for metadata
           const selection = this.state.selection;
           if (Object.keys(selection).length === 0) {
@@ -344,7 +361,8 @@ class BaseRecordManager extends Component {
           }
         } else if (this.isCommand(message, [
           CMD_UPDATE_MONITOR_RECORD, CMD_UPDATE_PERSONNEL_RECORD, CMD_UPDATE_SSC_RECORD, CMD_UPDATE_STORAGE_LOCATION_RECORD,
-          CMD_UPDATE_MATERIAL_RECORD, CMD_UPDATE_MANUFACTURER_RECORD])) {
+          CMD_UPDATE_MATERIAL_RECORD, CMD_UPDATE_MANUFACTURER_RECORD,
+          CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD])) {
           toast.success(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
           if (this.listRef.current) {
             // this.listRef.current.updateRecord(response[this.recordTopic]);
@@ -353,7 +371,7 @@ class BaseRecordManager extends Component {
         } else if (this.isCommand(message, [
           CMD_DELETE_MONITOR_RECORD, CMD_DELETE_PERSONNEL_RECORD, CMD_DELETE_SSC_RECORD,
           CMD_DELETE_STORAGE_LOCATION_RECORD, CMD_DELETE_MATERIAL_RECORD,
-          CMD_DELETE_MANUFACTURER_RECORD])) {
+          CMD_DELETE_MANUFACTURER_RECORD, CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD])) {
           toast.success(`Record (id: ${response.item_id}) deleted successfully`)
           if (this.listRef.current) {
             this.listRef.current.removeRecord(this.state.selection)

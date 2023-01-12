@@ -13,7 +13,6 @@ import {
 
 
 export function approveIrradiationMessageComponent(record, user, disabled, approveRequest, theme) {
-  console.log("THEME", theme)
   const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
   if (approver !== "") {
     return (

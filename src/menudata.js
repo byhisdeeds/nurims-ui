@@ -576,10 +576,17 @@ export const MenuData = [
         authmodlevel: 'basic',
         items: [
           {
-            name: '   - Reactor Sample Irradiation',
+            name: '   - Add/Edit Reactor Irrad.',
             link: 'ro.add.edit.reactor.sample.irradiation.records',
-            title: 'Add/Edit Reactor Irradiation Authorization Records',
-            tooltip: 'Add or edit the irradiation requests and authorization records for samples to be irradiated in the reactor core.',
+            title: 'Add/Edit Reactor Sample Irradiation (RSI) Authorization Records',
+            tooltip: 'Add or edit the irradiation request/authorization record for samples to be irradiated in the reactor core.',
+            authmodlevel: 'basic',
+          },
+          {
+            name: '   - Print RSI Auth. Records',
+            link: 'ro.generate.reactor.sample.irradiation.authorization.pdf',
+            title: 'Print Reactor Sample Irradiation Authorization Pdf',
+            tooltip: 'Generate a pdf of the irradiation authorization records for samples to be irradiated in the reactor core.',
             authmodlevel: 'basic',
           },
         ],
