@@ -219,12 +219,12 @@ class AddEditMonitors extends BaseRecordManager {
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
                // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
-               disabled={!this.isValidSelection(selection)}>
+               disabled={!this.isSysadminButtonAccessible(selection)}>
             <PersonRemoveIcon sx={{mr: 1}}/>
             Remove Monitor
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>
+               onClick={this.changeRecordArchivalStatus} disabled={!this.isSysadminButtonAccessible(selection)}>
             {this.isRecordArchived(selection) ?
               <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Monitor Record"</React.Fragment> :
               <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Monitor Record"</React.Fragment>}

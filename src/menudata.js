@@ -583,7 +583,7 @@ export const MenuData = [
             authmodlevel: 'basic',
           },
           {
-            name: '   - Print RSI Auth. Records',
+            name: '   - Print Auth. Records',
             link: 'ro.generate.reactor.sample.irradiation.authorization.pdf',
             title: 'Print Reactor Sample Irradiation Authorization Pdf',
             tooltip: 'Generate a pdf of the irradiation authorization records for samples to be irradiated in the reactor core.',

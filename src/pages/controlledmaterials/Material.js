@@ -99,7 +99,7 @@ class Material extends BaseRecordManager {
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
-               disabled={!this.isValidSelection(selection)}>
+               disabled={!this.isSysadminButtonAccessible(selection)}>
             <PersonRemoveIcon sx={{mr: 1}}/>
             Remove Monitor
           </Fab>

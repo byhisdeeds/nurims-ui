@@ -95,7 +95,7 @@ class AddEditSSC extends BaseRecordManager {
             Remove SSC
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>
+               onClick={this.changeRecordArchivalStatus} disabled={!this.isSysadminButtonAccessible(selection)}>
             {this.isRecordArchived(selection) ?
               <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore SSC Record"</React.Fragment> :
               <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive SSC Record"</React.Fragment>}

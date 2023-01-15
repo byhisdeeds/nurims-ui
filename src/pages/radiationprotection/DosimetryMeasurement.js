@@ -274,7 +274,7 @@ class DosimetryMeasurement extends BaseRecordManager {
             variant={"contained"}
             endIcon={<RemoveCircleIcon />}
             onClick={this.removeRecord}
-            disabled={!this.isValidSelection(selection)}
+            disabled={!this.isSysadminButtonAccessible(selection)}
             size={"small"}color={"primary"}
             aria-label={"remove"}
           >
@@ -284,7 +284,7 @@ class DosimetryMeasurement extends BaseRecordManager {
             variant={"contained"}
             endIcon={this.isRecordArchived(selection) ? <UnarchiveIcon /> : <ArchiveIcon />}
             onClick={this.changeRecordArchivalStatus}
-            disabled={!this.isValidSelection(selection)}
+            disabled={!this.isSysadminButtonAccessible(selection)}
             size={"small"}color={"primary"}
             aria-label={"archive"}
           >

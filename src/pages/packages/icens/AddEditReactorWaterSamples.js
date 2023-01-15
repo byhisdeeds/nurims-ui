@@ -65,7 +65,7 @@ class AddEditReactorWaterSamples extends React.Component {
     this.requestGetRecords(this.state.include_archived);
   }
 
-  isValidSelection = (selection) => {
+  isAccesibleButton = (selection) => {
     return (selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
   }
 
@@ -324,7 +324,7 @@ class AddEditReactorWaterSamples extends React.Component {
             Remove SSC
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>
+               onClick={this.changeRecordArchivalStatus} disabled={!this.isSysadminButtonAccessible(selection)}>
             {ArchiveRecordLabel(selection, "Run")}
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}

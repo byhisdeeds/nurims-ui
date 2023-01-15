@@ -1,13 +1,9 @@
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
 import {
-  Button,
   Card,
   CardContent,
-  FormControl,
   Grid,
-  InputLabel,
-  Select,
 } from "@mui/material";
 import {
   CMD_SUGGEST_ANALYSIS_JOBS, CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD, NURIMS_CREATED_BY,
@@ -21,7 +17,8 @@ import {
   NURIMS_TITLE, NURIMS_WITHDRAWN
 } from "../../../utils/constants";
 import {
-  AutoCompleteComponent, DateRangePicker,
+  AutoCompleteComponent,
+  DateRangePicker,
   SelectFormControlWithTooltip,
   TextFieldWithTooltip
 } from "../../../components/CommonComponents";
@@ -29,23 +26,22 @@ import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./AddEditReactor
 import {
   analysisJobAsObject,
   getRecordData,
-  setRecordData, UUID
+  setRecordData,
+  UUID
 } from "../../../utils/MetadataUtils";
-import {getGlossaryValue} from "../../../utils/GlossaryUtils";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 import {isValidUserRole} from "../../../utils/UserUtils";
 import {addMonths, format, parseISO} from "date-fns";
 import TextField from "@mui/material/TextField";
 import {LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import UnarchiveIcon from "@mui/icons-material/Unarchive";
-import ArchiveIcon from "@mui/icons-material/Archive";
 import {approveIrradiationMessageComponent} from "../../../utils/MessageUtils";
 import {withTheme} from "@mui/styles";
 
 
 class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
     this.state = {

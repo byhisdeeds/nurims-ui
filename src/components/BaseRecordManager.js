@@ -39,6 +39,7 @@ import {
 import {toast} from "react-toastify";
 import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
 import {getNextItemId, new_record} from "../utils/MetadataUtils";
+import {isValidUserRole} from "../utils/UserUtils";
 
 class BaseRecordManager extends Component {
   static contextType = UserDebugContext;
@@ -176,6 +177,10 @@ class BaseRecordManager extends Component {
     this.setState({selection: selection})
   }
 
+  isSysadminButtonAccessible = (selection) => {
+    return (isValidUserRole(this.context.user, "sysadmin") && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
+  }
+
   isValidSelection = (selection) => {
     return (selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
   }
@@ -200,7 +205,7 @@ class BaseRecordManager extends Component {
   }
 
   removeRecord = () => {
-    console.log("REMOVE RECORD")
+    console.log("REMOVE RECORD - USER", this.context.user)
     this.setState({confirm_remove: true,});
   }
 

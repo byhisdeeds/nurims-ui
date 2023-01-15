@@ -88,7 +88,7 @@ class Storage extends BaseRecordManager {
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
             // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
-               disabled={!this.isValidSelection(selection)}>
+               disabled={!this.isSysadminButtonAccessible(selection)}>
             <PersonRemoveIcon sx={{mr: 1}}/>
             Remove Storage
           </Fab>

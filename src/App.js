@@ -56,6 +56,7 @@ import {MANAGEUSERS_REF} from "./pages/sysadmin/ManageUsers";
 import {ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF} from "./pages/maintenance/AddEditCorrectiveMaintenanceIssueRecord";
 import {GENERATESSCMAINTENANCEREPORT_REF} from "./pages/maintenance/GenerateSSCMaintenanceReport";
 import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./pages/packages/icens/AddEditReactorSampleIrradiationAuthorization";
+import {GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF} from "./pages/packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -90,6 +91,7 @@ const ReactorOperationsReport = lazy(() => import('./pages/packages/icens/Reacto
 const AddEditReactorWaterSamples = lazy(() => import('./pages/packages/icens/AddEditReactorWaterSamples'));
 const PersonnelDosimetryEvaluation = lazy(() => import('./pages/radiationprotection/PersonnelDosimetryEvaluation'));
 const AddEditReactorSampleIrradiationAuthorization = lazy(() => import('./pages/packages/icens/AddEditReactorSampleIrradiationAuthorization'));
+const GenerateReactorSampleIrradiationAuthorizationPdf = lazy(() => import('./pages/packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf'));
 
 const drawerWidth = 300;
 const DEBUG_LEVEL = 9;
@@ -448,6 +450,16 @@ const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send,
       properties={properties}
     />)
   }
+  else if (actionid === Constants.RO_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF) {
+    return (<GenerateReactorSampleIrradiationAuthorizationPdf
+      ref={crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
 }
 
 class App extends React.Component {
@@ -499,6 +511,7 @@ class App extends React.Component {
     this.crefs[MANAGEUSERS_REF] = React.createRef();
     this.crefs[GENERATESSCMAINTENANCEREPORT_REF] = React.createRef();
     this.crefs[ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF] = React.createRef();
+    this.crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF] = React.createRef();
   }
 
 

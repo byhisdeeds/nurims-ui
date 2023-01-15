@@ -23,6 +23,7 @@ module.exports = Object.freeze({
   RO_REACTOR_OPERATIONS_REPORT: 'ro.reactor.operations.report',
   RO_ADD_EDIT_REACTOR_WATER_SAMPLES: 'ro.add.edit.reactor.water.samples',
   RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION: 'ro.add.edit.reactor.sample.irradiation.records',
+  RO_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF: 'ro.generate.reactor.sample.irradiation.authorization.pdf',
 
   SYSADMIN_MANAGE_USERS: 'sysadmin.manage.users',
 
@@ -81,6 +82,7 @@ module.exports = Object.freeze({
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS: "get_reactor_operation_run_records",
   CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD: "update_sample_irradiation_log_record",
 
+  CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF: "generate_reactor_sample_irradiation_authorization_pdf",
   CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF: "generate_reactor_operation_report_pdf",
   CMD_GET_REACTOR_WATER_SAMPLE_RECORDS: "get_reactor_water_sample_records",
   CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD: "update_reactor_water_sample_record",

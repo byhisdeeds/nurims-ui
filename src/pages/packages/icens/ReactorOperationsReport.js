@@ -26,6 +26,7 @@ import TextField from "@mui/material/TextField";
 import {SameYearDateRangePicker} from "../../../components/CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 import AddIcon from "@mui/icons-material/Add";
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 export const REACTOROPERATIONSREPORT_REF = "ReactorOperationsReport";
 
@@ -149,7 +150,7 @@ class ReactorOperationsReport extends Component {
               <div style={{flexGrow: 1}}/>
               <Fab variant="extended" size="medium" color="primary" aria-label="submit" onClick={this.onSubmit}
                    style={{marginTop: 16}}>
-                <AddIcon sx={{mr: 1}}/>
+                <PictureAsPdfIcon sx={{mr: 1}}/>
                 Generate Report
               </Fab>
             </Stack>

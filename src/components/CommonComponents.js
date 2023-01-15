@@ -443,13 +443,13 @@ MonitorTypeSelect.propTypes = {
   monitorTypes: PropTypes.array.isRequired
 }
 
-export function DateRangePicker({from, to, fromLabel, toLabel, disabled, onToChange, onFromChange, inputFormat, width, views}) {
+export function DateRangePicker({from, to, fromLabel, toLabel, disabled, onToChange, onFromChange, inputFormat,
+                                  width, views}) {
   return (
     <Box sx={{display: 'flex'}}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
-          renderInput={(props) => <TextField
-            style={{width: width, paddingRight: 8, marginTop: 8}} {...props} />}
+          renderInput={(props) => <TextField style={{paddingRight: 8, marginTop: 8}} {...props} />}
           label={fromLabel}
           value={from}
           views={views}
@@ -458,8 +458,7 @@ export function DateRangePicker({from, to, fromLabel, toLabel, disabled, onToCha
           disabled={disabled}
         />
         <DatePicker
-          renderInput={(props) => <TextField
-            style={{width: width, paddingRight: 8, marginTop: 8}} {...props} />}
+          renderInput={(props) => <TextField style={{paddingRight: 8, marginTop: 8}} {...props} />}
           label={toLabel}
           value={to}
           views={views}
@@ -480,6 +479,7 @@ DateRangePicker.defaultProps = {
   endLabel: " End ",
   onToChange: (date) => {},
   onFromChange: (date) => {},
+  renderInput: (props) => <TextField style={{paddingRight: 8, marginTop: 8}} {...props} />,
 };
 
 DateRangePicker.propTypes = {
@@ -487,6 +487,7 @@ DateRangePicker.propTypes = {
   to: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
   onToChange: PropTypes.func,
+  renderInput: PropTypes.func,
   onFromChange: PropTypes.func,
   inputFormat: PropTypes.string,
   fromLabel: PropTypes.string,
