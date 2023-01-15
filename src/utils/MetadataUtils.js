@@ -407,14 +407,14 @@ export function toBoolean(s) {
   return regex.test(s);
 }
 
-export function new_record(item_id, title, withdrawn, createdby) {
+export function new_record(item_id, title, withdrawn, createdby, fullname) {
   return {
     "changed": true,
     "item_id": (item_id) ? item_id : -1,
     "nurims.title": (title) ? title : "New Record",
     "nurims.withdrawn": (withdrawn) ? withdrawn : 0,
     "metadata": [
-      {"nurims.createdby": (createdby) ? createdby : ""},
+      {"nurims.createdby": (createdby) ? (fullname) ? `${fullname} (${createdby})` : createdby : ""},
       {"nurims.creationdate": new Date().toISOString()}
     ]
   };

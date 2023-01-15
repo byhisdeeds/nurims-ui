@@ -344,7 +344,8 @@ class SSCCorrectiveMaintenanceRecords extends Component {
         getNextItemId(this.listRef.current.getRecords()),
         "New Maintenance Record",
         0,
-        this.context.user.profile.username
+        this.context.user.profile.username,
+        this.context.user.profile.fullname
       )], false);
       this.setState({metadata_changed: true});
     }

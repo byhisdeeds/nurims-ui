@@ -244,7 +244,8 @@ class BaseRecordManager extends Component {
         -1,
         this.getNewRecordName(),
         0,
-        this.context.user.profile.username
+        this.context.user.profile.username,
+        this.context.user.profile.fullname
       )], false);
       this.setState({metadata_changed: true});
     }
