@@ -46,7 +46,7 @@ class AddEditIrradiatedSamples extends Component {
   }
 
   ws_message = (message) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "ws_message", message);
     }
     if (messageHasResponse(message)) {
@@ -80,7 +80,7 @@ class AddEditIrradiatedSamples extends Component {
   }
 
   saveChanges = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "saveChanges");
     }
     if (this.tableRef.current) {
@@ -93,7 +93,7 @@ class AddEditIrradiatedSamples extends Component {
 
   handleFileUpload = (event) => {
     const selectedFile = event.target.files[0];
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleFileUpload", "selectedFile", selectedFile);
     }
     const that = this;
@@ -162,7 +162,7 @@ class AddEditIrradiatedSamples extends Component {
 
   render() {
     const {busy, data_changed, messages} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "data_changed", data_changed);
     }    return (
       <React.Fragment>

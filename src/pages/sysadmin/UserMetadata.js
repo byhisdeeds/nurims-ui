@@ -19,8 +19,6 @@ class UserMetadata extends Component {
     this.state = {
       user: {},
       disabled: true,
-      password: "",
-      password_check: "",
       properties: props.properties,
     };
     this.Module = "UserMetadata";
@@ -35,20 +33,22 @@ class UserMetadata extends Component {
     if (e.target.id === "username") {
       setUserRecordData(user, NURIMS_TITLE, e.target.value);
       setUserRecordData(user, "username", e.target.value);
-      this.setState({user: user});
     } else if (e.target.id === "fullname") {
       setUserRecordData(user, "fullname", e.target.value);
-    } else if (e.target.id === "password") {
+    } else if (e.target.id === "password1") {
+      setUserRecordData(user, "password1", e.target.value);
       this.setState({user: user, password: e.target.value});
     } else if (e.target.id === "password2") {
+      setUserRecordData(user, "password2", e.target.value);
       this.setState({user: user, password_check: e.target.value});
     }
+    this.setState({user: user});
     // signal to parent that details have changed
     this.props.onChange(true);
   }
 
   setRecordMetadata = (record) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
     this.setState({
@@ -66,6 +66,7 @@ class UserMetadata extends Component {
 
   handleModuleAuthorizationLevelChange = (e) => {
     const user = this.state.user;
+    setUserRecordData(user, "authorized_module_level", e.target.value)
     this.setState({user: user})
     // signal to parent that details have changed
     this.props.onChange(true);
@@ -80,8 +81,8 @@ class UserMetadata extends Component {
   }
 
   render() {
-    const {user, properties, disabled, password, password_check} = this.state;
-    if (this.context.debug > 5) {
+    const {user, properties, disabled} = this.state;
+    if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "disabled", disabled, "user", user);
     }
     const authorized_module_levels = getPropertyValue(properties, "system.authorizedmodulelevels", "").split('|');
@@ -148,7 +149,7 @@ class UserMetadata extends Component {
               type={"password"}
               id="password1"
               label="Password"
-              value={password}
+              value={getUserRecordData(user, "password1", "")}
               onChange={this.handleChange}
             />
           </Grid>
@@ -159,7 +160,7 @@ class UserMetadata extends Component {
               id="password2"
               type={"password"}
               label="Password (again)"
-              value={password_check}
+              value={getUserRecordData(user, "password2", "")}
               onChange={this.handleChange}
             />
           </Grid>

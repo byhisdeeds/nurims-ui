@@ -60,21 +60,21 @@ class GenerateSSCMaintenanceReport extends Component {
   }
 
   handleToDateRangeChange = (range) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleToDateRangeChange", range);
     }
     this.setState({endDate: range});
   }
 
   handleFromDateRangeChange = (range) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleFromDateRangeChange", range);
     }
     this.setState({startDate: range});
   }
 
   handleYearDateRangeChange = (range) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleYearDateRangeChange", range);
     }
     this.setState({year: range});

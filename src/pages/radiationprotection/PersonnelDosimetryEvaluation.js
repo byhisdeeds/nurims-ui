@@ -56,7 +56,7 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
   }
 
   requestGetRecords = (include_archived) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
     }
     this.props.send({
@@ -78,7 +78,7 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
   }
 
   onSelection = (selection) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "onSelection", "selection", selection);
     }
     if (this.dataRef.current) {
@@ -89,7 +89,7 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
 
   render() {
     const {data_changed, confirm_remove, include_archived, selection, title, busy} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "data_changed", data_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
     }

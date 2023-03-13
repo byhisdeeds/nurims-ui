@@ -116,7 +116,7 @@ class DosimetryMeasurement extends BaseRecordManager {
   }
 
   ctrlKeyPress = (event) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "ctrlKeyPress", "key", event.key, "ctrlKey", event.ctrlKey);
     }
     if (event.key === 'i' && event.ctrlKey) {
@@ -135,7 +135,7 @@ class DosimetryMeasurement extends BaseRecordManager {
   }
 
   // requestGetRecords = (include_archived) => {
-  //   if (this.context.debug > 5) {
+  //   if (this.context.debug) {
   //     ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
   //   }
   //   this.props.send({
@@ -148,7 +148,7 @@ class DosimetryMeasurement extends BaseRecordManager {
   // }
 
   onSelection = (selection) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "onSelection", "selection", selection);
     }
     if (this.metadataRef.current) {
@@ -159,7 +159,7 @@ class DosimetryMeasurement extends BaseRecordManager {
 
   handleFileUpload = (event) => {
     const selectedFile = event.target.files[0];
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleFileUpload", "selectedFile", selectedFile);
     }
     const records = (this.listRef.current) ? this.listRef.current.getRecords() : [];
@@ -219,7 +219,7 @@ class DosimetryMeasurement extends BaseRecordManager {
   render() {
     const {confirm_remove, include_archived, selection, busy} = this.state;
     const has_changed_records = this.hasChangedRecords();
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "has_changed_records", has_changed_records,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
     }

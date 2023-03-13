@@ -197,7 +197,7 @@ class PersonList extends React.Component {
   }
 
   render() {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog("PersonList", "render");
     }
     return (

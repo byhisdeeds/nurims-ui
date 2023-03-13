@@ -79,7 +79,7 @@ class PagedRecordList extends React.Component {
   }
 
   setRecords = (records) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.__Component__, "setRecords", "records", records);
     }
     if (Array.isArray(records)) {
@@ -104,7 +104,7 @@ class PagedRecordList extends React.Component {
   }
 
   updateRecord = (record) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.__Component__, "updateRecord", "record", record);
     }
     if (record) {
@@ -117,7 +117,11 @@ class PagedRecordList extends React.Component {
           if (row.hasOwnProperty(NURIMS_TITLE_SUBTITLE)) {
             row[NURIMS_TITLE_SUBTITLE] = record[NURIMS_TITLE_SUBTITLE];
           }
-          row[METADATA] = [...record[METADATA]]
+          if (Array.isArray(row[METADATA])) {
+            row[METADATA] = [...record[METADATA]]
+          } else {
+            row[METADATA] = {...record[METADATA]}
+          }
         } else if (row.item_id !== -1 && row.item_id === record[ITEM_ID]) {
           row[NURIMS_TITLE] = record[NURIMS_TITLE];
           row[NURIMS_WITHDRAWN] = record[NURIMS_WITHDRAWN];
@@ -125,7 +129,11 @@ class PagedRecordList extends React.Component {
             row[NURIMS_TITLE_SUBTITLE] = record[NURIMS_TITLE_SUBTITLE];
           }
           row["changed"] = false;
-          row[METADATA] = [...record[METADATA]]
+          if (Array.isArray(row[METADATA])) {
+            row[METADATA] = [...record[METADATA]]
+          } else {
+            row[METADATA] = {...record[METADATA]}
+          }
         }
       }
     }
@@ -177,7 +185,7 @@ class PagedRecordList extends React.Component {
 
   render () {
     const {include_archived, selection} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog("PagedRecordList", "render", "include_archived", include_archived, "selection", selection);
     }
     return (

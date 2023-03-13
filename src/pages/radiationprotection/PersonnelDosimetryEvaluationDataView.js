@@ -374,7 +374,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
   }
 
   handleChange = (e) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleChange", "target.id", e.target.id, "target.value", e.target.value);
     }
     const options = this.state.options;
@@ -408,7 +408,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
   }
 
   handleProfileRangeChange = (e) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleProfileRangeChange", "target.value", e.target.value);
     }
 
@@ -416,7 +416,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
   }
 
   setRecordMetadata = (record) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
     const dosimetryType = WHOLE_BODY;
@@ -486,7 +486,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
     } = this.state;
     const monitorPeriod = getMonitorPeriod(selection, NURIMS_DOSIMETRY_MONITOR_PERIOD, [null, null]);
     const defaultUnits = getPropertyValue(properties, "nurims.dosimetry.units", "");
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "dosimetryType", dosimetryType, "options",
         options, "profile_series", profile_series, "selection", selection);
     }

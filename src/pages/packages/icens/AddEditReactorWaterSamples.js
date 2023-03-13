@@ -93,7 +93,7 @@ class AddEditReactorWaterSamples extends React.Component {
   }
 
   proceedWithRemove = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "proceedWithRemove", "selection", this.state.selection);
     }
     this.setState({confirm_remove: false,});
@@ -111,7 +111,7 @@ class AddEditReactorWaterSamples extends React.Component {
   }
 
   addRecord = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "addRecord");
     }
     if (this.listRef.current) {
@@ -132,7 +132,7 @@ class AddEditReactorWaterSamples extends React.Component {
   }
 
   requestGetRecords = (include_archived) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
     }
     this.props.send({
@@ -150,7 +150,7 @@ class AddEditReactorWaterSamples extends React.Component {
       for (const record of records) {
         // only save monitor record with changed metadata
         if (record.changed) {
-          if (this.context.debug > 5) {
+          if (this.context.debug) {
             ConsoleLog(this.Module, "saveChanges", record);
           }
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
@@ -183,7 +183,7 @@ class AddEditReactorWaterSamples extends React.Component {
   }
 
   ws_message(message) {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "ws_message", "message", message);
     }
     if (messageHasResponse(message)) {
@@ -247,7 +247,7 @@ class AddEditReactorWaterSamples extends React.Component {
   }
 
   onRecordSelection = (selection) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
     }
     if (selection.hasOwnProperty("item_id") && selection.item_id === -1) {
@@ -270,7 +270,7 @@ class AddEditReactorWaterSamples extends React.Component {
   }
 
   // onRecordSelection = (selection) => {
-  //   if (this.context.debug > 5) {
+  //   if (this.context.debug) {
   //     ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
   //   }
   //   if (selection.hasOwnProperty("item_id")) {
@@ -283,7 +283,7 @@ class AddEditReactorWaterSamples extends React.Component {
 
   render() {
     const {metadata_changed, confirm_remove, include_archived, selection} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
     }

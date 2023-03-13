@@ -156,7 +156,7 @@ class BaseRecordManager extends Component {
   }
 
   onRecordSelection = (selection) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
     }
     if (selection.hasOwnProperty("item_id") && selection.item_id === -1) {
@@ -214,7 +214,7 @@ class BaseRecordManager extends Component {
   }
 
   proceedWithRemove = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "proceedWithRemove", "selection", this.state.selection);
     }
     this.setState({confirm_remove: false,});
@@ -236,7 +236,7 @@ class BaseRecordManager extends Component {
   }
 
   addRecord = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "addRecord");
     }
     if (this.listRef.current) {
@@ -252,7 +252,7 @@ class BaseRecordManager extends Component {
   }
 
   requestGetRecords = (include_archived, include_metadata) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived,
         "include_metadata", include_metadata, "recordTopic", this.recordTopic, this.recordCommand("get"));
     }
@@ -271,7 +271,7 @@ class BaseRecordManager extends Component {
       for (const record of records) {
         // only save record with changed metadata
         if (record.changed) {
-          if (this.context.debug > 5) {
+          if (this.context.debug) {
             ConsoleLog(this.Module, "saveChanges", record);
           }
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
@@ -313,7 +313,7 @@ class BaseRecordManager extends Component {
   }
 
   ws_message(message, commandHandlers) {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "ws_message", "message", message);
       ConsoleLog(this.Module, "ws_message", "commandHandlers", commandHandlers);
     }

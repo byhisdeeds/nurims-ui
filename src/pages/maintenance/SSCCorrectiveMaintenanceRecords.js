@@ -312,7 +312,7 @@ class SSCCorrectiveMaintenanceRecords extends Component {
   // };
 
   setRecordMetadata = (record) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
     if (this.listRef.current) {
@@ -327,7 +327,7 @@ class SSCCorrectiveMaintenanceRecords extends Component {
   }
 
   addMaintenanceRecord = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "addMaintenanceRecord");
     }
     if (this.listRef.current) {
@@ -352,13 +352,13 @@ class SSCCorrectiveMaintenanceRecords extends Component {
   }
 
   getMaintenanceRecords = (include_archived) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "getMaintenanceRecords", "include_archived", include_archived);
     }
   }
 
   onMaintenanceRecordSelection = (selection) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "onMaintenanceRecordSelection", "selection", selection, "ssc", this.state.ssc);
     }
     // display the selection metadata
@@ -371,7 +371,7 @@ class SSCCorrectiveMaintenanceRecords extends Component {
       setMetadataValue(ssc, NURIMS_SSC_MAINTENANCE_RECORDS, this.listRef.current.getRecords())
       ssc["changed"] = true;
     }
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "saveMaintenanceRecord", "selection", this.state.selection, "ssc", ssc);
     }
     this.props.saveChanges();
@@ -386,7 +386,7 @@ class SSCCorrectiveMaintenanceRecords extends Component {
   }
 
   proceedWithRemove = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "proceedWithRemove", "selection", this.state.selection);
     }
     if (this.listRef.current) {
@@ -407,7 +407,7 @@ class SSCCorrectiveMaintenanceRecords extends Component {
     const {confirm_remove, ssc, selection, metadata_changed, properties} = this.state;
     const no_selection = Object.entries(selection).length === 0;
     const no_ssc = Object.entries(ssc).length === 0;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "ssc", ssc, "selection", selection);
     }
     return (

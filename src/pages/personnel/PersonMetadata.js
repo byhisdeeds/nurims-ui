@@ -143,7 +143,7 @@ class PersonMetadata extends Component {
     const person = this.person;
     const assignedRole = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
     const avatar = getRecordMetadataValue(person, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT);
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog("PersonMetadata", "render", "personnel", person, "assignedRole", assignedRole);
     }
     return (

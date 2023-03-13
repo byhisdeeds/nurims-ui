@@ -94,7 +94,6 @@ const AddEditReactorSampleIrradiationAuthorization = lazy(() => import('./pages/
 const GenerateReactorSampleIrradiationAuthorizationPdf = lazy(() => import('./pages/packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf'));
 
 const drawerWidth = 300;
-const DEBUG_LEVEL = 9;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -475,6 +474,7 @@ class App extends React.Component {
       busy: 0,
       background_tasks_active: false,
     };
+    this.debug = window.location.href.includes("debug");
     this.properties = [];
     this.menuTitle = "";
     this.ws = null;
@@ -521,7 +521,7 @@ class App extends React.Component {
     // this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}/nurimsws`);
     this.ws = new ReconnectingWebSocket(this.props.wsep);
     this.ws.onopen = (event) => {
-      if (DEBUG_LEVEL > 2) {
+      if (this.debug) {
         ConsoleLog("App", "ws.onopen", "websocket connection established");
       }
       this.setState({ready: true});
@@ -539,7 +539,7 @@ class App extends React.Component {
       this.setState({ready: false});
     };
     this.ws.onclose = (event) => {
-      if (DEBUG_LEVEL > 2) {
+      if (this.debug) {
         ConsoleLog("App", "ws.onclose", "websocket connection closed", event);
       }
       if (this.mounted) {
@@ -548,7 +548,7 @@ class App extends React.Component {
     };
     this.ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      if (DEBUG_LEVEL > 5) {
+      if (this.debug) {
         ConsoleLog("App", "onmessage", data);
       }
       if (data.hasOwnProperty('module')) {
@@ -589,11 +589,12 @@ class App extends React.Component {
 
   send = (msg) => {
     if (this.ws && this.ws.readyState === 1) {
-      if (DEBUG_LEVEL > 5) {
-        ConsoleLog("App.send", JSON.stringify(msg));
+      if (this.debug) {
+        ConsoleLog("App", "send", msg);
       }
       this.ws.send(JSON.stringify({
         uuid: uuid(),
+        user: this.user,
         ...msg
       }));
       this.setState(pstate => {
@@ -645,7 +646,7 @@ class App extends React.Component {
   render() {
     const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active} = this.state;
     return (
-      <UserDebugContext.Provider value={{debug: DEBUG_LEVEL, user: this.user}}>
+      <UserDebugContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
           <Box sx={{flexGrow: 1}}>
             <ToastContainer

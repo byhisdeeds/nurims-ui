@@ -41,7 +41,7 @@ class ViewPersonnelRecords extends Component {
   }
 
   ws_message = (message) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "ws_message", "message", message);
     }
     if (message.hasOwnProperty("response")) {
@@ -58,7 +58,7 @@ class ViewPersonnelRecords extends Component {
 
   render() {
     const { pdf, include_archived} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "include_archived", include_archived, "pdf", pdf);
     }
     return (

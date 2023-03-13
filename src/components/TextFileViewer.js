@@ -41,7 +41,7 @@ class TextFileViewer extends Component {
   render() {
     const {stdout} = this.state;
     const {style} = this.props;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "stdout", stdout);
     }
     return (

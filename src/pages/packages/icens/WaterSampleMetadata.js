@@ -124,7 +124,7 @@ class WaterSampleMetadata extends Component {
   }
 
   handleChange = (e) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleChange", "id", e.target.id, "value", e.target.value);
     }
     const record = this.state.record;
@@ -142,7 +142,7 @@ class WaterSampleMetadata extends Component {
   }
 
   setRecordMetadata = (record) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
     if (record) {
@@ -175,7 +175,7 @@ class WaterSampleMetadata extends Component {
   }
 
   handleDateAvailableChange = (e) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleDateAvailableChange", "date", e.toISOString().substring(0,10));
     }
     const record = this.state.record;
@@ -188,7 +188,7 @@ class WaterSampleMetadata extends Component {
   }
 
   saveTableData = data => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "saveTableData", "data", data);
     }
     // const material = this.state.material;
@@ -201,7 +201,7 @@ class WaterSampleMetadata extends Component {
 
   render() {
     const {record, disabled} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "disabled", disabled, "record", record);
     }
     console.log("$$$$$", getMetadataValueAsISODateString(record, NURIMS_SAMPLEDATE, ""))

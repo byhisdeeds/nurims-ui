@@ -62,7 +62,7 @@ class DosimetryMeasurementMetadata extends Component {
   }
 
   handleChange = (e) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleChange", "target.id", e.target.id, "target.value", e.target.value);
     }
     const selection = this.state.selection;
@@ -97,7 +97,7 @@ class DosimetryMeasurementMetadata extends Component {
   }
 
   handleDoseProviderChange = (e) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleDoseProviderChange", "target.value", e.target.value);
     }
     const p = this.state.measurements;
@@ -109,7 +109,7 @@ class DosimetryMeasurementMetadata extends Component {
   }
 
   // handleDoseProviderIdChange = (e) => {
-  //   if (this.context.debug > 5) {
+  //   if (this.context.debug) {
   //     ConsoleLog(this.Module, "handleDateRangeChange", "range", range);
   //   }
   //   console.log("handleDoseProviderIdChange", e.target.value);
@@ -122,7 +122,7 @@ class DosimetryMeasurementMetadata extends Component {
   // }
 
   handleDosimeterIdChange = (e) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleDosimeterIdChange", "target.value", e.target.value);
     }
     const p = this.state.measurements;
@@ -134,7 +134,7 @@ class DosimetryMeasurementMetadata extends Component {
   }
 
   handleDoseUnitsChange = (e) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleDoseUnitsChange", "target.value", e.target.value);
     }
     const selection = this.state.selection;
@@ -161,7 +161,7 @@ class DosimetryMeasurementMetadata extends Component {
   // }
 
   handleDateRangeChange = (range) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleDateRangeChange", "range", range);
     }
     const p = this.state.measurements;
@@ -173,7 +173,7 @@ class DosimetryMeasurementMetadata extends Component {
   }
 
   setRecordMetadata = (record) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
     if (this.ref.current) {
@@ -196,7 +196,7 @@ class DosimetryMeasurementMetadata extends Component {
     // const wristMonitor = getRecordMetadataValue(measurements, "nurims.entity.iswristmonitored", "false");
     const defaultUnits = getPropertyValue(properties, "nurims.dosimetry.units", "");
     const dosimetryType = selection.hasOwnProperty(NURIMS_DOSIMETRY_TYPE) ? selection[NURIMS_DOSIMETRY_TYPE] : "";
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "dosimetryType", dosimetryType);
     }
     return (

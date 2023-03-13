@@ -80,7 +80,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   }
 
   setRecordMetadata = (record) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
     this.setState({record: record})
@@ -182,7 +182,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     const {record, properties, selected_job, jobs, searching, busy, ac_open} = this.state;
     const disabled = Object.entries(record).length === 0;
     const can_authorize = isValidUserRole(this.context.user, "irradiation_authorizer");
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "disabled", disabled, "record", record, "selected_job",
         selected_job, "user", this.context.user, "can_authorize", can_authorize);
     }

@@ -474,7 +474,7 @@ class EditableTable extends React.Component {
       initWithoutHead
     } = this.props;
     const {allRowsData, isAdding, editingIndex, isEditing} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog("EditableTable", "render", "isAdding", isAdding, "editingIndex", editingIndex,
         "isEditing", isEditing, "allRowsData", allRowsData);
     }

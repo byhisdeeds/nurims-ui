@@ -48,7 +48,7 @@ class ReactorOperationsReport extends Component {
   }
 
   ws_message = (message) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "ws_message", message);
     }
     if (messageHasResponse(message)) {
@@ -69,7 +69,7 @@ class ReactorOperationsReport extends Component {
   }
 
   handleReportTypeChange = (e) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleReportTypeChange", e.target.value);
     }
     this.setState({reportType: e.target.value});
@@ -86,21 +86,21 @@ class ReactorOperationsReport extends Component {
   }
 
   handleToDateRangeChange = (range) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleToDateRangeChange", range);
     }
     this.setState({endDate: range});
   }
 
   handleFromDateRangeChange = (range) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleFromDateRangeChange", range);
     }
     this.setState({startDate: range});
   }
 
   handleYearDateRangeChange = (range) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleYearDateRangeChange", range);
     }
     this.setState({year: range});

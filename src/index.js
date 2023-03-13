@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import {Routes, Route, Router, Navigate, BrowserRouter} from 'react-router-dom';
 import App from "./App";
 import Login from "./components/Login";
-// import { Auth0Provider } from "@auth0/auth0-react";
 
 const AuthService = {
   isAuthenticated: false,
@@ -21,9 +20,9 @@ const AuthService = {
   }
 };
 
-const ProtectedRoute = ({ authService, path, children }) => {
-  authService.from = path;
-  return authService.isAuthenticated ? children : <Navigate to={'/login'} replace={false}/>
+const ProtectedRoute = ({ authService, path, debug, children }) => {
+  authService.from = path + debug;
+  return authService.isAuthenticated ? children : <Navigate to={"/login"} replace={false}/>
 }
 
 const routing = (
@@ -34,14 +33,14 @@ const routing = (
         element={
           <Login
             authService={AuthService}
-            wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}
+            wsep={`${window.location.protocol === "https:"?"wss":"ws"}://${window.location.hostname}/nurimsws`}
           />
         }
       />
       <Route
         path="/"
         element={
-          <ProtectedRoute path="/" authService={AuthService}>
+          <ProtectedRoute path={"/"} debug={window.location.href.includes("debug")?"?debug":""} authService={AuthService}>
             <App
               authService={AuthService}
               wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}

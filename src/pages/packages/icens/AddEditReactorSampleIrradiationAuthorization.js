@@ -109,7 +109,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   render() {
     const {metadata_changed, confirm_remove, include_archived, selection} = this.state;
     const has_changed_records = this.hasChangedRecords();
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "has_changed_records", has_changed_records,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
     }

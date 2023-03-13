@@ -97,7 +97,7 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   proceedWithRemove = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "proceedWithRemove", "selection", this.state.selection);
     }
     this.setState({confirm_remove: false,});
@@ -115,7 +115,7 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   discoverOperatingRuns = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "discoverOperatingRuns");
     }
     this.setState({confirm_discovery: true,});
@@ -126,7 +126,7 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   proceedWithDiscovery = (year, startMonth, endMonth, forceOverwrite) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "proceedWithDiscovery", "year", year, "startMonth", startMonth,
         "endMonth", endMonth, "forceOverwrite", forceOverwrite);
     }
@@ -143,7 +143,7 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   requestGetRecords = (include_archived) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
     }
     this.props.send({
@@ -161,7 +161,7 @@ class AddEditReactorOperatingRuns extends React.Component {
       for (const record of records) {
         // only save monitor record with changed metadata
         if (record.changed) {
-          if (this.context.debug > 5) {
+          if (this.context.debug) {
             ConsoleLog(this.Module, "saveChanges", record);
           }
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
@@ -184,7 +184,7 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   ws_message(message) {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "ws_message", "message", message);
     }
     if (messageHasResponse(message)) {
@@ -238,7 +238,7 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   onRecordSelection = (selection) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
     }
     if (selection.hasOwnProperty("item_id") && selection.item_id === -1) {
@@ -262,7 +262,7 @@ class AddEditReactorOperatingRuns extends React.Component {
 
   render() {
     const {metadata_changed, confirm_remove, confirm_discovery, include_archived, selection} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
     }

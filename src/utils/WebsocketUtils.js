@@ -1,8 +1,4 @@
 
-export function messageHasData(message) {
-  return message.data;
-}
-
 export function messageHasResponse(message) {
   return message.hasOwnProperty("response");
 }

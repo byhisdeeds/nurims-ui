@@ -135,7 +135,7 @@ class SSCMetadata extends Component {
   }
 
   setRecordMetadata = (record) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.module, "setRecordMetadata", "record", record);
     }
     if (this.ref.current) {
@@ -221,7 +221,7 @@ class SSCMetadata extends Component {
   render() {
     const {ssc, properties} = this.state;
     const disabled = Object.entries(ssc).length === 0;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.module, "render", "ssc", ssc);
     }
     return (

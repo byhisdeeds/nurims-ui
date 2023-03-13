@@ -55,7 +55,7 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
   }
 
   ws_message = (message) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "ws_message", message);
     }
     if (messageHasResponse(message)) {
@@ -76,21 +76,21 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
   }
 
   handleReportTypeChange = (e) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleReportTypeChange", e.target.value);
     }
     this.setState({reportType: e.target.value});
   }
 
   handleToDateChange = (date) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleToDateChange", date);
     }
     this.setState({endDate: date});
   }
 
   handleFromDateChange = (date) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleFromDateChange", date);
     }
     this.setState({endDate: date});
@@ -108,7 +108,7 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
 
   render() {
     const {pdf, reportType} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render");
     }
     return (

@@ -62,7 +62,7 @@ class PagedCsvTable extends React.Component {
   }
 
   setRecords = (records) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog("PagedCsvTable", "setRecords", "records", records);
     }
     if (Array.isArray(records)) {
@@ -86,7 +86,7 @@ class PagedCsvTable extends React.Component {
   }
 
   updateRecord = (record) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog("PagedCsvTable", "updateRecord", "record", record);
     }
     if (record) {
@@ -137,7 +137,7 @@ class PagedCsvTable extends React.Component {
 
   render () {
     const {include_archived, selection} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog("PagedCsvTable", "render", "include_archived", include_archived, "selection", selection);
     }
     return (

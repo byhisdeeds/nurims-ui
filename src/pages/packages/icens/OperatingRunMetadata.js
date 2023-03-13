@@ -56,7 +56,7 @@ class OperatingRunMetadata extends Component {
   }
 
   setRecordMetadata = (record) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
     this.setState({
@@ -74,7 +74,7 @@ class OperatingRunMetadata extends Component {
 
   render() {
     const {record, disabled} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "record",
         getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, ""));
     }

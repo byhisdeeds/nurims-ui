@@ -12,8 +12,8 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import SaveIcon from "@mui/icons-material/Save";
 import AddIcon from "@mui/icons-material/Add";
 import UserList from "./UserList";
-import {
-  CMD_DELETE_USER_RECORD,
+import Constants, {
+  CMD_DELETE_USER_RECORD, CMD_GET_PUBLIC_KEY,
   CMD_GET_USER_RECORDS,
   CMD_UPDATE_USER_RECORD,
   ITEM_ID,
@@ -31,6 +31,7 @@ import {
 import {toast} from "react-toastify";
 import UserMetadata from "./UserMetadata";
 import {TitleComponent} from "../../components/CommonComponents";
+import {encryptText} from "../../utils/EncryptionUtils";
 
 export const MANAGEUSERS_REF = "ManageUsers";
 
@@ -46,11 +47,18 @@ class ManageUsers extends React.Component {
       include_archived: false,
     };
     this.Module = MANAGEUSERS_REF;
+    this.puk = "";
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
   }
 
   componentDidMount() {
+    // get public key as base64 string
+    // this.ws.send(JSON.stringify({uuid:this.uuid, cmd: Constants.CMD_GET_PUBLIC_KEY}));
+    this.props.send({
+      cmd: CMD_GET_PUBLIC_KEY,
+      module: this.Module,
+    })
     this.requestGetRecords(this.state.include_archived);
   }
 
@@ -86,7 +94,7 @@ class ManageUsers extends React.Component {
   }
 
   proceedWithRemove = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "proceedWithRemove", "selection", this.state.selection);
     }
     this.setState({confirm_remove: false,});
@@ -96,15 +104,16 @@ class ManageUsers extends React.Component {
       }
     } else {
       this.props.send({
-        cmd: this.recordCommand("delete"),
+        cmd: CMD_DELETE_USER_RECORD,
         item_id: this.state.selection.item_id,
+        username: this.state.selection[NURIMS_TITLE],
         module: this.Module,
       });
     }
   }
 
   addRecord = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "addRecord");
     }
     if (this.listRef.current) {
@@ -115,7 +124,8 @@ class ManageUsers extends React.Component {
         "nurims.withdrawn": 0,
         "metadata": {
           username: "New Record",
-          password: "",
+          password1: "",
+          password2: "",
           authorized_module_level: "",
           role: "[]",
         }
@@ -125,7 +135,7 @@ class ManageUsers extends React.Component {
   }
 
   requestGetRecords = (include_archived) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
     }
     this.props.send({
@@ -140,14 +150,28 @@ class ManageUsers extends React.Component {
     if (this.listRef.current) {
       const records = this.listRef.current.getRecords();
       for (const record of records) {
-        // only save monitor record with changed metadata
+        // only save user records with changed metadata
         if (record.changed) {
-          if (this.context.debug > 5) {
+          if (this.context.debug) {
             ConsoleLog(this.Module, "saveChanges", record);
+          }
+          // if passwords don't match then do nothing
+          if (record.metadata.password1 === "") {
+            toast.warn(`Empty password for ${record[NURIMS_TITLE]}`);
+            return;
+          } else if (record.metadata.password2 === "") {
+            toast.warn(`Empty password (again) for ${record[NURIMS_TITLE]}`);
+            return;
+          } else if (record.metadata.password1 !== record.metadata.password2) {
+            toast.warn(`Passwords for ${record[NURIMS_TITLE]} don't match`);
+            return;
           }
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
             record["record_key"] = uuid();
           }
+          record.metadata.password = encryptText(this.puk, record.metadata.password1);
+          delete record.metadata.password1;
+          delete record.metadata.password2;
           this.props.send({
             cmd: CMD_UPDATE_USER_RECORD,
             item_id: record.item_id,
@@ -165,7 +189,7 @@ class ManageUsers extends React.Component {
   }
 
   ws_message(message) {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "ws_message", "message", message);
     }
     if (messageHasResponse(message)) {
@@ -194,14 +218,16 @@ class ManageUsers extends React.Component {
               }
             }
           }
+        } else if (isCommandResponse(message, CMD_GET_PUBLIC_KEY)) {
+          this.puk = message.response.public_key;
         } else if (isCommandResponse(message, CMD_UPDATE_USER_RECORD)) {
           toast.success(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
           if (this.listRef.current) {
             // this.listRef.current.updateRecord(response[this.recordTopic]);
-            this.listRef.current.updateRecord(response.users);
+            this.listRef.current.updateRecord(response.users[0]);
           }
         } else if (isCommandResponse(message, CMD_DELETE_USER_RECORD)) {
-          toast.success(`Record (id: ${response.item_id}) deleted successfully`)
+          toast.success(`User record for '${message.username}' deleted successfully`);
           if (this.listRef.current) {
             this.listRef.current.removeRecord(this.state.selection)
           }
@@ -220,7 +246,7 @@ class ManageUsers extends React.Component {
   }
 
   onRecordSelection = (selection) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
     }
     if (selection.hasOwnProperty("item_id")) {
@@ -233,7 +259,7 @@ class ManageUsers extends React.Component {
 
   render() {
     const {metadata_changed, confirm_remove, include_archived, selection} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
     }

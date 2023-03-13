@@ -74,12 +74,6 @@ class Login extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.state.online) {
-      // console.log(JSON.stringify({
-      //   uuid:this.uuid,
-      //   cmd: Constants.CMD_VERIFY_USER_PASSWORD,
-      //   username:this.state.username,
-      //   password:encryptPassword(this.puk, this.state.password),
-      // }));
       this.ws.send(JSON.stringify({
         uuid:this.uuid,
         cmd: Constants.CMD_VERIFY_USER_PASSWORD,
@@ -116,20 +110,20 @@ class Login extends React.Component {
       }
     };
     this.ws.onmessage = (event) => {
-      const ev_data = JSON.parse(event.data);
-      if (commandResponseEquals(ev_data, Constants.CMD_GET_PUBLIC_KEY) && ev_data.data.status === 0) {
-        this.puk = ev_data.data.public_key;
+      const message = JSON.parse(event.data);
+      if (commandResponseEquals(message, Constants.CMD_GET_PUBLIC_KEY) && message.response.status === 0) {
+        this.puk = message.response.public_key;
         this.setState({ online: true });
-      } else if (commandResponseEquals(ev_data, Constants.CMD_GET_USER_RECORDS) && ev_data.response.status === 0) {
-        for (const u of ev_data.response.users) {
+      } else if (commandResponseEquals(message, Constants.CMD_GET_USER_RECORDS) && message.response.status === 0) {
+        for (const u of message.response.users) {
           if (u.hasOwnProperty("metadata")) {
             this.authService.users.push(u.metadata.username);
           }
         }
-      } else if (commandResponseEquals(ev_data, Constants.CMD_VERIFY_USER_PASSWORD)) {
-        console.log(ev_data)
-        if (ev_data.hasOwnProperty("response") && ev_data.response.hasOwnProperty('status') && ev_data.response.status === 0) {
-          if (ev_data.response.valid) {
+      } else if (commandResponseEquals(message, Constants.CMD_VERIFY_USER_PASSWORD)) {
+        console.log(message)
+        if (message.hasOwnProperty("response") && message.response.hasOwnProperty('status') && message.response.status === 0) {
+          if (message.response.valid) {
             // if Remember Me selected then save the username
             if (this.state.remember) {
               localStorage.setItem('rememberme', this.state.username);
@@ -137,12 +131,12 @@ class Login extends React.Component {
               localStorage.removeItem('rememberme');
             }
           } else {
-            toast.warn(ev_data.response.message);
+            toast.warn(message.response.message);
           }
-          this.authService.authenticate(ev_data.response.valid, ev_data.response.profile);
-          this.setState({ NavigateToPreviousRoute: ev_data.response.valid });
+          this.authService.authenticate(message.response.valid, message.response.profile);
+          this.setState({ NavigateToPreviousRoute: message.response.valid });
         } else {
-          toast.warn(ev_data.response.message);
+          toast.warn(message.response.message);
           this.setState({ NavigateToPreviousRoute: false });
         }
       }

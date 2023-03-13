@@ -44,7 +44,7 @@ class SSCList extends React.Component {
   }
 
   render() {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.module, "render");
     }
     return (

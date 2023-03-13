@@ -63,7 +63,7 @@ class AddEditMonitors extends BaseRecordManager {
   }
 
   ctrlKeyPress = (event) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "ctrlKeyPress", "key", event.key, "ctrlKey", event.ctrlKey);
     }
     if (event.key === 'i' && event.ctrlKey) {
@@ -84,7 +84,7 @@ class AddEditMonitors extends BaseRecordManager {
   }
 
   proceedWithBatchRemove = () => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "proceedWithBatchRemove", "batch_selection", this.state.batch_selection);
     }
 
@@ -123,7 +123,7 @@ class AddEditMonitors extends BaseRecordManager {
 
   handleImportMonitors = (e) => {
     const selectedFile = e.target.files[0];
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "handleImportMonitors", "selectedFile", selectedFile);
     }
     const records = (this.listRef.current) ? this.listRef.current.getRecords() : [];
@@ -167,7 +167,7 @@ class AddEditMonitors extends BaseRecordManager {
   render() {
     const {confirm_remove, selection, include_archived, confirm_batch_remove, batch_selection, busy} = this.state;
     const has_changed_records = this.hasChangedRecords();
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "has_changed_records", has_changed_records,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection,
         "confirm_batch_remove", confirm_batch_remove, "batch_selection", batch_selection);

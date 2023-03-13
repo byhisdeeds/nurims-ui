@@ -63,7 +63,7 @@ class DosimetryMeasurementsList extends React.Component {
   }
 
   setRecords = (records) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "setRecords", "records", records);
     }
     if (Array.isArray(records)) {
@@ -77,7 +77,7 @@ class DosimetryMeasurementsList extends React.Component {
   }
 
   updateRecord = (record) => {
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "updateRecord", "record", record);
     }
     if (record) {
@@ -134,7 +134,7 @@ class DosimetryMeasurementsList extends React.Component {
 
   render () {
     const {include_archived, selection} = this.state;
-    if (this.context.debug > 5) {
+    if (this.context.debug) {
       ConsoleLog(this.Module, "render", "include_archived", include_archived, "selection", selection);
     }
     return (
