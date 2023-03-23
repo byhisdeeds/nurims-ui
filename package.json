@@ -50,6 +50,8 @@
     "react-virtuoso": "^2.18.0",
     "reconnecting-websocket": "^4.4.0",
     "simple-statistics": "^7.8.0",
+    "slate": "^0.91.4",
+    "slate-react": "^0.92.0",
     "styled-components": "^5.3.5",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"

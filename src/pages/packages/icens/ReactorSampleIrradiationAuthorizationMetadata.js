@@ -239,7 +239,6 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   isOpen={ac_open}
                   onOpen={this.onAutocompleteOpen}
                   onClose={this.onAutocompleteClose}
-                  disabled={false}
                   getOptionLabel={this.getJobLabel}
                   options={jobs}
                   loading={searching}

@@ -10,11 +10,14 @@ import {
   TextField,
   Box,
   CircularProgress,
-  ButtonBase, FormControlLabel, Switch, OutlinedInput, createFilterOptions,
+  ButtonBase,
+  FormControlLabel,
+  Switch,
+  OutlinedInput,
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import DeleteForever from "@mui/icons-material/DeleteForever";
@@ -804,7 +807,8 @@ SwitchComponent.propTypes = {
 }
 
 export function AutoCompleteComponent({isOpen, onOpen, onClose, filterOptions, getOptionLabel, options, loading,
-                                        label, busy, onSelected, onChange, freeInput, defaultValue, disabled}) {
+                                       label, busy, onSelected, onChange, freeInput, defaultValue, disabled,
+                                       optionId}) {
   return (
     <Autocomplete
       disabled={disabled}
@@ -815,16 +819,16 @@ export function AutoCompleteComponent({isOpen, onOpen, onClose, filterOptions, g
       open={isOpen}
       onOpen={onOpen}
       onClose={onClose}
-      filterOptions={filterOptions}
+      // filterOptions={filterOptions}
       getOptionLabel={getOptionLabel}
       options={options}
       loading={loading}
-      openOnFocus={true}
+      openOnFocus={false}
       onChange={onSelected}
-      renderOption={(p, option) => (
-        <Box component="li" {...p}>
-          {option.name}
-        </Box>
+      renderOption={(props, option) => (
+        <li component="li" {...props}>
+          {option[optionId]}
+        </li>
       )}
       renderInput={params => (
         <TextField
@@ -859,6 +863,9 @@ AutoCompleteComponent.defaultProps = {
   onChange: (event) => {},
   onSelected: (event, value) => {},
   freeInput: false,
+  disabled: false,
+  optionId: "name",
+  busy: false,
 }
 
 AutoCompleteComponent.propTypes = {
@@ -873,6 +880,7 @@ AutoCompleteComponent.propTypes = {
   getOptionLabel: PropTypes.func.isRequired,
   filterOptions: PropTypes.func,
   options: PropTypes.array.isRequired,
+  optionId: PropTypes.string,
   disabled: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   busy: PropTypes.bool.isRequired,

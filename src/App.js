@@ -32,6 +32,14 @@ import {
   CMD_BACKGROUND_TASKS
 } from "./utils/constants";
 import {ConsoleLog, UserDebugContext} from "./utils/UserDebugContext";
+import {
+  SSCPackages,
+  SysAdminResourcePackages,
+  HumanResourcePackages,
+  ControlledMaterialPackages,
+  RadiationProtectionPackages,
+  IcensPackages, SupportPackages
+} from "./pages/pagepackages";
 import {MONITORDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/MonitorDosimetryMeasurement";
 import {PERSONNELDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/PersonnelDosimetryMeasurement";
 import {PERSONNELDOSIMETRYREPORT_REF} from "./pages/radiationprotection/PersonnelDosimetryReport";
@@ -57,41 +65,12 @@ import {ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF} from "./pages/maintena
 import {GENERATESSCMAINTENANCEREPORT_REF} from "./pages/maintenance/GenerateSSCMaintenanceReport";
 import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./pages/packages/icens/AddEditReactorSampleIrradiationAuthorization";
 import {GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF} from "./pages/packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf";
+const {TERMSANDDEFINITIONS_REF} = require("./pages/support/TermsAndDefinitions");
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));
-const AddEditPersonnel = lazy(() => import('./pages/personnel/AddEditPersonnel'));
-const UpdateMonitoringStatus = lazy(() => import('./pages/personnel/UpdateMonitoringStatus'));
-const ViewPersonnelRecords = lazy(() => import('./pages/personnel/ViewPersonnelRecords'));
-const PersonnelDosimetryMeasurement = lazy(() => import('./pages/radiationprotection/PersonnelDosimetryMeasurement'));
-const PersonnelDosimetryReport = lazy(() => import('./pages/radiationprotection/PersonnelDosimetryReport'));
-const MonitorDosimetryMeasurement = lazy(() => import('./pages/radiationprotection/MonitorDosimetryMeasurement'));
-const Manufacturer = lazy(() => import('./pages/controlledmaterials/Manufacturer'));
-const Storage = lazy(() => import('./pages/controlledmaterials/Storage'));
-const Material = lazy(() => import('./pages/controlledmaterials/Material'));
-const ViewMaterialsList = lazy(() => import('./pages/controlledmaterials/ViewMaterialsList'));
-const GenerateMaterialSurveillanceSheet = lazy(() => import('./pages/controlledmaterials/GenerateMaterialSurveillanceSheet'));
-const GenerateSSCMaintenanceReport = lazy(() => import('./pages/maintenance/GenerateSSCMaintenanceReport'));
-const AddEditCorrectiveMaintenanceIssueRecord = lazy(() => import('./pages/maintenance/AddEditCorrectiveMaintenanceIssueRecord'));
-const AddEditSSC = lazy(() => import('./pages/maintenance/AddEditSSC'));
-const AddEditAMP = lazy(() => import('./pages/maintenance/AddEditAMP'));
-const ViewSSCRecords = lazy(() => import('./pages/maintenance/ViewSSCRecords'));
-const AddEditMonitors = lazy(() => import('./pages/radiationprotection/AddEditMonitors'));
-const ManageUsers = lazy(() => import('./pages/sysadmin/ManageUsers'));
-const ImportICENSPersonnel = lazy(() => import('./pages/packages/icens/ImportICENSPersonnel'));
-const ImportICENSControlledMaterialManufacturers = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialManufacturers'));
-const ImportICENSControlledMaterials = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterials'));
-const ImportICENSControlledMaterialStorageLocations = lazy(() => import('./pages/packages/icens/ImportICENSControlledMaterialStorageLocations'));
-const ImportICENSMonitors = lazy(() => import('./pages/packages/icens/ImportICENSMonitors'));
-const AddEditReactorOperatingRuns = lazy(() => import('./pages/packages/icens/AddEditReactorOperatingRuns'));
-const AddEditIrradiatedSamples = lazy(() => import('./pages/packages/icens/AddEditIrradiatedSamples'));
-const ReactorOperationsReport = lazy(() => import('./pages/packages/icens/ReactorOperationsReport'));
-const AddEditReactorWaterSamples = lazy(() => import('./pages/packages/icens/AddEditReactorWaterSamples'));
-const PersonnelDosimetryEvaluation = lazy(() => import('./pages/radiationprotection/PersonnelDosimetryEvaluation'));
-const AddEditReactorSampleIrradiationAuthorization = lazy(() => import('./pages/packages/icens/AddEditReactorSampleIrradiationAuthorization'));
-const GenerateReactorSampleIrradiationAuthorizationPdf = lazy(() => import('./pages/packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf'));
 
 const drawerWidth = 300;
 
@@ -140,324 +119,6 @@ const BackgroundTasks = (background_tasks_active) => {
         { <HourglassEmptyIcon sx={{color: '#838383', paddingLeft: '10px', marginLeft: '10px', width: 32, height: 32}}/> }
       </Tooltip>
     )
-  }
-}
-
-const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
-  if (actionid === Constants.SYSADMIN_MANAGE_USERS) {
-    return (<ManageUsers
-      ref={crefs[MANAGEUSERS_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-}
-
-const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
-  if (actionid === Constants.HR_ADD_EDIT_PERSONNEL) {
-    return (<AddEditPersonnel
-      ref={crefs[ADDEDITPERSONNEL_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.HR_UPDATE_MONITORING_STATUS) {
-    return (<UpdateMonitoringStatus
-      ref={crefs[UPDATEMONITORINGSTATUS_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.HR_VIEW_PERSONNEL_RECORDS) {
-    return (<ViewPersonnelRecords
-      ref={crefs[VIEWPERSONNELRECORDS_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-}
-
-const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
-  if (actionid === Constants.CM_VIEW_CONTROLLED_MATERIALS_LIST) {
-    return (<ViewMaterialsList
-      ref={crefs[VIEWMATERIALSLIST_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL) {
-    return (<Material
-      ref={crefs[MATERIAL_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION) {
-    return (<Storage
-      ref={crefs[STORAGE_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER) {
-    return (<Manufacturer
-      ref={crefs[MANUFACTURER_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET) {
-    return (<GenerateMaterialSurveillanceSheet
-      ref={crefs[GENERATEMATERIALSURVEILLANCESHEET_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-}
-
-const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
-  if (actionid === Constants.SSC_VIEW_SSC_RECORDS) {
-    return (<ViewSSCRecords
-      ref={crefs[VIEWSSCRECORDS_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.SSC_ADD_EDIT_SSC_AMP) {
-    return (<AddEditAMP
-      ref={crefs[ADDEDITAMP_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.SSC_ADD_EDIT_SSC) {
-    return (<AddEditSSC
-      ref={crefs[ADDEDITSSC_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.SSC_ADD_EDIT_SSC_CORRECTIVE_MAINTENANCE_ISSUE_RECORD) {
-    return (<AddEditCorrectiveMaintenanceIssueRecord
-      ref={crefs[ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.SSC_GENERATE_SSC_MAINTENANCE_REPORT) {
-    return (<GenerateSSCMaintenanceReport
-      ref={crefs[GENERATESSCMAINTENANCEREPORT_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-}
-
-const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
-  if (actionid === Constants.BASIC_RP_ADD_EDIT_MONITORS) {
-    return (<AddEditMonitors
-      ref={crefs[ADDEDITMONITORS_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS) {
-    return (<PersonnelDosimetryMeasurement
-      ref={crefs[PERSONNELDOSIMETRYMEASUREMENT_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS) {
-    return (<MonitorDosimetryMeasurement
-      ref={crefs[MONITORDOSIMETRYMEASUREMENT_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.RP_PERSONNEL_DOSIMETRY_EVALUATION) {
-    return (<PersonnelDosimetryEvaluation
-      ref={crefs[PERSONNELDOSIMETRYEVALUATION_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.RP_PERSONNEL_DOSIMETRY_REPORT) {
-    return (<PersonnelDosimetryReport
-      ref={crefs[PERSONNELDOSIMETRYREPORT_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-}
-
-const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
-  if (actionid === Constants.PRO_IMPORT_ICENS_PERSONNEL) {
-    return (<ImportICENSPersonnel
-      ref={crefs["ImportICENSPersonnel"]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS) {
-    return (<ImportICENSControlledMaterialManufacturers
-      ref={crefs["ImportICENSControlledMaterialManufacturers"]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS) {
-    return (<ImportICENSControlledMaterialStorageLocations
-      ref={crefs["ImportICENSControlledMaterialStorageLocations"]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIALS) {
-    return (<ImportICENSControlledMaterials
-      ref={crefs["ImportICENSControlledMaterials"]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_MONITORS) {
-    return (<ImportICENSMonitors
-      ref={crefs["ImportICENSMonitors"]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS) {
-    return (<AddEditReactorOperatingRuns
-      ref={crefs[ADDEDITREACTOROPERATINGRUNS_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA) {
-    return (<AddEditIrradiatedSamples
-      ref={crefs[ADDEDITIRRADIATEDSAMPLES_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.RO_REACTOR_OPERATIONS_REPORT) {
-    return (<ReactorOperationsReport
-      ref={crefs[REACTOROPERATIONSREPORT_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.RO_ADD_EDIT_REACTOR_WATER_SAMPLES) {
-    return (<AddEditReactorWaterSamples
-      ref={crefs[ADDEDITREACTORWATERSAMPLES_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION) {
-    return (<AddEditReactorSampleIrradiationAuthorization
-      ref={crefs[ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
-  }
-  else if (actionid === Constants.RO_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF) {
-    return (<GenerateReactorSampleIrradiationAuthorizationPdf
-      ref={crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-    />)
   }
 }
 
@@ -512,6 +173,8 @@ class App extends React.Component {
     this.crefs[GENERATESSCMAINTENANCEREPORT_REF] = React.createRef();
     this.crefs[ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF] = React.createRef();
     this.crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF] = React.createRef();
+    this.crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF] = React.createRef();
+    this.crefs[TERMSANDDEFINITIONS_REF] = React.createRef();
   }
 
 
@@ -713,6 +376,7 @@ class App extends React.Component {
                       send={this.send}
                       properties={this.properties}
                     />}
+                  {SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {ControlledMaterialPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}

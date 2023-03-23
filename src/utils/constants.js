@@ -27,6 +27,8 @@ module.exports = Object.freeze({
 
   SYSADMIN_MANAGE_USERS: 'sysadmin.manage.users',
 
+  SUPPORT_TERMS_AND_DEFINITIONS: 'support.terms.and.definitions',
+
   BASIC_RP_ADD_EDIT_MONITORS: "rp.add.edit.monitors",
 
   PRO_IMPORT_ICENS_PERSONNEL: 'sysadmin.import.icens.personnel',
@@ -97,6 +99,8 @@ module.exports = Object.freeze({
   CMD_GENERATE_PERSONNEL_DOSE_EVALUATION_PDF: "generate_personnel_dose_evaluation_pdf",
 
   CMD_SUGGEST_ANALYSIS_JOBS: "suggest_analysis_jobs",
+  CMD_SUGGEST_SUPPORT_SEARCH_TERMS: "suggest_support_search_terms",
+  CMD_GET_SEARCH_TERM_CONTENT: "get_search_term_content",
 
   METADATA: 'metadata',
   INCLUDE_METADATA: 'include.metadata',

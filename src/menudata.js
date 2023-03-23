@@ -739,4 +739,21 @@ export const MenuData = [
       },
     ],
   },
+  {
+    root: true,
+    name: 'Support',
+    link: 'support',
+    tooltip: 'Support',
+    Icon: BusinessIcon,
+    authmodlevel: 'sysadmin',
+    items: [
+      {
+        name: '- Terms and Definitions',
+        link: 'support.terms.and.definitions',
+        title: 'Terms and Definitions',
+        tooltip: 'View terms and definitions',
+        authmodlevel: 'basic',
+      },
+    ],
+  },
 ]

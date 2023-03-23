@@ -1,6 +1,6 @@
 import {createTheme} from "@mui/material/styles";
 
-const FONT_FAMILY = 'RobotoSlabRegular, Segoeui, Cabin';
+const FONT_FAMILY = 'robotoslabregular, Segoeui, consola';
 
 export const lightTheme = createTheme({
   components: {
