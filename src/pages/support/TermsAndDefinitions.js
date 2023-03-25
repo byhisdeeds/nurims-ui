@@ -1,6 +1,10 @@
 import React from 'react';
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
-import {Box, Button, Grid, Stack} from "@mui/material";
+import {
+  ConsoleLog,
+  UserDebugContext
+} from "../../utils/UserDebugContext";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
 import {
   AutoCompleteComponent,
   TitleComponent
@@ -9,17 +13,24 @@ import {
   CMD_GET_SEARCH_TERM_CONTENT,
   CMD_SUGGEST_SUPPORT_SEARCH_TERMS,
 } from "../../utils/constants";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {
+  isCommandResponse,
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
 import {toast} from "react-toastify";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from '@mui/icons-material/Search';
 import {Slate, Editable, withReact} from 'slate-react'
-import {createEditor} from 'slate'
+import {createEditor, Editor} from 'slate'
 import {plainText2RichText} from "../../utils/RTFUtils";
+import {MaterialEditable, MaterialSlate, Toolbar} from "../../components/material-slate";
+import PdfViewer from "../../components/PdfViewer";
+import FormattedTextViewer from "../../components/FormattedTextViewer";
 
 export const TERMSANDDEFINITIONS_REF = "TermsAndDefinitions";
 
+const BLANK_PDF = 'data:application/pdf;base64,JVBERi0xLjQKJb/3ov4KMSAwIG9iago8PCAvUGFnZXMgMiAwIFIgL1R5cGUgL0NhdGFsb2cgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL0NvdW50IDEgL0tpZHMgWyAzIDAgUiBdIC9UeXBlIC9QYWdlcyA+PgplbmRvYmoKMyAwIG9iago8PCAvQ29udGVudHMgNCAwIFIgL0dyb3VwIDw8IC9DUyAvRGV2aWNlUkdCIC9JIHRydWUgL1MgL1RyYW5zcGFyZW5jeSAvVHlwZSAvR3JvdXAgPj4gL01lZGlhQm94IFsgMCAwIDYxMiA3OTEuMjUgXSAvUGFyZW50IDIgMCBSIC9SZXNvdXJjZXMgNSAwIFIgL1R5cGUgL1BhZ2UgPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0ZpbHRlciAvRmxhdGVEZWNvZGUgL0xlbmd0aCAzMCA+PgpzdHJlYW0KeJwzVDAAQl1DIGFuaahnZKqQnMtVyBXIBQA6LATGZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8ID4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDA2NCAwMDAwMCBuIAowMDAwMDAwMTIzIDAwMDAwIG4gCjAwMDAwMDAyOTggMDAwMDAgbiAKMDAwMDAwMDM5OCAwMDAwMCBuIAp0cmFpbGVyIDw8IC9Sb290IDEgMCBSIC9TaXplIDYgL0lEIFs8YzhjZDFmYzFhMWNiODBlZTgyNzI1ZjIyMTYyMTU2NDE+PGM4Y2QxZmMxYTFjYjgwZWU4MjcyNWYyMjE2MjE1NjQxPl0gPj4Kc3RhcnR4cmVmCjQxOQolJUVPRgo='
 
 class TermsAndDefinitions extends React.Component {
   static contextType = UserDebugContext;
@@ -34,7 +45,7 @@ class TermsAndDefinitions extends React.Component {
     };
     this.Module = TERMSANDDEFINITIONS_REF;
     this.editor = withReact(createEditor());
-    this.search_term_content = [];
+    this.search_term_content = BLANK_PDF;
   }
 
   componentDidMount() {
@@ -86,7 +97,8 @@ class TermsAndDefinitions extends React.Component {
         if (isCommandResponse(message, CMD_SUGGEST_SUPPORT_SEARCH_TERMS)) {
           this.setState({search_term_options: response.search_term_results, searching: false });
         } else if (isCommandResponse(message, CMD_GET_SEARCH_TERM_CONTENT)) {
-          this.search_term_content = plainText2RichText(this.search_term_content, response.search_term_content.content);
+          // this.search_term_content = plainText2RichText(this.search_term_content, response.search_term_content.content);
+          this.search_term_content = "data:application/pdf;base64," + response.search_term_content.content;
           this.setState({searching: false });
         }
       } else {
@@ -145,11 +157,40 @@ class TermsAndDefinitions extends React.Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <Box style={{fontSize: 18, fontFamily: 'consola'}}>
-              <Slate editor={this.editor} value={this.search_term_content}>
-                <Editable readOnly={true} />
-              </Slate>
-            </Box>
+            <FormattedTextViewer
+              height={"50vh"}
+              source={this.search_term_content}
+              paddingRight={8}
+            />
+            {/*<div style={{fontSize: 18, fontFamily: 'consola'}}>*/}
+            {/*  <Slate*/}
+            {/*    editor={this.editor}*/}
+            {/*    value={this.search_term_content}*/}
+            {/*    onChange={value => {*/}
+            {/*      // const isAstChange = this.editor.operations.some(*/}
+            {/*      //   op => 'set_selection' !== op.type*/}
+            {/*      // )*/}
+            {/*      // if (isAstChange) {*/}
+            {/*      //   // Save the value to Local Storage.*/}
+            {/*      //   const content = JSON.stringify(value)*/}
+            {/*      //   console.log("@@@", content)*/}
+            {/*      // }*/}
+            {/*      console.log("@@@", JSON.stringify(value))*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    <Toolbar />*/}
+            {/*    <Editable*/}
+            {/*      readOnly={false}*/}
+            {/*      onKeyDown={(e) => {*/}
+            {/*        // let's make the current text bold if the user holds command and hits "b"*/}
+            {/*        if (e.metaKey && e.key === 'b') {*/}
+            {/*          e.preventDefault();*/}
+            {/*          Editor.addMark(this.editor, 'bold', true);*/}
+            {/*        }*/}
+            {/*      }}*/}
+            {/*    />*/}
+            {/*  </Slate>*/}
+            {/*</div>*/}
           </Grid>
         </Grid>
       </React.Fragment>
