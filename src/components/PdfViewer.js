@@ -10,7 +10,7 @@ const PdfViewer = (props) => {
   const { width = '100%', height = '400px', marginLeft = 'auto', marginRight = 'auto', source } = props;
 
   return (
-    <Worker workerUrl="pdf.worker.min.js">
+    <Worker workerUrl="/nurims/pdf.worker.min.js">
       <div
         style={{
           height: height,

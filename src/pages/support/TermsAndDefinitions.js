@@ -21,12 +21,9 @@ import {
 import {toast} from "react-toastify";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from '@mui/icons-material/Search';
-import {Slate, Editable, withReact} from 'slate-react'
-import {createEditor, Editor} from 'slate'
-import {plainText2RichText} from "../../utils/RTFUtils";
-import {MaterialEditable, MaterialSlate, Toolbar} from "../../components/material-slate";
-import PdfViewer from "../../components/PdfViewer";
-import FormattedTextViewer from "../../components/FormattedTextViewer";
+// import createDOMPurify from 'dompurify'
+// import { JSDOM } from 'jsdom'
+import sanitize from "sanitize-html";
 
 export const TERMSANDDEFINITIONS_REF = "TermsAndDefinitions";
 
@@ -44,8 +41,10 @@ class TermsAndDefinitions extends React.Component {
       searching: false,
     };
     this.Module = TERMSANDDEFINITIONS_REF;
-    this.editor = withReact(createEditor());
-    this.search_term_content = BLANK_PDF;
+    // this.viewerRef = React.createRef();
+    // this.editor = withReact(createEditor());
+    // this.DOMPurify = createDOMPurify((new JSDOM('')).window)
+    this.search_term_content = "";
   }
 
   componentDidMount() {
@@ -98,7 +97,8 @@ class TermsAndDefinitions extends React.Component {
           this.setState({search_term_options: response.search_term_results, searching: false });
         } else if (isCommandResponse(message, CMD_GET_SEARCH_TERM_CONTENT)) {
           // this.search_term_content = plainText2RichText(this.search_term_content, response.search_term_content.content);
-          this.search_term_content = "data:application/pdf;base64," + response.search_term_content.content;
+          // this.search_term_content = "data:application/pdf;base64," + response.search_term_content.content;
+          this.search_term_content = sanitize(response.search_term_content.content);
           this.setState({searching: false });
         }
       } else {
@@ -157,40 +157,9 @@ class TermsAndDefinitions extends React.Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <FormattedTextViewer
-              height={"50vh"}
-              source={this.search_term_content}
-              paddingRight={8}
-            />
-            {/*<div style={{fontSize: 18, fontFamily: 'consola'}}>*/}
-            {/*  <Slate*/}
-            {/*    editor={this.editor}*/}
-            {/*    value={this.search_term_content}*/}
-            {/*    onChange={value => {*/}
-            {/*      // const isAstChange = this.editor.operations.some(*/}
-            {/*      //   op => 'set_selection' !== op.type*/}
-            {/*      // )*/}
-            {/*      // if (isAstChange) {*/}
-            {/*      //   // Save the value to Local Storage.*/}
-            {/*      //   const content = JSON.stringify(value)*/}
-            {/*      //   console.log("@@@", content)*/}
-            {/*      // }*/}
-            {/*      console.log("@@@", JSON.stringify(value))*/}
-            {/*    }}*/}
-            {/*  >*/}
-            {/*    <Toolbar />*/}
-            {/*    <Editable*/}
-            {/*      readOnly={false}*/}
-            {/*      onKeyDown={(e) => {*/}
-            {/*        // let's make the current text bold if the user holds command and hits "b"*/}
-            {/*        if (e.metaKey && e.key === 'b') {*/}
-            {/*          e.preventDefault();*/}
-            {/*          Editor.addMark(this.editor, 'bold', true);*/}
-            {/*        }*/}
-            {/*      }}*/}
-            {/*    />*/}
-            {/*  </Slate>*/}
-            {/*</div>*/}
+            <div style={{fontSize: 18, fontFamily: 'consola'}}>
+              { <div dangerouslySetInnerHTML={{ __html: this.search_term_content }} /> }
+            </div>
           </Grid>
         </Grid>
       </React.Fragment>
