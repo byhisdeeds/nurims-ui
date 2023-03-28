@@ -115,6 +115,14 @@ class TermsAndDefinitions extends React.Component {
     });
   }
 
+  update = () => {
+    this.props.send({
+      cmd: "update_terms_and_definitions",
+      search_term: this.state.search_term,
+      module: TERMSANDDEFINITIONS_REF,
+    });
+  }
+
   render() {
     const { user, ac_open, searching, search_term, search_term_options } = this.state;
     if (this.context.debug) {
@@ -151,6 +159,14 @@ class TermsAndDefinitions extends React.Component {
                 small
                 variant={"contained"}
                 onClick={this.getSearchContent}
+              >
+                <SearchIcon small />
+              </IconButton>
+              <IconButton
+                disableRipple={true}
+                small
+                variant={"contained"}
+                onClick={this.update}
               >
                 <SearchIcon small />
               </IconButton>
