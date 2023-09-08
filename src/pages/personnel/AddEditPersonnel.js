@@ -19,17 +19,19 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {TitleComponent} from "../../components/CommonComponents";
 import {
-  CMD_DELETE_PERSONNEL_RECORD, EMPLOYEE_RECORD_TYPE,
+  CMD_DELETE_PERSONNEL_RECORD,
+  EMPLOYEE_RECORD_TYPE,
   ITEM_ID,
   NURIMS_ENTITY_DATE_OF_BIRTH,
-  NURIMS_ENTITY_DOSE_PROVIDER_ID, NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
-  NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, NURIMS_ENTITY_IS_WRIST_MONITORED,
+  NURIMS_ENTITY_DOSE_PROVIDER_ID,
+  NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
+  NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED,
+  NURIMS_ENTITY_IS_WRIST_MONITORED,
   NURIMS_ENTITY_NATIONAL_ID,
   NURIMS_ENTITY_SEX,
   NURIMS_ENTITY_WORK_DETAILS,
   NURIMS_TITLE, PERSONNEL_TOPIC
 } from "../../utils/constants";
-import {toast} from "react-toastify";
 import {readString} from "react-papaparse";
 import {
   getRecordMetadataValue,
@@ -38,6 +40,7 @@ import {
   setMetadataValue
 } from "../../utils/MetadataUtils";
 import BusyIndicator from "../../components/BusyIndicator";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 export const ADDEDITPERSONNEL_REF = "AddEditPersonnel";
 
@@ -127,7 +130,7 @@ class AddEditPersonnel extends BaseRecordManager {
     const fileReader = new FileReader();
     fileReader.onerror = function () {
       alert('Unable to read ' + selectedFile.name);
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     fileReader.readAsText(selectedFile);
     fileReader.onload = function (e) {

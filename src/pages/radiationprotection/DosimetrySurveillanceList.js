@@ -30,7 +30,7 @@ import {
 import {
   getPropertyValue,
 } from "../../utils/PropertyUtils";
-import {toast} from "react-toastify";
+import {enqueueWarningSnackbar} from "../../utils/SnackbarVariants";
 
 const TABLE_ROW_HEIGHT = 24;
 
@@ -397,7 +397,7 @@ export default class DosimetrySurveillanceList extends Component {
       importIcensDoseReport(data, this.rows, getPropertyValue(this.props.properties, "nurims.dosimeter.units"), "usv");
       this.props.onChange(true);
     } else {
-      toast.warn('Unknown file format')
+      enqueueWarningSnackbar('Unknown file format')
     }
   }
 

@@ -4,12 +4,12 @@ import {
   CMD_GENERATE_PERSONNEL_RECORDS_PDF,
 } from "../../utils/constants";
 import {Box, Button, Grid, Stack} from "@mui/material";
-import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import {withTheme} from "@mui/styles";
 import {SwitchComponent, TitleComponent} from "../../components/CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 export const PERSONNELDOSIMETRYREPORT_REF = "PersonnelDosimetryReport";
 
@@ -51,7 +51,7 @@ class PersonnelDosimetryReport extends Component {
           this.setState({ pdf: message.data.pdf });
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

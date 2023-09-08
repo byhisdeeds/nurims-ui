@@ -15,9 +15,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {styled} from "@mui/material/styles";
 import Container from '@mui/material/Container';
-import {toast, ToastContainer, Zoom} from "react-toastify";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import Box from "@mui/material/Box";
+import {SnackbarProvider} from "notistack";
+import {enqueueWarningSnackbar} from "../utils/SnackbarVariants";
 
 const { v4: uuid } = require('uuid');
 const Constants = require('../utils/constants');
@@ -131,12 +132,12 @@ class Login extends React.Component {
               localStorage.removeItem('rememberme');
             }
           } else {
-            toast.warn(message.response.message);
+            enqueueWarningSnackbar(message.response.message);
           }
           this.authService.authenticate(message.response.valid, message.response.profile);
           this.setState({ NavigateToPreviousRoute: message.response.valid });
         } else {
-          toast.warn(message.response.message);
+          enqueueWarningSnackbar(message.response.message);
           this.setState({ NavigateToPreviousRoute: false });
         }
       }
@@ -158,17 +159,13 @@ class Login extends React.Component {
     return (
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
-          <ToastContainer
-            position="top-right"
-            autoClose={4000}
-            theme={'dark'}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
+          <SnackbarProvider
+            autoHideDuration={2000}
+            maxSnack={5}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
           />
           <Container
             component="main"

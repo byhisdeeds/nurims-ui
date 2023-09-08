@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import {Card, CardContent, FormControl, InputLabel, Select} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import {toast} from "react-toastify";
 import Avatar from "@mui/material/Avatar";
 import PersonIcon from '@mui/icons-material/Person';
 import {
@@ -25,6 +24,7 @@ import {
   BLANK_IMAGE_OBJECT,
 } from "../../utils/constants";
 import {MonitorTypeSelect} from "../../components/CommonComponents";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 class MonitorMetadata extends Component {
   constructor(props) {
@@ -115,7 +115,7 @@ class MonitorMetadata extends Component {
     const that = this;
     const fileReader = new FileReader();
     fileReader.onerror = function () {
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     fileReader.readAsDataURL(selectedFile);
     // fileReader.readAsText(selectedFile);

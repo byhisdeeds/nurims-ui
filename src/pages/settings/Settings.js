@@ -4,10 +4,10 @@ import {Grid, ListItem, ListItemIcon, ListItemText, ListSubheader, Select, Switc
 import WifiIcon from '@mui/icons-material/Wifi';
 import SettingsIcon from '@mui/icons-material/Settings';
 import MenuItem from "@mui/material/MenuItem";
-import {toast} from "react-toastify";
 import {getPropertyValue} from "../../utils/PropertyUtils";
 import {withTheme} from "@mui/styles";
 import {TitleComponent} from "../../components/CommonComponents";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 const MODULE = "Settings";
 
@@ -55,7 +55,7 @@ class Settings extends Component {
         //   this.setState({ properties: this.state.properties });
         // }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

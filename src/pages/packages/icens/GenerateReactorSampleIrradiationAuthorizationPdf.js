@@ -32,7 +32,7 @@ import {LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import PdfViewer from "../../../components/PdfViewer";
 import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../../utils/WebsocketUtils";
-import {toast} from "react-toastify";
+import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../../utils/SnackbarVariants";
 
 export const GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF = "GenerateReactorSampleIrradiationAuthorizationPdf";
 
@@ -63,14 +63,14 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
       if (messageStatusOk(message)) {
         if (isCommandResponse(message, CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF)) {
           if (response.message !== "") {
-            toast.info(response.message);
+            enqueueInfoSnackbar(response.message);
           }
           if (message.hasOwnProperty("data") ** message.data.hasOwnProperty("pdf")) {
             this.setState({pdf: message.data.pdf});
           }
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

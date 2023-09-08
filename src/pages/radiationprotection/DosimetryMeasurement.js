@@ -28,7 +28,6 @@ import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import PersonnelList from "./PersonnelList";
 import DosimetryMeasurementMetadata from "./DosimetryMeasurementMetadata";
 import BusyIndicator from "../../components/BusyIndicator";
-import {toast} from "react-toastify";
 import {readString} from "react-papaparse";
 import {
   getMatchingEntityDoseProviderRecord,
@@ -40,6 +39,7 @@ import {transformDose} from "../../utils/DoseReportUtils";
 import PropTypes from "prop-types";
 import {TitleComponent} from "../../components/CommonComponents";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 
 function assignDosimetryRecord(dosimetry, records) {
@@ -167,7 +167,7 @@ class DosimetryMeasurement extends BaseRecordManager {
     const that = this;
     const fileReader = new FileReader();
     fileReader.onerror = function () {
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     this.setState({busy: 1});
     fileReader.readAsText(selectedFile);

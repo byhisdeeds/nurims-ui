@@ -18,7 +18,6 @@ import ImageIcon from '@mui/icons-material/Image';
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import EditableTable from "../../components/EditableTable";
-import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import {
   BLANK_PDF,
@@ -48,6 +47,7 @@ import {
   TextFieldWithTooltip,
   DatePickerWithTooltip
 } from "../../components/CommonComponents";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 class MaterialMetadata extends Component {
   constructor(props) {
@@ -329,7 +329,7 @@ class MaterialMetadata extends Component {
     const that = this;
     const fileReader = new FileReader();
     fileReader.onerror = function () {
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     fileReader.readAsDataURL(selectedFile);
     fileReader.onload = function (event) {
@@ -347,7 +347,7 @@ class MaterialMetadata extends Component {
     const that = this;
     const fileReader = new FileReader();
     fileReader.onerror = function () {
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     fileReader.readAsDataURL(selectedFile);
     fileReader.onload = function (event) {

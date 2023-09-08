@@ -11,7 +11,6 @@ import {
   Typography
 } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
-import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
 import PersonsMonitoredStatusList from "./PersonsMonitoredStatusList";
 import {
@@ -28,6 +27,7 @@ import {
   messageStatusOk
 } from "../../utils/WebsocketUtils";
 import {TitleComponent} from "../../components/CommonComponents";
+import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../../utils/SnackbarVariants";
 
 export const UPDATEMONITORINGSTATUS_REF = "UpdateMonitoringStatus";
 
@@ -119,10 +119,10 @@ class UpdateMonitoringStatus extends Component {
             this.plref.current.update_personnel(response.personnel)
           }
         } else if (message.hasOwnProperty("cmd") && message.cmd === CMD_UPDATE_PERSONNEL_RECORD) {
-          toast.success(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)
+          enqueueSuccessSnackbar(`Personnel record for ${response.personnel[NURIMS_TITLE]} updated successfully`)
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

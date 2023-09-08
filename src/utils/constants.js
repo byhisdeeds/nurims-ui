@@ -29,6 +29,8 @@ module.exports = Object.freeze({
 
   SUPPORT_TERMS_AND_DEFINITIONS: 'support.terms.and.definitions',
 
+  RASA_CHATBOT: 'chat.bot',
+
   BASIC_RP_ADD_EDIT_MONITORS: "rp.add.edit.monitors",
 
   PRO_IMPORT_ICENS_PERSONNEL: 'sysadmin.import.icens.personnel',
@@ -101,6 +103,8 @@ module.exports = Object.freeze({
   CMD_SUGGEST_ANALYSIS_JOBS: "suggest_analysis_jobs",
   CMD_SUGGEST_SUPPORT_SEARCH_TERMS: "suggest_support_search_terms",
   CMD_GET_SEARCH_TERM_CONTENT: "get_search_term_content",
+
+  CMD_BOT_MESSAGE_SEND: "bot_message_send",
 
   METADATA: 'metadata',
   INCLUDE_METADATA: 'include.metadata',

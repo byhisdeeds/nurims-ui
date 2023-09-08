@@ -42,10 +42,9 @@ import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import Avatar from "@mui/material/Avatar";
 import ImageIcon from '@mui/icons-material/Image';
-import {toast} from "react-toastify";
 import IconButton from "@mui/material/IconButton";
 import {PhotoCamera} from "@mui/icons-material";
-
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 const DEFAULT_STORAGE_LOCATION = {easting: 0, northing: 0, marker: ""}
 
@@ -154,7 +153,7 @@ class StorageMetadata extends Component {
     const that = this;
     const fileReader = new FileReader();
     fileReader.onerror = function () {
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     fileReader.readAsDataURL(selectedFile);
     // fileReader.readAsText(selectedFile);
@@ -176,7 +175,7 @@ class StorageMetadata extends Component {
     const that = this;
     const fileReader = new FileReader();
     fileReader.onerror = function () {
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     fileReader.readAsDataURL(selectedFile);
     // fileReader.readAsText(selectedFile);

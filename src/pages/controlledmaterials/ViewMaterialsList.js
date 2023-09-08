@@ -11,7 +11,6 @@ import {
   Select,
   Stack,
 } from "@mui/material";
-import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import MenuItem from "@mui/material/MenuItem";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -20,6 +19,7 @@ import {withTheme} from "@mui/styles";
 import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 import {TitleComponent} from "../../components/CommonComponents";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 export const VIEWMATERIALSLIST_REF = "ViewMaterialsList";
 
@@ -42,7 +42,7 @@ class ViewMaterialsList extends Component {
           this.setState({ pdf: message.data.pdf });
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

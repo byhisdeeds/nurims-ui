@@ -45,10 +45,10 @@ import * as ss from "simple-statistics"
 import {doseProfileStats, doseStats} from "../../utils/StatsUtils";
 import {ConfirmRemoveRecordDialog, PdfViewerDialog} from "../../components/UtilityDialogs";
 import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
-import {toast} from "react-toastify";
 import {
   PERSONNELDOSIMETRYEVALUATION_REF
 } from "./PersonnelDosimetryEvaluation";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 const doseUnits = "mSv";
 
@@ -441,7 +441,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
       }
     } else {
       if (messageHasResponse(message)) {
-        toast.error(message.response.message);
+        enqueueErrorSnackbar(message.response.message);
       }
     }
   }

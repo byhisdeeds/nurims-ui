@@ -6,7 +6,6 @@ import {
 } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import UploadIcon from '@mui/icons-material/Upload';
-import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
 import {
   CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD,
@@ -23,6 +22,7 @@ import PagedCsvTable from "../../../components/PagedCsvTable";
 import {readString} from "react-papaparse";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 import {TitleComponent} from "../../../components/CommonComponents";
+import {enqueueErrorSnackbar} from "../../../utils/SnackbarVariants";
 
 export const ADDEDITIRRADIATEDSAMPLES_REF = "AddEditIrradiatedSamples";
 
@@ -63,7 +63,7 @@ class AddEditIrradiatedSamples extends Component {
           this.saveNextRecord();
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }
@@ -99,7 +99,7 @@ class AddEditIrradiatedSamples extends Component {
     const that = this;
     const fileReader = new FileReader();
     fileReader.onerror = function () {
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     this.setState({busy: 1});
     fileReader.readAsText(selectedFile);

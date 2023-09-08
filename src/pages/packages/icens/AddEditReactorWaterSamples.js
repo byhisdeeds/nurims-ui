@@ -36,11 +36,11 @@ import {
 import {
   ArchiveRecordLabel
 } from "../../../utils/RenderUtils";
-import {toast} from "react-toastify";
 import WaterSamplesList from "./WaterSamplesList";
 import WaterSampleMetadata from "./WaterSampleMetadata";
 import {getRecordMetadataValue} from "../../../utils/MetadataUtils";
 import {TitleComponent} from "../../../components/CommonComponents";
+import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../../../utils/SnackbarVariants";
 
 export const ADDEDITREACTORWATERSAMPLES_REF = "AddEditReactorWaterSamples";
 
@@ -213,7 +213,7 @@ class AddEditReactorWaterSamples extends React.Component {
             }
           }
         } else if (isCommandResponse(message, CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD)) {
-          toast.success(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
+          enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
           const selection = this.state.selection;
           const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
           selection[METADATA] = [...record[METADATA]]
@@ -228,7 +228,7 @@ class AddEditReactorWaterSamples extends React.Component {
           //   this.listRef.current.updateRecord(response.operation);
           // }
         } else if (isCommandResponse(message, CMD_DELETE_USER_RECORD)) {
-          toast.success(`Record (id: ${response.item_id}) deleted successfully`)
+          enqueueSuccessSnackbar(`Record (id: ${response.item_id}) deleted successfully`)
           if (this.listRef.current) {
             this.listRef.current.removeRecord(this.state.selection)
           }
@@ -241,7 +241,7 @@ class AddEditReactorWaterSamples extends React.Component {
           this.setState({selection: {}, metadata_changed: false});
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

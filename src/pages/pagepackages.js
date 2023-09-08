@@ -1,66 +1,38 @@
-import {lazy} from "react";
-// import ManageUsers from "./sysadmin/ManageUsers";
-// import AddEditPersonnel from "./personnel/AddEditPersonnel";
-// import UpdateMonitoringStatus from "./personnel/UpdateMonitoringStatus";
-// import ViewPersonnelRecords from "./personnel/ViewPersonnelRecords";
-// import ViewMaterialsList from "./controlledmaterials/ViewMaterialsList";
-// import Material from "./controlledmaterials/Material";
-// import Manufacturer from "./controlledmaterials/Manufacturer";
-// import GenerateMaterialSurveillanceSheet from "./controlledmaterials/GenerateMaterialSurveillanceSheet";
-// import ViewSSCRecords from "./maintenance/ViewSSCRecords";
-// import AddEditAMP from "./maintenance/AddEditAMP";
-// import AddEditSSC from "./maintenance/AddEditSSC";
-// import AddEditCorrectiveMaintenanceIssueRecord from "./maintenance/AddEditCorrectiveMaintenanceIssueRecord";
-// import GenerateSSCMaintenanceReport from "./maintenance/GenerateSSCMaintenanceReport";
-// import AddEditMonitors from "./radiationprotection/AddEditMonitors";
-// import PersonnelDosimetryMeasurement from "./radiationprotection/PersonnelDosimetryMeasurement";
-// import MonitorDosimetryMeasurement from "./radiationprotection/MonitorDosimetryMeasurement";
-// import PersonnelDosimetryEvaluation from "./radiationprotection/PersonnelDosimetryEvaluation";
-// import PersonnelDosimetryReport from "./radiationprotection/PersonnelDosimetryReport";
-// import ImportICENSPersonnel from "./packages/icens/ImportICENSPersonnel";
-// import ImportICENSControlledMaterialManufacturers from "./packages/icens/ImportICENSControlledMaterialManufacturers";
-// import ImportICENSControlledMaterialStorageLocations
-//   from "./packages/icens/ImportICENSControlledMaterialStorageLocations";
-// import ImportICENSControlledMaterials from "./packages/icens/ImportICENSControlledMaterials";
-// import ImportICENSMonitors from "./packages/icens/ImportICENSMonitors";
-// import AddEditReactorOperatingRuns from "./packages/icens/AddEditReactorOperatingRuns";
-// import AddEditIrradiatedSamples from "./packages/icens/AddEditIrradiatedSamples";
-// import ReactorOperationsReport from "./packages/icens/ReactorOperationsReport";
-// import AddEditReactorWaterSamples from "./packages/icens/AddEditReactorWaterSamples";
-// import AddEditReactorSampleIrradiationAuthorization
-//   from "./packages/icens/AddEditReactorSampleIrradiationAuthorization";
-// import GenerateReactorSampleIrradiationAuthorizationPdf
-//   from "./packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf";
-// import {lazy} from "react";
-// import TermsAndDefinitions from "./support/TermsAndDefinitions";
+import React, {lazy} from "react";
+
+import {CHATBOT_REF} from "./rasa/ChatBot";
+import {TERMSANDDEFINITIONS_REF} from "./support/TermsAndDefinitions";
+import {MANAGEUSERS_REF} from "./sysadmin/ManageUsers";
+import {ADDEDITPERSONNEL_REF} from "./personnel/AddEditPersonnel";
+import {UPDATEMONITORINGSTATUS_REF} from "./personnel/UpdateMonitoringStatus";
+import {VIEWPERSONNELRECORDS_REF} from "./personnel/ViewPersonnelRecords";
+import {VIEWMATERIALSLIST_REF} from "./controlledmaterials/ViewMaterialsList";
+import {MATERIAL_REF} from "./controlledmaterials/Material";
+import {STORAGE_REF} from "./controlledmaterials/Storage";
+import {MANUFACTURER_REF} from "./controlledmaterials/Manufacturer";
+import {GENERATEMATERIALSURVEILLANCESHEET_REF} from "./controlledmaterials/GenerateMaterialSurveillanceSheet";
+import {VIEWSSCRECORDS_REF} from "./maintenance/ViewSSCRecords";
+import {ADDEDITAMP_REF} from "./maintenance/AddEditAMP";
+import {ADDEDITSSC_REF} from "./maintenance/AddEditSSC";
+import {ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF} from "./maintenance/AddEditCorrectiveMaintenanceIssueRecord";
+import {GENERATESSCMAINTENANCEREPORT_REF} from "./maintenance/GenerateSSCMaintenanceReport";
+import {ADDEDITMONITORS_REF} from "./radiationprotection/AddEditMonitors";
+import {PERSONNELDOSIMETRYMEASUREMENT_REF} from "./radiationprotection/PersonnelDosimetryMeasurement";
+import {MONITORDOSIMETRYMEASUREMENT_REF} from "./radiationprotection/MonitorDosimetryMeasurement";
+import {PERSONNELDOSIMETRYEVALUATION_REF} from "./radiationprotection/PersonnelDosimetryEvaluation";
+import {PERSONNELDOSIMETRYREPORT_REF} from "./radiationprotection/PersonnelDosimetryReport";
+import {ADDEDITREACTOROPERATINGRUNS_REF} from "./packages/icens/AddEditReactorOperatingRuns";
+import {ADDEDITIRRADIATEDSAMPLES_REF} from "./packages/icens/AddEditIrradiatedSamples";
+import {REACTOROPERATIONSREPORT_REF} from "./packages/icens/ReactorOperationsReport";
+import {ADDEDITREACTORWATERSAMPLES_REF} from "./packages/icens/AddEditReactorWaterSamples";
+import {
+  ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF
+} from "./packages/icens/AddEditReactorSampleIrradiationAuthorization";
+import {
+  GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF
+} from "./packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf";
 
 const Constants = require("../utils/constants");
-const {MANAGEUSERS_REF} = require("./sysadmin/ManageUsers");
-const {ADDEDITPERSONNEL_REF} = require("./personnel/AddEditPersonnel");
-const {UPDATEMONITORINGSTATUS_REF} = require("./personnel/UpdateMonitoringStatus");
-const {VIEWPERSONNELRECORDS_REF} = require("./personnel/ViewPersonnelRecords");
-const {VIEWMATERIALSLIST_REF} = require("./controlledmaterials/ViewMaterialsList");
-const {MATERIAL_REF} = require("./controlledmaterials/Material");
-const {STORAGE_REF} = require("./controlledmaterials/Storage");
-const {MANUFACTURER_REF} = require("./controlledmaterials/Manufacturer");
-const {GENERATEMATERIALSURVEILLANCESHEET_REF} = require("./controlledmaterials/GenerateMaterialSurveillanceSheet");
-const {VIEWSSCRECORDS_REF} = require("./maintenance/ViewSSCRecords");
-const {ADDEDITAMP_REF} = require("./maintenance/AddEditAMP");
-const {ADDEDITSSC_REF} = require("./maintenance/AddEditSSC");
-const {ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF} = require("./maintenance/AddEditCorrectiveMaintenanceIssueRecord");
-const {GENERATESSCMAINTENANCEREPORT_REF} = require("./maintenance/GenerateSSCMaintenanceReport");
-const {ADDEDITMONITORS_REF} = require("./radiationprotection/AddEditMonitors");
-const {PERSONNELDOSIMETRYMEASUREMENT_REF} = require("./radiationprotection/PersonnelDosimetryMeasurement");
-const {MONITORDOSIMETRYMEASUREMENT_REF} = require("./radiationprotection/MonitorDosimetryMeasurement");
-const {PERSONNELDOSIMETRYEVALUATION_REF} = require("./radiationprotection/PersonnelDosimetryEvaluation");
-const {PERSONNELDOSIMETRYREPORT_REF} = require("./radiationprotection/PersonnelDosimetryReport");
-const {ADDEDITREACTOROPERATINGRUNS_REF} = require("./packages/icens/AddEditReactorOperatingRuns");
-const {ADDEDITIRRADIATEDSAMPLES_REF} = require("./packages/icens/AddEditIrradiatedSamples");
-const {REACTOROPERATIONSREPORT_REF} = require("./packages/icens/ReactorOperationsReport");
-const {ADDEDITREACTORWATERSAMPLES_REF} = require("./packages/icens/AddEditReactorWaterSamples");
-const {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} = require("./packages/icens/AddEditReactorSampleIrradiationAuthorization");
-const {GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF} = require("./packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf");
-const {TERMSANDDEFINITIONS_REF} = require("./support/TermsAndDefinitions");
 
 const AddEditPersonnel = lazy(() => import('./personnel/AddEditPersonnel'));
 const UpdateMonitoringStatus = lazy(() => import('./personnel/UpdateMonitoringStatus'));
@@ -93,6 +65,21 @@ const PersonnelDosimetryEvaluation = lazy(() => import('./radiationprotection/Pe
 const AddEditReactorSampleIrradiationAuthorization = lazy(() => import('./packages/icens/AddEditReactorSampleIrradiationAuthorization'));
 const GenerateReactorSampleIrradiationAuthorizationPdf = lazy(() => import('./packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf'));
 const TermsAndDefinitions = lazy(() => import('./support/TermsAndDefinitions'));
+const ChatBot = lazy(() => import('./rasa/ChatBot'));
+
+
+export const RasaPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+  if (actionid === Constants.RASA_CHATBOT) {
+    return (<ChatBot
+      ref={crefs[CHATBOT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+}
 
 
 export const SupportPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {

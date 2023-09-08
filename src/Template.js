@@ -5,7 +5,8 @@ import {
   CMD_GET_MATERIAL_RECORDS,
   CMD_GET_STORAGE_RECORDS, CMD_SAVE_MATERIAL_RECORD, NURIMS_TITLE
 } from "./utils/constants";
-import {toast} from "react-toastify";
+import {enqueueErrorSnackbar} from "./utils/SnackbarVariants";
+
 
 const MODULE = "Template";
 
@@ -22,7 +23,7 @@ class Template extends Component {
       const response = message.response;
       if (response.hasOwnProperty("status") && response.status === 0) {
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

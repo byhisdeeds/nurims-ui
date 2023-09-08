@@ -10,7 +10,6 @@ import {
   Select,
   Stack,
 } from "@mui/material";
-import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import MenuItem from "@mui/material/MenuItem";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -22,6 +21,7 @@ import {
   messageStatusOk
 } from "../../utils/WebsocketUtils";
 import {TitleComponent} from "../../components/CommonComponents";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 export const GENERATEMATERIALSURVEILLANCESHEET_REF = "GenerateMaterialSurveillanceSheet";
 
@@ -44,7 +44,7 @@ class GenerateMaterialSurveillanceSheet extends Component {
           this.setState({ pdf: message.data.pdf });
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

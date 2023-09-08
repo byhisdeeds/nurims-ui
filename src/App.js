@@ -19,9 +19,8 @@ import {darkTheme, lightTheme} from "./utils/Theme";
 import {ThemeProvider} from "@mui/material/styles";
 import {MenuData} from "./menudata";
 import {NetworkCheck} from "@mui/icons-material";
+import {SnackbarProvider} from "notistack";
 import metadata from './metadata.json';
-import {ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import BusyIndicator from "./components/BusyIndicator";
 import "./App.css"
 import {setPropertyValue} from "./utils/PropertyUtils";
@@ -38,34 +37,36 @@ import {
   HumanResourcePackages,
   ControlledMaterialPackages,
   RadiationProtectionPackages,
-  IcensPackages, SupportPackages
+  IcensPackages, SupportPackages,
+  RasaPackages
 } from "./pages/pagepackages";
-import {MONITORDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/MonitorDosimetryMeasurement";
-import {PERSONNELDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/PersonnelDosimetryMeasurement";
-import {PERSONNELDOSIMETRYREPORT_REF} from "./pages/radiationprotection/PersonnelDosimetryReport";
-import {MANUFACTURER_REF} from "./pages/controlledmaterials/Manufacturer";
-import {MATERIAL_REF} from "./pages/controlledmaterials/Material";
-import {STORAGE_REF} from "./pages/controlledmaterials/Storage";
-import {ADDEDITPERSONNEL_REF} from "./pages/personnel/AddEditPersonnel";
-import {VIEWPERSONNELRECORDS_REF} from "./pages/personnel/ViewPersonnelRecords";
-import {ADDEDITSSC_REF} from "./pages/maintenance/AddEditSSC";
-import {ADDEDITAMP_REF} from "./pages/maintenance/AddEditAMP";
-import {VIEWSSCRECORDS_REF} from "./pages/maintenance/ViewSSCRecords";
-import {GENERATEMATERIALSURVEILLANCESHEET_REF} from "./pages/controlledmaterials/GenerateMaterialSurveillanceSheet";
-import {ADDEDITREACTORWATERSAMPLES_REF} from "./pages/packages/icens/AddEditReactorWaterSamples";
-import {ADDEDITIRRADIATEDSAMPLES_REF} from "./pages/packages/icens/AddEditIrradiatedSamples";
-import {REACTOROPERATIONSREPORT_REF} from "./pages/packages/icens/ReactorOperationsReport";
-import {ADDEDITREACTOROPERATINGRUNS_REF} from "./pages/packages/icens/AddEditReactorOperatingRuns";
-import {UPDATEMONITORINGSTATUS_REF} from "./pages/personnel/UpdateMonitoringStatus";
-import {ADDEDITMONITORS_REF} from "./pages/radiationprotection/AddEditMonitors";
-import {PERSONNELDOSIMETRYEVALUATION_REF} from "./pages/radiationprotection/PersonnelDosimetryEvaluation";
-import {VIEWMATERIALSLIST_REF} from "./pages/controlledmaterials/ViewMaterialsList";
-import {MANAGEUSERS_REF} from "./pages/sysadmin/ManageUsers";
-import {ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF} from "./pages/maintenance/AddEditCorrectiveMaintenanceIssueRecord";
-import {GENERATESSCMAINTENANCEREPORT_REF} from "./pages/maintenance/GenerateSSCMaintenanceReport";
-import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./pages/packages/icens/AddEditReactorSampleIrradiationAuthorization";
-import {GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF} from "./pages/packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf";
-const {TERMSANDDEFINITIONS_REF} = require("./pages/support/TermsAndDefinitions");
+import {MONITORDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/MonitorDosimetryMeasurement"
+import {PERSONNELDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/PersonnelDosimetryMeasurement"
+import {PERSONNELDOSIMETRYREPORT_REF} from "./pages/radiationprotection/PersonnelDosimetryReport"
+import {MANUFACTURER_REF} from "./pages/controlledmaterials/Manufacturer"
+import {MATERIAL_REF} from "./pages/controlledmaterials/Material"
+import {STORAGE_REF} from "./pages/controlledmaterials/Storage"
+import {ADDEDITPERSONNEL_REF} from "./pages/personnel/AddEditPersonnel"
+import {VIEWPERSONNELRECORDS_REF} from "./pages/personnel/ViewPersonnelRecords"
+import {ADDEDITSSC_REF} from "./pages/maintenance/AddEditSSC"
+import {ADDEDITAMP_REF} from "./pages/maintenance/AddEditAMP"
+import {VIEWSSCRECORDS_REF} from "./pages/maintenance/ViewSSCRecords"
+import {GENERATEMATERIALSURVEILLANCESHEET_REF} from "./pages/controlledmaterials/GenerateMaterialSurveillanceSheet"
+import {ADDEDITREACTORWATERSAMPLES_REF} from "./pages/packages/icens/AddEditReactorWaterSamples"
+import {ADDEDITIRRADIATEDSAMPLES_REF} from "./pages/packages/icens/AddEditIrradiatedSamples"
+import {REACTOROPERATIONSREPORT_REF} from "./pages/packages/icens/ReactorOperationsReport"
+import {ADDEDITREACTOROPERATINGRUNS_REF} from "./pages/packages/icens/AddEditReactorOperatingRuns"
+import {UPDATEMONITORINGSTATUS_REF} from "./pages/personnel/UpdateMonitoringStatus"
+import {ADDEDITMONITORS_REF} from "./pages/radiationprotection/AddEditMonitors"
+import {PERSONNELDOSIMETRYEVALUATION_REF} from "./pages/radiationprotection/PersonnelDosimetryEvaluation"
+import {VIEWMATERIALSLIST_REF} from "./pages/controlledmaterials/ViewMaterialsList"
+import {MANAGEUSERS_REF} from "./pages/sysadmin/ManageUsers"
+import {ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF} from "./pages/maintenance/AddEditCorrectiveMaintenanceIssueRecord"
+import {GENERATESSCMAINTENANCEREPORT_REF} from "./pages/maintenance/GenerateSSCMaintenanceReport"
+import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./pages/packages/icens/AddEditReactorSampleIrradiationAuthorization"
+import {GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF} from "./pages/packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf"
+import {CHATBOT_REF} from "./pages/rasa/ChatBot"
+import {TERMSANDDEFINITIONS_REF} from "./pages/support/TermsAndDefinitions"
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -175,6 +176,7 @@ class App extends React.Component {
     this.crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF] = React.createRef();
     this.crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF] = React.createRef();
     this.crefs[TERMSANDDEFINITIONS_REF] = React.createRef();
+    this.crefs[CHATBOT_REF] = React.createRef();
   }
 
 
@@ -239,7 +241,9 @@ class App extends React.Component {
         this.setState({background_tasks_active: data.hasOwnProperty("tasks_active")});
         return;
       }
-      this.setState({busy: this.state.busy - 1});
+      if (data.show_busy) {
+        this.setState({busy: this.state.busy - 1});
+      }
     };
   }
 
@@ -250,19 +254,25 @@ class App extends React.Component {
     }
   }
 
-  send = (msg) => {
+  send = (msg, show_busy) => {
+    console.log("***** SEND *****", msg)
+    console.log("***** SEND *****", this.ws, this.ws.readyState)
     if (this.ws && this.ws.readyState === 1) {
       if (this.debug) {
         ConsoleLog("App", "send", msg);
       }
+      const _show_busy = (show_busy === undefined) ? true : show_busy;
       this.ws.send(JSON.stringify({
         uuid: uuid(),
         user: this.user,
+        show_busy: _show_busy,
         ...msg
       }));
-      this.setState(pstate => {
-        return {busy: pstate.busy + 1}
-      });
+      if (_show_busy) {
+        this.setState(pstate => {
+          return {busy: pstate.busy + 1}
+        });
+      }
     }
   };
 
@@ -312,17 +322,13 @@ class App extends React.Component {
       <UserDebugContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
           <Box sx={{flexGrow: 1}}>
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              theme={'dark'}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
+            <SnackbarProvider
+              autoHideDuration={2000}
+              maxSnack={5}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
             />
             <AppBar position="static">
               <Toolbar>
@@ -376,6 +382,7 @@ class App extends React.Component {
                       send={this.send}
                       properties={this.properties}
                     />}
+                  {RasaPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}

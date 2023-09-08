@@ -7,6 +7,16 @@ import EngineeringIcon from '@mui/icons-material/Engineering';
 export const MenuData = [
   {
     root: true,
+    name: 'Chat With NURIMS',
+    title: 'Chat With NURIMS',
+    link: 'chat.bot',
+    tooltip: 'Natural language interface to NURIMS',
+    authmodlevel: 'basic',
+    Icon: LockIcon,
+    items: [],
+  },
+  {
+    root: true,
     name: 'Controlled Materials',
     link: 'controlled.materials',
     tooltip: 'Controlled material resource actions',

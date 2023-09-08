@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "/nurims",
   "dependencies": {
+    "@cozimacode/react-bot": "^2.1.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
@@ -31,12 +32,16 @@
     "install": "^0.13.0",
     "jsencrypt": "^3.3.2",
     "leaflet": "^1.9.3",
+    "notistack": "^3.0.1",
     "npm": "^9.6.2",
-    "pdfjs-dist": "^3.4.120",
+    "npm-check-updates": "^16.10.17",
+    "pdfjs-dist": "^3.9.179",
     "process": "^0.11.10",
     "prop-types": "^15.8.1",
+    "rasa-webchat": "^1.0.0",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",
+    "react-chatbot-kit": "^2.1.2",
     "react-dom": "^18.2.0",
     "react-floater": "^0.8.2",
     "react-frame-component": "^5.2.6",
@@ -45,9 +50,8 @@
     "react-leaflet": "^4.2.1",
     "react-papaparse": "^4.1.0",
     "react-router-dom": "^6.9.0",
-    "react-scripts": "^5.0.1",
+    "react-scripts": "^4.0.3",
     "react-spinners": "^0.13.8",
-    "react-toastify": "^9.1.2",
     "react-virtuoso": "^4.1.0",
     "reconnecting-websocket": "^4.4.0",
     "sanitize-html": "^2.10.0",
@@ -57,8 +61,8 @@
     "web-vitals": "^3.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "node generate-buildno.js && react-scripts build",
+    "start": "react-scripts start --openssl-legacy-provider",
+    "build": "node generate-buildno.js && react-scripts build --openssl-legacy-provider",
     "postbuild": "rsync -avr --delete-after build/* ../nurims-server/public/nurims",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -82,6 +86,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.0-placeholder-for-preset-env",
     "constants": "0.0.2",
     "dotenv-cli": "^7.1.0"
   }

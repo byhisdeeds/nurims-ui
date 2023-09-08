@@ -6,7 +6,6 @@ import {
 } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import UploadIcon from '@mui/icons-material/Upload';
-import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
 import {
   CMD_UPDATE_PERSONNEL_RECORD,
@@ -31,6 +30,7 @@ import {withTheme} from "@mui/styles";
 import ReactJson from "react-json-view";
 import {setMetadataValue} from "../../../utils/MetadataUtils";
 import BusyIndicator from "../../../components/BusyIndicator";
+import {enqueueErrorSnackbar} from "../../../utils/SnackbarVariants";
 
 const MODULE = "ImportICENSMonitors";
 
@@ -70,7 +70,7 @@ class ImportICENSMonitors extends Component {
           this.setState({messages: messages});
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }
@@ -100,7 +100,7 @@ class ImportICENSMonitors extends Component {
     const fileReader = new FileReader();
     fileReader.onerror = function () {
       alert('Unable to read ' + selectedFile.name);
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     this.setState({busy: 1});
     fileReader.readAsText(selectedFile);

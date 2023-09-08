@@ -18,12 +18,10 @@ import {
   messageHasResponse,
   messageStatusOk
 } from "../../utils/WebsocketUtils";
-import {toast} from "react-toastify";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from '@mui/icons-material/Search';
-// import createDOMPurify from 'dompurify'
-// import { JSDOM } from 'jsdom'
 import sanitize from "sanitize-html";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 export const TERMSANDDEFINITIONS_REF = "TermsAndDefinitions";
 
@@ -102,7 +100,7 @@ class TermsAndDefinitions extends React.Component {
           this.setState({searching: false });
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

@@ -5,7 +5,6 @@ import {Card, CardContent, FormControl, InputLabel, Select} from "@mui/material"
 import MenuItem from "@mui/material/MenuItem";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import {toast} from "react-toastify";
 import Avatar from "@mui/material/Avatar";
 import PersonIcon from '@mui/icons-material/Person';
 import {
@@ -22,6 +21,7 @@ import {
 } from "../../utils/constants";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {dateFromDateString} from "../../utils/DateUtils";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 class PersonMetadata extends Component {
   static contextType = UserDebugContext;
@@ -122,7 +122,7 @@ class PersonMetadata extends Component {
     const that = this;
     const fileReader = new FileReader();
     fileReader.onerror = function () {
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     fileReader.readAsDataURL(selectedFile);
     // fileReader.readAsText(selectedFile);

@@ -83,8 +83,3 @@ pre {
   font-family: ledger, Consolas, monospace;
   border: 1px solid red;
 }
-
-.leaflet-container {
-  width: 100%;
-  height: 100vh;
-}

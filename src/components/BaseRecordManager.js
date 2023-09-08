@@ -36,10 +36,10 @@ import {
   messageHasResponse,
   messageStatusOk
 } from "../utils/WebsocketUtils";
-import {toast} from "react-toastify";
 import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
 import {getNextItemId, new_record} from "../utils/MetadataUtils";
 import {isValidUserRole} from "../utils/UserUtils";
+import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../utils/SnackbarVariants";
 
 class BaseRecordManager extends Component {
   static contextType = UserDebugContext;
@@ -369,7 +369,7 @@ class BaseRecordManager extends Component {
           CMD_UPDATE_MONITOR_RECORD, CMD_UPDATE_PERSONNEL_RECORD, CMD_UPDATE_SSC_RECORD, CMD_UPDATE_STORAGE_LOCATION_RECORD,
           CMD_UPDATE_MATERIAL_RECORD, CMD_UPDATE_MANUFACTURER_RECORD,
           CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD])) {
-          toast.success(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
+          enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
           if (this.listRef.current) {
             // this.listRef.current.updateRecord(response[this.recordTopic]);
             this.listRef.current.updateRecord(response[this.cmdRecordTopic(message.cmd)]);
@@ -378,7 +378,7 @@ class BaseRecordManager extends Component {
           CMD_DELETE_MONITOR_RECORD, CMD_DELETE_PERSONNEL_RECORD, CMD_DELETE_SSC_RECORD,
           CMD_DELETE_STORAGE_LOCATION_RECORD, CMD_DELETE_MATERIAL_RECORD,
           CMD_DELETE_MANUFACTURER_RECORD, CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD])) {
-          toast.success(`Record (id: ${response.item_id}) deleted successfully`)
+          enqueueSuccessSnackbar(`Record (id: ${response.item_id}) deleted successfully`)
           if (this.listRef.current) {
             this.listRef.current.removeRecord(this.state.selection)
           }
@@ -391,7 +391,7 @@ class BaseRecordManager extends Component {
           this.setState({selection: {}, metadata_changed: false});
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

@@ -3,10 +3,10 @@ import {
   BLANK_PDF,
 } from "../../utils/constants";
 import {Grid, Typography} from "@mui/material";
-import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import PropTypes from "prop-types";
 import {TitleComponent} from "../../components/CommonComponents";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 const MODULE = "ViewAMPRecords";
 
@@ -34,7 +34,7 @@ class ViewAMPRecords extends Component {
           this.setState({ pdf: message.data.pdf });
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

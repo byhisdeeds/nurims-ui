@@ -27,13 +27,14 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog} from "../../utils/UserDebugContext";
 import {TitleComponent} from "../../components/CommonComponents";
 import BusyIndicator from "../../components/BusyIndicator";
-import {toast} from "react-toastify";
 import {readString} from "react-papaparse";
 import {
   getRecordMetadataValue,
   parseMonitorRecordFromLine,
   parsePersonnelRecordFromLine
 } from "../../utils/MetadataUtils";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+
 
 export const ADDEDITMONITORS_REF = "AddEditMonitors";
 
@@ -131,7 +132,7 @@ class AddEditMonitors extends BaseRecordManager {
     const fileReader = new FileReader();
     fileReader.onerror = function () {
       alert('Unable to read ' + selectedFile.name);
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     fileReader.readAsText(selectedFile);
     fileReader.onload = function (e) {

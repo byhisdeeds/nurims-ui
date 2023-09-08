@@ -11,7 +11,6 @@ import {
   Select,
   Stack,
 } from "@mui/material";
-import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import MenuItem from "@mui/material/MenuItem";
 import {withTheme} from "@mui/styles";
@@ -23,6 +22,7 @@ import Box from "@mui/material/Box";
 import {ConsoleLog} from "../../utils/UserDebugContext";
 import {getRecordMetadataValue} from "../../utils/MetadataUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 
 export const GENERATESSCMAINTENANCEREPORT_REF = "GenerateSSCMaintenanceReport";
@@ -50,7 +50,7 @@ class GenerateSSCMaintenanceReport extends Component {
           this.setState({ pdf: message.data.pdf });
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

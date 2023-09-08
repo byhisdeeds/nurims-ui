@@ -4,12 +4,12 @@ import {
   CMD_GENERATE_SSC_RECORDS_PDF,
 } from "../../utils/constants";
 import {Box, Button, Grid, Stack} from "@mui/material";
-import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import PropTypes from "prop-types";
 import {withTheme} from "@mui/styles";
 import {SwitchComponent, TitleComponent} from "../../components/CommonComponents";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 export const VIEWSSCRECORDS_REF = "ViewSSCRecords";
 
@@ -44,7 +44,7 @@ class ViewSSCRecords extends Component {
           this.setState({ pdf: message.data.pdf });
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

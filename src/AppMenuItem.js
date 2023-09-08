@@ -43,7 +43,7 @@ export default function AppMenuItem(props) {
 
   function handleClick(menuTitle, menuLink) {
     setOpen(!open)
-    console.log("APP-MENUITEM.onClick - title, link, open, key", menuTitle, menuLink, open)
+    console.log("APP-MENUITEM.onClick - title, link, open, root", menuTitle, menuLink, open, root)
     if (root) {
       eventBus.dispatch("menuClick", {
         link: menuLink,

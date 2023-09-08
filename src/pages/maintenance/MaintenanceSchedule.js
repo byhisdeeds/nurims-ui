@@ -8,7 +8,6 @@ import {
   IconButton,
   Slider
 } from "@mui/material";
-import {toast} from "react-toastify";
 import PdfViewer from "../../components/PdfViewer";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {withTheme} from "@mui/styles";
@@ -16,6 +15,7 @@ import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TextField from "@mui/material/TextField";
 import {TitleComponent} from "../../components/CommonComponents";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 const MODULE = "MaintenanceSchedule";
 
@@ -76,7 +76,7 @@ class MaintenanceSchedule extends Component {
           this.setState({ pdf: message.data.pdf });
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

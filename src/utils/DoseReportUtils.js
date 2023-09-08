@@ -1,8 +1,8 @@
-import {toast} from "react-toastify";
 import {
   getRecordMetadataValue,
   setDoseRecordMetadataValue
 } from "./MetadataUtils";
+import {enqueueWarningSnackbar} from "./SnackbarVariants";
 
 const DOSE_TRANSFORM_TABLE = {
   "mr-mr": 1.0,
@@ -89,21 +89,21 @@ export function importIcensDoseReport (data, persons, doseUnit) {
                       setDoseRecordMetadataValue(person, dosimeter, "Extremity", "nurims.dosimeter.extremitydose", r2*fac);
                     }
                   } else {
-                    toast.warning(`Ignoring dosimeter reading for ${name}(${id}) which was tagged as ${status}`);
+                    enqueueWarningSnackbar(`Ignoring dosimeter reading for ${name}(${id}) which was tagged as ${status}`);
                   }
                 }
               }
             }
           }
         } else {
-          toast.warn(`Incorrect dosereport.badges.badge type in dose report data file. Expecting an array but found ${typeof badge}`)
+          enqueueWarningSnackbar(`Incorrect dosereport.badges.badge type in dose report data file. Expecting an array but found ${typeof badge}`)
         }
       }
     } else {
-      toast.warn(`Incorrect dosereport.badges type in dose report data file. Expecting an object but found ${typeof badges}`)
+      enqueueWarningSnackbar(`Incorrect dosereport.badges type in dose report data file. Expecting an object but found ${typeof badges}`)
     }
   } else {
-    toast.warn('Missing dosereport.badges field in dose report data file')
+    enqueueWarningSnackbar('Missing dosereport.badges field in dose report data file')
   }
 }
 

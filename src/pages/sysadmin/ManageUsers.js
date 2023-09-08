@@ -28,10 +28,10 @@ import {
   messageHasResponse,
   messageStatusOk
 } from "../../utils/WebsocketUtils";
-import {toast} from "react-toastify";
 import UserMetadata from "./UserMetadata";
 import {TitleComponent} from "../../components/CommonComponents";
 import {encryptText} from "../../utils/EncryptionUtils";
+import {enqueueErrorSnackbar, enqueueSuccessSnackbar, enqueueWarningSnackbar} from "../../utils/SnackbarVariants";
 
 export const MANAGEUSERS_REF = "ManageUsers";
 
@@ -157,13 +157,13 @@ class ManageUsers extends React.Component {
           }
           // if passwords don't match then do nothing
           if (record.metadata.password1 === "") {
-            toast.warn(`Empty password for ${record[NURIMS_TITLE]}`);
+            enqueueWarningSnackbar(`Empty password for ${record[NURIMS_TITLE]}`);
             return;
           } else if (record.metadata.password2 === "") {
-            toast.warn(`Empty password (again) for ${record[NURIMS_TITLE]}`);
+            enqueueWarningSnackbar(`Empty password (again) for ${record[NURIMS_TITLE]}`);
             return;
           } else if (record.metadata.password1 !== record.metadata.password2) {
-            toast.warn(`Passwords for ${record[NURIMS_TITLE]} don't match`);
+            enqueueWarningSnackbar(`Passwords for ${record[NURIMS_TITLE]} don't match`);
             return;
           }
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
@@ -221,13 +221,13 @@ class ManageUsers extends React.Component {
         } else if (isCommandResponse(message, CMD_GET_PUBLIC_KEY)) {
           this.puk = message.response.public_key;
         } else if (isCommandResponse(message, CMD_UPDATE_USER_RECORD)) {
-          toast.success(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
+          enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
           if (this.listRef.current) {
             // this.listRef.current.updateRecord(response[this.recordTopic]);
             this.listRef.current.updateRecord(response.users[0]);
           }
         } else if (isCommandResponse(message, CMD_DELETE_USER_RECORD)) {
-          toast.success(`User record for '${message.username}' deleted successfully`);
+          enqueueSuccessSnackbar(`User record for '${message.username}' deleted successfully`);
           if (this.listRef.current) {
             this.listRef.current.removeRecord(this.state.selection)
           }
@@ -240,7 +240,7 @@ class ManageUsers extends React.Component {
           this.setState({selection: {}, metadata_changed: false});
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

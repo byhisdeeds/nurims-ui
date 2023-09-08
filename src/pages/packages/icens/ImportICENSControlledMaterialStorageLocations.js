@@ -6,7 +6,6 @@ import {
 } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import UploadIcon from '@mui/icons-material/Upload';
-import {toast} from "react-toastify";
 import Box from "@mui/material/Box";
 import {
   CMD_GET_STORAGE_LOCATION_RECORDS,
@@ -27,6 +26,7 @@ import {withTheme} from "@mui/styles";
 import ReactJson from "react-json-view";
 import {BlobObject, setMetadataValue} from "../../../utils/MetadataUtils";
 import BusyIndicator from "../../../components/BusyIndicator";
+import {enqueueErrorSnackbar} from "../../../utils/SnackbarVariants";
 
 const MODULE = "ImportICENSControlledMaterialStorageLocations";
 
@@ -84,7 +84,7 @@ class ImportICENSControlledMaterialStorageLocations extends Component {
           }
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }
@@ -114,7 +114,7 @@ class ImportICENSControlledMaterialStorageLocations extends Component {
     const fileReader = new FileReader();
     fileReader.onerror = function () {
       alert('Unable to read ' + selectedFile.name);
-      toast.error(`Error occurred reading file: ${selectedFile.name}`)
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
     this.setState({busy: 1});
     fileReader.readAsText(selectedFile);

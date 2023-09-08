@@ -40,10 +40,10 @@ import {
 import {
   ArchiveRecordLabel
 } from "../../../utils/RenderUtils";
-import {toast} from "react-toastify";
 import OperatingRunList from "./OperatingRunList";
 import OperatingRunMetadata from "./OperatingRunMetadata";
 import {TitleComponent} from "../../../components/CommonComponents";
+import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../../../utils/SnackbarVariants";
 
 export const ADDEDITREACTOROPERATINGRUNS_REF = "AddEditReactorOperatingRuns";
 
@@ -212,14 +212,14 @@ class AddEditReactorOperatingRuns extends React.Component {
             }
           }
         } else if (isCommandResponse(message, CMD_DISCOVER_REACTOR_OPERATION_RUNS)) {
-          // toast.success(response.message);
-          toast.success(response.message, {autoClose: !response.hasOwnProperty("persist_message")});
+          // enqueueSuccessSnackbar(response.message);
+          enqueueSuccessSnackbar(response.message, {autoClose: !response.hasOwnProperty("persist_message")});
           // if (this.listRef.current) {
           //   // this.listRef.current.updateRecord(response[this.recordTopic]);
           //   this.listRef.current.updateRecord(response.users);
           // }
         } else if (isCommandResponse(message, CMD_DELETE_USER_RECORD)) {
-          toast.success(`Record (id: ${response.item_id}) deleted successfully`)
+          enqueueSuccessSnackbar(`Record (id: ${response.item_id}) deleted successfully`)
           if (this.listRef.current) {
             this.listRef.current.removeRecord(this.state.selection)
           }
@@ -232,7 +232,7 @@ class AddEditReactorOperatingRuns extends React.Component {
           this.setState({selection: {}, metadata_changed: false});
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }

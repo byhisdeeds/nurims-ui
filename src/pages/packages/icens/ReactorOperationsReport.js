@@ -12,7 +12,6 @@ import {
   Stack,
   Typography
 } from "@mui/material";
-import {toast} from "react-toastify";
 import PdfViewer from "../../../components/PdfViewer";
 import MenuItem from "@mui/material/MenuItem";
 import {withTheme} from "@mui/styles";
@@ -27,6 +26,7 @@ import {SameYearDateRangePicker} from "../../../components/CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 import AddIcon from "@mui/icons-material/Add";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../../utils/SnackbarVariants";
 
 export const REACTOROPERATIONSREPORT_REF = "ReactorOperationsReport";
 
@@ -56,14 +56,14 @@ class ReactorOperationsReport extends Component {
       if (messageStatusOk(message)) {
         if (isCommandResponse(message, CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF)) {
           if (response.message !== "") {
-            toast.info(response.message);
+            enqueueInfoSnackbar(response.message);
           }
           if (message.hasOwnProperty("data") ** message.data.hasOwnProperty("pdf")) {
             this.setState({pdf: message.data.pdf});
           }
         }
       } else {
-        toast.error(response.message);
+        enqueueErrorSnackbar(response.message);
       }
     }
   }
