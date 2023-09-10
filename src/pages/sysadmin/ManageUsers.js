@@ -297,7 +297,7 @@ class ManageUsers extends React.Component {
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
                disabled={selection === -1}>
             <RemoveCircleIcon sx={{mr: 1}}/>
-            Remove SSC
+            Remove User
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
                onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>
@@ -312,7 +312,7 @@ class ManageUsers extends React.Component {
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>
             <AddIcon sx={{mr: 1}}/>
-            Add SSC
+            Add User
           </Fab>
         </Box>
       </React.Fragment>
