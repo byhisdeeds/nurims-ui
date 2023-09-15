@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_MANUFACTURER_RECORDS, CMD_GET_MATERIAL_RECORDS, CMD_GET_STORAGE_LOCATION_RECORDS,
@@ -100,8 +100,8 @@ class Material extends BaseRecordManager {
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
                disabled={!this.isSysadminButtonAccessible(selection)}>
-            <PersonRemoveIcon sx={{mr: 1}}/>
-            Remove Monitor
+            <RemoveCircleOutlineIcon sx={{mr: 1}}/>
+            Remove Material
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
                disabled={!metadata_changed}>
@@ -110,7 +110,7 @@ class Material extends BaseRecordManager {
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>
             <AddIcon sx={{mr: 1}}/>
-            Add Monitor
+            Add Material
           </Fab>
         </Box>
       </React.Fragment>
