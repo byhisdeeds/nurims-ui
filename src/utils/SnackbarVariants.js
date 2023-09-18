@@ -1,33 +1,36 @@
 import {enqueueSnackbar} from "notistack";
 
 export function enqueueWarningSnackbar(message, duration, auto_close) {
+  const hideAfter = (duration || 2000) * (auto_close) ? 5 : 1
   enqueueSnackbar(message,  {
     variant: 'warning',
-    autoHideDuration: duration || 2000,
-    autoClose: auto_close || true
+    autoHideDuration: hideAfter,
   });
 }
 
 export function enqueueInfoSnackbar(message, duration, auto_close) {
+  const hideAfter = (duration || 2000) * (auto_close) ? 5 : 1
   enqueueSnackbar(message,  {
     variant: 'info',
-    autoHideDuration: duration || 1000,
+    autoHideDuration: hideAfter,
     autoClose: auto_close || true
   });
 }
 
 export function enqueueErrorSnackbar(message, duration, auto_close) {
+  const hideAfter = (duration || 2000) * (auto_close) ? 5 : 1
   enqueueSnackbar(message,  {
     variant: 'error',
-    autoHideDuration: duration || 2000,
+    autoHideDuration: hideAfter,
     autoClose: auto_close || true
   });
 }
 
 export function enqueueSuccessSnackbar(message, duration, auto_close) {
+  const hideAfter = (duration || 2000) * (auto_close) ? 5 : 1
   enqueueSnackbar(message, {
       variant: 'success',
-      autoHideDuration: duration || 2000,
+      autoHideDuration: hideAfter,
       persist: auto_close || true
     });
 }
