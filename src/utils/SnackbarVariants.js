@@ -4,7 +4,7 @@ export function enqueueWarningSnackbar(message, duration, auto_close) {
   enqueueSnackbar(message,  {
     variant: 'warning',
     autoHideDuration: duration || 2000,
-    autoClose: auto_close || false
+    autoClose: auto_close || true
   });
 }
 
@@ -12,7 +12,7 @@ export function enqueueInfoSnackbar(message, duration, auto_close) {
   enqueueSnackbar(message,  {
     variant: 'info',
     autoHideDuration: duration || 1000,
-    autoClose: auto_close || false
+    autoClose: auto_close || true
   });
 }
 
@@ -20,7 +20,7 @@ export function enqueueErrorSnackbar(message, duration, auto_close) {
   enqueueSnackbar(message,  {
     variant: 'error',
     autoHideDuration: duration || 2000,
-    autoClose: auto_close || false
+    autoClose: auto_close || true
   });
 }
 
@@ -28,6 +28,6 @@ export function enqueueSuccessSnackbar(message, duration, auto_close) {
   enqueueSnackbar(message, {
       variant: 'success',
       autoHideDuration: duration || 2000,
-      persist: auto_close || false
+      persist: auto_close || true
     });
 }
