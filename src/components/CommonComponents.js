@@ -15,7 +15,8 @@ import {
   Switch,
   OutlinedInput,
 } from "@mui/material";
-import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers/DatePicker";
+import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import ListItemText from "@mui/material/ListItemText";
@@ -339,7 +340,7 @@ TextFieldWithTooltip.propTypes = {
 export function DatePickerWithTooltip({label, value, onChange, disabled, tooltip, placement, inputFormat, padding, width}) {
   return (
     <Box style={{paddingRight: padding, marginTop: padding, width: '100%'}}>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box sx={{'& .MuiTextField-root': {width: width}}}>
           <DatePicker
             disabled={disabled}
@@ -450,7 +451,7 @@ export function DateRangePicker({from, to, fromLabel, toLabel, disabled, onToCha
                                   width, views}) {
   return (
     <Box sx={{display: 'flex'}}>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           renderInput={(props) => <TextField style={{paddingRight: 8, marginTop: 8}} {...props} />}
           label={fromLabel}
@@ -501,7 +502,7 @@ DateRangePicker.propTypes = {
 export function SameYearDateRangePicker({year, from, to, disabled, onYearChange, onToChange, onFromChange}) {
   return (
     <Box sx={{display: 'flex'}}>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           renderInput={(props) => <TextField
             style={{width: "12ch", paddingRight: 8, marginTop: 8}} {...props} />}
@@ -894,7 +895,7 @@ AutoCompleteComponent.propTypes = {
 export function DateSelect({value, onChange, disabled, label}) {
   return (
     <Box>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           renderInput={(props) => <TextField
             style={{width: '20ch', paddingRight: 8, marginTop: 8}} {...props} />}
