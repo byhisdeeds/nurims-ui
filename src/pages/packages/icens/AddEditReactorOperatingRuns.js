@@ -214,7 +214,7 @@ class AddEditReactorOperatingRuns extends React.Component {
           }
         } else if (isCommandResponse(message, CMD_DISCOVER_REACTOR_OPERATION_RUNS)) {
           // enqueueSuccessSnackbar(response.message);
-          enqueueSuccessSnackbar(response.message, {autoClose: !response.hasOwnProperty("persist_message")});
+          enqueueSuccessSnackbar(response.message, 2000, !response.hasOwnProperty("persist_message"));
           // if (this.listRef.current) {
           //   // this.listRef.current.updateRecord(response[this.recordTopic]);
           //   this.listRef.current.updateRecord(response.users);
