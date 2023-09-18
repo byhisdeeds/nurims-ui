@@ -305,7 +305,7 @@ class AddEditReactorOperatingRuns extends React.Component {
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
                disabled={selection === -1}>
             <RemoveCircleIcon sx={{mr: 1}}/>
-            Remove SSC
+            Remove Operating Run
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
                onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>
