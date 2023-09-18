@@ -15,8 +15,8 @@ import {
   Switch,
   OutlinedInput,
 } from "@mui/material";
-import {DatePicker, LocalizationProvider} from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers/DatePicker";
+import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
