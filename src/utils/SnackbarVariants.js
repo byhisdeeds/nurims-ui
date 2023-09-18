@@ -13,7 +13,6 @@ export function enqueueInfoSnackbar(message, duration, auto_close) {
   enqueueSnackbar(message,  {
     variant: 'info',
     autoHideDuration: hideAfter,
-    autoClose: auto_close || true
   });
 }
 
@@ -22,7 +21,6 @@ export function enqueueErrorSnackbar(message, duration, auto_close) {
   enqueueSnackbar(message,  {
     variant: 'error',
     autoHideDuration: hideAfter,
-    autoClose: auto_close || true
   });
 }
 
@@ -31,6 +29,5 @@ export function enqueueSuccessSnackbar(message, duration, auto_close) {
   enqueueSnackbar(message, {
       variant: 'success',
       autoHideDuration: hideAfter,
-      persist: auto_close || true
     });
 }
