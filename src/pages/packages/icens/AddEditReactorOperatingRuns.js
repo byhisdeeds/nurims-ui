@@ -43,7 +43,7 @@ import {
 import OperatingRunList from "./OperatingRunList";
 import OperatingRunMetadata from "./OperatingRunMetadata";
 import {TitleComponent} from "../../../components/CommonComponents";
-import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../../../utils/SnackbarVariants";
+import {enqueueErrorSnackbar, enqueueSuccessSnackbar, enqueueWarningSnackbar} from "../../../utils/SnackbarVariants";
 
 export const ADDEDITREACTOROPERATINGRUNS_REF = "AddEditReactorOperatingRuns";
 
@@ -214,7 +214,11 @@ class AddEditReactorOperatingRuns extends React.Component {
           }
         } else if (isCommandResponse(message, CMD_DISCOVER_REACTOR_OPERATION_RUNS)) {
           // enqueueSuccessSnackbar(response.message);
-          enqueueSuccessSnackbar(response.message, 3000, !response.hasOwnProperty("persist_message"));
+          if (response.hasOwnProperty("warning_message")) {
+            enqueueWarningSnackbar(response.message, 3000, !response.hasOwnProperty("persist_message"));
+          } else {
+            enqueueSuccessSnackbar(response.message, 3000, !response.hasOwnProperty("persist_message"));
+          }
           // if (this.listRef.current) {
           //   // this.listRef.current.updateRecord(response[this.recordTopic]);
           //   this.listRef.current.updateRecord(response.users);
