@@ -238,7 +238,7 @@ class App extends React.Component {
           setPropertyValue(this.properties, property.name, property.value);
         }
       } else if (data.cmd === CMD_BACKGROUND_TASKS) {
-        this.setState({background_tasks_active: data.hasOwnProperty("tasks_active")});
+        this.setState({background_tasks_active: data.hasOwnProperty("tasks_active"), busy: 0});
         return;
       }
       if (data.show_busy) {
