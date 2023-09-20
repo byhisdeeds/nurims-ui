@@ -35,13 +35,17 @@ class ReactorOperationsReport extends Component {
 
   constructor(props) {
     super(props);
+    // const currentYear = new Date().getFullYear();
     const currentYear = new Date().getFullYear();
     this.state = {
       title: props.title,
       pdf: BLANK_PDF,
-      startDate: new Date(`January 1, ${currentYear}`),
-      endDate: new Date(`December 1, ${currentYear}`),
-      year: new Date(`January 1, ${currentYear}`),
+      startDate: new Date(`01-01-${currentYear}`),
+      endDate: new Date(`01-01-${currentYear}`),
+      year: new Date(`01-01-${currentYear}`),
+      // startDate: new Date(`01-01-${currentYear}`),
+      // endDate: new Date(`01-01-${currentYear}`),
+      // year: new Date(`01-01-${currentYear}`),
       reportType: "summary",
     };
     this.Module = REACTOROPERATIONSREPORT_REF;
@@ -78,8 +82,8 @@ class ReactorOperationsReport extends Component {
   onSubmit = () => {
     this.props.send({
       cmd: CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF,
-      startDate: `${this.state.year.getFullYear()}-${String(this.state.startDate.getMonth()+1).padStart(2, "0")}`,
-      endDate: `${this.state.year.getFullYear()}-${String(this.state.endDate.getMonth()+1).padStart(2, "0")}`,
+      startDate: `${this.state.year.year()}-${String(this.state.startDate.month() + 1).padStart(2, "0")}`,
+      endDate: `${this.state.year.year()}-${String(this.state.endDate.month() + 1).padStart(2, "0")}`,
       reportType: this.state.reportType,
       module: this.Module,
     });

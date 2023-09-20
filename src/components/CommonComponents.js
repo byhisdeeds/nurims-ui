@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
+// import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -481,8 +481,8 @@ DateRangePicker.defaultProps = {
   views: ['year', 'month', 'day'],
   fromLabel: " Start ",
   endLabel: " End ",
-  onToChange: (date) => {},
-  onFromChange: (date) => {},
+  onToChange: (date) => { },
+  onFromChange: (date) => { },
   renderInput: (props) => <TextField style={{paddingRight: 8, marginTop: 8}} {...props} />,
 };
 
