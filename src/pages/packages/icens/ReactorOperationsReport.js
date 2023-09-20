@@ -27,6 +27,7 @@ import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 import AddIcon from "@mui/icons-material/Add";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../../utils/SnackbarVariants";
+import dayjs from 'dayjs';
 
 export const REACTOROPERATIONSREPORT_REF = "ReactorOperationsReport";
 
@@ -40,12 +41,12 @@ class ReactorOperationsReport extends Component {
     this.state = {
       title: props.title,
       pdf: BLANK_PDF,
-      startDate: new Date(`01-01-${currentYear}`),
-      endDate: new Date(`01-01-${currentYear}`),
-      year: new Date(`01-01-${currentYear}`),
-      // startDate: new Date(`01-01-${currentYear}`),
-      // endDate: new Date(`01-01-${currentYear}`),
-      // year: new Date(`01-01-${currentYear}`),
+      // startDate: new Date(), //dayjs(`01-01-${currentYear}`),
+      // endDate: new Date(), // dayjs(`01-12-${currentYear}`),
+      // year: new Date(), // dayjs(`${currentYear}`),
+      startDate: dayjs(`${currentYear}-01-01`),
+      endDate: dayjs(`${currentYear}-12-01`),
+      year: dayjs(`${currentYear}-01-01`),
       reportType: "summary",
     };
     this.Module = REACTOROPERATIONSREPORT_REF;
@@ -112,6 +113,7 @@ class ReactorOperationsReport extends Component {
 
   render() {
     const {title, pdf, year, startDate, endDate, reportType} = this.state;
+    ConsoleLog(this.Module, "render", this.state);
     return (
       <React.Fragment>
         <Grid container spacing={2}>

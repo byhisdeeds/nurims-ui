@@ -43,7 +43,11 @@ import {
 import OperatingRunList from "./OperatingRunList";
 import OperatingRunMetadata from "./OperatingRunMetadata";
 import {TitleComponent} from "../../../components/CommonComponents";
-import {enqueueErrorSnackbar, enqueueSuccessSnackbar, enqueueWarningSnackbar} from "../../../utils/SnackbarVariants";
+import {
+  enqueueErrorSnackbar,
+  enqueueSuccessSnackbar,
+  enqueueWarningSnackbar
+} from "../../../utils/SnackbarVariants";
 
 export const ADDEDITREACTOROPERATINGRUNS_REF = "AddEditReactorOperatingRuns";
 
