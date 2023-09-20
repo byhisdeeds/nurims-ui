@@ -41,9 +41,6 @@ class ReactorOperationsReport extends Component {
     this.state = {
       title: props.title,
       pdf: BLANK_PDF,
-      // startDate: new Date(), //dayjs(`01-01-${currentYear}`),
-      // endDate: new Date(), // dayjs(`01-12-${currentYear}`),
-      // year: new Date(), // dayjs(`${currentYear}`),
       startDate: dayjs(`${currentYear}-01-01`),
       endDate: dayjs(`${currentYear}-12-01`),
       year: dayjs(`${currentYear}-01-01`),

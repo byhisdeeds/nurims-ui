@@ -28,7 +28,7 @@ import {
   CMD_GET_SYSTEM_PROPERTIES,
   CMD_GET_ORGANISATION,
   CMD_SET_SYSTEM_PROPERTIES,
-  CMD_BACKGROUND_TASKS
+  CMD_BACKGROUND_TASKS, CMD_PING
 } from "./utils/constants";
 import {ConsoleLog, UserDebugContext} from "./utils/UserDebugContext";
 import {
@@ -216,7 +216,9 @@ class App extends React.Component {
       if (this.debug) {
         ConsoleLog("App", "onmessage", data);
       }
-      if (data.hasOwnProperty('module')) {
+      if (data.cmd === CMD_PING) {
+        this.send_pong();
+      } else if (data.hasOwnProperty('module')) {
         for (const [k, v] of Object.entries(this.crefs)) {
           if (k === data.module) {
             if (v.current) {
@@ -253,6 +255,18 @@ class App extends React.Component {
       this.ws.close();
     }
   }
+
+  send_pong = () => {
+    const msg = { cmd: "pong" };
+    if (this.ws && this.ws.readyState === 1) {
+      if (this.debug) {
+        ConsoleLog("App", "send", msg);
+      }
+      this.ws.send(JSON.stringify({
+        ...msg
+      }));
+    }
+  };
 
   send = (msg, show_busy) => {
     console.log("***** SEND *****", msg)

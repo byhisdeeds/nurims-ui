@@ -39,6 +39,7 @@ module.exports = Object.freeze({
   PRO_IMPORT_ICENS_CONTROLLED_MATERIALS: 'sysadmin.import.icens.controlled.materials',
   PRO_IMPORT_ICENS_MONITORS: 'sysadmin.import.icens.monitors',
 
+  CMD_PING: "ping",
   CMD_GET_PUBLIC_KEY: 'get_public_key',
   CMD_VERIFY_USER_PASSWORD: 'verify_user_password',
 
