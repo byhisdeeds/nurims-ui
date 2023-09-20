@@ -270,11 +270,11 @@ class App extends React.Component {
 
   send = (msg, show_busy) => {
     console.log("***** SEND *****", msg)
-    console.log("***** SEND *****", this.ws, this.ws.readyState)
+    if (this.debug) {
+      ConsoleLog("App", "send", "ws.readyState",
+        this.ws && this.ws.readyState ? this.ws.readyState : "undefined", "msg", msg);
+    }
     if (this.ws && this.ws.readyState === 1) {
-      if (this.debug) {
-        ConsoleLog("App", "send", msg);
-      }
       const _show_busy = (show_busy === undefined) ? true : show_busy;
       this.ws.send(JSON.stringify({
         uuid: uuid(),
