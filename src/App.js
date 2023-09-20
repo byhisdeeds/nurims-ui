@@ -208,7 +208,7 @@ class App extends React.Component {
         ConsoleLog("App", "ws.onclose", "websocket connection closed", event);
       }
       if (this.mounted) {
-        this.setState({ready: false, busy: 0});
+        this.setState({ready: false, busy: 0, background_tasks_active: false});
       }
     };
     this.ws.onmessage = (event) => {
