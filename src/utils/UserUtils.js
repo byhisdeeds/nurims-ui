@@ -1,4 +1,5 @@
 
 export function isValidUserRole(user, role) {
-  return user.hasOwnProperty("profile") && (user.profile["role"].includes('sysadmin') || user.profile["role"].includes(`'${role}'`));
+  return user.hasOwnProperty("profile") &&
+    (user.profile["role"].includes('sysadmin') || user.profile["role"].includes(`'${role}'`));
 }
