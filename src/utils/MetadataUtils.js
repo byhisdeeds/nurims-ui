@@ -221,16 +221,17 @@ export function getDateRangeFromDateString(range, missingValue) {
     if (parts.length === 2) {
       const data = [];
       for (let i = 0; i < 2; i++) {
-        let d = parts[i].substring(0, 10).split('-');
-        if (d.length === 3) {
-          // Please pay attention to the month (d[1]); JavaScript counts months from 0:
-          // January - 0, February - 1, etc.
-          // data.push(dayjs(new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2]))));
-          data.push(dayjs(`${parseInt(d[2])}-${parseInt(d[1])}-${parseInt(d[0])}`));
-        } else {
-          // data.push(dayjs(new Date()));
-          data.push(dayjs());
-        }
+        data.push(getDateFromDateString(parts[i], missingValue))
+        // let d = parts[i].substring(0, 10).split('-');
+        // if (d.length === 3) {
+        //   // Please pay attention to the month (d[1]); JavaScript counts months from 0:
+        //   // January - 0, February - 1, etc.
+        //   // data.push(dayjs(new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2]))));
+        //   data.push(dayjs(`${parseInt(d[2])}-${parseInt(d[1])}-${parseInt(d[0])}`));
+        // } else {
+        //   // data.push(dayjs(new Date()));
+        //   data.push(dayjs());
+        // }
       }
       return data;
     }
@@ -239,16 +240,22 @@ export function getDateRangeFromDateString(range, missingValue) {
 }
 
 export function getDateFromDateString(dateString, missingValue) {
-  if (dateString && dateString.includes('-')) {
-    let d = dateString.substring(0, 10).split('-');
-    if (d.length === 3) {
-      // Please pay attention to the month (d[1]); JavaScript counts months from 0:
-      // January - 0, February - 1, etc.
-      // return new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2]));
-      return dayjs(`${parseInt(d[2])}-${parseInt(d[1])}-${parseInt(d[0])}`)
-    }
+  const d = dayjs(dateString.substring(0, 10), 'YYYY-MM-DD', true)
+  if (d.isValid()) {
+    return d;
   }
   return (missingValue) ? missingValue : null;
+
+  // if (dateString && dateString.includes('-')) {
+  //   let d = dateString.substring(0, 10).split('-');
+  //   if (d.length === 3) {
+  //     // Please pay attention to the month (d[1]); JavaScript counts months from 0:
+  //     // January - 0, February - 1, etc.
+  //     // return new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2]));
+  //     return dayjs(`${parseInt(d[2])}-${parseInt(d[1])}-${parseInt(d[0])}`)
+  //   }
+  // }
+  // return (missingValue) ? missingValue : null;
 }
 
 export function getDateRangeAsDays(range, missingValue) {
@@ -257,18 +264,20 @@ export function getDateRangeAsDays(range, missingValue) {
     if (parts.length === 2) {
       const data = [];
       for (let i = 0; i < 2; i++) {
-        let d = parts[i].substring(0, 10).split('-');
-        if (d.length === 3) {
-          // Please pay attention to the month (d[1]); JavaScript counts months from 0:
-          // January - 0, February - 1, etc.
-          // data.push(dayjs(new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2]))));
-          data.push(dayjs(`${parseInt(d[2])}-${parseInt(d[1])}-${parseInt(d[0])}`));
-        } else {
-          // data.push(dayjs(new Date()));
-          data.push(dayjs());
-        }
+        data.push(getDateFromDateString(parts[i], dayjs()))
+        // let d = parts[i].substring(0, 10).split('-');
+        // if (d.length === 3) {
+        //   // Please pay attention to the month (d[1]); JavaScript counts months from 0:
+        //   // January - 0, February - 1, etc.
+        //   // data.push(dayjs(new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2]))));
+        //   data.push(dayjs(`${parseInt(d[2])}-${parseInt(d[1])}-${parseInt(d[0])}`));
+        // } else {
+        //   // data.push(dayjs(new Date()));
+        //   data.push(dayjs());
+        // }
       }
-      return differenceInDays(data[1], data[0]);
+      // return differenceInDays(data[1], data[0]);
+      return data[1].diff(data[0], 'day');
     }
   }
   return (missingValue) ? missingValue : 0;
