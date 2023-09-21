@@ -32,6 +32,7 @@ import UserMetadata from "./UserMetadata";
 import {TitleComponent} from "../../components/CommonComponents";
 import {encryptText} from "../../utils/EncryptionUtils";
 import {enqueueErrorSnackbar, enqueueSuccessSnackbar, enqueueWarningSnackbar} from "../../utils/SnackbarVariants";
+import {getUserRecordData, getUserRecordMetadataValue} from "../../utils/MetadataUtils";
 
 export const MANAGEUSERS_REF = "ManageUsers";
 
@@ -221,7 +222,7 @@ class ManageUsers extends React.Component {
         } else if (isCommandResponse(message, CMD_GET_PUBLIC_KEY)) {
           this.puk = message.response.public_key;
         } else if (isCommandResponse(message, CMD_UPDATE_USER_RECORD)) {
-          enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
+          enqueueSuccessSnackbar(`Successfully updated record for ${getUserRecordData(message.response.users[0], NURIMS_TITLE, "unknown")}.`);
           if (this.listRef.current) {
             // this.listRef.current.updateRecord(response[this.recordTopic]);
             this.listRef.current.updateRecord(response.users[0]);
