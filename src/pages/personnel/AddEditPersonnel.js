@@ -19,25 +19,16 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {TitleComponent} from "../../components/CommonComponents";
 import {
-  CMD_DELETE_PERSONNEL_RECORD,
+  CMD_DELETE_PERSONNEL_RECORD, CMD_GET_GLOSSARY_TERMS,
   EMPLOYEE_RECORD_TYPE,
   ITEM_ID,
-  NURIMS_ENTITY_DATE_OF_BIRTH,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
-  NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
-  NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED,
-  NURIMS_ENTITY_IS_WRIST_MONITORED,
-  NURIMS_ENTITY_NATIONAL_ID,
-  NURIMS_ENTITY_SEX,
-  NURIMS_ENTITY_WORK_DETAILS,
-  NURIMS_TITLE, PERSONNEL_TOPIC
+  PERSONNEL_TOPIC
 } from "../../utils/constants";
 import {readString} from "react-papaparse";
 import {
   getRecordMetadataValue,
-  new_record,
   parsePersonnelRecordFromLine,
-  setMetadataValue
 } from "../../utils/MetadataUtils";
 import BusyIndicator from "../../components/BusyIndicator";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
@@ -65,6 +56,12 @@ class AddEditPersonnel extends BaseRecordManager {
 
   componentWillUnmount() {
     document.removeEventListener("keydown", this.ctrlKeyPress, false);
+  }
+
+  ws_message = (message) => {
+    super.ws_message(message, [
+      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
+    ]);
   }
 
   ctrlKeyPress = (event) => {

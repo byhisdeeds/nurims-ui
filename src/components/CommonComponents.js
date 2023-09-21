@@ -340,7 +340,7 @@ TextFieldWithTooltip.propTypes = {
 
 export function DatePickerWithTooltip({label, value, onChange, disabled, tooltip, placement, inputFormat, padding, width}) {
   return (
-    <Box style={{paddingRight: padding, marginTop: padding, width: '100%'}}>
+    <Box style={{paddingRight: padding, marginTop: padding, display: 'inline-flex'}}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
         <Box sx={{'& .MuiTextField-root': {width: width}}}>
           <DatePicker
@@ -411,7 +411,7 @@ DatePickerWithTooltip.defaultProps = {
 
 DatePickerWithTooltip.propTypes = {
   label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   tooltip: PropTypes.string.isRequired,

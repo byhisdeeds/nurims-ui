@@ -1,27 +1,48 @@
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import {Card, CardContent, FormControl, InputLabel, Select} from "@mui/material";
+import {
+  Card,
+  CardContent,
+  FormControl,
+  InputLabel,
+  Select
+} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import {DatePicker, LocalizationProvider} from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+// import {DatePicker, LocalizationProvider} from "@mui/lab";
+// import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import Avatar from "@mui/material/Avatar";
 import PersonIcon from '@mui/icons-material/Person';
 import {
-  BlobObject,
-  getDateFromDateString,
+  BlobObject, getDateFromDateString,
   getRecordMetadataValue,
   setMetadataValue
 } from "../../utils/MetadataUtils";
 import {getPropertyValue} from "../../utils/PropertyUtils";
 import {
-  NURIMS_ENTITY_ASSIGNED_ROLE, NURIMS_ENTITY_AVATAR,
-  NURIMS_ENTITY_CONTACT, NURIMS_ENTITY_DATE_OF_BIRTH, NURIMS_ENTITY_NATIONAL_ID, NURIMS_ENTITY_SEX,
-  NURIMS_TITLE, NURIMS_ENTITY_WORK_DETAILS, NURIMS_ENTITY_DOSE_PROVIDER_ID, BLANK_IMAGE_OBJECT,
+  NURIMS_ENTITY_ASSIGNED_ROLE,
+  NURIMS_ENTITY_AVATAR,
+  NURIMS_ENTITY_CONTACT,
+  NURIMS_ENTITY_DATE_OF_BIRTH,
+  NURIMS_ENTITY_NATIONAL_ID,
+  NURIMS_ENTITY_SEX,
+  NURIMS_TITLE,
+  NURIMS_ENTITY_WORK_DETAILS,
+  NURIMS_ENTITY_DOSE_PROVIDER_ID,
+  BLANK_IMAGE_OBJECT,
+  UNDEFINED_DATE_STRING,
 } from "../../utils/constants";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {dateFromDateString} from "../../utils/DateUtils";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {getGlossaryValue} from "../../utils/GlossaryUtils";
+import {DatePickerWithTooltip} from "../../components/CommonComponents";
+import dayjs from "dayjs";
+// import {format} from "date-fns";
+
+const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
+
+export const PERSONMETADATA_REF = "PersonMetadata";
 
 class PersonMetadata extends Component {
   static contextType = UserDebugContext;
@@ -31,10 +52,19 @@ class PersonMetadata extends Component {
     this.state = {
       properties: props.properties,
     };
+    this.Module = PERSONMETADATA_REF;
     this.person = {};
+    this.glossary = {};
   }
 
   componentDidMount() {
+  }
+
+  setGlossaryTerms = (terms) => {
+    // console.log("SSCMetadata.setGlossaryTerms", terms)
+    for (const term of terms) {
+      this.glossary[term.name] = term.value;
+    }
   }
 
   handleChange = (e) => {
@@ -67,16 +97,6 @@ class PersonMetadata extends Component {
     this.props.onChange(true);
   }
 
-  // handleDisabledChange = (e) => {
-  //   console.log(">>>disabled", e.target.value)
-  //   const p = this.person;
-  //   p["changed"] = true;
-  //   p[NURIMS_WITHDRAWN] = e.target.value;
-  //   this.forceUpdate()
-  //   // signal to parent that metadata has changed
-  //   this.props.onChange(true);
-  // }
-
   handleRoleChange = (e) => {
     console.log(">>>role", e.target.value)
     const p = this.person;
@@ -89,7 +109,7 @@ class PersonMetadata extends Component {
 
   handleDobChange = (dob) => {
     const p = this.person;
-    setMetadataValue(p, NURIMS_ENTITY_DATE_OF_BIRTH, dob.toISOString().substring(0,10))
+    setMetadataValue(p, NURIMS_ENTITY_DATE_OF_BIRTH, dob.format("YYYY-MM-DD"))
     p["changed"] = true;
     this.forceUpdate()
     // signal to parent that metadata has changed
@@ -143,8 +163,11 @@ class PersonMetadata extends Component {
     const person = this.person;
     const assignedRole = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
     const avatar = getRecordMetadataValue(person, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT);
+    const disabled = Object.keys(person).length === 0;
     if (this.context.debug) {
-      ConsoleLog("PersonMetadata", "render", "personnel", person, "assignedRole", assignedRole);
+      ConsoleLog(this.Module, "render", "personnel", person, "assignedRole", assignedRole);
+      console.log("%%%%", getDateFromDateString(getRecordMetadataValue(
+        person, NURIMS_ENTITY_DATE_OF_BIRTH, UNDEFINED_DATE_STRING), UNDEFINED_DATE))
     }
     return (
       <Box
@@ -186,16 +209,26 @@ class PersonMetadata extends Component {
             value={getRecordMetadataValue(person, NURIMS_ENTITY_NATIONAL_ID, "")}
             onChange={this.handleChange}
           />
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              label="Date Of Birth"
-              inputFormat={"yyyy-MM-dd"}
-              // value={getDateFromDateString(getRecordMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), null)}
-              value={dateFromDateString(getRecordMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), "1970-01-01")}
-              onChange={this.handleDobChange}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
+          <DatePickerWithTooltip
+            width={"17ch"}
+            label="Date Of Birth"
+            inputFormat={"yyyy-MM-dd"}
+            value={getDateFromDateString(getRecordMetadataValue(
+              person, NURIMS_ENTITY_DATE_OF_BIRTH, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
+            onChange={this.handleDobChange}
+            disabled={disabled}
+            tooltip={getGlossaryValue(this.glossary, NURIMS_ENTITY_DATE_OF_BIRTH, "")}
+          />
+          {/*<LocalizationProvider dateAdapter={AdapterDateFns}>*/}
+          {/*  <DatePicker*/}
+          {/*    label="Date Of Birth"*/}
+          {/*    inputFormat={"yyyy-MM-dd"}*/}
+          {/*    // value={getDateFromDateString(getRecordMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), null)}*/}
+          {/*    value={dateFromDateString(getRecordMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), "1970-01-01")}*/}
+          {/*    onChange={this.handleDobChange}*/}
+          {/*    renderInput={(params) => <TextField {...params} />}*/}
+          {/*  />*/}
+          {/*</LocalizationProvider>*/}
           <FormControl sx={{m: 1, minWidth: 250}}>
             <InputLabel id="sex">Sex</InputLabel>
             <Select
@@ -209,19 +242,6 @@ class PersonMetadata extends Component {
               <MenuItem value={"f"}>Female</MenuItem>
             </Select>
           </FormControl>
-          {/*<FormControl sx={{m: 1, minWidth: 250}}>*/}
-          {/*  <InputLabel id="disabled">Disabled</InputLabel>*/}
-          {/*  <Select*/}
-          {/*    labelId="disabled"*/}
-          {/*    id="disabled"*/}
-          {/*    value={person.hasOwnProperty(NURIMS_WITHDRAWN) ? person[NURIMS_WITHDRAWN] : 0}*/}
-          {/*    label="Disabled"*/}
-          {/*    onChange={this.handleDisabledChange}*/}
-          {/*  >*/}
-          {/*    <MenuItem value={0}>False</MenuItem>*/}
-          {/*    <MenuItem value={1}>True</MenuItem>*/}
-          {/*  </Select>*/}
-          {/*</FormControl>*/}
           <FormControl sx={{m: 1, minWidth: 250}}>
             <InputLabel id="roles">Assigned Roles</InputLabel>
             <Select
