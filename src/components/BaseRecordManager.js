@@ -181,8 +181,8 @@ class BaseRecordManager extends Component {
     return (isValidUserRole(this.context.user, "sysadmin") && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
   }
 
-  hasDataEntryRole = (selection) => {
-    return (isValidUserRole(this.context.user, "dataentry") && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
+  isSelectableByRole = (selection, role) => {
+    return (isValidUserRole(this.context.user, role) && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
   }
 
   isValidSelection = (selection) => {

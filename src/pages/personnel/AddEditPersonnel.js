@@ -223,7 +223,7 @@ class AddEditPersonnel extends BaseRecordManager {
             Remove Personnel
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!this.hasDataEntryRole(selection)}>
+               onClick={this.changeRecordArchivalStatus} disabled={!this.isSelectableByRole(selection, "dataentry")}>
             {this.isRecordArchived(selection) ?
               <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Personnel Record"</React.Fragment> :
               <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Personnel Record"</React.Fragment>}
