@@ -17,6 +17,7 @@ import {
 import {differenceInDays, format} from "date-fns";
 import {transformDose} from "./DoseReportUtils";
 import {v4 as uuid} from "uuid";
+import dayjs from 'dayjs';
 
 export function UUID() {
   return uuid();
@@ -224,9 +225,11 @@ export function getDateRangeFromDateString(range, missingValue) {
         if (d.length === 3) {
           // Please pay attention to the month (d[1]); JavaScript counts months from 0:
           // January - 0, February - 1, etc.
-          data.push(new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2])));
+          // data.push(dayjs(new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2]))));
+          data.push(dayjs(`${parseInt(d[2])}-${parseInt(d[1])}-${parseInt(d[0])}`));
         } else {
-          data.push(new Date());
+          // data.push(dayjs(new Date()));
+          data.push(dayjs());
         }
       }
       return data;
@@ -241,7 +244,8 @@ export function getDateFromDateString(dateString, missingValue) {
     if (d.length === 3) {
       // Please pay attention to the month (d[1]); JavaScript counts months from 0:
       // January - 0, February - 1, etc.
-      return new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2]));
+      // return new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2]));
+      return dayjs(`${parseInt(d[2])}-${parseInt(d[1])}-${parseInt(d[0])}`)
     }
   }
   return (missingValue) ? missingValue : null;
@@ -257,9 +261,11 @@ export function getDateRangeAsDays(range, missingValue) {
         if (d.length === 3) {
           // Please pay attention to the month (d[1]); JavaScript counts months from 0:
           // January - 0, February - 1, etc.
-          data.push(new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2])));
+          // data.push(dayjs(new Date(parseInt(d[0]), parseInt(d[1]) - 1, parseInt(d[2]))));
+          data.push(dayjs(`${parseInt(d[2])}-${parseInt(d[1])}-${parseInt(d[0])}`));
         } else {
-          data.push(new Date());
+          // data.push(dayjs(new Date()));
+          data.push(dayjs());
         }
       }
       return differenceInDays(data[1], data[0]);
