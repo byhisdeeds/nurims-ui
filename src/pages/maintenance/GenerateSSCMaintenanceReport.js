@@ -23,19 +23,19 @@ import {ConsoleLog} from "../../utils/UserDebugContext";
 import {getRecordMetadataValue} from "../../utils/MetadataUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-
+import dayjs from 'dayjs';
 
 export const GENERATESSCMAINTENANCEREPORT_REF = "GenerateSSCMaintenanceReport";
 
 class GenerateSSCMaintenanceReport extends Component {
   constructor(props) {
     super(props);
-    const currentYear = new Date().getFullYear();
+    const currentYear = dayjs().year();
     this.state = {
       pdf: BLANK_PDF,
-      startDate: new Date(`January 1, ${currentYear}`),
-      endDate: new Date(`December 1, ${currentYear}`),
-      year: new Date(`January 1, ${currentYear}`),
+      startDate: dayjs(`${currentYear}-01-01`),
+      endDate: dayjs(`${currentYear}-12-01`),
+      year: dayjs(`${currentYear}-01-01`),
       reportType: "summary",
     };
     this.Module = GENERATESSCMAINTENANCEREPORT_REF;
@@ -83,20 +83,23 @@ class GenerateSSCMaintenanceReport extends Component {
   onGenerateMaintenanceReportPdf = () => {
     this.props.send({
       cmd: CMD_GENERATE_SSC_MAINTENANCE_REPORT_PDF,
-      startDate: `${this.state.year.getFullYear()}-${String(this.state.startDate.getMonth()+1).padStart(2, "0")}`,
-      endDate: `${this.state.year.getFullYear()}-${String(this.state.endDate.getMonth()+1).padStart(2, "0")}`,
+      startDate: `${this.state.year.year()}-${String(this.state.startDate.month() + 1).padStart(2, "0")}`,
+      endDate: `${this.state.year.year()}-${String(this.state.endDate.month() + 1).padStart(2, "0")}`,
       type: this.state.reportType,
       module: this.Module,
     });
   }
 
   render() {
-    const { pdf, reportType, startDate, endDate, year, } = this.state;
+    const {pdf, reportType, startDate, endDate, year,} = this.state;
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "render", this.state);
+    }
     return (
       <React.Fragment>
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <TitleComponent title={this.props.title} />
+            <TitleComponent title={this.props.title}/>
           </Grid>
           <Grid item xs={12}>
             <Stack direction="row" spacing={1}>
@@ -123,6 +126,7 @@ class GenerateSSCMaintenanceReport extends Component {
                 label="Report Type"
                 required={true}
                 value={reportType}
+                disabled={false}
                 onChange={this.handleChange}
                 options={[
                   {id:"summary", title: "Summary Report"},

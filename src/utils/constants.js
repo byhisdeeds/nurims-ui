@@ -101,6 +101,8 @@ module.exports = Object.freeze({
 
   CMD_GENERATE_PERSONNEL_DOSE_EVALUATION_PDF: "generate_personnel_dose_evaluation_pdf",
 
+  CMD_GENERATE_SSC_MAINTENANCE_SCHEDULE_PDF: "generate_ssc_maintenance_schedule_pdf",
+
   CMD_SUGGEST_ANALYSIS_JOBS: "suggest_analysis_jobs",
   CMD_SUGGEST_SUPPORT_SEARCH_TERMS: "suggest_support_search_terms",
   CMD_GET_SEARCH_TERM_CONTENT: "get_search_term_content",
@@ -246,4 +248,6 @@ module.exports = Object.freeze({
   WHOLE_BODY: "wholebody",
   EXTREMITY: "extremity",
   WRIST: "wrist",
+
+  UNDEFINED_DATE_STRING: "1970-01-01",
 });

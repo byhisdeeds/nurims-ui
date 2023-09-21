@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
 import 'dayjs/locale/en-gb';
 // import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
@@ -452,7 +451,7 @@ export function DateRangePicker({from, to, fromLabel, toLabel, disabled, onToCha
                                   width, views}) {
   return (
     <Box sx={{display: 'flex'}}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
         <DatePicker
           renderInput={(props) => <TextField style={{paddingRight: 8, marginTop: 8}} {...props} />}
           label={fromLabel}
@@ -503,7 +502,7 @@ DateRangePicker.propTypes = {
 export function SameYearDateRangePicker({year, from, to, disabled, onYearChange, onToChange, onFromChange}) {
   return (
     <Box sx={{display: 'flex'}}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
         <DatePicker
           renderInput={(props) => <TextField
             style={{width: "12ch", paddingRight: 8, marginTop: 8}} {...props} />}

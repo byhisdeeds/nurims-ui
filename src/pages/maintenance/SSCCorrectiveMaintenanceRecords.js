@@ -1,16 +1,11 @@
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import {
   Button,
   Card,
   CardContent,
-  FormControl,
   Grid,
-  InputLabel,
-  Select
 } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
 import "leaflet/dist/leaflet.css";
 import {
   getDateFromDateString,
@@ -20,23 +15,14 @@ import {
   toBoolean,
 } from "../../utils/MetadataUtils";
 import {
-  getPropertyAsMenuitems,
   getPropertyValue,
 } from "../../utils/PropertyUtils";
 import {
   NURIMS_TITLE,
-  NURIMS_SSC_TYPE,
-  NURIMS_SSC_CLASSIFICATION,
-  NURIMS_SSC_SAFETY_FUNCTION,
-  NURIMS_SSC_SAFETY_CATEGORY,
   NURIMS_SSC_SURVEILLANCE_FREQUENCY,
-  NURIMS_SSC_COMMISSIONING_DATE,
-  NURIMS_SSC_ID,
-  NURIMS_SSC_MAINTAINABILITY,
   NURIMS_SURVEILLANCE_FREQUENCY,
   NURIMS_SSC_MAINTENANCE_TASK,
   NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
-  NURIMS_SSC_MAINTENANCE_SCOPE,
   NURIMS_SSC_MAINTENANCE_RECORDS,
   NURIMS_SSC_MAINTENANCE_RECORD_NAME,
   NURIMS_SSC_MAINTENANCE_RECORD_ISSUE,
@@ -45,20 +31,15 @@ import {
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_ACTIONS,
   NURIMS_SSC_MAINTENANCE_RECORD_DOCUMENTS,
   NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE,
-  NURIMS_MATERIAL_REGISTRATION_DATE,
-  NURIMS_WITHDRAWN,
   NURIMS_SSC_MAINTENANCE_RECORD_ACCEPTANCE_CRITERIA,
   NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL,
-  NURIMS_MATERIAL_TYPE,
   NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE,
   NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE,
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE,
+  UNDEFINED_DATE_STRING,
 } from "../../utils/constants";
-import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
-import {DatePicker, LocalizationProvider} from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import EditableTable from "../../components/EditableTable";
+import dayjs from 'dayjs';
 import {
   ConsoleLog,
   UserDebugContext
@@ -68,12 +49,9 @@ import {
   CheckboxWithTooltip,
   DatePickerWithTooltip,
   SelectFormControlWithTooltip,
-  SwitchComponent,
   TextFieldWithTooltip
 } from "../../components/CommonComponents";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import PropTypes from "prop-types";
@@ -81,6 +59,7 @@ import {
   ConfirmRemoveRecordDialog
 } from "../../components/UtilityDialogs";
 
+const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
 export const SSCMAINTENANCERECORDS_REF = "SSCCorrectiveMaintenanceRecords";
 
 class SSCCorrectiveMaintenanceRecords extends Component {
@@ -170,15 +149,15 @@ class SSCCorrectiveMaintenanceRecords extends Component {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE, ""+e.target.checked);
       changed = true;
     } else if (e.target.name === "obsolescence") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE, ""+e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE, "" + e.target.checked);
       changed = true;
     } else if (e.target.name === "preventive-maintenance") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE, ""+e.target.checked);
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE, ""+(!e.target.checked));
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE, "" + e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE, "" + (!e.target.checked));
       changed = true;
     } else if (e.target.name === "corrective-maintenance") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE, ""+e.target.checked);
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE, ""+(!e.target.checked));
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE, "" + e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE, "" + (!e.target.checked));
       changed = true;
     } else if (e.target.id === "acceptance-criteria") {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_ACCEPTANCE_CRITERIA, e.target.value);
@@ -212,7 +191,8 @@ class SSCCorrectiveMaintenanceRecords extends Component {
   removedFromServiceDateChange = (date) => {
     const selection = this.state.selection;
     if (date) {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, date.toISOString().substring(0,10));
+      // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, date.toISOString().substring(0,10));
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, date.format('YYYY-MM-DD'));
     } else {
       removeMetadataField(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE);
     }
@@ -224,7 +204,8 @@ class SSCCorrectiveMaintenanceRecords extends Component {
   returnedToServiceDateChange = (date) => {
     const selection = this.state.selection;
     if (date) {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, date.toISOString().substring(0,10));
+      // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, date.toISOString().substring(0,10));
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, date.format('YYYY-MM-DD'));
     } else {
       removeMetadataField(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE);
     }
@@ -474,10 +455,12 @@ class SSCCorrectiveMaintenanceRecords extends Component {
                         width={"25ch"}
                         label="Removed From Service"
                         inputFormat={"yyyy-MM-dd"}
-                        value={getDateFromDateString(getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, null), null)}
+                        value={getDateFromDateString(getRecordMetadataValue(selection,
+                          NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
                         onChange={this.removedFromServiceDateChange}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, "")}
+                        tooltip={getGlossaryValue(
+                          this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, "")}
                       />
                     </Grid>
                     <Grid item xs={12} sm={4} style={{textAlign: 'center'}}>
@@ -485,10 +468,12 @@ class SSCCorrectiveMaintenanceRecords extends Component {
                         width={"25ch"}
                         label="Returned To Service"
                         inputFormat={"yyyy-MM-dd"}
-                        value={getDateFromDateString(getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, null), null)}
+                        value={getDateFromDateString(getRecordMetadataValue(selection,
+                          NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
                         onChange={this.returnedToServiceDateChange}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, "")}
+                        tooltip={getGlossaryValue(
+                          this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, "")}
                       />
                     </Grid>
                     <Grid item xs={12} sm={12}>
@@ -500,7 +485,8 @@ class SSCCorrectiveMaintenanceRecords extends Component {
                             onChange={this.handleChange}
                             required={true}
                             disabled={no_selection}
-                            checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE, "false")}
+                            checked={getRecordMetadataValue(selection,
+                              NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE, "false")}
                             tooltip={"hg gugtt "}
                             padding={8}
                           />
@@ -510,7 +496,8 @@ class SSCCorrectiveMaintenanceRecords extends Component {
                             id={"obsolescence"}
                             label={"Obsolescence Issue"}
                             onChange={this.handleChange}
-                            checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE, "false")}
+                            checked={getRecordMetadataValue(selection,
+                              NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE, "false")}
                             disabled={no_selection}
                             tooltip={"hg gugtt "}
                             padding={8}

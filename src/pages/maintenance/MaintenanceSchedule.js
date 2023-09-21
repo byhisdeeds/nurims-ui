@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-  BLANK_PDF,
+  BLANK_PDF, CMD_GENERATE_SSC_MAINTENANCE_SCHEDULE_PDF,
 } from "../../utils/constants";
 import {
   Grid,
@@ -11,7 +11,11 @@ import {
 import PdfViewer from "../../components/PdfViewer";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {withTheme} from "@mui/styles";
-import {DatePicker, LocalizationProvider} from "@mui/lab";
+import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import 'dayjs/locale/en-gb';
+// import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TextField from "@mui/material/TextField";
 import {TitleComponent} from "../../components/CommonComponents";
@@ -62,7 +66,7 @@ class MaintenanceSchedule extends Component {
     super(props);
     this.state = {
       pdf: BLANK_PDF,
-      year: new Date(),
+      year: dayjs(),
       period: [0, 11],
     };
   }
@@ -82,7 +86,9 @@ class MaintenanceSchedule extends Component {
   }
 
   handleYearChange = (year) => {
-    this.setState({ year: year });
+    console.log("@@@@@ YEAR", year)
+    console.log("@@@@@ YEAR", year.year())
+    this.setState({ year: year.year() });
   }
 
   handlePeriodChange = (event, period) => {
@@ -112,7 +118,7 @@ class MaintenanceSchedule extends Component {
           </Grid>
           <Grid item xs={12}>
             <Stack direction="row" spacing={1}>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
                 <DatePicker
                   views={['year']}
                   label="Maintenance Year"
