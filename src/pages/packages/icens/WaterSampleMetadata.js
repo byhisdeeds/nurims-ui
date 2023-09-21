@@ -13,7 +13,7 @@ import {
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS,
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE,
   NURIMS_SAMPLEDATE,
-  NURIMS_TITLE
+  NURIMS_TITLE, UNDEFINED_DATE_STRING
 } from "../../../utils/constants";
 import PropTypes from "prop-types";
 import {
@@ -33,7 +33,7 @@ import {
 } from "@mui/material";
 import EditableTable from "../../../components/EditableTable";
 import TextFileViewer from "../../../components/TextFileViewer";
-
+import dayjs from 'dayjs';
 
 class WaterSampleMetadata extends Component {
   static contextType = UserDebugContext;
@@ -148,7 +148,8 @@ class WaterSampleMetadata extends Component {
     if (record) {
       record["changed"] = false;
       record["changed.metadata"] = [];
-      this.doc = {uri: getRecordMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE, "").url};
+      this.doc = {uri: getRecordMetadataValue(
+        record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE, "").url};
     }
     this.setState({
       record: (record) ? record : [],
@@ -156,7 +157,8 @@ class WaterSampleMetadata extends Component {
     })
     if (this.ref.current && (record)) {
       console.log("######", getRecordMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
-      this.ref.current.setRowData(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
+      this.ref.current.setRowData(getRecordMetadataValue(
+        record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
     }
     this.props.onChange(false);
   }
@@ -176,12 +178,12 @@ class WaterSampleMetadata extends Component {
 
   handleDateAvailableChange = (e) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "handleDateAvailableChange", "date", e.toISOString().substring(0,10));
+      ConsoleLog(this.Module, "handleDateAvailableChange", "date", e.format("YYYY-MM-DD"));
     }
     const record = this.state.record;
     record["changed"] = true;
     appendMetadataChangedField(record["changed.metadata"], NURIMS_SAMPLEDATE);
-    setMetadataValue(record, NURIMS_SAMPLEDATE, e.toISOString().substring(0,10), "");
+    setMetadataValue(record, NURIMS_SAMPLEDATE, e.format("YYYY-MM-DD"), "");
     this.setState({record: record})
     // signal to parent that details have changed
     this.props.onChange(true);
@@ -242,7 +244,7 @@ class WaterSampleMetadata extends Component {
             <DateSelect
               disabled={disabled}
               label="Analysis Date"
-              value={getMetadataValueAsISODateString(record, NURIMS_SAMPLEDATE, "")}
+              value={dayjs(getMetadataValueAsISODateString(record, NURIMS_SAMPLEDATE, UNDEFINED_DATE_STRING))}
               onChange={this.handleDateAvailableChange}
             />
           </Grid>

@@ -895,7 +895,7 @@ AutoCompleteComponent.propTypes = {
 export function DateSelect({value, onChange, disabled, label}) {
   return (
     <Box>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
         <DatePicker
           renderInput={(props) => <TextField
             style={{width: '20ch', paddingRight: 8, marginTop: 8}} {...props} />}
