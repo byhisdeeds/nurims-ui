@@ -17,6 +17,8 @@ import {
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import 'dayjs/locale/en-gb';
 // import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import ListItemText from "@mui/material/ListItemText";
@@ -340,7 +342,7 @@ TextFieldWithTooltip.propTypes = {
 export function DatePickerWithTooltip({label, value, onChange, disabled, tooltip, placement, inputFormat, padding, width}) {
   return (
     <Box style={{paddingRight: padding, marginTop: padding, width: '100%'}}>
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={['en-gb']}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
         <Box sx={{'& .MuiTextField-root': {width: width}}}>
           <DatePicker
             disabled={disabled}
