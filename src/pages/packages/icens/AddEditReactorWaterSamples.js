@@ -324,7 +324,7 @@ class AddEditReactorWaterSamples extends React.Component {
             Remove SSC
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!this.isSysadminButtonAccessible(selection)}>
+               onClick={this.changeRecordArchivalStatus} disabled={!this.isAccesibleButton(selection)}>
             {ArchiveRecordLabel(selection, "Run")}
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
