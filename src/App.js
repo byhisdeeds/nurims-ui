@@ -7,7 +7,6 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  Drawer
 } from "@mui/material";
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -95,11 +94,11 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const NetworkConnection = (ready) => {
+const NetworkConnection = (props) => {
   return (
     <Tooltip title="Network connection to system server">
       <NetworkCheck sx={{
-        color: ready ? '#4CAF50' : '#F44336',
+        color: props.ready ? '#4CAF50' : '#F44336',
         paddingLeft: '10px',
         marginLeft: '10px',
         width: 32,
@@ -109,17 +108,37 @@ const NetworkConnection = (ready) => {
   )
 }
 
-const BackgroundTasks = (background_tasks_active) => {
-  if (background_tasks_active) {
+const BackgroundTasks = (props) => {
+  if (props.active) {
     return (
       <Tooltip title="Background tasks active.">
-        { <HourglassFullIcon sx={{color: '#ffb431', paddingLeft: '10px', marginLeft: '10px', width: 32, height: 32}}/> }
+        { <HourglassFullIcon
+            sx={{
+              color: '#ffb431',
+              paddingLeft: '10px',
+              marginLeft: '10px',
+              width: 32,
+              height: 32
+            }}
+            onClick={props.onClick}
+          />
+        }
       </Tooltip>
     )
   } else {
     return (
       <Tooltip title="No background tasks active.">
-        { <HourglassEmptyIcon sx={{color: '#838383', paddingLeft: '10px', marginLeft: '10px', width: 32, height: 32}}/> }
+        { <HourglassEmptyIcon
+            sx={{
+              color: '#838383',
+              paddingLeft: '10px',
+              marginLeft: '10px',
+              width: 32,
+              height: 32
+            }}
+            onClick={props.onClick}
+        />
+        }
       </Tooltip>
     )
   }
@@ -145,6 +164,7 @@ class App extends React.Component {
     this.ws = null;
     this.mounted = false;
     this.user = this.props.authService;
+    this.logRef = React.createRef();
     this.crefs = {};
     this.crefs["MyAccount"] = React.createRef();
     this.crefs["Settings"] = React.createRef();
@@ -381,9 +401,8 @@ class App extends React.Component {
                   Organisation: {org.name.toUpperCase()}
                 </Typography>
                 <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
-                { BackgroundTasks(background_tasks_active) }
-                { NetworkConnection(ready) }
-                <LogWindow onClick={this.toggleLogWindow} />
+                <BackgroundTasks active={background_tasks_active} onClick={this.toggleLogWindow} />
+                <NetworkConnection ready={ready} />
               </Toolbar>
             </AppBar>
             <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
@@ -421,7 +440,13 @@ class App extends React.Component {
                   <Typography paragraph>
                     {actionid}
                   </Typography>
-                  <LogWindow onClose={this.closeLogWindow} visible={log_window_visible} />
+                  <LogWindow
+                    ref={this.logRef}
+                    onClose={this.closeLogWindow}
+                    visible={log_window_visible}
+                    width={`${drawerWidth}px`}
+                    height={240}
+                  />
                 </Box>
               </Suspense>
             </MenuDrawer>
