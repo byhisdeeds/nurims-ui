@@ -454,7 +454,7 @@ class App extends React.Component {
                     onClose={this.closeLogWindow}
                     visible={log_window_visible}
                     width={`${drawerWidth}px`}
-                    height={240}
+                    height={350}
                   />
                 </Box>
               </Suspense>
