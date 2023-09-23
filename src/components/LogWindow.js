@@ -3,8 +3,17 @@ import PropTypes from "prop-types";
 import {darkTheme, lightTheme} from "../utils/Theme";
 import {Drawer} from "@mui/material";
 import {withTheme} from "@mui/styles";
+import DownloadIcon from '@mui/icons-material/Download';
 import {LogViewer, LogViewerSearch} from '@patternfly/react-log-viewer';
-import {Toolbar, ToolbarContent, Checkbox, ToolbarItem} from "@patternfly/react-core";
+import {
+  Toolbar,
+  ToolbarContent,
+  Checkbox,
+  ToolbarItem,
+  ToolbarGroup,
+  Tooltip,
+  Button
+} from "@patternfly/react-core";
 import '@patternfly/patternfly/patternfly.css';
 import '@patternfly/patternfly/components/LogViewer/log-viewer.css';
 import '@patternfly/patternfly/components/Toolbar/toolbar.css';
@@ -30,6 +39,17 @@ class LogWindow extends Component {
     const logs = this.state.logs + (this.state.logs === "" ? "" : "\n") + (typeof msg === 'object' ? JSON.stringify(msg) : msg);
     const scrollToRow = logs.split("\n").length;
     this.setState({ logs: logs, scrollToRow: scrollToRow })
+  }
+
+  onDownloadClick = () => {
+    const element = document.createElement('a');
+    const dataToDownload = [data[dataSources[selectedDataSource].id]];
+    const file = new Blob(dataToDownload, { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'log-window.txt';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   }
 
   render() {
@@ -66,21 +86,32 @@ class LogWindow extends Component {
             toolbar={
               <Toolbar>
                 <ToolbarContent>
-                  <ToolbarItem>
-                    <LogViewerSearch
-                      minSearchChars={2}
-                      placeholder="Search"
-                    />
-                  </ToolbarItem>
-                  <ToolbarItem alignSelf='center'>
-                    <Checkbox
-                      label="Wrap text"
-                      aria-label="wrap text checkbox"
-                      isChecked={isTextWrapped}
-                      id="wrap-text-checkbox"
-                      onChange={this.toggleTextWrapping}
-                    />
-                  </ToolbarItem>
+                  <ToolbarGroup align={{ default: 'alignLeft' }}>
+                    <ToolbarItem>
+                      <LogViewerSearch
+                        minSearchChars={2}
+                        placeholder="Search"
+                      />
+                    </ToolbarItem>
+                    <ToolbarItem alignSelf='center'>
+                      <Checkbox
+                        label="Wrap text"
+                        aria-label="wrap text checkbox"
+                        isChecked={isTextWrapped}
+                        id="wrap-text-checkbox"
+                        onChange={this.toggleTextWrapping}
+                      />
+                    </ToolbarItem>
+                  </ToolbarGroup>
+                  <ToolbarGroup align={{ default: 'alignRight' }} variant="icon-button-group">
+                    <ToolbarItem>
+                      <Tooltip position="top" content={<div>Download</div>}>
+                        <Button onClick={this.onDownloadClick} variant="plain" aria-label="Download current logs">
+                          <DownloadIcon />
+                        </Button>
+                      </Tooltip>
+                    </ToolbarItem>
+                  </ToolbarGroup>
                 </ToolbarContent>
               </Toolbar>
             }
