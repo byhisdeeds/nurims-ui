@@ -4,6 +4,7 @@ import {darkTheme, lightTheme} from "../utils/Theme";
 import {Drawer} from "@mui/material";
 import {withTheme} from "@mui/styles";
 import DownloadIcon from '@mui/icons-material/Download';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {LogViewer, LogViewerSearch} from '@patternfly/react-log-viewer';
 import {
   Toolbar,
@@ -36,20 +37,24 @@ class LogWindow extends Component {
   }
 
   log = (msg) => {
-    const logs = this.state.logs + (this.state.logs === "" ? "" : "\n") + (typeof msg === 'object' ? JSON.stringify(msg) : msg);
+    const logs = this.state.logs + (this.state.logs === "" ? "" : "\n") + (typeof msg === 'object' ? JSON.stringify(msg, null, 2) : msg);
     const scrollToRow = logs.split("\n").length;
     this.setState({ logs: logs, scrollToRow: scrollToRow })
   }
 
   onDownloadClick = () => {
     const element = document.createElement('a');
-    const dataToDownload = [data[dataSources[selectedDataSource].id]];
+    const dataToDownload = [this.state.logs];
     const file = new Blob(dataToDownload, { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
     element.download = 'log-window.txt';
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
+  }
+
+  onClearLogsClick = () => {
+    this.setState({ logs: '' });
   }
 
   render() {
@@ -77,6 +82,7 @@ class LogWindow extends Component {
           }}
         >
           <LogViewer
+            className={{fontSize: 50}}
             isTextWrapped={isTextWrapped}
             hasLineNumbers={true}
             height={200}
@@ -106,8 +112,15 @@ class LogWindow extends Component {
                   <ToolbarGroup align={{ default: 'alignRight' }} variant="icon-button-group">
                     <ToolbarItem>
                       <Tooltip position="top" content={<div>Download</div>}>
-                        <Button onClick={this.onDownloadClick} variant="plain" aria-label="Download current logs">
+                        <Button onClick={this.onDownloadClick} variant="plain" aria-label="Download logs">
                           <DownloadIcon />
+                        </Button>
+                      </Tooltip>
+                    </ToolbarItem>
+                    <ToolbarItem>
+                      <Tooltip position="top" content={<div>Clear</div>}>
+                        <Button onClick={this.onClearLogsClick} variant="plain" aria-label="Clear logs">
+                          <DeleteForeverIcon />
                         </Button>
                       </Tooltip>
                     </ToolbarItem>

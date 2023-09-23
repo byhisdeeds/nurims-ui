@@ -54,3 +54,7 @@ pre {
 .rcb-header-text {
   width: 95%
 }
+
+.pf-v5-c-log-viewer__main {
+  font-family: consola, 'Courier New', monospace;
+}
