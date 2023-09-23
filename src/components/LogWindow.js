@@ -37,8 +37,9 @@ class LogWindow extends Component {
   }
 
   log = (msg) => {
-    const logs = this.state.logs + (this.state.logs === "" ? "" : "\n") + (typeof msg === 'object' ? JSON.stringify(msg, null, 2) : msg);
-    const scrollToRow = logs.split("\n").length;
+    const message = typeof msg === 'object' ? msg.hasOwnProperty("message") ? msg.message : JSON.stringify(msg) : msg;
+    const logs = this.state.logs + (this.state.logs === "" ? "" : "\n") + message;
+    const scrollToRow = logs.split("\n").length + 1;
     this.setState({ logs: logs, scrollToRow: scrollToRow })
   }
 
