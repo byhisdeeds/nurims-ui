@@ -238,6 +238,10 @@ class App extends React.Component {
       const data = JSON.parse(event.data);
       if (this.debug) {
         ConsoleLog("App", "onmessage", data);
+        this.appendLog(data);
+      }
+      if (data.hasOwnProperty("background_job_message")) {
+        this.appendLog(data.response);
       }
       if (data.cmd === CMD_PING) {
         this.send_pong();
@@ -359,6 +363,12 @@ class App extends React.Component {
 
   closeLogWindow = () => {
     this.setState({ log_window_visible: false });
+  }
+
+  appendLog = (msg) => {
+    if (this.logRef.current) {
+      this.logRef.current.log(msg);
+    }
   }
 
   render() {
