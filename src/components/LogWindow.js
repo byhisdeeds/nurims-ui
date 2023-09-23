@@ -82,7 +82,6 @@ class LogWindow extends Component {
           }}
         >
           <LogViewer
-            className={{fontSize: 50}}
             isTextWrapped={isTextWrapped}
             hasLineNumbers={true}
             height={200}

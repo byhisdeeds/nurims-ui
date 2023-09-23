@@ -1,6 +1,4 @@
 /* App.css */
-
-
 @font-face {
   font-family: 'consola';
   src: local('Consola'), url(./fonts/Consola.ttf) format('truetype');
@@ -56,5 +54,5 @@ pre {
 }
 
 .pf-v5-c-log-viewer__main {
-  font-family: consola, 'Courier New', monospace;
+  --pf-v5-c-log-viewer__text--WhiteSpace: break-spaces;
 }
