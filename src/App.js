@@ -6,7 +6,8 @@ import {
   IconButton,
   Toolbar,
   Tooltip,
-  Typography
+  Typography,
+  Drawer
 } from "@mui/material";
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -67,6 +68,7 @@ import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./pages/packages
 import {GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF} from "./pages/packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf"
 import {CHATBOT_REF} from "./pages/rasa/ChatBot"
 import {TERMSANDDEFINITIONS_REF} from "./pages/support/TermsAndDefinitions"
+import LogWindow from "./components/LogWindow";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -135,6 +137,7 @@ class App extends React.Component {
       ready: false,
       busy: 0,
       background_tasks_active: false,
+      log_window_visible: false,
     };
     this.debug = window.location.href.includes("debug");
     this.properties = [];
@@ -330,8 +333,17 @@ class App extends React.Component {
   //   }
   // };
 
+  toggleLogWindow = () => {
+    this.setState({ log_window_visible: !this.state.log_window_visible });
+  }
+
+  closeLogWindow = () => {
+    this.setState({ log_window_visible: false });
+  }
+
   render() {
-    const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active} = this.state;
+    const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active, log_window_visible} = this.state;
+    console.log("App.render, log_window_visible", log_window_visible)
     return (
       <UserDebugContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
@@ -371,6 +383,7 @@ class App extends React.Component {
                 <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
                 { BackgroundTasks(background_tasks_active) }
                 { NetworkConnection(ready) }
+                <LogWindow onClick={this.toggleLogWindow} />
               </Toolbar>
             </AppBar>
             <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
@@ -395,7 +408,8 @@ class App extends React.Component {
                       onClick={this.handleMenuAction}
                       send={this.send}
                       properties={this.properties}
-                    />}
+                    />
+                  }
                   {RasaPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
@@ -407,6 +421,7 @@ class App extends React.Component {
                   <Typography paragraph>
                     {actionid}
                   </Typography>
+                  <LogWindow onClose={this.closeLogWindow} visible={log_window_visible} />
                 </Box>
               </Suspense>
             </MenuDrawer>

@@ -168,6 +168,8 @@ class ReactorOperationsReport extends Component {
   }
 }
 
-ReactorOperationsReport.defaultProps = {};
+ReactorOperationsReport.defaultProps = {
+
+};
 
 export default withTheme(ReactorOperationsReport);
