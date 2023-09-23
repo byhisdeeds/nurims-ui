@@ -238,7 +238,6 @@ class App extends React.Component {
       const data = JSON.parse(event.data);
       if (this.debug) {
         ConsoleLog("App", "onmessage", data);
-        this.appendLog(data);
       }
       if (data.hasOwnProperty("background_job_message")) {
         this.appendLog(data.response);
