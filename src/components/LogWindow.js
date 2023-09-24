@@ -85,7 +85,7 @@ class LogWindow extends Component {
           <LogViewer
             isTextWrapped={isTextWrapped}
             hasLineNumbers={true}
-            height={200}
+            height={height}
             data={logs}
             scrollToRow={scrollToRow}
             theme={'dark'}

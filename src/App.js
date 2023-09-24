@@ -212,6 +212,7 @@ class App extends React.Component {
       if (this.debug) {
         ConsoleLog("App", "ws.onopen", "websocket connection established");
       }
+      this.appendLog("Websocket connection established.");
       this.setState({ready: true});
       // load organisation database on server
       this.send({
@@ -224,12 +225,14 @@ class App extends React.Component {
     };
     this.ws.onerror = (error) => {
       ConsoleLog("App", "ws.onerror", error);
+      this.appendLog("Websocket error: "+error);
       this.setState({ready: false});
     };
     this.ws.onclose = (event) => {
       if (this.debug) {
         ConsoleLog("App", "ws.onclose", "websocket connection closed", event);
       }
+      this.appendLog("Websocket connection closed: " + event);
       if (this.mounted) {
         this.setState({ready: false, busy: 0, background_tasks_active: false});
       }
