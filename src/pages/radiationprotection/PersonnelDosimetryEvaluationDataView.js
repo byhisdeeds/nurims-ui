@@ -9,7 +9,8 @@ import {
   Typography,
   TextField, Button
 } from "@mui/material";
-import {parseISO, format} from "date-fns";
+// import {parseISO, format} from "date-fns";
+import dayjs from "dayjs";
 import {
   getRecordMetadataValue,
   getDateRangeFromDateString, getDateRangeAsDays
@@ -230,7 +231,8 @@ class PersonnelDosimetryEvaluationDataView extends Component {
         width: '20%',
         sortField: true,
         format: (row, cell) => {
-          return row[cell] ? format(parseISO(row[cell]), "yyyy-MM-dd HH:mm:ss") : row[cell]
+          // return row[cell] ? format(parseISO(row[cell]), "yyyy-MM-dd HH:mm:ss") : row[cell]
+          return row[cell] ? dayjs(row[cell], "yyyy-MM-dd HH:mm:ss").format("yyyy-MM-dd HH:mm:ss") : row[cell]
         },
       },
       {
@@ -344,7 +346,8 @@ class PersonnelDosimetryEvaluationDataView extends Component {
           ...this.state.options,
           title: {
             ...this.state.options.title,
-            text: `Data from ${ts_min ? format(ts_min, "MMM io, yyyy") : ""} to ${ts_max ? format(ts_max, "MMM io, yyyy") : ""}`
+            // text: `Data from ${ts_min ? format(ts_min, "MMM io, yyyy") : ""} to ${ts_max ? format(ts_max, "MMM io, yyyy") : ""}`
+            text: `Data from ${ts_min ? ts_min.format("MMM io, yyyy") : ""} to ${ts_max ? ts_max.for("MMM io, yyyy") : ""}`
           }
         },
         hoptions: {
