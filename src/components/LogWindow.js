@@ -39,7 +39,7 @@ class LogWindow extends Component {
   log = (msg) => {
     let message = typeof msg === 'object' ? msg.hasOwnProperty("message") ? msg.message : JSON.stringify(msg) : msg;
     if (!message.startsWith("[")) {
-      message += new Date().toISOString().substring(0, 19).replace("T", " ");
+      message += "[" + new Date().toISOString().substring(0, 19).replace("T", " ") + "] ";
     }
     const logs = this.state.logs + (this.state.logs === "" ? "" : "\n") + message;
     const scrollToRow = logs.split("\n").length + 1;
