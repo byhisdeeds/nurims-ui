@@ -118,7 +118,7 @@ export function NetworkConnection(props) {
     <Tooltip title="Network connection to system server">
       <NetworkCheck sx={{
         // color: props.ready ? '#4CAF50' : '#F44336',
-        color: props.ready ? theme.palette.error.main : theme.palette.success.main,
+        color: props.ready ? theme.palette.success.main : theme.palette.error.main,
         paddingLeft: '10px',
         marginLeft: '10px',
         width: 32,

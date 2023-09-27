@@ -11,15 +11,11 @@ import {
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountMenu from "./user/AccountMenu";
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
-import HourglassFullIcon from '@mui/icons-material/HourglassFull';
-import TerminalIcon from '@mui/icons-material/Terminal';
 import {styled} from '@mui/material/styles';
 import MenuDrawer from "./MenuDrawer";
 import {darkTheme, lightTheme} from "./utils/Theme";
 import {ThemeProvider} from "@mui/material/styles";
 import {MenuData} from "./menudata";
-import {NetworkCheck} from "@mui/icons-material";
 import {SnackbarProvider} from "notistack";
 import metadata from './metadata.json';
 import BusyIndicator from "./components/BusyIndicator";
@@ -75,7 +71,11 @@ import {
 import {CHATBOT_REF} from "./pages/rasa/ChatBot"
 import {TERMSANDDEFINITIONS_REF} from "./pages/support/TermsAndDefinitions"
 import LogWindow from "./components/LogWindow";
-import {BackgroundTasks, LogWindowButton, NetworkConnection} from "./components/CommonComponents";
+import {
+  BackgroundTasks,
+  LogWindowButton,
+  NetworkConnection
+} from "./components/CommonComponents";
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -101,69 +101,6 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
-
-// const ToggleLogWindow = (props) => {
-//   return (
-//     <Tooltip title="Toggle Log window">
-//       <TerminalIcon sx={{
-//         color: '#929292',
-//         paddingLeft: '10px',
-//         marginLeft: '10px',
-//         width: 32,
-//         height: 32
-//       }} onClick={props.onClick}/>
-//     </Tooltip>
-//   )
-// }
-
-// const NetworkConnection = (props) => {
-//   return (
-//     <Tooltip title="Network connection to system server">
-//       <NetworkCheck sx={{
-//         // color: props.ready ? '#4CAF50' : '#F44336',
-//         color: props.ready ? props.theme.palette.error.main : props.theme.palette.success.main,
-//         paddingLeft: '10px',
-//         marginLeft: '10px',
-//         width: 32,
-//         height: 32
-//       }}/>
-//     </Tooltip>
-//   )
-// }
-
-// const BackgroundTasks = (props) => {
-//   if (props.active) {
-//     return (
-//       <Tooltip title="Background tasks active.">
-//         {<HourglassFullIcon
-//           sx={{
-//             color: '#ffb431',
-//             paddingLeft: '10px',
-//             marginLeft: '10px',
-//             width: 32,
-//             height: 32
-//           }}
-//         />
-//         }
-//       </Tooltip>
-//     )
-//   } else {
-//     return (
-//       <Tooltip title="No background tasks active.">
-//         {<HourglassEmptyIcon
-//           sx={{
-//             color: props.theme.palette.action.disabled,
-//             paddingLeft: '10px',
-//             marginLeft: '10px',
-//             width: 32,
-//             height: 32
-//           }}
-//         />
-//         }
-//       </Tooltip>
-//     )
-//   }
-// }
 
 class App extends React.Component {
   constructor(props) {
