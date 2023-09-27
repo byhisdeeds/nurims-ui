@@ -26,7 +26,7 @@ class LogWindow extends Component {
     super(props);
     this.state = {
       scrollToRow: 0,
-      isTextWrapped: false,
+      isTextWrapped: true,
       logs: "",
     };
     this.Module = LOGWINDOW_REF;
