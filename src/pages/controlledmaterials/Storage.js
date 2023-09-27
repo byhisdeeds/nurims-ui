@@ -44,7 +44,7 @@ class Storage extends BaseRecordManager {
     this.props.send({
       cmd: CMD_GET_STORAGE_LOCATION_RECORDS,
       "include.withdrawn": "false",
-      "include.metadata": "true",
+      "include.metadata": "false",
       module: this.Module,
     });
   }
