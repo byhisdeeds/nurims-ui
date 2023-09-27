@@ -14,17 +14,17 @@ import {
   FormControlLabel,
   Switch,
   OutlinedInput,
+  useTheme
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/en-gb';
-// import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns';
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import Checkbox from "@mui/material/Checkbox";
-import {Person} from "@mui/icons-material";
+import {NetworkCheck, Person} from "@mui/icons-material";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -39,6 +39,10 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import {visuallyHidden} from "@mui/utils";
 import Floater from 'react-floater';
 import {toBoolean} from "../utils/MetadataUtils";
+import HourglassFullIcon from "@mui/icons-material/HourglassFull";
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
+import TerminalIcon from "@mui/icons-material/Terminal";
+
 
 export function TitleComponent({title}) {
   return (
@@ -68,6 +72,84 @@ function TooltipContent(closeFn) {
   );
 }
 
+
+export function BackgroundTasks(props) {
+  const theme = useTheme();
+  if (props.active) {
+    return (
+      <Tooltip title="Background tasks active.">
+        {<HourglassFullIcon
+          sx={{
+            color: props.theme.palette.warning.light,
+            paddingLeft: '10px',
+            marginLeft: '10px',
+            width: 32,
+            height: 32
+          }}
+        />
+        }
+      </Tooltip>
+    )
+  } else {
+    return (
+      <Tooltip title="No background tasks active.">
+        {<HourglassEmptyIcon
+          sx={{
+            color: props.theme.palette.text.disabled,
+            paddingLeft: '10px',
+            marginLeft: '10px',
+            width: 32,
+            height: 32
+          }}
+        />
+        }
+      </Tooltip>
+    )
+  }
+}
+
+BackgroundTasks.propTypes = {
+  active: PropTypes.bool.isRequired
+}
+
+export function NetworkConnection(props) {
+  const theme = useTheme();
+  return (
+    <Tooltip title="Network connection to system server">
+      <NetworkCheck sx={{
+        // color: props.ready ? '#4CAF50' : '#F44336',
+        color: props.ready ? props.theme.palette.error.main : props.theme.palette.success.main,
+        paddingLeft: '10px',
+        marginLeft: '10px',
+        width: 32,
+        height: 32
+      }}/>
+    </Tooltip>
+  )
+}
+
+NetworkConnection.propTypes = {
+  ready: PropTypes.bool.isRequired
+}
+
+export function LogWindowButton(props) {
+  const theme = useTheme();
+  return (
+    <Tooltip title="Toggle Log window">
+      <TerminalIcon sx={{
+        color: props.theme.palette.text.disabled,
+        paddingLeft: '10px',
+        marginLeft: '10px',
+        width: 32,
+        height: 32
+      }} onClick={props.onClick}/>
+    </Tooltip>
+  )
+}
+
+LogWindowButton.propTypes = {
+  onClick: PropTypes.func.isRequired
+}
 
 export function BasePaper(props) {
   return (
