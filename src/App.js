@@ -78,7 +78,7 @@ import {
 } from "./components/CommonComponents";
 import {DeviceUUID} from 'device-uuid';
 
-const {v4: uuid} = require('uuid');
+// const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));
@@ -123,7 +123,7 @@ class App extends React.Component {
     this.ws = null;
     this.mounted = false;
     this.user = this.props.authService;
-    this.instanceId = new DeviceUUID().get();
+    this.uuid = new DeviceUUID().get();
     this.logRef = React.createRef();
     this.crefs = {};
     this.crefs["MyAccount"] = React.createRef();
@@ -266,8 +266,7 @@ class App extends React.Component {
     if (this.ws && this.ws.readyState === 1) {
       const _show_busy = (show_busy === undefined) ? true : show_busy;
       this.ws.send(JSON.stringify({
-        uuid: uuid(),
-        instance: this.instanceId,
+        uuid: this.uuid,
         user: this.user,
         show_busy: _show_busy,
         ...msg
