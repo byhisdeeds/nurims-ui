@@ -14,34 +14,50 @@ import {
   FormControlLabel,
   Switch,
   OutlinedInput,
-  useTheme
+  useTheme,
+  ListItemText,
+  ListItemIcon,
+  Checkbox,
+  TableContainer,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TablePagination,
+  Typography,
+  Tooltip,
+  IconButton,
+  TableHead,
+  TableSortLabel
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/en-gb';
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
-import ListItemText from "@mui/material/ListItemText";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import DeleteForever from "@mui/icons-material/DeleteForever";
-import Checkbox from "@mui/material/Checkbox";
-import {NetworkCheck, Person} from "@mui/icons-material";
-import TableContainer from "@mui/material/TableContainer";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TablePagination from "@mui/material/TablePagination";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
-import TableHead from "@mui/material/TableHead";
-import TableSortLabel from "@mui/material/TableSortLabel";
+// import ListItemIcon from "@mui/material/ListItemIcon";
+// import Checkbox from "@mui/material/Checkbox";
+// import TableContainer from "@mui/material/TableContainer";
+// import Table from "@mui/material/Table";
+// import TableBody from "@mui/material/TableBody";
+// import TableRow from "@mui/material/TableRow";
+// import TableCell from "@mui/material/TableCell";
+// import TablePagination from "@mui/material/TablePagination";
+// import Typography from "@mui/material/Typography";
+// import Tooltip from "@mui/material/Tooltip";
+// import IconButton from "@mui/material/IconButton";
+// import TableHead from "@mui/material/TableHead";
+// import TableSortLabel from "@mui/material/TableSortLabel";
 import {visuallyHidden} from "@mui/utils";
 import Floater from 'react-floater';
 import {toBoolean} from "../utils/MetadataUtils";
-import HourglassFullIcon from "@mui/icons-material/HourglassFull";
-import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
-import TerminalIcon from "@mui/icons-material/Terminal";
+import {
+  NotificationImportant,
+  HourglassEmpty,
+  HourglassFull,
+  NetworkCheck,
+  Person,
+  DeleteForever
+} from '@mui/icons-material';
 
 
 export function TitleComponent({title}) {
@@ -78,7 +94,7 @@ export function BackgroundTasks(props) {
   if (props.active) {
     return (
       <Tooltip title="Background tasks active.">
-        {<HourglassFullIcon
+        {<HourglassFull
           sx={{
             color: theme.palette.warning.light,
             paddingLeft: '10px',
@@ -93,7 +109,7 @@ export function BackgroundTasks(props) {
   } else {
     return (
       <Tooltip title="No background tasks active.">
-        {<HourglassEmptyIcon
+        {<HourglassEmpty
           sx={{
             color: theme.palette.text.disabled,
             paddingLeft: '10px',
@@ -136,7 +152,7 @@ export function LogWindowButton(props) {
   const theme = useTheme();
   return (
     <Tooltip title="Toggle Log window">
-      <TerminalIcon sx={{
+      <NotificationImportant sx={{
         color: theme.palette.text.disabled,
         paddingLeft: '10px',
         marginLeft: '10px',
