@@ -76,7 +76,7 @@ import {
   LogWindowButton,
   NetworkConnection
 } from "./components/CommonComponents";
-import * as FingerprintJS from "@fingerprintjs/fingerprintjs";
+import {DeviceUUID} from 'device-uuid';
 
 const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
@@ -123,7 +123,7 @@ class App extends React.Component {
     this.ws = null;
     this.mounted = false;
     this.user = this.props.authService;
-    this.instanceId = null;
+    this.instanceId = new DeviceUUID().get();
     this.logRef = React.createRef();
     this.crefs = {};
     this.crefs["MyAccount"] = React.createRef();
@@ -165,12 +165,6 @@ class App extends React.Component {
 
   componentDidMount() {
     this.mounted = true;
-    // fingerprint
-    const setFp = async () => {
-      const fp = await FingerprintJS.load();
-      const {visitorId} = await fp.get();
-      this.instanceId = visitorId;
-    };
     // Everything here is fired on component mount.
     // this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}/nurimsws`);
     this.ws = new ReconnectingWebSocket(this.props.wsep);
