@@ -165,6 +165,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.mounted = true;
+    ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
     // Everything here is fired on component mount.
     // this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}/nurimsws`);
     this.ws = new ReconnectingWebSocket(this.props.wsep);
