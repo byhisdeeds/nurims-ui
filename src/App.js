@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountMenu from "./user/AccountMenu";
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import HourglassFullIcon from '@mui/icons-material/HourglassFull';
+import TerminalIcon from '@mui/icons-material/Terminal';
 import {styled} from '@mui/material/styles';
 import MenuDrawer from "./MenuDrawer";
 import {darkTheme, lightTheme} from "./utils/Theme";
@@ -61,10 +62,16 @@ import {ADDEDITMONITORS_REF} from "./pages/radiationprotection/AddEditMonitors"
 import {PERSONNELDOSIMETRYEVALUATION_REF} from "./pages/radiationprotection/PersonnelDosimetryEvaluation"
 import {VIEWMATERIALSLIST_REF} from "./pages/controlledmaterials/ViewMaterialsList"
 import {MANAGEUSERS_REF} from "./pages/sysadmin/ManageUsers"
-import {ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF} from "./pages/maintenance/AddEditCorrectiveMaintenanceIssueRecord"
+import {
+  ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF
+} from "./pages/maintenance/AddEditCorrectiveMaintenanceIssueRecord"
 import {GENERATESSCMAINTENANCEREPORT_REF} from "./pages/maintenance/GenerateSSCMaintenanceReport"
-import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./pages/packages/icens/AddEditReactorSampleIrradiationAuthorization"
-import {GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF} from "./pages/packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf"
+import {
+  ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF
+} from "./pages/packages/icens/AddEditReactorSampleIrradiationAuthorization"
+import {
+  GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF
+} from "./pages/packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf"
 import {CHATBOT_REF} from "./pages/rasa/ChatBot"
 import {TERMSANDDEFINITIONS_REF} from "./pages/support/TermsAndDefinitions"
 import LogWindow from "./components/LogWindow";
@@ -94,6 +101,20 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
+const ToggleLogWindow = (props) => {
+  return (
+    <Tooltip title="Toggle Log window">
+      <TerminalIcon sx={{
+        color: '#929292',
+        paddingLeft: '10px',
+        marginLeft: '10px',
+        width: 32,
+        height: 32
+      }} onClick={props.onClick}/>
+    </Tooltip>
+  )
+}
+
 const NetworkConnection = (props) => {
   return (
     <Tooltip title="Network connection to system server">
@@ -112,31 +133,29 @@ const BackgroundTasks = (props) => {
   if (props.active) {
     return (
       <Tooltip title="Background tasks active.">
-        { <HourglassFullIcon
-            sx={{
-              color: '#ffb431',
-              paddingLeft: '10px',
-              marginLeft: '10px',
-              width: 32,
-              height: 32
-            }}
-            onClick={props.onClick}
-          />
+        {<HourglassFullIcon
+          sx={{
+            color: '#ffb431',
+            paddingLeft: '10px',
+            marginLeft: '10px',
+            width: 32,
+            height: 32
+          }}
+        />
         }
       </Tooltip>
     )
   } else {
     return (
       <Tooltip title="No background tasks active.">
-        { <HourglassEmptyIcon
-            sx={{
-              color: '#838383',
-              paddingLeft: '10px',
-              marginLeft: '10px',
-              width: 32,
-              height: 32
-            }}
-            onClick={props.onClick}
+        {<HourglassEmptyIcon
+          sx={{
+            color: '#838383',
+            paddingLeft: '10px',
+            marginLeft: '10px',
+            width: 32,
+            height: 32
+          }}
         />
         }
       </Tooltip>
@@ -286,7 +305,7 @@ class App extends React.Component {
   }
 
   send_pong = () => {
-    const msg = { cmd: "pong" };
+    const msg = {cmd: "pong"};
     if (this.ws && this.ws.readyState === 1) {
       if (this.debug) {
         ConsoleLog("App", "send", msg);
@@ -360,11 +379,11 @@ class App extends React.Component {
   // };
 
   toggleLogWindow = () => {
-    this.setState({ log_window_visible: !this.state.log_window_visible });
+    this.setState({log_window_visible: !this.state.log_window_visible});
   }
 
   closeLogWindow = () => {
-    this.setState({ log_window_visible: false });
+    this.setState({log_window_visible: false});
   }
 
   appendLog = (msg) => {
@@ -413,8 +432,9 @@ class App extends React.Component {
                   Organisation: {org.name.toUpperCase()}
                 </Typography>
                 <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
-                <BackgroundTasks active={background_tasks_active} onClick={this.toggleLogWindow} />
-                <NetworkConnection ready={ready} />
+                <BackgroundTasks active={background_tasks_active}/>
+                <NetworkConnection ready={ready}/>
+                <ToggleLogWindow onClick={this.toggleLogWindow}/>
               </Toolbar>
             </AppBar>
             <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
