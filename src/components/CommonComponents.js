@@ -80,7 +80,7 @@ export function BackgroundTasks(props) {
       <Tooltip title="Background tasks active.">
         {<HourglassFullIcon
           sx={{
-            color: props.theme.palette.warning.light,
+            color: theme.palette.warning.light,
             paddingLeft: '10px',
             marginLeft: '10px',
             width: 32,
@@ -95,7 +95,7 @@ export function BackgroundTasks(props) {
       <Tooltip title="No background tasks active.">
         {<HourglassEmptyIcon
           sx={{
-            color: props.theme.palette.text.disabled,
+            color: theme.palette.text.disabled,
             paddingLeft: '10px',
             marginLeft: '10px',
             width: 32,
@@ -118,7 +118,7 @@ export function NetworkConnection(props) {
     <Tooltip title="Network connection to system server">
       <NetworkCheck sx={{
         // color: props.ready ? '#4CAF50' : '#F44336',
-        color: props.ready ? props.theme.palette.error.main : props.theme.palette.success.main,
+        color: props.ready ? theme.palette.error.main : theme.palette.success.main,
         paddingLeft: '10px',
         marginLeft: '10px',
         width: 32,
@@ -137,7 +137,7 @@ export function LogWindowButton(props) {
   return (
     <Tooltip title="Toggle Log window">
       <TerminalIcon sx={{
-        color: props.theme.palette.text.disabled,
+        color: theme.palette.text.disabled,
         paddingLeft: '10px',
         marginLeft: '10px',
         width: 32,
