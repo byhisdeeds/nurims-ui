@@ -19,7 +19,7 @@ import {transformDose} from "./DoseReportUtils";
 import {v4 as uuid} from "uuid";
 import dayjs from 'dayjs';
 
-export function UUID() {
+export function record_uuid() {
   return uuid();
 }
 

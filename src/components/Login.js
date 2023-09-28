@@ -76,7 +76,7 @@ class Login extends React.Component {
     event.preventDefault();
     if (this.state.online) {
       this.ws.send(JSON.stringify({
-        uuid:this.uuid,
+        uuid: this.uuid,
         cmd: Constants.CMD_VERIFY_USER_PASSWORD,
         username:this.state.username,
         password:encryptPassword(this.puk, this.state.password),
@@ -97,9 +97,9 @@ class Login extends React.Component {
     this.ws.onopen = () => {
       console.log(`${MODULE} websocket connection established.`);
       // get public key as base64 string
-      this.ws.send(JSON.stringify({uuid:this.uuid, cmd: Constants.CMD_GET_PUBLIC_KEY}));
+      this.ws.send(JSON.stringify({uuid: this.uuid, cmd: Constants.CMD_GET_PUBLIC_KEY}));
       // get list of all registered users
-      this.ws.send(JSON.stringify({uuid:this.uuid, cmd: Constants.CMD_GET_USER_RECORDS}));
+      this.ws.send(JSON.stringify({uuid: this.uuid, cmd: Constants.CMD_GET_USER_RECORDS}));
     };
     this.ws.onerror = (error) => {
       console.log(`${MODULE} websocket error - ${error}`);

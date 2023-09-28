@@ -30,7 +30,7 @@ import {
   RemoveCircle as RemoveCircleIcon,
 } from "@mui/icons-material";
 
-import {v4 as uuid} from "uuid";
+// import {v4 as uuid} from "uuid";
 import {
   getMatchingResponseObject,
   isCommandResponse,
@@ -48,6 +48,7 @@ import {
   enqueueSuccessSnackbar,
   enqueueWarningSnackbar
 } from "../../../utils/SnackbarVariants";
+import {record_uuid} from "../../../utils/MetadataUtils";
 
 export const ADDEDITREACTOROPERATINGRUNS_REF = "AddEditReactorOperatingRuns";
 
@@ -170,7 +171,7 @@ class AddEditReactorOperatingRuns extends React.Component {
             ConsoleLog(this.Module, "saveChanges", record);
           }
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
-            record["record_key"] = uuid();
+            record["record_key"] = record_uuid();
           }
           this.props.send({
             cmd: CMD_UPDATE_USER_RECORD,

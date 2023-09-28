@@ -26,7 +26,7 @@ import {
   Save as SaveIcon,
   RemoveCircle as RemoveCircleIcon,
 } from "@mui/icons-material";
-import {v4 as uuid} from "uuid";
+// import {v4 as uuid} from "uuid";
 import {
   getMatchingResponseObject,
   isCommandResponse,
@@ -38,7 +38,7 @@ import {
 } from "../../../utils/RenderUtils";
 import WaterSamplesList from "./WaterSamplesList";
 import WaterSampleMetadata from "./WaterSampleMetadata";
-import {getRecordMetadataValue} from "../../../utils/MetadataUtils";
+import {getRecordMetadataValue, record_uuid} from "../../../utils/MetadataUtils";
 import {TitleComponent} from "../../../components/CommonComponents";
 import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../../../utils/SnackbarVariants";
 
@@ -154,7 +154,7 @@ class AddEditReactorWaterSamples extends React.Component {
             ConsoleLog(this.Module, "saveChanges", record);
           }
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
-            record["record_key"] = uuid();
+            record["record_key"] = record_uuid();
           }
           // Only update then changed metadata fields
           console.log("CHANGED METADATA", record["changed.metadata"])

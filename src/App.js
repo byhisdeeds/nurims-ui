@@ -78,7 +78,6 @@ import {
 } from "./components/CommonComponents";
 import {DeviceUUID} from 'device-uuid';
 
-// const {v4: uuid} = require('uuid');
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));

@@ -3,19 +3,22 @@ import {
   CMD_DELETE_MANUFACTURER_RECORD,
   CMD_DELETE_MATERIAL_RECORD,
   CMD_DELETE_MONITOR_RECORD,
-  CMD_DELETE_PERSONNEL_RECORD, CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
+  CMD_DELETE_PERSONNEL_RECORD,
+  CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
   CMD_DELETE_SSC_RECORD,
   CMD_DELETE_STORAGE_LOCATION_RECORD,
   CMD_GET_MANUFACTURER_RECORDS,
   CMD_GET_MATERIAL_RECORDS,
   CMD_GET_MONITOR_RECORDS,
-  CMD_GET_PERSONNEL_RECORDS, CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS,
+  CMD_GET_PERSONNEL_RECORDS,
+  CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS,
   CMD_GET_SSC_RECORDS,
   CMD_GET_STORAGE_LOCATION_RECORDS,
   CMD_UPDATE_MANUFACTURER_RECORD,
   CMD_UPDATE_MATERIAL_RECORD,
   CMD_UPDATE_MONITOR_RECORD,
-  CMD_UPDATE_PERSONNEL_RECORD, CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
+  CMD_UPDATE_PERSONNEL_RECORD,
+  CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
   CMD_UPDATE_SSC_RECORD,
   CMD_UPDATE_STORAGE_LOCATION_RECORD,
   ITEM_ID,
@@ -25,11 +28,12 @@ import {
   MONITOR_TOPIC,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
-  PERSONNEL_TOPIC, REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
+  PERSONNEL_TOPIC,
+  REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
   SSC_TOPIC,
   STORAGE_LOCATION_TOPIC
 } from "../utils/constants";
-import {v4 as uuid} from "uuid";
+// import {v4 as uuid} from "uuid";
 import {
   getMatchingResponseObject,
   isCommandResponse,
@@ -37,7 +41,7 @@ import {
   messageStatusOk
 } from "../utils/WebsocketUtils";
 import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
-import {getNextItemId, new_record} from "../utils/MetadataUtils";
+import {getNextItemId, new_record, record_uuid} from "../utils/MetadataUtils";
 import {isValidUserRole} from "../utils/UserUtils";
 import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../utils/SnackbarVariants";
 
@@ -280,7 +284,7 @@ class BaseRecordManager extends Component {
             ConsoleLog(this.Module, "saveChanges", record);
           }
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
-            record["record_key"] = uuid();
+            record["record_key"] = record_uuid();
           }
           this.props.send({
             cmd: this.recordCommand("update", this.topic),

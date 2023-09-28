@@ -21,7 +21,7 @@ import Constants, {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
-import {v4 as uuid} from "uuid";
+// import {v4 as uuid} from "uuid";
 import {
   getMatchingResponseObject,
   isCommandResponse,
@@ -32,7 +32,7 @@ import UserMetadata from "./UserMetadata";
 import {TitleComponent} from "../../components/CommonComponents";
 import {encryptText} from "../../utils/EncryptionUtils";
 import {enqueueErrorSnackbar, enqueueSuccessSnackbar, enqueueWarningSnackbar} from "../../utils/SnackbarVariants";
-import {getUserRecordData, getUserRecordMetadataValue} from "../../utils/MetadataUtils";
+import {getUserRecordData, getUserRecordMetadataValue, record_uuid} from "../../utils/MetadataUtils";
 
 export const MANAGEUSERS_REF = "ManageUsers";
 
@@ -168,7 +168,7 @@ class ManageUsers extends React.Component {
             return;
           }
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
-            record["record_key"] = uuid();
+            record["record_key"] = record_uuid();
           }
           record.metadata.password = encryptText(this.puk, record.metadata.password1);
           delete record.metadata.password1;

@@ -27,7 +27,7 @@ import {
   analysisJobAsObject,
   getRecordData,
   setRecordData,
-  UUID
+  record_uuid
 } from "../../../utils/MetadataUtils";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 import {isValidUserRole} from "../../../utils/UserUtils";
@@ -165,7 +165,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
       `${user.profile.fullname} (${user.profile.username}) on ${new Date().toISOString()}`);
     if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
-      record["record_key"] = UUID();
+      record["record_key"] = record_uuid();
     }
     this.props.send({
       cmd: CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
