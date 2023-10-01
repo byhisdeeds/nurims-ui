@@ -26,10 +26,8 @@ import {
   TitleComponent
 } from "../../../components/CommonComponents";
 import PropTypes from "prop-types";
-import {addMonths, format} from "date-fns";
 import {withTheme} from "@mui/styles";
-import {LocalizationProvider} from "@mui/lab";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import dayjs from 'dayjs';
 import PdfViewer from "../../../components/PdfViewer";
 import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../../utils/WebsocketUtils";
 import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../../utils/SnackbarVariants";
@@ -43,8 +41,8 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
     super(props);
     this.state = {
       pdf: BLANK_PDF,
-      startDate: new Date(),
-      endDate: addMonths(new Date(), 1),
+      startDate: dayjs(),
+      endDate: dayjs().add(1, "month"),
       reportType: "reactor_sample_irradiation_authorization",
     };
     this.Module = GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF;
@@ -132,17 +130,16 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
                   <MenuItem value={'reactor_sample_irradiation_authorization'}>Reactor Sample Irradiation Authorizations</MenuItem>
                 </Select>
               </FormControl>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DateRangePicker
-                  fromLabel="Records From"
-                  toLabel="Records To"
-                  from={new Date()}
-                  to={addMonths(new Date(), 1)}
-                  inputFormat={'yyyy-MM-dd'}
-                  onFromChange={this.handleFromDateChange}
-                  onToChange={this.handleToDateChange}
-                />
-              </LocalizationProvider>
+              <DateRangePicker
+                fromLabel="Records From"
+                toLabel="Records To"
+                from={dayjs()}
+                to={dayjs().add(1, "month")}
+                disabled={false}
+                inputFormat={'yyyy-MM-dd'}
+                onFromChange={this.handleFromDateChange}
+                onToChange={this.handleToDateChange}
+              />
               <div style={{flexGrow: 1}}/>
               <Button
                 variant={"contained"}

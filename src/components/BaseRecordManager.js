@@ -186,7 +186,6 @@ class BaseRecordManager extends Component {
   }
 
   isSelectableByRole = (selection, role) => {
-    console.log("+++++++ isSelectableByRole", selection, role)
     return (isValidUserRole(this.context.user, role) && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
   }
 

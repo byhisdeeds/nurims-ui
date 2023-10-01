@@ -11,9 +11,7 @@ import {
   Select,
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import {LocalizationProvider} from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DateRangePicker from '@mui/lab/DateRangePicker';
+import dayjs from 'dayjs';
 import {
   getRecordMetadataValue,
   setMetadataValue,
@@ -37,6 +35,7 @@ import {
 } from "../../utils/constants";
 import DosimetryMeasurementsList from "./DosimetryMeasurementsList";
 import Checkbox from "@mui/material/Checkbox";
+import {DateRangePicker} from "../../components/CommonComponents";
 
 
 function getMonitorPeriod(selection, field, missingValue) {
@@ -267,23 +266,23 @@ class DosimetryMeasurementMetadata extends Component {
                         </Box>
                       </Grid>
                       <Grid item xs={5} style={{paddingTop: 0}}>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                          <DateRangePicker
-                            startText="Wear Start"
-                            endText="Wear End"
-                            value={monitorPeriod}
-                            inputFormat={'yyyy-MM-dd'}
-                            disabled={readonly}
-                            onChange={this.handleDateRangeChange}
-                            renderInput={(startProps, endProps) => (
-                              <React.Fragment>
-                                <TextField {...startProps}/>
-                                <Box sx={{mx: 1}}>to</Box>
-                                <TextField {...endProps}/>
-                              </React.Fragment>
-                            )}
-                          />
-                        </LocalizationProvider>
+                        <DateRangePicker
+                          startText="Wear Start"
+                          endText="Wear End"
+                          from={dayjs()}
+                          to={dayjs().add(1, "month")}
+                          value={monitorPeriod}
+                          inputFormat={'yyyy-MM-dd'}
+                          disabled={readonly}
+                          onChange={this.handleDateRangeChange}
+                          renderInput={(startProps, endProps) => (
+                            <React.Fragment>
+                              <TextField {...startProps}/>
+                              <Box sx={{mx: 1}}>to</Box>
+                              <TextField {...endProps}/>
+                            </React.Fragment>
+                          )}
+                        />
                       </Grid>
                     </Grid>
                   </CardContent>

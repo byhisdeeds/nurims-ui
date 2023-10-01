@@ -1,9 +1,15 @@
 import {
-  NURIMS_DOSIMETRY_BATCH_ID, NURIMS_DOSIMETRY_DEEP_DOSE, NURIMS_DOSIMETRY_EXTREMITY_DOSE,
-  NURIMS_DOSIMETRY_ID, NURIMS_DOSIMETRY_MEASUREMENTS, NURIMS_DOSIMETRY_MONITOR_PERIOD, NURIMS_DOSIMETRY_SHALLOW_DOSE,
+  NURIMS_DOSIMETRY_BATCH_ID,
+  NURIMS_DOSIMETRY_DEEP_DOSE,
+  NURIMS_DOSIMETRY_EXTREMITY_DOSE,
+  NURIMS_DOSIMETRY_ID,
+  NURIMS_DOSIMETRY_MEASUREMENTS,
+  NURIMS_DOSIMETRY_MONITOR_PERIOD,
+  NURIMS_DOSIMETRY_SHALLOW_DOSE,
   NURIMS_DOSIMETRY_TIMESTAMP,
   NURIMS_DOSIMETRY_TYPE,
-  NURIMS_DOSIMETRY_UNITS, NURIMS_DOSIMETRY_WRIST_DOSE,
+  NURIMS_DOSIMETRY_UNITS,
+  NURIMS_DOSIMETRY_WRIST_DOSE,
   NURIMS_ENTITY_DATE_OF_BIRTH,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
   NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
@@ -11,10 +17,10 @@ import {
   NURIMS_ENTITY_IS_WRIST_MONITORED,
   NURIMS_ENTITY_NATIONAL_ID,
   NURIMS_ENTITY_SEX,
-  NURIMS_ENTITY_WORK_DETAILS, NURIMS_TITLE,
+  NURIMS_ENTITY_WORK_DETAILS,
+  NURIMS_TITLE,
   NURIMS_WITHDRAWN
 } from "./constants";
-import {differenceInDays, format} from "date-fns";
 import {transformDose} from "./DoseReportUtils";
 import {v4 as uuid} from "uuid";
 import dayjs from 'dayjs';
@@ -430,7 +436,7 @@ export function new_record(item_id, title, withdrawn, createdby, fullname) {
     "nurims.withdrawn": (withdrawn) ? withdrawn : 0,
     "metadata": [
       {"nurims.createdby": (createdby) ? (fullname) ? `${fullname} (${createdby})` : createdby : ""},
-      {"nurims.creationdate": new Date().toISOString()}
+      {"nurims.creationdate": dayjs.toISOString()}
     ]
   };
 }
@@ -443,7 +449,7 @@ export function parsePersonnelRecordFromLine(line, recordType, username) {
     "record_type": recordType,
     "metadata": [
       {"nurims.createdby": username},
-      {"nurims.creationdate": new Date().toISOString()}
+      {"nurims.creationdate": dayjs.toISOString()}
     ]
   };
   if (line.hasOwnProperty("DateOfBirth")) {
@@ -470,7 +476,6 @@ export function parsePersonnelRecordFromLine(line, recordType, username) {
   if (line.hasOwnProperty("IsWristMonitored")) {
     setMetadataValue(p, NURIMS_ENTITY_IS_WRIST_MONITORED, line.IsWristMonitored === "" ? "false" : "true")
   }
-  console.log("$$$$", p)
 
   return p;
 }
@@ -483,7 +488,7 @@ export function parseMonitorRecordFromLine(line, recordType, username) {
     "record_type": recordType,
     "metadata": [
       {"nurims.createdby": username},
-      {"nurims.creationdate": new Date().toISOString()}
+      {"nurims.creationdate": dayjs.toISOString()}
     ]
   };
   if (line.hasOwnProperty("DateOfBirth")) {
@@ -510,7 +515,6 @@ export function parseMonitorRecordFromLine(line, recordType, username) {
   if (line.hasOwnProperty("IsWristMonitored")) {
     setMetadataValue(p, NURIMS_ENTITY_IS_WRIST_MONITORED, line.IsWristMonitored === "" ? "false" : "true")
   }
-  console.log("$$$$", p)
 
   return p;
 }
@@ -554,7 +558,7 @@ export function analysisJobAsObject(name) {
     "clientid": 0,
     "contact": "",
     "name": name,
-    "created": format(new Date(), 'yyyy-MM-dd'),
+    "created": dayjs().format('yyyy-MM-dd'),
     "jtype": "",
     "lastmodification": "",
     "info1": "",

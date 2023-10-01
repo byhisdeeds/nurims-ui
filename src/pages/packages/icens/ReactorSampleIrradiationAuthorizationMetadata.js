@@ -31,10 +31,8 @@ import {
 } from "../../../utils/MetadataUtils";
 import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
 import {isValidUserRole} from "../../../utils/UserUtils";
-import {addMonths, format, parseISO} from "date-fns";
+import dayjs from 'dayjs';
 import TextField from "@mui/material/TextField";
-import {LocalizationProvider} from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import {approveIrradiationMessageComponent} from "../../../utils/MessageUtils";
 import {withTheme} from "@mui/styles";
 
@@ -153,17 +151,17 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
 
   recordDisplayText = (record) => {
     if (Object.keys(record).length === 0) return "";
-    const d = parseISO(getRecordData(record, NURIMS_CREATION_DATE, "1970-01-01 00:00:00"));
+    const d = dayjs(getRecordData(record, NURIMS_CREATION_DATE, "1970-01-01 00:00:00"));
     return getRecordData(record, NURIMS_TITLE, "") + " created by " +
       getRecordData(record, NURIMS_CREATED_BY, "") + " on " +
-      format(d, "d MMMM, yyyy");
+      d.format("d MMMM, yyyy");
   }
 
   approveRequest = () => {
     const record = this.state.record;
     const user = this.context.user;
     setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
-      `${user.profile.fullname} (${user.profile.username}) on ${new Date().toISOString()}`);
+      `${user.profile.fullname} (${user.profile.username}) on ${dayjs.format("yyyy-MM-ddTHH:mm:ss")}`);
     if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
       record["record_key"] = record_uuid();
     }
@@ -262,24 +260,22 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DateRangePicker
-                    fromLabel="Proposed Irradiation Start"
-                    toLabel="Proposed Irradiation End"
-                    from={new Date()}
-                    to={addMonths(new Date(), 1)}
-                    inputFormat={'yyyy-MM-dd'}
-                    disabled={disabled}
-                    // onChange={this.handleDateRangeChange}
-                    renderInput={(startProps, endProps) => (
-                      <React.Fragment>
-                        <TextField {...startProps}/>
-                        <Box sx={{mx: 1}}> to </Box>
-                        <TextField {...endProps}/>
-                      </React.Fragment>
-                    )}
-                  />
-                </LocalizationProvider>
+                <DateRangePicker
+                  fromLabel="Proposed Irradiation Start"
+                  toLabel="Proposed Irradiation End"
+                  from={dayjs()}
+                  to={dayjs().add(1,"month")}
+                  inputFormat={'yyyy-MM-dd'}
+                  disabled={disabled}
+                  // onChange={this.handleDateRangeChange}
+                  renderInput={(startProps, endProps) => (
+                    <React.Fragment>
+                      <TextField {...startProps}/>
+                      <Box sx={{mx: 1}}> to </Box>
+                      <TextField {...endProps}/>
+                    </React.Fragment>
+                  )}
+                />
               </Grid>
               <Grid item xs={6}>
                 <TextFieldWithTooltip

@@ -36,6 +36,7 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
       busy: 0,
       data_changed: false,
       selection: {},
+      confirm_remove: false,
     }
     this.recordTopic = "personnel";
     this.listTitle = "Personnel";

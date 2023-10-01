@@ -7,13 +7,15 @@ import {
   Grid,
   TableCell,
   Typography,
-  TextField, Button
+  TextField,
+  Button,
+  Checkbox
 } from "@mui/material";
-// import {parseISO, format} from "date-fns";
 import dayjs from "dayjs";
 import {
   getRecordMetadataValue,
-  getDateRangeFromDateString, getDateRangeAsDays
+  getDateRangeFromDateString,
+  getDateRangeAsDays
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
@@ -28,7 +30,8 @@ import {
   NURIMS_DOSIMETRY_EXTREMITY_DOSE,
   NURIMS_DOSIMETRY_MEASUREMENTS,
   NURIMS_DOSIMETRY_MONITOR_PERIOD,
-  NURIMS_DOSIMETRY_SHALLOW_DOSE, NURIMS_DOSIMETRY_TIMESTAMP,
+  NURIMS_DOSIMETRY_SHALLOW_DOSE,
+  NURIMS_DOSIMETRY_TIMESTAMP,
   NURIMS_DOSIMETRY_TYPE,
   NURIMS_DOSIMETRY_UNITS,
   NURIMS_DOSIMETRY_WRIST_DOSE,
@@ -38,7 +41,6 @@ import {
   WRIST,
   CMD_GENERATE_PERSONNEL_DOSE_EVALUATION_PDF,
 } from "../../utils/constants";
-import Checkbox from "@mui/material/Checkbox";
 import {PageableTable} from "../../components/CommonComponents";
 import {withTheme} from "@mui/styles";
 import Charts from "react-apexcharts";
@@ -50,6 +52,7 @@ import {
   PERSONNELDOSIMETRYEVALUATION_REF
 } from "./PersonnelDosimetryEvaluation";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import PropTypes from "prop-types";
 
 const doseUnits = "mSv";
 
@@ -305,7 +308,6 @@ class PersonnelDosimetryEvaluationDataView extends Component {
   }
 
   updateStatistics = (rows, dosimetryType) => {
-
     const {
       d0,
       q0,
@@ -322,6 +324,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
       b0,
       h_series_data
     } = doseStats(rows, dosimetryType);
+    const a = `Data from ${ts_min ? ts_min.format("MMM io, yyyy") : ""} to ${ts_max ? ts_max.format("MMM io, yyyy") : ""}`
 
     this.setState(pstate => {
       return {
@@ -347,7 +350,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
           title: {
             ...this.state.options.title,
             // text: `Data from ${ts_min ? format(ts_min, "MMM io, yyyy") : ""} to ${ts_max ? format(ts_max, "MMM io, yyyy") : ""}`
-            text: `Data from ${ts_min ? ts_min.format("MMM io, yyyy") : ""} to ${ts_max ? ts_max.for("MMM io, yyyy") : ""}`
+            text: `Data from ${ts_min ? ts_min.format("MMM io, yyyy") : ""} to ${ts_max ? ts_max.format("MMM io, yyyy") : ""}`
           }
         },
         hoptions: {
@@ -431,6 +434,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
     // filter data based on default record type
     this.rows = filterRecordsByRecordType(this.rawData, dosimetryType)
     this.updateStatistics(this.rows, dosimetryType);
+    if (true) return
     this.updateDoseProfileStatistics(this.rows, dosimetryType, this.state.groupDataRange);
     this.setState({selection: {}, record: record});
     this.props.onChange(false);
@@ -699,6 +703,12 @@ class PersonnelDosimetryEvaluationDataView extends Component {
       </Box>
     );
   }
+}
+
+PersonnelDosimetryEvaluationDataView.propTypes = {
+  send: PropTypes.func.isRequired,
+  properties: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 PersonnelDosimetryEvaluationDataView.defaultProps = {

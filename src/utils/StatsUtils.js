@@ -1,5 +1,4 @@
 import * as ss from "simple-statistics";
-// import {parseISO} from "date-fns";
 import {
   EXTREMITY,
   NURIMS_DOSIMETRY_DEEP_DOSE,
@@ -140,13 +139,13 @@ export function histogram(X, nbins) {
 export function doseStats(rows, dosimetryType) {
   // calculate QA stats
   qaStats(rows, dosimetryType);
+  descriptiveStats(rows, dosimetryType)
 
   // Return descriptive stats
   return descriptiveStats(rows, dosimetryType);
 }
 
 function descriptiveStats(rows, dosimetryType) {
-  console.log("*** descriptiveStats ***", rows, dosimetryType)
   let ts_min = null;
   let ts_max = null;
   const d0 = [];
@@ -154,9 +153,7 @@ function descriptiveStats(rows, dosimetryType) {
   // re-calculate descriptive statistics dataset
   for (const row of rows) {
     if (row.use) {
-      console.log("--->", row[NURIMS_DOSIMETRY_TIMESTAMP])
       const ts = dayjs(row[NURIMS_DOSIMETRY_TIMESTAMP]);
-      console.log("===>", ts)
       if (ts_min === null || ts_max === null) {
         ts_min = ts;
         ts_max = ts;
@@ -175,7 +172,6 @@ function descriptiveStats(rows, dosimetryType) {
       }
     }
   }
-  console.log("*** descriptiveStats ***", ts_min, ts_max, d0, d1)
   const series_data = [];
   const h_series_data = [];
   let q0 = [];

@@ -57,9 +57,9 @@ import {ADDEDITAMP_REF} from "../../maintenance/AddEditAMP";
 import BaseRecordManager from "../../../components/BaseRecordManager";
 import ReactorSampleIrradiationAuthorizationRecordsList from "./ReactorSampleIrradiationAuthorizationRecordsList";
 import ReactorSampleIrradiationAuthorizationMetadata from "./ReactorSampleIrradiationAuthorizationMetadata";
-import {format} from "date-fns";
 import {getRecordData, getRecordMetadataValue} from "../../../utils/MetadataUtils";
 import {withTheme} from "@mui/styles";
+import dayjs from 'dayjs';
 
 export const ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF = "AddEditReactorSampleIrradiationAuthorization";
 
@@ -73,7 +73,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   }
 
   getNewRecordName = () => {
-    return format(new Date(), 'yyyyMMdd-HHmm');
+    return dayjs().format('yyyyMMdd-HHmm');
   }
 
   componentDidMount() {

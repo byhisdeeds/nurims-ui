@@ -26,9 +26,7 @@ class ViewPersonnelRecords extends Component {
   }
 
   generateSSCPersonnelPdf = () => {
-    console.log("@@@@@@@@@@@@@@@@@@@@")
     console.log(this.state.include_archived)
-    console.log("@@@@@@@@@@@@@@@@@@@@")
     this.props.send({
       cmd: CMD_GENERATE_PERSONNEL_RECORDS_PDF,
       module: this.Module,
