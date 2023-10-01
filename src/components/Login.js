@@ -19,6 +19,7 @@ import ReconnectingWebSocket from "reconnecting-websocket";
 import Box from "@mui/material/Box";
 import {SnackbarProvider} from "notistack";
 import {enqueueWarningSnackbar} from "../utils/SnackbarVariants";
+import {DeviceUUID} from "device-uuid";
 
 const { v4: uuid } = require('uuid');
 const Constants = require('../utils/constants');
@@ -50,6 +51,7 @@ class Login extends React.Component {
     this.puk = null;
     this.uuid = uuid();
     this._mounted = false;
+    this.uuid = new DeviceUUID().get();
     this.state = {
       NavigateToPreviousRoute: false,
       theme: localStorage.getItem("theme") || "light",
@@ -93,7 +95,7 @@ class Login extends React.Component {
 
   componentDidMount () {
     this._mounted = true;
-    this.ws = new ReconnectingWebSocket(this.props.wsep);
+    this.ws = new ReconnectingWebSocket(this.props.wsep+"?uuid="+this.uuid);
     this.ws.onopen = () => {
       console.log(`${MODULE} websocket connection established.`);
       // get public key as base64 string

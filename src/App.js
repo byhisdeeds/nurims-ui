@@ -167,7 +167,7 @@ class App extends React.Component {
     ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
     // Everything here is fired on component mount.
     // this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}/nurimsws`);
-    this.ws = new ReconnectingWebSocket(this.props.wsep);
+    this.ws = new ReconnectingWebSocket(this.props.wsep+"?uuid="+this.uuid);
     this.ws.onopen = (event) => {
       if (this.debug) {
         ConsoleLog("App", "ws.onopen", "websocket connection established");

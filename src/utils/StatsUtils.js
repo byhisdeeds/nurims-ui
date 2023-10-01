@@ -1,5 +1,5 @@
 import * as ss from "simple-statistics";
-import {parseISO} from "date-fns";
+// import {parseISO} from "date-fns";
 import {
   EXTREMITY,
   NURIMS_DOSIMETRY_DEEP_DOSE,
@@ -13,6 +13,7 @@ import {
   WRIST
 } from "./constants";
 import {getDateRangeAsDays} from "./MetadataUtils";
+import dayjs from 'dayjs';
 
 
 export function doseProfileStats(rows, dosimetryType, groupDataRange) {
@@ -145,6 +146,7 @@ export function doseStats(rows, dosimetryType) {
 }
 
 function descriptiveStats(rows, dosimetryType) {
+  console.log("*** descriptiveStats ***", rows, dosimetryType)
   let ts_min = null;
   let ts_max = null;
   const d0 = [];
@@ -152,13 +154,15 @@ function descriptiveStats(rows, dosimetryType) {
   // re-calculate descriptive statistics dataset
   for (const row of rows) {
     if (row.use) {
-      const ts = parseISO(row[NURIMS_DOSIMETRY_TIMESTAMP]);
+      console.log("--->", row[NURIMS_DOSIMETRY_TIMESTAMP])
+      const ts = dayjs(row[NURIMS_DOSIMETRY_TIMESTAMP]);
+      console.log("===>", ts)
       if (ts_min === null || ts_max === null) {
         ts_min = ts;
         ts_max = ts;
-      } else if (ts.getTime() <= ts_min.getTime()) {
+      } else if (ts.unix() <= ts_min.unix()) {
         ts_min = ts;
-      } else if (ts.getTime() >= ts_max.getTime()) {
+      } else if (ts.unix() >= ts_max.unix()) {
         ts_max = ts;
       }
       if (row[NURIMS_DOSIMETRY_TYPE] === WHOLE_BODY && dosimetryType === WHOLE_BODY) {
@@ -171,6 +175,7 @@ function descriptiveStats(rows, dosimetryType) {
       }
     }
   }
+  console.log("*** descriptiveStats ***", ts_min, ts_max, d0, d1)
   const series_data = [];
   const h_series_data = [];
   let q0 = [];
