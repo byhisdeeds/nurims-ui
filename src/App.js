@@ -339,7 +339,7 @@ class App extends React.Component {
     return (
       <UserDebugContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-          <Box sx={{flexGrow: 1}}>
+          <Box sx={{flexGrow: 1, height: "100%"}}>
             <SnackbarProvider
               autoHideDuration={2000}
               maxSnack={5}

@@ -64,12 +64,12 @@ MenuDrawer.propTypes = {
 function MenuDrawer(props) {
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', overflowY: 'auto', height: 'calc(100vh - 64px)' }}>
       <CssBaseline />
       <Drawer
         variant="permanent"
         open={props.open}
-        style={{top: 64, overflowY: 'auto', height: 'calc(100vh - 64px)'}}
+        style={{top: 64}}
       >
         <List component="nav" disablePadding>
           {props.menuItems.map((item, index) => (
