@@ -202,7 +202,7 @@ class App extends React.Component {
       if (this.debug) {
         ConsoleLog("App", "onmessage", data);
       }
-      if (data.hasOwnProperty("background_job_message")) {
+      if (data.hasOwnProperty("log_message")) {
         this.appendLog(data.response);
       }
       if (data.cmd === CMD_PING) {
