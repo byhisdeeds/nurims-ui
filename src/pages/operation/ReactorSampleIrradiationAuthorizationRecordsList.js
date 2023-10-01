@@ -1,5 +1,5 @@
 import * as React from 'react';
-import PagedRecordList from "../../../components/PagedRecordList";
+import PagedRecordList from "../../components/PagedRecordList";
 import PropTypes from "prop-types";
 
 class ReactorSampleIrradiationAuthorizationRecordsList extends React.Component {
@@ -59,7 +59,7 @@ ReactorSampleIrradiationAuthorizationRecordsList.propTypes = {
   ref: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
   onSelection: PropTypes.func.isRequired,
-  properties: PropTypes.func.isRequired,
+  properties: PropTypes.object.isRequired,
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
   renderCellStyle: PropTypes.func,
 }

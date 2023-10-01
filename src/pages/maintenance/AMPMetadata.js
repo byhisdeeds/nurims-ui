@@ -42,7 +42,6 @@ class AMPMetadata extends Component {
   }
 
   setGlossaryTerms = (terms) => {
-    // console.log("AMPMetadata.setGlossaryTerms", terms)
     for (const term of terms) {
       this.glossary[term.name] = term.value;
     }

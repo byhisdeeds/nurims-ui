@@ -120,7 +120,7 @@ class Login extends React.Component {
       } else if (commandResponseEquals(message, Constants.CMD_GET_USER_RECORDS) && message.response.status === 0) {
         for (const u of message.response.users) {
           if (u.hasOwnProperty("metadata")) {
-            this.authService.users.push(u.metadata.username);
+            this.authService.users.push([u.metadata.username, u.metadata.fullname]);
           }
         }
       } else if (commandResponseEquals(message, Constants.CMD_VERIFY_USER_PASSWORD)) {

@@ -2,13 +2,24 @@ import React from "react";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 import DoneIcon from '@mui/icons-material/Done';
-import {Box, Button, ButtonBase} from "@mui/material";
-import {isValidUserRole} from "./UserUtils";
-import {getRecordData, setRecordData} from "./MetadataUtils";
 import {
-  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
+  Box,
+  Button,
+  ButtonBase
+} from "@mui/material";
+import {
+  isValidUserRole
+} from "./UserUtils";
+import {
+  getRecordData,
+  setRecordData
+} from "./MetadataUtils";
+import {
+  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
+  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
   NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
-  NURIMS_OPERATION_DATA_IRRADIATIONDURATION, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
+  NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
+  NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
   NURIMS_OPERATION_DATA_NEUTRONFLUX
 } from "./constants";
 
@@ -16,6 +27,7 @@ import {
 export function approveIrradiationMessageComponent(record, user, disabled, approveRequest, theme) {
   const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
   if (approver !== "") {
+    const fullname = getUserFullname(user, approver)
     return (
       <Button
         variant={"outlined"}
@@ -26,7 +38,7 @@ export function approveIrradiationMessageComponent(record, user, disabled, appro
         fullWidth
         sx={{marginTop: 1}}
       >
-        {`Approved by ${approver}`}
+        {`Approved by ${fullname}`}
       </Button>
     )
   }
@@ -68,4 +80,13 @@ export function approveIrradiationMessageComponent(record, user, disabled, appro
       </Button>
     )
   }
+}
+
+export function getUserFullname(users, user) {
+  return users.users.reduce((prev, obj) => {
+    if (obj[0] === user) {
+      prev = obj[1];
+    }
+    return prev;
+  }, "");
 }

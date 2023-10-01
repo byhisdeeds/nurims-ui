@@ -3,12 +3,12 @@ import React, {Component} from 'react';
 import {
   ConsoleLog,
   UserDebugContext
-} from "../../../utils/UserDebugContext";
+} from "../../utils/UserDebugContext";
 import {
   BLANK_PDF,
   CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF,
   REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
-} from "../../../utils/constants";
+} from "../../utils/constants";
 import {
   Button,
   FormControl,
@@ -24,13 +24,13 @@ import {
 import {
   DateRangePicker,
   TitleComponent
-} from "../../../components/CommonComponents";
+} from "../../components/CommonComponents";
 import PropTypes from "prop-types";
 import {withTheme} from "@mui/styles";
 import dayjs from 'dayjs';
-import PdfViewer from "../../../components/PdfViewer";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../../utils/WebsocketUtils";
-import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../../utils/SnackbarVariants";
+import PdfViewer from "../../components/PdfViewer";
+import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../utils/SnackbarVariants";
 
 export const GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF = "GenerateReactorSampleIrradiationAuthorizationPdf";
 

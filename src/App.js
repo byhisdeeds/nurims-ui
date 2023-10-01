@@ -49,10 +49,10 @@ import {ADDEDITSSC_REF} from "./pages/maintenance/AddEditSSC"
 import {ADDEDITAMP_REF} from "./pages/maintenance/AddEditAMP"
 import {VIEWSSCRECORDS_REF} from "./pages/maintenance/ViewSSCRecords"
 import {GENERATEMATERIALSURVEILLANCESHEET_REF} from "./pages/controlledmaterials/GenerateMaterialSurveillanceSheet"
-import {ADDEDITREACTORWATERSAMPLES_REF} from "./pages/packages/icens/AddEditReactorWaterSamples"
-import {ADDEDITIRRADIATEDSAMPLES_REF} from "./pages/packages/icens/AddEditIrradiatedSamples"
-import {REACTOROPERATIONSREPORT_REF} from "./pages/packages/icens/ReactorOperationsReport"
-import {ADDEDITREACTOROPERATINGRUNS_REF} from "./pages/packages/icens/AddEditReactorOperatingRuns"
+import {ADDEDITREACTORWATERSAMPLES_REF} from "./pages/operation/AddEditReactorWaterSamples"
+import {ADDEDITIRRADIATEDSAMPLES_REF} from "./pages/operation/AddEditIrradiatedSamples"
+import {REACTOROPERATIONSREPORT_REF} from "./pages/operation/ReactorOperationsReport"
+import {ADDEDITREACTOROPERATINGRUNS_REF} from "./pages/operation/AddEditReactorOperatingRuns"
 import {UPDATEMONITORINGSTATUS_REF} from "./pages/personnel/UpdateMonitoringStatus"
 import {ADDEDITMONITORS_REF} from "./pages/radiationprotection/AddEditMonitors"
 import {PERSONNELDOSIMETRYEVALUATION_REF} from "./pages/radiationprotection/PersonnelDosimetryEvaluation"
@@ -64,10 +64,10 @@ import {
 import {GENERATESSCMAINTENANCEREPORT_REF} from "./pages/maintenance/GenerateSSCMaintenanceReport"
 import {
   ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF
-} from "./pages/packages/icens/AddEditReactorSampleIrradiationAuthorization"
+} from "./pages/operation/AddEditReactorSampleIrradiationAuthorization"
 import {
   GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF
-} from "./pages/packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf"
+} from "./pages/operation/GenerateReactorSampleIrradiationAuthorizationPdf"
 import {CHATBOT_REF} from "./pages/rasa/ChatBot"
 import {TERMSANDDEFINITIONS_REF} from "./pages/support/TermsAndDefinitions"
 import LogWindow from "./components/LogWindow";

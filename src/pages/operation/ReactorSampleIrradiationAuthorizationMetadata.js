@@ -6,7 +6,9 @@ import {
   Grid,
 } from "@mui/material";
 import {
-  CMD_SUGGEST_ANALYSIS_JOBS, CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD, NURIMS_CREATED_BY,
+  CMD_SUGGEST_ANALYSIS_JOBS,
+  CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
+  NURIMS_CREATED_BY,
   NURIMS_CREATION_DATE,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
@@ -15,26 +17,32 @@ import {
   NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
   NURIMS_OPERATION_DATA_NEUTRONFLUX,
   NURIMS_TITLE, NURIMS_WITHDRAWN
-} from "../../../utils/constants";
+} from "../../utils/constants";
 import {
   AutoCompleteComponent,
   DateRangePicker,
   SelectFormControlWithTooltip,
   TextFieldWithTooltip
-} from "../../../components/CommonComponents";
+} from "../../components/CommonComponents";
 import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./AddEditReactorSampleIrradiationAuthorization";
 import {
   analysisJobAsObject,
   getRecordData,
   setRecordData,
   record_uuid
-} from "../../../utils/MetadataUtils";
-import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
-import {isValidUserRole} from "../../../utils/UserUtils";
+} from "../../utils/MetadataUtils";
+import {
+  ConsoleLog,
+  UserDebugContext
+} from "../../utils/UserDebugContext";
+import {isValidUserRole} from "../../utils/UserUtils";
 import dayjs from 'dayjs';
 import TextField from "@mui/material/TextField";
-import {approveIrradiationMessageComponent} from "../../../utils/MessageUtils";
+import {
+  approveIrradiationMessageComponent
+} from "../../utils/MessageUtils";
 import {withTheme} from "@mui/styles";
+import PropTypes from "prop-types";
 
 
 class ReactorSampleIrradiationAuthorizationMetadata extends Component {
@@ -63,7 +71,6 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   }
 
   setGlossaryTerms = (terms) => {
-    // console.log("AMPMetadata.setGlossaryTerms", terms)
     for (const term of terms) {
       this.glossary[term.name] = term.value;
     }
@@ -119,7 +126,8 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     clearTimeout(this.timeout);
     this.timeout = null;
     const record = this.state.record;
-    setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, typeof value == "string" ? analysisJobAsObject(value) : value);
+    setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
+      typeof value == "string" ? analysisJobAsObject(value) : value);
     this.setState({record: record});
   };
 
@@ -161,7 +169,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     const record = this.state.record;
     const user = this.context.user;
     setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
-      `${user.profile.fullname} (${user.profile.username}) on ${dayjs.format("yyyy-MM-ddTHH:mm:ss")}`);
+      `${user.profile.fullname} (${user.profile.username}) on ${dayjs.toISOString()}`);
     if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
       record["record_key"] = record_uuid();
     }
@@ -298,6 +306,10 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
       </Box>
     );
   }
+}
+
+ReactorSampleIrradiationAuthorizationMetadata.propTypes = {
+  properties: PropTypes.object.isRequired,
 }
 
 ReactorSampleIrradiationAuthorizationMetadata.defaultProps = {

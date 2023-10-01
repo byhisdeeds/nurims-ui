@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {
   BLANK_PDF,
   CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF,
-} from "../../../utils/constants";
+} from "../../utils/constants";
 import {
   Fab,
   FormControl,
@@ -12,21 +12,21 @@ import {
   Stack,
   Typography
 } from "@mui/material";
-import PdfViewer from "../../../components/PdfViewer";
+import PdfViewer from "../../components/PdfViewer";
 import MenuItem from "@mui/material/MenuItem";
 import {withTheme} from "@mui/styles";
 import {
   isCommandResponse,
   messageHasResponse,
   messageStatusOk
-} from "../../../utils/WebsocketUtils";
+} from "../../utils/WebsocketUtils";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import {SameYearDateRangePicker} from "../../../components/CommonComponents";
-import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
+import {SameYearDateRangePicker} from "../../components/CommonComponents";
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import AddIcon from "@mui/icons-material/Add";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../../utils/SnackbarVariants";
+import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../utils/SnackbarVariants";
 import dayjs from 'dayjs';
 
 export const REACTOROPERATIONSREPORT_REF = "ReactorOperationsReport";

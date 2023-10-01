@@ -21,16 +21,16 @@ import {PERSONNELDOSIMETRYMEASUREMENT_REF} from "./radiationprotection/Personnel
 import {MONITORDOSIMETRYMEASUREMENT_REF} from "./radiationprotection/MonitorDosimetryMeasurement";
 import {PERSONNELDOSIMETRYEVALUATION_REF} from "./radiationprotection/PersonnelDosimetryEvaluation";
 import {PERSONNELDOSIMETRYREPORT_REF} from "./radiationprotection/PersonnelDosimetryReport";
-import {ADDEDITREACTOROPERATINGRUNS_REF} from "./packages/icens/AddEditReactorOperatingRuns";
-import {ADDEDITIRRADIATEDSAMPLES_REF} from "./packages/icens/AddEditIrradiatedSamples";
-import {REACTOROPERATIONSREPORT_REF} from "./packages/icens/ReactorOperationsReport";
-import {ADDEDITREACTORWATERSAMPLES_REF} from "./packages/icens/AddEditReactorWaterSamples";
+import {ADDEDITREACTOROPERATINGRUNS_REF} from "./operation/AddEditReactorOperatingRuns";
+import {ADDEDITIRRADIATEDSAMPLES_REF} from "./operation/AddEditIrradiatedSamples";
+import {REACTOROPERATIONSREPORT_REF} from "./operation/ReactorOperationsReport";
+import {ADDEDITREACTORWATERSAMPLES_REF} from "./operation/AddEditReactorWaterSamples";
 import {
   ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF
-} from "./packages/icens/AddEditReactorSampleIrradiationAuthorization";
+} from "./operation/AddEditReactorSampleIrradiationAuthorization";
 import {
   GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF
-} from "./packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf";
+} from "./operation/GenerateReactorSampleIrradiationAuthorizationPdf";
 
 const Constants = require("../utils/constants");
 
@@ -57,13 +57,13 @@ const ImportICENSControlledMaterialManufacturers = lazy(() => import('./packages
 const ImportICENSControlledMaterials = lazy(() => import('./packages/icens/ImportICENSControlledMaterials'));
 const ImportICENSControlledMaterialStorageLocations = lazy(() => import('./packages/icens/ImportICENSControlledMaterialStorageLocations'));
 const ImportICENSMonitors = lazy(() => import('./packages/icens/ImportICENSMonitors'));
-const AddEditReactorOperatingRuns = lazy(() => import('./packages/icens/AddEditReactorOperatingRuns'));
-const AddEditIrradiatedSamples = lazy(() => import('./packages/icens/AddEditIrradiatedSamples'));
-const ReactorOperationsReport = lazy(() => import('./packages/icens/ReactorOperationsReport'));
-const AddEditReactorWaterSamples = lazy(() => import('./packages/icens/AddEditReactorWaterSamples'));
+const AddEditReactorOperatingRuns = lazy(() => import('./operation/AddEditReactorOperatingRuns'));
+const AddEditIrradiatedSamples = lazy(() => import('./operation/AddEditIrradiatedSamples'));
+const ReactorOperationsReport = lazy(() => import('./operation/ReactorOperationsReport'));
+const AddEditReactorWaterSamples = lazy(() => import('./operation/AddEditReactorWaterSamples'));
 const PersonnelDosimetryEvaluation = lazy(() => import('./radiationprotection/PersonnelDosimetryEvaluation'));
-const AddEditReactorSampleIrradiationAuthorization = lazy(() => import('./packages/icens/AddEditReactorSampleIrradiationAuthorization'));
-const GenerateReactorSampleIrradiationAuthorizationPdf = lazy(() => import('./packages/icens/GenerateReactorSampleIrradiationAuthorizationPdf'));
+const AddEditReactorSampleIrradiationAuthorization = lazy(() => import('./operation/AddEditReactorSampleIrradiationAuthorization'));
+const GenerateReactorSampleIrradiationAuthorizationPdf = lazy(() => import('./operation/GenerateReactorSampleIrradiationAuthorizationPdf'));
 const TermsAndDefinitions = lazy(() => import('./support/TermsAndDefinitions'));
 const ChatBot = lazy(() => import('./rasa/ChatBot'));
 

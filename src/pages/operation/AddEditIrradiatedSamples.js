@@ -10,19 +10,19 @@ import Box from "@mui/material/Box";
 import {
   CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD,
   ITEM_ID,
-} from "../../../utils/constants";
+} from "../../utils/constants";
 import {
   isCommandResponse,
   messageHasResponse,
   messageStatusOk
-} from "../../../utils/WebsocketUtils";
+} from "../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
-import BusyIndicator from "../../../components/BusyIndicator";
-import PagedCsvTable from "../../../components/PagedCsvTable";
+import BusyIndicator from "../../components/BusyIndicator";
+import PagedCsvTable from "../../components/PagedCsvTable";
 import {readString} from "react-papaparse";
-import {ConsoleLog, UserDebugContext} from "../../../utils/UserDebugContext";
-import {TitleComponent} from "../../../components/CommonComponents";
-import {enqueueErrorSnackbar} from "../../../utils/SnackbarVariants";
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {TitleComponent} from "../../components/CommonComponents";
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 export const ADDEDITIRRADIATEDSAMPLES_REF = "AddEditIrradiatedSamples";
 

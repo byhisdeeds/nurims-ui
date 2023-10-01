@@ -39,7 +39,6 @@ export function removeMetadataField(obj, key) {
     if (Array.isArray(metadata)) {
       for (const m of metadata) {
         for (const [k, v] of Object.entries(m)) {
-          // console.log(`${k}: ${v}`);
           if (k === key) {
             delete m[k];
             return;
@@ -56,7 +55,6 @@ export function setRecordMetadataValue(obj, key, value) {
     if (Array.isArray(metadata)) {
       for (const m of metadata) {
         for (const [k, v] of Object.entries(m)) {
-          // console.log(`${k}: ${v}`);
           if (k === key) {
             m[k] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
             return;
@@ -86,7 +84,6 @@ export function setRecordData(record, key, value) {
     if (Array.isArray(record.metadata)) {
       for (const m of record.metadata) {
         for (const [k, v] of Object.entries(m)) {
-          // console.log(`${k}: ${v}`);
           if (k === key) {
             m[k] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
             record["changed"] = true;
@@ -202,7 +199,6 @@ export function setMetadataValue(obj, key, value) {
     if (Array.isArray(metadata)) {
       for (const m of metadata) {
         for (const [k, v] of Object.entries(m)) {
-          // console.log(`${k}: ${v}`);
           if (k === key) {
             m[k] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
             return;
@@ -299,7 +295,6 @@ export function setDoseRecordMetadataValue(person_record, dosimeter, dosimeterTy
             if (dose_record.hasOwnProperty("metadata")) {
               for (const metadata of dose_record.metadata) {
                 for (const [k, v] of Object.entries(metadata)) {
-                  // console.log(`${k}: ${v}`);
                   if (k === key) {
                     metadata[k] = value;
                     return;

@@ -5,7 +5,7 @@ import {
   getRecordMetadataValue,
   appendMetadataChangedField,
   getMetadataValueAsISODateString,
-} from "../../../utils/MetadataUtils";
+} from "../../utils/MetadataUtils";
 import {
   NURIMS_DESCRIPTION,
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS,
@@ -14,25 +14,25 @@ import {
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE,
   NURIMS_SAMPLEDATE,
   NURIMS_TITLE, UNDEFINED_DATE_STRING
-} from "../../../utils/constants";
+} from "../../utils/constants";
 import PropTypes from "prop-types";
 import {
   DateSelect,
-} from "../../../components/CommonComponents";
+} from "../../components/CommonComponents";
 import {
   ConsoleLog,
   UserDebugContext
-} from "../../../utils/UserDebugContext";
+} from "../../utils/UserDebugContext";
 import {
   getPropertyValue
-} from "../../../utils/PropertyUtils";
+} from "../../utils/PropertyUtils";
 import {
   Grid,
   Box,
   TextField
 } from "@mui/material";
-import EditableTable from "../../../components/EditableTable";
-import TextFileViewer from "../../../components/TextFileViewer";
+import EditableTable from "../../components/EditableTable";
+import TextFileViewer from "../../components/TextFileViewer";
 import dayjs from 'dayjs';
 
 class WaterSampleMetadata extends Component {

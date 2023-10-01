@@ -2,49 +2,57 @@ import React from 'react';
 import {
   ConsoleLog,
   UserDebugContext
-} from "../../../utils/UserDebugContext";
+} from "../../utils/UserDebugContext";
 import {
+  ConfirmOperatingRunDiscoveryDialog,
   ConfirmRemoveRecordDialog
-} from "../../../components/UtilityDialogs";
+} from "../../components/UtilityDialogs";
 import {
   CMD_DELETE_USER_RECORD,
-  CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
-  CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
+  CMD_DISCOVER_REACTOR_OPERATION_RUNS,
+  CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
+  CMD_UPDATE_USER_RECORD,
   ITEM_ID,
   METADATA,
-  NURIMS_SAMPLEDATE,
+  NURIMS_OPERATION_DATA_STATS,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN
-} from "../../../utils/constants";
+} from "../../utils/constants";
 import {
   Box,
   Fab,
   Grid,
+  Typography
 } from "@mui/material";
 import {
   Add as AddIcon,
   Save as SaveIcon,
   RemoveCircle as RemoveCircleIcon,
 } from "@mui/icons-material";
+
 // import {v4 as uuid} from "uuid";
 import {
   getMatchingResponseObject,
   isCommandResponse,
   messageHasResponse,
   messageStatusOk
-} from "../../../utils/WebsocketUtils";
+} from "../../utils/WebsocketUtils";
 import {
   ArchiveRecordLabel
-} from "../../../utils/RenderUtils";
-import WaterSamplesList from "./WaterSamplesList";
-import WaterSampleMetadata from "./WaterSampleMetadata";
-import {getRecordMetadataValue, record_uuid} from "../../../utils/MetadataUtils";
-import {TitleComponent} from "../../../components/CommonComponents";
-import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../../../utils/SnackbarVariants";
+} from "../../utils/RenderUtils";
+import OperatingRunList from "./OperatingRunList";
+import OperatingRunMetadata from "./OperatingRunMetadata";
+import {TitleComponent} from "../../components/CommonComponents";
+import {
+  enqueueErrorSnackbar,
+  enqueueSuccessSnackbar,
+  enqueueWarningSnackbar
+} from "../../utils/SnackbarVariants";
+import {record_uuid} from "../../utils/MetadataUtils";
 
-export const ADDEDITREACTORWATERSAMPLES_REF = "AddEditReactorWaterSamples";
+export const ADDEDITREACTOROPERATINGRUNS_REF = "AddEditReactorOperatingRuns";
 
-class AddEditReactorWaterSamples extends React.Component {
+class AddEditReactorOperatingRuns extends React.Component {
   static contextType = UserDebugContext;
 
   constructor(props) {
@@ -52,11 +60,12 @@ class AddEditReactorWaterSamples extends React.Component {
     this.state = {
       metadata_changed: false,
       confirm_remove: false,
+      confirm_discovery: false,
       selection: {},
       title: props.title,
       include_archived: false,
     };
-    this.Module = ADDEDITREACTORWATERSAMPLES_REF;
+    this.Module = ADDEDITREACTOROPERATINGRUNS_REF;
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
   }
@@ -65,7 +74,7 @@ class AddEditReactorWaterSamples extends React.Component {
     this.requestGetRecords(this.state.include_archived);
   }
 
-  isAccesibleButton = (selection) => {
+  isValidSelection = (selection) => {
     return (selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
   }
 
@@ -110,25 +119,33 @@ class AddEditReactorWaterSamples extends React.Component {
     }
   }
 
-  addRecord = () => {
+  discoverOperatingRuns = () => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "addRecord");
+      ConsoleLog(this.Module, "discoverOperatingRuns");
     }
-    if (this.listRef.current) {
-      this.listRef.current.addRecords([{
-        "changed": true,
-        "item_id": -1,
-        "nurims.title": "New Record",
-        "nurims.withdrawn": 0,
-        "metadata": {
-          username: "New Record",
-          password: "",
-          authorized_module_level: "",
-          role: "",
-        }
-      }], false);
-      this.setState({metadata_changed: true});
+    this.setState({confirm_discovery: true,});
+  }
+
+  cancelDiscovery = () => {
+    this.setState({confirm_discovery: false,});
+  }
+
+  proceedWithDiscovery = (year, startMonth, endMonth, forceOverwrite) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "proceedWithDiscovery", "year", year, "startMonth", startMonth,
+        "endMonth", endMonth, "forceOverwrite", forceOverwrite);
     }
+    this.setState({confirm_discovery: false,});
+
+    this.props.send({
+      cmd: CMD_DISCOVER_REACTOR_OPERATION_RUNS,
+      year: year.year(),
+      startMonth: startMonth.month() + 1,
+      endMonth: endMonth.month() + 1,
+      forceOverwrite: forceOverwrite,
+      "run_in_background": "true",
+      module: this.Module,
+    });
   }
 
   requestGetRecords = (include_archived) => {
@@ -136,9 +153,9 @@ class AddEditReactorWaterSamples extends React.Component {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
     }
     this.props.send({
-      cmd: CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
+      cmd: CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
       "include.disabled": include_archived ? "true" : "false",
-      "include.metadata.subtitle": NURIMS_SAMPLEDATE,
+      "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
       module: this.Module,
     })
     this.setState({include_archived: include_archived});
@@ -156,18 +173,8 @@ class AddEditReactorWaterSamples extends React.Component {
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
             record["record_key"] = record_uuid();
           }
-          // Only update then changed metadata fields
-          console.log("CHANGED METADATA", record["changed.metadata"])
-          const metadata_entries = [];
-          for (const md of record["changed.metadata"]) {
-            const entry = {};
-            entry[md] = getRecordMetadataValue(record, md, "");
-            metadata_entries.push(entry)
-          }
-          record["metadata"] = metadata_entries;
-          console.log("SAVING RECORD", record)
           this.props.send({
-            cmd: CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
+            cmd: CMD_UPDATE_USER_RECORD,
             item_id: record.item_id,
             "nurims.title": record[NURIMS_TITLE],
             "nurims.withdrawn": record[NURIMS_WITHDRAWN],
@@ -179,7 +186,7 @@ class AddEditReactorWaterSamples extends React.Component {
       }
     }
 
-    // this.setState({metadata_changed: false})
+    this.setState({metadata_changed: false})
   }
 
   ws_message(message) {
@@ -189,22 +196,20 @@ class AddEditReactorWaterSamples extends React.Component {
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageStatusOk(message)) {
-        if (isCommandResponse(message, CMD_GET_REACTOR_WATER_SAMPLE_RECORDS)) {
+        if (isCommandResponse(message, CMD_GET_REACTOR_OPERATION_RUN_RECORDS)) {
           const selection = this.state.selection;
           if (Object.keys(selection).length === 0) {
             if (this.listRef.current) {
               this.listRef.current.setRecords(response.operation);
             }
             if (this.metadataRef.current) {
-              this.metadataRef.current.setRecordMetadata();
+              this.metadataRef.current.setRecordMetadata(selection);
             }
           } else {
             if (!message.hasOwnProperty("item_id") && this.listRef.current) {
-              // this.listRef.current.setRecords(response[this.recordTopic], true);
               this.listRef.current.setRecords(response.operation);
             }
             if (message.hasOwnProperty("item_id")) {
-              // const record = getMatchingResponseObject(message, "response." + this.recordTopic, "item_id", selection["item_id"]);
               const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
               selection[METADATA] = [...record[METADATA]]
               if (this.metadataRef.current) {
@@ -212,20 +217,16 @@ class AddEditReactorWaterSamples extends React.Component {
               }
             }
           }
-        } else if (isCommandResponse(message, CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD)) {
-          enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
-          const selection = this.state.selection;
-          const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
-          selection[METADATA] = [...record[METADATA]]
-          if (this.listRef.current) {
-            this.listRef.current.updateRecord(response.operation);
-          }
-          if (this.metadataRef.current) {
-            this.metadataRef.current.setRecordMetadata(selection);
+        } else if (isCommandResponse(message, CMD_DISCOVER_REACTOR_OPERATION_RUNS)) {
+          // enqueueSuccessSnackbar(response.message);
+          if (response.hasOwnProperty("warning_message")) {
+            enqueueWarningSnackbar(response.message, 3000, !response.hasOwnProperty("persist_message"));
+          } else {
+            enqueueSuccessSnackbar(response.message, 3000, !response.hasOwnProperty("persist_message"));
           }
           // if (this.listRef.current) {
           //   // this.listRef.current.updateRecord(response[this.recordTopic]);
-          //   this.listRef.current.updateRecord(response.operation);
+          //   this.listRef.current.updateRecord(response.users);
           // }
         } else if (isCommandResponse(message, CMD_DELETE_USER_RECORD)) {
           enqueueSuccessSnackbar(`Record (id: ${response.item_id}) deleted successfully`)
@@ -259,30 +260,18 @@ class AddEditReactorWaterSamples extends React.Component {
         return {selection: selection}
       });
       this.props.send({
-        cmd: CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
+        cmd: CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
         item_id: selection.item_id,
         "include.metadata": "true",
-        "include.metadata.subtitle": NURIMS_SAMPLEDATE,
+        "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
         module: this.Module,
       })
     }
     this.setState({selection: selection})
   }
 
-  // onRecordSelection = (selection) => {
-  //   if (this.context.debug) {
-  //     ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
-  //   }
-  //   if (selection.hasOwnProperty("item_id")) {
-  //     if (this.metadataRef.current) {
-  //       this.metadataRef.current.setRecordMetadata(selection)
-  //     }
-  //   }
-  //   this.setState({selection: selection})
-  // }
-
   render() {
-    const {metadata_changed, confirm_remove, include_archived, selection} = this.state;
+    const {metadata_changed, confirm_remove, confirm_discovery, include_archived, selection} = this.state;
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
@@ -294,14 +283,18 @@ class AddEditReactorWaterSamples extends React.Component {
                                    onProceed={this.proceedWithRemove}
                                    onCancel={this.cancelRemove}
         />
+        <ConfirmOperatingRunDiscoveryDialog open={confirm_discovery}
+                                            onProceed={this.proceedWithDiscovery}
+                                            onCancel={this.cancelDiscovery}
+        />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
             <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={4}>
-            <WaterSamplesList
+            <OperatingRunList
               ref={this.listRef}
-              title={"Reactor Water Samples"}
+              title={"Reactor Operation Runs"}
               properties={this.props.properties}
               onSelection={this.onRecordSelection}
               includeArchived={include_archived}
@@ -310,7 +303,7 @@ class AddEditReactorWaterSamples extends React.Component {
             />
           </Grid>
           <Grid item xs={8}>
-            <WaterSampleMetadata
+            <OperatingRunMetadata
               ref={this.metadataRef}
               properties={this.props.properties}
               onChange={this.onRecordMetadataChanged}
@@ -321,10 +314,10 @@ class AddEditReactorWaterSamples extends React.Component {
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
                disabled={selection === -1}>
             <RemoveCircleIcon sx={{mr: 1}}/>
-            Remove SSC
+            Remove Operating Run
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!this.isAccesibleButton(selection)}>
+               onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>
             {ArchiveRecordLabel(selection, "Run")}
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
@@ -332,9 +325,9 @@ class AddEditReactorWaterSamples extends React.Component {
             <SaveIcon sx={{mr: 1}}/>
             Save Changes
           </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>
+          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.discoverOperatingRuns}>
             <AddIcon sx={{mr: 1}}/>
-            Add SSC
+            Update Operating Runs
           </Fab>
         </Box>
       </React.Fragment>
@@ -342,8 +335,8 @@ class AddEditReactorWaterSamples extends React.Component {
   }
 }
 
-AddEditReactorWaterSamples.defaultProps = {
+AddEditReactorOperatingRuns.defaultProps = {
   send: (msg) => {},
 };
 
-export default AddEditReactorWaterSamples;
+export default AddEditReactorOperatingRuns;

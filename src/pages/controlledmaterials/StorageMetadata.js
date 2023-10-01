@@ -63,7 +63,6 @@ class StorageMetadata extends Component {
   }
 
   setGlossaryTerms = (terms) => {
-    // console.log("StorageMetadata.setGlossaryTerms", terms)
     for (const term of terms) {
       this.glossary[term.name] = term.value;
     }

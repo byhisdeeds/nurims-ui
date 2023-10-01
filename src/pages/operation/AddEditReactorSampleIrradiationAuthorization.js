@@ -1,12 +1,11 @@
-
 import React from 'react';
 import {
   ConsoleLog,
   UserDebugContext
-} from "../../../utils/UserDebugContext";
+} from "../../utils/UserDebugContext";
 import {
   ConfirmRemoveRecordDialog
-} from "../../../components/UtilityDialogs";
+} from "../../components/UtilityDialogs";
 import {
   CMD_DELETE_USER_RECORD,
   CMD_GET_GLOSSARY_TERMS,
@@ -16,16 +15,19 @@ import {
   CMD_SUGGEST_ANALYSIS_JOBS,
   CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
   ITEM_ID,
-  METADATA, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
-  NURIMS_SAMPLEDATE, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE,
+  METADATA,
+  NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
+  NURIMS_SAMPLEDATE,
+  NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
   OPERATION_TOPIC,
   REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
   SSC_TOPIC
-} from "../../../utils/constants";
+} from "../../utils/constants";
 import {
-  Box, Button,
+  Box,
+  Button,
   Fab,
   Grid,
 } from "@mui/material";
@@ -34,30 +36,18 @@ import {
   Save as SaveIcon,
   RemoveCircle as RemoveCircleIcon,
 } from "@mui/icons-material";
-// import {v4 as uuid} from "uuid";
-import {
-  getMatchingResponseObject,
-  isCommandResponse,
-  messageHasResponse,
-  messageStatusOk
-} from "../../../utils/WebsocketUtils";
-import {
-  ArchiveRecordLabel
-} from "../../../utils/RenderUtils";
-import WaterSamplesList from "./WaterSamplesList";
-import WaterSampleMetadata from "./WaterSampleMetadata";
-// import {
-//   getRecordMetadataValue
-// } from "../../../utils/MetadataUtils";
-import {TitleComponent} from "../../../components/CommonComponents";
+import {TitleComponent} from "../../components/CommonComponents";
 import PropTypes from "prop-types";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
-import {ADDEDITAMP_REF} from "../../maintenance/AddEditAMP";
-import BaseRecordManager from "../../../components/BaseRecordManager";
+import {ADDEDITAMP_REF} from "../maintenance/AddEditAMP";
+import BaseRecordManager from "../../components/BaseRecordManager";
 import ReactorSampleIrradiationAuthorizationRecordsList from "./ReactorSampleIrradiationAuthorizationRecordsList";
 import ReactorSampleIrradiationAuthorizationMetadata from "./ReactorSampleIrradiationAuthorizationMetadata";
-import {getRecordData, getRecordMetadataValue} from "../../../utils/MetadataUtils";
+import {
+  getRecordData,
+  getRecordMetadataValue
+} from "../../utils/MetadataUtils";
 import {withTheme} from "@mui/styles";
 import dayjs from 'dayjs';
 
@@ -139,6 +129,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
             <ReactorSampleIrradiationAuthorizationMetadata
               ref={this.metadataRef}
               properties={this.props.properties}
+              user={this.props.user}
               onChange={this.onRecordMetadataChanged}
               send={this.props.send}
             />
@@ -209,7 +200,8 @@ AddEditReactorSampleIrradiationAuthorization.propTypes = {
   ref: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
   onSelection: PropTypes.func.isRequired,
-  properties: PropTypes.func.isRequired,
+  properties: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
 }
 

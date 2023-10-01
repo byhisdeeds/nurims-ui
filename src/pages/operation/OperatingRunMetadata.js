@@ -3,16 +3,16 @@ import {withTheme} from "@mui/styles";
 import {
   getRecordMetadataValue,
   formatISODateString,
-} from "../../../utils/MetadataUtils";
+} from "../../utils/MetadataUtils";
 import {
   NURIMS_OPERATION_DATA_STATS,
   NURIMS_TITLE
-} from "../../../utils/constants";
+} from "../../utils/constants";
 import PropTypes from "prop-types";
 import {
   ConsoleLog,
   UserDebugContext
-} from "../../../utils/UserDebugContext";
+} from "../../utils/UserDebugContext";
 import {
   Grid,
   Box,
