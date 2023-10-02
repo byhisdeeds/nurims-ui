@@ -278,7 +278,7 @@ class DosimetryMeasurement extends BaseRecordManager {
             size={"small"}color={"primary"}
             aria-label={"remove"}
           >
-            Remove SSC
+            Remove Measurement
           </Button>
           <Button
             variant={"contained"}
@@ -307,7 +307,7 @@ class DosimetryMeasurement extends BaseRecordManager {
             size={"small"}color={"primary"}
             aria-label={"add"}
           >
-            Add SSC
+            Add Measurement
           </Button>
         </Box>
         {/*<Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>*/}
