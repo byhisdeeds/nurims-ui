@@ -199,6 +199,7 @@ class PersonMetadata extends Component {
             required
             id="name"
             label="Fullname"
+            style={{minWidth: 400}}
             value={person.hasOwnProperty(NURIMS_TITLE) ? person[NURIMS_TITLE] : ""}
             onChange={this.handleChange}
           />
@@ -218,17 +219,7 @@ class PersonMetadata extends Component {
             disabled={disabled}
             tooltip={getGlossaryValue(this.glossary, NURIMS_ENTITY_DATE_OF_BIRTH, "")}
           />
-          {/*<LocalizationProvider dateAdapter={AdapterDateFns}>*/}
-          {/*  <DatePicker*/}
-          {/*    label="Date Of Birth"*/}
-          {/*    inputFormat={"yyyy-MM-dd"}*/}
-          {/*    // value={getDateFromDateString(getRecordMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), null)}*/}
-          {/*    value={dateFromDateString(getRecordMetadataValue(person, NURIMS_ENTITY_DATE_OF_BIRTH, "1970-01-01"), "1970-01-01")}*/}
-          {/*    onChange={this.handleDobChange}*/}
-          {/*    renderInput={(params) => <TextField {...params} />}*/}
-          {/*  />*/}
-          {/*</LocalizationProvider>*/}
-          <FormControl sx={{m: 1, minWidth: 250}}>
+          <FormControl sx={{m: 1, minWidth: 180}}>
             <InputLabel id="sex">Sex</InputLabel>
             <Select
               labelId="sex"
@@ -241,7 +232,7 @@ class PersonMetadata extends Component {
               <MenuItem value={"f"}>Female</MenuItem>
             </Select>
           </FormControl>
-          <FormControl sx={{m: 1, minWidth: 250}}>
+          <FormControl sx={{m: 1, minWidth: 450}}>
             <InputLabel id="roles">Assigned Roles</InputLabel>
             <Select
               labelId="roles"
@@ -264,6 +255,7 @@ class PersonMetadata extends Component {
           <TextField
             id="contact"
             label="Contact"
+            style={{minWidth: 400}}
             multiline
             maxRows={4}
             minRows={4}
@@ -273,6 +265,7 @@ class PersonMetadata extends Component {
           <TextField
             id="work-details"
             label="Work Details"
+            style={{minWidth: 400}}
             multiline
             maxRows={4}
             minRows={4}
@@ -282,6 +275,7 @@ class PersonMetadata extends Component {
           <TextField
             id="dose-provider-id"
             label="Dose Provider ID"
+            style={{minWidth: 150}}
             multiline
             maxRows={2}
             minRows={2}

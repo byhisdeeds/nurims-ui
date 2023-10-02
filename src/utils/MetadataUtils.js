@@ -431,7 +431,7 @@ export function new_record(item_id, title, withdrawn, createdby, fullname) {
     "nurims.withdrawn": (withdrawn) ? withdrawn : 0,
     "metadata": [
       {"nurims.createdby": (createdby) ? (fullname) ? `${fullname} (${createdby})` : createdby : ""},
-      {"nurims.creationdate": dayjs.toISOString()}
+      {"nurims.creationdate": dayjs().toISOString()}
     ]
   };
 }
