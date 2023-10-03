@@ -359,8 +359,6 @@ class StorageMetadata extends Component {
                   >
                     {<ImageIcon sx={{width: 256, height: 256}}/>}
                   </Avatar>
-                  {/*{storageImage.file === "" && <ImageIcon sx={{width: 256, height: 256}}/>}*/}
-                  {/*{storageImage.file !== "" && <img src={storageImage.url} alt={"no-image"} style={{height: 256, width: "auto"}}/>}*/}
                 </label>
               </Grid>
             </Grid>
