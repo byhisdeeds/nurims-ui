@@ -18,13 +18,12 @@ import {
   MapContainer,
   ImageOverlay,
 } from 'react-leaflet';
-import L from 'leaflet';
 import defaultMarkerIcon from 'leaflet/dist/images/marker-icon.png';
 import MouseCoordinates from "../../components/MouseCoordinates";
 import LocationFinder from "../../components/LocationFinder";
 import "leaflet/dist/leaflet.css";
 import {
-  BlobObject,
+  BlobObject, getMarkerImageUrl,
   getRecordMetadataValue,
   markerBounds,
   setMetadataValue,
@@ -48,7 +47,7 @@ import {PhotoCamera} from "@mui/icons-material";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import PropTypes from "prop-types";
-import {deepOrange, indigo, grey} from "@mui/material/colors";
+import {grey} from "@mui/material/colors";
 
 export const STORAGEMETADATA_REF = "StorageMetadata";
 
@@ -213,16 +212,9 @@ class StorageMetadata extends Component {
     const storageImage = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, BLANK_IMAGE_OBJECT);
     const storageMapImage = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, BLANK_IMAGE_OBJECT);
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "storage", storage, "storageImage", storageImage);
+      ConsoleLog(this.Module, "render", "storage", storage, "storageImage", storageImage,
+        "storageLocation", storageLocation);
     }
-    // const storageLocationMarker = storageLocation.marker.split("#");
-    // const storageMarkerIcon = L.icon({
-    //   iconUrl: storageLocationMarker[0],
-    //   iconSize: [storageLocationMarker[1], storageLocationMarker[1]],
-    //   iconAnchor: [storageLocationMarker[2], storageLocationMarker[3]],
-    // });
-    // console.log("MARKER-BOUNDS", markerBounds(this.markerBounds, storageLocation))
-
     return (
       <Box
         component="form"
@@ -413,18 +405,11 @@ class StorageMetadata extends Component {
                       <MouseCoordinates />
                       <LocationFinder onClick={this.onMapClick}/>
                     </div>
-                    {/*<MapConsumer>*/}
-                    {/*  {(map) => {*/}
-                    {/*    console.log('map center:', map.getCenter())*/}
-                    {/*    return null*/}
-                    {/*  }}*/}
-                    {/*</MapConsumer>*/}
-                    {/*<Marker position={[storageLocation.northing, storageLocation.easting]} icon={storageMarkerIcon}/>*/}
                     <ImageOverlay
                       ref={this.markerRef}
-                      // bounds={markerBounds(storageLocation.northing, storageLocation.easting)}
                       bounds={marker_bounds}
-                      url={defaultMarkerIcon}
+                      url={getMarkerImageUrl(storageLocation, this.props.locationMarkerUrlPrefix)}
+                      opacity={this.props.locationIconOpacity}
                     />
                   </MapContainer>
                 </Box>
@@ -441,11 +426,19 @@ StorageMetadata.propTypes = {
   ref: PropTypes.element.isRequired,
   properties: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
+  locationMapInitialZoom: PropTypes.number,
+  locationMapMaxZoom: PropTypes.number,
+  locationIconOpacity: PropTypes.number,
+  locationMarkerUrlPrefix: PropTypes.string,
 }
 
 StorageMetadata.defaultProps = {
   onChange: (msg) => {
   },
+  locationMapInitialZoom: 9,
+  locationMapMaxZoom: 18,
+  locationIconOpacity: 0.7,
+  locationMarkerUrlPrefix: "nurims/",
 };
 
 export default StorageMetadata;

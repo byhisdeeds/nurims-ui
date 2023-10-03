@@ -382,6 +382,10 @@ export function markerBounds(location) {
     [[-fac, -fac], [fac, fac]];
 }
 
+export function getMarkerImageUrl(location, prefix) {
+  return location.hasOwnProperty("marker") ? (prefix || "") + location.marker.split("#")[0] : "";
+}
+
 export function appendMetadataChangedField(obj, field) {
   for (const f of obj) {
     if (f === field) {
