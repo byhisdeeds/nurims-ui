@@ -9,7 +9,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import {
   CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_MANUFACTURER_RECORDS, CMD_GET_MATERIAL_RECORDS, CMD_GET_STORAGE_LOCATION_RECORDS,
+  CMD_GET_MANUFACTURER_RECORDS, CMD_GET_MATERIAL_RECORDS, CMD_GET_OWNER_RECORDS, CMD_GET_STORAGE_LOCATION_RECORDS,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -42,6 +42,10 @@ class Material extends BaseRecordManager {
       module: this.Module,
     });
     this.props.send({
+      cmd: CMD_GET_OWNER_RECORDS,
+      module: this.Module,
+    });
+    this.props.send({
       cmd: CMD_GET_STORAGE_LOCATION_RECORDS,
       module: this.Module,
     });
@@ -60,6 +64,7 @@ class Material extends BaseRecordManager {
     super.ws_message(message, [
       { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" },
       { cmd: CMD_GET_MANUFACTURER_RECORDS, func: "setManufacturers", params: "manufacturer" },
+      { cmd: CMD_GET_OWNER_RECORDS, func: "setOwners", params: "owner" },
       { cmd: CMD_GET_STORAGE_LOCATION_RECORDS, func: "setStorageLocations", params: "storage_location" },
     ]);
   }

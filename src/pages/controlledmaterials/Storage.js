@@ -75,6 +75,7 @@ class Storage extends BaseRecordManager {
               title={"Storage Locations"}
               onSelection={this.onRecordSelection}
               properties={this.props.properties}
+              includeArchived={true}
             />
           </Grid>
           <Grid item xs={7}>

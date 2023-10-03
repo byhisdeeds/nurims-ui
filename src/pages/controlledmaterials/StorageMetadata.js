@@ -10,7 +10,9 @@ import {
   InputLabel,
   Select,
   Switch,
-  MenuItem
+  MenuItem,
+  Avatar,
+  IconButton
 } from "@mui/material";
 import {
   MapContainer,
@@ -23,7 +25,8 @@ import LocationFinder from "../../components/LocationFinder";
 import "leaflet/dist/leaflet.css";
 import {
   BlobObject,
-  getRecordMetadataValue, markerBounds,
+  getRecordMetadataValue,
+  markerBounds,
   setMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
@@ -40,15 +43,20 @@ import {
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
-import Avatar from "@mui/material/Avatar";
 import ImageIcon from '@mui/icons-material/Image';
-import IconButton from "@mui/material/IconButton";
 import {PhotoCamera} from "@mui/icons-material";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import PropTypes from "prop-types";
+import {deepOrange, indigo, grey} from "@mui/material/colors";
+
+export const STORAGEMETADATA_REF = "StorageMetadata";
 
 const DEFAULT_STORAGE_LOCATION = {easting: 0, northing: 0, marker: ""}
 
 class StorageMetadata extends Component {
+  static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -57,6 +65,7 @@ class StorageMetadata extends Component {
       mapclick: false,
       marker_bounds: markerBounds(),
     };
+    this.Module = STORAGEMETADATA_REF;
     this.glossary = {};
     this.mapRef = React.createRef();
     this.markerRef = React.createRef();
@@ -148,7 +157,9 @@ class StorageMetadata extends Component {
 
   handleStorageImageUpload = (e) => {
     const selectedFile = e.target.files[0];
-    // console.log("file uploaded", selectedFile)
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "handleStorageImageUpload", "selectedFile", selectedFile);
+    }
     const that = this;
     const fileReader = new FileReader();
     fileReader.onerror = function () {
@@ -162,7 +173,7 @@ class StorageMetadata extends Component {
       storage["changed"] = true;
       setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, BlobObject(selectedFile.name, event.target.result));
       // setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, event.target.result);
-      that.forceUpdate();
+      that.setState({ storage: storage });
       // signal to parent that metadata has changed
       that.props.onChange(true);
     };
@@ -196,14 +207,14 @@ class StorageMetadata extends Component {
 
   render() {
     const {storage, properties, marker_bounds} = this.state;
-    console.log("StorageMetadata.RENDER - storage", storage)
-    // console.log("StorageMetadata.RENDER - properties", properties)
-    const storageLocation = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION, {easting: 0,
-                                                                                                    northing: 0,
-                                                                                                    marker: defaultMarkerIcon});
+    const storageLocation = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION,
+      {easting: 0, northing: 0, marker: defaultMarkerIcon});
     const markers = getPropertyValue(properties, NURIMS_MATERIAL_STORAGE_LOCATION_MARKERS, "").split('|');
     const storageImage = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_IMAGE, BLANK_IMAGE_OBJECT);
     const storageMapImage = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, BLANK_IMAGE_OBJECT);
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "render", "storage", storage, "storageImage", storageImage);
+    }
     // const storageLocationMarker = storageLocation.marker.split("#");
     // const storageMarkerIcon = L.icon({
     //   iconUrl: storageLocationMarker[0],
@@ -341,9 +352,15 @@ class StorageMetadata extends Component {
                       <PhotoCamera />
                     </IconButton>
                   </HtmlTooltip>
-                  <Avatar variant={"square"} sx={{ width: 256, height: 256 }} src={storageImage.url}>
-                    {storageImage.file === "" && <ImageIcon/>}
+                  <Avatar
+                    variant={"square"}
+                    sx={{ height: 256, width: "fit-content", bgcolor: grey[400] }}
+                    src={storageImage.url}
+                  >
+                    {<ImageIcon sx={{width: 256, height: 256}}/>}
                   </Avatar>
+                  {/*{storageImage.file === "" && <ImageIcon sx={{width: 256, height: 256}}/>}*/}
+                  {/*{storageImage.file !== "" && <img src={storageImage.url} alt={"no-image"} style={{height: 256, width: "auto"}}/>}*/}
                 </label>
               </Grid>
             </Grid>
@@ -420,6 +437,12 @@ class StorageMetadata extends Component {
       </Box>
     );
   }
+}
+
+StorageMetadata.propTypes = {
+  ref: PropTypes.element.isRequired,
+  properties: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 StorageMetadata.defaultProps = {

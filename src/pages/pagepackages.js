@@ -31,6 +31,7 @@ import {
 import {
   GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF
 } from "./operation/GenerateReactorSampleIrradiationAuthorizationPdf";
+import {OWNER_REF} from "./controlledmaterials/Owner";
 
 const Constants = require("../utils/constants");
 
@@ -43,6 +44,7 @@ const MonitorDosimetryMeasurement = lazy(() => import('./radiationprotection/Mon
 const Manufacturer = lazy(() => import('./controlledmaterials/Manufacturer'));
 const Storage = lazy(() => import('./controlledmaterials/Storage'));
 const Material = lazy(() => import('./controlledmaterials/Material'));
+const Owner = lazy(() => import('./controlledmaterials/Owner'));
 const ViewMaterialsList = lazy(() => import('./controlledmaterials/ViewMaterialsList'));
 const GenerateMaterialSurveillanceSheet = lazy(() => import('./controlledmaterials/GenerateMaterialSurveillanceSheet'));
 const GenerateSSCMaintenanceReport = lazy(() => import('./maintenance/GenerateSSCMaintenanceReport'));
@@ -185,6 +187,16 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
   else if (actionid === Constants.CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET) {
     return (<GenerateMaterialSurveillanceSheet
       ref={crefs[GENERATEMATERIALSURVEILLANCESHEET_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.CM_UPDATE_MATERIAL_OWNER) {
+    return (<Owner
+      ref={crefs[OWNER_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}

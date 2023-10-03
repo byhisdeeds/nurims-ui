@@ -44,9 +44,9 @@ export const MenuData = [
           },
           {
             name: '   - Owner',
-            tooltip: 'Human resource actions',
+            tooltip: 'Register and update controlled material owner details',
             link: 'cm.update.material.owner',
-            title: '',
+            title: 'Register/Update Controlled Material Owner',
             authmodlevel: 'basic',
           },
           {

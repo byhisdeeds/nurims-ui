@@ -34,7 +34,8 @@ import {
   HumanResourcePackages,
   ControlledMaterialPackages,
   RadiationProtectionPackages,
-  IcensPackages, SupportPackages,
+  IcensPackages,
+  SupportPackages,
   RasaPackages
 } from "./pages/pagepackages";
 import {MONITORDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/MonitorDosimetryMeasurement"
@@ -43,6 +44,7 @@ import {PERSONNELDOSIMETRYREPORT_REF} from "./pages/radiationprotection/Personne
 import {MANUFACTURER_REF} from "./pages/controlledmaterials/Manufacturer"
 import {MATERIAL_REF} from "./pages/controlledmaterials/Material"
 import {STORAGE_REF} from "./pages/controlledmaterials/Storage"
+import {OWNER_REF} from "./pages/controlledmaterials/Owner"
 import {ADDEDITPERSONNEL_REF} from "./pages/personnel/AddEditPersonnel"
 import {VIEWPERSONNELRECORDS_REF} from "./pages/personnel/ViewPersonnelRecords"
 import {ADDEDITSSC_REF} from "./pages/maintenance/AddEditSSC"
@@ -135,6 +137,7 @@ class App extends React.Component {
     this.crefs[PERSONNELDOSIMETRYMEASUREMENT_REF] = React.createRef();
     this.crefs[PERSONNELDOSIMETRYREPORT_REF] = React.createRef();
     this.crefs[MANUFACTURER_REF] = React.createRef();
+    this.crefs[OWNER_REF] = React.createRef();
     this.crefs[MATERIAL_REF] = React.createRef();
     this.crefs[STORAGE_REF] = React.createRef();
     this.crefs[ADDEDITPERSONNEL_REF] = React.createRef();
@@ -335,7 +338,7 @@ class App extends React.Component {
 
   render() {
     const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active, log_window_visible} = this.state;
-    console.log("App.render, log_window_visible", log_window_visible)
+    console.log("App.render, actionid", actionid)
     return (
       <UserDebugContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
@@ -410,9 +413,6 @@ class App extends React.Component {
                   {HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                  <Typography paragraph>
-                    {actionid}
-                  </Typography>
                   <LogWindow
                     ref={this.logRef}
                     onClose={this.closeLogWindow}

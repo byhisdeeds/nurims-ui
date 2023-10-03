@@ -3,6 +3,7 @@ import {
   CMD_DELETE_MANUFACTURER_RECORD,
   CMD_DELETE_MATERIAL_RECORD,
   CMD_DELETE_MONITOR_RECORD,
+  CMD_DELETE_OWNER_RECORD,
   CMD_DELETE_PERSONNEL_RECORD,
   CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
   CMD_DELETE_SSC_RECORD,
@@ -10,6 +11,7 @@ import {
   CMD_GET_MANUFACTURER_RECORDS,
   CMD_GET_MATERIAL_RECORDS,
   CMD_GET_MONITOR_RECORDS,
+  CMD_GET_OWNER_RECORDS,
   CMD_GET_PERSONNEL_RECORDS,
   CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS,
   CMD_GET_SSC_RECORDS,
@@ -17,6 +19,7 @@ import {
   CMD_UPDATE_MANUFACTURER_RECORD,
   CMD_UPDATE_MATERIAL_RECORD,
   CMD_UPDATE_MONITOR_RECORD,
+  CMD_UPDATE_OWNER_RECORD,
   CMD_UPDATE_PERSONNEL_RECORD,
   CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
   CMD_UPDATE_SSC_RECORD,
@@ -27,7 +30,7 @@ import {
   METADATA,
   MONITOR_TOPIC,
   NURIMS_TITLE,
-  NURIMS_WITHDRAWN,
+  NURIMS_WITHDRAWN, OWNER_TOPIC,
   PERSONNEL_TOPIC,
   REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
   SSC_TOPIC,
@@ -88,6 +91,10 @@ class BaseRecordManager extends Component {
       case CMD_UPDATE_MANUFACTURER_RECORD:
       case CMD_DELETE_MANUFACTURER_RECORD:
         return MANUFACTURER_TOPIC;
+      case CMD_GET_OWNER_RECORDS:
+      case CMD_UPDATE_OWNER_RECORD:
+      case CMD_DELETE_OWNER_RECORD:
+        return OWNER_TOPIC;
       case CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS:
       case CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD:
       case CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD:
@@ -122,6 +129,14 @@ class BaseRecordManager extends Component {
         return CMD_GET_MANUFACTURER_RECORDS;
       } else if (mode === "delete") {
         return CMD_DELETE_MANUFACTURER_RECORD;
+      }
+    } else if (topic === OWNER_TOPIC) {
+      if (mode === "update") {
+        return CMD_UPDATE_OWNER_RECORD;
+      } else if (mode === "get") {
+        return CMD_GET_OWNER_RECORDS;
+      } else if (mode === "delete") {
+        return CMD_DELETE_OWNER_RECORD;
       }
     } else if (topic === STORAGE_LOCATION_TOPIC) {
       if (mode === "update") {
@@ -343,11 +358,12 @@ class BaseRecordManager extends Component {
         }
         if (this.isCommand(message, [
           CMD_GET_MONITOR_RECORDS, CMD_GET_PERSONNEL_RECORDS, CMD_GET_SSC_RECORDS, CMD_GET_STORAGE_LOCATION_RECORDS,
-          CMD_GET_MATERIAL_RECORDS, CMD_GET_MANUFACTURER_RECORDS,
+          CMD_GET_MATERIAL_RECORDS, CMD_GET_MANUFACTURER_RECORDS, CMD_GET_OWNER_RECORDS,
           CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS])) {
           // Branch if GET_XXXXX_RECORDS request included a request for metadata
           const selection = this.state.selection;
           if (Object.keys(selection).length === 0) {
+            console.log("#############################", this.listRef.current)
             if (this.listRef.current) {
               // this.listRef.current.setRecords(response[this.recordTopic], false);
               if (message.hasOwnProperty("append.records")) {
@@ -356,6 +372,7 @@ class BaseRecordManager extends Component {
                 this.listRef.current.setRecords(response[this.cmdRecordTopic(message.cmd)]);
               }
             }
+            console.log("#############################", this.metadataRef.current)
             if (this.metadataRef.current) {
               this.metadataRef.current.setRecordMetadata(selection);
             }
@@ -375,7 +392,7 @@ class BaseRecordManager extends Component {
           }
         } else if (this.isCommand(message, [
           CMD_UPDATE_MONITOR_RECORD, CMD_UPDATE_PERSONNEL_RECORD, CMD_UPDATE_SSC_RECORD, CMD_UPDATE_STORAGE_LOCATION_RECORD,
-          CMD_UPDATE_MATERIAL_RECORD, CMD_UPDATE_MANUFACTURER_RECORD,
+          CMD_UPDATE_MATERIAL_RECORD, CMD_UPDATE_MANUFACTURER_RECORD, CMD_UPDATE_OWNER_RECORD,
           CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD])) {
           enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
           if (this.listRef.current) {
@@ -384,7 +401,7 @@ class BaseRecordManager extends Component {
           }
         } else if (this.isCommand(message, [
           CMD_DELETE_MONITOR_RECORD, CMD_DELETE_PERSONNEL_RECORD, CMD_DELETE_SSC_RECORD,
-          CMD_DELETE_STORAGE_LOCATION_RECORD, CMD_DELETE_MATERIAL_RECORD,
+          CMD_DELETE_STORAGE_LOCATION_RECORD, CMD_DELETE_MATERIAL_RECORD, CMD_DELETE_OWNER_RECORD,
           CMD_DELETE_MANUFACTURER_RECORD, CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD])) {
           enqueueSuccessSnackbar(`Record (id: ${response.item_id}) deleted successfully`)
           if (this.listRef.current) {

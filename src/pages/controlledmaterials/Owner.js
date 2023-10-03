@@ -8,37 +8,36 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import {
-  CMD_GET_MANUFACTURER_RECORDS,
-} from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
 } from "../../components/UtilityDialogs";
-import ManufacturerList from "./ManufacturerList";
-import ManufacturerMetadata from "./ManufacturerMetadata";
+import OwnerList from "./OwnerList";
+import OwnerMetadata from "./OwnerMetadata";
 import {TitleComponent} from "../../components/CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import PropTypes from "prop-types";
+import {CMD_GET_GLOSSARY_TERMS, CMD_GET_OWNER_RECORDS} from "../../utils/constants";
 
-export const MANUFACTURER_REF = "Manufacturer";
+export const OWNER_REF = "Owner";
 
-class Manufacturer extends BaseRecordManager {
+class Owner extends BaseRecordManager {
   static contextType = UserDebugContext;
 
   constructor(props) {
     super(props);
-    this.Module = MANUFACTURER_REF;
-    this.recordTopic = "manufacturer";
+    this.Module = OWNER_REF;
+    this.recordTopic = "owner";
   }
 
   componentDidMount() {
-    this.getManufacturerRecords();
+    this.getOwnerRecords();
   }
 
-  getManufacturerRecords = () => {
+  getOwnerRecords = () => {
     this.props.send({
-      cmd: CMD_GET_MANUFACTURER_RECORDS,
+      cmd: CMD_GET_OWNER_RECORDS,
       "include.withdrawn": "false",
       "include.metadata": "false",
       module: this.Module,
@@ -53,7 +52,6 @@ class Manufacturer extends BaseRecordManager {
 
   render() {
     const {metadata_changed, confirm_remove, selection} = this.state;
-    // console.log("render - RECORD_TYPE", this.recordTopic);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "recordTopic", this.recordTopic, "selection", selection);
     }
@@ -69,15 +67,16 @@ class Manufacturer extends BaseRecordManager {
             <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={5}>
-            <ManufacturerList
+            <OwnerList
               ref={this.listRef}
-              title={"Manufacturers"}
+              title={"Owners"}
               onSelection={this.onRecordSelection}
               properties={this.props.properties}
+              includeArchived={true}
             />
           </Grid>
           <Grid item xs={7}>
-            <ManufacturerMetadata
+            <OwnerMetadata
               ref={this.metadataRef}
               onChange={this.onRecordMetadataChanged}
               properties={this.props.properties}
@@ -89,7 +88,7 @@ class Manufacturer extends BaseRecordManager {
             // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
                disabled={!this.isSysadminButtonAccessible(selection)}>
             <PersonRemoveIcon sx={{mr: 1}}/>
-            Remove Monitor
+            Remove Owner
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
                disabled={!metadata_changed}>
@@ -98,7 +97,7 @@ class Manufacturer extends BaseRecordManager {
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>
             <AddIcon sx={{mr: 1}}/>
-            Add Monitor
+            Add Owner
           </Fab>
         </Box>
       </React.Fragment>
@@ -106,10 +105,16 @@ class Manufacturer extends BaseRecordManager {
   }
 }
 
-Manufacturer.defaultProps = {
+Owner.propTypes = {
+  send: PropTypes.func.isRequired,
+  properties: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+}
+
+Owner.defaultProps = {
   send: (msg) => {
   },
   user: {},
 };
 
-export default Manufacturer;
+export default Owner;
