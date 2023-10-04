@@ -205,7 +205,7 @@ class App extends React.Component {
       if (this.debug) {
         ConsoleLog("App", "onmessage", data);
       }
-      if (data.hasOwnProperty("log_message")) {
+      if (data.hasOwnProperty("log_message") && data.log_message === "true") {
         this.appendLog(data.response);
         return;
       }
