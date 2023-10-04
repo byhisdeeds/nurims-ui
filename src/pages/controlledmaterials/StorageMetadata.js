@@ -48,6 +48,7 @@ import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import PropTypes from "prop-types";
 import {grey} from "@mui/material/colors";
+import {BLANK_MAP_IMAGE} from "../../components/blank_map_image.png"
 
 export const STORAGEMETADATA_REF = "StorageMetadata";
 
@@ -223,7 +224,7 @@ class StorageMetadata extends Component {
     const storageMapImage = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, BLANK_IMAGE_OBJECT);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "storage", storage, "storageImage", storageImage,
-        "storageLocation", storageLocation);
+        "storageLocation", storageLocation, "storageImage", storageImage, "storageMapImage", storageMapImage);
     }
     return (
       <Box
@@ -425,7 +426,8 @@ class StorageMetadata extends Component {
                     style={{width:'100%', height: 400}}
                   >
                     <ImageOverlay
-                      url={storageMapImage.file === "" ? require("../../components/blank_map_image.png") : storageMapImage.url}
+                      // url={storageMapImage.file === "" ? require("../../components/blank_map_image.png") : storageMapImage.url}
+                      url={storageMapImage.file === "" ? BLANK_MAP_IMAGE : storageMapImage.url}
                       bounds={[[0, 0], [1, 1]]}
                     />
                     <div className="leaflet-bottom leaflet-left">
