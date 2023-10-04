@@ -48,7 +48,7 @@ import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import PropTypes from "prop-types";
 import {grey} from "@mui/material/colors";
-import {BLANK_MAP_IMAGE} from "../../components/blank_map_image.png"
+import BLANK_MAP_IMAGE from "../../components/blank_map_image.png"
 
 export const STORAGEMETADATA_REF = "StorageMetadata";
 
