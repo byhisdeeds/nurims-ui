@@ -43,7 +43,7 @@ import {
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import ImageIcon from '@mui/icons-material/Image';
-import {PhotoCamera} from "@mui/icons-material";
+import {PhotoCamera, NoPhotography} from "@mui/icons-material";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import PropTypes from "prop-types";
@@ -198,6 +198,16 @@ class StorageMetadata extends Component {
       // signal to parent that metadata has changed
       that.props.onChange(true);
     };
+  }
+
+  handleStorageMapImageDeletion = (e) => {
+    console.log("DELETION OF STORAGE MAP")
+    const storage = this.state.storage;
+    storage["changed"] = true;
+    setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, BLANK_IMAGE_OBJECT);
+    this.forceUpdate();
+    // signal to parent that metadata has changed
+    this.props.onChange(true);
   }
 
   enableMapClick = (e) => {
@@ -377,6 +387,23 @@ class StorageMetadata extends Component {
                     >
                       <IconButton color="primary" aria-label="upload storage location map" component="span">
                         <PhotoCamera />
+                      </IconButton>
+                    </HtmlTooltip>
+                  </label>
+                  <label htmlFor="delete-storage-map-image">
+                    <HtmlTooltip
+                      placement={'top-start'}
+                      title={
+                        <TooltipText htmlText={"Click Icon to delete storage location map."} />
+                      }
+                    >
+                      <IconButton
+                        color="primary"
+                        aria-label="delete storage location map"
+                        component="span"
+                        onClick={this.handleStorageMapImageDeletion}
+                      >
+                        <NoPhotography />
                       </IconButton>
                     </HtmlTooltip>
                   </label>
