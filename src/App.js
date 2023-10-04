@@ -207,6 +207,7 @@ class App extends React.Component {
       }
       if (data.hasOwnProperty("log_message")) {
         this.appendLog(data.response);
+        return;
       }
       if (data.cmd === CMD_PING) {
         this.send_pong();

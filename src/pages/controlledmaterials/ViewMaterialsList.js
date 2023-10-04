@@ -16,7 +16,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import IconButton from "@mui/material/IconButton";
 import {withTheme} from "@mui/styles";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {
+  isCommandResponse,
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
 import {TitleComponent} from "../../components/CommonComponents";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";

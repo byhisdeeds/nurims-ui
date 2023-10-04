@@ -131,9 +131,8 @@ BackgroundTasks.propTypes = {
 export function NetworkConnection(props) {
   const theme = useTheme();
   return (
-    <Tooltip title="Network connection to system server">
+    <Tooltip title={props.ready ? "Online" : "Offline"}>
       <NetworkCheck sx={{
-        // color: props.ready ? '#4CAF50' : '#F44336',
         color: props.ready ? theme.palette.success.main : theme.palette.error.main,
         paddingLeft: '10px',
         marginLeft: '10px',
