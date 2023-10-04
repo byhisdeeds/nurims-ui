@@ -220,6 +220,7 @@ class ManufacturerMetadata extends Component {
             required
             id="name"
             label="Name"
+            style={{minWidth: 400}}
             value={manufacturer.hasOwnProperty(NURIMS_TITLE) ? manufacturer[NURIMS_TITLE] : ""}
             onChange={this.handleChange}
           />
@@ -227,6 +228,7 @@ class ManufacturerMetadata extends Component {
             id="address"
             label="Address"
             multiline
+            style={{minWidth: 400}}
             maxRows={5}
             minRows={5}
             value={getRecordMetadataValue(manufacturer, NURIMS_ENTITY_ADDRESS, "")}
@@ -236,6 +238,7 @@ class ManufacturerMetadata extends Component {
             id="contact"
             label="Contact"
             multiline
+            style={{minWidth: 400}}
             maxRows={5}
             minRows={5}
             value={getRecordMetadataValue(manufacturer, NURIMS_ENTITY_CONTACT, "")}

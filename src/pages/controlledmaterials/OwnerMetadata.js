@@ -209,6 +209,7 @@ class OwnerMetadata extends Component {
             required
             id="name"
             label="Name"
+            style={{minWidth: 400}}
             value={owner.hasOwnProperty(NURIMS_TITLE) ? owner[NURIMS_TITLE] : ""}
             onChange={this.handleChange}
           />
@@ -216,6 +217,7 @@ class OwnerMetadata extends Component {
             id="address"
             label="Address"
             multiline
+            style={{minWidth: 400}}
             maxRows={5}
             minRows={5}
             value={getRecordMetadataValue(owner, NURIMS_ENTITY_ADDRESS, "")}
@@ -225,6 +227,7 @@ class OwnerMetadata extends Component {
             id="contact"
             label="Contact"
             multiline
+            style={{minWidth: 400}}
             maxRows={5}
             minRows={5}
             value={getRecordMetadataValue(owner, NURIMS_ENTITY_CONTACT, "")}
