@@ -79,6 +79,7 @@ import {
   NetworkConnection
 } from "./components/CommonComponents";
 import {DeviceUUID} from 'device-uuid';
+import {enqueueWarningSnackbar} from "./utils/SnackbarVariants";
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
@@ -280,6 +281,8 @@ class App extends React.Component {
           return {busy: pstate.busy + 1}
         });
       }
+    } else {
+      enqueueWarningSnackbar("NURIMS server connection broken!")
     }
   };
 
