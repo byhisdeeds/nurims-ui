@@ -133,6 +133,7 @@ module.exports = Object.freeze({
   NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY: 'nurims.activitysurveillancefrequency',
   NURIMS_COVERAGE_LOCATION: "nurims.coverage.location",
 
+  NURIMS_ENTITY_TYPE: 'nurims.entity.type',
   NURIMS_ENTITY_ASSIGNED_ROLE: 'nurims.entity.assignedrole',
   NURIMS_ENTITY_DATE_OF_BIRTH: 'nurims.entity.dob',
   NURIMS_ENTITY_NATIONAL_ID: 'nurims.entity.nid',
@@ -150,6 +151,7 @@ module.exports = Object.freeze({
   NURIMS_DOSIMETRY_BATCH_ID: "nurims.dosimetry.batchid",
   NURIMS_DOSIMETRY_ID: "nurims.dosimetry.id",
   NURIMS_DOSIMETRY_TYPE: "nurims.dosimetry.type",
+  NURIMS_DOSIMETRY_DEVICE_TYPE: "nurims.dosimetry.devicetype",
   NURIMS_DOSIMETRY_TIMESTAMP: "nurims.dosimetry.timestamp",
   NURIMS_DOSIMETRY_UNITS: "nurims.dosimetry.units",
   NURIMS_DOSIMETRY_MONITOR_PERIOD: "nurims.dosimetry.monitorperiod",

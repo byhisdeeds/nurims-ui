@@ -518,30 +518,44 @@ DatePickerWithTooltip.propTypes = {
   width: PropTypes.string,
 }
 
-export function MonitorTypeSelect({value, onChange, monitorTypes}) {
+export function MonitorTypeSelect({value, onChange, monitorTypes, width}) {
   const label='Monitor Type';
   const labelId='monitor-type-select-label';
   return (
     <SelectFormControl id={labelId} label={label}>
       <Select
-        style={{width: 180}}
+        style={{width: width}}
         labelId={labelId}
         value={value}
         onChange={onChange}
         label={label}
       >
-        {monitorTypes.map(monitor => (
-          <MenuItem key={monitor.name} value={monitor}>{monitor.name}</MenuItem>
-        ))}
+        {monitorTypes.map(monitor => {
+          const t = monitor.split(',');
+          if (t.length === 1) {
+            return (
+              <MenuItem value={t[0]}>{t[0]}</MenuItem>
+            )
+          } else if (t.length === 2) {
+            return (
+              <MenuItem value={t[0]}>{t[1]}</MenuItem>
+            )
+          }
+        })}
       </Select>
     </SelectFormControl>
   );
 }
 
 MonitorTypeSelect.propTypes = {
+  width: PropTypes.string,
   value: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   monitorTypes: PropTypes.array.isRequired
+}
+
+MonitorTypeSelect.defaultProps = {
+  width: "30ch",
 }
 
 export function DateRangePicker({from, to, fromLabel, toLabel, disabled, onToChange, onFromChange, inputFormat,
