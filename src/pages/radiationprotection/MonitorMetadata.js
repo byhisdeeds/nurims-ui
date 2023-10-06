@@ -151,7 +151,7 @@ class MonitorMetadata extends Component {
             required
             id="name"
             label="Fullname"
-            style={{minWidth: 400}}
+            style={{minWidth: 600}}
             value={monitor.hasOwnProperty(NURIMS_TITLE) ? monitor[NURIMS_TITLE] : ""}
             onChange={this.handleChange}
           />
