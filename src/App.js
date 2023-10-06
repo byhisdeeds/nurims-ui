@@ -206,9 +206,11 @@ class App extends React.Component {
       if (this.debug) {
         ConsoleLog("App", "onmessage", data);
       }
-      if (data.hasOwnProperty("log_message") && data.log_message === "true") {
+      if (data.hasOwnProperty("log_message")) {
         this.appendLog(data.response);
-        return;
+        if (data.log_message === "only_logging_system") {
+          return;
+        }
       }
       if (data.cmd === CMD_PING) {
         this.send_pong();
