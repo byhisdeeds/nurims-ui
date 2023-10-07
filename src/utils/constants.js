@@ -216,6 +216,7 @@ module.exports = Object.freeze({
   NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER: "nurims.operation.data.irradiationauthorizer",
   NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES: "nurims.operation.data.irradiationsampletypes",
   NURIMS_OPERATION_DATA_IRRADIATIONDURATION: "nurims.operation.data.irradiationduration",
+  NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE: "nurims.operation.data.proposedirradiationdate",
   NURIMS_OPERATION_DATA_NEUTRONFLUX: "nurims.operation.data.neutronflux",
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDES: "nurims.operation.data.reactorwaterchemistry.nuclides",
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS: "nurims.operation.data.reactorwaterchemistry.nuclideunits",

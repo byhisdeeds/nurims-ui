@@ -32,7 +32,8 @@ import PdfViewer from "../../components/PdfViewer";
 import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../utils/SnackbarVariants";
 
-export const GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF = "GenerateReactorSampleIrradiationAuthorizationPdf";
+export const GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF =
+  "GenerateReactorSampleIrradiationAuthorizationPdf";
 
 class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
   static contextType = UserDebugContext;
@@ -63,7 +64,7 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
           if (response.message !== "") {
             enqueueInfoSnackbar(response.message);
           }
-          if (message.hasOwnProperty("data") ** message.data.hasOwnProperty("pdf")) {
+          if (message.hasOwnProperty("data") && message.data.hasOwnProperty("pdf")) {
             this.setState({pdf: message.data.pdf});
           }
         }

@@ -60,7 +60,7 @@ class ReactorOperationsReport extends Component {
           if (response.message !== "") {
             enqueueInfoSnackbar(response.message);
           }
-          if (message.hasOwnProperty("data") ** message.data.hasOwnProperty("pdf")) {
+          if (message.hasOwnProperty("data") && message.data.hasOwnProperty("pdf")) {
             this.setState({pdf: message.data.pdf});
           }
         }

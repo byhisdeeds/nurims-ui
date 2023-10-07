@@ -215,6 +215,7 @@ class App extends React.Component {
       if (data.cmd === CMD_PING) {
         this.send_pong();
       } else if (data.hasOwnProperty('module')) {
+        console.log("1111111111111")
         for (const [k, v] of Object.entries(this.crefs)) {
           if (k === data.module) {
             if (v.current) {
@@ -239,6 +240,7 @@ class App extends React.Component {
         this.setState({background_tasks_active: data.hasOwnProperty("tasks_active"), busy: 0});
         return;
       }
+      console.log("########", data.show_busy, this.state.busy)
       if (data.show_busy) {
         this.setState({busy: this.state.busy - 1});
       }

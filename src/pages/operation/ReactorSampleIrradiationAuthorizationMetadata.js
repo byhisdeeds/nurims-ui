@@ -15,12 +15,13 @@ import {
   NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
   NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
   NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
-  NURIMS_OPERATION_DATA_NEUTRONFLUX,
-  NURIMS_TITLE, NURIMS_WITHDRAWN
+  NURIMS_OPERATION_DATA_NEUTRONFLUX, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
+  NURIMS_TITLE,
+  NURIMS_WITHDRAWN, UNDEFINED_DATE_STRING
 } from "../../utils/constants";
 import {
   AutoCompleteComponent,
-  DateRangePicker,
+  DateRangePicker, DateSelect,
   SelectFormControlWithTooltip,
   TextFieldWithTooltip
 } from "../../components/CommonComponents";
@@ -139,6 +140,17 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     return typeof job === "object" ? job.hasOwnProperty('name') ? job.name : '' : job;
   };
 
+  handleIrradiationDateChange = (date) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "handleIrradiationDateChange", date);
+    }
+    const record = this.state.record;
+    setRecordData(record, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE, date.toISOString());
+    this.setState({record: record})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
   handleChange = (e) => {
     const id = e.target.id || e.target.name || ""
     console.log(">>>", e.target.id, e.target.name, id, e.target.value)
@@ -212,7 +224,8 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   readOnly={true}
                   tooltip={"Authorisation record identifier."}
                   padding={0}
-                />
+                  disabled={disabled}
+                  onChange={(e)=>{}}/>
               </Grid>
               <Grid item xs={12} sm={2}>
                 <TextFieldWithTooltip
@@ -268,21 +281,11 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <DateRangePicker
-                  fromLabel="Proposed Irradiation Start"
-                  toLabel="Proposed Irradiation End"
-                  from={dayjs()}
-                  to={dayjs().add(1,"month")}
-                  inputFormat={'yyyy-MM-dd'}
+                <DateSelect
+                  label={"Proposed Irradiation Date"}
+                  value={dayjs(getRecordData(record, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE, UNDEFINED_DATE_STRING))}
                   disabled={disabled}
-                  // onChange={this.handleDateRangeChange}
-                  renderInput={(startProps, endProps) => (
-                    <React.Fragment>
-                      <TextField {...startProps}/>
-                      <Box sx={{mx: 1}}> to </Box>
-                      <TextField {...endProps}/>
-                    </React.Fragment>
-                  )}
+                  onChange={this.handleIrradiationDateChange}
                 />
               </Grid>
               <Grid item xs={6}>

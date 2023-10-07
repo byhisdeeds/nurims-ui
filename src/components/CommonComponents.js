@@ -985,11 +985,7 @@ AutoCompleteComponent.propTypes = {
   freeInput: PropTypes.bool,
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-export function DateSelect({value, onChange, disabled, label}) {
+export function DateSelect({value, onChange, disabled, label, inputFormat}) {
   return (
     <Box>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
@@ -998,7 +994,7 @@ export function DateSelect({value, onChange, disabled, label}) {
             style={{width: '20ch', paddingRight: 8, marginTop: 8}} {...props} />}
           label={label}
           value={value}
-          inputFormat={'yyyy-MM-dd'}
+          inputFormat={inputFormat}
           onChange={onChange}
           disabled={disabled}
         />
@@ -1012,7 +1008,17 @@ DateSelect.propTypes = {
   value: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
+  inputFormat: PropTypes.string
 }
+
+DateSelect.defaultProps = {
+  inputFormat: "yyyy-MM-dd"
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export function AnalyticalIDAutoComplete(props) {
   return (

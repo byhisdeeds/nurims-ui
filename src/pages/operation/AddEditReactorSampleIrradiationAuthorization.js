@@ -51,7 +51,8 @@ import {
 import {withTheme} from "@mui/styles";
 import dayjs from 'dayjs';
 
-export const ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF = "AddEditReactorSampleIrradiationAuthorization";
+export const ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF =
+  "AddEditReactorSampleIrradiationAuthorization";
 
 class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   static contextType = UserDebugContext;
