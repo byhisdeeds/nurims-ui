@@ -112,6 +112,8 @@ module.exports = Object.freeze({
   CMD_SUGGEST_SUPPORT_SEARCH_TERMS: "suggest_support_search_terms",
   CMD_GET_SEARCH_TERM_CONTENT: "get_search_term_content",
 
+  CMD_GET_PROVENANCE_RECORDS: "get_provenance_records",
+
   CMD_BOT_MESSAGE_SEND: "bot_message_send",
 
   METADATA: 'metadata',

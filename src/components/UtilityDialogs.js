@@ -233,3 +233,48 @@ PdfViewerDialog.propTypes = {
   pdf: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
 }
+
+
+export const ShowProvenanceRecordsDialog = (props) => (
+  <div>
+    <Dialog
+      open={props.open}
+      onClose={props.onCancel}
+      aria-labelledby="provenance-dialog-title"
+      aria-describedby="provenance-dialog-description"
+      scroll={"paper"}
+      sx={{height: 500}}
+    >
+      <DialogTitle id="alert-dialog-title">
+        {`View provenance records for ${props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""}`}
+      </DialogTitle>
+      {/*<DialogContent>*/}
+      {/*  <DialogContentText id="alert-dialog-description">*/}
+      {/*    Are you sure you want to delete the record*/}
+      {/*    for {props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""} (*/}
+      {/*    {props.selection.hasOwnProperty(ITEM_ID) ? props.selection[ITEM_ID] : ""})?*/}
+      {/*  </DialogContentText>*/}
+      {/*</DialogContent>*/}
+      <DialogContent dividers={true}>
+        <DialogContentText
+          id="scroll-dialog-description"
+          // ref={descriptionElementRef}
+          tabIndex={-1}
+        >
+          {props.body}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onCancel}>Ok</Button>
+        {/*<Button onClick={props.onProceed} autoFocus>Yes</Button>*/}
+      </DialogActions>
+    </Dialog>
+  </div>
+)
+
+ShowProvenanceRecordsDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  selection: PropTypes.object.isRequired,
+  body: PropTypes.string.isRequired,
+  onCancel: PropTypes.func.isRequired,
+}

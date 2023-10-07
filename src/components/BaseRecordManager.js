@@ -13,6 +13,7 @@ import {
   CMD_GET_MONITOR_RECORDS,
   CMD_GET_OWNER_RECORDS,
   CMD_GET_PERSONNEL_RECORDS,
+  CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS,
   CMD_GET_SSC_RECORDS,
   CMD_GET_STORAGE_LOCATION_RECORDS,
@@ -363,7 +364,6 @@ class BaseRecordManager extends Component {
           // Branch if GET_XXXXX_RECORDS request included a request for metadata
           const selection = this.state.selection;
           if (Object.keys(selection).length === 0) {
-            console.log("#############################", this.listRef.current)
             if (this.listRef.current) {
               // this.listRef.current.setRecords(response[this.recordTopic], false);
               if (message.hasOwnProperty("append.records")) {
@@ -372,7 +372,6 @@ class BaseRecordManager extends Component {
                 this.listRef.current.setRecords(response[this.cmdRecordTopic(message.cmd)]);
               }
             }
-            console.log("#############################", this.metadataRef.current)
             if (this.metadataRef.current) {
               this.metadataRef.current.setRecordMetadata(selection);
             }

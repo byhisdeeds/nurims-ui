@@ -11,6 +11,7 @@ import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmBatchRemoveRecordDialog,
   ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
 import PersonList from "./PersonList";
 import PersonMetadata from "./PersonMetadata";
@@ -19,7 +20,9 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {TitleComponent} from "../../components/CommonComponents";
 import {
-  CMD_DELETE_PERSONNEL_RECORD, CMD_GET_GLOSSARY_TERMS,
+  CMD_DELETE_PERSONNEL_RECORD,
+  CMD_GET_GLOSSARY_TERMS,
+  CMD_GET_PROVENANCE_RECORDS,
   EMPLOYEE_RECORD_TYPE,
   ITEM_ID,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
@@ -32,6 +35,9 @@ import {
 } from "../../utils/MetadataUtils";
 import BusyIndicator from "../../components/BusyIndicator";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {isValidUserRole} from "../../utils/UserUtils";
+import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {stringify} from "uuid";
 
 export const ADDEDITPERSONNEL_REF = "AddEditPersonnel";
 
@@ -43,9 +49,18 @@ class AddEditPersonnel extends BaseRecordManager {
     this.state["busy"] = false;
     this.state["open_batch_remove"] = false;
     this.state["confirm_batch_remove"] = false;
+    this.state["show_provenance_view"] = false;
     this.state["batch_selection"] = {"nurims.title": "Personnel"};
     this.Module = ADDEDITPERSONNEL_REF;
     this.recordTopic = PERSONNEL_TOPIC;
+    this.provenanceRecords = [...new Array(50)]
+      .map(
+        () => `Cras mattis consectetur purus sit amet fermentum.
+Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
+      )
+      .join('\n');
     this.importFileRef = React.createRef();
   }
 
@@ -59,9 +74,18 @@ class AddEditPersonnel extends BaseRecordManager {
   }
 
   ws_message = (message) => {
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@")
     super.ws_message(message, [
       { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
     ]);
+    if (messageHasResponse(message)) {
+      const response = message.response;
+      if (messageStatusOk(message)) {
+        if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
+          this.setProvenanceRecords(response.provenance)
+        }
+      }
+    }
   }
 
   ctrlKeyPress = (event) => {
@@ -117,6 +141,34 @@ class AddEditPersonnel extends BaseRecordManager {
     this.setState({confirm_batch_remove: false,});
   }
 
+  setProvenanceRecords = (provenance) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "setProvenanceRecords", "setProvenanceRecords", provenance);
+    }
+    console.log("**********************************************************************************")
+    this.provenanceRecords.setLength(0)
+    for (p of provenance) {
+      this.provenanceRecords.push(JSON.stringify(p)+"\n")
+    }
+    this.forceUpdate();
+  }
+
+  showProvenanceRecordsView = () => {
+    this.props.send({
+      cmd: CMD_GET_PROVENANCE_RECORDS,
+      item_id: this.state.selection.item_id,
+      module: this.Module,
+    });
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "viewProvenanceRecords", "selection", this.state.selection);
+    }
+    this.setState({show_provenance_view: true,});
+  }
+
+  closeProvenanceRecordsView = () => {
+    this.setState({show_provenance_view: false,});
+  }
+
   handleImportPersonnel = (e) => {
     const selectedFile = e.target.files[0];
     if (this.context.debug) {
@@ -161,8 +213,12 @@ class AddEditPersonnel extends BaseRecordManager {
   }
 
   render() {
-    const {confirm_remove, selection, include_archived, confirm_batch_remove, batch_selection, busy} = this.state;
+    const {confirm_remove, selection, include_archived, confirm_batch_remove, batch_selection, busy,
+      show_provenance_view} = this.state;
+    const {user} = this.props;
     const has_changed_records = this.hasChangedRecords();
+    const isSysadmin = isValidUserRole(user, "sysadmin");
+
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "has_changed_records", has_changed_records,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection,
@@ -180,6 +236,11 @@ class AddEditPersonnel extends BaseRecordManager {
                                         selection={batch_selection}
                                         onProceed={this.proceedWithBatchRemove}
                                         onCancel={this.cancelBatchRemove}
+        />
+        <ShowProvenanceRecordsDialog open={show_provenance_view}
+                                     selection={selection}
+                                     body={this.provenanceRecords}
+                                     onCancel={this.closeProvenanceRecordsView}
         />
         <input
           ref={this.importFileRef}
@@ -219,6 +280,13 @@ class AddEditPersonnel extends BaseRecordManager {
             <PersonRemoveIcon sx={{mr: 1}}/>
             Remove Personnel
           </Fab>
+          { isSysadmin &&
+            <Fab variant="extended" size="small" color="primary" aria-label="save"
+                 onClick={this.showProvenanceRecordsView} disabled={!selection.hasOwnProperty("item_id")}>
+              <SaveIcon sx={{mr: 1}}/>
+              View Provenance Records
+            </Fab>
+          }
           <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
                onClick={this.changeRecordArchivalStatus} disabled={!this.isSelectableByRole(selection, "dataentry")}>
             {this.isRecordArchived(selection) ?
