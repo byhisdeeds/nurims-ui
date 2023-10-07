@@ -24,7 +24,7 @@ export const MenuData = [
     Icon: LockIcon,
     items: [
       {
-        name: '‣ Materials',
+        name: '○ Materials',
         tooltip: 'Controlled material resource actions',
         authmodlevel: 'basic',
         items: [
@@ -59,7 +59,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Surveillance',
+        name: '○ Surveillance',
         tooltip: 'Surveillance of controlled material resource actions',
         authmodlevel: 'basic',
         items: [
@@ -80,7 +80,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Reports',
+        name: '○ Reports',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         items: [
@@ -125,7 +125,7 @@ export const MenuData = [
     Icon: IconPeople,
     items: [
       {
-        name: '‣ Monitors',
+        name: '○ Monitors',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         items: [
@@ -146,7 +146,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Concept of Operations',
+        name: '○ Concept of Operations',
         tooltip: 'A basic concept of operations describing the response process. On the basis of the concept of operations, roles and responsibilities are assigned to each group, organization or individual involved in emergency preparedness and response.',
         authmodlevel: 'basic',
         items: [
@@ -167,7 +167,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Reports',
+        name: '○ Reports',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         items: [
@@ -202,7 +202,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Documents',
+        name: '○ Documents',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         items: [
@@ -248,7 +248,7 @@ export const MenuData = [
     authmodlevel: 'basic',
     items: [
       {
-        name: '‣ Personnel',
+        name: '○ Personnel',
         tooltip: 'Personnel action',
         authmodlevel: 'basic',
         items: [
@@ -283,7 +283,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Training',
+        name: '○ Training',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         items: [
@@ -297,7 +297,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Assessment',
+        name: '○ Assessment',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         items: [
@@ -327,7 +327,7 @@ export const MenuData = [
     authmodlevel: 'basic',
     items: [
       {
-        name: '‣ SSC\'s',
+        name: '○ SSC\'s',
         tooltip: 'Structures, systems and components.',
         authmodlevel: 'basic',
         items: [
@@ -348,7 +348,7 @@ export const MenuData = [
         ]
       },
       {
-        name: '‣ Aging Management',
+        name: '○ Aging Management',
         tooltip: 'Aging management programme (AMP) for Structures, systems and components.',
         authmodlevel: 'basic',
         items: [
@@ -369,7 +369,7 @@ export const MenuData = [
         ]
       },
       {
-        name: '‣ Corr. Maintenance',
+        name: '○ Corr. Maintenance',
         tooltip: 'Corrective maintenance issue records.',
         authmodlevel: 'basic',
         items: [
@@ -390,7 +390,7 @@ export const MenuData = [
         ]
       },
       {
-        name: '‣ Reports',
+        name: '○ Reports',
         tooltip: 'Reports.',
         authmodlevel: 'basic',
         items: [
@@ -459,7 +459,7 @@ export const MenuData = [
     Icon: IconPeople,
     items: [
       {
-        name: '‣ Monitors',
+        name: '○ Monitors',
         tooltip: 'Radiation protection resource actions',
         authmodlevel: 'basic',
         items: [
@@ -470,17 +470,10 @@ export const MenuData = [
             tooltip: 'Add/Edit radiation monitor details including area, contamination, waste, and other types of monitors.',
             authmodlevel: 'basic',
           },
-          {
-            name: '   - Edit Monitor',
-            link: 'rp.edit.area.monitor',
-            title: '',
-            tooltip: 'Edit area, contamination, waste and other types monitors',
-            authmodlevel: 'basic',
-          },
         ],
       },
       {
-        name: '‣ Dosimetry',
+        name: '○ Dosimetry',
         tooltip: 'Dosimetry resource actions',
         authmodlevel: 'basic',
         items: [
@@ -501,7 +494,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Reports',
+        name: '○ Reports',
         tooltip: 'Radiation protection resource actions',
         authmodlevel: 'basic',
         items: [
@@ -536,7 +529,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Documents',
+        name: '○ Documents',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         items: [
@@ -581,7 +574,7 @@ export const MenuData = [
     authmodlevel: 'basic',
     items: [
       {
-        name: '‣ Authorizations',
+        name: '○ Authorizations',
         tooltip: 'Authorizations for reactor utilization',
         authmodlevel: 'basic',
         items: [
@@ -602,7 +595,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Operating Data',
+        name: '○ Operating Data',
         tooltip: 'Data on the reactor operating runs',
         authmodlevel: 'basic',
         items: [
@@ -630,7 +623,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Reports',
+        name: '○ Reports',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         items: [
@@ -654,7 +647,7 @@ export const MenuData = [
     Icon: IconPeople,
     items: [
       {
-        name: '‣ Safety',
+        name: '○ Safety',
         tooltip: 'Safety resource actions',
         authmodlevel: 'basic',
         items: [
@@ -675,7 +668,7 @@ export const MenuData = [
         ],
       },
       {
-        name: '‣ Security',
+        name: '○ Security',
         tooltip: 'Security resource actions',
         authmodlevel: 'basic',
         items: [
