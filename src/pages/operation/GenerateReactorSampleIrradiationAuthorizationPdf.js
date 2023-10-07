@@ -91,7 +91,7 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "handleFromDateChange", date);
     }
-    this.setState({endDate: date});
+    this.setState({startDate: date});
   }
 
   submit = () => {
@@ -105,9 +105,9 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
   }
 
   render() {
-    const {pdf, reportType} = this.state;
+    const {pdf, reportType, startDate, endDate} = this.state;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render");
+      ConsoleLog(this.Module, "render", "startDate", startDate, "endDate", endDate);
     }
     return (
       <React.Fragment>
@@ -133,10 +133,9 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
               <DateRangePicker
                 fromLabel="Records From"
                 toLabel="Records To"
-                from={dayjs()}
-                to={dayjs().add(1, "month")}
+                from={startDate}
+                to={endDate}
                 disabled={false}
-                inputFormat={'yyyy-MM-dd'}
                 onFromChange={this.handleFromDateChange}
                 onToChange={this.handleToDateChange}
               />

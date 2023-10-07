@@ -31,22 +31,9 @@ import {
   TableSortLabel
 } from "@mui/material";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import 'dayjs/locale/en-gb';
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import "dayjs/locale/en-gb";
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
-// import ListItemIcon from "@mui/material/ListItemIcon";
-// import Checkbox from "@mui/material/Checkbox";
-// import TableContainer from "@mui/material/TableContainer";
-// import Table from "@mui/material/Table";
-// import TableBody from "@mui/material/TableBody";
-// import TableRow from "@mui/material/TableRow";
-// import TableCell from "@mui/material/TableCell";
-// import TablePagination from "@mui/material/TablePagination";
-// import Typography from "@mui/material/Typography";
-// import Tooltip from "@mui/material/Tooltip";
-// import IconButton from "@mui/material/IconButton";
-// import TableHead from "@mui/material/TableHead";
-// import TableSortLabel from "@mui/material/TableSortLabel";
 import {visuallyHidden} from "@mui/utils";
 import Floater from 'react-floater';
 import {toBoolean} from "../utils/MetadataUtils";
