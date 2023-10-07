@@ -53,14 +53,15 @@ class AddEditPersonnel extends BaseRecordManager {
     this.state["batch_selection"] = {"nurims.title": "Personnel"};
     this.Module = ADDEDITPERSONNEL_REF;
     this.recordTopic = PERSONNEL_TOPIC;
-    this.provenanceRecords = [...new Array(50)]
-      .map(
-        () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
-      )
-      .join('\n');
+    this.provenanceRecords = [];
+//     this.provenanceRecords = [...new Array(50)]
+//       .map(
+//         () => `Cras mattis consectetur purus sit amet fermentum.
+// Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+// Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+// Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
+//       )
+//       .join('\n');
     this.importFileRef = React.createRef();
   }
 
@@ -143,13 +144,14 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
 
   setProvenanceRecords = (provenance) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "setProvenanceRecords", "setProvenanceRecords", provenance);
+      ConsoleLog(this.Module, "setProvenanceRecords", "provenance", provenance);
     }
-    console.log("**********************************************************************************")
-    this.provenanceRecords.setLength(0)
-    for (p of provenance) {
-      this.provenanceRecords.push(JSON.stringify(p)+"\n")
+    for (const p of provenance) {
+      this.provenanceRecords.push(`   Timestamp: ${p.ts}\n        Text: ${p.text}\nSubmitted By: ${p.submitted_by}`)
     }
+    console.log("=======================")
+    console.log(this.provenanceRecords)
+    console.log("=======================")
     this.forceUpdate();
   }
 
@@ -239,7 +241,7 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
         />
         <ShowProvenanceRecordsDialog open={show_provenance_view}
                                      selection={selection}
-                                     body={this.provenanceRecords}
+                                     body={this.provenanceRecords.join("\n")}
                                      onCancel={this.closeProvenanceRecordsView}
         />
         <input

@@ -243,23 +243,17 @@ export const ShowProvenanceRecordsDialog = (props) => (
       aria-labelledby="provenance-dialog-title"
       aria-describedby="provenance-dialog-description"
       scroll={"paper"}
-      sx={{height: 500}}
+      sx={{height: 500, maxWidth: "60%"}}
     >
       <DialogTitle id="alert-dialog-title">
         {`View provenance records for ${props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""}`}
       </DialogTitle>
-      {/*<DialogContent>*/}
-      {/*  <DialogContentText id="alert-dialog-description">*/}
-      {/*    Are you sure you want to delete the record*/}
-      {/*    for {props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""} (*/}
-      {/*    {props.selection.hasOwnProperty(ITEM_ID) ? props.selection[ITEM_ID] : ""})?*/}
-      {/*  </DialogContentText>*/}
-      {/*</DialogContent>*/}
-      <DialogContent dividers={true}>
+      <DialogContent dividers={true} sx={{maxWidth: 800}}>
         <DialogContentText
           id="scroll-dialog-description"
           // ref={descriptionElementRef}
           tabIndex={-1}
+          sx={{fontFamily: "monospace", whiteSpace: "pre"}}
         >
           {props.body}
         </DialogContentText>
