@@ -125,27 +125,6 @@ export const MenuData = [
     Icon: IconPeople,
     items: [
       {
-        name: '○ Monitors',
-        tooltip: 'Human resource actions',
-        authmodlevel: 'basic',
-        items: [
-          {
-            name: '   - Add Monitor',
-            link: 'rp.add.area.monitor',
-            title: '',
-            tooltip: 'Add area,contamination, waste, and other types of monitors',
-            authmodlevel: 'basic',
-          },
-          {
-            name: '   - Edit Monitor',
-            link: 'rp.edit.area.monitor',
-            title: '',
-            tooltip: 'Edit area, contamination, waste and other types monitors',
-            authmodlevel: 'basic',
-          },
-        ],
-      },
-      {
         name: '○ Concept of Operations',
         tooltip: 'A basic concept of operations describing the response process. On the basis of the concept of operations, roles and responsibilities are assigned to each group, organization or individual involved in emergency preparedness and response.',
         authmodlevel: 'basic',
@@ -704,42 +683,7 @@ export const MenuData = [
         title: 'Manage Users',
         tooltip: 'Manage system users',
         authmodlevel: 'sysadmin',
-      },
-      {
-        name: '- Import ICENS Personnel',
-        link: 'sysadmin.import.icens.personnel',
-        title: 'Import ICENS Personnel',
-        tooltip: 'Batch import ICENS personnel',
-        authmodlevel: 'sysadmin',
-      },
-      {
-        name: '- Import Material Manuf.',
-        link: 'sysadmin.import.icens.controlled.material.manufacturers',
-        title: 'Import Controlled Material Manufacturers',
-        tooltip: 'Batch import of controlled material manufacturers',
-        authmodlevel: 'sysadmin',
-      },
-      {
-        name: '- Import Material Store.',
-        link: 'sysadmin.import.icens.controlled.material.storage.locations',
-        title: 'Import Controlled Material Storage Locations',
-        tooltip: 'Batch import of controlled material storage locations',
-        authmodlevel: 'sysadmin',
-      },
-      {
-        name: '- Import Materials.',
-        link: 'sysadmin.import.icens.controlled.materials',
-        title: 'Import Controlled Materials',
-        tooltip: 'Batch import of controlled materials',
-        authmodlevel: 'sysadmin',
-      },
-      {
-        name: '- Import ICENS Monitors',
-        link: 'sysadmin.import.icens.monitors',
-        title: 'Import ICENS Environmental Monitors',
-        tooltip: 'Batch import of environmental radiation monitors',
-        authmodlevel: 'sysadmin',
-      },
+      }
     ],
   },
   {
