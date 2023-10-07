@@ -69,7 +69,7 @@ class ViewPersonnelRecords extends Component {
             <Stack direction="row" spacing={1}>
               <SwitchComponent
                 id={"id"}
-                label={"Include Archived Personnel"}
+                label={"Include Archived/Unmonitored Personnel"}
                 onChange={this.includeArchived}
                 value={include_archived}
               />

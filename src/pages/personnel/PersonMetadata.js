@@ -232,7 +232,7 @@ class PersonMetadata extends Component {
               <MenuItem value={"f"}>Female</MenuItem>
             </Select>
           </FormControl>
-          <FormControl sx={{m: 1, minWidth: 450}}>
+          <FormControl sx={{m: 1, minWidth: 550}}>
             <InputLabel id="roles">Assigned Roles</InputLabel>
             <Select
               labelId="roles"

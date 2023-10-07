@@ -51,6 +51,7 @@ class PersonnelList extends React.Component {
         onListItemSelection={this.props.onSelection}
         requestGetRecords={this.props.requestGetRecords}
         includeArchived={this.props.includeArchived}
+        filterTooltip={"Include unmonitored personnel records"}
         title={this.props.title}
         enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}
       />

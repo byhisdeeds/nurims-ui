@@ -661,7 +661,7 @@ SameYearDateRangePicker.propTypes = {
 
 export function PageableTable({theme, title, minWidth, cells, defaultOrder, defaultOrderBy, rows, rowsPerPage,
                                rowHeight, onRowSelection, selectedRow, disabled, renderCell, filterElement,
-                               selectionMetadataField, filterRows, enableRowFilter}) {
+                               selectionMetadataField, filterRows, enableRowFilter, filterTooltip}) {
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState(defaultOrder);
@@ -786,7 +786,7 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
           }}
         />}
 
-        <Tooltip title="Include archived records">
+        <Tooltip title={filterTooltip}>
           <IconButton>
             {filterElement}
           </IconButton>
@@ -807,9 +807,6 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
             cells={cells}
           />
           <TableBody>
-            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
-            {/*{this.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).sort(getComparator(order, orderBy))*/}
             {rows.sort(getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 // const isItemSelected = selected.hasOwnProperty("item_id") && selected.item_id === row.item_id;
@@ -871,6 +868,7 @@ PageableTable.defaultProps = {
   )},
   filterElement: <div/>,
   enableRowFilter: true,
+  filterTooltip: "Include archived records",
   filterRows: (value) => {},
 };
 
@@ -889,6 +887,7 @@ PageableTable.propTypes = {
   onRowSelection: PropTypes.func,
   renderCell: PropTypes.func,
   filterElement: PropTypes.object,
+  filterTooltip: PropTypes.string,
   enableRowFilter: PropTypes.bool,
   filterRows: PropTypes.func,
   selectionMetadataField: PropTypes.string.isRequired,

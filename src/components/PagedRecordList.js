@@ -186,7 +186,7 @@ class PagedRecordList extends React.Component {
   render () {
     const {include_archived, selection} = this.state;
     if (this.context.debug) {
-      ConsoleLog("PagedRecordList", "render", "include_archived", include_archived, "selection", selection);
+      ConsoleLog(this.__Component__, "render", "include_archived", include_archived, "selection", selection);
     }
     return (
       <Box sx={{width: '100%'}}>
@@ -212,6 +212,7 @@ class PagedRecordList extends React.Component {
               checked={include_archived}
             />}
             enableRowFilter={this.props.enableRowFilter}
+            filterTooltip={this.props.filterTooltip}
             filterRows={this.filterRows}
           />
         </Paper>
@@ -232,6 +233,7 @@ PagedRecordList.propTypes = {
   includeArchived: PropTypes.bool,
   cells: PropTypes.array,
   rowsPerPage: PropTypes.number,
+  filterTooltip: PropTypes.string,
   renderCellStyle: PropTypes.func,
 }
 
@@ -239,6 +241,7 @@ PagedRecordList.defaultProps = {
   includeArchived: false,
   enableRowFilter: true,
   enableRecordArchiveSwitch: false,
+  filterTooltip: "Include archived records",
   rowHeight: 24,
   rowsPerPage: 20,
   minWidth: 350,
