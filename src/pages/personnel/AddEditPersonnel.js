@@ -160,7 +160,10 @@ class AddEditPersonnel extends BaseRecordManager {
     this.setState({show_provenance_view: true,});
   }
 
-  closeProvenanceRecordsView = () => {
+  closeProvenanceRecordsView = (event, reason) => {
+    if (reason && reason === "backdropClick") {
+      return;
+    }
     this.setState({show_provenance_view: false,});
   }
 

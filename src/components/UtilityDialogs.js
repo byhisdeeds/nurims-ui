@@ -260,7 +260,7 @@ export const ShowProvenanceRecordsDialog = (props) => (
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onCancel}>Ok</Button>
+        <Button onClick={props.onCancel}>{this.props.buttonLabel}</Button>
         {/*<Button onClick={props.onProceed} autoFocus>Yes</Button>*/}
       </DialogActions>
     </Dialog>
@@ -272,4 +272,9 @@ ShowProvenanceRecordsDialog.propTypes = {
   selection: PropTypes.object.isRequired,
   body: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
+  buttonLabel: PropTypes.string
+}
+
+ShowProvenanceRecordsDialog.defaultProps = {
+  buttonLabel: "Close"
 }
