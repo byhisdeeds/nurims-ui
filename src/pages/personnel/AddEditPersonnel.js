@@ -142,17 +142,21 @@ class AddEditPersonnel extends BaseRecordManager {
     this.setState({confirm_batch_remove: false,});
   }
 
-  setProvenanceRecords = (v) => {
+  setProvenanceRecords = (provenance) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "setProvenanceRecords", "provenance", provenance);
     }
-    this.provenanceRecords.length = 0;
-    if (this.provenance.length > 0) {
-      for (const p of provenance) {
-        this.provenanceRecords.push(`   Timestamp: ${p.ts}\n        Text: ${p.text}\nSubmitted By: ${p.submitted_by}`)
-      }
-    } else {
-      this.provenanceRecords.push("No records found");
+    // // this.provenanceRecords.length = 0;
+    // if (this.provenance.length > 0) {
+    //   for (const p of provenance) {
+    //     this.provenanceRecords.push(`   Timestamp: ${p.ts}\n        Text: ${p.text}\nSubmitted By: ${p.submitted_by}`)
+    //   }
+    // } else {
+    //   this.provenanceRecords.push("No records found");
+    // }
+    // this.provenanceRecords.length = 0;
+    for (const p of provenance) {
+      this.provenanceRecords.push(`   Timestamp: ${p.ts}\n        Text: ${p.text}\nSubmitted By: ${p.submitted_by}`)
     }
     this.forceUpdate();
   }

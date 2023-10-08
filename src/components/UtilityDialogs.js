@@ -243,15 +243,16 @@ export const ShowProvenanceRecordsDialog = (props) => (
       aria-labelledby="provenance-dialog-title"
       aria-describedby="provenance-dialog-description"
       scroll={"paper"}
-      sx={{height: 500, maxWidth: "60%"}}
+      sx={{ '& .MuiDialog-paper': { width: '70%', maxWidth: "70%", maxHeight: 500, height: 500 } }}
+      // maxWidth="xl"
+      // fullWidth={800}
     >
       <DialogTitle id="alert-dialog-title">
         {`View provenance records for ${props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""}`}
       </DialogTitle>
-      <DialogContent dividers={true} sx={{maxWidth: 800}}>
+      <DialogContent dividers={true} >
         <DialogContentText
           id="scroll-dialog-description"
-          // ref={descriptionElementRef}
           tabIndex={-1}
           sx={{fontFamily: "monospace", whiteSpace: "pre"}}
         >
