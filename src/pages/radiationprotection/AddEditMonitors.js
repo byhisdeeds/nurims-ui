@@ -50,6 +50,7 @@ import {
   setProvenanceRecordsHelper,
   showProvenanceRecordsViewHelper
 } from "../../utils/ProvenanceUtils";
+import {AddEditButtonPanel} from "../../utils/UiUtils";
 
 
 export const ADDEDITMONITORS_REF = "AddEditMonitors";
@@ -266,67 +267,78 @@ class AddEditMonitors extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
-          <Fab
-            variant="extended"
-            size="small"
-            color="primary"
-            aria-label="remove"
-            onClick={this.removeRecord}
-            // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
-            disabled={!this.isSysadminButtonAccessible(selection)}
-          >
-            <RemoveCircleOutlineIcon sx={{mr: 1}}/>
-            Remove Monitor
-          </Fab>
-          { isSysadmin &&
-            <Fab
-              variant="extended"
-              size="small"
-              color="primary"
-              aria-label="save"
-              onClick={this.showProvenanceRecordsView}
-              disabled={!selection.hasOwnProperty("item_id")}
-            >
-              <VisibilityIcon sx={{mr: 1}}/>
-              View Provenance Records
-            </Fab>
-          }
-          <Fab
-            variant="extended"
-            size="small"
-            color="primary"
-            aria-label="archive"
-            component={"span"}
-            onClick={this.changeRecordArchivalStatus}
-            disabled={!this.isSysadminButtonAccessible(selection)}
-          >
-            {this.isRecordArchived(selection) ?
-              <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Monitor Record"</React.Fragment> :
-              <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Monitor Record"</React.Fragment>}
-          </Fab>
-          <Fab
-            variant="extended"
-            size="small"
-            color="primary"
-            aria-label="save"
-            onClick={this.saveChanges}
-            disabled={!has_changed_records}
-          >
-            <SaveIcon sx={{mr: 1}}/>
-            Save Changes
-          </Fab>
-          <Fab
-            variant="extended"
-            size="small"
-            color="primary"
-            aria-label="add"
-            onClick={this.addRecord}
-          >
-            <AddCircleOutlineIcon sx={{mr: 1}}/>
-            Add Monitor
-          </Fab>
-        </Box>
+        {<AddEditButtonPanel
+          THIS={this}
+          user={user}
+          onClickAddRecord={this.addRecord}
+          onClickChangeRecordArchivalStatus={this.changeRecordArchivalStatus}
+          onClickRemoveRecord={this.removeRecord}
+          onClickSaveRecordChanges={this.saveChanges}
+          onClickViewProvenanceRecords={this.showProvenanceRecordsView}
+          addRecordButtonLabel={"Add Monitor"}
+          removeRecordButtonLabel={"Remove Monitor"}
+        />}
+        {/*<Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>*/}
+        {/*  <Fab*/}
+        {/*    variant="extended"*/}
+        {/*    size="small"*/}
+        {/*    color="primary"*/}
+        {/*    aria-label="remove"*/}
+        {/*    onClick={this.removeRecord}*/}
+        {/*    // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>*/}
+        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
+        {/*  >*/}
+        {/*    <RemoveCircleOutlineIcon sx={{mr: 1}}/>*/}
+        {/*    Remove Monitor*/}
+        {/*  </Fab>*/}
+        {/*  { isSysadmin &&*/}
+        {/*    <Fab*/}
+        {/*      variant="extended"*/}
+        {/*      size="small"*/}
+        {/*      color="primary"*/}
+        {/*      aria-label="save"*/}
+        {/*      onClick={this.showProvenanceRecordsView}*/}
+        {/*      disabled={!selection.hasOwnProperty("item_id")}*/}
+        {/*    >*/}
+        {/*      <VisibilityIcon sx={{mr: 1}}/>*/}
+        {/*      View Provenance Records*/}
+        {/*    </Fab>*/}
+        {/*  }*/}
+        {/*  <Fab*/}
+        {/*    variant="extended"*/}
+        {/*    size="small"*/}
+        {/*    color="primary"*/}
+        {/*    aria-label="archive"*/}
+        {/*    component={"span"}*/}
+        {/*    onClick={this.changeRecordArchivalStatus}*/}
+        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
+        {/*  >*/}
+        {/*    {this.isRecordArchived(selection) ?*/}
+        {/*      <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Monitor Record"</React.Fragment> :*/}
+        {/*      <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Monitor Record"</React.Fragment>}*/}
+        {/*  </Fab>*/}
+        {/*  <Fab*/}
+        {/*    variant="extended"*/}
+        {/*    size="small"*/}
+        {/*    color="primary"*/}
+        {/*    aria-label="save"*/}
+        {/*    onClick={this.saveChanges}*/}
+        {/*    disabled={!has_changed_records}*/}
+        {/*  >*/}
+        {/*    <SaveIcon sx={{mr: 1}}/>*/}
+        {/*    Save Changes*/}
+        {/*  </Fab>*/}
+        {/*  <Fab*/}
+        {/*    variant="extended"*/}
+        {/*    size="small"*/}
+        {/*    color="primary"*/}
+        {/*    aria-label="add"*/}
+        {/*    onClick={this.addRecord}*/}
+        {/*  >*/}
+        {/*    <AddCircleOutlineIcon sx={{mr: 1}}/>*/}
+        {/*    Add Monitor*/}
+        {/*  </Fab>*/}
+        {/*</Box>*/}
       </React.Fragment>
     );
   }

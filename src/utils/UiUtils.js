@@ -7,7 +7,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import {isValidUserRole} from "./UserUtils";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
 
 
