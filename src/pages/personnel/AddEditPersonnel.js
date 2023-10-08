@@ -54,14 +54,6 @@ class AddEditPersonnel extends BaseRecordManager {
     this.Module = ADDEDITPERSONNEL_REF;
     this.recordTopic = PERSONNEL_TOPIC;
     this.provenanceRecords = [];
-//     this.provenanceRecords = [...new Array(50)]
-//       .map(
-//         () => `Cras mattis consectetur purus sit amet fermentum.
-// Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-// Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-// Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
-//       )
-//       .join('\n');
     this.importFileRef = React.createRef();
   }
 
@@ -75,7 +67,6 @@ class AddEditPersonnel extends BaseRecordManager {
   }
 
   ws_message = (message) => {
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@")
     super.ws_message(message, [
       { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
     ]);
@@ -146,17 +137,13 @@ class AddEditPersonnel extends BaseRecordManager {
     if (this.context.debug) {
       ConsoleLog(this.Module, "setProvenanceRecords", "provenance", provenance);
     }
-    // // this.provenanceRecords.length = 0;
-    // if (this.provenance.length > 0) {
-    //   for (const p of provenance) {
-    //     this.provenanceRecords.push(`   Timestamp: ${p.ts}\n        Text: ${p.text}\nSubmitted By: ${p.submitted_by}`)
-    //   }
-    // } else {
-    //   this.provenanceRecords.push("No records found");
-    // }
-    // this.provenanceRecords.length = 0;
-    for (const p of provenance) {
-      this.provenanceRecords.push(`   Timestamp: ${p.ts}\n        Text: ${p.text}\nSubmitted By: ${p.submitted_by}`)
+    this.provenanceRecords.length = 0;
+    if (provenance.length > 0) {
+      for (const p of provenance) {
+        this.provenanceRecords.push(`   Timestamp: ${p.ts}\n        Text: ${p.text}\nSubmitted By: ${p.submitted_by}`)
+      }
+    } else {
+      this.provenanceRecords.push("No records found");
     }
     this.forceUpdate();
   }
