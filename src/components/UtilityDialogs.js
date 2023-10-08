@@ -254,7 +254,7 @@ export const ShowProvenanceRecordsDialog = (props) => (
         <DialogContentText
           id="scroll-dialog-description"
           tabIndex={-1}
-          sx={{fontFamily: "monospace", whiteSpace: "pre", fontSize: '0.5rem'}}
+          sx={{fontFamily: "monospace", whiteSpace: "pre", fontSize: '0.9rem'}}
         >
           {props.body}
         </DialogContentText>
