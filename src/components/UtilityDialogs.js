@@ -260,7 +260,7 @@ export const ShowProvenanceRecordsDialog = (props) => (
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onCancel}>{this.props.buttonLabel}</Button>
+        <Button onClick={props.onCancel}>{props.buttonLabel}</Button>
         {/*<Button onClick={props.onProceed} autoFocus>Yes</Button>*/}
       </DialogActions>
     </Dialog>
