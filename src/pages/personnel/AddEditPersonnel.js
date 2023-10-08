@@ -140,7 +140,7 @@ class AddEditPersonnel extends BaseRecordManager {
     this.provenanceRecords.length = 0;
     if (provenance.length > 0) {
       for (const p of provenance) {
-        this.provenanceRecords.push(`   Timestamp: ${p.ts}\n        Text: ${p.text}\nSubmitted By: ${p.submitted_by}`)
+        this.provenanceRecords.push(`   Timestamp: ${p.ts}\n        Text: ${p.text}\nSubmitted By: ${p.submitted_by}\n`)
       }
     } else {
       this.provenanceRecords.push("No records found");
