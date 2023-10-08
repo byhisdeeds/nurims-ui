@@ -9,7 +9,10 @@ export function setProvenanceRecordsHelper(THIS, provenance) {
   THIS.provenanceRecords.length = 0;
   if (provenance.length > 0) {
     for (const p of provenance) {
-      THIS.provenanceRecords.push(`   Timestamp: ${p.ts}\n        Text: ${p.text}\nSubmitted By: ${p.submitted_by}\n`)
+      THIS.provenanceRecords.push(
+        `[${p.ts}] Submitted by ${p.submitted_by},
+         ${p.authenticated?"authenticated user":"unauthenticated user"}\n
+         ${p.text}\n`)
     }
   } else {
     THIS.provenanceRecords.push("No records found");

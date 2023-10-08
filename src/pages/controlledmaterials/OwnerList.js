@@ -42,8 +42,10 @@ class OwnerList extends React.Component {
         ref={this.ref}
         onListItemSelection={this.props.onSelection}
         includeArchived={this.props.includeArchived}
+        requestGetRecords={this.props.requestGetRecords}
         title={this.props.title}
-        enableRecordArchiveSwitch={false}
+        enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}
+        // requestGetRecords={this.requestGetRecords}
       />
     )
   }
@@ -54,6 +56,8 @@ OwnerList.propTypes = {
   title: PropTypes.string.isRequired,
   onSelection: PropTypes.func.isRequired,
   properties: PropTypes.object.isRequired,
+  enableRecordArchiveSwitch: PropTypes.bool.isRequired,
+  includeArchived: PropTypes.bool.isRequired,
 }
 
 export default OwnerList

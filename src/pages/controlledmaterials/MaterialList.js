@@ -57,6 +57,7 @@ MaterialList.propTypes = {
   onSelection: PropTypes.func.isRequired,
   properties: PropTypes.func.isRequired,
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
+  includeArchived: PropTypes.bool.isRequired,
 }
 
 export default MaterialList

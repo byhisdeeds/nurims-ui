@@ -37,17 +37,28 @@ import {
   SSC_TOPIC,
   STORAGE_LOCATION_TOPIC
 } from "../utils/constants";
-// import {v4 as uuid} from "uuid";
 import {
   getMatchingResponseObject,
   isCommandResponse,
   messageHasResponse,
   messageStatusOk
 } from "../utils/WebsocketUtils";
-import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
-import {getNextItemId, new_record, record_uuid} from "../utils/MetadataUtils";
-import {isValidUserRole} from "../utils/UserUtils";
-import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../utils/SnackbarVariants";
+import {
+  ConsoleLog,
+  UserDebugContext
+} from "../utils/UserDebugContext";
+import {
+  getNextItemId,
+  new_record,
+  record_uuid
+} from "../utils/MetadataUtils";
+import {
+  isValidUserRole
+} from "../utils/UserUtils";
+import {
+  enqueueErrorSnackbar,
+  enqueueSuccessSnackbar
+} from "../utils/SnackbarVariants";
 
 class BaseRecordManager extends Component {
   static contextType = UserDebugContext;

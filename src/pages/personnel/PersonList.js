@@ -49,9 +49,9 @@ class PersonList extends React.Component {
         rowsPerPage={15}
         onListItemSelection={this.props.onSelection}
         requestGetRecords={this.props.requestGetRecords}
-        includeArchived={this.props.includeArchived}
-        filterTooltip={"Include unmonitored personnel records"}
         title={this.props.title}
+        filterTooltip={"Include unmonitored personnel records"}
+        includeArchived={this.props.includeArchived}
         enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}
       />
     )

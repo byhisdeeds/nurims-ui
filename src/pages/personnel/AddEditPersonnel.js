@@ -44,7 +44,8 @@ import {
 } from "../../utils/WebsocketUtils";
 import {stringify} from "uuid";
 import {
-  setProvenanceRecordsHelper, showProvenanceRecordsViewHelper
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
 } from "../../utils/ProvenanceUtils";
 import {AddEditButtonPanel} from "../../utils/UiUtils";
 

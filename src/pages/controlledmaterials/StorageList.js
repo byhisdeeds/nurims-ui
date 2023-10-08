@@ -41,10 +41,11 @@ class StorageList extends React.Component {
       <PagedRecordList
         ref={this.ref}
         onListItemSelection={this.props.onSelection}
-        // requestGetRecords={this.props.requestGetRecords}
         includeArchived={this.props.includeArchived}
+        requestGetRecords={this.props.requestGetRecords}
         title={this.props.title}
-        enableRecordArchiveSwitch={false}
+        enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}
+        // requestGetRecords={this.requestGetRecords}
       />
     )
   }
@@ -55,6 +56,8 @@ StorageList.propTypes = {
   title: PropTypes.string.isRequired,
   onSelection: PropTypes.func.isRequired,
   properties: PropTypes.func.isRequired,
+  enableRecordArchiveSwitch: PropTypes.bool.isRequired,
+  includeArchived: PropTypes.bool.isRequired,
 }
 
 export default StorageList

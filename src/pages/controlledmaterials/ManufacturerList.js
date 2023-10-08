@@ -42,7 +42,11 @@ class ManufactuerList extends React.Component {
         ref={this.ref}
         onListItemSelection={this.props.onSelection}
         title={this.props.title}
-        enableRecordArchiveSwitch={false}
+        filterTooltip={"Include unmonitored personnel records"}
+        includeArchived={this.props.includeArchived}
+        enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}
+        // requestGetRecords={this.requestGetRecords}
+        requestGetRecords={this.props.requestGetRecords}
       />
     )
   }
@@ -53,6 +57,9 @@ ManufactuerList.propTypes = {
   title: PropTypes.string.isRequired,
   onSelection: PropTypes.func.isRequired,
   properties: PropTypes.func.isRequired,
+  enableRecordArchiveSwitch: PropTypes.bool.isRequired,
+  includeArchived: PropTypes.bool.isRequired,
+
 }
 
 export default ManufactuerList

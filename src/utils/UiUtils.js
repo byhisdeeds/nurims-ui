@@ -2,6 +2,7 @@ import React from "react";
 import {Box, Fab} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import ArchiveIcon from "@mui/icons-material/Archive";
 import SaveIcon from "@mui/icons-material/Save";
 import {isValidUserRole} from "./UserUtils";
@@ -53,8 +54,8 @@ export function AddEditButtonPanel ({THIS, user, onClickRemoveRecord, removeReco
         disabled={!THIS.isSelectableByRole(selection, "dataentry")}
       >
         {THIS.isRecordArchived(selection) ?
-          <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Record"</React.Fragment> :
-          <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Record"</React.Fragment>}
+          <React.Fragment><VisibilityIcon sx={{mr: 1}}/> "Restore Record"</React.Fragment> :
+          <React.Fragment><VisibilityOffIcon sx={{mr: 1}}/> "Archive Record"</React.Fragment>}
       </Fab>
       <Fab
         variant="extended"
