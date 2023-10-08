@@ -7,6 +7,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmBatchRemoveRecordDialog,
@@ -16,6 +17,7 @@ import {
 import PersonList from "./PersonList";
 import PersonMetadata from "./PersonMetadata";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {TitleComponent} from "../../components/CommonComponents";
@@ -36,8 +38,14 @@ import {
 import BusyIndicator from "../../components/BusyIndicator";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import {isValidUserRole} from "../../utils/UserUtils";
-import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
 import {stringify} from "uuid";
+import {
+  setProvenanceRecordsHelper, showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
 
 export const ADDEDITPERSONNEL_REF = "AddEditPersonnel";
 
@@ -134,30 +142,11 @@ class AddEditPersonnel extends BaseRecordManager {
   }
 
   setProvenanceRecords = (provenance) => {
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "setProvenanceRecords", "provenance", provenance);
-    }
-    this.provenanceRecords.length = 0;
-    if (provenance.length > 0) {
-      for (const p of provenance) {
-        this.provenanceRecords.push(`   Timestamp: ${p.ts}\n        Text: ${p.text}\nSubmitted By: ${p.submitted_by}\n`)
-      }
-    } else {
-      this.provenanceRecords.push("No records found");
-    }
-    this.forceUpdate();
+    setProvenanceRecordsHelper(this, provenance);
   }
 
   showProvenanceRecordsView = () => {
-    this.props.send({
-      cmd: CMD_GET_PROVENANCE_RECORDS,
-      item_id: this.state.selection.item_id,
-      module: this.Module,
-    });
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "viewProvenanceRecords", "selection", this.state.selection);
-    }
-    this.setState({show_provenance_view: true,});
+    showProvenanceRecordsViewHelper(this);
   }
 
   closeProvenanceRecordsView = (event, reason) => {
@@ -281,7 +270,7 @@ class AddEditPersonnel extends BaseRecordManager {
           { isSysadmin &&
             <Fab variant="extended" size="small" color="primary" aria-label="save"
                  onClick={this.showProvenanceRecordsView} disabled={!selection.hasOwnProperty("item_id")}>
-              <SaveIcon sx={{mr: 1}}/>
+              <VisibilityIcon sx={{mr: 1}}/>
               View Provenance Records
             </Fab>
           }
@@ -296,8 +285,9 @@ class AddEditPersonnel extends BaseRecordManager {
             <SaveIcon sx={{mr: 1}}/>
             Save Changes
           </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>
-            <AddIcon sx={{mr: 1}}/>
+          <Fab variant="extended" size="small" color="primary" aria-label="add"
+               onClick={this.addRecord} disabled={!this.isSelectableByRole(selection, "dataentry")}>
+            <PersonAddIcon sx={{mr: 1}}/>
             Add Personnel
           </Fab>
         </Box>

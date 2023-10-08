@@ -7,13 +7,18 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import MonitorList from "./MonitorList";
 import MonitorMetadata from "./MonitorMetadata";
 import {
   CMD_DELETE_PERSONNEL_RECORD,
   CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_MONITOR_RECORDS, FIXED_LOCATION_MONITOR_RECORD,
-  ITEM_ID, MONITOR_RECORD_TYPE, MONITOR_TOPIC,
+  CMD_GET_PROVENANCE_RECORDS,
+  FIXED_LOCATION_MONITOR_RECORD,
+  ITEM_ID,
+  MONITOR_RECORD_TYPE,
+  MONITOR_TOPIC,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
 } from "../../utils/constants";
 
@@ -21,6 +26,7 @@ import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmBatchRemoveRecordDialog,
   ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
@@ -34,6 +40,16 @@ import {
   parsePersonnelRecordFromLine
 } from "../../utils/MetadataUtils";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import {isValidUserRole} from "../../utils/UserUtils";
+import {
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
 
 
 export const ADDEDITMONITORS_REF = "AddEditMonitors";
@@ -45,8 +61,10 @@ class AddEditMonitors extends BaseRecordManager {
     this.state["open_batch_remove"] = false;
     this.state["confirm_batch_remove"] = false;
     this.state["batch_selection"] = {"nurims.title": "Monitor"};
+    this.state["show_provenance_view"] = false;
     this.Module = ADDEDITMONITORS_REF;
     this.recordTopic = MONITOR_TOPIC;
+    this.provenanceRecords = [];
     this.importFileRef = React.createRef();
   }
 
@@ -120,6 +138,29 @@ class AddEditMonitors extends BaseRecordManager {
     super.ws_message(message, [
       { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
     ]);
+    if (messageHasResponse(message)) {
+      const response = message.response;
+      if (messageStatusOk(message)) {
+        if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
+          this.setProvenanceRecords(response.provenance)
+        }
+      }
+    }
+  }
+
+  setProvenanceRecords = (provenance) => {
+    setProvenanceRecordsHelper(this, provenance);
+  }
+
+  showProvenanceRecordsView = () => {
+    showProvenanceRecordsViewHelper(this);
+  }
+
+  closeProvenanceRecordsView = (event, reason) => {
+    if (reason && reason === "backdropClick") {
+      return;
+    }
+    this.setState({show_provenance_view: false,});
   }
 
   handleImportMonitors = (e) => {
@@ -166,8 +207,11 @@ class AddEditMonitors extends BaseRecordManager {
   }
 
   render() {
-    const {confirm_remove, selection, include_archived, confirm_batch_remove, batch_selection, busy} = this.state;
+    const {confirm_remove, selection, include_archived, confirm_batch_remove, batch_selection, busy,
+      show_provenance_view} = this.state;
+    const {user} = this.props;
     const has_changed_records = this.hasChangedRecords();
+    const isSysadmin = isValidUserRole(user, "sysadmin");
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "has_changed_records", has_changed_records,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection,
@@ -185,6 +229,11 @@ class AddEditMonitors extends BaseRecordManager {
                                         selection={batch_selection}
                                         onProceed={this.proceedWithBatchRemove}
                                         onCancel={this.cancelBatchRemove}
+        />
+        <ShowProvenanceRecordsDialog open={show_provenance_view}
+                                     selection={selection}
+                                     body={this.provenanceRecords.join("\n")}
+                                     onCancel={this.closeProvenanceRecordsView}
         />
         <input
           ref={this.importFileRef}
@@ -218,25 +267,63 @@ class AddEditMonitors extends BaseRecordManager {
           </Grid>
         </Grid>
         <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
-          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
-               // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
-               disabled={!this.isSysadminButtonAccessible(selection)}>
-            <PersonRemoveIcon sx={{mr: 1}}/>
+          <Fab
+            variant="extended"
+            size="small"
+            color="primary"
+            aria-label="remove"
+            onClick={this.removeRecord}
+            // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>
+            disabled={!this.isSysadminButtonAccessible(selection)}
+          >
+            <RemoveCircleOutlineIcon sx={{mr: 1}}/>
             Remove Monitor
           </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!this.isSysadminButtonAccessible(selection)}>
+          { isSysadmin &&
+            <Fab
+              variant="extended"
+              size="small"
+              color="primary"
+              aria-label="save"
+              onClick={this.showProvenanceRecordsView}
+              disabled={!selection.hasOwnProperty("item_id")}
+            >
+              <VisibilityIcon sx={{mr: 1}}/>
+              View Provenance Records
+            </Fab>
+          }
+          <Fab
+            variant="extended"
+            size="small"
+            color="primary"
+            aria-label="archive"
+            component={"span"}
+            onClick={this.changeRecordArchivalStatus}
+            disabled={!this.isSysadminButtonAccessible(selection)}
+          >
             {this.isRecordArchived(selection) ?
               <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Monitor Record"</React.Fragment> :
               <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Monitor Record"</React.Fragment>}
           </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
-               disabled={!has_changed_records}>
+          <Fab
+            variant="extended"
+            size="small"
+            color="primary"
+            aria-label="save"
+            onClick={this.saveChanges}
+            disabled={!has_changed_records}
+          >
             <SaveIcon sx={{mr: 1}}/>
             Save Changes
           </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>
-            <AddIcon sx={{mr: 1}}/>
+          <Fab
+            variant="extended"
+            size="small"
+            color="primary"
+            aria-label="add"
+            onClick={this.addRecord}
+          >
+            <AddCircleOutlineIcon sx={{mr: 1}}/>
             Add Monitor
           </Fab>
         </Box>

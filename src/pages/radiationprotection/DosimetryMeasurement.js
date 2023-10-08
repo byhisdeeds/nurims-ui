@@ -10,19 +10,24 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {
-  CMD_GET_GLOSSARY_TERMS, EMPLOYEE_RECORD_TYPE,
-  NURIMS_DOSIMETRY_BATCH_ID, NURIMS_DOSIMETRY_DEEP_DOSE, NURIMS_DOSIMETRY_EXTREMITY_DOSE,
+  CMD_GET_GLOSSARY_TERMS, CMD_GET_PROVENANCE_RECORDS,
+  EMPLOYEE_RECORD_TYPE,
+  NURIMS_DOSIMETRY_BATCH_ID,
+  NURIMS_DOSIMETRY_DEEP_DOSE,
+  NURIMS_DOSIMETRY_EXTREMITY_DOSE,
   NURIMS_DOSIMETRY_ID,
   NURIMS_DOSIMETRY_MEASUREMENTS,
-  NURIMS_DOSIMETRY_MONITOR_PERIOD, NURIMS_DOSIMETRY_SHALLOW_DOSE,
+  NURIMS_DOSIMETRY_MONITOR_PERIOD,
+  NURIMS_DOSIMETRY_SHALLOW_DOSE,
   NURIMS_DOSIMETRY_TIMESTAMP,
   NURIMS_DOSIMETRY_TYPE,
-  NURIMS_DOSIMETRY_UNITS, NURIMS_DOSIMETRY_WRIST_DOSE,
+  NURIMS_DOSIMETRY_UNITS,
+  NURIMS_DOSIMETRY_WRIST_DOSE,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
 } from "../../utils/constants";
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
-  ConfirmRemoveRecordDialog,
+  ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import PersonnelList from "./PersonnelList";
@@ -40,6 +45,10 @@ import PropTypes from "prop-types";
 import {TitleComponent} from "../../components/CommonComponents";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {isValidUserRole} from "../../utils/UserUtils";
+import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 
 function assignDosimetryRecord(dosimetry, records) {
@@ -95,8 +104,10 @@ class DosimetryMeasurement extends BaseRecordManager {
     this.state = {
       busy: 0,
       selection: {},
+      show_provenance_view: false,
     }
     this.Module = DOSIMETRYMEASUREMENT_REF;
+    this.provenanceRecords = [];
     this.importFileRef = React.createRef();
     this.importRecordType = props.importRecordType;
     console.log("%%%%%%", this.importRecordType)
@@ -132,6 +143,29 @@ class DosimetryMeasurement extends BaseRecordManager {
     super.ws_message(message, [
       { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
     ]);
+    if (messageHasResponse(message)) {
+      const response = message.response;
+      if (messageStatusOk(message)) {
+        if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
+          this.setProvenanceRecords(response.provenance)
+        }
+      }
+    }
+  }
+
+  setProvenanceRecords = (provenance) => {
+    setProvenanceRecordsHelper(this, provenance);
+  }
+
+  showProvenanceRecordsView = () => {
+    showProvenanceRecordsViewHelper(this);
+  }
+
+  closeProvenanceRecordsView = (event, reason) => {
+    if (reason && reason === "backdropClick") {
+      return;
+    }
+    this.setState({show_provenance_view: false,});
   }
 
   // requestGetRecords = (include_archived) => {
@@ -217,7 +251,9 @@ class DosimetryMeasurement extends BaseRecordManager {
   }
 
   render() {
-    const {confirm_remove, include_archived, selection, busy} = this.state;
+    const {confirm_remove, include_archived, selection, busy, show_provenance_view} = this.state;
+    const {user} = this.props;
+    const isSysadmin = isValidUserRole(user, "sysadmin");
     const has_changed_records = this.hasChangedRecords();
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "has_changed_records", has_changed_records,
@@ -229,6 +265,11 @@ class DosimetryMeasurement extends BaseRecordManager {
                                    selection={selection}
                                    onProceed={this.proceedWithRemove}
                                    onCancel={this.cancelRemove}
+        />
+        <ShowProvenanceRecordsDialog open={show_provenance_view}
+                                     selection={selection}
+                                     body={this.provenanceRecords.join("\n")}
+                                     onCancel={this.closeProvenanceRecordsView}
         />
         <BusyIndicator open={busy > 0} loader={"bar"} size={40}/>
         <input
@@ -264,9 +305,9 @@ class DosimetryMeasurement extends BaseRecordManager {
         </Grid>
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-around',
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-around",
             m: 1,
           }}
         >
@@ -275,27 +316,42 @@ class DosimetryMeasurement extends BaseRecordManager {
             endIcon={<RemoveCircleIcon />}
             onClick={this.removeRecord}
             disabled={!this.isSysadminButtonAccessible(selection)}
-            size={"small"}color={"primary"}
+            size={"small"}
+            color={"primary"}
             aria-label={"remove"}
           >
             Remove Measurement
           </Button>
+          { isSysadmin &&
+            <Button
+              variant="contained"
+              size="small"
+              color="primary"
+              aria-label="save"
+              onClick={this.showProvenanceRecordsView}
+              disabled={!selection.hasOwnProperty("item_id")}
+            >
+              <VisibilityIcon sx={{mr: 1}}/>
+              View Provenance Records
+            </Button>
+          }
           <Button
             variant={"contained"}
             endIcon={this.isRecordArchived(selection) ? <UnarchiveIcon /> : <ArchiveIcon />}
             onClick={this.changeRecordArchivalStatus}
             disabled={!this.isSysadminButtonAccessible(selection)}
-            size={"small"}color={"primary"}
+            size={"small"} color={"primary"}
             aria-label={"archive"}
           >
-            {this.isRecordArchived(selection) ? "Restore SSC Record" : "Archive SSC Record"}
+            {this.isRecordArchived(selection) ? "Restore Measurement Record" : "Archive Measurement Record"}
           </Button>
           <Button
             variant={"contained"}
             endIcon={<SaveIcon />}
             onClick={this.saveChanges}
             disabled={!has_changed_records}
-            size={"small"}color={"primary"}
+            size={"small"}
+            color={"primary"}
             aria-label={"save"}
           >
             Save Changes
@@ -304,34 +360,13 @@ class DosimetryMeasurement extends BaseRecordManager {
             variant={"contained"}
             endIcon={<AddIcon />}
             onClick={this.addRecord}
-            size={"small"}color={"primary"}
+            size={"small"}
+            color={"primary"}
             aria-label={"add"}
           >
             Add Measurement
           </Button>
         </Box>
-        {/*<Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}
-        {/*       disabled={selection === -1}>*/}
-        {/*    <RemoveCircleIcon sx={{mr: 1}}/>*/}
-        {/*    Remove SSC*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}*/}
-        {/*       onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>*/}
-        {/*    {this.isRecordArchived(selection) ?*/}
-        {/*      <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore SSC Record"</React.Fragment> :*/}
-        {/*      <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive SSC Record"</React.Fragment>}*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}*/}
-        {/*       disabled={!has_changed_records}>*/}
-        {/*    <SaveIcon sx={{mr: 1}}/>*/}
-        {/*    Save Changes*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>*/}
-        {/*    <AddIcon sx={{mr: 1}}/>*/}
-        {/*    Add SSC*/}
-        {/*  </Fab>*/}
-        {/*</Box>*/}
       </React.Fragment>
     );
   }
