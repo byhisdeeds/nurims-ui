@@ -20,6 +20,7 @@ import {
 } from "../../utils/WebsocketUtils";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from '@mui/icons-material/Search';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import sanitize from "sanitize-html";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
@@ -166,7 +167,7 @@ class TermsAndDefinitions extends React.Component {
                 variant={"contained"}
                 onClick={this.update}
               >
-                <SearchIcon small />
+                <RefreshIcon small />
               </IconButton>
             </Stack>
           </Grid>
