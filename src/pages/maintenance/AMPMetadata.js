@@ -25,7 +25,8 @@ import {
   NURIMS_AMP_MATERIALS,
   NURIMS_AMP_ACCEPTANCE_CRITERIA,
   NURIMS_AMP_MITIGATION_STEPS,
-  NURIMS_SURVEILLANCE_FREQUENCY, NURIMS_AMP_SURVEILLANCE_FREQUENCY,
+  NURIMS_SURVEILLANCE_FREQUENCY,
+  NURIMS_AMP_SURVEILLANCE_FREQUENCY,
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
@@ -183,7 +184,7 @@ class AMPMetadata extends Component {
                   </FormControl>
                 </HtmlTooltip>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={12}>
                 <HtmlTooltip
                   placement={'left'}
                   title={
