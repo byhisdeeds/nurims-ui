@@ -46,6 +46,7 @@ import {stringify} from "uuid";
 import {
   setProvenanceRecordsHelper, showProvenanceRecordsViewHelper
 } from "../../utils/ProvenanceUtils";
+import {AddEditButtonPanel} from "../../utils/UiUtils";
 
 export const ADDEDITPERSONNEL_REF = "AddEditPersonnel";
 
@@ -261,36 +262,80 @@ class AddEditPersonnel extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
-          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
-               disabled={!this.isSysadminButtonAccessible(selection)}>
-            <PersonRemoveIcon sx={{mr: 1}}/>
-            Remove Personnel
-          </Fab>
-          { isSysadmin &&
-            <Fab variant="extended" size="small" color="primary" aria-label="save"
-                 onClick={this.showProvenanceRecordsView} disabled={!selection.hasOwnProperty("item_id")}>
-              <VisibilityIcon sx={{mr: 1}}/>
-              View Provenance Records
-            </Fab>
-          }
-          <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!this.isSelectableByRole(selection, "dataentry")}>
-            {this.isRecordArchived(selection) ?
-              <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Personnel Record"</React.Fragment> :
-              <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Personnel Record"</React.Fragment>}
-          </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
-               disabled={!has_changed_records}>
-            <SaveIcon sx={{mr: 1}}/>
-            Save Changes
-          </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add"
-               onClick={this.addRecord} disabled={!this.isSelectableByRole(selection, "dataentry")}>
-            <PersonAddIcon sx={{mr: 1}}/>
-            Add Personnel
-          </Fab>
-        </Box>
+        {<AddEditButtonPanel
+          THIS={this}
+          user={user}
+          onClickAddRecord={this.addRecord}
+          onClickChangeRecordArchivalStatus={this.changeRecordArchivalStatus}
+          onClickRemoveRecord={this.removeRecord}
+          onClickSaveRecordChanges={this.saveChanges}
+          onClickViewProvenanceRecords={this.showProvenanceRecordsView}
+          addRecordIcon={<PersonAddIcon sx={{mr: 1}}/>}
+          addRecordButtonLabel={"Add Personnel"}
+          removeRecordIcon={<PersonRemoveIcon sx={{mr: 1}}/>}
+          removeRecordButtonLabel={"Remove Personnel"}
+        />}
+        {/*<Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>*/}
+        {/*  <Fab*/}
+        {/*    variant="extended"*/}
+        {/*    size="small"*/}
+        {/*    color="primary"*/}
+        {/*    aria-label="remove"*/}
+        {/*    onClick={this.removeRecord}*/}
+        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
+        {/*  >*/}
+        {/*    <PersonRemoveIcon sx={{mr: 1}}/>*/}
+        {/*    Remove Personnel*/}
+        {/*  </Fab>*/}
+        {/*  { isSysadmin &&*/}
+        {/*    <Fab*/}
+        {/*      variant="extended"*/}
+        {/*      size="small"*/}
+        {/*      color="primary"*/}
+        {/*      aria-label="save"*/}
+        {/*      onClick={this.showProvenanceRecordsView}*/}
+        {/*      disabled={!selection.hasOwnProperty("item_id")}*/}
+        {/*    >*/}
+        {/*      <VisibilityIcon sx={{mr: 1}}/>*/}
+        {/*      View Provenance Records*/}
+        {/*    </Fab>*/}
+        {/*  }*/}
+        {/*  <Fab*/}
+        {/*    variant="extended"*/}
+        {/*    size="small"*/}
+        {/*    color="primary"*/}
+        {/*    aria-label="archive"*/}
+        {/*    component={"span"}*/}
+        {/*    onClick={this.changeRecordArchivalStatus}*/}
+        {/*    disabled={!this.isSelectableByRole(selection, "dataentry")}*/}
+        {/*  >*/}
+        {/*    {this.isRecordArchived(selection) ?*/}
+        {/*      <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Personnel Record"</React.Fragment> :*/}
+        {/*      <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Personnel Record"</React.Fragment>}*/}
+        {/*  </Fab>*/}
+        {/*  <Fab*/}
+        {/*    variant="extended"*/}
+        {/*    size="small"*/}
+        {/*    color="primary"*/}
+        {/*    aria-label="save"*/}
+        {/*    onClick={this.saveChanges}*/}
+        {/*    disabled={!has_changed_records}*/}
+        {/*  >*/}
+        {/*    <SaveIcon sx={{mr: 1}}/>*/}
+        {/*    Save Changes*/}
+        {/*  </Fab>*/}
+        {/*  <Fab*/}
+        {/*    variant="extended"*/}
+        {/*    size="small"*/}
+        {/*    color="primary"*/}
+        {/*    aria-label="add"*/}
+        {/*    onClick={this.addRecord}*/}
+        {/*    disabled={!this.isSelectableByRole(selection, "dataentry")}*/}
+        {/*  >*/}
+        {/*    <PersonAddIcon sx={{mr: 1}}/>*/}
+        {/*    Add Personnel*/}
+        {/*  </Fab>*/}
+        {/*</Box>*/}
       </React.Fragment>
     );
   }

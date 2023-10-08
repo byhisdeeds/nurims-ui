@@ -10,7 +10,8 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {
-  CMD_GET_GLOSSARY_TERMS, CMD_GET_PROVENANCE_RECORDS,
+  CMD_GET_GLOSSARY_TERMS,
+  CMD_GET_PROVENANCE_RECORDS,
   EMPLOYEE_RECORD_TYPE,
   NURIMS_DOSIMETRY_BATCH_ID,
   NURIMS_DOSIMETRY_DEEP_DOSE,
@@ -27,7 +28,8 @@ import {
 } from "../../utils/constants";
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
-  ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog,
+  ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import PersonnelList from "./PersonnelList";
@@ -36,7 +38,8 @@ import BusyIndicator from "../../components/BusyIndicator";
 import {readString} from "react-papaparse";
 import {
   getMatchingEntityDoseProviderRecord,
-  getRecordMetadataValue, parseDosimetryMeasurementRecordFromLine,
+  getRecordMetadataValue,
+  parseDosimetryMeasurementRecordFromLine,
   parsePersonnelRecordFromLine,
   setRecordMetadataValue
 } from "../../utils/MetadataUtils";
@@ -49,6 +52,9 @@ import {isValidUserRole} from "../../utils/UserUtils";
 import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import {AddEditButtonPanel} from "../../utils/UiUtils";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 
 
 function assignDosimetryRecord(dosimetry, records) {
@@ -303,70 +309,74 @@ class DosimetryMeasurement extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-around",
-            m: 1,
-          }}
-        >
-          <Button
-            variant={"contained"}
-            endIcon={<RemoveCircleIcon />}
-            onClick={this.removeRecord}
-            disabled={!this.isSysadminButtonAccessible(selection)}
-            size={"small"}
-            color={"primary"}
-            aria-label={"remove"}
-          >
-            Remove Measurement
-          </Button>
-          { isSysadmin &&
-            <Button
-              variant="contained"
-              size="small"
-              color="primary"
-              aria-label="save"
-              onClick={this.showProvenanceRecordsView}
-              disabled={!selection.hasOwnProperty("item_id")}
-            >
-              <VisibilityIcon sx={{mr: 1}}/>
-              View Provenance Records
-            </Button>
-          }
-          <Button
-            variant={"contained"}
-            endIcon={this.isRecordArchived(selection) ? <UnarchiveIcon /> : <ArchiveIcon />}
-            onClick={this.changeRecordArchivalStatus}
-            disabled={!this.isSysadminButtonAccessible(selection)}
-            size={"small"} color={"primary"}
-            aria-label={"archive"}
-          >
-            {this.isRecordArchived(selection) ? "Restore Measurement Record" : "Archive Measurement Record"}
-          </Button>
-          <Button
-            variant={"contained"}
-            endIcon={<SaveIcon />}
-            onClick={this.saveChanges}
-            disabled={!has_changed_records}
-            size={"small"}
-            color={"primary"}
-            aria-label={"save"}
-          >
-            Save Changes
-          </Button>
-          <Button
-            variant={"contained"}
-            endIcon={<AddIcon />}
-            onClick={this.addRecord}
-            size={"small"}
-            color={"primary"}
-            aria-label={"add"}
-          >
-            Add Measurement
-          </Button>
-        </Box>
+        {<AddEditButtonPanel
+          THIS={this}
+          user={user}
+          onClickAddRecord={this.addRecord}
+          onClickChangeRecordArchivalStatus={this.changeRecordArchivalStatus}
+          onClickRemoveRecord={this.removeRecord}
+          onClickSaveRecordChanges={this.saveChanges}
+          onClickViewProvenanceRecords={this.showProvenanceRecordsView}
+          addRecordButtonLabel={"Add Measurement"}
+          removeRecordButtonLabel={"Remove Measurement"}
+        />}
+        {/*<Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-around", m: 1, }} >*/}
+        {/*  <Button*/}
+        {/*    variant={"contained"}*/}
+        {/*    endIcon={<RemoveCircleIcon />}*/}
+        {/*    onClick={this.removeRecord}*/}
+        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
+        {/*    size={"small"}*/}
+        {/*    color={"primary"}*/}
+        {/*    aria-label={"remove"}*/}
+        {/*  >*/}
+        {/*    Remove Measurement*/}
+        {/*  </Button>*/}
+        {/*  { isSysadmin &&*/}
+        {/*    <Button*/}
+        {/*      variant="contained"*/}
+        {/*      size="small"*/}
+        {/*      color="primary"*/}
+        {/*      aria-label="save"*/}
+        {/*      onClick={this.showProvenanceRecordsView}*/}
+        {/*      disabled={!selection.hasOwnProperty("item_id")}*/}
+        {/*    >*/}
+        {/*      <VisibilityIcon sx={{mr: 1}}/>*/}
+        {/*      View Provenance Records*/}
+        {/*    </Button>*/}
+        {/*  }*/}
+        {/*  <Button*/}
+        {/*    variant={"contained"}*/}
+        {/*    endIcon={this.isRecordArchived(selection) ? <UnarchiveIcon /> : <ArchiveIcon />}*/}
+        {/*    onClick={this.changeRecordArchivalStatus}*/}
+        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
+        {/*    size={"small"} color={"primary"}*/}
+        {/*    aria-label={"archive"}*/}
+        {/*  >*/}
+        {/*    {this.isRecordArchived(selection) ? "Restore Measurement Record" : "Archive Measurement Record"}*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    variant={"contained"}*/}
+        {/*    endIcon={<SaveIcon />}*/}
+        {/*    onClick={this.saveChanges}*/}
+        {/*    disabled={!has_changed_records}*/}
+        {/*    size={"small"}*/}
+        {/*    color={"primary"}*/}
+        {/*    aria-label={"save"}*/}
+        {/*  >*/}
+        {/*    Save Changes*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    variant={"contained"}*/}
+        {/*    endIcon={<AddIcon />}*/}
+        {/*    onClick={this.addRecord}*/}
+        {/*    size={"small"}*/}
+        {/*    color={"primary"}*/}
+        {/*    aria-label={"add"}*/}
+        {/*  >*/}
+        {/*    Add Measurement*/}
+        {/*  </Button>*/}
+        {/*</Box>*/}
       </React.Fragment>
     );
   }
