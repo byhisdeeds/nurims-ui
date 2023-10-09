@@ -119,10 +119,10 @@ export const MenuItems = [
         authmodlevel: 'basic',
         children: [
           {
-            label: 'Add Measurement',
-            value: 'rp.add.dosimetry.measurement',
-            title: 'Add Dosimetry Measurement Record',
-            tooltip: 'Add dosimetry measurement for personnel, area, contamination, waste and other monitors',
+            label: 'Add/Edit Scenarios',
+            value: 'ep.add.edit.emergency.scenarios',
+            title: 'Add/Edit Emergency Scenarios',
+            tooltip: 'Brief description of the response to an emergency used when planning the response. It ensures that all those involved in the development of a response capability share a common vision.',
             authmodlevel: 'basic',
           },
         ]
@@ -134,7 +134,7 @@ export const MenuItems = [
         children: [
           {
             label: 'Surveillance Sheet',
-            value: 'cm.generate.material.surveillance.sheet',
+            value: 'ep.',
             title: 'Controlled Material Surveillance Sheet',
             tooltip: 'Generate controlled material surveillance sheet',
             authmodlevel: 'basic',
@@ -143,14 +143,13 @@ export const MenuItems = [
       },
       {
         label: '○ Documents',
-        value: '',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         children: [
           {
             label: 'RadPro Schedule',
-            value: 'cm.radiation.protection.schedule',
-            title: '',
+            value: 'ep.',
+            title: 'eeeee',
             tooltip: 'Human resource actions',
             authmodlevel: 'pro',
           },
@@ -161,7 +160,6 @@ export const MenuItems = [
   {
     label: 'Human Resource',
     value: 'human.resource',
-    title: '',
     tooltip: 'Human resource actions',
     icon: IconPeople,
     authmodlevel: 'basic',

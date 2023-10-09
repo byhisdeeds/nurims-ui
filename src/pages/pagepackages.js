@@ -549,8 +549,16 @@ export const OrgPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.ORG_STATUTORY_REQUIREMENTS) {
+  } else if (actionid === Constants.ORG_STATUTORY_REQUIREMENTS) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  } else if (actionid === Constants.ORG_MAINTAIN_ORGANISATION_DOCUMENTS) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -560,7 +568,20 @@ export const OrgPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       properties={properties}
     />)
   }
-  else if (actionid === Constants.ORG_MAINTAIN_ORGANISATION_DOCUMENTS) {
+}
+
+export const EmergencyPreparednessPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+  if (actionid === Constants.EP_CONCEPT_OF_OPERATION) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.EP_ADD_EDIT_EMERGENCY_SCENARIOS) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}

@@ -41,7 +41,8 @@ import {
   IcensPackages,
   SupportPackages,
   RasaPackages,
-  OrgPackages
+  OrgPackages,
+  EmergencyPreparednessPackages
 } from "./pages/pagepackages";
 import {MONITORDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/MonitorDosimetryMeasurement"
 import {PERSONNELDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/PersonnelDosimetryMeasurement"
@@ -429,6 +430,7 @@ class App extends React.Component {
                   {RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {OrgPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                  {EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   <LogWindow
                     ref={this.logRef}
                     onClose={this.closeLogWindow}

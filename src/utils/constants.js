@@ -16,6 +16,7 @@ module.exports = Object.freeze({
   RP_PERSONNEL_DOSIMETRY_REPORT: 'rp.personnel.dosimetry.report',
   RP_MONITOR_LIST: 'rp.monitors.list',
   RP_MONITOR_DATA: 'rp.monitors.data',
+  BASIC_RP_ADD_EDIT_MONITORS: "rp.add.edit.monitors",
 
   CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER: 'cm.register.update.material.manufacturer',
   CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION: 'cm.register.update.material.storage.location',
@@ -46,13 +47,15 @@ module.exports = Object.freeze({
   ORG_STATUTORY_REQUIREMENTS: 'org.statutory.requirements',
   ORG_MAINTAIN_ORGANISATION_DOCUMENTS: 'org.maintain.organisation.documents',
 
+  EP_ADD_EDIT_EMERGENCY_SCENARIOS: 'ep.add.edit.emergency.scenarios',
+  EP_CONCEPT_OF_OPERATION: 'ep.',
+
   SYSADMIN_MANAGE_USERS: 'sysadmin.manage.users',
 
   SUPPORT_TERMS_AND_DEFINITIONS: 'support.terms.and.definitions',
 
   RASA_CHATBOT: 'chat.bot',
 
-  BASIC_RP_ADD_EDIT_MONITORS: "rp.add.edit.monitors",
 
   PRO_IMPORT_ICENS_PERSONNEL: 'sysadmin.import.icens.personnel',
   PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS: 'sysadmin.import.icens.controlled.material.manufacturers',
