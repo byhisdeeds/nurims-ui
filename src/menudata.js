@@ -287,7 +287,7 @@ export const MenuItems = [
       },
       {
         label: '○ Maintenance',
-        tooltip: 'Corrective and upgrade maintenance issue records.',
+        tooltip: 'Corrective maintenance issue and SSC upgrade task records.',
         authmodlevel: 'basic',
         children: [
           {

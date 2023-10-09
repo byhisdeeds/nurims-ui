@@ -371,16 +371,16 @@ class App extends React.Component {
             />
             <AppBar position="static">
               <Toolbar>
-                <IconButton
-                  onClick={this.toggleMenuDrawer}
-                  size="large"
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  sx={{mr: 2}}
-                >
-                  <MenuIcon/>
-                </IconButton>
+                {/*<IconButton*/}
+                {/*  onClick={this.toggleMenuDrawer}*/}
+                {/*  size="large"*/}
+                {/*  edge="start"*/}
+                {/*  color="inherit"*/}
+                {/*  aria-label="menu"*/}
+                {/*  sx={{mr: 2}}*/}
+                {/*>*/}
+                {/*  <MenuIcon/>*/}
+                {/*</IconButton>*/}
                 <Tooltip
                   title={`Build ${metadata.buildMajor}.${metadata.buildMinor}.${metadata.buildRevision} ${metadata.buildTag}`}
                   placement={"bottom-start"}
