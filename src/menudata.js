@@ -318,8 +318,8 @@ export const MenuData = [
             authmodlevel: 'basic',
           },
           {
-            name: '   - View SSC Records',
-            link: 'ssc.view.ssc.records',
+            name: '   - View SSC List',
+            link: 'ssc.view.ssc.list',
             title: 'View SSC Records',
             tooltip: 'View structures systems and components records.',
             authmodlevel: 'basic',
@@ -332,17 +332,17 @@ export const MenuData = [
         authmodlevel: 'basic',
         items: [
           {
-            name: '   - Add SSC AMP Record',
+            name: '   - Add/Edit SSC AMP Record',
             link: 'ssc.add.edit.ssc.amp',
             title: 'Add/Edit SSC Aging Management Programme',
             tooltip: 'Add or Edit an Aging Management Programme (AMP) for an SSC',
             authmodlevel: 'basic',
           },
           {
-            name: '   - View AMP Records',
-            link: 'ssc.view.amp.records',
-            title: 'View AMP Records',
-            tooltip: 'View SSC ageing management programme records.',
+            name: '   - View SSC AMP List',
+            link: 'ssc.amp.list',
+            title: 'View Aging Management Programme SSC List',
+            tooltip: 'View Aging Management Programme (AMP) SSC details',
             authmodlevel: 'basic',
           },
         ]
@@ -357,13 +357,6 @@ export const MenuData = [
             link: 'ssc.add.edit.ssc.corrective.maintenance.issue.record',
             title: 'Add/Edit SSC Corrective Maintenance Issue Record',
             tooltip: 'Add or Edit an SSC corrective maintenance issue record.',
-            authmodlevel: 'basic',
-          },
-          {
-            name: '   - View Maint. Record',
-            link: 'ssc.view.ssc.maintenance.records',
-            title: 'View SSC Maintenance Records',
-            tooltip: 'View an SSC corrective maintenance records.',
             authmodlevel: 'basic',
           },
         ]

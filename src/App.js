@@ -80,6 +80,7 @@ import {
 } from "./components/CommonComponents";
 import {DeviceUUID} from 'device-uuid';
 import {enqueueWarningSnackbar} from "./utils/SnackbarVariants";
+import {VIEWAMPRECORDS_REF} from "./pages/maintenance/ViewAMPRecords";
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
@@ -147,6 +148,7 @@ class App extends React.Component {
     this.crefs[ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF] = React.createRef();
     this.crefs[ADDEDITAMP_REF] = React.createRef();
     this.crefs[VIEWSSCRECORDS_REF] = React.createRef();
+    this.crefs[VIEWAMPRECORDS_REF] = React.createRef();
     this.crefs[GENERATEMATERIALSURVEILLANCESHEET_REF] = React.createRef();
     this.crefs[ADDEDITREACTORWATERSAMPLES_REF] = React.createRef();
     this.crefs[ADDEDITIRRADIATEDSAMPLES_REF] = React.createRef();

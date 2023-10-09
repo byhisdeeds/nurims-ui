@@ -10,10 +10,12 @@ import {withTheme} from "@mui/styles";
 import {SwitchComponent, TitleComponent} from "../../components/CommonComponents";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 
 export const VIEWSSCRECORDS_REF = "ViewSSCRecords";
 
 class ViewSSCRecords extends Component {
+  static context = UserDebugContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -36,7 +38,9 @@ class ViewSSCRecords extends Component {
   }
 
   ws_message = (message) => {
-    console.log("ON_WS_MESSAGE", this.Module, message)
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "ws_message", "message", message);
+    }
     if (message.hasOwnProperty("response")) {
       const response = message.response;
       if (response.hasOwnProperty("status") && response.status === 0) {

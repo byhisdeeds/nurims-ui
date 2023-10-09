@@ -12,6 +12,7 @@ import {STORAGE_REF} from "./controlledmaterials/Storage";
 import {MANUFACTURER_REF} from "./controlledmaterials/Manufacturer";
 import {GENERATEMATERIALSURVEILLANCESHEET_REF} from "./controlledmaterials/GenerateMaterialSurveillanceSheet";
 import {VIEWSSCRECORDS_REF} from "./maintenance/ViewSSCRecords";
+import {VIEWAMPRECORDS_REF} from "./maintenance/ViewAMPRecords";
 import {ADDEDITAMP_REF} from "./maintenance/AddEditAMP";
 import {ADDEDITSSC_REF} from "./maintenance/AddEditSSC";
 import {ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF} from "./maintenance/AddEditCorrectiveMaintenanceIssueRecord";
@@ -32,6 +33,7 @@ import {
   GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF
 } from "./operation/GenerateReactorSampleIrradiationAuthorizationPdf";
 import {OWNER_REF} from "./controlledmaterials/Owner";
+import ViewAMPRecords from "./maintenance/ViewAMPRecords";
 
 const Constants = require("../utils/constants");
 
@@ -52,6 +54,7 @@ const AddEditCorrectiveMaintenanceIssueRecord = lazy(() => import('./maintenance
 const AddEditSSC = lazy(() => import('./maintenance/AddEditSSC'));
 const AddEditAMP = lazy(() => import('./maintenance/AddEditAMP'));
 const ViewSSCRecords = lazy(() => import('./maintenance/ViewSSCRecords'));
+const ViewAMPRecords = lazy(() => import('./maintenance/ViewAMPRecords'));
 const AddEditMonitors = lazy(() => import('./radiationprotection/AddEditMonitors'));
 const ManageUsers = lazy(() => import('./sysadmin/ManageUsers'));
 const ImportICENSPersonnel = lazy(() => import('./packages/icens/ImportICENSPersonnel'));
@@ -207,7 +210,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
 }
 
 export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
-  if (actionid === Constants.SSC_VIEW_SSC_RECORDS) {
+  if (actionid === Constants.SSC_VIEW_SSC_LIST) {
     return (<ViewSSCRecords
       ref={crefs[VIEWSSCRECORDS_REF]}
       title={menuTitle}
@@ -220,6 +223,16 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
   else if (actionid === Constants.SSC_ADD_EDIT_SSC_AMP) {
     return (<AddEditAMP
       ref={crefs[ADDEDITAMP_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.SSC_VIEW_AMP_SSC_LIST) {
+    return (<ViewAMPRecords
+      ref={crefs[VIEWAMPRECORDS_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
