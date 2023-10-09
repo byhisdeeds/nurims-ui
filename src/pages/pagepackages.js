@@ -33,7 +33,6 @@ import {
   GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF
 } from "./operation/GenerateReactorSampleIrradiationAuthorizationPdf";
 import {OWNER_REF} from "./controlledmaterials/Owner";
-import ViewAMPRecords from "./maintenance/ViewAMPRecords";
 
 const Constants = require("../utils/constants");
 
