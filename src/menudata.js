@@ -16,47 +16,47 @@ export const MenuItems = [
     label: 'Controlled Materials',
     value: 'controlled.materials',
     icon: LockIcon,
-    tooltip: 'Controlled material resource actions',
+    tooltip: 'Actions related to the management of controlled materials',
     authmodlevel: 'basic',
     children: [
       {
         label: '○ Materials',
-        tooltip: 'Controlled material resource actions',
+        tooltip: 'Actions related to the management of controlled materials',
         authmodlevel: 'basic',
         children: [
           {
             label: 'Storage',
             value: 'cm.register.update.material.storage.location',
             title: 'Register/Update Controlled Material Storage',
-            tooltip: 'Register and update controlled material storage location details',
+            tooltip: 'Register and/or update storage location details for controlled materials.',
             authmodlevel: 'basic',
           },
           {
             label: 'Manufacturer',
             value: 'cm.register.update.material.manufacturer',
             title: 'Register/Update Controlled Material Manufacturer',
-            tooltip: 'Register and update controlled material manufacturer details',
+            tooltip: 'Register and/or update manufacturer details for controlled materials',
             authmodlevel: 'basic',
           },
           {
             label: 'Owner',
             value: 'cm.update.material.owner',
             title: 'Register/Update Controlled Material Owner',
-            tooltip: 'Register and update controlled material owner details',
+            tooltip: 'Register and/or update ownership details for controlled materials',
             authmodlevel: 'basic',
           },
           {
             label: 'Material',
             value: 'cm.register.update.material',
             title: 'Register/Update Controlled Material',
-            tooltip: 'Register and update controlled material details',
+            tooltip: 'Register and/or update the details for controlled materials',
             authmodlevel: 'basic',
           },
         ]
       },
       {
         label: '○ Surveillance',
-        tooltip: 'Surveillance of controlled material resource actions',
+        tooltip: 'Actions related to the surveillance of controlled materials.',
         authmodlevel: 'basic',
         children: [
           {
