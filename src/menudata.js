@@ -495,14 +495,14 @@ export const MenuItems = [
             label: 'Add/Edit Reactor Irrad.',
             value: 'ro.add.edit.reactor.sample.irradiation.records',
             title: 'Add/Edit Reactor Sample Irradiation (RSI) Authorization Records',
-            tooltip: 'Add or edit the irradiation request/authorization record for samples to be irradiated in the reactor core.',
+            tooltip: 'Add or edit the irradiation request/authorization record for samples to be irradiated in the reactor.',
             authmodlevel: 'basic',
           },
           {
             label: 'Print Auth. Records',
             value: 'ro.generate.reactor.sample.irradiation.authorization.pdf',
             title: 'Print Reactor Sample Irradiation Authorization Pdf',
-            tooltip: 'Generate a pdf of the irradiation authorization records for samples to be irradiated in the reactor core.',
+            tooltip: 'Generate a pdf of the irradiation authorization records for samples to be irradiated in the reactor.',
             authmodlevel: 'basic',
           },
         ]
