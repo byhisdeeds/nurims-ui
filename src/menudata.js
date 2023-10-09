@@ -115,7 +115,7 @@ export const MenuItems = [
     children: [
       {
         label: '○ Concept of Operations',
-        tooltip: 'A basic concept of operations describing the response process. On the basis of the concept of operations, roles and responsibilities are assigned to each group, organization or individual involved in emergency preparedness and response.',
+        tooltip: 'A basic concept of operations describes the response process, and assigns roles and responsibilities to each group, organization or individual involved in emergency preparedness and response.',
         authmodlevel: 'basic',
         children: [
           {
