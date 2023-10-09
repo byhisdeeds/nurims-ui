@@ -222,14 +222,14 @@ export const MenuItems = [
             label: 'SPI',
             value: 'hr.spi',
             title: 'Personnel Safety Performance Indicators',
-            tooltip: 'Human resource actions',
+            tooltip: 'Safety performance indicators for personnel',
             authmodlevel: 'pro',
           },
           {
             label: 'TPI',
             value: 'hr.tpi',
             title: 'Personnel Training Performance Indicators',
-            tooltip: 'Human resource actions',
+            tooltip: 'Training performance indicators for personnel',
             authmodlevel: 'pro',
           },
         ]
