@@ -3,10 +3,8 @@ import {withTheme} from "@mui/styles";
 import {styled} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
-import AppMenuItem from "./AppMenuItem";
 import PropTypes from 'prop-types'
 import DrawerMenu from "./components/DrawerMenu";
 
@@ -73,18 +71,6 @@ function MenuDrawer(props) {
         open={props.open}
         style={{top: 64}}
       >
-        {/*<List component="nav" disablePadding>*/}
-        {/*  {props.menuItems.map((item, index) => (*/}
-        {/*    <AppMenuItem*/}
-        {/*      {...item}*/}
-        {/*      root={item.hasOwnProperty("root")}*/}
-        {/*      key={index}*/}
-        {/*      user={props.user}*/}
-        {/*      organisation={props.organisation}*/}
-        {/*      onClick={props.onClick}*/}
-        {/*    />*/}
-        {/*  ))}*/}
-        {/*</List>*/}
         <DrawerMenu
           items={props.menuItems}
           reverse={false}

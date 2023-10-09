@@ -160,7 +160,7 @@ pre {
 }
 
 .Side-menu-default {
-  background-color: #222D32;
+  /*background-color: #222D32;*/
   color: #B8C7CE;
 }
 
@@ -172,7 +172,7 @@ pre {
 }
 
 .Side-menu-default .divider {
-  background-color: #1A2226;
+  /*background-color: #1A2226;*/
   color: #4A636E;
   text-transform: uppercase;
 }
