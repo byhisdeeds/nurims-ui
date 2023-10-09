@@ -8,9 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import AppMenuItem from "./AppMenuItem";
 import PropTypes from 'prop-types'
-// import SideMenu from "react-sidemenu/dist/SideMenu";
 import DrawerMenu from "./components/DrawerMenu";
-import {MenuItems} from "./menudata";
 
 const drawerWidth = 300;
 
@@ -65,36 +63,6 @@ MenuDrawer.propTypes = {
 }
 
 
-// =========================================================================================================
-
-const items = [
-  {divider: true, label: 'Segment 1', value: 'segment1'},
-  {label: 'Item 1', value: 'item1', icon: 'fa-search',
-    children: [
-      {label: 'Item 1.1', value: 'item1.1', icon: 'fa-snapchat',
-        children: [
-          {label: 'Item 1.1.1', value: 'item1.1.1', icon: 'fa-anchor'},
-          {label: 'Item 1.1.2', value: 'item1.1.2', icon: 'fa-bar-chart'}]},
-      {label: 'Item 1.2', value: 'item1.2'}]},
-  {label: 'Item 2', value: 'item2', icon: 'fa-automobile',
-    children: [
-      {label: 'Item 2.1', value: 'item2.1',
-        children: [
-          {label: 'Item 2.1.1', value: 'item2.1.1'},
-          {label: 'Item 2.1.2', value: 'item2.1.2'}]},
-      {label: 'Item 2.2', value: 'item2.2'}]},
-  {divider: true, label: 'Segment 2', value: 'segment2'},
-  {label: 'Item 3', value: 'item3', icon: 'fa-beer'}
-];
-
-function onMenuItemClicked(item, extras) {
-  console.log("$$$$$$$$$ ON MENU ITEM CLICKED $$$$$$$$$$$$$$$")
-  console.log(item, extras)
-  console.log("$$$$$$$$$$$$$$$$$$$$$$$$")
-}
-// =========================================================================================================
-
-
 function MenuDrawer(props) {
 
   return (
@@ -118,9 +86,10 @@ function MenuDrawer(props) {
         {/*  ))}*/}
         {/*</List>*/}
         <DrawerMenu
-          items={MenuItems}
+          items={props.menuItems}
           reverse={false}
-          // onMenuItemClick={onMenuItemClicked}
+          activeItem={"chat.bot"}
+          collapse={true}
           onMenuItemClick={props.onClick}
         />
         <Divider />

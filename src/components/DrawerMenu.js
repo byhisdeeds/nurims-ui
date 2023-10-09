@@ -1,72 +1,16 @@
-// @flow
-
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import LockIcon from "@mui/icons-material/Lock";
 import {Tooltip} from "@mui/material";
-// import type { Node as React$Node } from 'react'
 
-// types
-// type JSONDivider = {
-//   divider: true,
-//   label: string,
-//   value: string
-// }
-//
-// type JSONItem = {
-//   label: string,
-//   value: string,
-//   icon?: string,
-//   children?: Array<JSONItem | JSONDivider>,
-//   extras?: any
-// }
-//
-// type JSONStateTreeItem = {
-//   parent: ?JSONStateTreeItem,
-//   active: ?boolean,
-//   value: string,
-//   children: ?Array<JSONStateTreeItem>,
-//   onClick: (any) => mixed,
-//   extras: any,
-//   icon: ?string,
-//   label: ?string,
-//   divider: ?boolean
-// }
-//
-// type Props = {
-//   items?: Array<JSONItem | JSONDivider>,
-//   onMenuItemClick?: (value: string, extras: any) => void,
-//   renderMenuItemContent?: ({ icon: ?string, value: ?string, label: ?string }) => React$Node,
-//   theme: string,
-//   collapse?: boolean,
-//   rtl?: boolean,
-//   activeItem?: string,
-//   children?: Array<React$Node>,
-//   shouldTriggerClickOnParents?: boolean,
-// };
-//
-// type ComponentStateTreeItem = {
-//   parent: ?ComponentStateTreeItem,
-//   active: boolean,
-//   children: ?Array<ComponentStateTreeItem>
-// }
-//
-// type State = {
-//   itemTree: ?Array<JSONStateTreeItem>,
-//   componentStateTree: ?Array<ComponentStateTreeItem>,
-// }
-//
-// type PropsItem = {
-//   label: string,
-//   value: string,
-//   icon?: string,
-//   onMenuItemClick?: (value: string, extras: any) => void,
-//   divider?: boolean,
-//   extras?: any,
-//   children?: Array<React$Node>
-// }
 
-// components
+// A fork of react-sidemenu, a lightweight side menu component written in React.js. No jQuery, just CSS3.
+//   Pure React.js, no external dependencies
+// 	 Configure with JSON or via React components</li>
+// 	 Packed with default ready-to-use styling</li>
+// 	 Easy to customize styling guide</li>
+// 	 Support of custom properties</li>
+// 	 Detailed <a href="https://github.com/banomaster/react-sidemenu">documentation</a>
+
 export default class DrawerMenu extends Component {
   static defaultProps = {
     collapse: true,
@@ -90,19 +34,19 @@ export default class DrawerMenu extends Component {
   }
 
   componentWillMount () {
-    if (this.props.children) {
-      this.setState({
-        componentStateTree: this.buildComponentStateTree(this.props.children, null)
-      })
-    }
   }
 
   componentDidMount () {
-    const { items } = this.props
-
-    if (items) {
-      this.setState({ itemTree: this.buildTree(items, null) })
+    if (this.props.children) {
+      this.setState(pstate => {
+        return {componentStateTree: this.buildComponentStateTree(this.props.children, null)}
+      });
     }
+    if (this.props.items) {
+      this.setState(pstate => {
+        return {itemTree: this.buildTree(this.props.items, null)}
+      });
+     }
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -124,7 +68,6 @@ export default class DrawerMenu extends Component {
   //
   // methods for DrawerMenu using COMPONENT structure
   //
-
   buildComponentStateTree (children, parent) {
     const { activeItem } = this.props
 

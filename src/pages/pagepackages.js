@@ -33,6 +33,7 @@ import {
   GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF
 } from "./operation/GenerateReactorSampleIrradiationAuthorizationPdf";
 import {OWNER_REF} from "./controlledmaterials/Owner";
+import {UNDERDEVELOPMENT_REF} from "../components/UnderDevelopment";
 
 const Constants = require("../utils/constants");
 
@@ -70,6 +71,7 @@ const AddEditReactorSampleIrradiationAuthorization = lazy(() => import('./operat
 const GenerateReactorSampleIrradiationAuthorizationPdf = lazy(() => import('./operation/GenerateReactorSampleIrradiationAuthorizationPdf'));
 const TermsAndDefinitions = lazy(() => import('./support/TermsAndDefinitions'));
 const ChatBot = lazy(() => import('./rasa/ChatBot'));
+const UnderDevelopment = lazy(() => import('../components/UnderDevelopment'));
 
 
 export const RasaPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
@@ -143,6 +145,46 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       properties={properties}
     />)
   }
+  else if (actionid === Constants.HR_UPDATE_TRAINING_RECORD) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.HR_ADD_EDIT_TRAINING_PROGRAMME) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.HR_SPI) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.HR_TPP) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
 }
 
 export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
@@ -199,6 +241,26 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
   else if (actionid === Constants.CM_UPDATE_MATERIAL_OWNER) {
     return (<Owner
       ref={crefs[OWNER_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.CM_UPDATE_MATERIAL_SURVEILLANCE) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.CM_RADIATION_PROTECTION_SCHEDULE) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -269,6 +331,16 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       properties={properties}
     />)
   }
+  else if (actionid === Constants.SSC_GENERATE_AMP_SCHEDULE) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
 }
 
 export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
@@ -315,6 +387,26 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
   else if (actionid === Constants.RP_PERSONNEL_DOSIMETRY_REPORT) {
     return (<PersonnelDosimetryReport
       ref={crefs[PERSONNELDOSIMETRYREPORT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.RP_MONITOR_LIST) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.RP_MONITOR_DATA) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
@@ -428,6 +520,39 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
   else if (actionid === Constants.RO_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF) {
     return (<GenerateReactorSampleIrradiationAuthorizationPdf
       ref={crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+}
+
+export const OrgPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+  if (actionid === Constants.ORG_EDIT_DETAILS) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.ORG_STATUTORY_REQUIREMENTS) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.ORG_MAINTAIN_ORGANISATION_DOCUMENTS) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}

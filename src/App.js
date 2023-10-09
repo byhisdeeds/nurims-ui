@@ -15,7 +15,7 @@ import {styled} from '@mui/material/styles';
 import MenuDrawer from "./MenuDrawer";
 import {darkTheme, lightTheme} from "./utils/Theme";
 import {ThemeProvider} from "@mui/material/styles";
-import {MenuData} from "./menudata";
+import {MenuItems} from "./menudata";
 import {SnackbarProvider} from "notistack";
 import metadata from './metadata.json';
 import BusyIndicator from "./components/BusyIndicator";
@@ -25,9 +25,13 @@ import {
   CMD_GET_SYSTEM_PROPERTIES,
   CMD_GET_ORGANISATION,
   CMD_SET_SYSTEM_PROPERTIES,
-  CMD_BACKGROUND_TASKS, CMD_PING
+  CMD_BACKGROUND_TASKS,
+  CMD_PING
 } from "./utils/constants";
-import {ConsoleLog, UserDebugContext} from "./utils/UserDebugContext";
+import {
+  ConsoleLog,
+  UserDebugContext
+} from "./utils/UserDebugContext";
 import {
   SSCPackages,
   SysAdminResourcePackages,
@@ -36,7 +40,8 @@ import {
   RadiationProtectionPackages,
   IcensPackages,
   SupportPackages,
-  RasaPackages
+  RasaPackages,
+  OrgPackages
 } from "./pages/pagepackages";
 import {MONITORDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/MonitorDosimetryMeasurement"
 import {PERSONNELDOSIMETRYMEASUREMENT_REF} from "./pages/radiationprotection/PersonnelDosimetryMeasurement"
@@ -72,6 +77,7 @@ import {
 } from "./pages/operation/GenerateReactorSampleIrradiationAuthorizationPdf"
 import {CHATBOT_REF} from "./pages/rasa/ChatBot"
 import {TERMSANDDEFINITIONS_REF} from "./pages/support/TermsAndDefinitions"
+import {UNDERDEVELOPMENT_REF} from "./components/UnderDevelopment"
 import LogWindow from "./components/LogWindow";
 import {
   BackgroundTasks,
@@ -113,7 +119,7 @@ class App extends React.Component {
       actionid: '',
       open: true,
       theme: localStorage.getItem("theme") || "light",
-      menuData: MenuData,
+      menuData: MenuItems,
       org: {name: "", authorized_module_level: ""},
       ready: false,
       busy: 0,
@@ -165,6 +171,7 @@ class App extends React.Component {
     this.crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF] = React.createRef();
     this.crefs[TERMSANDDEFINITIONS_REF] = React.createRef();
     this.crefs[CHATBOT_REF] = React.createRef();
+    this.crefs[UNDERDEVELOPMENT_REF] = React.createRef();
   }
 
 
@@ -421,6 +428,7 @@ class App extends React.Component {
                   {HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                  {OrgPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
                   <LogWindow
                     ref={this.logRef}
                     onClose={this.closeLogWindow}

@@ -191,7 +191,7 @@ pre {
 }
 
 .Side-menu-default .item.active > .item-title > a {
-  color: white;
+  color: green;
 }
 
 .Side-menu-default .item:hover > .item-title {
@@ -206,7 +206,7 @@ pre {
   background-color: #435863;
 }
 
-.Side-menu-default .item.item-level-1:hover,
-.Side-menu-default .item.item-level-1.active {
-  border-left: 4px solid #C4EAF2;
-}
+/*.Side-menu-default .item.item-level-1:hover,*/
+/*.Side-menu-default .item.item-level-1.active {*/
+/*  border-left: 4px solid #C4EAF2;*/
+/*}*/

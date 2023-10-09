@@ -1,31 +1,50 @@
 module.exports = Object.freeze({
   MY_ACCOUNT: 'myaccount',
   SETTINGS: 'settings',
+
   HR_ADD_EDIT_PERSONNEL: 'hr.add.edit.personnel',
   HR_VIEW_PERSONNEL_RECORDS: 'hr.view.person.records',
   HR_UPDATE_MONITORING_STATUS: 'hr.update.personnel.monitoring.status',
+  HR_UPDATE_TRAINING_RECORD: 'hr.update.person.training.record',
+  HR_ADD_EDIT_TRAINING_PROGRAMME: 'hr.add.edit.training.programme',
+  HR_SPI: 'hr.spi',
+  HR_TPP: 'hr.tpp',
+
   RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS: 'rp.add.edit.personnel.dosimetry.measurements',
   RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS: 'rp.add.edit.monitor.dosimetry.measurements',
   RP_PERSONNEL_DOSIMETRY_EVALUATION: 'rp.personnel.dosimetry.evaluation',
   RP_PERSONNEL_DOSIMETRY_REPORT: 'rp.personnel.dosimetry.report',
+  RP_MONITOR_LIST: 'rp.monitors.list',
+  RP_MONITOR_DATA: 'rp.monitors.data',
+
   CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER: 'cm.register.update.material.manufacturer',
   CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION: 'cm.register.update.material.storage.location',
   CM_REGISTER_CONTROLLED_MATERIAL: 'cm.register.update.material',
   CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET: 'cm.generate.material.surveillance.sheet',
   CM_VIEW_CONTROLLED_MATERIALS_LIST: 'cm.view.controlled.materials.list',
   CM_UPDATE_MATERIAL_OWNER: 'cm.update.material.owner',
+  CM_UPDATE_MATERIAL_SURVEILLANCE: 'cm.update.material.surveillance',
+  CM_RADIATION_PROTECTION_SCHEDULE: 'cm.radiation.protection.schedule',
+  CM_INVENTORY_LIST: 'cm.inventory.list',
+
   SSC_ADD_EDIT_SSC: 'ssc.add.edit.ssc',
   SSC_ADD_EDIT_SSC_CORRECTIVE_MAINTENANCE_ISSUE_RECORD: 'ssc.add.edit.ssc.corrective.maintenance.issue.record',
   SSC_ADD_EDIT_SSC_AMP: 'ssc.add.edit.ssc.amp',
   SSC_VIEW_SSC_LIST: 'ssc.view.ssc.list',
   SSC_VIEW_AMP_SSC_LIST: 'ssc.amp.list',
   SSC_GENERATE_SSC_MAINTENANCE_REPORT: 'ssc.generate.ssc.maintenance.report',
+  SSC_GENERATE_AMP_SCHEDULE: 'ssc.generate.amp.schedule',
+
   RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS: 'ro.add.edit.reactor.operating.run.records',
   RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA: 'ro.add.edit.irradiated.samples',
   RO_REACTOR_OPERATIONS_REPORT: 'ro.reactor.operations.report',
   RO_ADD_EDIT_REACTOR_WATER_SAMPLES: 'ro.add.edit.reactor.water.samples',
   RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION: 'ro.add.edit.reactor.sample.irradiation.records',
   RO_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF: 'ro.generate.reactor.sample.irradiation.authorization.pdf',
+
+  ORG_EDIT_DETAILS: 'org.edit.details',
+  ORG_STATUTORY_REQUIREMENTS: 'org.statutory.requirements',
+  ORG_MAINTAIN_ORGANISATION_DOCUMENTS: 'org.maintain.organisation.documents',
 
   SYSADMIN_MANAGE_USERS: 'sysadmin.manage.users',
 
