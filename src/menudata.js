@@ -300,7 +300,7 @@ export const MenuItems = [
           {
             label: 'Add/Edit TODO Records',
             value: 'ssc.add.edit.ssc.todo.record',
-            title: 'Add/Edit SSC TODO Issue Record',
+            title: 'Add/Edit SSC TODO Record',
             tooltip: 'Add or edit a new feature or upgrade request record for an SSC',
             authmodlevel: 'basic',
           },
