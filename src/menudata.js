@@ -332,14 +332,14 @@ export const MenuData = [
         authmodlevel: 'basic',
         items: [
           {
-            name: '   - Add/Edit SSC AMP Record',
+            name: '   - Add/Edit AMP Record',
             link: 'ssc.add.edit.ssc.amp',
             title: 'Add/Edit SSC Aging Management Programme',
             tooltip: 'Add or Edit an Aging Management Programme (AMP) for an SSC',
             authmodlevel: 'basic',
           },
           {
-            name: '   - View SSC AMP List',
+            name: '   - View AMP List',
             link: 'ssc.amp.list',
             title: 'View Aging Management Programme SSC List',
             tooltip: 'View Aging Management Programme (AMP) SSC details',
