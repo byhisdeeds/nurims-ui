@@ -175,7 +175,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       properties={properties}
     />)
   }
-  else if (actionid === Constants.HR_TPP) {
+  else if (actionid === Constants.HR_TPI) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -259,6 +259,16 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
     />)
   }
   else if (actionid === Constants.CM_RADIATION_PROTECTION_SCHEDULE) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.CM_INVENTORY_LIST) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}

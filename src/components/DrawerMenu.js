@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {Tooltip} from "@mui/material";
+import {isValidUserRole} from "../utils/UserUtils";
 
 
 // A fork of react-sidemenu, a lightweight side menu component written in React.js. No jQuery, just CSS3.
@@ -300,7 +301,20 @@ export default class DrawerMenu extends Component {
     )
   }
 
+  menu_disabled(organisation, modver, sysadmin) {
+    if (sysadmin) {
+      return false;
+    } else if (modver === 'basic') {
+      return false
+    } else if (organisation && organisation.hasOwnProperty('authorized_module_level')) {
+      return !(organisation.authorized_module_level === modver)
+    }
+    return true;
+  }
+
   renderItem (item, level) {
+    // console.log("== renderItem ==", item)
+    // console.log("== renderItem.props ==", this.props)
     if (item.divider) {
       return (
         <div key={item.value} className={`divider divider-level-${level}`}>
@@ -308,8 +322,10 @@ export default class DrawerMenu extends Component {
         </div>
       )
     }
+    const disabled = this.menu_disabled(this.props.organisation,
+      item.authmodlevel, isValidUserRole(this.props.user, "sysadmin"));
     return (
-      <div key={item.value} className={`item item-level-${level} ${item.active ? 'active' : ''}`}>
+      <div key={item.value} className={`item item-level-${level} ${disabled?"item-disabled":""} ${item.active ? 'active' : ''}`}>
         <Tooltip title={item.tooltip} placement={'right-end'} arrow>
           <div
             title={item.tooltip}
@@ -333,7 +349,7 @@ export default class DrawerMenu extends Component {
     const { theme, onMenuItemClick, rtl, renderMenuItemContent, shouldTriggerClickOnParents } = this.props
     const sidemenuComponent = this
     if (!componentStateTree || componentStateTree.length === 0) {
-      // sidemenu constructed from json
+      // menu constructed from json
       return (
         <div className={`Side-menu Side-menu-${theme} ${rtl ? 'rtl' : ''} children active`}>
           {itemTree && itemTree.map((item) =>
@@ -342,7 +358,7 @@ export default class DrawerMenu extends Component {
         </div>
       )
     }
-    // sidemenu constructed with react components
+    // menu constructed with react components
     return (
       <div className={`Side-menu  Side-menu-${theme} ${rtl ? 'rtl' : ''} children active`}>
         { React.Children.map(this.props.children, (child, index) => {
@@ -368,6 +384,7 @@ export class Item extends Component {
   static propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
+    disabled: PropTypes.bool,
     activeState: PropTypes.object,
     level: PropTypes.number,
     icon: PropTypes.string,
@@ -390,6 +407,7 @@ export class Item extends Component {
       handleComponentClick,
       activeState,
       shouldTriggerClickOnParents,
+      disabled,
       onClick
     } = this.props
 
@@ -445,9 +463,7 @@ export class Item extends Component {
     return (
       <span>
         {/* render icon if provided */}
-        {icon &&
-          <i className={`fa ${icon} item-icon`} />
-        }
+        {icon && <i className={`fa ${icon} item-icon`} /> }
         {/* render a simple label */}
         <span className="item-label"> {label} </span>
         { this.renderChevron(children, activeState, rtl) }

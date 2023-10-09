@@ -59,7 +59,6 @@
     "react-papaparse": "^4.1.0",
     "react-router-dom": "^6.9.0",
     "react-scripts": "^4.0.3",
-    "react-sidemenu": "^1.1.0",
     "react-spinners": "^0.13.8",
     "react-virtuoso": "^4.1.0",
     "reconnecting-websocket": "^4.4.0",

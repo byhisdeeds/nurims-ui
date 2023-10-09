@@ -84,14 +84,14 @@ export const MenuItems = [
           {
             label: 'RadPro Schedule',
             value: 'cm.radiation.protection.schedule',
-            title: '',
+            title: 'sss',
             tooltip: 'Human resource actions',
             authmodlevel: 'pro',
           },
           {
             label: 'Inventory',
             value: 'cm.inventory.list',
-            title: '',
+            title: 'ssss',
             tooltip: 'Human resource actions',
             authmodlevel: 'basic',
           },
@@ -207,9 +207,9 @@ export const MenuItems = [
         authmodlevel: 'basic',
         children: [
           {
-            label: 'Add/Edit Training Programme',
+            label: 'Add/Edit Training Program',
             value: 'hr.add.edit.training.programme',
-            title: 'Add/Edit Training Programmes',
+            title: 'Add/Edit Training Programs',
             tooltip: 'Human resource actions',
             authmodlevel: 'basic',
           },
@@ -223,14 +223,14 @@ export const MenuItems = [
           {
             label: 'SPI',
             value: 'hr.spi',
-            title: 'SPI',
+            title: 'Personnel Safety Performance Indicators',
             tooltip: 'Human resource actions',
             authmodlevel: 'pro',
           },
           {
-            label: 'TPP',
-            value: 'hr.tpp',
-            title: 'TTP',
+            label: 'TPI',
+            value: 'hr.tpi',
+            title: 'Personnel Training Performance Indicators',
             tooltip: 'Human resource actions',
             authmodlevel: 'pro',
           },
@@ -274,15 +274,15 @@ export const MenuItems = [
           {
             label: 'Add/Edit AMP Record',
             value: 'ssc.add.edit.ssc.amp',
-            title: 'Add/Edit SSC Aging Management Programme',
-            tooltip: 'Add or Edit an Aging Management Programme (AMP) for an SSC',
+            title: 'Add/Edit SSC Aging Management Program',
+            tooltip: 'Add or Edit an Aging Management Program (AMP) for an SSC',
             authmodlevel: 'basic',
           },
           {
             label: 'View AMP List',
             value: 'ssc.amp.list',
-            title: 'View Aging Management Programme SSC List',
-            tooltip: 'View Aging Management Programme (AMP) SSC details',
+            title: 'View Aging Management Program SSC List',
+            tooltip: 'View Aging Management Program (AMP) SSC details',
             authmodlevel: 'basic',
           },
         ]
@@ -355,7 +355,7 @@ export const MenuItems = [
       {
         label: 'Documents',
         value: 'org.maintain.organisation.documents',
-        title: 'Maintain Organisation Documents',
+        title: 'Organisation Document Repository',
         tooltip: 'Add/Update documents related to the organisation and its responsibilities. These will include operating licenses, statutory requirements, organisational chart etc.',
         authmodlevel: 'basic',
       },

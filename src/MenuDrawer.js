@@ -90,6 +90,8 @@ function MenuDrawer(props) {
           reverse={false}
           activeItem={"chat.bot"}
           collapse={true}
+          user={props.user}
+          organisation={props.organisation}
           onMenuItemClick={props.onClick}
         />
         <Divider />

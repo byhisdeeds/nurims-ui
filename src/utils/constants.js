@@ -8,7 +8,7 @@ module.exports = Object.freeze({
   HR_UPDATE_TRAINING_RECORD: 'hr.update.person.training.record',
   HR_ADD_EDIT_TRAINING_PROGRAMME: 'hr.add.edit.training.programme',
   HR_SPI: 'hr.spi',
-  HR_TPP: 'hr.tpp',
+  HR_TPI: 'hr.tpi',
 
   RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS: 'rp.add.edit.personnel.dosimetry.measurements',
   RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS: 'rp.add.edit.monitor.dosimetry.measurements',
