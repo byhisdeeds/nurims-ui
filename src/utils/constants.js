@@ -34,6 +34,7 @@ module.exports = Object.freeze({
   SSC_VIEW_SSC_LIST: 'ssc.view.ssc.list',
   SSC_VIEW_AMP_SSC_LIST: 'ssc.amp.list',
   SSC_GENERATE_SSC_MAINTENANCE_REPORT: 'ssc.generate.ssc.maintenance.report',
+  SSC_GENERATE_SSC_MAINTENANCE_SCHEDULE: 'ssc.generate.ssc.maintenance.schedule',
   SSC_GENERATE_AMP_SCHEDULE: 'ssc.generate.amp.schedule',
   SSC_ADD_EDIT_SSC_TODO_RECORD: 'ssc.add.edit.ssc.todo.record',
 

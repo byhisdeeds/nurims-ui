@@ -313,8 +313,8 @@ export const MenuItems = [
         children: [
           {
             label: 'Maintenance Schedule',
-            value: 'ssc.generate.maintenance.schedule',
-            title: 'Generate Maintenance Schedule',
+            value: 'ssc.generate.ssc.maintenance.schedule',
+            title: 'Generate SSC Maintenance Schedule',
             tooltip: 'Generate a preventive maintenance schedule for structures, systems and components.',
             authmodlevel: 'basic',
           },

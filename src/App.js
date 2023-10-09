@@ -66,6 +66,7 @@ import {ADDEDITMONITORS_REF} from "./pages/radiationprotection/AddEditMonitors"
 import {PERSONNELDOSIMETRYEVALUATION_REF} from "./pages/radiationprotection/PersonnelDosimetryEvaluation"
 import {VIEWMATERIALSLIST_REF} from "./pages/controlledmaterials/ViewMaterialsList"
 import {MANAGEUSERS_REF} from "./pages/sysadmin/ManageUsers"
+import {MAINTENANCESCHEDULE_REF} from "./pages/maintenance/MaintenanceSchedule"
 import {
   ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF
 } from "./pages/maintenance/AddEditCorrectiveMaintenanceIssueRecord"
@@ -173,6 +174,7 @@ class App extends React.Component {
     this.crefs[TERMSANDDEFINITIONS_REF] = React.createRef();
     this.crefs[CHATBOT_REF] = React.createRef();
     this.crefs[UNDERDEVELOPMENT_REF] = React.createRef();
+    this.crefs[MAINTENANCESCHEDULE_REF] = React.createRef();
   }
 
 

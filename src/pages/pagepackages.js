@@ -34,6 +34,7 @@ import {
 } from "./operation/GenerateReactorSampleIrradiationAuthorizationPdf";
 import {OWNER_REF} from "./controlledmaterials/Owner";
 import {UNDERDEVELOPMENT_REF} from "../components/UnderDevelopment";
+import MaintenanceSchedule, {MAINTENANCESCHEDULE_REF} from "./maintenance/MaintenanceSchedule";
 
 const Constants = require("../utils/constants");
 
@@ -354,6 +355,16 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
   else if (actionid === Constants.SSC_ADD_EDIT_SSC_TODO_RECORD) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.SSC_GENERATE_SSC_MAINTENANCE_SCHEDULE) {
+    return (<MaintenanceSchedule
+      ref={crefs[MAINTENANCESCHEDULE_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}

@@ -15,13 +15,12 @@ import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en-gb';
-// import {DatePicker, LocalizationProvider} from "@mui/lab";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import TextField from "@mui/material/TextField";
 import {TitleComponent} from "../../components/CommonComponents";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {ConsoleLog} from "../../utils/UserDebugContext";
 
-const MODULE = "MaintenanceSchedule";
+export const MAINTENANCESCHEDULE_REF = "MaintenanceSchedule";
 
 const months = [
   "Jan",
@@ -69,9 +68,13 @@ class MaintenanceSchedule extends Component {
       year: dayjs(),
       period: [0, 11],
     };
+    this.Module = MAINTENANCESCHEDULE_REF
   }
 
   ws_message = (message) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "ws_message", "message", message);
+    }
     // console.log("ON_WS_MESSAGE", MODULE, message)
     if (message.hasOwnProperty("response")) {
       const response = message.response;
@@ -100,7 +103,7 @@ class MaintenanceSchedule extends Component {
       cmd: CMD_GENERATE_SSC_MAINTENANCE_SCHEDULE_PDF,
       year: this.state.year.toISOString().substring(0,4),
       period: this.state.period,
-      module: MODULE,
+      module: this.Module,
     });
   }
 
