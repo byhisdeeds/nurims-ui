@@ -286,15 +286,22 @@ export const MenuItems = [
         ]
       },
       {
-        label: '○ Corr. Maintenance',
-        tooltip: 'Corrective maintenance issue records.',
+        label: '○ Maintenance',
+        tooltip: 'Corrective and upgrade maintenance issue records.',
         authmodlevel: 'basic',
         children: [
           {
             label: 'Add/Edit Issue Record',
             value: 'ssc.add.edit.ssc.corrective.maintenance.issue.record',
             title: 'Add/Edit SSC Corrective Maintenance Issue Record',
-            tooltip: 'Add or Edit an SSC corrective maintenance issue record.',
+            tooltip: 'Add or edit an SSC corrective maintenance issue record.',
+            authmodlevel: 'basic',
+          },
+          {
+            label: 'Add/Edit TODO Records',
+            value: 'ssc.add.edit.ssc.todo.record',
+            title: 'Add/Edit SSC TODO Issue Record',
+            tooltip: 'Records of upgrade or new feature maintenance for an SSC.',
             authmodlevel: 'basic',
           },
         ]

@@ -351,6 +351,16 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       properties={properties}
     />)
   }
+  else if (actionid === Constants.SSC_ADD_EDIT_SSC_TODO_RECORD) {
+    return (<UnderDevelopment
+      ref={crefs[UNDERDEVELOPMENT_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
 }
 
 export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
