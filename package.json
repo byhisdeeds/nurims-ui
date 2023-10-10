@@ -57,6 +57,7 @@
     "react-json-view": "^1.21.3",
     "react-leaflet": "^4.2.1",
     "react-papaparse": "^4.1.0",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.9.0",
     "react-scripts": "^4.0.3",
     "react-spinners": "^0.13.8",

@@ -559,30 +559,16 @@ export const MenuItems = [
     children: [
       {
         label: '○ Safety',
-        tooltip: 'Safety resource actions',
+        tooltip: 'Safety culture programs and activities',
         authmodlevel: 'basic',
         children: [
-          {
-            label: 'Add Monitor',
-            value: 'rp.add.area.monitor',
-            title: '',
-            tooltip: 'Add area,contamination, waste, and other types of monitors',
-            authmodlevel: 'basic',
-          },
         ]
       },
       {
         label: '○ Security',
-        tooltip: 'Security resource actions',
+        tooltip: 'Security culture programs and activities',
         authmodlevel: 'basic',
         children: [
-          {
-            label: 'Surveillance Sheet',
-            value: 'cm.generate.material.surveillance.sheet',
-            title: 'Controlled Material Surveillance Sheet',
-            tooltip: 'Generate controlled material surveillance sheet',
-            authmodlevel: 'basic',
-          },
         ]
       },
     ]

@@ -23,6 +23,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import sanitize from "sanitize-html";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import ReactQuill from "react-quill"
+import 'react-quill/dist/quill.snow.css'
 
 export const TERMSANDDEFINITIONS_REF = "TermsAndDefinitions";
 
@@ -40,15 +42,33 @@ class TermsAndDefinitions extends React.Component {
       search_term: "",
       search_term_options: [],
       searching: false,
+      text: "",
     };
     this.Module = TERMSANDDEFINITIONS_REF;
-    // this.viewerRef = React.createRef();
-    // this.editor = withReact(createEditor());
-    // this.DOMPurify = createDOMPurify((new JSDOM('')).window)
+    this.modules = {
+      toolbar:
+      [
+        [{'header': [1, 2, false]}],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        ['link', 'image'],
+        ['clean']
+      ]
+    };
+    this.formats = [
+      'header',
+      'bold', 'italic', 'underline', 'strike', 'blockquote',
+      'list', 'bullet', 'indent',
+      'link', 'image'
+    ];
     this.search_term_content = "";
   }
 
   componentDidMount() {
+  }
+
+  handleChange = (value) => {
+    this.setState({text: value});
   }
 
   onAutocompleteOpen = () => {
@@ -100,7 +120,7 @@ class TermsAndDefinitions extends React.Component {
           // this.search_term_content = plainText2RichText(this.search_term_content, response.search_term_content.content);
           // this.search_term_content = "data:application/pdf;base64," + response.search_term_content.content;
           this.search_term_content = sanitize(response.search_term_content.content);
-          this.setState({searching: false });
+          this.setState({searching: false, text: this.search_term_content });
         }
       } else {
         enqueueErrorSnackbar(response.message);
@@ -125,10 +145,10 @@ class TermsAndDefinitions extends React.Component {
   }
 
   render() {
-    const { user, ac_open, searching, search_term, search_term_options } = this.state;
+    const { user, ac_open, searching, search_term, search_term_options, text } = this.state;
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "ac_open", ac_open, "searching", searching,
-        "search_term", search_term);
+        "search_term", search_term, "text", text);
     }
     return (
       <React.Fragment>
@@ -174,9 +194,16 @@ class TermsAndDefinitions extends React.Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <div style={{fontSize: 16, fontFamily: 'consola'}}>
-              { <div dangerouslySetInnerHTML={{ __html: this.search_term_content }} /> }
-            </div>
+            {/*<div style={{fontSize: 16, fontFamily: 'consola'}}>*/}
+            {/*  { <div dangerouslySetInnerHTML={{ __html: this.search_term_content }} /> }*/}
+            {/*</div>*/}
+            <ReactQuill
+              readOnly={true}
+              value={text}
+              modules={this.modules}
+              formats={this.formats}
+              onChange={this.handleChange}
+            />
           </Grid>
         </Grid>
       </React.Fragment>
