@@ -597,10 +597,10 @@ export const MenuItems = [
     authmodlevel: 'sysadmin',
     children: [
       {
-        label: 'Terms and Definitions',
+        label: 'Glossary',
         value: 'support.terms.and.definitions',
-        title: 'Terms and Definitions',
-        tooltip: 'View terms and definitions',
+        title: 'Glossary of Terms and Definitions',
+        tooltip: 'View a glossary of various terms and definitions used throughout the system.',
         authmodlevel: 'basic',
       },
     ]
