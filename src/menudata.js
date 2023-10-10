@@ -219,10 +219,10 @@ export const MenuItems = [
         authmodlevel: 'basic',
         children: [
           {
-            label: 'SPI',
-            value: 'hr.spi',
-            title: 'Personnel Safety Performance Indicators',
-            tooltip: 'Safety performance indicators for personnel',
+            label: 'SSPI',
+            value: 'hr.sspi',
+            title: 'Personnel Safety/Security Performance Indicators',
+            tooltip: 'Safety and security performance indicators for personnel',
             authmodlevel: 'pro',
           },
           {

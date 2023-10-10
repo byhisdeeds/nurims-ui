@@ -166,7 +166,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       properties={properties}
     />)
   }
-  else if (actionid === Constants.HR_SPI) {
+  else if (actionid === Constants.HR_SSPI) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
