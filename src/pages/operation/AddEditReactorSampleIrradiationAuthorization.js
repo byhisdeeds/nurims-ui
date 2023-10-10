@@ -4,52 +4,30 @@ import {
   UserDebugContext
 } from "../../utils/UserDebugContext";
 import {
-  ConfirmRemoveRecordDialog
+  ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog
 } from "../../components/UtilityDialogs";
 import {
-  CMD_DELETE_USER_RECORD,
-  CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS,
-  CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
-  CMD_GET_SSC_RECORDS,
+  CMD_GET_GLOSSARY_TERMS, CMD_GET_PROVENANCE_RECORDS,
   CMD_SUGGEST_ANALYSIS_JOBS,
-  CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
-  ITEM_ID,
-  METADATA,
   NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
-  NURIMS_SAMPLEDATE,
-  NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE,
-  NURIMS_TITLE,
-  NURIMS_WITHDRAWN,
-  OPERATION_TOPIC,
   REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
-  SSC_TOPIC
 } from "../../utils/constants";
 import {
-  Box,
-  Button,
-  Fab,
   Grid,
 } from "@mui/material";
-import {
-  Add as AddIcon,
-  Save as SaveIcon,
-  RemoveCircle as RemoveCircleIcon,
-} from "@mui/icons-material";
 import {TitleComponent} from "../../components/CommonComponents";
 import PropTypes from "prop-types";
-import UnarchiveIcon from "@mui/icons-material/Unarchive";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import {ADDEDITAMP_REF} from "../maintenance/AddEditAMP";
 import BaseRecordManager from "../../components/BaseRecordManager";
 import ReactorSampleIrradiationAuthorizationRecordsList from "./ReactorSampleIrradiationAuthorizationRecordsList";
 import ReactorSampleIrradiationAuthorizationMetadata from "./ReactorSampleIrradiationAuthorizationMetadata";
 import {
   getRecordData,
-  getRecordMetadataValue
 } from "../../utils/MetadataUtils";
 import {withTheme} from "@mui/styles";
 import dayjs from 'dayjs';
+import {AddEditButtonPanel} from "../../utils/UiUtils";
+import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
+import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 
 export const ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF =
   "AddEditReactorSampleIrradiationAuthorization";
@@ -59,12 +37,15 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
 
   constructor(props) {
     super(props);
+    this.state["show_provenance_view"] = false;
     this.Module = ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF;
     this.recordTopic = REACTOR_IRRADIATION_AUTHORIZATION_TOPIC;
+    this.provenanceRecords = [];
   }
 
   getNewRecordName = () => {
-    return dayjs().format('yyyyMMdd-HHmm');
+    // 20230112-1128
+    return dayjs().format('YYYYMMDD-HHmm');
   }
 
   componentDidMount() {
@@ -85,6 +66,14 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
       { cmd: CMD_SUGGEST_ANALYSIS_JOBS, func: "updateAnalysisJobs", params: "jobs" },
       { cmd: "get_sample_types", func: "setSampleTypes", params: "sampletypes" }
     ]);
+    if (messageHasResponse(message)) {
+      const response = message.response;
+      if (messageStatusOk(message)) {
+        if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
+          this.setProvenanceRecords(response.provenance)
+        }
+      }
+    }
   }
 
   renderCellStyle = (row, cell, theme, selected) => {
@@ -92,12 +81,28 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
     return {
       mixBlendMode: selected ? 'lighten' : 'inherit',
       color: unauthorized ? theme.palette.primary.contrastText : theme.palette.primary.light,
-      backgroundColor: unauthorized ? theme.palette.warning.dark : theme.components.MuiTableRow.styleOverrides.root.backgroundColor,
+      backgroundColor: unauthorized ? theme.palette.warning.light : theme.components.MuiTableRow.styleOverrides.root.backgroundColor,
     }
   }
 
+  setProvenanceRecords = (provenance) => {
+    setProvenanceRecordsHelper(this, provenance);
+  }
+
+  showProvenanceRecordsView = () => {
+    showProvenanceRecordsViewHelper(this);
+  }
+
+  closeProvenanceRecordsView = (event, reason) => {
+    if (reason && reason === "backdropClick") {
+      return;
+    }
+    this.setState({show_provenance_view: false,});
+  }
+
   render() {
-    const {metadata_changed, confirm_remove, include_archived, selection} = this.state;
+    const {metadata_changed, confirm_remove, include_archived, selection, show_provenance_view} = this.state;
+    const {user} = this.props;
     const has_changed_records = this.hasChangedRecords();
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "has_changed_records", has_changed_records,
@@ -109,6 +114,11 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
                                    selection={selection}
                                    onProceed={this.proceedWithRemove}
                                    onCancel={this.cancelRemove}
+        />
+        <ShowProvenanceRecordsDialog open={show_provenance_view}
+                                     selection={selection}
+                                     body={this.provenanceRecords.join("\n")}
+                                     onCancel={this.closeProvenanceRecordsView}
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
@@ -136,58 +146,69 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            m: 1,
-          }}
-        >
-          <Button
-            variant={"contained"}
-            endIcon={<RemoveCircleIcon />}
-            onClick={this.removeRecord}
-            disabled={!this.isSysadminButtonAccessible(selection)}
-            size={"small"}
-            color={"primary"}
-            aria-label={"remove"}
-          >
-            Remove Authorization
-          </Button>
-          <Button
-            variant={"contained"}
-            endIcon={this.isRecordArchived(selection) ? <UnarchiveIcon /> : <ArchiveIcon />}
-            onClick={this.changeRecordArchivalStatus}
-            disabled={!this.isSysadminButtonAccessible(selection)}
-            size={"small"}
-            color={"primary"}
-            aria-label={"archive"}
-          >
-            {this.isRecordArchived(selection) ? "Restore Authorization" : "Archive Authorization"}
-          </Button>
-          <Button
-            variant={"contained"}
-            endIcon={<SaveIcon />}
-            onClick={this.saveChanges}
-            disabled={!has_changed_records}
-            size={"small"}
-            color={"primary"}
-            aria-label={"save"}
-          >
-            Save Authorization
-          </Button>
-          <Button
-            variant={"contained"}
-            endIcon={<AddIcon />}
-            onClick={this.addRecord}
-            size={"small"}
-            color={"primary"}
-            aria-label={"add"}
-          >
-            Add Authorization
-          </Button>
-        </Box>
+        {<AddEditButtonPanel
+          THIS={this}
+          user={user}
+          onClickAddRecord={this.addRecord}
+          onClickChangeRecordArchivalStatus={this.changeRecordArchivalStatus}
+          onClickRemoveRecord={this.removeRecord}
+          onClickSaveRecordChanges={this.saveChanges}
+          onClickViewProvenanceRecords={this.showProvenanceRecordsView}
+          addRecordButtonLabel={"Add Authorization"}
+          removeRecordButtonLabel={"Remove Authorization"}
+        />}
+        {/*<Box*/}
+        {/*  sx={{*/}
+        {/*    display: 'flex',*/}
+        {/*    flexDirection: 'row',*/}
+        {/*    justifyContent: 'space-around',*/}
+        {/*    m: 1,*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  <Button*/}
+        {/*    variant={"contained"}*/}
+        {/*    endIcon={<RemoveCircleIcon />}*/}
+        {/*    onClick={this.removeRecord}*/}
+        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
+        {/*    size={"small"}*/}
+        {/*    color={"primary"}*/}
+        {/*    aria-label={"remove"}*/}
+        {/*  >*/}
+        {/*    Remove Authorization*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    variant={"contained"}*/}
+        {/*    endIcon={this.isRecordArchived(selection) ? <UnarchiveIcon /> : <ArchiveIcon />}*/}
+        {/*    onClick={this.changeRecordArchivalStatus}*/}
+        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
+        {/*    size={"small"}*/}
+        {/*    color={"primary"}*/}
+        {/*    aria-label={"archive"}*/}
+        {/*  >*/}
+        {/*    {this.isRecordArchived(selection) ? "Restore Authorization" : "Archive Authorization"}*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    variant={"contained"}*/}
+        {/*    endIcon={<SaveIcon />}*/}
+        {/*    onClick={this.saveChanges}*/}
+        {/*    disabled={!has_changed_records}*/}
+        {/*    size={"small"}*/}
+        {/*    color={"primary"}*/}
+        {/*    aria-label={"save"}*/}
+        {/*  >*/}
+        {/*    Save Authorization*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    variant={"contained"}*/}
+        {/*    endIcon={<AddIcon />}*/}
+        {/*    onClick={this.addRecord}*/}
+        {/*    size={"small"}*/}
+        {/*    color={"primary"}*/}
+        {/*    aria-label={"add"}*/}
+        {/*  >*/}
+        {/*    Add Authorization*/}
+        {/*  </Button>*/}
+        {/*</Box>*/}
       </React.Fragment>
     );
   }

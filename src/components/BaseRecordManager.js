@@ -13,7 +13,6 @@ import {
   CMD_GET_MONITOR_RECORDS,
   CMD_GET_OWNER_RECORDS,
   CMD_GET_PERSONNEL_RECORDS,
-  CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS,
   CMD_GET_SSC_RECORDS,
   CMD_GET_STORAGE_LOCATION_RECORDS,
@@ -31,7 +30,8 @@ import {
   METADATA,
   MONITOR_TOPIC,
   NURIMS_TITLE,
-  NURIMS_WITHDRAWN, OWNER_TOPIC,
+  NURIMS_WITHDRAWN,
+  OWNER_TOPIC,
   PERSONNEL_TOPIC,
   REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
   SSC_TOPIC,
@@ -214,6 +214,19 @@ class BaseRecordManager extends Component {
 
   isSelectableByRole = (selection, role) => {
     return (isValidUserRole(this.context.user, role) && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
+  }
+
+  isSelectableByRoles = (selection, roles, valid_item_id) => {
+    for (const r of roles) {
+      if (isValidUserRole(this.context.user, r)) {
+        // We have at least one match, now we check for a valid item_id boolean parameter has been specified
+        if (valid_item_id) {
+          return selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
+        }
+        return true;
+      }
+    }
+    return false;
   }
 
   isValidSelection = (selection) => {

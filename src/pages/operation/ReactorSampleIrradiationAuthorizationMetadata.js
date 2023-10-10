@@ -174,7 +174,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     const d = dayjs(getRecordData(record, NURIMS_CREATION_DATE, "1970-01-01 00:00:00"));
     return getRecordData(record, NURIMS_TITLE, "") + " created by " +
       getRecordData(record, NURIMS_CREATED_BY, "") + " on " +
-      d.format("d MMMM, yyyy");
+      d.format("d MMMM, YYYY");
   }
 
   approveRequest = () => {

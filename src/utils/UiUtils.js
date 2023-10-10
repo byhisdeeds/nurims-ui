@@ -74,7 +74,7 @@ export function AddEditButtonPanel ({THIS, user, onClickRemoveRecord, removeReco
         color="primary"
         aria-label="add"
         onClick={onClickAddRecord}
-        disabled={!THIS.isSelectableByRole(selection, "dataentry")}
+        disabled={!THIS.isSelectableByRoles(selection, ["dataentry", "sysadmin"], false)}
       >
         {addRecordIcon}
         {addRecordButtonLabel}
@@ -90,10 +90,10 @@ AddEditButtonPanel.propTypes = {
   onClickSaveRecordChanges: PropTypes.func.isRequired,
   onClickAddRecord: PropTypes.func.isRequired,
   addRecordButtonLabel: PropTypes.string,
-  addRecordIcon: PropTypes.object,
+  addRecordIcon: PropTypes.element,
   onClickChangeRecordArchivalStatus: PropTypes.func.isRequired,
   onClickViewProvenanceRecords: PropTypes.func.isRequired,
-  removeRecordIcon: PropTypes.object,
+  removeRecordIcon: PropTypes.element,
   removeRecordButtonLabel: PropTypes.string,
 }
 
