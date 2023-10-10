@@ -216,3 +216,23 @@ pre {
 .Side-menu-default .item.item-level-1.active {
   border-left: 4px solid #C4EAF2;
 }
+
+/* Set default font-family */
+.ql-editor {
+  font-family: "RobotoSlabRegular";
+}
+
+/*!* Set dropdown font-families *!*/
+/*.ql-font span[data-label="RobotoSlabRegular"]::before {*/
+/*  font-family: "RobotoSlabRegular";*/
+/*}*/
+
+/*!* Set content font-families *!*/
+/*.ql-font-RobotoSlabRegular {*/
+/*  font-family: "RobotoSlabRegular";*/
+/*}*/
+/* We do not set Courier since it is the default font */
+.ql-container {
+  font-family: "RobotoSlabRegular";
+  font-size: 1.2em;
+}

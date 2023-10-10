@@ -24,7 +24,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import sanitize from "sanitize-html";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import ReactQuill from "react-quill"
-import 'react-quill/dist/quill.snow.css'
+import 'react-quill/dist/quill.bubble.css'
 
 export const TERMSANDDEFINITIONS_REF = "TermsAndDefinitions";
 
@@ -34,6 +34,7 @@ const BLANK_PDF = 'data:application/pdf;base64,JVBERi0xLjQKJb/3ov4KMSAwIG9iago8P
 
 class TermsAndDefinitions extends React.Component {
   static contextType = UserDebugContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -46,14 +47,15 @@ class TermsAndDefinitions extends React.Component {
     };
     this.Module = TERMSANDDEFINITIONS_REF;
     this.modules = {
-      toolbar:
-      [
-        [{'header': [1, 2, false]}],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-        ['link', 'image'],
-        ['clean']
-      ]
+      toolbar: false
+      // [
+      //   [{'header': [1, 2, false]}],
+      //   // [{'header': '1'}, {'header': '2'}, {'font': Font.whitelist}],
+      //   ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      //   [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+      //   ['link', 'image'],
+      //   ['clean']
+      // ]
     };
     this.formats = [
       'header',
