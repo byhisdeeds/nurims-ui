@@ -20,14 +20,14 @@ import {
   ConfirmRemoveRecordDialog,
 } from "../../components/UtilityDialogs";
 import SSCList from "./SSCList";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import {TitleComponent} from "../../components/CommonComponents";
 import SSCCorrectiveMaintenanceRecords from "./SSCCorrectiveMaintenanceRecords";
 
 export const ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF = "AddEditCorrectiveMaintenanceIssueRecord";
 
 class AddEditCorrectiveMaintenanceIssueRecord extends BaseRecordManager {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

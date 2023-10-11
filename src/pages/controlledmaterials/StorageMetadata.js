@@ -45,7 +45,7 @@ import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import ImageIcon from '@mui/icons-material/Image';
 import {PhotoCamera, NoPhotography} from "@mui/icons-material";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import PropTypes from "prop-types";
 import {grey} from "@mui/material/colors";
 import BLANK_MAP_IMAGE from "../../components/blank_map_image.png"
@@ -55,7 +55,7 @@ export const STORAGEMETADATA_REF = "StorageMetadata";
 const DEFAULT_STORAGE_LOCATION = {easting: 0, northing: 0, marker: ""}
 
 class StorageMetadata extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

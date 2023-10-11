@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withTheme} from "@mui/styles";
-import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../utils/UserContext";
 
 class TextFileViewer extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

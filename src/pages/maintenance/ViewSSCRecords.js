@@ -10,12 +10,12 @@ import {withTheme} from "@mui/styles";
 import {SwitchComponent, TitleComponent} from "../../components/CommonComponents";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 
 export const VIEWSSCRECORDS_REF = "ViewSSCRecords";
 
 class ViewSSCRecords extends Component {
-  static context = UserDebugContext;
+  static context = UserContext;
   constructor(props) {
     super(props);
     this.state = {

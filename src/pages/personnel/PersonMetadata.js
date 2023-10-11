@@ -32,7 +32,7 @@ import {
   BLANK_IMAGE_OBJECT,
   UNDEFINED_DATE_STRING,
 } from "../../utils/constants";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 // import {dateFromDateString} from "../../utils/DateUtils";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
@@ -44,7 +44,7 @@ const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
 export const PERSONMETADATA_REF = "PersonMetadata";
 
 class PersonMetadata extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

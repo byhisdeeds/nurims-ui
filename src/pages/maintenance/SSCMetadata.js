@@ -41,12 +41,12 @@ import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import EditableTable from "../../components/EditableTable";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 
 export const SSCMETADATA_REF = "SSCMetadata";
 
 class SSCMetadata extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

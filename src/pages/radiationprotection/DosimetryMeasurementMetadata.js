@@ -20,7 +20,7 @@ import {
 import {
   getPropertyValue,
 } from "../../utils/PropertyUtils";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import {
   NURIMS_DOSIMETRY_BATCH_ID,
   NURIMS_DOSIMETRY_DEEP_DOSE,
@@ -44,7 +44,7 @@ function getMonitorPeriod(selection, field, missingValue) {
 }
 
 class DosimetryMeasurementMetadata extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

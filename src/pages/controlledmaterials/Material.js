@@ -27,7 +27,7 @@ import {
   TitleComponent,
   AddEditButtonPanel
 } from "../../components/CommonComponents";
-import {UserDebugContext} from "../../utils/UserDebugContext";
+import {UserContext} from "../../utils/UserContext";
 import {
   messageHasResponse,
   messageStatusOk
@@ -40,7 +40,7 @@ import {
 export const MATERIAL_REF = "Material";
 
 class Material extends BaseRecordManager {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

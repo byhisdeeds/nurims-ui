@@ -28,7 +28,7 @@ import {
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import {ConsoleLog} from "../../utils/UserDebugContext";
+import {ConsoleLog} from "../../utils/UserContext";
 import {getRecordMetadataValue} from "../../utils/MetadataUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";

@@ -18,7 +18,7 @@ import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmRemoveRecordDialog,
 } from "../../components/UtilityDialogs";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import PersonnelList from "./PersonnelList";
 import BusyIndicator from "../../components/BusyIndicator";
 import {TitleComponent} from "../../components/CommonComponents";
@@ -28,7 +28,7 @@ import {isCommandResponse, messageHasResponse} from "../../utils/WebsocketUtils"
 export const PERSONNELDOSIMETRYEVALUATION_REF = "PersonnelDosimetryEvaluation";
 
 class PersonnelDosimetryEvaluation extends BaseRecordManager {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

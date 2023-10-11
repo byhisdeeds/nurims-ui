@@ -1,4 +1,4 @@
-import {ConsoleLog} from "./UserDebugContext";
+import {ConsoleLog} from "./UserContext";
 import {CMD_GET_PROVENANCE_RECORDS} from "./constants";
 
 

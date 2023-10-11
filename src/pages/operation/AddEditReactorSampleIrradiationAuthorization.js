@@ -1,8 +1,8 @@
 import React from 'react';
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../../utils/UserDebugContext";
+  UserContext
+} from "../../utils/UserContext";
 import {
   ConfirmRemoveRecordDialog,
   ShowProvenanceRecordsDialog
@@ -43,7 +43,7 @@ export const ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF =
   "AddEditReactorSampleIrradiationAuthorization";
 
 class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

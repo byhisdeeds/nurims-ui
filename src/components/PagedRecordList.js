@@ -15,7 +15,7 @@ import {
   TableCell
 } from "@mui/material";
 import {PageableTable} from "./CommonComponents";
-import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../utils/UserContext";
 import {getRecordMetadataValue} from "../utils/MetadataUtils";
 
 function filterRowsByName(rows, value) {
@@ -30,7 +30,7 @@ function filterRowsByName(rows, value) {
 }
 
 class PagedRecordList extends React.Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

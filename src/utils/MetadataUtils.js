@@ -557,7 +557,7 @@ export function analysisJobAsObject(name) {
     "clientid": 0,
     "contact": "",
     "name": name,
-    "created": dayjs().format('yyyy-MM-dd'),
+    "created": dayjs().format('YYYY-MM-DD'),
     "jtype": "",
     "lastmodification": "",
     "info1": "",

@@ -20,7 +20,7 @@ import {
 } from "../../components/UtilityDialogs";
 import StorageList from "./StorageList";
 import StorageMetadata from "./StorageMetadata";
-import {UserDebugContext} from "../../utils/UserDebugContext";
+import {UserContext} from "../../utils/UserContext";
 import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
 import {
   messageHasResponse,
@@ -35,7 +35,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 export const STORAGE_REF = "Storage";
 
 class Storage extends BaseRecordManager {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

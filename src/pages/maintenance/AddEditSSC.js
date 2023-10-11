@@ -21,7 +21,7 @@ import {
 } from "../../components/UtilityDialogs";
 import SSCList from "./SSCList";
 import SSCMetadata from "./SSCMetadata";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {isValidUserRole} from "../../utils/UserUtils";
@@ -33,7 +33,7 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 export const ADDEDITSSC_REF = "AddEditSSC";
 
 class AddEditSSC extends BaseRecordManager {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

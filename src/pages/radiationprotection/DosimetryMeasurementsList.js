@@ -13,10 +13,10 @@ import {
   TableCell
 } from "@mui/material";
 import {PageableTable} from "../../components/CommonComponents";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 
 class DosimetryMeasurementsList extends React.Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

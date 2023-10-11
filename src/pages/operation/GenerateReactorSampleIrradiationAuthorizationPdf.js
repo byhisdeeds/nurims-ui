@@ -2,8 +2,8 @@
 import React, {Component} from 'react';
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../../utils/UserDebugContext";
+  UserContext
+} from "../../utils/UserContext";
 import {
   BLANK_PDF,
   CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF,
@@ -36,7 +36,7 @@ export const GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF =
   "GenerateReactorSampleIrradiationAuthorizationPdf";
 
 class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

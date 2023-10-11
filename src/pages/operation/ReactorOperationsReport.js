@@ -23,7 +23,7 @@ import {
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import {SameYearDateRangePicker} from "../../components/CommonComponents";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import AddIcon from "@mui/icons-material/Add";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../utils/SnackbarVariants";
@@ -32,7 +32,7 @@ import dayjs from 'dayjs';
 export const REACTOROPERATIONSREPORT_REF = "ReactorOperationsReport";
 
 class ReactorOperationsReport extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

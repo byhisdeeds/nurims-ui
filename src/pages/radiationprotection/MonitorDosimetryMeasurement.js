@@ -1,5 +1,5 @@
 import React from "react";
-import {UserDebugContext} from "../../utils/UserDebugContext";
+import {UserContext} from "../../utils/UserContext";
 import DosimetryMeasurement from "./DosimetryMeasurement";
 import {
   EMPLOYEE_RECORD,
@@ -10,7 +10,7 @@ import {
 export const MONITORDOSIMETRYMEASUREMENT_REF = "MonitorDosimetryMeasurement";
 
 class MonitorDosimetryMeasurement extends DosimetryMeasurement {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

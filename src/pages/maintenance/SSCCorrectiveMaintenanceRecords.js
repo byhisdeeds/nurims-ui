@@ -42,8 +42,8 @@ import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import dayjs from 'dayjs';
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../../utils/UserDebugContext";
+  UserContext
+} from "../../utils/UserContext";
 import PagedRecordList from "../../components/PagedRecordList";
 import {
   CheckboxWithTooltip,
@@ -63,7 +63,7 @@ const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
 export const SSCMAINTENANCERECORDS_REF = "SSCCorrectiveMaintenanceRecords";
 
 class SSCCorrectiveMaintenanceRecords extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

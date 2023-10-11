@@ -1,5 +1,8 @@
 import React from 'react';
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
 import {ConfirmRemoveRecordDialog} from "../../components/UtilityDialogs";
 import {
   Box,
@@ -13,7 +16,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import AddIcon from "@mui/icons-material/Add";
 import UserList from "./UserList";
 import Constants, {
-  CMD_DELETE_USER_RECORD, CMD_GET_PUBLIC_KEY,
+  CMD_DELETE_USER_RECORD,
+  CMD_GET_PUBLIC_KEY,
   CMD_GET_USER_RECORDS,
   CMD_UPDATE_USER_RECORD,
   ITEM_ID,
@@ -30,13 +34,21 @@ import {
 import UserMetadata from "./UserMetadata";
 import {TitleComponent} from "../../components/CommonComponents";
 import {encryptText} from "../../utils/EncryptionUtils";
-import {enqueueErrorSnackbar, enqueueSuccessSnackbar, enqueueWarningSnackbar} from "../../utils/SnackbarVariants";
-import {getUserRecordData, getUserRecordMetadataValue, record_uuid} from "../../utils/MetadataUtils";
+import {
+  enqueueErrorSnackbar,
+  enqueueSuccessSnackbar,
+  enqueueWarningSnackbar
+} from "../../utils/SnackbarVariants";
+import {
+  getUserRecordData,
+  getUserRecordMetadataValue,
+  record_uuid
+} from "../../utils/MetadataUtils";
 
 export const MANAGEUSERS_REF = "ManageUsers";
 
 class ManageUsers extends React.Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);
@@ -221,7 +233,15 @@ class ManageUsers extends React.Component {
         } else if (isCommandResponse(message, CMD_GET_PUBLIC_KEY)) {
           this.puk = message.response.public_key;
         } else if (isCommandResponse(message, CMD_UPDATE_USER_RECORD)) {
-          enqueueSuccessSnackbar(`Successfully updated record for ${getUserRecordData(message.response.users[0], NURIMS_TITLE, "unknown")}.`);
+          // update user profile
+          const user_metadata = message.response.users[0].metadata;
+          this.props.user.profile.username = user_metadata.username;
+          this.props.user.profile.fullname = user_metadata.fullname;
+          this.props.user.profile.role = user_metadata.role;
+          this.props.user.profile.authorized_module_level = user_metadata.authorized_module_level;
+          enqueueSuccessSnackbar(
+            `Successfully updated record for ${getUserRecordData(message.response.users[0],
+              NURIMS_TITLE, "unknown")}.`);
           if (this.listRef.current) {
             // this.listRef.current.updateRecord(response[this.recordTopic]);
             this.listRef.current.updateRecord(response.users[0]);

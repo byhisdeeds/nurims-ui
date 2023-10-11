@@ -14,11 +14,11 @@ import {
   NURIMS_TITLE
 } from "../../utils/constants";
 import PropTypes from "prop-types";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 
 
 class OwnerMetadata extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
   constructor(props) {
     super(props);
     this.state = {

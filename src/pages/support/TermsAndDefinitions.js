@@ -1,8 +1,8 @@
 import React from 'react';
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../../utils/UserDebugContext";
+  UserContext
+} from "../../utils/UserContext";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import {
@@ -33,7 +33,7 @@ const BLANK_PDF = 'data:application/pdf;base64,JVBERi0xLjQKJb/3ov4KMSAwIG9iago8P
 // https://draftjs.org/docs/getting-started
 
 class TermsAndDefinitions extends React.Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

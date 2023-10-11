@@ -30,8 +30,8 @@ import {
 } from "./utils/constants";
 import {
   ConsoleLog,
-  UserDebugContext
-} from "./utils/UserDebugContext";
+  UserContext
+} from "./utils/UserContext";
 import {
   SSCPackages,
   SysAdminResourcePackages,
@@ -358,7 +358,7 @@ class App extends React.Component {
     const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active, log_window_visible} = this.state;
     console.log("App.render, actionid", actionid)
     return (
-      <UserDebugContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
+      <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
           <Box sx={{flexGrow: 1, height: "100%"}}>
             <SnackbarProvider
@@ -445,7 +445,7 @@ class App extends React.Component {
             </MenuDrawer>
           </Box>
         </ThemeProvider>
-      </UserDebugContext.Provider>
+      </UserContext.Provider>
     )
   }
 }

@@ -7,14 +7,14 @@ import {Box, Button, Grid, Stack} from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
 import {withTheme} from "@mui/styles";
 import {SwitchComponent, TitleComponent} from "../../components/CommonComponents";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 export const VIEWPERSONNELRECORDS_REF = "ViewPersonnelRecords";
 
 class ViewPersonnelRecords extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

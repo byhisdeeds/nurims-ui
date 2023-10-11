@@ -11,8 +11,8 @@ import {
 import PropTypes from "prop-types";
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../../utils/UserDebugContext";
+  UserContext
+} from "../../utils/UserContext";
 import {
   Grid,
   Box,
@@ -22,7 +22,7 @@ import { duration } from "duration-pretty";
 
 
 class OperatingRunMetadata extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

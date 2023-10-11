@@ -18,7 +18,7 @@ import {
   TitleComponent,
   AddEditButtonPanel
 } from "../../components/CommonComponents";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 import {
   setProvenanceRecordsHelper,
@@ -28,7 +28,7 @@ import {
 export const MANUFACTURER_REF = "Manufacturer";
 
 class Manufacturer extends BaseRecordManager {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

@@ -23,7 +23,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import {ConsoleLog, UserDebugContext} from "../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../utils/UserContext";
 
 const Input = ({
                  name,
@@ -333,7 +333,7 @@ const Row = ({
 };
 
 class EditableTable extends React.Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

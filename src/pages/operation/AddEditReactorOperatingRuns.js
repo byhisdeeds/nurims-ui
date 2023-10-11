@@ -1,8 +1,8 @@
 import React from 'react';
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../../utils/UserDebugContext";
+  UserContext
+} from "../../utils/UserContext";
 import {
   ConfirmOperatingRunDiscoveryDialog,
   ConfirmRemoveRecordDialog
@@ -53,7 +53,7 @@ import {record_uuid} from "../../utils/MetadataUtils";
 export const ADDEDITREACTOROPERATINGRUNS_REF = "AddEditReactorOperatingRuns";
 
 class AddEditReactorOperatingRuns extends React.Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

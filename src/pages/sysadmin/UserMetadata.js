@@ -6,13 +6,13 @@ import {getUserRecordData, setUserRecordData} from "../../utils/MetadataUtils";
 import {NURIMS_TITLE} from "../../utils/constants";
 import PropTypes from "prop-types";
 import {SelectFormControlWithTooltip} from "../../components/CommonComponents";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import {getPropertyValue} from "../../utils/PropertyUtils";
 import {Grid} from "@mui/material";
 
 
 class UserMetadata extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

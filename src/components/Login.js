@@ -1,24 +1,34 @@
 import React from 'react';
 import {Navigate} from "react-router-dom";
 import PropTypes from 'prop-types'
-import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
-import {darkTheme, lightTheme} from "../utils/Theme";
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
+import {
+  ThemeProvider,
+  StyledEngineProvider
+} from '@mui/material/styles';
+import {
+  darkTheme,
+  lightTheme
+} from "../utils/Theme";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Grid,
+  Typography,
+  Container,
+  Box
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import {styled} from "@mui/material/styles";
-import Container from '@mui/material/Container';
 import ReconnectingWebSocket from "reconnecting-websocket";
-import Box from "@mui/material/Box";
 import {SnackbarProvider} from "notistack";
-import {enqueueWarningSnackbar} from "../utils/SnackbarVariants";
+import {
+  enqueueWarningSnackbar
+} from "../utils/SnackbarVariants";
 import {DeviceUUID} from "device-uuid";
 
 const { v4: uuid } = require('uuid');
@@ -125,7 +135,9 @@ class Login extends React.Component {
         }
       } else if (commandResponseEquals(message, Constants.CMD_VERIFY_USER_PASSWORD)) {
         console.log(message)
-        if (message.hasOwnProperty("response") && message.response.hasOwnProperty('status') && message.response.status === 0) {
+        if (message.hasOwnProperty("response") &&
+          message.response.hasOwnProperty('status') &&
+          message.response.status === 0) {
           if (message.response.valid) {
             // if Remember Me selected then save the username
             if (this.state.remember) {

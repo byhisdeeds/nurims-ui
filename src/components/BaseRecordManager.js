@@ -45,8 +45,8 @@ import {
 } from "../utils/WebsocketUtils";
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../utils/UserDebugContext";
+  UserContext
+} from "../utils/UserContext";
 import {
   getNextItemId,
   new_record,
@@ -61,7 +61,7 @@ import {
 } from "../utils/SnackbarVariants";
 
 class BaseRecordManager extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

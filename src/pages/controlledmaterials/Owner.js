@@ -16,7 +16,7 @@ import {
 import OwnerList from "./OwnerList";
 import OwnerMetadata from "./OwnerMetadata";
 import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import PropTypes from "prop-types";
 import {CMD_GET_GLOSSARY_TERMS, CMD_GET_OWNER_RECORDS, CMD_GET_PROVENANCE_RECORDS} from "../../utils/constants";
 import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
@@ -25,7 +25,7 @@ import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../..
 export const OWNER_REF = "Owner";
 
 class Owner extends BaseRecordManager {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

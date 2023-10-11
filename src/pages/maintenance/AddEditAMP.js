@@ -17,8 +17,8 @@ import AMPList from "./AMPList";
 import AMPMetadata from "./AMPMetadata";
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../../utils/UserDebugContext";
+  UserContext
+} from "../../utils/UserContext";
 import {
   TitleComponent,
   AddEditButtonPanel
@@ -36,7 +36,7 @@ import {
 export const ADDEDITAMP_REF = "AddEditAMP";
 
 class AddEditAMP extends BaseRecordManager {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

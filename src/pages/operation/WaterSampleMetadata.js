@@ -21,8 +21,8 @@ import {
 } from "../../components/CommonComponents";
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../../utils/UserDebugContext";
+  UserContext
+} from "../../utils/UserContext";
 import {
   getPropertyValue
 } from "../../utils/PropertyUtils";
@@ -36,7 +36,7 @@ import TextFileViewer from "../../components/TextFileViewer";
 import dayjs from 'dayjs';
 
 class WaterSampleMetadata extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

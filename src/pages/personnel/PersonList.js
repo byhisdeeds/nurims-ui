@@ -1,10 +1,10 @@
 import * as React from 'react';
 import PagedRecordList from "../../components/PagedRecordList";
 import PropTypes from "prop-types";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 
 class PersonList extends React.Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

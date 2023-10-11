@@ -19,7 +19,7 @@ import PersonMetadata from "./PersonMetadata";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArchiveIcon from "@mui/icons-material/Archive";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
 import {
   CMD_DELETE_PERSONNEL_RECORD,
@@ -51,7 +51,7 @@ import {
 export const ADDEDITPERSONNEL_REF = "AddEditPersonnel";
 
 class AddEditPersonnel extends BaseRecordManager {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

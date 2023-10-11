@@ -1,8 +1,8 @@
 import React from 'react';
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../../utils/UserDebugContext";
+  UserContext
+} from "../../utils/UserContext";
 import {
   ConfirmRemoveRecordDialog
 } from "../../components/UtilityDialogs";
@@ -45,7 +45,7 @@ import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../../utils/Snackbar
 export const ADDEDITREACTORWATERSAMPLES_REF = "AddEditReactorWaterSamples";
 
 class AddEditReactorWaterSamples extends React.Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

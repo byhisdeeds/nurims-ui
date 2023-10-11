@@ -38,8 +38,8 @@ import {
 } from "../../utils/MetadataUtils";
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../../utils/UserDebugContext";
+  UserContext
+} from "../../utils/UserContext";
 import {isValidUserRole} from "../../utils/UserUtils";
 import dayjs from 'dayjs';
 import {withTheme} from "@mui/styles";
@@ -47,7 +47,7 @@ import PropTypes from "prop-types";
 
 
 class ReactorSampleIrradiationAuthorizationMetadata extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);
@@ -124,6 +124,10 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   };
 
   onAnalysisJobSelected = (event, value) => {
+    console.log("++++++++++++++++++")
+    console.log(">>", value)
+    console.log(">>", typeof value == "string" ? analysisJobAsObject(value) : value)
+    console.log("++++++++++++++++++")
     clearTimeout(this.timeout);
     this.timeout = null;
     const record = this.state.record;
@@ -152,8 +156,10 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   }
 
   handleChange = (e) => {
-    const id = e.target.id || e.target.name || ""
-    console.log(">>>", e.target.id, e.target.name, id, e.target.value)
+    const id = e.target.id || e.target.name || "";
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "handleChange", "id", id, "value", e.target.value);
+    }
     const record = this.state.record;
     if (id === "flux") {
       setRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, e.target.value);

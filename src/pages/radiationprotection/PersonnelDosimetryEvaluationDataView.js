@@ -22,8 +22,8 @@ import {
 } from "../../utils/PropertyUtils";
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../../utils/UserDebugContext";
+  UserContext
+} from "../../utils/UserContext";
 import {
   NURIMS_DOSIMETRY_BATCH_ID,
   NURIMS_DOSIMETRY_DEEP_DOSE,
@@ -86,7 +86,7 @@ function filterRecordsByRecordType(rawData, recordType) {
 }
 
 class PersonnelDosimetryEvaluationDataView extends Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

@@ -31,7 +31,7 @@ import {
   ConfirmRemoveRecordDialog,
   ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import PersonnelList from "./PersonnelList";
 import DosimetryMeasurementMetadata from "./DosimetryMeasurementMetadata";
 import BusyIndicator from "../../components/BusyIndicator";
@@ -102,7 +102,7 @@ function assignDosimetryRecord(dosimetry, records) {
 export const DOSIMETRYMEASUREMENT_REF = "DosimetryMeasurement";
 
 class DosimetryMeasurement extends BaseRecordManager {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
 
   constructor(props) {
     super(props);

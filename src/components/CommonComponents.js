@@ -40,7 +40,10 @@ import "dayjs/locale/en-gb";
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import {visuallyHidden} from "@mui/utils";
 import Floater from 'react-floater';
-import {getRecordData, toBoolean} from "../utils/MetadataUtils";
+import {
+  getRecordData,
+  toBoolean
+} from "../utils/MetadataUtils";
 import {
   NotificationImportant,
   HourglassEmpty,
@@ -59,13 +62,15 @@ import {
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
   NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
-  NURIMS_OPERATION_DATA_IRRADIATIONDURATION, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
-  NURIMS_OPERATION_DATA_NEUTRONFLUX
+  NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
+  NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
+  NURIMS_OPERATION_DATA_NEUTRONFLUX,
+  NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
+  UNDEFINED_DATE_STRING
 } from "../utils/constants";
 import DoneIcon from "@mui/icons-material/Done";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
-import {getUserFullname} from "../utils/MessageUtils";
 
 
 export function TitleComponent({title}) {
@@ -1522,7 +1527,6 @@ AddEditButtonPanel.defaultProps = {
 export function ApproveIrradiationMessageComponent({record, user, disabled, onClickApproveRequest, theme, approverRole}) {
   const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
   if (approver !== "") {
-    // const fullname = getUserFullname(user, approver)
     const fullname = user.users.reduce((prev, obj) => {
       if (obj[0] === approver) {
         prev = obj[1];
@@ -1550,21 +1554,30 @@ export function ApproveIrradiationMessageComponent({record, user, disabled, onCl
     let disabled_hint = "";
     if (Object.keys(record).length === 0) {
       disabled = true;
-    } else if (getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, "") === "") {
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX,
+      "") === "") {
       disabled = true;
       disabled_hint = "Disabled because no neutron flux specified!";
-    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "") === "") {
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
+      "") === "") {
       disabled = true;
       disabled_hint = "Disabled because no irradiation duration specified!";
-    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, "") === "") {
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
+      "") === "") {
       disabled = true;
       disabled_hint = "Disabled because no irradiation sample list specified!";
-    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, []).size === 0) {
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
+      []).size === 0) {
       disabled = true;
       disabled_hint = "Disabled because no irradiation sample types specified!";
-    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name: ""}).name === "") {
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
+      {name: ""}).name === "") {
       disabled = true;
       disabled_hint = "Disabled because no irradiation sample job specified!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
+      UNDEFINED_DATE_STRING) === UNDEFINED_DATE_STRING) {
+      disabled = true;
+      disabled_hint = "Disabled because no proposed irradiation date specified!";
     }
     return (
       <Tooltip title={disabled_hint}>

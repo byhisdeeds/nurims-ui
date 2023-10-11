@@ -8,13 +8,13 @@ import PropTypes from "prop-types";
 import {SwitchComponent, TitleComponent} from "../../components/CommonComponents";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import {withTheme} from "@mui/styles";
 
 export const VIEWAMPRECORDS_REF = "ViewAMPRecords";
 
 class ViewAMPRecords extends Component {
-  static context = UserDebugContext;
+  static context = UserContext;
   constructor(props) {
     super(props);
     this.state = {

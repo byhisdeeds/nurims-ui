@@ -1,5 +1,5 @@
 import React from 'react';
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import {enqueueErrorSnackbar, enqueueSuccessSnackbar, enqueueWarningSnackbar} from "../../utils/SnackbarVariants";
 import 'react-chatbot-kit/build/main.css';
 import {
@@ -12,7 +12,7 @@ import "@cozimacode/react-bot/dist/styles.css";
 export const CHATBOT_REF = "ChatBot";
 
 class ChatBot extends React.Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
   constructor(props) {
     super(props);
     this.state = {

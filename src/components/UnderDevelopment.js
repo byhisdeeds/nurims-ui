@@ -1,8 +1,8 @@
 import React from 'react';
 import {
   ConsoleLog,
-  UserDebugContext
-} from "../utils/UserDebugContext";
+  UserContext
+} from "../utils/UserContext";
 import Grid from "@mui/material/Grid";
 import {
   TitleComponent
@@ -11,7 +11,7 @@ import {
 export const UNDERDEVELOPMENT_REF = "UnderDevelopment";
 
 class UnderDevelopment extends React.Component {
-  static contextType = UserDebugContext;
+  static contextType = UserContext;
   constructor(props) {
     super(props);
     this.state = {
