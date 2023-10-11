@@ -166,6 +166,10 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add Authorization"}
           removeRecordButtonLabel={"Remove Authorization"}
+          addRole={"reactor_operations_data_entry"}
+          removeRole={"sysadmin"}
+          saveRole={"reactor_operations_data_entry"}
+          archiveRole={"reactor_operations_data_entry"}
         />}
         {/*<Box*/}
         {/*  sx={{*/}
