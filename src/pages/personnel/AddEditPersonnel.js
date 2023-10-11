@@ -274,6 +274,10 @@ class AddEditPersonnel extends BaseRecordManager {
           addRecordButtonLabel={"Add Personnel"}
           removeRecordIcon={<PersonRemoveIcon sx={{mr: 1}}/>}
           removeRecordButtonLabel={"Remove Personnel"}
+          addRole={"personnel_data_entry"}
+          removeRole={"sysadmin"}
+          saveRole={"personnel_data_entry"}
+          archiveRole={"personnel_data_entry"}
         />}
         {/*<Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>*/}
         {/*  <Fab*/}

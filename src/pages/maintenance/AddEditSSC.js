@@ -136,6 +136,10 @@ class AddEditSSC extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add SSC"}
           removeRecordButtonLabel={"Remove SSC"}
+          addRole={"maintenance_data_entry"}
+          removeRole={"sysadmin"}
+          saveRole={"maintenance_data_entry"}
+          archiveRole={"maintenance_data_entry"}
         />}
         {/*<Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>*/}
         {/*  <Fab*/}

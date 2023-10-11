@@ -276,6 +276,10 @@ class AddEditMonitors extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add Monitor"}
           removeRecordButtonLabel={"Remove Monitor"}
+          addRole={"radiation_protection_data_entry"}
+          removeRole={"sysadmin"}
+          saveRole={"radiation_protection_data_entry"}
+          archiveRole={"radiation_protection_data_entry"}
         />}
         {/*<Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>*/}
         {/*  <Fab*/}

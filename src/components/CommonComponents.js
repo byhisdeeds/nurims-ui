@@ -1448,7 +1448,7 @@ export function AddEditButtonPanel({
           variant="extended"
           size="small"
           color="primary"
-          aria-label="save"
+          aria-label="view-provenance"
           onClick={onClickViewProvenanceRecords}
           disabled={!selection.hasOwnProperty("item_id")}
         >
@@ -1475,7 +1475,7 @@ export function AddEditButtonPanel({
         color="primary"
         aria-label="save"
         onClick={onClickSaveRecordChanges}
-        disabled={!has_changed_records}
+        disabled={!(has_changed_records && THIS.isSelectableByRoles(selection, [saveRole], true))}
       >
         <SaveIcon sx={{mr: 1}}/>
         Save Changes
@@ -1511,6 +1511,7 @@ AddEditButtonPanel.propTypes = {
   archiveRole: PropTypes.string,
   sysadminRole: PropTypes.string,
   removeRole: PropTypes.string,
+  saveRole: PropTypes.string,
 }
 
 AddEditButtonPanel.defaultProps = {
@@ -1521,7 +1522,8 @@ AddEditButtonPanel.defaultProps = {
   addRole: "",
   archiveRole: "",
   sysadminRole: "sysadmin",
-  removeRole: "sysadmin",
+  removeRole: "",
+  saveRole: "",
 }
 
 export function ApproveIrradiationMessageComponent({record, user, disabled, onClickApproveRequest, theme, approverRole}) {

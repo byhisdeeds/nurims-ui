@@ -153,8 +153,6 @@ class Material extends BaseRecordManager {
         {<AddEditButtonPanel
           THIS={this}
           user={user}
-          addRole={"dataentry"}
-          archiveRole={"dataentry"}
           onClickAddRecord={this.addRecord}
           onClickChangeRecordArchivalStatus={this.changeRecordArchivalStatus}
           onClickRemoveRecord={this.removeRecord}
@@ -162,6 +160,10 @@ class Material extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add Material"}
           removeRecordButtonLabel={"Remove Material"}
+          addRole={"controlled_materials_data_entry"}
+          removeRole={"sysadmin"}
+          saveRole={"controlled_materials_data_entry"}
+          archiveRole={"controlled_materials_data_entry"}
         />}
         {/*<Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>*/}
         {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}

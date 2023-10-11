@@ -133,6 +133,10 @@ class Manufacturer extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add Manufacturer"}
           removeRecordButtonLabel={"Remove Manufacturer"}
+          addRole={"controlled_materials_data_entry"}
+          removeRole={"sysadmin"}
+          saveRole={"controlled_materials_data_entry"}
+          archiveRole={"controlled_materials_data_entry"}
         />}
         {/*<Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>*/}
         {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}

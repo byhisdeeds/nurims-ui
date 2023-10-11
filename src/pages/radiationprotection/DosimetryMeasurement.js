@@ -318,6 +318,10 @@ class DosimetryMeasurement extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add Measurement"}
           removeRecordButtonLabel={"Remove Measurement"}
+          addRole={"radiation_protection_data_entry"}
+          removeRole={"sysadmin"}
+          saveRole={"radiation_protection_data_entry"}
+          archiveRole={"radiation_protection_data_entry"}
         />}
         {/*<Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-around", m: 1, }} >*/}
         {/*  <Button*/}
