@@ -1523,8 +1523,8 @@ export function ApproveIrradiationMessageComponent({record, user, disabled, onCl
   const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
   if (approver !== "") {
     // const fullname = getUserFullname(user, approver)
-    const fullname = users.users.reduce((prev, obj) => {
-      if (obj[0] === user) {
+    const fullname = user.users.reduce((prev, obj) => {
+      if (obj[0] === approver) {
         prev = obj[1];
       }
       return prev;
@@ -1572,7 +1572,7 @@ export function ApproveIrradiationMessageComponent({record, user, disabled, onCl
       <Button
         variant={"outlined"}
         style={{color: theme.palette.warning.contrastText, backgroundColor: theme.palette.warning.light}}
-        endIcon={<DoNotDisturbAltIcon />}
+        endIcon={<DoNotDisturbAltIcon/>}
         aria-label={"authorize"}
         disableRipple={true}
         fullWidth
