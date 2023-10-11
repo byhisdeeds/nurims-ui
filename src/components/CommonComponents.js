@@ -1550,32 +1550,22 @@ export function ApproveIrradiationMessageComponent({record, user, disabled, onCl
     let disabled_hint = "";
     if (Object.keys(record).length === 0) {
       disabled = true;
-      disabled_hint = "No record selected!";
     } else if (getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, "") === "") {
       disabled = true;
-      disabled_hint = "No neutron flux specified!";
+      disabled_hint = "Disabled because no neutron flux specified!";
     } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "") === "") {
       disabled = true;
-      disabled_hint = "No irradiation duration specified!";
+      disabled_hint = "Disabled because no irradiation duration specified!";
     } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, "") === "") {
       disabled = true;
-      disabled_hint = "No irradiation sample list specified!";
+      disabled_hint = "Disabled because no irradiation sample list specified!";
     } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, []).size === 0) {
       disabled = true;
-      disabled_hint = "No irradiation sample types specified!";
+      disabled_hint = "Disabled because no irradiation sample types specified!";
     } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name: ""}).name === "") {
       disabled = true;
-      disabled_hint = "No irradiation sample job specified!";
+      disabled_hint = "Disabled because no irradiation sample job specified!";
     }
-
-    // const disabled =
-    //   Object.keys(record).length === 0 ||
-    //   getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, "") === "" ||
-    //   getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "") === "" ||
-    //   getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, "") === "" ||
-    //   getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, []).size === 0 ||
-    //   getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name: ""}).name === "";
-
     return (
       <Tooltip title={disabled_hint}>
         <span>
