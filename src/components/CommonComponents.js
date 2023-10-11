@@ -1519,7 +1519,7 @@ AddEditButtonPanel.defaultProps = {
   removeRole: "sysadmin",
 }
 
-export function ApproveIrradiationMessageComponent({record, user, disabled, onClickApproveRequest, theme}) {
+export function ApproveIrradiationMessageComponent({record, user, disabled, onClickApproveRequest, theme, approverRole}) {
   const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
   if (approver !== "") {
     // const fullname = getUserFullname(user, approver)
@@ -1544,28 +1544,55 @@ export function ApproveIrradiationMessageComponent({record, user, disabled, onCl
       </Button>
     )
   }
-  const can_authorize = isValidUserRole(user, "irradiation_authorizer");
+  const can_authorize = isValidUserRole(user, approverRole);
   if (can_authorize) {
-    const disabled =
-      Object.keys(record).length === 0 ||
-      getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, "") === "" ||
-      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "") === "" ||
-      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, "") === "" ||
-      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, []).size === 0 ||
-      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name: ""}).name === "";
+    let disabled = false;
+    let disabled_hint = "";
+    if (Object.keys(record).length === 0) {
+      disabled = true;
+      disabled_hint = "No record selected!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, "") === "") {
+      disabled = true;
+      disabled_hint = "No neutron flux specified!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "") === "") {
+      disabled = true;
+      disabled_hint = "No irradiation duration specified!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, "") === "") {
+      disabled = true;
+      disabled_hint = "No irradiation sample list specified!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, []).size === 0) {
+      disabled = true;
+      disabled_hint = "No irradiation sample types specified!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name: ""}).name === "") {
+      disabled = true;
+      disabled_hint = "No irradiation sample job specified!";
+    }
+
+    // const disabled =
+    //   Object.keys(record).length === 0 ||
+    //   getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, "") === "" ||
+    //   getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "") === "" ||
+    //   getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, "") === "" ||
+    //   getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, []).size === 0 ||
+    //   getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name: ""}).name === "";
+
     return (
-      <Button
-        disabled={disabled}
-        variant={"contained"}
-        endIcon={<ArchiveIcon />}
-        onClick={onClickApproveRequest}
-        color={"primary"}
-        aria-label={"authorize"}
-        fullWidth
-        sx={{marginTop: 1}}
-      >
-        {"Approve Irradiation Request"}
-      </Button>
+      <Tooltip title={disabled_hint}>
+        <span>
+          <Button
+            disabled={disabled}
+            variant={"contained"}
+            endIcon={<ArchiveIcon />}
+            onClick={onClickApproveRequest}
+            color={"primary"}
+            aria-label={"authorize"}
+            fullWidth
+            sx={{marginTop: 1}}
+          >
+            {"Approve Irradiation Request"}
+          </Button>
+        </span>
+      </Tooltip>
     )
   } else {
     return (
@@ -1590,4 +1617,9 @@ ApproveIrradiationMessageComponent.propTypes = {
   disabled: PropTypes.bool.isRequired,
   onClickApproveRequest: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired,
+  approverRole: PropTypes.string,
+}
+
+ApproveIrradiationMessageComponent.defaultProps = {
+  approverRole: "irradiation_authorizer",
 }

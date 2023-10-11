@@ -177,7 +177,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
       d.format("d MMMM, YYYY");
   }
 
-  approveRequest = () => {
+  onClickApproveRequest = () => {
     const record = this.state.record;
     const user = this.context.user;
     setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
@@ -305,7 +305,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   record={record}
                   user={this.context.user}
                   disabled={disabled}
-                  onClickApproveRequest={this.approveRequest}
+                  onClickApproveRequest={this.onClickApproveRequest}
                   theme={this.props.theme}
                 />
               </Grid>
