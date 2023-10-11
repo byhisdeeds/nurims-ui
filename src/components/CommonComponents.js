@@ -28,15 +28,19 @@ import {
   Tooltip,
   IconButton,
   TableHead,
-  TableSortLabel
+  TableSortLabel,
+  Fab, Button
 } from "@mui/material";
-import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {
+  DatePicker,
+  LocalizationProvider
+} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/en-gb";
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import {visuallyHidden} from "@mui/utils";
 import Floater from 'react-floater';
-import {toBoolean} from "../utils/MetadataUtils";
+import {getRecordData, toBoolean} from "../utils/MetadataUtils";
 import {
   NotificationImportant,
   HourglassEmpty,
@@ -45,6 +49,23 @@ import {
   Person,
   DeleteForever
 } from '@mui/icons-material';
+import {isValidUserRole} from "../utils/UserUtils";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import SaveIcon from "@mui/icons-material/Save";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import {
+  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
+  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
+  NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
+  NURIMS_OPERATION_DATA_IRRADIATIONDURATION, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
+  NURIMS_OPERATION_DATA_NEUTRONFLUX
+} from "../utils/constants";
+import DoneIcon from "@mui/icons-material/Done";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
+import {getUserFullname} from "../utils/MessageUtils";
 
 
 export function TitleComponent({title}) {
@@ -60,16 +81,16 @@ TitleComponent.propTypes = {
 
 function TooltipContent(closeFn) {
   return (
-    <Box sx={{ width: 300, height: 100, backgroundColor: 'rgba(121,152,223,0.1)', color: '#dadada' }}>
+    <Box sx={{width: 300, height: 100, backgroundColor: 'rgba(121,152,223,0.1)', color: '#dadada'}}>
       <h4 align="center">
         I'm a custom component acting as modal. No arrow and centered
       </h4>
       <ButtonBase
         onClick={closeFn}
         padding="sm"
-        style={{ position: 'absolute', right: 16, top: 16 }}
+        style={{position: 'absolute', right: 16, top: 16}}
       >
-        <Person name="close" size={24} />
+        <Person name="close" size={24}/>
       </ButtonBase>
     </Box>
   );
@@ -233,8 +254,10 @@ CheckboxWithTooltip.propTypes = {
   padding: PropTypes.number,
 }
 
-export function SelectFormControlWithTooltip({id, label, value, onChange, options, disabled, tooltip, placement,
-                                              padding, multiple}) {
+export function SelectFormControlWithTooltip({
+                                               id, label, value, onChange, options, disabled, tooltip, placement,
+                                               padding, multiple
+                                             }) {
   return (
     <FormControl style={{paddingRight: padding, marginTop: padding, width: '100%'}} variant="outlined">
       <Floater
@@ -289,12 +312,12 @@ export function SelectFormControlWithTooltip({id, label, value, onChange, option
         name={id}
         value={typeof value === 'string' ? value.split(",") : value}
         onChange={onChange}
-        input={<OutlinedInput label={label} />}
+        input={<OutlinedInput label={label}/>}
       >
         {options.map((option) => {
           if (typeof option === 'object') {
             return (
-              <MenuItem disabled={option.disabled||false} value={option["id"]}>{option["title"]}</MenuItem>
+              <MenuItem disabled={option.disabled || false} value={option["id"]}>{option["title"]}</MenuItem>
             )
           } else {
             const t = option.split(',');
@@ -333,8 +356,10 @@ SelectFormControlWithTooltip.propTypes = {
   multiple: PropTypes.bool,
 }
 
-export function TextFieldWithTooltip({id, label, value, onChange, disabled, tooltip, placement, required, lines,
-                                       padding, readOnly}) {
+export function TextFieldWithTooltip({
+                                       id, label, value, onChange, disabled, tooltip, placement, required, lines,
+                                       padding, readOnly
+                                     }) {
   return (
     <Box style={{paddingRight: padding, marginTop: padding, width: '100%'}}>
       <TextField
@@ -392,7 +417,7 @@ export function TextFieldWithTooltip({id, label, value, onChange, disabled, tool
           >
             {label}
           </Floater>
-          }
+        }
         value={value}
         onChange={onChange}
       />
@@ -422,7 +447,17 @@ TextFieldWithTooltip.propTypes = {
   readOnly: PropTypes.bool,
 }
 
-export function DatePickerWithTooltip({label, value, onChange, disabled, tooltip, placement, inputFormat, padding, width}) {
+export function DatePickerWithTooltip({
+                                        label,
+                                        value,
+                                        onChange,
+                                        disabled,
+                                        tooltip,
+                                        placement,
+                                        inputFormat,
+                                        padding,
+                                        width
+                                      }) {
   return (
     <Box style={{paddingRight: padding, marginTop: padding, display: 'inline-flex'}}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
@@ -506,8 +541,8 @@ DatePickerWithTooltip.propTypes = {
 }
 
 export function MonitorTypeSelect({value, onChange, monitorTypes, width}) {
-  const label='Monitor Type';
-  const labelId='monitor-type-select-label';
+  const label = 'Monitor Type';
+  const labelId = 'monitor-type-select-label';
   return (
     <SelectFormControl id={labelId} label={label}>
       <Select
@@ -545,8 +580,10 @@ MonitorTypeSelect.defaultProps = {
   width: "30ch",
 }
 
-export function DateRangePicker({from, to, fromLabel, toLabel, disabled, onToChange, onFromChange, inputFormat,
-                                  width, views}) {
+export function DateRangePicker({
+                                  from, to, fromLabel, toLabel, disabled, onToChange, onFromChange, inputFormat,
+                                  width, views
+                                }) {
   return (
     <Box sx={{display: 'flex'}}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
@@ -579,8 +616,10 @@ DateRangePicker.defaultProps = {
   views: ['year', 'month', 'day'],
   fromLabel: " Start ",
   endLabel: " End ",
-  onToChange: (date) => { },
-  onFromChange: (date) => { },
+  onToChange: (date) => {
+  },
+  onFromChange: (date) => {
+  },
   renderInput: (props) => <TextField style={{paddingRight: 8, marginTop: 8}} {...props} />,
 };
 
@@ -646,9 +685,11 @@ SameYearDateRangePicker.propTypes = {
 }
 
 
-export function PageableTable({theme, title, minWidth, cells, defaultOrder, defaultOrderBy, rows, rowsPerPage,
-                               rowHeight, onRowSelection, selectedRow, disabled, renderCell, filterElement,
-                               selectionMetadataField, filterRows, enableRowFilter, filterTooltip}) {
+export function PageableTable({
+                                theme, title, minWidth, cells, defaultOrder, defaultOrderBy, rows, rowsPerPage,
+                                rowHeight, onRowSelection, selectedRow, disabled, renderCell, filterElement,
+                                selectionMetadataField, filterRows, enableRowFilter, filterTooltip
+                              }) {
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState(defaultOrder);
@@ -682,9 +723,9 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
               >
                 {cell.label}
                 {cell.sortField &&
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </Box>
                 }
               </TableSortLabel>
             </TableCell>
@@ -798,11 +839,11 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
               .map((row, index) => {
                 // const isItemSelected = selected.hasOwnProperty("item_id") && selected.item_id === row.item_id;
                 const isItemSelected = selected.hasOwnProperty(selectionMetadataField) &&
-                                       selected[selectionMetadataField] === row[selectionMetadataField];
+                  selected[selectionMetadataField] === row[selectionMetadataField];
                 return (
                   <TableRow
                     hover
-                    onClick={()=>rowSelectionHandler(row)}
+                    onClick={() => rowSelectionHandler(row)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -810,8 +851,8 @@ export function PageableTable({theme, title, minWidth, cells, defaultOrder, defa
                     selected={isItemSelected}
                     sx={{height: rowHeight}}
                   >{cells.map((cell) => {
-                      return (renderCell(row, cell))
-                    })}
+                    return (renderCell(row, cell))
+                  })}
                     {/*<TableCell align="center" padding="none">{row["item_id"]}</TableCell>*/}
                     {/*<TableCell align="left" padding="none">{row["nurims.title"]}</TableCell>*/}
                   </TableRow>
@@ -848,15 +889,19 @@ PageableTable.defaultProps = {
   rowsPerPage: 20,
   rowHeight: 24,
   selectedRow: {},
-  onRowSelection: (row) => {},
+  onRowSelection: (row) => {
+  },
   rows: [],
-  renderCell: (row, cell) => { return (
-    <TableCell align={cell.align} padding={cell.disablePadding ? 'none' : 'normal'}>{row[cell.id]}</TableCell>
-  )},
+  renderCell: (row, cell) => {
+    return (
+      <TableCell align={cell.align} padding={cell.disablePadding ? 'none' : 'normal'}>{row[cell.id]}</TableCell>
+    )
+  },
   filterElement: <div/>,
   enableRowFilter: true,
   filterTooltip: "Include archived records",
-  filterRows: (value) => {},
+  filterRows: (value) => {
+  },
 };
 
 PageableTable.propTypes = {
@@ -904,9 +949,11 @@ SwitchComponent.propTypes = {
   onChange: PropTypes.func.isRequired,
 }
 
-export function AutoCompleteComponent({isOpen, onOpen, onClose, filterOptions, getOptionLabel, options, loading,
-                                       label, busy, onSelected, onChange, freeInput, defaultValue, disabled,
-                                       optionId}) {
+export function AutoCompleteComponent({
+                                        isOpen, onOpen, onClose, filterOptions, getOptionLabel, options, loading,
+                                        label, busy, onSelected, onChange, freeInput, defaultValue, disabled,
+                                        optionId
+                                      }) {
   return (
     <Autocomplete
       disabled={disabled}
@@ -958,8 +1005,10 @@ AutoCompleteComponent.defaultProps = {
     matchFrom: 'start',
     stringify: option => option.name,
   }),
-  onChange: (event) => {},
-  onSelected: (event, value) => {},
+  onChange: (event) => {
+  },
+  onSelected: (event, value) => {
+  },
   freeInput: false,
   disabled: false,
   optionId: "name",
@@ -1102,7 +1151,7 @@ OutlinedTextField.propTypes = {
 
 export function AnalysisEngineSelect({value, onChange, engines}) {
   const label = 'Analysis Engine';
-  const labelId='analysis-engine-select-label';
+  const labelId = 'analysis-engine-select-label';
   return (
     <SelectFormControl id={labelId} label={label}>
       <Select
@@ -1128,7 +1177,7 @@ AnalysisEngineSelect.propTypes = {
 
 export function NuclideLibrarySelect({value, onChange, libraryFiles}) {
   const label = 'Nuclide Library';
-  const labelId='nuclide-library-select-label';
+  const labelId = 'nuclide-library-select-label';
   return (
     <SelectFormControl id={labelId} label={label}>
       <Select
@@ -1154,7 +1203,7 @@ NuclideLibrarySelect.propTypes = {
 
 export function EnergyCalibrationFileSelect({value, onChange, encalFiles}) {
   const label = 'Energy Calibration File';
-  const labelId='encal-file-select-label';
+  const labelId = 'encal-file-select-label';
   return (
     <SelectFormControl id={labelId} label={label}>
       <Select
@@ -1180,7 +1229,7 @@ EnergyCalibrationFileSelect.propTypes = {
 
 export function DecayDuringAcquisitionSelect({value, onChange}) {
   const label = 'Decay During Acquisition';
-  const labelId='decay-during-acquisition-select-label';
+  const labelId = 'decay-during-acquisition-select-label';
   return (
     <SelectFormControl id={labelId} label={label}>
       <Select
@@ -1204,7 +1253,7 @@ DecayDuringAcquisitionSelect.propTypes = {
 
 export function DecayCorrectionSelect({value, onChange}) {
   const label = 'Decay Correction';
-  const labelId='decay-correction-select-label';
+  const labelId = 'decay-correction-select-label';
   return (
     <SelectFormControl id={labelId} label={label}>
       <Select
@@ -1228,7 +1277,7 @@ DecayCorrectionSelect.propTypes = {
 
 export function WpcTableSelect({value, onChange, onOpen, onDelete, disabled, wpcTables, selectedWPCTable}) {
   const label = 'Weight Per Count Table';
-  const labelId='wpc-tables-select-label';
+  const labelId = 'wpc-tables-select-label';
   console.log("WPC TABLES", wpcTables)
   return (
     <SelectFormControl id={labelId} label={label}>
@@ -1247,7 +1296,7 @@ export function WpcTableSelect({value, onChange, onOpen, onDelete, disabled, wpc
             key={table.name}
             value={`${table.path}/${table.file}`}
           >
-            <ListItemText primary={table.name} />
+            <ListItemText primary={table.name}/>
             <ListItemIcon>
               <DeleteForever data-table={JSON.stringify(table)} onClick={onDelete}/>
             </ListItemIcon>
@@ -1269,7 +1318,7 @@ WpcTableSelect.propTypes = {
 
 export function AnalysisDataTypesSelect({value, onChange, dataTypes}) {
   const label = 'Data Types';
-  const labelId='data-types-select-label';
+  const labelId = 'data-types-select-label';
   return (
     <SelectFormControl id={labelId} label={label}>
       <Select
@@ -1283,7 +1332,7 @@ export function AnalysisDataTypesSelect({value, onChange, dataTypes}) {
       >
         {dataTypes.map(dt => (
           <MenuItem key={dt.id} value={dt.name}>
-            <Checkbox checked={value.includes(dt.name)} />
+            <Checkbox checked={value.includes(dt.name)}/>
             <ListItemText primary={dt.name} title={dt.info}/>
           </MenuItem>
         ))}
@@ -1300,7 +1349,7 @@ AnalysisDataTypesSelect.propTypes = {
 
 export function SelectedAnalysisSystemPerformanceMetricSelect({value, onChange, metrics}) {
   const label = 'Performance Metric';
-  const labelId='performance-metric-select-label';
+  const labelId = 'performance-metric-select-label';
   return (
     <SelectFormControl id={labelId} label={label}>
       <Select
@@ -1364,4 +1413,181 @@ export function AnalysisJobAutoComplete(props) {
       )}
     />
   )
+}
+
+export function AddEditButtonPanel({
+                                     THIS, user, onClickRemoveRecord, removeRecordButtonLabel,
+                                     onClickSaveRecordChanges, onClickAddRecord, addRecordButtonLabel,
+                                     onClickChangeRecordArchivalStatus, onClickViewProvenanceRecords,
+                                     removeRecordIcon, addRecordIcon, addRole, archiveRole, sysadminRole,
+                                     removeRole
+                                   }) {
+  const {selection} = THIS.state;
+  const isSysadmin = isValidUserRole(user, sysadminRole);
+  const has_changed_records = THIS.hasChangedRecords();
+  return (
+    <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
+      <Fab
+        variant="extended"
+        size="small"
+        color="primary"
+        aria-label="remove"
+        onClick={onClickRemoveRecord}
+        disabled={!THIS.isSelectableByRoles(selection, [removeRole], true)}
+      >
+        {removeRecordIcon}
+        {removeRecordButtonLabel}
+      </Fab>
+      {isSysadmin &&
+        <Fab
+          variant="extended"
+          size="small"
+          color="primary"
+          aria-label="save"
+          onClick={onClickViewProvenanceRecords}
+          disabled={!selection.hasOwnProperty("item_id")}
+        >
+          <VisibilityIcon sx={{mr: 1}}/>
+          View Provenance Records
+        </Fab>
+      }
+      <Fab
+        variant="extended"
+        size="small"
+        color="primary"
+        aria-label="archive"
+        component={"span"}
+        onClick={onClickChangeRecordArchivalStatus}
+        disabled={!THIS.isSelectableByRoles(selection, [archiveRole], true)}
+      >
+        {THIS.isRecordArchived(selection) ?
+          <React.Fragment><VisibilityIcon sx={{mr: 1}}/> "Restore Record"</React.Fragment> :
+          <React.Fragment><VisibilityOffIcon sx={{mr: 1}}/> "Archive Record"</React.Fragment>}
+      </Fab>
+      <Fab
+        variant="extended"
+        size="small"
+        color="primary"
+        aria-label="save"
+        onClick={onClickSaveRecordChanges}
+        disabled={!has_changed_records}
+      >
+        <SaveIcon sx={{mr: 1}}/>
+        Save Changes
+      </Fab>
+      <Fab
+        variant="extended"
+        size="small"
+        color="primary"
+        aria-label="add"
+        onClick={onClickAddRecord}
+        disabled={!THIS.isSelectableByRoles(selection, [addRole], false)}
+      >
+        {addRecordIcon}
+        {addRecordButtonLabel}
+      </Fab>
+    </Box>
+  )
+}
+
+AddEditButtonPanel.propTypes = {
+  THIS: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  onClickRemoveRecord: PropTypes.func.isRequired,
+  onClickSaveRecordChanges: PropTypes.func.isRequired,
+  onClickAddRecord: PropTypes.func.isRequired,
+  addRecordButtonLabel: PropTypes.string,
+  addRecordIcon: PropTypes.element,
+  onClickChangeRecordArchivalStatus: PropTypes.func.isRequired,
+  onClickViewProvenanceRecords: PropTypes.func.isRequired,
+  removeRecordIcon: PropTypes.element,
+  removeRecordButtonLabel: PropTypes.string,
+  addRole: PropTypes.string,
+  archiveRole: PropTypes.string,
+  sysadminRole: PropTypes.string,
+  removeRole: PropTypes.string,
+}
+
+AddEditButtonPanel.defaultProps = {
+  removeRecordIcon: <RemoveCircleIcon sx={{mr: 1}}/>,
+  addRecordIcon: <AddCircleOutlineIcon sx={{mr: 1}}/>,
+  addRecordButtonLabel: "Add Record",
+  removeRecordButtonLabel: "Remove Record",
+  addRole: "",
+  archiveRole: "",
+  sysadminRole: "sysadmin",
+  removeRole: "sysadmin",
+}
+
+export function ApproveIrradiationMessageComponent({record, user, disabled, onClickApproveRequest, theme}) {
+  const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
+  if (approver !== "") {
+    // const fullname = getUserFullname(user, approver)
+    const fullname = users.users.reduce((prev, obj) => {
+      if (obj[0] === user) {
+        prev = obj[1];
+      }
+      return prev;
+    }, "");
+
+    return (
+      <Button
+        variant={"outlined"}
+        endIcon={<DoneIcon />}
+        style={{color: theme.palette.success.contrastText, backgroundColor: theme.palette.success.light}}
+        aria-label={"authorize"}
+        disableRipple={true}
+        fullWidth
+        sx={{marginTop: 1}}
+      >
+        {`Approved by ${fullname}`}
+      </Button>
+    )
+  }
+  const can_authorize = isValidUserRole(user, "irradiation_authorizer");
+  if (can_authorize) {
+    const disabled =
+      Object.keys(record).length === 0 ||
+      getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, "") === "" ||
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "") === "" ||
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, "") === "" ||
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, []).size === 0 ||
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name: ""}).name === "";
+    return (
+      <Button
+        disabled={disabled}
+        variant={"contained"}
+        endIcon={<ArchiveIcon />}
+        onClick={onClickApproveRequest}
+        color={"primary"}
+        aria-label={"authorize"}
+        fullWidth
+        sx={{marginTop: 1}}
+      >
+        {"Approve Irradiation Request"}
+      </Button>
+    )
+  } else {
+    return (
+      <Button
+        variant={"outlined"}
+        style={{color: theme.palette.warning.contrastText, backgroundColor: theme.palette.warning.light}}
+        endIcon={<DoNotDisturbAltIcon />}
+        aria-label={"authorize"}
+        disableRipple={true}
+        fullWidth
+        sx={{marginTop: 1}}
+      >
+        {`YOU IS NOT AUTHORIZED TO APPROVE IRRADIATIONS.`}
+      </Button>
+    )
+  }
+}
+
+ApproveIrradiationMessageComponent.propTypes = {
+  record: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onClickApproveRequest: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired,
 }

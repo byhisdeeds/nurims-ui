@@ -21,7 +21,7 @@ import {
 import StorageList from "./StorageList";
 import StorageMetadata from "./StorageMetadata";
 import {UserDebugContext} from "../../utils/UserDebugContext";
-import {TitleComponent} from "../../components/CommonComponents";
+import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
 import {
   messageHasResponse,
   messageStatusOk
@@ -30,7 +30,6 @@ import {
   setProvenanceRecordsHelper,
   showProvenanceRecordsViewHelper
 } from "../../utils/ProvenanceUtils";
-import {AddEditButtonPanel} from "../../utils/UiUtils";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 export const STORAGE_REF = "Storage";

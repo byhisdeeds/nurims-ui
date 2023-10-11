@@ -31,7 +31,7 @@ import {
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog} from "../../utils/UserDebugContext";
-import {TitleComponent} from "../../components/CommonComponents";
+import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
 import BusyIndicator from "../../components/BusyIndicator";
 import {readString} from "react-papaparse";
 import {
@@ -50,7 +50,6 @@ import {
   setProvenanceRecordsHelper,
   showProvenanceRecordsViewHelper
 } from "../../utils/ProvenanceUtils";
-import {AddEditButtonPanel} from "../../utils/UiUtils";
 
 
 export const ADDEDITMONITORS_REF = "AddEditMonitors";

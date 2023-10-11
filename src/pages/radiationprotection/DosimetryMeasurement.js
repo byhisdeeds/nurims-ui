@@ -45,14 +45,13 @@ import {
 } from "../../utils/MetadataUtils";
 import {transformDose} from "../../utils/DoseReportUtils";
 import PropTypes from "prop-types";
-import {TitleComponent} from "../../components/CommonComponents";
+import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import {isValidUserRole} from "../../utils/UserUtils";
 import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {AddEditButtonPanel} from "../../utils/UiUtils";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 

@@ -1,13 +1,7 @@
 import React from 'react';
 import {
-  Fab,
   Grid,
-  Typography,
-  Box
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_MANUFACTURER_RECORDS, CMD_GET_PROVENANCE_RECORDS,
@@ -15,15 +9,21 @@ import {
 
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
-  ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog,
+  ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
 import ManufacturerList from "./ManufacturerList";
 import ManufacturerMetadata from "./ManufacturerMetadata";
-import {TitleComponent} from "../../components/CommonComponents";
+import {
+  TitleComponent,
+  AddEditButtonPanel
+} from "../../components/CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
-import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
-import {AddEditButtonPanel} from "../../utils/UiUtils";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
 
 export const MANUFACTURER_REF = "Manufacturer";
 

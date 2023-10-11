@@ -15,13 +15,12 @@ import {
 } from "../../components/UtilityDialogs";
 import OwnerList from "./OwnerList";
 import OwnerMetadata from "./OwnerMetadata";
-import {TitleComponent} from "../../components/CommonComponents";
+import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
 import PropTypes from "prop-types";
 import {CMD_GET_GLOSSARY_TERMS, CMD_GET_OWNER_RECORDS, CMD_GET_PROVENANCE_RECORDS} from "../../utils/constants";
 import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
 import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
-import {AddEditButtonPanel} from "../../utils/UiUtils";
 
 export const OWNER_REF = "Owner";
 

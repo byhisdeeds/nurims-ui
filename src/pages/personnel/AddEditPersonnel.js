@@ -20,7 +20,7 @@ import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
-import {TitleComponent} from "../../components/CommonComponents";
+import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
 import {
   CMD_DELETE_PERSONNEL_RECORD,
   CMD_GET_GLOSSARY_TERMS,
@@ -47,7 +47,6 @@ import {
   setProvenanceRecordsHelper,
   showProvenanceRecordsViewHelper
 } from "../../utils/ProvenanceUtils";
-import {AddEditButtonPanel} from "../../utils/UiUtils";
 
 export const ADDEDITPERSONNEL_REF = "AddEditPersonnel";
 

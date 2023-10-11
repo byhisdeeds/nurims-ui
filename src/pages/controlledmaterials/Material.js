@@ -18,15 +18,24 @@ import {
 
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
-  ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog,
+  ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
 import MaterialList from "./MaterialList";
 import MaterialMetadata from "./MaterialMetadata";
-import {TitleComponent} from "../../components/CommonComponents";
+import {
+  TitleComponent,
+  AddEditButtonPanel
+} from "../../components/CommonComponents";
 import {UserDebugContext} from "../../utils/UserDebugContext";
-import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
-import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
-import {AddEditButtonPanel} from "../../utils/UiUtils";
+import {
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
 
 export const MATERIAL_REF = "Material";
 
@@ -103,7 +112,7 @@ class Material extends BaseRecordManager {
   }
 
   render() {
-    const {metadata_changed, confirm_remove, selection, show_provenance_view, include_archived} = this.state;
+    const {confirm_remove, selection, show_provenance_view, include_archived} = this.state;
     const {user} = this.props;
     console.log("render - RECORD_TYPE", this.recordTopic);
     return (
@@ -144,6 +153,8 @@ class Material extends BaseRecordManager {
         {<AddEditButtonPanel
           THIS={this}
           user={user}
+          addRole={"dataentry"}
+          archiveRole={"dataentry"}
           onClickAddRecord={this.addRecord}
           onClickChangeRecordArchivalStatus={this.changeRecordArchivalStatus}
           onClickRemoveRecord={this.removeRecord}

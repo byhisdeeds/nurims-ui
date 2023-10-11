@@ -15,17 +15,21 @@ import {
   NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
   NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
   NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
-  NURIMS_OPERATION_DATA_NEUTRONFLUX, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
+  NURIMS_OPERATION_DATA_NEUTRONFLUX,
+  NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN, UNDEFINED_DATE_STRING
 } from "../../utils/constants";
 import {
+  ApproveIrradiationMessageComponent,
   AutoCompleteComponent,
   DateRangePicker, DateSelect,
   SelectFormControlWithTooltip,
   TextFieldWithTooltip
 } from "../../components/CommonComponents";
-import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./AddEditReactorSampleIrradiationAuthorization";
+import {
+  ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF
+} from "./AddEditReactorSampleIrradiationAuthorization";
 import {
   analysisJobAsObject,
   getRecordData,
@@ -38,10 +42,6 @@ import {
 } from "../../utils/UserDebugContext";
 import {isValidUserRole} from "../../utils/UserUtils";
 import dayjs from 'dayjs';
-import TextField from "@mui/material/TextField";
-import {
-  approveIrradiationMessageComponent
-} from "../../utils/MessageUtils";
 import {withTheme} from "@mui/styles";
 import PropTypes from "prop-types";
 
@@ -301,7 +301,13 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                {approveIrradiationMessageComponent(record, this.context.user, disabled, this.approveRequest, this.props.theme)}
+                <ApproveIrradiationMessageComponent
+                  record={record}
+                  user={this.context.user}
+                  disabled={disabled}
+                  onClickApproveRequest={this.approveRequest}
+                  theme={this.props.theme}
+                />
               </Grid>
             </Grid>
           </CardContent>

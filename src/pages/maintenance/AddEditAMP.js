@@ -1,16 +1,8 @@
 import React from 'react';
 import {withTheme} from "@mui/styles";
 import {
-  Fab,
   Grid,
-  Typography,
-  Box
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import UnarchiveIcon from "@mui/icons-material/Unarchive";
-import ArchiveIcon from "@mui/icons-material/Archive";
 import {
   CMD_GET_GLOSSARY_TERMS, CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_SSC_RECORDS, SSC_TOPIC,
@@ -18,19 +10,28 @@ import {
 
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
-  ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog,
+  ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
 import AMPList from "./AMPList";
 import AMPMetadata from "./AMPMetadata";
-import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
-import {TitleComponent} from "../../components/CommonComponents";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import {
+  ConsoleLog,
+  UserDebugContext
+} from "../../utils/UserDebugContext";
+import {
+  TitleComponent,
+  AddEditButtonPanel
+} from "../../components/CommonComponents";
 import {isValidUserRole} from "../../utils/UserUtils";
-import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
-import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
-import {AddEditButtonPanel} from "../../utils/UiUtils";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
+import {
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
 
 export const ADDEDITAMP_REF = "AddEditAMP";
 

@@ -22,12 +22,11 @@ import {
 import SSCList from "./SSCList";
 import SSCMetadata from "./SSCMetadata";
 import {ConsoleLog, UserDebugContext} from "../../utils/UserDebugContext";
-import {TitleComponent} from "../../components/CommonComponents";
+import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {isValidUserRole} from "../../utils/UserUtils";
 import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
 import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
-import {AddEditButtonPanel} from "../../utils/UiUtils";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 
