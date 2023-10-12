@@ -47,24 +47,21 @@ class SystemInfoBadges extends Component {
     return (
       <React.Fragment>
         <Badge
-          badgeContent={server_availability}
+          sx={{marginLeft: "10px", paddingLeft: "10px"}}
+          badgeContent={user_connections}
           showZero={true}
-          color="secondary"
-          title={"% availability of server over the last 10 days"}
+          title={"Active user server connections."}
         >
-          <CloudDone/>
-        </Badge>
-        <div style={{width: 20}}/>
-        <Badge badgeContent={user_connections} color="secondary" title={"User web connections to the server"}>
           <People/>
         </Badge>
-        <div style={{width: 10}}/>
-        <Badge badgeContent={sensor_connections} color="secondary" title={"Sensors connected to the server"}>
-          <Router/>
-        </Badge>
-        <IconButton size="large">
-          <NetworkCheck color={'inherit'} style={{color: network_ready ? '#4CAF50' : '#F44336'}}/>
-        </IconButton>
+        {/*<div style={{width: 20}}/>*/}
+        {/*<Badge badgeContent={user_connections} color="secondary" title={"User web connections to the server"}>*/}
+        {/*  <People/>*/}
+        {/*</Badge>*/}
+        {/*<div style={{width: 10}}/>*/}
+        {/*<Badge badgeContent={sensor_connections} color="secondary" title={"Sensors connected to the server"}>*/}
+        {/*  <Router/>*/}
+        {/*</Badge>*/}
       </React.Fragment>
     );
   }
