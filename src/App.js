@@ -3,13 +3,11 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 import PropTypes from 'prop-types'
 import {
   Box,
-  IconButton,
   Toolbar,
   Tooltip,
   Typography,
 } from "@mui/material";
 import MuiAppBar from '@mui/material/AppBar';
-import MenuIcon from '@mui/icons-material/Menu';
 import AccountMenu from "./user/AccountMenu";
 import {styled} from '@mui/material/styles';
 import MenuDrawer from "./MenuDrawer";
@@ -89,6 +87,8 @@ import {
 import {DeviceUUID} from 'device-uuid';
 import {enqueueWarningSnackbar} from "./utils/SnackbarVariants";
 import {VIEWAMPRECORDS_REF} from "./pages/maintenance/ViewAMPRecords";
+import {isValidUserRole} from "./utils/UserUtils";
+import SystemInfoBadges from "./components/SystemInfoBadges";
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
@@ -136,6 +136,7 @@ class App extends React.Component {
     this.user = this.props.authService;
     this.uuid = new DeviceUUID().get();
     this.logRef = React.createRef();
+    this.sysinfoRef = React.createRef();
     this.crefs = {};
     this.crefs["MyAccount"] = React.createRef();
     this.crefs["Settings"] = React.createRef();
@@ -356,6 +357,7 @@ class App extends React.Component {
 
   render() {
     const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active, log_window_visible} = this.state;
+    const isSysadmin = isValidUserRole(this.user, "sysadmin");
     console.log("App.render, actionid", actionid)
     return (
       <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
@@ -387,6 +389,7 @@ class App extends React.Component {
                 <BackgroundTasks active={background_tasks_active}/>
                 <NetworkConnection ready={ready}/>
                 <LogWindowButton onClick={this.toggleLogWindow}/>
+                {isSysadmin && <SystemInfoBadges ref={this.sysinfoRef}/>}
               </Toolbar>
             </AppBar>
             <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
