@@ -73,6 +73,7 @@ module.exports = Object.freeze({
   PRO_IMPORT_ICENS_MONITORS: 'sysadmin.import.icens.monitors',
 
   CMD_PING: "ping",
+  CMD_GET_SERVER_INFO: "get_server_info",
   CMD_GET_PUBLIC_KEY: 'get_public_key',
   CMD_VERIFY_USER_PASSWORD: 'verify_user_password',
 

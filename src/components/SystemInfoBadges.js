@@ -37,7 +37,7 @@ class SystemInfoBadges extends Component {
   }
 
   render() {
-    const { server_availability, user_connections, sensor_connections, network_ready} = this.state
+    const { server_availability, user_connections, sensor_connections} = this.state
     return (
       <React.Fragment>
         <Badge
