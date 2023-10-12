@@ -24,7 +24,7 @@ import {
   CMD_GET_ORGANISATION,
   CMD_SET_SYSTEM_PROPERTIES,
   CMD_BACKGROUND_TASKS,
-  CMD_PING
+  CMD_PING, CMD_GET_SERVER_INFO
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -227,6 +227,10 @@ class App extends React.Component {
       }
       if (data.cmd === CMD_PING) {
         this.send_pong();
+      } else if (data.cmd === CMD_GET_SERVER_INFO) {
+        if (this.sysinfoRef.current) {
+          this.sysinfoRef.current.setServerInfo(data.response);
+        }
       } else if (data.hasOwnProperty('module')) {
         for (const [k, v] of Object.entries(this.crefs)) {
           if (k === data.module) {

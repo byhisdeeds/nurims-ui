@@ -32,8 +32,11 @@ class SystemInfoBadges extends Component {
     this.setState({ user_connections: user_connections, sensor_connections: sensor_connections })
   }
 
-  set_server_availability = (data) => {
-    this.setState({ server_availability: Math.round(data * 100) })
+  setServerInfo = (data) => {
+    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    console.log(data)
+    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    // this.setState({ server_availability: Math.round(data * 100) })
   }
 
   render() {
