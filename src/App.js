@@ -199,6 +199,10 @@ class App extends React.Component {
       this.send({
         cmd: CMD_GET_SYSTEM_PROPERTIES,
       })
+      // load system properties
+      this.send({
+        cmd: CMD_GET_SERVER_INFO,
+      })
     };
     this.ws.onerror = (error) => {
       ConsoleLog("App", "ws.onerror", error);

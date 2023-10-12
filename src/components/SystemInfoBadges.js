@@ -36,7 +36,7 @@ class SystemInfoBadges extends Component {
     console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
     console.log(data)
     console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-    // this.setState({ server_availability: Math.round(data * 100) })
+    this.setState({ user_connections: data.clients })
   }
 
   render() {
