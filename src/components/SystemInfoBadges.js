@@ -5,7 +5,6 @@ import {
 } from "@mui/material";
 import {
   CloudDone,
-  NetworkCheck,
   People,
   Router
 } from "@mui/icons-material";
@@ -17,7 +16,6 @@ class SystemInfoBadges extends Component {
       server_availability: 0,
       user_connections: 0,
       sensor_connections: 0,
-      network_ready: false
     };
     this._mounted = false;
   }
@@ -28,10 +26,6 @@ class SystemInfoBadges extends Component {
 
   componentDidMount() {
     this._mounted = true;
-  }
-
-  set_network_ready = (value) => {
-    this.setState({ network_ready: value })
   }
 
   set_server_connections = (user_connections, sensor_connections) => {
@@ -50,6 +44,7 @@ class SystemInfoBadges extends Component {
           sx={{marginLeft: "10px", paddingLeft: "10px"}}
           badgeContent={user_connections}
           showZero={true}
+          color={"secondary"}
           title={"Active user server connections."}
         >
           <People/>
