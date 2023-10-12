@@ -187,9 +187,6 @@ class ManufacturerMetadata extends Component {
     //     details["nurims.entity.dob"] = new Date();
     //   }
     // }
-    console.log("+++++++++++++++++++++++++")
-    console.log(manufacturer)
-    console.log("+++++++++++++++++++++++++")
     this.setState({manufacturer: manufacturer})
     this.props.onChange(false);
   }

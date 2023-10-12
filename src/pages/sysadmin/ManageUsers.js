@@ -15,7 +15,7 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import SaveIcon from "@mui/icons-material/Save";
 import AddIcon from "@mui/icons-material/Add";
 import UserList from "./UserList";
-import Constants, {
+import {
   CMD_DELETE_USER_RECORD,
   CMD_GET_PUBLIC_KEY,
   CMD_GET_USER_RECORDS,
@@ -44,6 +44,7 @@ import {
   getUserRecordMetadataValue,
   record_uuid
 } from "../../utils/MetadataUtils";
+import {isValidUserRole} from "../../utils/UserUtils";
 
 export const MANAGEUSERS_REF = "ManageUsers";
 
@@ -150,11 +151,15 @@ class ManageUsers extends React.Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
     }
-    this.props.send({
+    const params = {
       cmd: CMD_GET_USER_RECORDS,
       "include.disabled": include_archived ? "true" : "false",
       module: this.Module,
-    })
+    };
+    if (!isValidUserRole(this.props.user, "sysadmin")) {
+      params["id"] = this.props.user.profile.id;
+    }
+    this.props.send(params)
     this.setState({include_archived: include_archived});
   }
 
@@ -233,12 +238,18 @@ class ManageUsers extends React.Component {
         } else if (isCommandResponse(message, CMD_GET_PUBLIC_KEY)) {
           this.puk = message.response.public_key;
         } else if (isCommandResponse(message, CMD_UPDATE_USER_RECORD)) {
-          // update user profile
-          const user_metadata = message.response.users[0].metadata;
-          this.props.user.profile.username = user_metadata.username;
-          this.props.user.profile.fullname = user_metadata.fullname;
-          this.props.user.profile.role = user_metadata.role;
-          this.props.user.profile.authorized_module_level = user_metadata.authorized_module_level;
+          // update existing user profile if it is for me
+          // console.log("************************************************")
+          // console.log(" -- this.props.user.profile --", this.props.user.profile)
+          // console.log(" -- message.response.users[0] --", message.response.users[0])
+          // console.log("************************************************")
+          if (this.props.user.profile.id ===  message.response.users[0].item_id) {
+            const user_metadata = message.response.users[0].metadata;
+            this.props.user.profile.username = user_metadata.username;
+            this.props.user.profile.fullname = user_metadata.fullname;
+            this.props.user.profile.role = user_metadata.role;
+            this.props.user.profile.authorized_module_level = user_metadata.authorized_module_level;
+          }
           enqueueSuccessSnackbar(
             `Successfully updated record for ${getUserRecordData(message.response.users[0],
               NURIMS_TITLE, "unknown")}.`);

@@ -111,12 +111,11 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   }
 
   render() {
-    const {metadata_changed, confirm_remove, include_archived, selection, show_provenance_view} = this.state;
+    const {confirm_remove, include_archived, selection, show_provenance_view} = this.state;
     const {user} = this.props;
-    const has_changed_records = this.hasChangedRecords();
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "has_changed_records", has_changed_records,
-        "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
+      ConsoleLog(this.Module, "render","confirm_removed", confirm_remove, "include_archived",
+        include_archived, "selection", selection);
     }
     return (
       <React.Fragment>
@@ -171,58 +170,6 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
           saveRole={"reactor_operations_data_entry"}
           archiveRole={"reactor_operations_data_entry"}
         />}
-        {/*<Box*/}
-        {/*  sx={{*/}
-        {/*    display: 'flex',*/}
-        {/*    flexDirection: 'row',*/}
-        {/*    justifyContent: 'space-around',*/}
-        {/*    m: 1,*/}
-        {/*  }}*/}
-        {/*>*/}
-        {/*  <Button*/}
-        {/*    variant={"contained"}*/}
-        {/*    endIcon={<RemoveCircleIcon />}*/}
-        {/*    onClick={this.removeRecord}*/}
-        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
-        {/*    size={"small"}*/}
-        {/*    color={"primary"}*/}
-        {/*    aria-label={"remove"}*/}
-        {/*  >*/}
-        {/*    Remove Authorization*/}
-        {/*  </Button>*/}
-        {/*  <Button*/}
-        {/*    variant={"contained"}*/}
-        {/*    endIcon={this.isRecordArchived(selection) ? <UnarchiveIcon /> : <ArchiveIcon />}*/}
-        {/*    onClick={this.changeRecordArchivalStatus}*/}
-        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
-        {/*    size={"small"}*/}
-        {/*    color={"primary"}*/}
-        {/*    aria-label={"archive"}*/}
-        {/*  >*/}
-        {/*    {this.isRecordArchived(selection) ? "Restore Authorization" : "Archive Authorization"}*/}
-        {/*  </Button>*/}
-        {/*  <Button*/}
-        {/*    variant={"contained"}*/}
-        {/*    endIcon={<SaveIcon />}*/}
-        {/*    onClick={this.saveChanges}*/}
-        {/*    disabled={!has_changed_records}*/}
-        {/*    size={"small"}*/}
-        {/*    color={"primary"}*/}
-        {/*    aria-label={"save"}*/}
-        {/*  >*/}
-        {/*    Save Authorization*/}
-        {/*  </Button>*/}
-        {/*  <Button*/}
-        {/*    variant={"contained"}*/}
-        {/*    endIcon={<AddIcon />}*/}
-        {/*    onClick={this.addRecord}*/}
-        {/*    size={"small"}*/}
-        {/*    color={"primary"}*/}
-        {/*    aria-label={"add"}*/}
-        {/*  >*/}
-        {/*    Add Authorization*/}
-        {/*  </Button>*/}
-        {/*</Box>*/}
       </React.Fragment>
     );
   }

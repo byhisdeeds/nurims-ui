@@ -1,14 +1,29 @@
 import React, {Component} from 'react';
 import {withTheme} from "@mui/styles";
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import {getUserRecordData, setUserRecordData} from "../../utils/MetadataUtils";
-import {NURIMS_TITLE} from "../../utils/constants";
+import {
+  getUserRecordData,
+  setUserRecordData
+} from "../../utils/MetadataUtils";
+import {
+  NURIMS_TITLE
+} from "../../utils/constants";
 import PropTypes from "prop-types";
-import {SelectFormControlWithTooltip} from "../../components/CommonComponents";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
-import {getPropertyValue} from "../../utils/PropertyUtils";
-import {Grid} from "@mui/material";
+import {
+  SelectFormControlWithTooltip
+} from "../../components/CommonComponents";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
+import {
+  getPropertyValue
+} from "../../utils/PropertyUtils";
+import {
+  Grid,
+  TextField,
+  Box
+} from "@mui/material";
+import {isValidUserRole} from "../../utils/UserUtils";
 
 
 class UserMetadata extends Component {
@@ -87,6 +102,7 @@ class UserMetadata extends Component {
     }
     const authorized_module_levels = getPropertyValue(properties, "system.authorizedmodulelevels", "").split('|');
     const user_roles = getPropertyValue(properties, "system.userrole", "").split('|');
+    const isSysadmin = isValidUserRole(this.context.user, "sysadmin");
     return (
       <Box
         component="form"
@@ -124,7 +140,7 @@ class UserMetadata extends Component {
               value={getUserRecordData(user, "authorized_module_level", "")}
               onChange={this.handleModuleAuthorizationLevelChange}
               options={authorized_module_levels}
-              disabled={disabled}
+              disabled={disabled || !isSysadmin}
               tooltip={""}
               // target={this.tooltipRef}
             />
@@ -136,7 +152,7 @@ class UserMetadata extends Component {
               value={getUserRecordData(user, "role", [])}
               onChange={this.handleUserRoleChange}
               options={user_roles}
-              disabled={disabled}
+              disabled={disabled || !isSysadmin}
               tooltip={""}
               multiple={true}
               // target={this.tooltipRef}

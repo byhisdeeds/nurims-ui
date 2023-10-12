@@ -304,9 +304,6 @@ class MaterialMetadata extends Component {
     if (this.ref.current) {
       this.ref.current.setRowData(nuclideData);
     }
-    console.log("+++++++++++++++++++++++++")
-    console.log(material)
-    console.log("+++++++++++++++++++++++++")
     this.setState({material: material})
     this.props.onChange(false);
   }

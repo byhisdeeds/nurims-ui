@@ -578,14 +578,14 @@ export const MenuItems = [
     value: 'sysadmin',
     tooltip: 'System Administration',
     icon: BusinessIcon,
-    authmodlevel: 'sysadmin',
+    authmodlevel: 'basic',
     children: [
       {
         label: 'Add Users',
         value: 'sysadmin.manage.users',
         title: 'Manage Users',
         tooltip: 'Manage system users',
-        authmodlevel: 'sysadmin',
+        authmodlevel: 'basic',
       },
     ]
   },

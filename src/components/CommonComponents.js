@@ -1425,11 +1425,11 @@ export function AddEditButtonPanel({
                                      onClickSaveRecordChanges, onClickAddRecord, addRecordButtonLabel,
                                      onClickChangeRecordArchivalStatus, onClickViewProvenanceRecords,
                                      removeRecordIcon, addRecordIcon, addRole, archiveRole, sysadminRole,
-                                     removeRole
+                                     removeRole, saveRole
                                    }) {
   const {selection} = THIS.state;
   const isSysadmin = isValidUserRole(user, sysadminRole);
-  const has_changed_records = THIS.hasChangedRecords();
+  const recordHasChanged = THIS.hasChangedRecords();
   return (
     <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
       <Fab
@@ -1438,7 +1438,7 @@ export function AddEditButtonPanel({
         color="primary"
         aria-label="remove"
         onClick={onClickRemoveRecord}
-        disabled={!THIS.isSelectableByRoles(selection, [removeRole], true)}
+        disabled={!THIS.isSelectableByRoles(selection, [removeRole, sysadminRole], true)}
       >
         {removeRecordIcon}
         {removeRecordButtonLabel}
@@ -1463,7 +1463,7 @@ export function AddEditButtonPanel({
         aria-label="archive"
         component={"span"}
         onClick={onClickChangeRecordArchivalStatus}
-        disabled={!THIS.isSelectableByRoles(selection, [archiveRole], true)}
+        disabled={!THIS.isSelectableByRoles(selection, [archiveRole, sysadminRole], true)}
       >
         {THIS.isRecordArchived(selection) ?
           <React.Fragment><VisibilityIcon sx={{mr: 1}}/> "Restore Record"</React.Fragment> :
@@ -1475,7 +1475,7 @@ export function AddEditButtonPanel({
         color="primary"
         aria-label="save"
         onClick={onClickSaveRecordChanges}
-        disabled={!(has_changed_records && THIS.isSelectableByRoles(selection, [saveRole], true))}
+        disabled={!(recordHasChanged && THIS.isSelectableByRoles(selection, [saveRole, sysadminRole], false))}
       >
         <SaveIcon sx={{mr: 1}}/>
         Save Changes
@@ -1486,7 +1486,7 @@ export function AddEditButtonPanel({
         color="primary"
         aria-label="add"
         onClick={onClickAddRecord}
-        disabled={!THIS.isSelectableByRoles(selection, [addRole], false)}
+        disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
       >
         {addRecordIcon}
         {addRecordButtonLabel}
