@@ -19,7 +19,7 @@ import {
   ITEM_ID,
   MONITOR_RECORD_TYPE,
   MONITOR_TOPIC,
-  NURIMS_ENTITY_DOSE_PROVIDER_ID,
+  NURIMS_ENTITY_DOSE_PROVIDER_ID, ROLE_RADIATION_PROTECTION_DATA_ENTRY,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -276,10 +276,10 @@ class AddEditMonitors extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add Monitor"}
           removeRecordButtonLabel={"Remove Monitor"}
-          addRole={"radiation_protection_data_entry"}
+          addRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
           removeRole={"sysadmin"}
-          saveRole={"radiation_protection_data_entry"}
-          archiveRole={"radiation_protection_data_entry"}
+          saveRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
+          archiveRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
         />}
         {/*<Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>*/}
         {/*  <Fab*/}

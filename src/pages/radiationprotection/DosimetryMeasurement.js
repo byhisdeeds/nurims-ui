@@ -24,7 +24,7 @@ import {
   NURIMS_DOSIMETRY_TYPE,
   NURIMS_DOSIMETRY_UNITS,
   NURIMS_DOSIMETRY_WRIST_DOSE,
-  NURIMS_ENTITY_DOSE_PROVIDER_ID,
+  NURIMS_ENTITY_DOSE_PROVIDER_ID, ROLE_RADIATION_PROTECTION_DATA_ENTRY,
 } from "../../utils/constants";
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
@@ -318,10 +318,10 @@ class DosimetryMeasurement extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add Measurement"}
           removeRecordButtonLabel={"Remove Measurement"}
-          addRole={"radiation_protection_data_entry"}
+          addRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
           removeRole={"sysadmin"}
-          saveRole={"radiation_protection_data_entry"}
-          archiveRole={"radiation_protection_data_entry"}
+          saveRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
+          archiveRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
         />}
         {/*<Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-around", m: 1, }} >*/}
         {/*  <Button*/}

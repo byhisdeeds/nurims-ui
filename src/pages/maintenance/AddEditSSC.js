@@ -12,7 +12,7 @@ import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {
   CMD_GET_GLOSSARY_TERMS, CMD_GET_PROVENANCE_RECORDS,
-  CMD_GET_SSC_RECORDS, SSC_TOPIC,
+  CMD_GET_SSC_RECORDS, ROLE_MAINTENANCE_DATA_ENTRY, SSC_TOPIC,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -136,71 +136,11 @@ class AddEditSSC extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add SSC"}
           removeRecordButtonLabel={"Remove SSC"}
-          addRole={"maintenance_data_entry"}
+          addRole={ROLE_MAINTENANCE_DATA_ENTRY}
           removeRole={"sysadmin"}
-          saveRole={"maintenance_data_entry"}
-          archiveRole={"maintenance_data_entry"}
+          saveRole={ROLE_MAINTENANCE_DATA_ENTRY}
+          archiveRole={ROLE_MAINTENANCE_DATA_ENTRY}
         />}
-        {/*<Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>*/}
-        {/*  <Fab*/}
-        {/*    variant="extended"*/}
-        {/*    size="small"*/}
-        {/*    color="primary"*/}
-        {/*    aria-label="remove"*/}
-        {/*    onClick={this.removeRecord}*/}
-        {/*    disabled={selection === -1}*/}
-        {/*  >*/}
-        {/*    <RemoveCircleIcon sx={{mr: 1}}/>*/}
-        {/*    Remove SSC*/}
-        {/*  </Fab>*/}
-        {/*  { isSysadmin &&*/}
-        {/*    <Fab*/}
-        {/*      variant="extended"*/}
-        {/*      size="small"*/}
-        {/*      color="primary"*/}
-        {/*      aria-label="save"*/}
-        {/*      onClick={this.showProvenanceRecordsView}*/}
-        {/*      disabled={!selection.hasOwnProperty("item_id")}*/}
-        {/*    >*/}
-        {/*      <VisibilityIcon sx={{mr: 1}}/>*/}
-        {/*      View Provenance Records*/}
-        {/*    </Fab>*/}
-        {/*  }*/}
-        {/*  <Fab*/}
-        {/*    variant="extended"*/}
-        {/*    size="small"*/}
-        {/*    color="primary"*/}
-        {/*    aria-label="archive"*/}
-        {/*    component={"span"}*/}
-        {/*    onClick={this.changeRecordArchivalStatus}*/}
-        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
-        {/*  >*/}
-        {/*    {this.isRecordArchived(selection) ?*/}
-        {/*      <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore SSC Record"</React.Fragment> :*/}
-        {/*      <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive SSC Record"</React.Fragment>}*/}
-        {/*  </Fab>*/}
-        {/*  <Fab*/}
-        {/*    variant="extended"*/}
-        {/*    size="small"*/}
-        {/*    color="primary"*/}
-        {/*    aria-label="save"*/}
-        {/*    onClick={this.saveChanges}*/}
-        {/*    disabled={!metadata_changed}*/}
-        {/*  >*/}
-        {/*    <SaveIcon sx={{mr: 1}}/>*/}
-        {/*    Save Changes*/}
-        {/*  </Fab>*/}
-        {/*  <Fab*/}
-        {/*    variant="extended"*/}
-        {/*    size="small"*/}
-        {/*    color="primary"*/}
-        {/*    aria-label="add"*/}
-        {/*    onClick={this.addRecord}*/}
-        {/*  >*/}
-        {/*    <AddIcon sx={{mr: 1}}/>*/}
-        {/*    Add SSC*/}
-        {/*  </Fab>*/}
-        {/*</Box>*/}
       </React.Fragment>
     );
   }
