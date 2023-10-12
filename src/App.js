@@ -178,43 +178,43 @@ class App extends React.Component {
     this.crefs[UNDERDEVELOPMENT_REF] = React.createRef();
     this.crefs[MAINTENANCESCHEDULE_REF] = React.createRef();
     /////////////////////////////
-    this.du = new DeviceUUID().parse();
-    this.dua = [
-      this.du.language,
-      this.du.platform,
-      this.du.os,
-      this.du.cpuCores,
-      this.du.isAuthoritative,
-      this.du.silkAccelerated,
-      this.du.isKindleFire,
-      this.du.isDesktop,
-      this.du.isMobile,
-      this.du.isTablet,
-      this.du.isWindows,
-      this.du.isLinux,
-      this.du.isLinux64,
-      this.du.isMac,
-      this.du.isiPad,
-      this.du.isiPhone,
-      this.du.isiPod,
-      this.du.isSmartTV,
-      this.du.pixelDepth,
-      this.du.isTouchScreen
-    ];
-    this.uuid2 = this.du.hashMD5(this.dua.join(':'));
-    this.uuid3 = this.du.hashInt(this.dua.join(':'));
+    // this.du = new DeviceUUID().parse();
+    // this.dua = [
+    //   this.du.language,
+    //   this.du.platform,
+    //   this.du.os,
+    //   this.du.cpuCores,
+    //   this.du.isAuthoritative,
+    //   this.du.silkAccelerated,
+    //   this.du.isKindleFire,
+    //   this.du.isDesktop,
+    //   this.du.isMobile,
+    //   this.du.isTablet,
+    //   this.du.isWindows,
+    //   this.du.isLinux,
+    //   this.du.isLinux64,
+    //   this.du.isMac,
+    //   this.du.isiPad,
+    //   this.du.isiPhone,
+    //   this.du.isiPod,
+    //   this.du.isSmartTV,
+    //   this.du.pixelDepth,
+    //   this.du.isTouchScreen
+    // ];
+    // this.uuid2 = this.du.hashMD5(this.dua.join(':'));
+    // this.uuid3 = this.du.hashInt(this.dua.join(':'));
     /////////////////////////////
   }
 
 
   componentDidMount() {
     ///////////////////////////////////////////
-    console.log("UUID", this.uuid)
-    console.log("DUA", this.dua)
-    console.log("UUID2", this.uuid2)
-    console.log("UUID3", this.uuid3)
-    console.log("NAVIGATOR, SCREEN, WINDOW.PERFORMANCE", navigator)
-    console.log("USE_DEVICE_DATA", deviceDetect())
+    // console.log("UUID", this.uuid)
+    // console.log("DUA", this.dua)
+    // console.log("UUID2", this.uuid2)
+    // console.log("UUID3", this.uuid3)
+    // console.log("NAVIGATOR, SCREEN, WINDOW.PERFORMANCE", navigator)
+    // console.log("USE_DEVICE_DATA", deviceDetect())
     ///////////////////////////////////////////
     this.mounted = true;
     ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
