@@ -135,7 +135,7 @@ class App extends React.Component {
     this.ws = null;
     this.mounted = false;
     this.user = this.props.authService;
-    this.uuid = new DeviceUUID().get();
+    this.uuid = `${deviceDetect()["browserName"].toLowerCase()}-${new DeviceUUID().get()}`;
     this.logRef = React.createRef();
     this.sysinfoRef = React.createRef();
     this.crefs = {};
