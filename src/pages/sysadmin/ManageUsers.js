@@ -239,10 +239,6 @@ class ManageUsers extends React.Component {
           this.puk = message.response.public_key;
         } else if (isCommandResponse(message, CMD_UPDATE_USER_RECORD)) {
           // update existing user profile if it is for me
-          // console.log("************************************************")
-          // console.log(" -- this.props.user.profile --", this.props.user.profile)
-          // console.log(" -- message.response.users[0] --", message.response.users[0])
-          // console.log("************************************************")
           if (this.props.user.profile.id ===  message.response.users[0].item_id) {
             const user_metadata = message.response.users[0].metadata;
             this.props.user.profile.username = user_metadata.username;
