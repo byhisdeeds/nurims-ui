@@ -89,7 +89,7 @@ import {enqueueWarningSnackbar} from "./utils/SnackbarVariants";
 import {VIEWAMPRECORDS_REF} from "./pages/maintenance/ViewAMPRecords";
 import {isValidUserRole} from "./utils/UserUtils";
 import SystemInfoBadges from "./components/SystemInfoBadges";
-import { deviceDetect } from 'react-device-detect';
+import {deviceDetect} from 'react-device-detect';
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
