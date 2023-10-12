@@ -33,9 +33,6 @@ class SystemInfoBadges extends Component {
   }
 
   setServerInfo = (data) => {
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-    console.log(data)
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
     this.setState({ user_connections: data.clients })
   }
 
