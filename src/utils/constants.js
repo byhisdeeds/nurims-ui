@@ -1,4 +1,7 @@
 module.exports = Object.freeze({
+  ROLE_CONTROLLED_MATERIAL_DATA_ENTRY: "controlled_material_data_entry",
+  ROLE_CONTROLLED_MATERIAL_SYSADMIN: "controlled_material_sysadmin",
+
   MY_ACCOUNT: 'myaccount',
   SETTINGS: 'settings',
 

@@ -4,7 +4,7 @@ import {
 } from "@mui/material";
 import {
   CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_MANUFACTURER_RECORDS, CMD_GET_PROVENANCE_RECORDS,
+  CMD_GET_MANUFACTURER_RECORDS, CMD_GET_PROVENANCE_RECORDS, ROLE_CONTROLLED_MATERIAL_DATA_ENTRY,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -133,28 +133,11 @@ class Manufacturer extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add Manufacturer"}
           removeRecordButtonLabel={"Remove Manufacturer"}
-          addRole={"controlled_materials_data_entry"}
+          addRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
           removeRole={"sysadmin"}
-          saveRole={"controlled_materials_data_entry"}
-          archiveRole={"controlled_materials_data_entry"}
+          saveRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
+          archiveRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
         />}
-        {/*<Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}
-        {/*    // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>*/}
-        {/*       disabled={!this.isSysadminButtonAccessible(selection)}>*/}
-        {/*    <PersonRemoveIcon sx={{mr: 1}}/>*/}
-        {/*    Remove Monitor*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}*/}
-        {/*       disabled={!metadata_changed}>*/}
-        {/*    <SaveIcon sx={{mr: 1}}/>*/}
-        {/*    Save Changes*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>*/}
-        {/*    <AddIcon sx={{mr: 1}}/>*/}
-        {/*    Add Monitor*/}
-        {/*  </Fab>*/}
-        {/*</Box>*/}
       </React.Fragment>
     );
   }

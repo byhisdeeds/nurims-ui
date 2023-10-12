@@ -1,13 +1,7 @@
 import React from 'react';
 import {
-  Fab,
   Grid,
-  Typography,
-  Box
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
@@ -15,12 +9,29 @@ import {
 } from "../../components/UtilityDialogs";
 import OwnerList from "./OwnerList";
 import OwnerMetadata from "./OwnerMetadata";
-import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
+import {
+  TitleComponent,
+  AddEditButtonPanel
+} from "../../components/CommonComponents";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
 import PropTypes from "prop-types";
-import {CMD_GET_GLOSSARY_TERMS, CMD_GET_OWNER_RECORDS, CMD_GET_PROVENANCE_RECORDS} from "../../utils/constants";
-import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
-import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
+import {
+  CMD_GET_GLOSSARY_TERMS,
+  CMD_GET_OWNER_RECORDS,
+  CMD_GET_PROVENANCE_RECORDS,
+  ROLE_CONTROLLED_MATERIAL_DATA_ENTRY
+} from "../../utils/constants";
+import {
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
 
 export const OWNER_REF = "Owner";
 
@@ -129,28 +140,11 @@ class Owner extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add Owner"}
           removeRecordButtonLabel={"Remove Owner"}
-          addRole={"controlled_materials_data_entry"}
+          addRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
           removeRole={"sysadmin"}
-          saveRole={"controlled_materials_data_entry"}
-          archiveRole={"controlled_materials_data_entry"}
+          saveRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
+          archiveRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
         />}
-        {/*<Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}
-        {/*    // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>*/}
-        {/*       disabled={!this.isSysadminButtonAccessible(selection)}>*/}
-        {/*    <PersonRemoveIcon sx={{mr: 1}}/>*/}
-        {/*    Remove Owner*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}*/}
-        {/*       disabled={!metadata_changed}>*/}
-        {/*    <SaveIcon sx={{mr: 1}}/>*/}
-        {/*    Save Changes*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>*/}
-        {/*    <AddIcon sx={{mr: 1}}/>*/}
-        {/*    Add Owner*/}
-        {/*  </Fab>*/}
-        {/*</Box>*/}
       </React.Fragment>
     );
   }
