@@ -8,15 +8,20 @@ import {
 import {
   getRecordMetadataValue,
   setMetadataValue,
-  getDateFromDateString, BlobObject
+  getDateFromDateString, BlobObject, BlobPath
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
 } from "../../utils/PropertyUtils";
 import Avatar from "@mui/material/Avatar";
 import ImageIcon from '@mui/icons-material/Image';
-import {getGlossaryValue} from "../../utils/GlossaryUtils";
-import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
+import {
+  getGlossaryValue
+} from "../../utils/GlossaryUtils";
+import {
+  HtmlTooltip,
+  TooltipText
+} from "../../utils/TooltipUtils";
 import EditableTable from "../../components/EditableTable";
 import PdfViewer from "../../components/PdfViewer";
 import {
@@ -40,21 +45,23 @@ import {
   NURIMS_MATERIAL_QUANTITY_UNITS,
   BLANK_IMAGE_OBJECT,
   ITEM_ID,
-  NURIMS_MATERIAL_MANUFACTURER_RECORD, NURIMS_MATERIAL_OWNER_RECORD
+  NURIMS_MATERIAL_MANUFACTURER_RECORD,
+  NURIMS_MATERIAL_OWNER_RECORD
 } from "../../utils/constants";
 import {
   SelectFormControlWithTooltip,
   TextFieldWithTooltip,
   DatePickerWithTooltip
 } from "../../components/CommonComponents";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
 
 class MaterialMetadata extends Component {
   constructor(props) {
     super(props);
     this.state = {
       material: {},
-      properties: props.properties,
     };
     this.ref = React.createRef();
     this.pdfRef = React.createRef();
@@ -378,10 +385,12 @@ class MaterialMetadata extends Component {
   }
 
   render() {
-    const {material, properties} = this.state;
+    const {material} = this.state;
+    const {properties} = this.props;
     // console.log("MaterialMetadata.RENDER - material", material)
     // console.log("MaterialMetadata.RENDER - table_rows", this.table_rows)
     // console.log("MaterialMetadata.RENDER - glossary", this.glossary)
+    const blobUri = getPropertyValue(properties, "bloburi", "/")
     const disabled = Object.entries(material).length === 0;
     const materialTypes = getPropertyValue(properties, NURIMS_MATERIAL_TYPE, "").split('|');
     const materialClassification = getPropertyValue(properties, NURIMS_MATERIAL_CLASSIFICATION, "").split('|');
@@ -638,8 +647,11 @@ class MaterialMetadata extends Component {
                     }
                   >
                     <label htmlFor="load-material-image">
-                      <Avatar variant="rounded" sx={{ width: "100%", height: 300, border: "5px dashed grey" }} src={image.url}>
-                        {image.url === "" && <ImageIcon/>}
+                      <Avatar
+                        variant="rounded"
+                        sx={{ width: "100%", height: 300, border: "5px dashed grey" }}
+                        src={BlobPath(blobUri, image)}>
+                        {image.uri === "" && <ImageIcon/>}
                       </Avatar>
                     </label>
                   </HtmlTooltip>
@@ -665,7 +677,10 @@ class MaterialMetadata extends Component {
                       </label>
                     </HtmlTooltip>
                     {/*<iframe width={"100%"} height={"400px"} src={documentPdf.hasOwnProperty("file") ? documentPdf.url : ""} />*/}
-                    <PdfViewer height={"400px"} source={documentPdf.file === "" ? BLANK_PDF : documentPdf.url } />
+                    <PdfViewer
+                      height={"400px"}
+                      source={documentPdf.uri === "" ? BLANK_PDF : BlobPath(blobUri, documentPdf) }
+                    />
                   </Box>
                 </Grid>
               </Grid>

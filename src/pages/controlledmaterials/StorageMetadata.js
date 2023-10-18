@@ -23,7 +23,8 @@ import MouseCoordinates from "../../components/MouseCoordinates";
 import LocationFinder from "../../components/LocationFinder";
 import "leaflet/dist/leaflet.css";
 import {
-  BlobObject, getMarkerImageUrl,
+  BlobObject, BlobPath,
+  getMarkerImageUrl,
   getRecordMetadataValue,
   markerBounds,
   setMetadataValue,
@@ -40,14 +41,27 @@ import {
   NURIMS_MATERIAL_STORAGE_MAP_IMAGE,
   BLANK_IMAGE_OBJECT,
 } from "../../utils/constants";
-import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
+import {
+  HtmlTooltip,
+  TooltipText
+} from "../../utils/TooltipUtils";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import ImageIcon from '@mui/icons-material/Image';
-import {PhotoCamera, NoPhotography} from "@mui/icons-material";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
+import {
+  PhotoCamera,
+  NoPhotography
+} from "@mui/icons-material";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
 import PropTypes from "prop-types";
-import {grey} from "@mui/material/colors";
+import {
+  grey
+} from "@mui/material/colors";
 import BLANK_MAP_IMAGE from "../../components/blank_map_image.png"
 
 export const STORAGEMETADATA_REF = "StorageMetadata";
@@ -61,7 +75,6 @@ class StorageMetadata extends Component {
     super(props);
     this.state = {
       storage: {},
-      properties: props.properties,
       mapclick: false,
       marker_bounds: markerBounds(),
     };
@@ -193,7 +206,7 @@ class StorageMetadata extends Component {
       // console.log(">>>>>", event.target.result);
       const storage = that.state.storage;
       storage["changed"] = true;
-      setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, {file: selectedFile.name, url: event.target.result});
+      setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, BlobObject(selectedFile.name, event.target.result));
       // setMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, event.target.result);
       that.forceUpdate();
       // signal to parent that metadata has changed
@@ -216,7 +229,9 @@ class StorageMetadata extends Component {
   }
 
   render() {
-    const {storage, properties, marker_bounds} = this.state;
+    const {storage, marker_bounds} = this.state;
+    const {properties} = this.props;
+    const blobUri = getPropertyValue(properties, "bloburi", "/")
     const storageLocation = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION,
       {easting: 0, northing: 0, marker: defaultMarkerIcon});
     const markers = getPropertyValue(properties, NURIMS_MATERIAL_STORAGE_LOCATION_MARKERS, "").split('|');
@@ -358,7 +373,7 @@ class StorageMetadata extends Component {
                   <Avatar
                     variant={"square"}
                     sx={{ height: 256, width: "fit-content", bgcolor: grey[400] }}
-                    src={storageImage.url}
+                    src={BlobPath(blobUri, storageImage)}
                   >
                     {<ImageIcon sx={{width: 256, height: 256}}/>}
                   </Avatar>
@@ -427,7 +442,7 @@ class StorageMetadata extends Component {
                   >
                     <ImageOverlay
                       // url={storageMapImage.file === "" ? require("../../components/blank_map_image.png") : storageMapImage.url}
-                      url={storageMapImage.file === "" ? BLANK_MAP_IMAGE : storageMapImage.url}
+                      url={storageMapImage.uri === "" ? BLANK_MAP_IMAGE : BlobPath(blobUri, storageMapImage)}
                       bounds={[[0, 0], [1, 1]]}
                     />
                     <div className="leaflet-bottom leaflet-left">

@@ -370,8 +370,19 @@ export function getDoseRecordMetadataValue(person_record, dosimeter, dosimeterTy
   return missingValue;
 }
 
+export function BlobPath(blobpath, image) {
+  if (image && image.uri !== "") {
+    return image.uri.startsWith("data:") ? image.uri : `${blobpath}/${image.uri}`;
+  }
+  return "";
+}
+
 export function BlobObject(name, blob) {
-  return {file: name, url: blob};
+  let index = blob.indexOf(",")
+  let content_type = blob.substring(0, index)
+    .replace("data:", "")
+    .replace(";base64", "")
+  return {file: name, content_type: content_type, uri: blob};
 }
 
 export function markerBounds(location) {

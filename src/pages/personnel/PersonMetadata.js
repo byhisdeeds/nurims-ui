@@ -9,12 +9,11 @@ import {
   Select
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-// import {DatePicker, LocalizationProvider} from "@mui/lab";
-// import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import Avatar from "@mui/material/Avatar";
 import PersonIcon from '@mui/icons-material/Person';
 import {
-  BlobObject, getDateFromDateString,
+  BlobObject, BlobPath,
+  getDateFromDateString,
   getRecordMetadataValue,
   setMetadataValue
 } from "../../utils/MetadataUtils";
@@ -30,13 +29,21 @@ import {
   NURIMS_ENTITY_WORK_DETAILS,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
   BLANK_IMAGE_OBJECT,
-  UNDEFINED_DATE_STRING,
+  UNDEFINED_DATE_STRING, NUBS,
 } from "../../utils/constants";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
-// import {dateFromDateString} from "../../utils/DateUtils";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import {getGlossaryValue} from "../../utils/GlossaryUtils";
-import {DatePickerWithTooltip} from "../../components/CommonComponents";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
+import {
+  getGlossaryValue
+} from "../../utils/GlossaryUtils";
+import {
+  DatePickerWithTooltip
+} from "../../components/CommonComponents";
 import dayjs from "dayjs";
 
 const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
@@ -48,9 +55,6 @@ class PersonMetadata extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      properties: props.properties,
-    };
     this.Module = PERSONMETADATA_REF;
     this.person = {};
     this.glossary = {};
@@ -158,15 +162,14 @@ class PersonMetadata extends Component {
   }
 
   render() {
-    const {properties} = this.state;
+    const {properties} = this.props;
     const person = this.person;
+    const blobUri = getPropertyValue(properties, "bloburi", "/")
     const assignedRole = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
     const avatar = getRecordMetadataValue(person, NURIMS_ENTITY_AVATAR, BLANK_IMAGE_OBJECT);
     const disabled = Object.keys(person).length === 0;
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "personnel", person, "assignedRole", assignedRole);
-      console.log("%%%%", getDateFromDateString(getRecordMetadataValue(
-        person, NURIMS_ENTITY_DATE_OF_BIRTH, UNDEFINED_DATE_STRING), UNDEFINED_DATE))
     }
     return (
       <Box
@@ -189,8 +192,8 @@ class PersonMetadata extends Component {
           <Card variant="outlined" sx={{ mb:1, ml:1, width: '25ch' }}>
             <CardContent>
               <label htmlFor="load-avatar">
-                <Avatar sx={{ width: 128, height: 128, margin: 2 }} src={avatar.url}>
-                  {avatar.url === "" && <PersonIcon/>}
+                <Avatar sx={{ width: 128, height: 128, margin: 2 }} src={BlobPath(blobUri, avatar)}>
+                  {avatar.uri === "" && <PersonIcon/>}
                 </Avatar>
               </label>
             </CardContent>
