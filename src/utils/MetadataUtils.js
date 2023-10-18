@@ -378,11 +378,11 @@ export function BlobPath(blobpath, image) {
 }
 
 export function BlobObject(name, blob) {
-  let index = blob.indexOf(",")
-  let content_type = blob.substring(0, index)
-    .replace("data:", "")
-    .replace(";base64", "")
-  return {file: name, content_type: content_type, uri: blob};
+  // let index = blob.indexOf(",")
+  // let content_type = blob.substring(0, index)
+  //   .replace("data:", "")
+  //   .replace(";base64", "")
+  return {file: name, uri: blob};
 }
 
 export function markerBounds(location) {
