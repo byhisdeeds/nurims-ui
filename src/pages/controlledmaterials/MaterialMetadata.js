@@ -526,18 +526,6 @@ class MaterialMetadata extends Component {
                     // target={this.tooltipRef}
                   />
                 </Grid>
-                {/*<Grid item xs={4}>*/}
-                {/*  <SelectFormControlWithTooltip*/}
-                {/*    id={"physicalform"}*/}
-                {/*    label="Physical Form"*/}
-                {/*    value={getRecordMetadataValue(material, NURIMS_MATERIAL_PHYSICAL_FORM, "")}*/}
-                {/*    onChange={this.handlePhysicalFormChange}*/}
-                {/*    options={physicalForm}*/}
-                {/*    disabled={disabled}*/}
-                {/*    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_PHYSICAL_FORM, "")}*/}
-                {/*    // target={this.tooltipRef}*/}
-                {/*  />*/}
-                {/*</Grid>*/}
               </Grid>
               <Grid container spacing={2}>
                 <Grid item xs={4}>
@@ -568,23 +556,23 @@ class MaterialMetadata extends Component {
             </CardContent>
           </Card>
           {getRecordMetadataValue(material, NURIMS_MATERIAL_TYPE, "") !== "controlled_item" &&
-          <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <EditableTable
-                    disable={disabled}
-                    ref={this.ref}
-                    addRowBtnText={"Add Nuclide"}
-                    initWithoutHead={false}
-                    defaultData={this.nuclidesData}
-                    getData={this.saveTableData}
-                    fieldsArr={this.nuclideTableFields}
-                  />
+            <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
+              <CardContent>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <EditableTable
+                      disable={disabled}
+                      ref={this.ref}
+                      addRowBtnText={"Add Nuclide"}
+                      initWithoutHead={false}
+                      defaultData={this.nuclidesData}
+                      getData={this.saveTableData}
+                      fieldsArr={this.nuclideTableFields}
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
           }
           <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, width: '100%'}}>
             <CardContent>
@@ -649,7 +637,7 @@ class MaterialMetadata extends Component {
                     <label htmlFor="load-material-image">
                       <Avatar
                         variant="rounded"
-                        sx={{ width: "100%", height: 300, border: "5px dashed grey" }}
+                        sx={{ width: "auto", height: 300, border: "5px dashed grey" }}
                         src={BlobPath(blobUri, image)}>
                         {image.uri === "" && <ImageIcon/>}
                       </Avatar>
