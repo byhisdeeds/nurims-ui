@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {
-  BLANK_PDF, CMD_GENERATE_SSC_MAINTENANCE_SCHEDULE_PDF,
+  BLANK_PDF,
+  CMD_GENERATE_SSC_MAINTENANCE_SCHEDULE_PDF,
 } from "../../utils/constants";
 import {
   Grid,
@@ -11,14 +12,25 @@ import {
 import PdfViewer from "../../components/PdfViewer";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {withTheme} from "@mui/styles";
-import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  DatePicker,
+  LocalizationProvider
+} from "@mui/x-date-pickers";
+import {
+  AdapterDayjs
+} from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en-gb';
 import TextField from "@mui/material/TextField";
-import {TitleComponent} from "../../components/CommonComponents";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import {ConsoleLog} from "../../utils/UserContext";
+import {
+  TitleComponent
+} from "../../components/CommonComponents";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
+import {
+  ConsoleLog
+} from "../../utils/UserContext";
 
 export const MAINTENANCESCHEDULE_REF = "MaintenanceSchedule";
 
@@ -91,7 +103,7 @@ class MaintenanceSchedule extends Component {
   handleYearChange = (year) => {
     console.log("@@@@@ YEAR", year)
     console.log("@@@@@ YEAR", year.year())
-    this.setState({ year: year.year() });
+    this.setState({ year: year });
   }
 
   handlePeriodChange = (event, period) => {
