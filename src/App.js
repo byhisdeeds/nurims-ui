@@ -217,7 +217,9 @@ class App extends React.Component {
     // console.log("USE_DEVICE_DATA", deviceDetect())
     ///////////////////////////////////////////
     this.mounted = true;
-    ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
+    if (this.debug) {
+      ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
+    }
     // Everything here is fired on component mount.
     // this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}/nurimsws`);
     this.ws = new ReconnectingWebSocket(this.props.wsep+"?uuid="+this.uuid);
@@ -238,7 +240,7 @@ class App extends React.Component {
       // load system properties
       this.send({
         cmd: CMD_GET_SERVER_INFO,
-      })
+      }, false)
     };
     this.ws.onerror = (error) => {
       ConsoleLog("App", "ws.onerror", error);
@@ -322,10 +324,10 @@ class App extends React.Component {
   };
 
   send = (msg, show_busy) => {
-    console.log("***** SEND *****", msg)
     if (this.debug) {
       ConsoleLog("App", "send", "ws.readyState",
-        this.ws && this.ws.readyState ? this.ws.readyState : "undefined", "msg", msg);
+        this.ws && this.ws.readyState ? this.ws.readyState : "undefined", "msg", msg, "show_busy",
+        (show_busy === undefined) ? true : show_busy);
     }
     if (this.ws && this.ws.readyState === 1) {
       const _show_busy = (show_busy === undefined) ? true : show_busy;
@@ -402,7 +404,9 @@ class App extends React.Component {
   render() {
     const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active, log_window_visible} = this.state;
     const isSysadmin = isValidUserRole(this.user, "sysadmin");
-    console.log("App.render, actionid", actionid)
+    if (this.debug) {
+      ConsoleLog("App", "render", "actionid", actionid, "busy", busy)
+    }
     return (
       <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
