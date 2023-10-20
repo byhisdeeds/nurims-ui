@@ -7,7 +7,7 @@ import {
   Grid,
   Stack,
   IconButton,
-  Slider
+  Slider, Button
 } from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -31,6 +31,7 @@ import {
 import {
   ConsoleLog
 } from "../../utils/UserContext";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
 export const MAINTENANCESCHEDULE_REF = "MaintenanceSchedule";
 
@@ -153,9 +154,17 @@ class MaintenanceSchedule extends Component {
                 min={0}
                 max={11}
               />
-              <IconButton onClick={this.GenerateMaintenanceSchedulePdf}>
-                <FileDownloadIcon/>
-              </IconButton>
+              {/*<IconButton onClick={this.GenerateMaintenanceSchedulePdf}>*/}
+              {/*  <FileDownloadIcon/>*/}
+              {/*</IconButton>*/}
+              <Button
+                sx={{width: 300}}
+                variant={"contained"}
+                endIcon={<PictureAsPdfIcon />}
+                onClick={this.GenerateMaintenanceSchedulePdf}
+              >
+                Generate PDF
+              </Button>
             </Stack>
           </Grid>
           <Grid item xs={12}>

@@ -2,18 +2,13 @@ import React, {Component} from 'react';
 import {
   BLANK_PDF,
   CMD_GENERATE_SSC_MAINTENANCE_REPORT_PDF,
-  NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL,
 } from "../../utils/constants";
 import {
   Button,
-  FormControl,
   Grid,
-  InputLabel,
-  Select,
   Stack,
 } from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
-import MenuItem from "@mui/material/MenuItem";
 import {withTheme} from "@mui/styles";
 import {
   isCommandResponse,
@@ -29,8 +24,6 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import {ConsoleLog} from "../../utils/UserContext";
-import {getRecordMetadataValue} from "../../utils/MetadataUtils";
-import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import dayjs from 'dayjs';
 

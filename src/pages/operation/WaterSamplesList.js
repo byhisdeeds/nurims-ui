@@ -36,7 +36,7 @@ class WaterSamplesList extends Component {
     console.log("$$$$", typeof records, Array.isArray(records), records.length)
     for (const record of records) {
       console.log("==>", record)
-      // record[NURIMS_TITLE_SUBTITLE] = record[NURIMS_TITLE_SUBTITLE].substring(0, 10);
+      record[NURIMS_TITLE_SUBTITLE] = record[NURIMS_TITLE_SUBTITLE].substring(0, 10);
     }
     if (this.ref.current) {
       this.ref.current.setRecords(records);
