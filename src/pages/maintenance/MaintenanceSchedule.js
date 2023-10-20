@@ -101,8 +101,6 @@ class MaintenanceSchedule extends Component {
   }
 
   handleYearChange = (year) => {
-    console.log("@@@@@ YEAR", year)
-    console.log("@@@@@ YEAR", year.year())
     this.setState({ year: year });
   }
 

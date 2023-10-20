@@ -295,5 +295,5 @@ module.exports = Object.freeze({
   EXTREMITY: "extremity",
   WRIST: "wrist",
 
-  UNDEFINED_DATE_STRING: "1970-01-01",
+  UNDEFINED_DATE_STRING: "1970-01-01T00:00:00",
 });

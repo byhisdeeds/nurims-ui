@@ -13,7 +13,8 @@ import {
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS,
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE,
   NURIMS_SAMPLEDATE,
-  NURIMS_TITLE, UNDEFINED_DATE_STRING
+  NURIMS_TITLE,
+  UNDEFINED_DATE_STRING
 } from "../../utils/constants";
 import PropTypes from "prop-types";
 import {
@@ -145,21 +146,25 @@ class WaterSampleMetadata extends Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
+    console.log("111111111111111111111111")
     if (record) {
       record["changed"] = false;
       record["changed.metadata"] = [];
       this.doc = {uri: getRecordMetadataValue(
-        record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE, "").url};
+        record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE, "").uri};
     }
+    console.log("22222222222222222222222222222222")
     this.setState({
       record: (record) ? record : [],
-      disabled: (!record),
+      disabled: !(record),
     })
+    console.log("3333333333333333333333333333")
     if (this.ref.current && (record)) {
       console.log("######", getRecordMetadataValue(record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
       this.ref.current.setRowData(getRecordMetadataValue(
         record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
     }
+    console.log("44444444444444444444444444")
     this.props.onChange(false);
   }
 
@@ -177,6 +182,8 @@ class WaterSampleMetadata extends Component {
   }
 
   handleDateAvailableChange = (e) => {
+    console.log("%%% handleDateAvailableChange %%%", e)
+    console.log("%%% handleDateAvailableChange %%%", e.format("YYYY-MM-DD"))
     if (this.context.debug) {
       ConsoleLog(this.Module, "handleDateAvailableChange", "date", e.format("YYYY-MM-DD"));
     }
@@ -207,6 +214,8 @@ class WaterSampleMetadata extends Component {
       ConsoleLog(this.Module, "render", "disabled", disabled, "record", record);
     }
     console.log("$$$$$", getMetadataValueAsISODateString(record, NURIMS_SAMPLEDATE, ""))
+    console.log("$$$$$", dayjs(getMetadataValueAsISODateString(record, NURIMS_SAMPLEDATE, UNDEFINED_DATE_STRING)))
+    console.log("==========================")
     // const authorized_module_levels = getPropertyValue(properties, "system.authorizedmodulelevels", "").split('|');
     // const user_roles = getPropertyValue(properties, "system.userrole", "").split('|');
     return (

@@ -26,7 +26,6 @@ import {
   Save as SaveIcon,
   RemoveCircle as RemoveCircleIcon,
 } from "@mui/icons-material";
-// import {v4 as uuid} from "uuid";
 import {
   getMatchingResponseObject,
   isCommandResponse,
@@ -38,9 +37,17 @@ import {
 } from "../../utils/RenderUtils";
 import WaterSamplesList from "./WaterSamplesList";
 import WaterSampleMetadata from "./WaterSampleMetadata";
-import {getRecordMetadataValue, record_uuid} from "../../utils/MetadataUtils";
-import {TitleComponent} from "../../components/CommonComponents";
-import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../../utils/SnackbarVariants";
+import {
+  getRecordMetadataValue,
+  record_uuid
+} from "../../utils/MetadataUtils";
+import {
+  TitleComponent
+} from "../../components/CommonComponents";
+import {
+  enqueueErrorSnackbar,
+  enqueueSuccessSnackbar
+} from "../../utils/SnackbarVariants";
 
 export const ADDEDITREACTORWATERSAMPLES_REF = "AddEditReactorWaterSamples";
 
@@ -201,11 +208,15 @@ class AddEditReactorWaterSamples extends React.Component {
           } else {
             if (!message.hasOwnProperty("item_id") && this.listRef.current) {
               // this.listRef.current.setRecords(response[this.recordTopic], true);
+              console.log("00000000000000000000")
               this.listRef.current.setRecords(response.operation);
+              console.log("00000000000000000000 +++++++++++++++++++++++++++++++++")
             }
             if (message.hasOwnProperty("item_id")) {
               // const record = getMatchingResponseObject(message, "response." + this.recordTopic, "item_id", selection["item_id"]);
               const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
+              console.log("====== SELECTION", selection)
+              console.log("====== RECORD", record)
               selection[METADATA] = [...record[METADATA]]
               if (this.metadataRef.current) {
                 this.metadataRef.current.setRecordMetadata(selection);
