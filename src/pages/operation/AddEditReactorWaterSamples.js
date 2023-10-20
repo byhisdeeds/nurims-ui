@@ -208,15 +208,11 @@ class AddEditReactorWaterSamples extends React.Component {
           } else {
             if (!message.hasOwnProperty("item_id") && this.listRef.current) {
               // this.listRef.current.setRecords(response[this.recordTopic], true);
-              console.log("00000000000000000000")
               this.listRef.current.setRecords(response.operation);
-              console.log("00000000000000000000 +++++++++++++++++++++++++++++++++")
             }
             if (message.hasOwnProperty("item_id")) {
               // const record = getMatchingResponseObject(message, "response." + this.recordTopic, "item_id", selection["item_id"]);
               const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
-              console.log("====== SELECTION", selection)
-              console.log("====== RECORD", record)
               selection[METADATA] = [...record[METADATA]]
               if (this.metadataRef.current) {
                 this.metadataRef.current.setRecordMetadata(selection);
