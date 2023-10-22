@@ -4,6 +4,7 @@ import {
   CMD_GENERATE_CONTROLLED_MATERIALS_SURVEILLANCE_SHEET_PDF,
 } from "../../utils/constants";
 import {
+  Button,
   FormControl,
   Grid,
   InputLabel,
@@ -12,16 +13,21 @@ import {
 } from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
 import MenuItem from "@mui/material/MenuItem";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import IconButton from "@mui/material/IconButton";
-import {withTheme} from "@mui/styles";
+import {
+  withTheme
+} from "@mui/styles";
 import {
   isCommandResponse,
   messageHasResponse,
   messageStatusOk
 } from "../../utils/WebsocketUtils";
-import {TitleComponent} from "../../components/CommonComponents";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {
+  TitleComponent
+} from "../../components/CommonComponents";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
 export const GENERATEMATERIALSURVEILLANCESHEET_REF = "GenerateMaterialSurveillanceSheet";
 
@@ -84,9 +90,17 @@ class GenerateMaterialSurveillanceSheet extends Component {
                   <MenuItem value={'unrestricted'}>Unrestricted Access</MenuItem>
                 </Select>
               </FormControl>
-              <IconButton onClick={this.onGenerateMaterialsListPdf}>
-                <FileDownloadIcon/>
-              </IconButton>
+              <Button
+                sx={{width: 300}}
+                variant={"contained"}
+                endIcon={<PictureAsPdfIcon />}
+                onClick={this.onGenerateMaterialsListPdf}
+              >
+                Generate PDF
+              </Button>
+              {/*<IconButton onClick={this.onGenerateMaterialsListPdf}>*/}
+              {/*  <FileDownloadIcon/>*/}
+              {/*</IconButton>*/}
             </Stack>
           </Grid>
           <Grid item xs={12}>
