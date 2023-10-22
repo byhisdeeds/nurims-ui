@@ -190,7 +190,8 @@ class BaseRecordManager extends Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
     }
-    if (selection.hasOwnProperty("item_id") && selection.item_id === -1) {
+    if ((selection.hasOwnProperty("item_id") && selection.item_id === -1) ||
+        (selection.hasOwnProperty("metadata") && selection.metadata.length > 0)) {
       if (this.metadataRef.current) {
         this.metadataRef.current.setRecordMetadata(selection)
       }

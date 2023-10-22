@@ -56,6 +56,7 @@ import {
 import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
+import {ConsoleLog} from "../../utils/UserContext";
 
 class MaterialMetadata extends Component {
   constructor(props) {
@@ -63,6 +64,7 @@ class MaterialMetadata extends Component {
     this.state = {
       material: {},
     };
+    this.Module = "MaterialMetadata";
     this.ref = React.createRef();
     this.pdfRef = React.createRef();
     this.tooltipRef = React.createRef();
@@ -387,12 +389,14 @@ class MaterialMetadata extends Component {
   render() {
     const {material} = this.state;
     const {properties} = this.props;
-    // console.log("MaterialMetadata.RENDER - material", material)
+    const blobUri = getPropertyValue(properties, "bloburi", "/")
+    const materialTypes = getPropertyValue(properties, NURIMS_MATERIAL_TYPE, "").split('|');
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "render", "material", material, "materialTypes", materialTypes);
+    }
     // console.log("MaterialMetadata.RENDER - table_rows", this.table_rows)
     // console.log("MaterialMetadata.RENDER - glossary", this.glossary)
-    const blobUri = getPropertyValue(properties, "bloburi", "/")
     const disabled = Object.entries(material).length === 0;
-    const materialTypes = getPropertyValue(properties, NURIMS_MATERIAL_TYPE, "").split('|');
     const materialClassification = getPropertyValue(properties, NURIMS_MATERIAL_CLASSIFICATION, "").split('|');
     const inventoryStatus = getPropertyValue(properties, NURIMS_MATERIAL_INVENTORY_STATUS, "").split('|');
     const physicalForm = getPropertyValue(properties, NURIMS_MATERIAL_PHYSICAL_FORM, "").split('|');
