@@ -18,16 +18,19 @@ import dayjs from 'dayjs';
 import EmailIcon from '@mui/icons-material/Email';
 import MarkEmailUnreadIcon from '@mui/icons-material/MarkEmailUnread';
 import DeleteIcon from '@mui/icons-material/HighlightOff';
+import {
+  ConsoleLog,
+  UserContext
+} from "../utils/UserContext";
 
 const NOTIFICATIONS_REF = "Notifications";
 
 class NotificationWindow extends Component {
+  static contextType = UserContext;
+
   constructor(props) {
     super(props);
     this.state = {
-      scrollToRow: 0,
-      isTextWrapped: true,
-      logs: "",
       messages: [
         {
           id: 1,
@@ -92,17 +95,19 @@ class NotificationWindow extends Component {
   }
 
   archive_message = (event) => {
-    console.log("== archive_message == id", event.currentTarget.dataset.message)
     if (event.currentTarget.dataset.message) {
       const id = Number.parseInt(event.currentTarget.dataset.message);
+      let count = 0;
       const messages = this.state.messages;
       for (const message of messages) {
-        console.log(message.id, id)
         if (message.id === id) {
-          console.log("archived message")
           message.archived = 1;
-          break;
+        } else {
+          count++;
         }
+      }
+      if (count === 0) {
+        this.props.onChange("");
       }
       this.setState({messages: messages});
     }
@@ -132,13 +137,15 @@ class NotificationWindow extends Component {
     }
   }
 
-  dd = (event) => {
-    console.log("== dd == e", event.currentTarget.dataset.message)
+  updateMessages = (msg) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "updateMessages", "messages", msg);
+    }
   }
 
   render() {
     const {anchorEl, id, visible, onClose, width, height, theme} = this.props;
-    const {messages, isTextWrapped, scrollToRow} = this.state;
+    const {messages} = this.state;
     return (
       <Popover
         id={id}
@@ -227,6 +234,7 @@ NotificationWindow.propTypes = {
   visible: PropTypes.bool.isRequired,
   anchorEl: PropTypes.element.isRequired,
   onClose: PropTypes.func,
+  onChange: PropTypes.func,
   send: PropTypes.func,
   width: PropTypes.number,
   height: PropTypes.number,

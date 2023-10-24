@@ -423,6 +423,10 @@ class App extends React.Component {
     this.setState({notification_window_visible: false});
   }
 
+  changeNotificationStatus = (badge_content) => {
+    this.setState({notification_badge_content: badge_content});
+  }
+
   render() {
     const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active, notification_badge_content,
       log_window_visible, notification_window_visible, notification_window_anchor} = this.state;
@@ -515,6 +519,7 @@ class App extends React.Component {
                     id={"notification-window"}
                     send={this.send}
                     onClose={this.closeNotificationWindow}
+                    onChange={this.changeNotificationStatus}
                     visible={notification_window_visible}
                     width={500}
                     height={600}
