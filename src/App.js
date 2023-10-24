@@ -432,7 +432,8 @@ class App extends React.Component {
       log_window_visible, notification_window_visible, notification_window_anchor} = this.state;
     const isSysadmin = isValidUserRole(this.user, "sysadmin");
     if (this.debug) {
-      ConsoleLog("App", "render", "actionid", actionid, "busy", busy)
+      ConsoleLog("App", "render", "actionid", actionid, "busy", busy,
+        "notification_badge_content", notification_badge_content)
     }
     return (
       <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
