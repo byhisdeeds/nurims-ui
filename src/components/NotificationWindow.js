@@ -29,8 +29,20 @@ class NotificationWindow extends Component {
       isTextWrapped: true,
       logs: "",
       messages: [
-        {id: 1, timestamp: "2023-10-12T12:03:45", message: "first message", archived: 0, sender: "__sys__"},
-        {id: 2, timestamp: "2023-10-12T12:03:45", message: "second message", archived: 0, sender: "__sys__"}
+        {
+          id: 1,
+          timestamp: "2023-10-12T12:03:45",
+          message: "Reading drm-971098-2022-01-03.json for radiation monitoring data ...",
+          archived: 0,
+          sender: "__sys__"
+        },
+        {
+          id: 2,
+          timestamp: "2023-10-12T12:03:45",
+          message: "Events discovery between January and December, 2022 found 122 run(s) in 4 hours, 44 minutes and 52 seconds",
+          archived: 0,
+          sender: "__sys__"
+        }
       ],
     };
     this.Module = NOTIFICATIONS_REF;
@@ -40,9 +52,9 @@ class NotificationWindow extends Component {
   since = (date) => {
     const now = dayjs()
     const then = dayjs(date)
-    console.log("NOW=", now.toISOString())
-    console.log("THEN=", then.toISOString())
-    console.log("DIFF=", now.diff(then, "d"))
+    // console.log("NOW=", now.toISOString())
+    // console.log("THEN=", then.toISOString())
+    // console.log("DIFF=", now.diff(then, "d"))
 
     // Find the right difference measure
     // How many seconds ago
@@ -71,35 +83,6 @@ class NotificationWindow extends Component {
 
     return `${lapsed} ${units}`;
   }
-  // toggleTextWrapping = (wrapped) => {
-  //   this.setState({ isTextWrapped: !this.state.isTextWrapped });
-  // }
-
-  // log = (msg) => {
-  //   let message = typeof msg === 'object' ? msg.hasOwnProperty("message") ? msg.message : JSON.stringify(msg) : msg;
-  //   if (!message.startsWith("[")) {
-  //     message = "[" + new Date().toISOString().substring(0, 19).replace("T", " ") + "] " + message;
-  //   }
-  //   const logs = this.state.logs + (this.state.logs === "" ? "" : "\n") + message;
-  //   const scrollToRow = logs.split("\n").length + 1;
-  //   this.setState({ logs: logs, scrollToRow: scrollToRow })
-  // }
-
-  // onDownloadClick = () => {
-  //   const element = document.createElement('a');
-  //   const dataToDownload = [this.state.logs];
-  //   const file = new Blob(dataToDownload, { type: 'text/plain' });
-  //   element.href = URL.createObjectURL(file);
-  //   element.download = 'log-window.txt';
-  //   document.body.appendChild(element);
-  //   element.click();
-  //   document.body.removeChild(element);
-  // }
-
-  // handleClickOpen = (scrollType: DialogProps['scroll']) => () => {
-  //   setOpen(true);
-  //   setScroll(scrollType);
-  // };
 
   sender_icon = (message) => {
     if (message.sender === "__sys__") {
@@ -113,7 +96,7 @@ class NotificationWindow extends Component {
     if (event.currentTarget.dataset.message) {
       const id = Number.parseInt(event.currentTarget.dataset.message);
       const messages = this.state.messages;
-      for (const message in messages) {
+      for (const message of messages) {
         console.log(message.id, id)
         if (message.id === id) {
           console.log("archived message")
@@ -121,7 +104,7 @@ class NotificationWindow extends Component {
           break;
         }
       }
-      this.setState({ messages: messages });
+      this.setState({messages: messages});
     }
   }
 
@@ -139,13 +122,13 @@ class NotificationWindow extends Component {
       const _messages = [];
       const id = Number.parseInt(event.currentTarget.dataset.message);
       const messages = this.state.messages;
-      for (const message in messages) {
+      for (const message of messages) {
         if (message.id !== id) {
-          messages.push(message);
+          _messages.push(message);
           break;
         }
       }
-      this.setState({ messages: _messages });
+      this.setState({messages: _messages});
     }
   }
 
