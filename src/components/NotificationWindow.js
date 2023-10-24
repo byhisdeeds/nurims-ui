@@ -192,9 +192,16 @@ class NotificationWindow extends Component {
                   </ListItemIcon>
                   <ListItemText
                     id={labelId}
-                    primary={message.message}
+                    primary={message.sender}
                     secondary={
                       <React.Fragment>
+                        <Typography
+                          component="div"
+                          variant="body2"
+                          color="text.secondary"
+                        >
+                          {message.message}
+                        </Typography>
                         <Typography
                           sx={{display: 'inline', fontStyle: 'italic'}}
                           component="span"
@@ -203,7 +210,6 @@ class NotificationWindow extends Component {
                         >
                           {this.since(message.timestamp)} ago
                         </Typography>
-                        {" — I'll be in your neighborhood doing errands this…"}
                       </React.Fragment>
                     }
                   />
