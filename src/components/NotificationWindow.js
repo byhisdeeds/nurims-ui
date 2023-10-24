@@ -103,7 +103,7 @@ class NotificationWindow extends Component {
         if (message.id === id) {
           message.archived = 1;
         }
-        count = message.archived === 0 ? 1 : 0;
+        count += message.archived === 0 ? 1 : 0;
       }
       console.log("count=", count)
       if (count === 0) {
