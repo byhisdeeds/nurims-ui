@@ -516,7 +516,7 @@ class App extends React.Component {
                     send={this.send}
                     onClose={this.closeNotificationWindow}
                     visible={notification_window_visible}
-                    width={300}
+                    width={500}
                     height={600}
                   />
                 </Box>

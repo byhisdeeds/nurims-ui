@@ -110,9 +110,9 @@ class NotificationWindow extends Component {
 
   message_background = (message) => {
     if (message.archived === 0) {
-      return ("red")
+      return ("action.disabled")
     } else {
-      return ("inherit")
+      return ("background.paper1")
     }
   }
 
@@ -162,7 +162,7 @@ class NotificationWindow extends Component {
           },
         }}
       >
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <List sx={{width: '100%'}}>
           {messages.map((message) => {
             const labelId = `checkbox-list-label-${message.id}`;
             return (

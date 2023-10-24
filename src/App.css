@@ -1,225 +1,225 @@
 /* App.css */
 @font-face {
-  font-family: 'consola';
-  src: local('Consola'), url(./fonts/Consola.ttf) format('truetype');
+    font-family: 'consola';
+    src: local('Consola'), url(./fonts/Consola.ttf) format('truetype');
 }
 
 @font-face {
-  font-family: 'robotoslabregular';
-  src: local('RobotoSlabRegular'), url(./fonts/RobotoSlabRegular.ttf) format('truetype');
+    font-family: 'robotoslabregular';
+    src: local('RobotoSlabRegular'), url(./fonts/RobotoSlabRegular.ttf) format('truetype');
 }
 
 @font-face {
-  font-family: 'source-code-pro';
-  src: local('SourceCodeProRegular'), url(./fonts/SourceCodePro-Regular.ttf) format('truetype');
+    font-family: 'source-code-pro';
+    src: local('SourceCodeProRegular'), url(./fonts/SourceCodePro-Regular.ttf) format('truetype');
 }
 
 body {
-  margin: 0;
-  font-family: robotoslabregular, consola,  sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: robotoslabregular, consola, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, consola, 'Courier New', monospace;
+    font-family: source-code-pro, consola, 'Courier New', monospace;
 }
 
 pre {
-  font-family: consola, 'Courier New', monospace;
+    font-family: consola, 'Courier New', monospace;
 }
 
 .leaflet-container {
-  width: 100%;
-  height: 100vh;
+    width: 100%;
+    height: 100vh;
 }
 
 .rasabot {
-  top: 80px;
+    top: 80px;
 }
 
 .rcb-container {
-  left: 320px;
-  top: 80px;
-  width: inherit;
+    left: 320px;
+    top: 80px;
+    width: inherit;
 }
 
 .rcb-bot-message {
-  max-width: inherit;
-  white-space: pre;
+    max-width: inherit;
+    white-space: pre;
 }
 
 .rcb-header-text {
-  width: 95%
+    width: 95%
 }
 
 .pf-v5-c-log-viewer__main {
-  --pf-v5-c-log-viewer__text--WhiteSpace: break-spaces;
+    --pf-v5-c-log-viewer__text--WhiteSpace: break-spaces;
 }
 
 .location_map_mouse_position {
-  color: black;
-  background-color: lightgrey;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-family: consola, 'Courier New', monospace;
-  font-size: 1em;
+    color: black;
+    background-color: lightgrey;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: consola, 'Courier New', monospace;
+    font-size: 1em;
 }
 
 .Side-menu {
-  max-width: 400px;
-  width: 100%;
+    max-width: 400px;
+    width: 100%;
 }
 
 .Side-menu .children {
-  transition: max-height 0.7s ease-in;
-  overflow: hidden;
+    transition: max-height 0.7s ease-in;
+    overflow: hidden;
 }
 
 .Side-menu .children.active {
-  transition-timing-function: cubic-bezier(0.5, 0, 1, 0);
-  max-height: 9999px;
+    transition-timing-function: cubic-bezier(0.5, 0, 1, 0);
+    max-height: 9999px;
 }
 
 .Side-menu .children.inactive {
-  transition: max-height 0.6s cubic-bezier(0, 1, 0, 1) -0.15s;
-  max-height: 0;
+    transition: max-height 0.6s cubic-bezier(0, 1, 0, 1) -0.15s;
+    max-height: 0;
 }
 
 .Side-menu * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .Side-menu .divider {
-  height: 42px;
-  padding-top: 14px;
-  padding-left: 14px;
-  padding-right: 14px;
-  font-size: 12px;
+    height: 42px;
+    padding-top: 14px;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 12px;
 }
 
 .Side-menu.rtl .divider {
-  text-align: right;
+    text-align: right;
 }
 
 .Side-menu.rtl .item .item-title .item-label {
-  float: right;
+    float: right;
 }
 
 .Side-menu.rtl .item .item-title .item-icon {
-  margin-right: 0px;
-  margin-left: 10px;
-  margin-top: 3px;
-  float: right;
+    margin-right: 0px;
+    margin-left: 10px;
+    margin-top: 3px;
+    float: right;
 }
 
 .Side-menu.rtl .item .item-title .fa-chevron-down,
 .Side-menu.rtl .item .item-title .fa-chevron-left,
 .Side-menu.rtl .item .item-title .fa-chevron-right {
-  float: left;
+    float: left;
 }
 
 .Side-menu.rtl .item .children {
-  padding-left: 0;
-  padding-right: 25px;
+    padding-left: 0;
+    padding-right: 25px;
 }
 
 .Side-menu .item .item-title {
-  height: 40px;
-  padding-top: 14px;
-  padding-left: 18px;
-  padding-right: 18px;
-  font-size: 14px;
-  cursor: pointer !important;
+    height: 40px;
+    padding-top: 14px;
+    padding-left: 18px;
+    padding-right: 18px;
+    font-size: 14px;
+    cursor: pointer !important;
 }
 
 .Side-menu .item .item-title .item-icon {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .Side-menu .item .item-title .fa-chevron-down,
 .Side-menu .item .item-title .fa-chevron-left,
 .Side-menu .item .item-title .fa-chevron-right {
-  float: right;
-  position: relative;
-  font-size: 12px;
-  padding-top: 3px;
+    float: right;
+    position: relative;
+    font-size: 12px;
+    padding-top: 3px;
 }
 
 .Side-menu .item:hover > .item-title {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .Side-menu .item.item-level-1 > .item-title {
-  height: 45px;
+    height: 45px;
 }
 
 .Side-menu .item .children {
-  padding-left: 25px;
+    padding-left: 25px;
 }
 
 .Side-menu-default {
-  /*background-color: #222D32;*/
-  color: #B8C7CE;
+    /*background-color: #222D32;*/
+    color: #B8C7CE;
 }
 
 .Side-menu-default *:not(i) {
-  font-family: robotoslabregular, consola,  sans-serif;
-  font-weight: 300;
-  font-size: 1.05em;
-  vertical-align: middle;
+    font-family: robotoslabregular, consola, sans-serif;
+    font-weight: 300;
+    font-size: 1.05em;
+    vertical-align: middle;
 }
 
 .Side-menu-default .divider {
-  /*background-color: #1A2226;*/
-  color: #4A636E;
-  text-transform: uppercase;
+    /*background-color: #1A2226;*/
+    color: #4A636E;
+    text-transform: uppercase;
 }
 
 .Side-menu-default .item a {
-  text-decoration: none;
-  color: #B8C7CE;
+    text-decoration: none;
+    color: #B8C7CE;
 }
 
 .Side-menu-default .item.active {
-  color: white;
+    color: white;
 }
 
 .Side-menu-default .item.active .children {
-  color: #B8C7CE;
+    color: #B8C7CE;
 }
 
 .Side-menu-default .item.active > .item-title > a {
-  color: green;
+    color: green;
 }
 
 .Side-menu-default .item:hover > .item-title {
-  color: white;
+    color: white;
 }
 
 .Side-menu-default .item:hover > .item-title a {
-  color: white;
+    color: white;
 }
 
 .Side-menu-default .item.item-level-1:hover > .item-title {
-  background-color: #435863;
+    background-color: #435863;
 }
 
 .Side-menu-default .item-disabled {
-  color: dimgray;
-  pointer-events: none;
-  opacity: 0.7;
+    color: dimgray;
+    pointer-events: none;
+    opacity: 0.7;
 }
 
 /*.Side-menu-default .item.item-level-1:hover,*/
 .Side-menu-default .item.item-level-1.active {
-  border-left: 4px solid #C4EAF2;
+    border-left: 4px solid #C4EAF2;
 }
 
 /* Set default font-family */
 .ql-editor {
-  font-family: "RobotoSlabRegular";
+    font-family: "RobotoSlabRegular";
 }
 
 /*!* Set dropdown font-families *!*/
@@ -233,6 +233,6 @@ pre {
 /*}*/
 /* We do not set Courier since it is the default font */
 .ql-container {
-  font-family: "RobotoSlabRegular";
-  font-size: 1.2em;
+    font-family: "RobotoSlabRegular";
+    font-size: 1.2em;
 }

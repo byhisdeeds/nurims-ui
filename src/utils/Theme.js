@@ -162,7 +162,8 @@ export const lightTheme = createTheme({
     },
     background: {
       default: '#fff',
-      paper: '#fff'
+      paper: '#fff',
+      paper1: '#fff',
     },
     common: {
       black: '#000',
@@ -444,7 +445,8 @@ export const darkTheme = createTheme({
     },
     background: {
       default: '#121212',
-      paper: '#121212'
+      paper: '#121212',
+      paper1: 'rgb(59,63,70)',
     },
     common: {
       black: '#000',
