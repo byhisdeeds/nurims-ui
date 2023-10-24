@@ -203,7 +203,7 @@ export function NotificationsButton(props) {
       aria-describedby={props.id}
       onClick={props.onClick}
       badgeContent={props.badgeContent}
-      showZero={true}
+      showZero={false}
       color={props.badgeContent && props.badgeContent.length === 0 ? "primary" : "secondary"}
     >
       <NotificationImportant />

@@ -105,7 +105,6 @@ class NotificationWindow extends Component {
         }
         count += message.archived === 0 ? 1 : 0;
       }
-      console.log("count=", count)
       if (count === 0) {
         this.props.onChange("");
       }
