@@ -119,7 +119,19 @@ class NotificationWindow extends Component {
                   <ListItemText
                     id={labelId}
                     primary={message.message}
-                    secondary={message.ts}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {message.ts}
+                        </Typography>
+                        {" — I'll be in your neighborhood doing errands this…"}
+                      </React.Fragment>
+                    }
                   />
                 </ListItemButton>
               </ListItem>
