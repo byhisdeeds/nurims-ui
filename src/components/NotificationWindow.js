@@ -109,13 +109,14 @@ class NotificationWindow extends Component {
   }
 
   archive_message = (event) => {
-    console.log("== archive_message == id", event.target)
-    console.log("== archive_message == id", event.currentTarget)
+    console.log("== archive_message == id", event.currentTarget.dataset.message)
     if (event.currentTarget.dataset.message) {
-      const id = event.currentTarget.dataset.message;
+      const id = Number.parseInt(event.currentTarget.dataset.message);
       const messages = this.state.messages;
       for (const message in messages) {
+        console.log(message.id, id)
         if (message.id === id) {
+          console.log("archived message")
           message.archived = 1;
           break;
         }
@@ -134,6 +135,18 @@ class NotificationWindow extends Component {
 
   delete_message = (event) => {
     console.log("== delete_message == id", event.currentTarget.dataset.message)
+    if (event.currentTarget.dataset.message) {
+      const _messages = [];
+      const id = Number.parseInt(event.currentTarget.dataset.message);
+      const messages = this.state.messages;
+      for (const message in messages) {
+        if (message.id !== id) {
+          messages.push(message);
+          break;
+        }
+      }
+      this.setState({ messages: _messages });
+    }
   }
 
   dd = (event) => {
