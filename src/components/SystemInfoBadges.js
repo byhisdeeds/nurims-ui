@@ -49,14 +49,6 @@ class SystemInfoBadges extends Component {
         >
           <People/>
         </Badge>
-        {/*<div style={{width: 20}}/>*/}
-        {/*<Badge badgeContent={user_connections} color="secondary" title={"User web connections to the server"}>*/}
-        {/*  <People/>*/}
-        {/*</Badge>*/}
-        {/*<div style={{width: 10}}/>*/}
-        {/*<Badge badgeContent={sensor_connections} color="secondary" title={"Sensors connected to the server"}>*/}
-        {/*  <Router/>*/}
-        {/*</Badge>*/}
       </React.Fragment>
     );
   }

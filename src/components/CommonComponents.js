@@ -29,7 +29,7 @@ import {
   IconButton,
   TableHead,
   TableSortLabel,
-  Fab, Button
+  Fab, Button, Badge
 } from "@mui/material";
 import {
   DatePicker,
@@ -50,7 +50,7 @@ import {
   HourglassFull,
   NetworkCheck,
   Person,
-  DeleteForever
+  DeleteForever, People
 } from '@mui/icons-material';
 import {isValidUserRole} from "../utils/UserUtils";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -177,6 +177,44 @@ export function LogWindowButton(props) {
 
 LogWindowButton.propTypes = {
   onClick: PropTypes.func.isRequired
+}
+
+export function NotificationsButton(props) {
+  const theme = useTheme();
+  return (
+    // <Tooltip title="View user notifications">
+    //   <NotificationImportant
+    //     sx={{
+    //       color: theme.palette.text.disabled,
+    //       paddingLeft: '10px',
+    //       marginLeft: '10px',
+    //       width: 32,
+    //       height: 32
+    //     }}
+    //     aria-describedby={props.id}
+    //     onClick={props.onClick}
+    //   />
+    // </Tooltip>
+    <Badge
+      sx={{
+        marginLeft: "10px",
+        paddingLeft: "10px"
+      }}
+      aria-describedby={props.id}
+      onClick={props.onClick}
+      badgeContent={props.badgeContent}
+      showZero={true}
+      color={props.badgeContent && props.badgeContent.length === 0 ? "primary" : "secondary"}
+    >
+      <NotificationImportant />
+    </Badge>
+  )
+}
+
+NotificationsButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  badgeContent: PropTypes.string.isRequired
 }
 
 export function BasePaper(props) {
@@ -1526,7 +1564,14 @@ AddEditButtonPanel.defaultProps = {
   saveRole: "",
 }
 
-export function ApproveIrradiationMessageComponent({record, user, disabled, onClickApproveRequest, theme, approverRole}) {
+export function ApproveIrradiationMessageComponent({
+                                                     record,
+                                                     user,
+                                                     disabled,
+                                                     onClickApproveRequest,
+                                                     theme,
+                                                     approverRole
+                                                   }) {
   const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
   if (approver !== "") {
     const fullname = user.users.reduce((prev, obj) => {
@@ -1539,7 +1584,7 @@ export function ApproveIrradiationMessageComponent({record, user, disabled, onCl
     return (
       <Button
         variant={"outlined"}
-        endIcon={<DoneIcon />}
+        endIcon={<DoneIcon/>}
         style={{color: theme.palette.success.contrastText, backgroundColor: theme.palette.success.light}}
         aria-label={"authorize"}
         disableRipple={true}
@@ -1587,7 +1632,7 @@ export function ApproveIrradiationMessageComponent({record, user, disabled, onCl
           <Button
             disabled={disabled}
             variant={"contained"}
-            endIcon={<ArchiveIcon />}
+            endIcon={<ArchiveIcon/>}
             onClick={onClickApproveRequest}
             color={"primary"}
             aria-label={"authorize"}

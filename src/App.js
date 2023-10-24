@@ -24,7 +24,8 @@ import {
   CMD_GET_ORGANISATION,
   CMD_SET_SYSTEM_PROPERTIES,
   CMD_BACKGROUND_TASKS,
-  CMD_PING, CMD_GET_SERVER_INFO
+  CMD_PING,
+  CMD_GET_SERVER_INFO
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -79,17 +80,23 @@ import {CHATBOT_REF} from "./pages/rasa/ChatBot"
 import {TERMSANDDEFINITIONS_REF} from "./pages/support/TermsAndDefinitions"
 import {UNDERDEVELOPMENT_REF} from "./components/UnderDevelopment"
 import LogWindow from "./components/LogWindow";
+import {VIEWAMPRECORDS_REF} from "./pages/maintenance/ViewAMPRecords";
+import NotificationWindow from "./components/NotificationWindow";
+import SystemInfoBadges from "./components/SystemInfoBadges";
 import {
   BackgroundTasks,
   LogWindowButton,
-  NetworkConnection
+  NetworkConnection,
+  NotificationsButton
 } from "./components/CommonComponents";
 import {DeviceUUID} from 'device-uuid';
 import {enqueueWarningSnackbar} from "./utils/SnackbarVariants";
-import {VIEWAMPRECORDS_REF} from "./pages/maintenance/ViewAMPRecords";
-import {isValidUserRole} from "./utils/UserUtils";
-import SystemInfoBadges from "./components/SystemInfoBadges";
-import {deviceDetect} from 'react-device-detect';
+import {
+  isValidUserRole
+} from "./utils/UserUtils";
+import {
+  deviceDetect
+} from 'react-device-detect';
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
@@ -128,6 +135,9 @@ class App extends React.Component {
       busy: 0,
       background_tasks_active: false,
       log_window_visible: false,
+      notification_window_visible: false,
+      notification_window_anchor: null,
+      notification_badge_content: "new",
     };
     this.debug = window.location.href.includes("debug");
     this.properties = [];
@@ -137,6 +147,7 @@ class App extends React.Component {
     this.user = this.props.authService;
     this.uuid = `${deviceDetect()["browserName"].toLowerCase()}-${new DeviceUUID().get()}`;
     this.logRef = React.createRef();
+    this.notificationRef = React.createRef();
     this.sysinfoRef = React.createRef();
     this.crefs = {};
     this.crefs["MyAccount"] = React.createRef();
@@ -401,8 +412,20 @@ class App extends React.Component {
     }
   }
 
+  toggleNotificationsWindow = (event) => {
+    this.setState({
+      notification_window_visible: !this.state.notification_window_visible,
+      notification_window_anchor: event.currentTarget,
+    });
+  }
+
+  closeNotificationWindow = () => {
+    this.setState({notification_window_visible: false});
+  }
+
   render() {
-    const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active, log_window_visible} = this.state;
+    const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active, notification_badge_content,
+      log_window_visible, notification_window_visible, notification_window_anchor} = this.state;
     const isSysadmin = isValidUserRole(this.user, "sysadmin");
     if (this.debug) {
       ConsoleLog("App", "render", "actionid", actionid, "busy", busy)
@@ -438,6 +461,11 @@ class App extends React.Component {
                 <NetworkConnection ready={ready}/>
                 <LogWindowButton onClick={this.toggleLogWindow}/>
                 {isSysadmin && <SystemInfoBadges ref={this.sysinfoRef}/>}
+                <NotificationsButton
+                  badgeContent={notification_badge_content}
+                  id={"notification-window"}
+                  onClick={this.toggleNotificationsWindow}
+                />
               </Toolbar>
             </AppBar>
             <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
@@ -480,6 +508,15 @@ class App extends React.Component {
                     visible={log_window_visible}
                     width={`${drawerWidth}px`}
                     height={350}
+                  />
+                  <NotificationWindow
+                    ref={this.notificationRef}
+                    anchorEl={notification_window_anchor}
+                    id={"notification-window"}
+                    onClose={this.closeNotificationWindow}
+                    visible={notification_window_visible}
+                    width={300}
+                    height={600}
                   />
                 </Box>
               </Suspense>
