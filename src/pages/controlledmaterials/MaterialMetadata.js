@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Box from '@mui/material/Box';
 import {
+  Box,
   Card,
   CardContent,
   Grid,
@@ -8,7 +8,9 @@ import {
 import {
   getRecordMetadataValue,
   setMetadataValue,
-  getDateFromDateString, BlobObject, BlobPath
+  getDateFromDateString,
+  BlobObject,
+  BlobPath
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
@@ -641,7 +643,7 @@ class MaterialMetadata extends Component {
                     <label htmlFor="load-material-image">
                       <Avatar
                         variant="rounded"
-                        sx={{ width: "auto", height: 300, border: "5px dashed grey" }}
+                        sx={{width: "auto", height: 300, border: "5px dashed grey"}}
                         src={BlobPath(blobUri, image)}>
                         {image.uri === "" && <ImageIcon/>}
                       </Avatar>

@@ -14,7 +14,7 @@ import {
 import {
   withTheme
 } from "@mui/styles";
-import CommentIcon from '@mui/icons-material/Comment'
+import dayjs from 'dayjs';
 import EmailIcon from '@mui/icons-material/Email';
 import MarkEmailUnreadIcon from '@mui/icons-material/MarkEmailUnread';
 import DeleteIcon from '@mui/icons-material/HighlightOff';
@@ -37,6 +37,40 @@ class NotificationWindow extends Component {
     this.messagesRef = React.createRef();
   }
 
+  since = (date) => {
+    const now = dayjs()
+    const then = dayjs("2023-10-12T12:03:45")
+    console.log("NOW=", now.toISOString())
+    console.log("THEN=", then.toISOString())
+    console.log("DIFF=", now.diff(then, "d"))
+
+    // Find the right measure
+    // How many seconds ago
+    let lapsed = now.diff(then, "s");
+    let units = "seconds";
+    if (lapsed > 60) {
+      lapsed = now.diff(then, "m");
+      units = "minutes";
+      if (lapsed > 60) {
+        lapsed = now.diff(then, "h");
+        units = "hours";
+        if (lapsed > 24) {
+          lapsed = now.diff(then, "d");
+          units = "days";
+          if (lapsed > 31) {
+            lapsed = now.diff(then, "M");
+            units = "months";
+            if (lapsed > 31) {
+              lapsed = now.diff(then, "y");
+              units = "years";
+            }
+          }
+        }
+      }
+    }
+
+    return `${lapsed} ${units}`;
+  }
   // toggleTextWrapping = (wrapped) => {
   //   this.setState({ isTextWrapped: !this.state.isTextWrapped });
   // }
@@ -75,13 +109,12 @@ class NotificationWindow extends Component {
   }
 
   archive_message = (event) => {
-    console.log("== archive_message == e", event.target)
-    console.log("== archive_message == e", event.target.dataset.message)
-    console.log("== archive_message == e", event.target.parentNode.getAttribute('data-message'))
-    if (event.target) {
-      // const message = event.target.getAttribute('data-message');
-      // message.archived = message.archived === 0 ? 1 : 0
-    }
+    console.log("== archive_message == e", event.currentTarget.dataset.message.id)
+    // if (event.currentTarget.dataset.message) {
+    //   const message = event.currentTarget.dataset.message;
+    //   message.archived = message.archived === 0 ? 1 : 0
+    //   this.setState({ messages: this.state.messages });
+    // }
   }
 
   message_background = (message) => {
@@ -90,6 +123,14 @@ class NotificationWindow extends Component {
     } else {
       return ("inherit")
     }
+  }
+
+  delete_message = (event) => {
+    console.log("== delete_message == e", event.currentTarget.dataset.message)
+  }
+
+  dd = (event) => {
+    console.log("== dd == e", event.currentTarget.dataset.message)
   }
 
   render() {
@@ -125,8 +166,14 @@ class NotificationWindow extends Component {
               <ListItem
                 key={message.id}
                 secondaryAction={
-                  <IconButton edge="end" aria-label="comments" size={"small"} >
-                    <DeleteIcon />
+                  <IconButton
+                    edge="end"
+                    aria-label="comments"
+                    size={"small"}
+                    data-message={message}
+                    onClick={this.delete_message}
+                  >
+                    <DeleteIcon/>
                   </IconButton>
                 }
                 disablePadding
@@ -155,12 +202,12 @@ class NotificationWindow extends Component {
                     secondary={
                       <React.Fragment>
                         <Typography
-                          sx={{ display: 'inline' }}
+                          sx={{display: 'inline'}}
                           component="span"
                           variant="body2"
                           color="text.secondary"
                         >
-                          {message.timestamp}
+                          {this.since(message.timestamp)} ago
                         </Typography>
                         {" — I'll be in your neighborhood doing errands this…"}
                       </React.Fragment>
