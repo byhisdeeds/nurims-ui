@@ -39,12 +39,12 @@ class NotificationWindow extends Component {
 
   since = (date) => {
     const now = dayjs()
-    const then = dayjs("2023-10-12T12:03:45")
+    const then = dayjs(date)
     console.log("NOW=", now.toISOString())
     console.log("THEN=", then.toISOString())
     console.log("DIFF=", now.diff(then, "d"))
 
-    // Find the right measure
+    // Find the right difference measure
     // How many seconds ago
     let lapsed = now.diff(then, "s");
     let units = "seconds";
@@ -109,12 +109,19 @@ class NotificationWindow extends Component {
   }
 
   archive_message = (event) => {
-    console.log("== archive_message == e", event.currentTarget.dataset.message.id)
-    // if (event.currentTarget.dataset.message) {
-    //   const message = event.currentTarget.dataset.message;
-    //   message.archived = message.archived === 0 ? 1 : 0
-    //   this.setState({ messages: this.state.messages });
-    // }
+    console.log("== archive_message == id", event.target)
+    console.log("== archive_message == id", event.currentTarget)
+    if (event.currentTarget.dataset.message) {
+      const id = event.currentTarget.dataset.message;
+      const messages = this.state.messages;
+      for (const message in messages) {
+        if (message.id === id) {
+          message.archived = 1;
+          break;
+        }
+      }
+      this.setState({ messages: messages });
+    }
   }
 
   message_background = (message) => {
@@ -126,7 +133,7 @@ class NotificationWindow extends Component {
   }
 
   delete_message = (event) => {
-    console.log("== delete_message == e", event.currentTarget.dataset.message)
+    console.log("== delete_message == id", event.currentTarget.dataset.message)
   }
 
   dd = (event) => {
@@ -170,7 +177,7 @@ class NotificationWindow extends Component {
                     edge="end"
                     aria-label="comments"
                     size={"small"}
-                    data-message={message}
+                    data-message={message.id}
                     onClick={this.delete_message}
                   >
                     <DeleteIcon/>
@@ -181,20 +188,11 @@ class NotificationWindow extends Component {
               >
                 <ListItemButton
                   dense
-                  data-message={message}
+                  data-message={message.id}
                   onClick={this.archive_message}
                 >
                   <ListItemIcon>
                     {this.sender_icon(message)}
-                    {/*<Checkbox*/}
-                    {/*  edge="start"*/}
-                    {/*  checked={false}*/}
-                    {/*  tabIndex={-1}*/}
-                    {/*  disableRipple*/}
-                    {/*  inputProps={{*/}
-                    {/*    'aria-labelledby': labelId*/}
-                    {/*  }}*/}
-                    {/*/>*/}
                   </ListItemIcon>
                   <ListItemText
                     id={labelId}
@@ -202,7 +200,7 @@ class NotificationWindow extends Component {
                     secondary={
                       <React.Fragment>
                         <Typography
-                          sx={{display: 'inline'}}
+                          sx={{display: 'inline', fontStyle: 'italic'}}
                           component="span"
                           variant="body2"
                           color="text.secondary"
