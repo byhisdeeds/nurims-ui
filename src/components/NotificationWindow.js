@@ -27,8 +27,8 @@ class NotificationWindow extends Component {
       isTextWrapped: true,
       logs: "",
       messages: [
-        {timestamp: "2023-10-12T12:03:45", message: "first message", archived: 0},
-        {timestamp: "2023-10-12T12:03:45", message: "second message", archived: 0}
+        {id: 1, timestamp: "2023-10-12T12:03:45", message: "first message", archived: 0},
+        {id: 2, timestamp: "2023-10-12T12:03:45", message: "second message", archived: 0}
       ],
     };
     this.Module = NOTIFICATIONS_REF;
@@ -92,11 +92,11 @@ class NotificationWindow extends Component {
         }}
       >
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((value) => {
-            const labelId = `checkbox-list-label-${value}`;
+          {messages.map((message) => {
+            const labelId = `checkbox-list-label-${message.id}`;
             return (
               <ListItem
-                key={value}
+                key={message.id}
                 secondaryAction={
                   <IconButton edge="end" aria-label="comments" size={"small"}>
                     <DeleteIcon />
@@ -118,7 +118,7 @@ class NotificationWindow extends Component {
                   </ListItemIcon>
                   <ListItemText
                     id={labelId}
-                    primary={`Line item as asdf adf a asf a fas f fa f  fa f f a  ${value + 1}`}
+                    primary={message.message}
                     secondary={
                       <React.Fragment>
                         <Typography
@@ -127,7 +127,7 @@ class NotificationWindow extends Component {
                           variant="body2"
                           color="text.primary"
                         >
-                          Ali Connors
+                          {message.ts}
                         </Typography>
                         {" — I'll be in your neighborhood doing errands this…"}
                       </React.Fragment>
