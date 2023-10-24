@@ -15,6 +15,8 @@ import {
   withTheme
 } from "@mui/styles";
 import CommentIcon from '@mui/icons-material/Comment'
+import EmailIcon from '@mui/icons-material/Email';
+import MarkEmailUnreadIcon from '@mui/icons-material/MarkEmailUnread';
 import DeleteIcon from '@mui/icons-material/HighlightOff';
 
 const NOTIFICATIONS_REF = "Notifications";
@@ -27,8 +29,8 @@ class NotificationWindow extends Component {
       isTextWrapped: true,
       logs: "",
       messages: [
-        {id: 1, timestamp: "2023-10-12T12:03:45", message: "first message", archived: 0},
-        {id: 2, timestamp: "2023-10-12T12:03:45", message: "second message", archived: 0}
+        {id: 1, timestamp: "2023-10-12T12:03:45", message: "first message", archived: 0, sender: "__sys__"},
+        {id: 2, timestamp: "2023-10-12T12:03:45", message: "second message", archived: 0, sender: "__sys__"}
       ],
     };
     this.Module = NOTIFICATIONS_REF;
@@ -65,6 +67,31 @@ class NotificationWindow extends Component {
   //   setScroll(scrollType);
   // };
 
+  sender_icon = (message) => {
+    if (message.sender === "__sys__") {
+      return (<EmailIcon />)
+    }
+    return (<MarkEmailUnreadIcon />)
+  }
+
+  archive_message = (event) => {
+    console.log("== archive_message == e", event.target)
+    console.log("== archive_message == e", event.target.dataset.message)
+    console.log("== archive_message == e", event.target.parentNode.getAttribute('data-message'))
+    if (event.target) {
+      // const message = event.target.getAttribute('data-message');
+      // message.archived = message.archived === 0 ? 1 : 0
+    }
+  }
+
+  message_background = (message) => {
+    if (message.archived === 0) {
+      return ("red")
+    } else {
+      return ("inherit")
+    }
+  }
+
   render() {
     const {anchorEl, id, visible, onClose, width, height, theme} = this.props;
     const {messages, isTextWrapped, scrollToRow} = this.state;
@@ -98,23 +125,29 @@ class NotificationWindow extends Component {
               <ListItem
                 key={message.id}
                 secondaryAction={
-                  <IconButton edge="end" aria-label="comments" size={"small"}>
+                  <IconButton edge="end" aria-label="comments" size={"small"} >
                     <DeleteIcon />
                   </IconButton>
                 }
                 disablePadding
+                sx={{bgcolor: this.message_background(message)}}
               >
-                <ListItemButton dense>
+                <ListItemButton
+                  dense
+                  data-message={message}
+                  onClick={this.archive_message}
+                >
                   <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={false}
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{
-                        'aria-labelledby': labelId
-                      }}
-                    />
+                    {this.sender_icon(message)}
+                    {/*<Checkbox*/}
+                    {/*  edge="start"*/}
+                    {/*  checked={false}*/}
+                    {/*  tabIndex={-1}*/}
+                    {/*  disableRipple*/}
+                    {/*  inputProps={{*/}
+                    {/*    'aria-labelledby': labelId*/}
+                    {/*  }}*/}
+                    {/*/>*/}
                   </ListItemIcon>
                   <ListItemText
                     id={labelId}
@@ -125,9 +158,9 @@ class NotificationWindow extends Component {
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="body2"
-                          color="text.primary"
+                          color="text.secondary"
                         >
-                          {message.ts}
+                          {message.timestamp}
                         </Typography>
                         {" — I'll be in your neighborhood doing errands this…"}
                       </React.Fragment>
@@ -147,11 +180,13 @@ NotificationWindow.propTypes = {
   visible: PropTypes.bool.isRequired,
   anchorEl: PropTypes.element.isRequired,
   onClose: PropTypes.func,
+  send: PropTypes.func,
   width: PropTypes.number,
   height: PropTypes.number,
 }
 
 NotificationWindow.defaultProps = {
+  send: () => {},
   onClose: () => {},
   width: 300,
   height: 200,

@@ -513,6 +513,7 @@ class App extends React.Component {
                     ref={this.notificationRef}
                     anchorEl={notification_window_anchor}
                     id={"notification-window"}
+                    send={this.send}
                     onClose={this.closeNotificationWindow}
                     visible={notification_window_visible}
                     width={300}
