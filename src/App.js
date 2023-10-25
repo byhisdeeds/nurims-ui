@@ -293,20 +293,18 @@ class App extends React.Component {
         if (this.notificationRef.current) {
           if (data.response.hasOwnProperty("notifications")) {
             this.notificationRef.current.updateMessages(data.response.notifications);
-            if (data.response.notifications.hasOwnProperty("messages")) {
-              let count = 0;
-              for (const m of data.response.notifications.messages) {
-                if (m.archived === 0) {
-                  count++;
-                }
+            let count = 0;
+            for (const m of data.response.notifications) {
+              if (m.archived === 0) {
+                count++;
               }
-              this.setState(pstate => {
-                return {
-                  num_unread_messages: count,
-                  num_messages: data.response.notifications.messages.length,
-                }
-              });
             }
+            this.setState(pstate => {
+              return {
+                num_unread_messages: count,
+                num_messages: data.response.notifications.length,
+              }
+            });
           }
         }
       } else if (data.hasOwnProperty('module')) {
@@ -450,8 +448,8 @@ class App extends React.Component {
     this.setState({notification_window_visible: false});
   }
 
-  onChangeUnreadMessages = (badge_content) => {
-    this.setState({num_unread_messages: badge_content});
+  onChangeUnreadMessages = (num_unread_messages) => {
+    this.setState({num_unread_messages: num_unread_messages});
   }
 
   onChangeNumMessages = (num_messages) => {

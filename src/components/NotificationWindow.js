@@ -42,8 +42,9 @@ class NotificationWindow extends Component {
   }
 
   since = (date) => {
-    const now = dayjs(new Date())
-    const then = dayjs(date)
+    console.log("DATE=", date)
+    const now = dayjs()
+    const then = dayjs(date+"Z")
     console.log("NOW=", now.toISOString())
     console.log("THEN=", then.toISOString())
     console.log("DIFF=", now.diff(then, "s"))
@@ -240,8 +241,8 @@ NotificationWindow.propTypes = {
   visible: PropTypes.bool.isRequired,
   anchorEl: PropTypes.element.isRequired,
   onClose: PropTypes.func,
-  onChangeUnreadMessages: PropTypes.func,
-  onChangeNumMessages: PropTypes.func,
+  onChangeUnreadMessages: PropTypes.func.isRequired,
+  onChangeNumMessages: PropTypes.func.isRequired,
   send: PropTypes.func,
   width: PropTypes.number,
   height: PropTypes.number,

@@ -182,8 +182,6 @@ LogWindowButton.propTypes = {
 
 export function NotificationsButton(props) {
   const theme = useTheme();
-  console.log("== NotificationsButton props.numMessages: ", props.numMessages)
-  console.log("== NotificationsButton props.numUnreadMessages: ", props.numUnreadMessages)
   return (
     <Badge
       sx={{
@@ -195,9 +193,9 @@ export function NotificationsButton(props) {
       onClick={props.onClick}
       badgeContent={props.numUnreadMessages}
       showZero={false}
+      overlap={"circular"}
       color={props.numMessages > 0 ? "primary" : "secondary"}
     >
-      {/*<Typography fontSize="xl">🔔</Typography>*/}
       <NotificationsIcon
         sx={{color: props.numUnreadMessages === 0 ? props.numMessages === 0 ? "#7e7d7d" : "#ffcd8f" : "#7887fa"}}
       />
