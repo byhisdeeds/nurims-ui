@@ -23,6 +23,7 @@ import {
   ConsoleLog,
   UserContext
 } from "../utils/UserContext";
+import {CMD_DELETE_USER_NOTIFICATION_MESSAGE, CMD_GET_USER_NOTIFICATION_MESSAGES} from "../utils/constants";
 
 
 const NOTIFICATIONS_REF = "Notifications";
@@ -128,8 +129,12 @@ class NotificationWindow extends Component {
       const id = Number.parseInt(event.currentTarget.dataset.message);
       const messages = this.state.messages;
       for (const message of messages) {
-        if (message.id !== id) {
-          console.log("== delete ==", message)
+        if (message.id === id) {
+          this.props.send({
+            cmd: CMD_DELETE_USER_NOTIFICATION_MESSAGE,
+            id: message.id,
+          }, false);
+        } else {
           _messages.push(message);
         }
       }
