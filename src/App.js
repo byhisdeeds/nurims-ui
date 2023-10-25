@@ -25,7 +25,7 @@ import {
   CMD_SET_SYSTEM_PROPERTIES,
   CMD_BACKGROUND_TASKS,
   CMD_PING,
-  CMD_GET_SERVER_INFO
+  CMD_GET_SERVER_INFO, CMD_GET_USER_NOTIFICATION_MESSAGES
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -137,7 +137,8 @@ class App extends React.Component {
       log_window_visible: false,
       notification_window_visible: false,
       notification_window_anchor: null,
-      notification_badge_content: "new",
+      num_unread_messages: 0,
+      num_messages: 0,
     };
     this.debug = window.location.href.includes("debug");
     this.properties = [];
@@ -252,6 +253,10 @@ class App extends React.Component {
       this.send({
         cmd: CMD_GET_SERVER_INFO,
       }, false)
+      // get user notification messages
+      this.send({
+        cmd: CMD_GET_USER_NOTIFICATION_MESSAGES,
+      }, false);
     };
     this.ws.onerror = (error) => {
       ConsoleLog("App", "ws.onerror", error);
@@ -284,6 +289,26 @@ class App extends React.Component {
         if (this.sysinfoRef.current) {
           this.sysinfoRef.current.setServerInfo(data.response);
         }
+      } else if (data.cmd === CMD_GET_USER_NOTIFICATION_MESSAGES) {
+        if (this.notificationRef.current) {
+          if (data.response.hasOwnProperty("notifications")) {
+            this.notificationRef.current.updateMessages(data.response.notifications);
+            if (data.response.notifications.hasOwnProperty("messages")) {
+              let count = 0;
+              for (const m of data.response.notifications.messages) {
+                if (m.archived === 0) {
+                  count ++;
+                }
+              }
+              this.setState(pstate => {
+                return {
+                  num_unread_messages: count,
+                  num_messages: data.response.notifications.messages.length,
+                }
+              });
+            }
+          }
+        }
       } else if (data.hasOwnProperty('module')) {
         for (const [k, v] of Object.entries(this.crefs)) {
           if (k === data.module) {
@@ -310,7 +335,9 @@ class App extends React.Component {
         return;
       }
       if (data.show_busy) {
-        this.setState({busy: this.state.busy - 1});
+        this.setState(pstate => {
+          return {busy: this.state.busy - 1}
+        });
       }
     };
   }
@@ -423,17 +450,21 @@ class App extends React.Component {
     this.setState({notification_window_visible: false});
   }
 
-  changeNotificationStatus = (badge_content) => {
-    this.setState({notification_badge_content: badge_content});
+  onChangeUnreadMessages = (badge_content) => {
+    this.setState({num_unread_messages: badge_content});
+  }
+
+  onChangeNumMessages = (num_messages) => {
+    this.setState({num_messages: num_messages});
   }
 
   render() {
-    const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active, notification_badge_content,
-      log_window_visible, notification_window_visible, notification_window_anchor} = this.state;
+    const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active, num_unread_messages,
+      log_window_visible, notification_window_visible, notification_window_anchor, num_messages} = this.state;
     const isSysadmin = isValidUserRole(this.user, "sysadmin");
     if (this.debug) {
       ConsoleLog("App", "render", "actionid", actionid, "busy", busy,
-        "notification_badge_content", notification_badge_content)
+        "num_unread_messages", num_unread_messages, "num_messages", num_messages)
     }
     return (
       <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
@@ -467,7 +498,8 @@ class App extends React.Component {
                 <LogWindowButton onClick={this.toggleLogWindow}/>
                 {isSysadmin && <SystemInfoBadges ref={this.sysinfoRef}/>}
                 <NotificationsButton
-                  badgeContent={notification_badge_content}
+                  numMessages={num_messages}
+                  numUnreadMessages={num_unread_messages}
                   id={"notification-window"}
                   onClick={this.toggleNotificationsWindow}
                 />
@@ -520,7 +552,8 @@ class App extends React.Component {
                     id={"notification-window"}
                     send={this.send}
                     onClose={this.closeNotificationWindow}
-                    onChange={this.changeNotificationStatus}
+                    onChangeUnreadMessages={this.onChangeUnreadMessages}
+                    onChangeNumMessages={this.onChangeNumMessages}
                     visible={notification_window_visible}
                     width={500}
                     height={600}

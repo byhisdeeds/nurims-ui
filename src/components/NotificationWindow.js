@@ -5,11 +5,12 @@ import {
   Popover,
   ListItemButton,
   ListItemIcon,
-  List,
   Checkbox,
   IconButton,
   ListItem,
-  ListItemText, Typography
+  List,
+  ListItemText,
+  Typography
 } from "@mui/material";
 import {
   withTheme
@@ -23,6 +24,7 @@ import {
   UserContext
 } from "../utils/UserContext";
 
+
 const NOTIFICATIONS_REF = "Notifications";
 
 class NotificationWindow extends Component {
@@ -33,14 +35,16 @@ class NotificationWindow extends Component {
     this.state = {
       messages: [
         {
-          id: 1,
+          index: 1,
+          id: 441,
           timestamp: "2023-10-12T12:03:45",
           message: "Reading drm-971098-2022-01-03.json for radiation monitoring data ...",
           archived: 0,
           sender: "__sys__"
         },
         {
-          id: 2,
+          index: 2,
+          id: 442,
           timestamp: "2023-10-12T12:03:45",
           message: "Events discovery between January and December, 2022 found 122 run(s) in 4 hours, 44 minutes and 52 seconds",
           archived: 0,
@@ -49,7 +53,6 @@ class NotificationWindow extends Component {
       ],
     };
     this.Module = NOTIFICATIONS_REF;
-    this.messagesRef = React.createRef();
   }
 
   since = (date) => {
@@ -105,9 +108,7 @@ class NotificationWindow extends Component {
         }
         count += message.archived === 0 ? 1 : 0;
       }
-      if (count === 0) {
-        this.props.onChange("");
-      }
+      this.props.onChangeUnreadMessages(count);
       this.setState({messages: messages});
     }
   }
@@ -128,17 +129,37 @@ class NotificationWindow extends Component {
       const messages = this.state.messages;
       for (const message of messages) {
         if (message.id !== id) {
+          console.log("== delete ==", message)
           _messages.push(message);
-          break;
         }
       }
+      this.props.onChangeNumMessages(_messages.length);
       this.setState({messages: _messages});
     }
   }
 
-  updateMessages = (msg) => {
+  updateMessages = (notifications) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "updateMessages", "messages", msg);
+      ConsoleLog(this.Module, "updateMessages", "notifications", notifications);
+    }
+    if (notifications.user === this.context.user.profile.id) {
+      if (notifications.hasOwnProperty("messages") && Array.isArray(notifications.messages)) {
+        // Append messages to user messages list
+        const messages = this.state.messages;
+        for (const m of notifications.messages) {
+          let found = false;
+          for (const message of messages) {
+            if (message.id === m.id) {
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            messages.push(m);
+          }
+        }
+        this.setState({messages: messages});
+      }
     }
   }
 
@@ -170,10 +191,10 @@ class NotificationWindow extends Component {
       >
         <List sx={{width: '100%'}}>
           {messages.map((message) => {
-            const labelId = `checkbox-list-label-${message.id}`;
+            const labelId = `checkbox-list-label-${message.index}`;
             return (
               <ListItem
-                key={message.id}
+                key={message.index}
                 secondaryAction={
                   <IconButton
                     edge="end"
@@ -233,7 +254,8 @@ NotificationWindow.propTypes = {
   visible: PropTypes.bool.isRequired,
   anchorEl: PropTypes.element.isRequired,
   onClose: PropTypes.func,
-  onChange: PropTypes.func,
+  onChangeUnreadMessages: PropTypes.func,
+  onChangeNumMessages: PropTypes.func,
   send: PropTypes.func,
   width: PropTypes.number,
   height: PropTypes.number,

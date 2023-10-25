@@ -58,6 +58,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import SaveIcon from "@mui/icons-material/Save";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import {
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
@@ -182,19 +183,6 @@ LogWindowButton.propTypes = {
 export function NotificationsButton(props) {
   const theme = useTheme();
   return (
-    // <Tooltip title="View user notifications">
-    //   <NotificationImportant
-    //     sx={{
-    //       color: theme.palette.text.disabled,
-    //       paddingLeft: '10px',
-    //       marginLeft: '10px',
-    //       width: 32,
-    //       height: 32
-    //     }}
-    //     aria-describedby={props.id}
-    //     onClick={props.onClick}
-    //   />
-    // </Tooltip>
     <Badge
       sx={{
         marginLeft: "10px",
@@ -202,11 +190,14 @@ export function NotificationsButton(props) {
       }}
       aria-describedby={props.id}
       onClick={props.onClick}
-      badgeContent={props.badgeContent}
+      badgeContent={props.numUnreadMessages}
       showZero={false}
-      color={props.badgeContent && props.badgeContent.length === 0 ? "primary" : "secondary"}
+      // color={props.badgeContent === 0 ? "primary" : "secondary"}
     >
-      <NotificationImportant />
+      {/*<Typography fontSize="xl">🔔</Typography>*/}
+      <NotificationsIcon
+        sx={{color: props.numUnreadMessages === 0 ? props.numMessages === 0 ? "#7e7d7d" : "#ffcd8f" : "#7887fa"}}
+      />
     </Badge>
   )
 }
@@ -214,7 +205,8 @@ export function NotificationsButton(props) {
 NotificationsButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
-  badgeContent: PropTypes.string.isRequired
+  numUnreadMessages: PropTypes.number.isRequired,
+  numMessages: PropTypes.number.isRequired
 }
 
 export function BasePaper(props) {

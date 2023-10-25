@@ -10,7 +10,9 @@ import "leaflet/dist/leaflet.css";
 import {
   getDateFromDateString,
   getNextItemId,
-  getRecordMetadataValue, new_record, removeMetadataField,
+  getRecordMetadataValue,
+  new_record,
+  removeMetadataField,
   setMetadataValue,
   toBoolean,
 } from "../../utils/MetadataUtils";

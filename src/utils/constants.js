@@ -148,6 +148,8 @@ module.exports = Object.freeze({
 
   CMD_GET_PROVENANCE_RECORDS: "get_provenance_records",
 
+  CMD_GET_USER_NOTIFICATION_MESSAGES: "get_user_notification_messages",
+
   CMD_BOT_MESSAGE_SEND: "bot_message_send",
 
   METADATA: 'metadata',
