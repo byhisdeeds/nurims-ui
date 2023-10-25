@@ -178,10 +178,10 @@ class NotificationWindow extends Component {
       >
         <List sx={{width: '100%'}}>
           {messages.map((message) => {
-            const labelId = `checkbox-list-label-${message.index}`;
+            const labelId = `checkbox-list-label-${message.id}`;
             return (
               <ListItem
-                key={message.index}
+                key={message.id}
                 secondaryAction={
                   <IconButton
                     edge="end"

@@ -197,7 +197,7 @@ export function NotificationsButton(props) {
       color={props.numMessages > 0 ? "primary" : "secondary"}
     >
       <NotificationsIcon
-        sx={{color: props.numUnreadMessages === 0 ? props.numMessages === 0 ? "#7e7d7d" : "#ffcd8f" : "#7887fa"}}
+        sx={{color: props.numUnreadMessages === 0 ? props.numMessages === 0 ? "#7e7d7d" : "#e3c492" : "#4d7588"}}
       />
     </Badge>
   )
