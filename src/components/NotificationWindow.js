@@ -5,7 +5,6 @@ import {
   Popover,
   ListItemButton,
   ListItemIcon,
-  Checkbox,
   IconButton,
   ListItem,
   List,
@@ -23,7 +22,10 @@ import {
   ConsoleLog,
   UserContext
 } from "../utils/UserContext";
-import {CMD_DELETE_USER_NOTIFICATION_MESSAGE, CMD_GET_USER_NOTIFICATION_MESSAGES} from "../utils/constants";
+import {
+  CMD_DELETE_USER_NOTIFICATION_MESSAGE,
+  CMD_GET_USER_NOTIFICATION_MESSAGES
+} from "../utils/constants";
 
 
 const NOTIFICATIONS_REF = "Notifications";
@@ -34,34 +36,17 @@ class NotificationWindow extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: [
-        {
-          index: 1,
-          id: 441,
-          timestamp: "2023-10-12T12:03:45",
-          message: "Reading drm-971098-2022-01-03.json for radiation monitoring data ...",
-          archived: 0,
-          sender: "__sys__"
-        },
-        {
-          index: 2,
-          id: 442,
-          timestamp: "2023-10-12T12:03:45",
-          message: "Events discovery between January and December, 2022 found 122 run(s) in 4 hours, 44 minutes and 52 seconds",
-          archived: 0,
-          sender: "__sys__"
-        }
-      ],
+      messages: [],
     };
     this.Module = NOTIFICATIONS_REF;
   }
 
   since = (date) => {
-    const now = dayjs()
+    const now = dayjs(new Date())
     const then = dayjs(date)
-    // console.log("NOW=", now.toISOString())
-    // console.log("THEN=", then.toISOString())
-    // console.log("DIFF=", now.diff(then, "d"))
+    console.log("NOW=", now.toISOString())
+    console.log("THEN=", then.toISOString())
+    console.log("DIFF=", now.diff(then, "s"))
 
     // Find the right difference measure
     // How many seconds ago
@@ -143,29 +128,25 @@ class NotificationWindow extends Component {
     }
   }
 
-  updateMessages = (notifications) => {
+  updateMessages = (messages) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "updateMessages", "notifications", notifications);
+      ConsoleLog(this.Module, "updateMessages", "messages", messages);
     }
-    if (notifications.user === this.context.user.profile.id) {
-      if (notifications.hasOwnProperty("messages") && Array.isArray(notifications.messages)) {
-        // Append messages to user messages list
-        const messages = this.state.messages;
-        for (const m of notifications.messages) {
-          let found = false;
-          for (const message of messages) {
-            if (message.id === m.id) {
-              found = true;
-              break;
-            }
-          }
-          if (!found) {
-            messages.push(m);
-          }
+    // Append messages to user messages list
+    const _messages = this.state.messages;
+    for (const m of messages) {
+      let found = false;
+      for (const message of _messages) {
+        if (message.id === m.id) {
+          found = true;
+          break;
         }
-        this.setState({messages: messages});
+      }
+      if (!found) {
+        _messages.push(m);
       }
     }
+    this.setState({messages: _messages});
   }
 
   render() {

@@ -297,7 +297,7 @@ class App extends React.Component {
               let count = 0;
               for (const m of data.response.notifications.messages) {
                 if (m.archived === 0) {
-                  count ++;
+                  count++;
                 }
               }
               this.setState(pstate => {

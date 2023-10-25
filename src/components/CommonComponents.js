@@ -182,17 +182,20 @@ LogWindowButton.propTypes = {
 
 export function NotificationsButton(props) {
   const theme = useTheme();
+  console.log("== NotificationsButton props.numMessages: ", props.numMessages)
+  console.log("== NotificationsButton props.numUnreadMessages: ", props.numUnreadMessages)
   return (
     <Badge
       sx={{
         marginLeft: "10px",
         paddingLeft: "10px"
       }}
+      variant={"dot"}
       aria-describedby={props.id}
       onClick={props.onClick}
       badgeContent={props.numUnreadMessages}
       showZero={false}
-      // color={props.badgeContent === 0 ? "primary" : "secondary"}
+      color={props.numMessages > 0 ? "primary" : "secondary"}
     >
       {/*<Typography fontSize="xl">🔔</Typography>*/}
       <NotificationsIcon
