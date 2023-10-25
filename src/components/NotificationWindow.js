@@ -44,7 +44,7 @@ class NotificationWindow extends Component {
   since = (date) => {
     console.log("DATE=", date)
     const now = dayjs()
-    const then = dayjs(date+"Z")
+    const then = dayjs(date)
     console.log("NOW=", now.toISOString())
     console.log("THEN=", then.toISOString())
     console.log("DIFF=", now.diff(then, "s"))
