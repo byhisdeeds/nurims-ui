@@ -5,10 +5,10 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
+  DialogTitle, FormControl,
   FormControlLabel,
   Grid,
-  IconButton,
+  IconButton, InputLabel, MenuItem, Select,
   Switch,
 } from "@mui/material";
 import {
@@ -21,6 +21,7 @@ import {SameYearDateRangePicker} from "./CommonComponents";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import PdfViewer from "./PdfViewer";
+import {ConsoleLog} from "../utils/UserContext";
 
 
 export const ConfirmRemoveRecordDialog = (props) => (
@@ -202,6 +203,118 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
 }
 
 ConfirmOperatingRunDiscoveryDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onProceed: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+}
+
+
+export const ConfirmGenerateReactorOperationReportDialog = (props) => {
+  const [year, setYear] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [reportType, setReportType] = useState("summary");
+  const [forceOverwrite, setForceOverwrite] = useState(false);
+
+  const handleToDateRangeChange = (range) => {
+    console.log("handleToDateRangeChange", range)
+    setEndDate(range);
+  }
+
+  const handleFromDateRangeChange = (range) => {
+    console.log("handleFromDateRangeChange", range)
+    setStartDate(range);
+  }
+
+  const handleYearDateRangeChange = (year) => {
+    console.log("handleYearDateRangeChange", year)
+    setYear(year);
+  }
+
+  const onForceOverwriteChange = (e) => {
+    setForceOverwrite(e.target.checked)
+  }
+
+  const onReportTypeChange = (e) => {
+    console.log("onReportTypeChange", e.target.value)
+    this.setState({reportType: e.target.value});
+  }
+
+  return (
+    <div>
+      <Dialog
+        open={props.open}
+        onClose={props.onCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Discover reactor operation runs"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Reactor operation reports can be generated in either a summary or detailed format. The
+            summary report lists the number of operating runs and their duration for the selected period,
+            while the detailed report includes graphs on the neutron flux, core temperatures, and
+            radiation levels experienced during the runs.
+            <p/><p/>
+            Select a year and month range for the operating period, and the type of report required.
+            <p/>
+          </DialogContentText>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <SameYearDateRangePicker
+                startText="Start Date"
+                endText="End Date"
+                from={startDate}
+                to={endDate}
+                year={year}
+                disabled={false}
+                onYearChange={handleYearDateRangeChange}
+                onToChange={handleToDateRangeChange}
+                onFromChange={handleFromDateRangeChange}
+                renderInput={(startProps, endProps) => (
+                  <React.Fragment>
+                    <TextField {...startProps}/>
+                    <Box sx={{mx: 1}}>to</Box>
+                    <TextField {...endProps}/>
+                  </React.Fragment>
+                )}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl style={{paddingRight: 8, marginTop: 8,}} variant="outlined">
+                <InputLabel id="report-type-select-label">Report Type</InputLabel>
+                <Select
+                  labelId="report-type-select-label"
+                  id="report-access"
+                  value={reportType}
+                  label="Report Type"
+                  onChange={onReportTypeChange}
+                >
+                  <MenuItem value={'summary'}>Reactor Operations Summary</MenuItem>
+                  <MenuItem value={'detailed'}>Detailed Reactor Operations</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <FormControlLabel
+            control={<Switch onChange={onForceOverwriteChange} checked={forceOverwrite} color="primary" />}
+            label="Overwrite existing report if found."
+            labelPlacement="start"
+          />
+          <Box sx={{flexGrow: 1}} />
+          <Button onClick={props.onCancel}>Cancel</Button>
+          <Button onClick={() => props.onProceed(year, startDate, endDate, reportType, forceOverwrite)} autoFocus>Continue</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  )
+}
+
+ConfirmGenerateReactorOperationReportDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onProceed: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,

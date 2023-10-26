@@ -17,7 +17,11 @@ import {
 import dayjs from 'dayjs';
 import EmailIcon from '@mui/icons-material/Email';
 import MarkEmailUnreadIcon from '@mui/icons-material/MarkEmailUnread';
+import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
 import DeleteIcon from '@mui/icons-material/HighlightOff';
+import WarningIcon from '@mui/icons-material/Warning';
+import ErrorIcon from '@mui/icons-material/Error';
+import InfoIcon from '@mui/icons-material/Info';
 import {
   ConsoleLog,
   UserContext
@@ -77,11 +81,16 @@ class NotificationWindow extends Component {
     return `${lapsed} ${units}`;
   }
 
-  sender_icon = (message) => {
-    if (message.sender === "__sys__") {
-      return (<EmailIcon />)
+  message_icon = (message) => {
+    if (message.level === 0) {
+      return (<InfoIcon color={"success"}/>)
+    } else if (message.level === 1) {
+      return (<WarningIcon color={"action"}/>)
+    } else if (message.level === 2) {
+      return (<ErrorOutlinedIcon color={"error"}/>)
+    } else {
+      return (<EmailIcon color={"primary"}/>)
     }
-    return (<MarkEmailUnreadIcon />)
   }
 
   archive_message = (event) => {
@@ -202,7 +211,7 @@ class NotificationWindow extends Component {
                   onClick={this.archive_message}
                 >
                   <ListItemIcon>
-                    {this.sender_icon(message)}
+                    {this.message_icon(message)}
                   </ListItemIcon>
                   <ListItemText
                     id={labelId}

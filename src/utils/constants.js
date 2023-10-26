@@ -122,6 +122,8 @@ module.exports = Object.freeze({
   CMD_DELETE_USER_RECORD: "delete_user_record",
 
   CMD_DISCOVER_REACTOR_OPERATION_RUNS: "discover_reactor_operation_runs",
+  CMD_GET_REACTOR_OPERATING_REPORT_RECORDS: "get_reactor_operating_report_records",
+  CMD_DELETE_REACTOR_OPERATING_REPORT_RECORD: "delete_reactor_operating_report_record",
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS: "get_reactor_operation_run_records",
   CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD: "update_sample_irradiation_log_record",
 

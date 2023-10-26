@@ -543,7 +543,7 @@ export const MenuItems = [
           {
             label: 'Reactor Operations',
             value: 'ro.reactor.operations.report',
-            title: 'Reactor Operations Report',
+            title: 'Reactor Operation Reports',
             tooltip: 'Report on reactor operations',
             authmodlevel: 'basic',
           },

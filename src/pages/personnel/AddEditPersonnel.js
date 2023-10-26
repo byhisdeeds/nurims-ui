@@ -206,7 +206,6 @@ class AddEditPersonnel extends BaseRecordManager {
     const {user} = this.props;
     const has_changed_records = this.hasChangedRecords();
     const isSysadmin = isValidUserRole(user, "sysadmin");
-
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "has_changed_records", has_changed_records,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection,
