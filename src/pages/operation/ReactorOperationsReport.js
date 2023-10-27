@@ -29,7 +29,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import {
   enqueueErrorSnackbar,
-  enqueueInfoSnackbar
+  enqueueInfoSnackbar, enqueueSuccessSnackbar
 } from "../../utils/SnackbarVariants";
 import dayjs from 'dayjs';
 import {
@@ -128,6 +128,11 @@ class ReactorOperationsReport extends Component {
               this.listRef.current.setRecords(response["operation"]);
             }
           }
+        } else if (isCommandResponse(message, CMD_DELETE_REACTOR_OPERATING_REPORT_RECORD)) {
+          enqueueSuccessSnackbar(`Record (id: ${response.item_id}) deleted successfully`)
+          if (this.listRef.current) {
+            this.listRef.current.removeRecord(this.state.selection)
+          }
         }
       } else {
         enqueueErrorSnackbar(response.message);
@@ -160,14 +165,7 @@ class ReactorOperationsReport extends Component {
   // }
 
   isSelectableByRoles = (selection, roles, valid_item_id) => {
-    console.log("++++++++++++++++++++++++")
-    console.log("++ SELECTION ++", selection)
-    console.log("++ THIS.CONTEXT.USER ++", this.context.user)
-    console.log("++ ROLES ++", roles)
-    console.log("++ VALID_ITEM_ID ++", valid_item_id, selection.item_id)
-    console.log("++++++++++++++++++++++++")
     for (const r of roles) {
-      console.log("++ isValidUserRole ++", r, isValidUserRole(this.context.user, r))
       if (isValidUserRole(this.context.user, r)) {
         // We have at least one match, now we check for a valid item_id boolean parameter has been specified
         if (valid_item_id) {
