@@ -2,24 +2,16 @@ import React, {Component} from 'react';
 import {
   BLANK_PDF,
   CMD_DELETE_REACTOR_OPERATING_REPORT_RECORD,
-  CMD_DISCOVER_REACTOR_OPERATION_RUNS,
   CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF,
   CMD_GET_PROVENANCE_RECORDS, CMD_GET_REACTOR_OPERATING_REPORT_RECORDS,
-  CMD_GET_REACTOR_OPERATION_RUN_RECORDS, ITEM_ID,
-  NURIMS_OPERATION_DATA_STATS, NURIMS_OPERATION_REPORT,
+  ITEM_ID,
+  NURIMS_OPERATION_REPORT,
   OPERATION_TOPIC,
-  PERSONNEL_TOPIC,
 } from "../../utils/constants";
 import {
   Box,
   Fab,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
   Typography
 } from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
@@ -29,12 +21,10 @@ import {
   messageHasResponse,
   messageStatusOk
 } from "../../utils/WebsocketUtils";
-import {AddEditButtonPanel, SameYearDateRangePicker} from "../../components/CommonComponents";
 import {
   ConsoleLog,
   UserContext
 } from "../../utils/UserContext";
-import AddIcon from "@mui/icons-material/Add";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import {
@@ -47,15 +37,15 @@ import {
   ConfirmRemoveRecordDialog,
   ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
-import OperatingRunReportsList from "./OperatingReportsList";
-import BaseRecordManager from "../../components/BaseRecordManager";
-import {e} from "caniuse-lite/data/browserVersions";
-import {title} from "process";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+// import OperatingRunReportsList from "./OperatingReportsList";
+// import BaseRecordManager from "../../components/BaseRecordManager";
+// import {e} from "caniuse-lite/data/browserVersions";
+// import {title} from "process";
+// import PersonAddIcon from "@mui/icons-material/PersonAdd";
+// import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import SaveIcon from "@mui/icons-material/Save";
+// import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+// import SaveIcon from "@mui/icons-material/Save";
 import {
   isValidUserRole
 } from "../../utils/UserUtils";
@@ -170,7 +160,14 @@ class ReactorOperationsReport extends Component {
   // }
 
   isSelectableByRoles = (selection, roles, valid_item_id) => {
+    console.log("++++++++++++++++++++++++")
+    console.log("++ SELECTION ++", selection)
+    console.log("++ THIS.CONTEXT.USER ++", this.context.user)
+    console.log("++ ROLES ++", roles)
+    console.log("++ VALID_ITEM_ID ++", valid_item_id, selection.item_id)
+    console.log("++++++++++++++++++++++++")
     for (const r of roles) {
+      console.log("++ isValidUserRole ++", r, isValidUserRole(this.context.user, r))
       if (isValidUserRole(this.context.user, r)) {
         // We have at least one match, now we check for a valid item_id boolean parameter has been specified
         if (valid_item_id) {
@@ -231,9 +228,7 @@ class ReactorOperationsReport extends Component {
     }
     if (selection.hasOwnProperty("item_id") && selection.item_id !== -1) {
       const report = getRecordMetadataValue(selection, NURIMS_OPERATION_REPORT, "");
-      if (report.length !== "") {
-        this.setState({pdf: "/nubs/"+report["uri"]});
-      }
+      this.setState({selection: selection, pdf: report.length === "" ? "" : "/nubs/" + report["uri"]});
     }
   }
 
