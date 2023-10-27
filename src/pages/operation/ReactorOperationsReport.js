@@ -30,7 +30,10 @@ import {
   messageStatusOk
 } from "../../utils/WebsocketUtils";
 import {AddEditButtonPanel, SameYearDateRangePicker} from "../../components/CommonComponents";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
 import AddIcon from "@mui/icons-material/Add";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
@@ -40,9 +43,11 @@ import {
 } from "../../utils/SnackbarVariants";
 import dayjs from 'dayjs';
 import {
-  ConfirmGenerateReactorOperationReportDialog, ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog,
+  ConfirmGenerateReactorOperationReportDialog,
+  ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
-import OperatingRunReportsList from "./OperatingRunReportsList";
+import OperatingRunReportsList from "./OperatingReportsList";
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {e} from "caniuse-lite/data/browserVersions";
 import {title} from "process";
@@ -51,8 +56,14 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import SaveIcon from "@mui/icons-material/Save";
-import {isValidUserRole} from "../../utils/UserUtils";
-import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
+import {
+  isValidUserRole
+} from "../../utils/UserUtils";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
+import OperatingReportsList from "./OperatingReportsList";
 
 export const REACTOROPERATIONSREPORT_REF = "ReactorOperationsReport";
 
@@ -92,6 +103,7 @@ class ReactorOperationsReport extends Component {
     this.props.send({
       cmd: CMD_GET_REACTOR_OPERATING_REPORT_RECORDS,
       "include.disabled": include_archived ? "true" : "false",
+      "include.metadata": "true",
       module: this.Module,
     })
     this.setState({include_archived: include_archived});
@@ -213,10 +225,11 @@ class ReactorOperationsReport extends Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
     }
-    // if (selection.hasOwnProperty("item_id") && selection.item_id === -1) {
-    //   if (this.metadataRef.current) {
-    //     this.metadataRef.current.setRecordMetadata(selection)
-    //   }
+    if (selection.hasOwnProperty("item_id") && selection.item_id !== -1) {
+      // if (message.hasOwnProperty("data") && message.data.hasOwnProperty("pdf")) {
+      //   this.setState({pdf: message.data.pdf});
+      // }
+    }
     // } else {
     //   this.setState(pstate => {
     //     return {selection: selection}
@@ -311,7 +324,7 @@ class ReactorOperationsReport extends Component {
             <Typography variant="h5" component="div">{title}</Typography>
           </Grid>
           <Grid item xs={4}>
-            <OperatingRunReportsList
+            <OperatingReportsList
               ref={this.listRef}
               title={"Reactor Operation Reports"}
               properties={this.props.properties}

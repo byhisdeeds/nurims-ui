@@ -3,7 +3,7 @@ import PagedRecordList from "../../components/PagedRecordList";
 import PropTypes from "prop-types";
 import {ITEM_ID, NURIMS_TITLE} from "../../utils/constants";
 
-class OperatingRunList extends React.Component {
+class OperatingReportsList extends React.Component {
   constructor(props) {
     super(props);
     this.ref=React.createRef();
@@ -70,7 +70,7 @@ class OperatingRunList extends React.Component {
   }
 }
 
-OperatingRunList.propTypes = {
+OperatingReportsList.propTypes = {
   ref: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
   onSelection: PropTypes.func.isRequired,
@@ -78,4 +78,4 @@ OperatingRunList.propTypes = {
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
 }
 
-export default OperatingRunList
+export default OperatingReportsList
