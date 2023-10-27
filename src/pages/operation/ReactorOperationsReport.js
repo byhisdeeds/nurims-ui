@@ -6,7 +6,7 @@ import {
   CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF,
   CMD_GET_PROVENANCE_RECORDS, CMD_GET_REACTOR_OPERATING_REPORT_RECORDS,
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS, ITEM_ID,
-  NURIMS_OPERATION_DATA_STATS,
+  NURIMS_OPERATION_DATA_STATS, NURIMS_OPERATION_REPORT,
   OPERATION_TOPIC,
   PERSONNEL_TOPIC,
 } from "../../utils/constants";
@@ -64,6 +64,7 @@ import {
   showProvenanceRecordsViewHelper
 } from "../../utils/ProvenanceUtils";
 import OperatingReportsList from "./OperatingReportsList";
+import {getRecordMetadataValue} from "../../utils/MetadataUtils";
 
 export const REACTOROPERATIONSREPORT_REF = "ReactorOperationsReport";
 
@@ -122,9 +123,11 @@ class ReactorOperationsReport extends Component {
           if (response.message !== "") {
             enqueueInfoSnackbar(response.message);
           }
-          if (message.hasOwnProperty("data") && message.data.hasOwnProperty("pdf")) {
-            this.setState({pdf: message.data.pdf});
-          }
+          // const report = getRecordMetadataValue(record, NURIMS_OPERATION_REPORT, ""));
+          //
+          // if (message.hasOwnProperty("data") && message.data.hasOwnProperty("pdf")) {
+          //   this.setState({pdf: message.data.pdf});
+          // }
         } else if (isCommandResponse(message, CMD_GET_REACTOR_OPERATING_REPORT_RECORDS)) {
           if (this.listRef.current) {
             // this.listRef.current.setRecords(response[this.recordTopic], false);
@@ -226,23 +229,11 @@ class ReactorOperationsReport extends Component {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
     }
     if (selection.hasOwnProperty("item_id") && selection.item_id !== -1) {
-      // if (message.hasOwnProperty("data") && message.data.hasOwnProperty("pdf")) {
-      //   this.setState({pdf: message.data.pdf});
-      // }
+      const report = getRecordMetadataValue(selection, NURIMS_OPERATION_REPORT, "");
+      if (report.length !== "") {
+        this.setState({pdf: "/nubs/"+report["uri"]});
+      }
     }
-    // } else {
-    //   this.setState(pstate => {
-    //     return {selection: selection}
-    //   });
-    //   this.props.send({
-    //     cmd: CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
-    //     item_id: selection.item_id,
-    //     "include.metadata": "true",
-    //     "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
-    //     module: this.Module,
-    //   })
-    // }
-    // this.setState({selection: selection})
   }
 
   removeRecord = () => {

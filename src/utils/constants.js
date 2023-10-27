@@ -254,6 +254,7 @@ module.exports = Object.freeze({
   NURIMS_AMP_MITIGATION_STEPS: "nurims.amp.mitigationsteps",
   NURIMS_AMP_SURVEILLANCE_FREQUENCY: "nurims.amp.surveillancefrequency",
 
+  NURIMS_OPERATION_REPORT: "nurims.operation.report",
   NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER: "nurims.operation.data.irradiationauthorizer",
   NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES: "nurims.operation.data.irradiationsampletypes",
   NURIMS_OPERATION_DATA_IRRADIATIONDURATION: "nurims.operation.data.irradiationduration",
