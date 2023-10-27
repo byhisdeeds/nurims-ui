@@ -61,18 +61,9 @@ class OperatingRunList extends React.Component {
             align: 'left',
             disablePadding: true,
             label: 'Name',
-            width: '60%',
+            width: '90%',
             sortField: true,
-          },
-          {
-            id: "nurims.title.subtitle",
-            align: 'center',
-            disablePadding: true,
-            label: 'Date',
-            width: '30%',
-            sortField: true,
-            format: (v) => {return v.replace("T", " ").substring(0, 19)},
-          },
+          }
         ]}
       />
     )
