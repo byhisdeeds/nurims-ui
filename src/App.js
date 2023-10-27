@@ -25,7 +25,7 @@ import {
   CMD_SET_SYSTEM_PROPERTIES,
   CMD_BACKGROUND_TASKS,
   CMD_PING,
-  CMD_GET_SERVER_INFO, CMD_GET_USER_NOTIFICATION_MESSAGES
+  CMD_GET_SERVER_INFO, CMD_GET_USER_NOTIFICATION_MESSAGES, CMD_DELETE_USER_NOTIFICATION_MESSAGE
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -289,7 +289,7 @@ class App extends React.Component {
         if (this.sysinfoRef.current) {
           this.sysinfoRef.current.setServerInfo(data.response);
         }
-      } else if (data.cmd === CMD_GET_USER_NOTIFICATION_MESSAGES) {
+      } else if (data.cmd === CMD_GET_USER_NOTIFICATION_MESSAGES || data.cmd === CMD_DELETE_USER_NOTIFICATION_MESSAGE) {
         if (this.notificationRef.current) {
           if (data.response.hasOwnProperty("notifications")) {
             this.notificationRef.current.updateMessages(data.response.notifications);

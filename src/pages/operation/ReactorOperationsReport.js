@@ -128,7 +128,7 @@ class ReactorOperationsReport extends Component {
           if (this.listRef.current) {
             this.listRef.current.removeRecord(this.state.selection)
           }
-          this.setState({selection: {}, pdf: ""})
+          this.setState({selection: {}, pdf: BLANK_PDF})
         }
       } else {
         enqueueErrorSnackbar(response.message);
@@ -184,7 +184,7 @@ class ReactorOperationsReport extends Component {
     }
     if (selection.hasOwnProperty("item_id") && selection.item_id !== -1) {
       const report = getRecordMetadataValue(selection, NURIMS_OPERATION_REPORT, "");
-      this.setState({selection: selection, pdf: report.length === "" ? "" : "/nubs/" + report["uri"]});
+      this.setState({selection: selection, pdf: report.length === "" ? BLANK_PDF : "/nubs/" + report["uri"]});
     }
   }
 
