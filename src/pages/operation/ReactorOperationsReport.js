@@ -97,14 +97,14 @@ class ReactorOperationsReport extends Component {
     this.requestGetRecords(false, true);
   }
 
-  requestGetRecords = (include_archived) => {
+  requestGetRecords = (include_archived, include_metadata) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
     }
     this.props.send({
       cmd: CMD_GET_REACTOR_OPERATING_REPORT_RECORDS,
       "include.disabled": include_archived ? "true" : "false",
-      "include.metadata": "true",
+      "include.metadata": include_metadata ? "true" : "false",
       module: this.Module,
     })
     this.setState({include_archived: include_archived});
@@ -123,6 +123,7 @@ class ReactorOperationsReport extends Component {
           if (response.message !== "") {
             enqueueInfoSnackbar(response.message);
           }
+          this.requestGetRecords(false, true);
           // const report = getRecordMetadataValue(record, NURIMS_OPERATION_REPORT, ""));
           //
           // if (message.hasOwnProperty("data") && message.data.hasOwnProperty("pdf")) {
@@ -151,15 +152,15 @@ class ReactorOperationsReport extends Component {
   //   this.setState({reportType: e.target.value});
   // }
 
-  onSubmit = () => {
-    this.props.send({
-      cmd: CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF,
-      startDate: `${this.state.year.year()}-${String(this.state.startDate.month() + 1).padStart(2, "0")}`,
-      endDate: `${this.state.year.year()}-${String(this.state.endDate.month() + 1).padStart(2, "0")}`,
-      reportType: this.state.reportType,
-      module: this.Module,
-    });
-  }
+  // onSubmit = () => {
+  //   this.props.send({
+  //     cmd: CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF,
+  //     startDate: `${this.state.year.year()}-${String(this.state.startDate.month() + 1).padStart(2, "0")}`,
+  //     endDate: `${this.state.year.year()}-${String(this.state.endDate.month() + 1).padStart(2, "0")}`,
+  //     reportType: this.state.reportType,
+  //     module: this.Module,
+  //   });
+  // }
 
   // handleToDateRangeChange = (range) => {
   //   if (this.context.debug) {
