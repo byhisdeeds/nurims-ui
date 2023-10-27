@@ -22,6 +22,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import PdfViewer from "./PdfViewer";
 import {ConsoleLog} from "../utils/UserContext";
+import {enqueueErrorSnackbar} from "../utils/SnackbarVariants";
 
 
 export const ConfirmRemoveRecordDialog = (props) => (
@@ -144,6 +145,18 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
     setForceOverwrite(e.target.checked)
   }
 
+  const proceed = (year, startDate, endDate, forceOverwrite) => {
+    if (year === null) {
+      enqueueErrorSnackbar("No operating year selected");
+    } else if (startDate === null) {
+      enqueueErrorSnackbar("No start month for the reactor operation period selected");
+    } else if (endDate === null) {
+      enqueueErrorSnackbar("No end month for the reactor operation period selected");
+    } else {
+      props.onProceed(year, startDate, endDate, forceOverwrite);
+    }
+  }
+
   return (
     <div>
       <Dialog
@@ -195,7 +208,7 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
           />
           <Box sx={{flexGrow: 1}} />
           <Button onClick={props.onCancel}>Cancel</Button>
-          <Button onClick={() => props.onProceed(year, startDate, endDate, forceOverwrite)} autoFocus>Continue</Button>
+          <Button onClick={() => proceed(year, startDate, endDate, forceOverwrite)} autoFocus>Continue</Button>
         </DialogActions>
       </Dialog>
     </div>
@@ -217,17 +230,14 @@ export const ConfirmGenerateReactorOperationReportDialog = (props) => {
   const [forceOverwrite, setForceOverwrite] = useState(false);
 
   const handleToDateRangeChange = (range) => {
-    console.log("handleToDateRangeChange", range)
     setEndDate(range);
   }
 
   const handleFromDateRangeChange = (range) => {
-    console.log("handleFromDateRangeChange", range)
     setStartDate(range);
   }
 
   const handleYearDateRangeChange = (year) => {
-    console.log("handleYearDateRangeChange", year)
     setYear(year);
   }
 
@@ -236,8 +246,19 @@ export const ConfirmGenerateReactorOperationReportDialog = (props) => {
   }
 
   const onReportTypeChange = (e) => {
-    console.log("onReportTypeChange", e.target.value)
     setReportType(e.target.value)
+  }
+
+  const proceed = (year, startDate, endDate, reportType, forceOverwrite) => {
+    if (year === null) {
+      enqueueErrorSnackbar("No reporting year selected");
+    } else if (startDate === null) {
+      enqueueErrorSnackbar("No start month for the reporting period selected");
+    } else if (endDate === null) {
+      enqueueErrorSnackbar("No end month for the reporting period selected");
+    } else {
+      props.onProceed(year, startDate, endDate, reportType, forceOverwrite);
+    }
   }
 
   return (
@@ -307,7 +328,7 @@ export const ConfirmGenerateReactorOperationReportDialog = (props) => {
           />
           <Box sx={{flexGrow: 1}} />
           <Button onClick={props.onCancel}>Cancel</Button>
-          <Button onClick={() => props.onProceed(year, startDate, endDate, reportType, forceOverwrite)} autoFocus>Continue</Button>
+          <Button onClick={() => proceed(year, startDate, endDate, reportType, forceOverwrite)} autoFocus>Continue</Button>
         </DialogActions>
       </Dialog>
     </div>
