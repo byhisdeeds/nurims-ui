@@ -237,7 +237,7 @@ export const ConfirmGenerateReactorOperationReportDialog = (props) => {
 
   const onReportTypeChange = (e) => {
     console.log("onReportTypeChange", e.target.value)
-    this.setState({reportType: e.target.value});
+    setReportType(e.target.value)
   }
 
   return (

@@ -59,6 +59,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import {
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
@@ -165,7 +167,7 @@ export function LogWindowButton(props) {
   const theme = useTheme();
   return (
     <Tooltip title="Toggle Log window">
-      <NotificationImportant sx={{
+      <ReceiptLongOutlinedIcon sx={{
         color: theme.palette.text.disabled,
         paddingLeft: '10px',
         marginLeft: '10px',
