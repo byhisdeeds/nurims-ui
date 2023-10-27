@@ -114,11 +114,6 @@ class ReactorOperationsReport extends Component {
             enqueueInfoSnackbar(response.message);
           }
           this.requestGetRecords(false, true);
-          // const report = getRecordMetadataValue(record, NURIMS_OPERATION_REPORT, ""));
-          //
-          // if (message.hasOwnProperty("data") && message.data.hasOwnProperty("pdf")) {
-          //   this.setState({pdf: message.data.pdf});
-          // }
         } else if (isCommandResponse(message, CMD_GET_REACTOR_OPERATING_REPORT_RECORDS)) {
           if (this.listRef.current) {
             // this.listRef.current.setRecords(response[this.recordTopic], false);
@@ -133,36 +128,13 @@ class ReactorOperationsReport extends Component {
           if (this.listRef.current) {
             this.listRef.current.removeRecord(this.state.selection)
           }
+          this.setState({selection: {}, pdf: ""})
         }
       } else {
         enqueueErrorSnackbar(response.message);
       }
     }
   }
-
-  // handleReportTypeChange = (e) => {
-  //   if (this.context.debug) {
-  //     ConsoleLog(this.Module, "handleReportTypeChange", e.target.value);
-  //   }
-  //   this.setState({reportType: e.target.value});
-  // }
-
-  // onSubmit = () => {
-  //   this.props.send({
-  //     cmd: CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF,
-  //     startDate: `${this.state.year.year()}-${String(this.state.startDate.month() + 1).padStart(2, "0")}`,
-  //     endDate: `${this.state.year.year()}-${String(this.state.endDate.month() + 1).padStart(2, "0")}`,
-  //     reportType: this.state.reportType,
-  //     module: this.Module,
-  //   });
-  // }
-
-  // handleToDateRangeChange = (range) => {
-  //   if (this.context.debug) {
-  //     ConsoleLog(this.Module, "handleToDateRangeChange", range);
-  //   }
-  //   this.setState({endDate: range});
-  // }
 
   isSelectableByRoles = (selection, roles, valid_item_id) => {
     for (const r of roles) {
@@ -176,20 +148,6 @@ class ReactorOperationsReport extends Component {
     }
     return false;
   }
-
-  // handleFromDateRangeChange = (range) => {
-  //   if (this.context.debug) {
-  //     ConsoleLog(this.Module, "handleFromDateRangeChange", range);
-  //   }
-  //   this.setState({startDate: range});
-  // }
-
-  // handleYearDateRangeChange = (range) => {
-  //   if (this.context.debug) {
-  //     ConsoleLog(this.Module, "handleYearDateRangeChange", range);
-  //   }
-  //   this.setState({year: range});
-  // }
 
   generateReport = () => {
     if (this.context.debug) {
@@ -319,48 +277,6 @@ class ReactorOperationsReport extends Component {
               enableRecordArchiveSwitch={true}
             />
           </Grid>
-
-          {/*<Grid item xs={12}>*/}
-          {/*  <Stack direction="row" spacing={1}>*/}
-          {/*    <SameYearDateRangePicker*/}
-          {/*      startText="Start Date"*/}
-          {/*      endText="End Date"*/}
-          {/*      from={startDate}*/}
-          {/*      to={endDate}*/}
-          {/*      year={year}*/}
-          {/*      disabled={false}*/}
-          {/*      onYearChange={this.handleYearDateRangeChange}*/}
-          {/*      onToChange={this.handleToDateRangeChange}*/}
-          {/*      onFromChange={this.handleFromDateRangeChange}*/}
-          {/*      renderInput={(startProps, endProps) => (*/}
-          {/*        <React.Fragment>*/}
-          {/*          <TextField {...startProps}/>*/}
-          {/*          <Box sx={{mx: 1}}>to</Box>*/}
-          {/*          <TextField {...endProps}/>*/}
-          {/*        </React.Fragment>*/}
-          {/*      )}*/}
-          {/*    />*/}
-          {/*    <FormControl style={{paddingRight: 8, marginTop: 8,}} variant="outlined">*/}
-          {/*      <InputLabel id="report-type-select-label">Report Type</InputLabel>*/}
-          {/*      <Select*/}
-          {/*        labelId="report-type-select-label"*/}
-          {/*        id="report-access"*/}
-          {/*        value={reportType}*/}
-          {/*        label="Report Type"*/}
-          {/*        onChange={this.handleReportTypeChange}*/}
-          {/*      >*/}
-          {/*        <MenuItem value={'summary'}>Reactor Operations Summary</MenuItem>*/}
-          {/*        <MenuItem value={'detailed'}>Detailed Reactor Operations</MenuItem>*/}
-          {/*      </Select>*/}
-          {/*    </FormControl>*/}
-          {/*    <div style={{flexGrow: 1}}/>*/}
-          {/*    <Fab variant="extended" size="medium" color="primary" aria-label="submit" onClick={this.onSubmit}*/}
-          {/*         style={{marginTop: 16}}>*/}
-          {/*      <PictureAsPdfIcon sx={{mr: 1}}/>*/}
-          {/*      Generate Report*/}
-          {/*    </Fab>*/}
-          {/*  </Stack>*/}
-          {/*</Grid>*/}
           <Grid item xs={8}>
             <PdfViewer height={"700px"} source={pdf}/>
           </Grid>
