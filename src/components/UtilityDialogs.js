@@ -302,7 +302,7 @@ export const ConfirmGenerateReactorOperationReportDialog = (props) => {
         <DialogActions>
           <FormControlLabel
             control={<Switch onChange={onForceOverwriteChange} checked={forceOverwrite} color="primary" />}
-            label="Overwrite existing report if found."
+            label="Overwrite any existing reports."
             labelPlacement="start"
           />
           <Box sx={{flexGrow: 1}} />
