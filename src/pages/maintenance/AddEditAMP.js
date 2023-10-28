@@ -21,7 +21,7 @@ import {
 } from "../../utils/UserContext";
 import {
   TitleComponent,
-  AddEditButtonPanel
+  AddRemoveArchiveSaveProvenanceButtonPanel
 } from "../../components/CommonComponents";
 import {isValidUserRole} from "../../utils/UserUtils";
 import {
@@ -129,7 +129,7 @@ class AddEditAMP extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        {<AddEditButtonPanel
+        {<AddRemoveArchiveSaveProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}

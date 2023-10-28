@@ -22,7 +22,7 @@ import {
 import SSCList from "./SSCList";
 import SSCMetadata from "./SSCMetadata";
 import {ConsoleLog, UserContext} from "../../utils/UserContext";
-import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
+import {TitleComponent, AddRemoveArchiveSaveProvenanceButtonPanel} from "../../components/CommonComponents";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {isValidUserRole} from "../../utils/UserUtils";
 import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
@@ -126,7 +126,7 @@ class AddEditSSC extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        {<AddEditButtonPanel
+        {<AddRemoveArchiveSaveProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}

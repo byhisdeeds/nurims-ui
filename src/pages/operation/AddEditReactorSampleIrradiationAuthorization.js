@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import {
   TitleComponent,
-  AddEditButtonPanel
+  AddRemoveArchiveSaveProvenanceButtonPanel
 } from "../../components/CommonComponents";
 import PropTypes from "prop-types";
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -155,7 +155,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        {<AddEditButtonPanel
+        {<AddRemoveArchiveSaveProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}

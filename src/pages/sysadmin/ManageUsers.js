@@ -3,7 +3,7 @@ import {
   ConsoleLog,
   UserContext
 } from "../../utils/UserContext";
-import {ConfirmRemoveRecordDialog} from "../../components/UtilityDialogs";
+import {ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog} from "../../components/UtilityDialogs";
 import {
   Box,
   Fab,
@@ -17,6 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import UserList from "./UserList";
 import {
   CMD_DELETE_USER_RECORD,
+  CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_PUBLIC_KEY,
   CMD_GET_USER_RECORDS,
   CMD_UPDATE_USER_RECORD,
@@ -32,7 +33,10 @@ import {
   messageStatusOk
 } from "../../utils/WebsocketUtils";
 import UserMetadata from "./UserMetadata";
-import {TitleComponent} from "../../components/CommonComponents";
+import {
+  AddRemoveArchiveSaveProvenanceButtonPanel,
+  TitleComponent
+} from "../../components/CommonComponents";
 import {encryptText} from "../../utils/EncryptionUtils";
 import {
   enqueueErrorSnackbar,
@@ -45,6 +49,12 @@ import {
   record_uuid
 } from "../../utils/MetadataUtils";
 import {isValidUserRole} from "../../utils/UserUtils";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
 
 export const MANAGEUSERS_REF = "ManageUsers";
 
@@ -58,9 +68,11 @@ class ManageUsers extends React.Component {
       confirm_remove: false,
       selection: {},
       include_archived: false,
+      show_provenance_view: false,
     };
     this.Module = MANAGEUSERS_REF;
     this.puk = "";
+    this.provenanceRecords = [];
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
   }
@@ -265,6 +277,8 @@ class ManageUsers extends React.Component {
             this.metadataRef.current.setRecordMetadata({})
           }
           this.setState({selection: {}, metadata_changed: false});
+        } else if (isCommandResponse(message, CMD_GET_PROVENANCE_RECORDS)) {
+          this.setProvenanceRecords(response.provenance)
         }
       } else {
         enqueueErrorSnackbar(response.message);
@@ -284,8 +298,55 @@ class ManageUsers extends React.Component {
     this.setState({selection: selection})
   }
 
+  setProvenanceRecords = (provenance) => {
+    setProvenanceRecordsHelper(this, provenance);
+  }
+
+  showProvenanceRecordsView = () => {
+    showProvenanceRecordsViewHelper(this);
+  }
+
+  closeProvenanceRecordsView = (event, reason) => {
+    if (reason && reason === "backdropClick") {
+      return;
+    }
+    this.setState({show_provenance_view: false,});
+  }
+
+  isSelectableByRoles = (selection, roles, valid_item_id) => {
+    // console.log("== isSelectableByRoles SELECTION ==", selection)
+    // console.log("== isSelectableByRoles user ==", this.context.user)
+    for (const r of roles) {
+      // if role is **current_user** then a match between the current user and the selection user returns true
+      if (r === "**current_user**" &&
+          selection.hasOwnProperty(NURIMS_TITLE) &&
+          selection[NURIMS_TITLE] === this.context.user.profile.username) {
+        return true
+      } else if (isValidUserRole(this.context.user, r)) {
+        // We have at least one match, now we check for a valid item_id boolean parameter has been specified
+        if (valid_item_id) {
+          return selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+
+  hasChangedRecords = () => {
+    if (this.listRef.current) {
+      for (const record of this.listRef.current.getRecords()) {
+        if (record.hasOwnProperty("changed") && record.changed) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   render() {
-    const {metadata_changed, confirm_remove, include_archived, selection} = this.state;
+    const {metadata_changed, confirm_remove, include_archived, selection, show_provenance_view} = this.state;
+    const {user} = this.props;
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
@@ -296,6 +357,11 @@ class ManageUsers extends React.Component {
                                    selection={selection}
                                    onProceed={this.proceedWithRemove}
                                    onCancel={this.cancelRemove}
+        />
+        <ShowProvenanceRecordsDialog open={show_provenance_view}
+                                     selection={selection}
+                                     body={this.provenanceRecords.join("\n")}
+                                     onCancel={this.closeProvenanceRecordsView}
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
@@ -320,28 +386,45 @@ class ManageUsers extends React.Component {
             />
           </Grid>
         </Grid>
-        <Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>
-          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
-               disabled={selection === -1}>
-            <RemoveCircleIcon sx={{mr: 1}}/>
-            Remove User
-          </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>
-            {this.isRecordArchived(selection) ?
-              <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore User Record"</React.Fragment> :
-              <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive User Record"</React.Fragment>}
-          </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
-               disabled={!metadata_changed}>
-            <SaveIcon sx={{mr: 1}}/>
-            Save Changes
-          </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>
-            <AddIcon sx={{mr: 1}}/>
-            Add User
-          </Fab>
-        </Box>
+        <AddRemoveArchiveSaveProvenanceButtonPanel
+          THIS={this}
+          user={user}
+          onClickAddRecord={this.addRecord}
+          onClickChangeRecordArchivalStatus={this.changeRecordArchivalStatus}
+          onClickRemoveRecord={this.removeRecord}
+          onClickSaveRecordChanges={this.saveChanges}
+          onClickViewProvenanceRecords={this.showProvenanceRecordsView}
+          addRecordIcon={<PersonAddIcon sx={{mr: 1}}/>}
+          addRecordButtonLabel={"Add User"}
+          removeRecordIcon={<PersonRemoveIcon sx={{mr: 1}}/>}
+          removeRecordButtonLabel={"Remove User"}
+          addRole={"sysadmin"}
+          removeRole={"sysadmin"}
+          saveRole={"**current_user**"}
+          archiveRole={"sysadmin"}
+        />
+        {/*<Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}
+        {/*       disabled={selection === -1}>*/}
+        {/*    <RemoveCircleIcon sx={{mr: 1}}/>*/}
+        {/*    Remove User*/}
+        {/*  </Fab>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}*/}
+        {/*       onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>*/}
+        {/*    {this.isRecordArchived(selection) ?*/}
+        {/*      <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore User Record"</React.Fragment> :*/}
+        {/*      <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive User Record"</React.Fragment>}*/}
+        {/*  </Fab>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}*/}
+        {/*       disabled={!metadata_changed}>*/}
+        {/*    <SaveIcon sx={{mr: 1}}/>*/}
+        {/*    Save Changes*/}
+        {/*  </Fab>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>*/}
+        {/*    <AddIcon sx={{mr: 1}}/>*/}
+        {/*    Add User*/}
+        {/*  </Fab>*/}
+        {/*</Box>*/}
       </React.Fragment>
     );
   }

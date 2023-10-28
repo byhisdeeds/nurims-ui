@@ -45,7 +45,7 @@ import {
 } from "../../utils/MetadataUtils";
 import {transformDose} from "../../utils/DoseReportUtils";
 import PropTypes from "prop-types";
-import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
+import {TitleComponent, AddRemoveArchiveSaveProvenanceButtonPanel} from "../../components/CommonComponents";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import {isValidUserRole} from "../../utils/UserUtils";
@@ -308,7 +308,7 @@ class DosimetryMeasurement extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        {<AddEditButtonPanel
+        {<AddRemoveArchiveSaveProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}

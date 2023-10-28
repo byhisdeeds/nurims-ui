@@ -1106,6 +1106,233 @@ DateSelect.defaultProps = {
 }
 
 
+export function AddRemoveArchiveSaveProvenanceButtonPanel({
+                                                            THIS,
+                                                            user,
+                                                            onClickRemoveRecord,
+                                                            removeRecordButtonLabel,
+                                                            onClickSaveRecordChanges,
+                                                            onClickAddRecord,
+                                                            addRecordButtonLabel,
+                                                            onClickChangeRecordArchivalStatus,
+                                                            onClickViewProvenanceRecords,
+                                                            removeRecordIcon,
+                                                            addRecordIcon,
+                                                            addRole,
+                                                            archiveRole,
+                                                            sysadminRole,
+                                                            removeRole,
+                                                            saveRole
+                                                          }) {
+  const {selection} = THIS.state;
+  const isSysadmin = isValidUserRole(user, sysadminRole);
+  const recordHasChanged = THIS.hasChangedRecords();
+  return (
+    <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
+      <Fab
+        variant="extended"
+        size="small"
+        color="primary"
+        aria-label="remove"
+        onClick={onClickRemoveRecord}
+        disabled={!THIS.isSelectableByRoles(selection, [removeRole, sysadminRole], true)}
+      >
+        {removeRecordIcon}
+        {removeRecordButtonLabel}
+      </Fab>
+      {isSysadmin &&
+        <Fab
+          variant="extended"
+          size="small"
+          color="primary"
+          aria-label="view-provenance"
+          onClick={onClickViewProvenanceRecords}
+          disabled={!selection.hasOwnProperty("item_id")}
+        >
+          <VisibilityIcon sx={{mr: 1}}/>
+          View Provenance Records
+        </Fab>
+      }
+      <Fab
+        variant="extended"
+        size="small"
+        color="primary"
+        aria-label="archive"
+        component={"span"}
+        onClick={onClickChangeRecordArchivalStatus}
+        disabled={!THIS.isSelectableByRoles(selection, [archiveRole, sysadminRole], true)}
+      >
+        {THIS.isRecordArchived(selection) ?
+          <React.Fragment><VisibilityIcon sx={{mr: 1}}/> "Restore Record"</React.Fragment> :
+          <React.Fragment><VisibilityOffIcon sx={{mr: 1}}/> "Archive Record"</React.Fragment>}
+      </Fab>
+      <Fab
+        variant="extended"
+        size="small"
+        color="primary"
+        aria-label="save"
+        onClick={onClickSaveRecordChanges}
+        disabled={!(recordHasChanged && THIS.isSelectableByRoles(selection, [saveRole, sysadminRole], false))}
+      >
+        <SaveIcon sx={{mr: 1}}/>
+        Save Changes
+      </Fab>
+      <Fab
+        variant="extended"
+        size="small"
+        color="primary"
+        aria-label="add"
+        onClick={onClickAddRecord}
+        disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
+      >
+        {addRecordIcon}
+        {addRecordButtonLabel}
+      </Fab>
+    </Box>
+  )
+}
+
+AddRemoveArchiveSaveProvenanceButtonPanel.propTypes = {
+  THIS: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  onClickRemoveRecord: PropTypes.func.isRequired,
+  onClickSaveRecordChanges: PropTypes.func.isRequired,
+  onClickAddRecord: PropTypes.func.isRequired,
+  addRecordButtonLabel: PropTypes.string,
+  addRecordIcon: PropTypes.element,
+  onClickChangeRecordArchivalStatus: PropTypes.func.isRequired,
+  onClickViewProvenanceRecords: PropTypes.func.isRequired,
+  removeRecordIcon: PropTypes.element,
+  removeRecordButtonLabel: PropTypes.string,
+  addRole: PropTypes.string,
+  archiveRole: PropTypes.string,
+  sysadminRole: PropTypes.string,
+  removeRole: PropTypes.string,
+  saveRole: PropTypes.string,
+}
+
+AddRemoveArchiveSaveProvenanceButtonPanel.defaultProps = {
+  removeRecordIcon: <RemoveCircleIcon sx={{mr: 1}}/>,
+  addRecordIcon: <AddCircleOutlineIcon sx={{mr: 1}}/>,
+  addRecordButtonLabel: "Add Record",
+  removeRecordButtonLabel: "Remove Record",
+  addRole: "",
+  archiveRole: "",
+  sysadminRole: "sysadmin",
+  removeRole: "",
+  saveRole: "",
+}
+
+export function ApproveIrradiationMessageComponent({
+                                                     record,
+                                                     user,
+                                                     disabled,
+                                                     onClickApproveRequest,
+                                                     theme,
+                                                     approverRole
+                                                   }) {
+  const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
+  if (approver !== "") {
+    const fullname = user.users.reduce((prev, obj) => {
+      if (obj[0] === approver) {
+        prev = obj[1];
+      }
+      return prev;
+    }, "");
+
+    return (
+      <Button
+        variant={"outlined"}
+        endIcon={<DoneIcon/>}
+        style={{color: theme.palette.success.contrastText, backgroundColor: theme.palette.success.light}}
+        aria-label={"authorize"}
+        disableRipple={true}
+        fullWidth
+        sx={{marginTop: 1}}
+      >
+        {`Approved by ${fullname}`}
+      </Button>
+    )
+  }
+  const can_authorize = isValidUserRole(user, approverRole);
+  if (can_authorize) {
+    let disabled = false;
+    let disabled_hint = "";
+    if (Object.keys(record).length === 0) {
+      disabled = true;
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX,
+      "") === "") {
+      disabled = true;
+      disabled_hint = "Disabled because no neutron flux specified!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
+      "") === "") {
+      disabled = true;
+      disabled_hint = "Disabled because no irradiation duration specified!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
+      "") === "") {
+      disabled = true;
+      disabled_hint = "Disabled because no irradiation sample list specified!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
+      []).size === 0) {
+      disabled = true;
+      disabled_hint = "Disabled because no irradiation sample types specified!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
+      {name: ""}).name === "") {
+      disabled = true;
+      disabled_hint = "Disabled because no irradiation sample job specified!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
+      UNDEFINED_DATE_STRING) === UNDEFINED_DATE_STRING) {
+      disabled = true;
+      disabled_hint = "Disabled because no proposed irradiation date specified!";
+    }
+    return (
+      <Tooltip title={disabled_hint}>
+        <span>
+          <Button
+            disabled={disabled}
+            variant={"contained"}
+            endIcon={<ArchiveIcon/>}
+            onClick={onClickApproveRequest}
+            color={"primary"}
+            aria-label={"authorize"}
+            fullWidth
+            sx={{marginTop: 1}}
+          >
+            {"Approve Irradiation Request"}
+          </Button>
+        </span>
+      </Tooltip>
+    )
+  } else {
+    return (
+      <Button
+        variant={"outlined"}
+        style={{color: theme.palette.warning.contrastText, backgroundColor: theme.palette.warning.light}}
+        endIcon={<DoNotDisturbAltIcon/>}
+        aria-label={"authorize"}
+        disableRipple={true}
+        fullWidth
+        sx={{marginTop: 1}}
+      >
+        {`YOU IS NOT AUTHORIZED TO APPROVE IRRADIATIONS.`}
+      </Button>
+    )
+  }
+}
+
+ApproveIrradiationMessageComponent.propTypes = {
+  record: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onClickApproveRequest: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired,
+  approverRole: PropTypes.string,
+}
+
+ApproveIrradiationMessageComponent.defaultProps = {
+  approverRole: "irradiation_authorizer",
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1454,220 +1681,4 @@ export function AnalysisJobAutoComplete(props) {
       )}
     />
   )
-}
-
-export function AddEditButtonPanel({
-                                     THIS, user, onClickRemoveRecord, removeRecordButtonLabel,
-                                     onClickSaveRecordChanges, onClickAddRecord, addRecordButtonLabel,
-                                     onClickChangeRecordArchivalStatus, onClickViewProvenanceRecords,
-                                     removeRecordIcon, addRecordIcon, addRole, archiveRole, sysadminRole,
-                                     removeRole, saveRole
-                                   }) {
-  const {selection} = THIS.state;
-  const isSysadmin = isValidUserRole(user, sysadminRole);
-  const recordHasChanged = THIS.hasChangedRecords();
-  return (
-    <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
-      <Fab
-        variant="extended"
-        size="small"
-        color="primary"
-        aria-label="remove"
-        onClick={onClickRemoveRecord}
-        disabled={!THIS.isSelectableByRoles(selection, [removeRole, sysadminRole], true)}
-      >
-        {removeRecordIcon}
-        {removeRecordButtonLabel}
-      </Fab>
-      {isSysadmin &&
-        <Fab
-          variant="extended"
-          size="small"
-          color="primary"
-          aria-label="view-provenance"
-          onClick={onClickViewProvenanceRecords}
-          disabled={!selection.hasOwnProperty("item_id")}
-        >
-          <VisibilityIcon sx={{mr: 1}}/>
-          View Provenance Records
-        </Fab>
-      }
-      <Fab
-        variant="extended"
-        size="small"
-        color="primary"
-        aria-label="archive"
-        component={"span"}
-        onClick={onClickChangeRecordArchivalStatus}
-        disabled={!THIS.isSelectableByRoles(selection, [archiveRole, sysadminRole], true)}
-      >
-        {THIS.isRecordArchived(selection) ?
-          <React.Fragment><VisibilityIcon sx={{mr: 1}}/> "Restore Record"</React.Fragment> :
-          <React.Fragment><VisibilityOffIcon sx={{mr: 1}}/> "Archive Record"</React.Fragment>}
-      </Fab>
-      <Fab
-        variant="extended"
-        size="small"
-        color="primary"
-        aria-label="save"
-        onClick={onClickSaveRecordChanges}
-        disabled={!(recordHasChanged && THIS.isSelectableByRoles(selection, [saveRole, sysadminRole], false))}
-      >
-        <SaveIcon sx={{mr: 1}}/>
-        Save Changes
-      </Fab>
-      <Fab
-        variant="extended"
-        size="small"
-        color="primary"
-        aria-label="add"
-        onClick={onClickAddRecord}
-        disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
-      >
-        {addRecordIcon}
-        {addRecordButtonLabel}
-      </Fab>
-    </Box>
-  )
-}
-
-AddEditButtonPanel.propTypes = {
-  THIS: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  onClickRemoveRecord: PropTypes.func.isRequired,
-  onClickSaveRecordChanges: PropTypes.func.isRequired,
-  onClickAddRecord: PropTypes.func.isRequired,
-  addRecordButtonLabel: PropTypes.string,
-  addRecordIcon: PropTypes.element,
-  onClickChangeRecordArchivalStatus: PropTypes.func.isRequired,
-  onClickViewProvenanceRecords: PropTypes.func.isRequired,
-  removeRecordIcon: PropTypes.element,
-  removeRecordButtonLabel: PropTypes.string,
-  addRole: PropTypes.string,
-  archiveRole: PropTypes.string,
-  sysadminRole: PropTypes.string,
-  removeRole: PropTypes.string,
-  saveRole: PropTypes.string,
-}
-
-AddEditButtonPanel.defaultProps = {
-  removeRecordIcon: <RemoveCircleIcon sx={{mr: 1}}/>,
-  addRecordIcon: <AddCircleOutlineIcon sx={{mr: 1}}/>,
-  addRecordButtonLabel: "Add Record",
-  removeRecordButtonLabel: "Remove Record",
-  addRole: "",
-  archiveRole: "",
-  sysadminRole: "sysadmin",
-  removeRole: "",
-  saveRole: "",
-}
-
-export function ApproveIrradiationMessageComponent({
-                                                     record,
-                                                     user,
-                                                     disabled,
-                                                     onClickApproveRequest,
-                                                     theme,
-                                                     approverRole
-                                                   }) {
-  const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
-  if (approver !== "") {
-    const fullname = user.users.reduce((prev, obj) => {
-      if (obj[0] === approver) {
-        prev = obj[1];
-      }
-      return prev;
-    }, "");
-
-    return (
-      <Button
-        variant={"outlined"}
-        endIcon={<DoneIcon/>}
-        style={{color: theme.palette.success.contrastText, backgroundColor: theme.palette.success.light}}
-        aria-label={"authorize"}
-        disableRipple={true}
-        fullWidth
-        sx={{marginTop: 1}}
-      >
-        {`Approved by ${fullname}`}
-      </Button>
-    )
-  }
-  const can_authorize = isValidUserRole(user, approverRole);
-  if (can_authorize) {
-    let disabled = false;
-    let disabled_hint = "";
-    if (Object.keys(record).length === 0) {
-      disabled = true;
-    } else if (getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX,
-      "") === "") {
-      disabled = true;
-      disabled_hint = "Disabled because no neutron flux specified!";
-    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
-      "") === "") {
-      disabled = true;
-      disabled_hint = "Disabled because no irradiation duration specified!";
-    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
-      "") === "") {
-      disabled = true;
-      disabled_hint = "Disabled because no irradiation sample list specified!";
-    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
-      []).size === 0) {
-      disabled = true;
-      disabled_hint = "Disabled because no irradiation sample types specified!";
-    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
-      {name: ""}).name === "") {
-      disabled = true;
-      disabled_hint = "Disabled because no irradiation sample job specified!";
-    } else if (getRecordData(record, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
-      UNDEFINED_DATE_STRING) === UNDEFINED_DATE_STRING) {
-      disabled = true;
-      disabled_hint = "Disabled because no proposed irradiation date specified!";
-    }
-    return (
-      <Tooltip title={disabled_hint}>
-        <span>
-          <Button
-            disabled={disabled}
-            variant={"contained"}
-            endIcon={<ArchiveIcon/>}
-            onClick={onClickApproveRequest}
-            color={"primary"}
-            aria-label={"authorize"}
-            fullWidth
-            sx={{marginTop: 1}}
-          >
-            {"Approve Irradiation Request"}
-          </Button>
-        </span>
-      </Tooltip>
-    )
-  } else {
-    return (
-      <Button
-        variant={"outlined"}
-        style={{color: theme.palette.warning.contrastText, backgroundColor: theme.palette.warning.light}}
-        endIcon={<DoNotDisturbAltIcon/>}
-        aria-label={"authorize"}
-        disableRipple={true}
-        fullWidth
-        sx={{marginTop: 1}}
-      >
-        {`YOU IS NOT AUTHORIZED TO APPROVE IRRADIATIONS.`}
-      </Button>
-    )
-  }
-}
-
-ApproveIrradiationMessageComponent.propTypes = {
-  record: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  onClickApproveRequest: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired,
-  approverRole: PropTypes.string,
-}
-
-ApproveIrradiationMessageComponent.defaultProps = {
-  approverRole: "irradiation_authorizer",
 }

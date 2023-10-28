@@ -20,7 +20,7 @@ import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog, UserContext} from "../../utils/UserContext";
-import {TitleComponent, AddEditButtonPanel} from "../../components/CommonComponents";
+import {TitleComponent, AddRemoveArchiveSaveProvenanceButtonPanel} from "../../components/CommonComponents";
 import {
   CMD_DELETE_PERSONNEL_RECORD,
   CMD_GET_GLOSSARY_TERMS,
@@ -260,7 +260,7 @@ class AddEditPersonnel extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        {<AddEditButtonPanel
+        <AddRemoveArchiveSaveProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}
@@ -276,7 +276,7 @@ class AddEditPersonnel extends BaseRecordManager {
           removeRole={"sysadmin"}
           saveRole={"personnel_data_entry"}
           archiveRole={"personnel_data_entry"}
-        />}
+        />
       </React.Fragment>
     );
   }

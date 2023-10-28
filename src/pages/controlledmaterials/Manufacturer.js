@@ -16,7 +16,7 @@ import ManufacturerList from "./ManufacturerList";
 import ManufacturerMetadata from "./ManufacturerMetadata";
 import {
   TitleComponent,
-  AddEditButtonPanel
+  AddRemoveArchiveSaveProvenanceButtonPanel
 } from "../../components/CommonComponents";
 import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
@@ -123,7 +123,7 @@ class Manufacturer extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        {<AddEditButtonPanel
+        {<AddRemoveArchiveSaveProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}
