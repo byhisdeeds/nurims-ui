@@ -963,13 +963,14 @@ PageableTable.propTypes = {
   selectionMetadataField: PropTypes.string.isRequired,
 }
 
-export function SwitchComponent({id, label, placement, onChange, value}) {
+export function SwitchComponent({id, label, placement, onChange, value, disabled}) {
   return (
     <Box display="flex" justifyContent="flex-end" sx={{height: '100%'}}>
       <FormControlLabel
         control={<Switch id={id} checked={toBoolean(value)} color="primary" onChange={onChange}/>}
         label={label}
         labelPlacement={placement}
+        disabled={disabled}
       />
     </Box>
   )
@@ -977,6 +978,7 @@ export function SwitchComponent({id, label, placement, onChange, value}) {
 
 SwitchComponent.defaultProps = {
   placement: "start",
+  disabled: false,
 }
 
 SwitchComponent.propTypes = {
@@ -985,6 +987,7 @@ SwitchComponent.propTypes = {
   label: PropTypes.string.isRequired,
   placement: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 }
 
 export function AutoCompleteComponent({

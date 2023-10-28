@@ -107,15 +107,16 @@ class CleanupLargeObjectStore extends Component {
             <Stack direction="row" spacing={1}>
               <SwitchComponent
                 id={"id"}
-                label={"Only List Files"}
+                label={"Only list files, do not remove"}
                 onChange={this.onlyListFiles}
                 value={only_list_files}
+                disabled={processing}
               />
               <Box sx={{flexGrow: 1}} />
               <LoadingButton
                 sx={{minWidth: 350}}
                 loading={processing}
-                loadingPosition="start"
+                loadingPosition="end"
                 endIcon={<DeleteSweepIcon fontSize={"large"} />}
                 variant="outlined"
                 onClick={this.removeUnreferencedFiles}
