@@ -23,7 +23,7 @@ class MyAccount extends React.Component {
     const { user } = this.state;
     return (
       <pre style={{fontSize: 16}}>
-        <JSONPretty id="json-pretty" data={user} />
+        <JSONPretty id="json-pretty" data={user.profile} />
       </pre>
     );
   }
