@@ -36,6 +36,7 @@ import {OWNER_REF} from "./controlledmaterials/Owner";
 import {UNDERDEVELOPMENT_REF} from "../components/UnderDevelopment";
 import MaintenanceSchedule, {MAINTENANCESCHEDULE_REF} from "./maintenance/MaintenanceSchedule";
 import {CLEANUPLARGEOBJECTSTORE_REF} from "./sysadmin/CleanupLargeObjectStore";
+import {ADDEDITTODORECORD_REF} from "./maintenance/AddEditTodoRecord";
 
 const Constants = require("../utils/constants");
 
@@ -53,6 +54,7 @@ const ViewMaterialsList = lazy(() => import('./controlledmaterials/ViewMaterials
 const GenerateMaterialSurveillanceSheet = lazy(() => import('./controlledmaterials/GenerateMaterialSurveillanceSheet'));
 const GenerateSSCMaintenanceReport = lazy(() => import('./maintenance/GenerateSSCMaintenanceReport'));
 const AddEditCorrectiveMaintenanceIssueRecord = lazy(() => import('./maintenance/AddEditCorrectiveMaintenanceIssueRecord'));
+const AddEditTodoRecord = lazy(() => import('./maintenance/AddEditTodoRecord'));
 const AddEditSSC = lazy(() => import('./maintenance/AddEditSSC'));
 const AddEditAMP = lazy(() => import('./maintenance/AddEditAMP'));
 const ViewSSCRecords = lazy(() => import('./maintenance/ViewSSCRecords'));
@@ -303,8 +305,16 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.SSC_ADD_EDIT_SSC_AMP) {
+  } else if (actionid === Constants.SSC_ADD_EDIT_SSC_TODO_RECORD) {
+    return (<AddEditTodoRecord
+      ref={crefs[ADDEDITTODORECORD_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  } else if (actionid === Constants.SSC_ADD_EDIT_SSC_AMP) {
     return (<AddEditAMP
       ref={crefs[ADDEDITAMP_REF]}
       title={menuTitle}
@@ -313,8 +323,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.SSC_VIEW_AMP_SSC_LIST) {
+  } else if (actionid === Constants.SSC_VIEW_AMP_SSC_LIST) {
     return (<ViewAMPRecords
       ref={crefs[VIEWAMPRECORDS_REF]}
       title={menuTitle}
@@ -323,8 +332,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.SSC_ADD_EDIT_SSC) {
+  } else if (actionid === Constants.SSC_ADD_EDIT_SSC) {
     return (<AddEditSSC
       ref={crefs[ADDEDITSSC_REF]}
       title={menuTitle}
@@ -333,8 +341,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.SSC_ADD_EDIT_SSC_CORRECTIVE_MAINTENANCE_ISSUE_RECORD) {
+  } else if (actionid === Constants.SSC_ADD_EDIT_SSC_CORRECTIVE_MAINTENANCE_ISSUE_RECORD) {
     return (<AddEditCorrectiveMaintenanceIssueRecord
       ref={crefs[ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF]}
       title={menuTitle}
@@ -343,8 +350,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.SSC_GENERATE_SSC_MAINTENANCE_REPORT) {
+  } else if (actionid === Constants.SSC_GENERATE_SSC_MAINTENANCE_REPORT) {
     return (<GenerateSSCMaintenanceReport
       ref={crefs[GENERATESSCMAINTENANCEREPORT_REF]}
       title={menuTitle}
@@ -353,8 +359,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.SSC_GENERATE_AMP_SCHEDULE) {
+  } else if (actionid === Constants.SSC_GENERATE_AMP_SCHEDULE) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -373,8 +378,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.SSC_GENERATE_SSC_MAINTENANCE_SCHEDULE) {
+  } else if (actionid === Constants.SSC_GENERATE_SSC_MAINTENANCE_SCHEDULE) {
     return (<MaintenanceSchedule
       ref={crefs[MAINTENANCESCHEDULE_REF]}
       title={menuTitle}

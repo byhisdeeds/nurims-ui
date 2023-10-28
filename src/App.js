@@ -25,7 +25,9 @@ import {
   CMD_SET_SYSTEM_PROPERTIES,
   CMD_BACKGROUND_TASKS,
   CMD_PING,
-  CMD_GET_SERVER_INFO, CMD_GET_USER_NOTIFICATION_MESSAGES, CMD_DELETE_USER_NOTIFICATION_MESSAGE
+  CMD_GET_SERVER_INFO,
+  CMD_GET_USER_NOTIFICATION_MESSAGES,
+  CMD_DELETE_USER_NOTIFICATION_MESSAGE
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -81,6 +83,8 @@ import {TERMSANDDEFINITIONS_REF} from "./pages/support/TermsAndDefinitions"
 import {UNDERDEVELOPMENT_REF} from "./components/UnderDevelopment"
 import LogWindow from "./components/LogWindow";
 import {VIEWAMPRECORDS_REF} from "./pages/maintenance/ViewAMPRecords";
+import {CLEANUPLARGEOBJECTSTORE_REF} from "./pages/sysadmin/CleanupLargeObjectStore";
+import {ADDEDITTODORECORD_REF} from "./pages/maintenance/AddEditTodoRecord";
 import NotificationWindow from "./components/NotificationWindow";
 import SystemInfoBadges from "./components/SystemInfoBadges";
 import {
@@ -97,7 +101,6 @@ import {
 import {
   deviceDetect
 } from 'react-device-detect';
-import {CLEANUPLARGEOBJECTSTORE_REF} from "./pages/sysadmin/CleanupLargeObjectStore";
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
@@ -175,6 +178,7 @@ class App extends React.Component {
     this.crefs[GENERATEMATERIALSURVEILLANCESHEET_REF] = React.createRef();
     this.crefs[ADDEDITREACTORWATERSAMPLES_REF] = React.createRef();
     this.crefs[ADDEDITIRRADIATEDSAMPLES_REF] = React.createRef();
+    this.crefs[ADDEDITTODORECORD_REF] = React.createRef();
     this.crefs[REACTOROPERATIONSREPORT_REF] = React.createRef();
     this.crefs[ADDEDITREACTOROPERATINGRUNS_REF] = React.createRef();
     this.crefs[UPDATEMONITORINGSTATUS_REF] = React.createRef();

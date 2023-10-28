@@ -6,7 +6,10 @@ import {
 import {Box, Button, Grid, Stack} from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
 import {withTheme} from "@mui/styles";
-import {SwitchComponent, TitleComponent} from "../../components/CommonComponents";
+import {
+  SwitchComponent,
+  TitleComponent
+} from "../../components/CommonComponents";
 import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
