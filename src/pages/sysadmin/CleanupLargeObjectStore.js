@@ -113,7 +113,7 @@ class CleanupLargeObjectStore extends Component {
               />
               <Box sx={{flexGrow: 1}} />
               <LoadingButton
-                sx={{minWidth: 300}}
+                sx={{minWidth: 350}}
                 loading={processing}
                 loadingPosition="start"
                 endIcon={<DeleteSweepIcon fontSize={"large"} />}
@@ -128,7 +128,7 @@ class CleanupLargeObjectStore extends Component {
             <LogViewer
               isTextWrapped={false}
               hasLineNumbers={true}
-              height={"calc(100vh - 180px)"}
+              height={"calc(100vh - 250px)"}
               data={files}
               scrollToRow={scrollToRow}
               theme={'dark'}
