@@ -5,10 +5,14 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle, FormControl,
+  DialogTitle,
+  FormControl,
   FormControlLabel,
   Grid,
-  IconButton, InputLabel, MenuItem, Select,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Switch,
 } from "@mui/material";
 import {
@@ -21,8 +25,11 @@ import {SameYearDateRangePicker} from "./CommonComponents";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import PdfViewer from "./PdfViewer";
-import {ConsoleLog} from "../utils/UserContext";
-import {enqueueErrorSnackbar} from "../utils/SnackbarVariants";
+import {
+  enqueueErrorSnackbar
+} from "../utils/SnackbarVariants";
+
+const ERROR_SNACKBAR_DURATION = 3;
 
 
 export const ConfirmRemoveRecordDialog = (props) => (
@@ -147,11 +154,11 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
 
   const proceed = (year, startDate, endDate, forceOverwrite) => {
     if (year === null) {
-      enqueueErrorSnackbar("No operating year selected");
+      enqueueErrorSnackbar("No operating year selected", ERROR_SNACKBAR_DURATION);
     } else if (startDate === null) {
-      enqueueErrorSnackbar("No start month for the reactor operation period selected");
+      enqueueErrorSnackbar("No start month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
     } else if (endDate === null) {
-      enqueueErrorSnackbar("No end month for the reactor operation period selected");
+      enqueueErrorSnackbar("No end month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
     } else {
       props.onProceed(year, startDate, endDate, forceOverwrite);
     }
@@ -251,11 +258,11 @@ export const ConfirmGenerateReactorOperationReportDialog = (props) => {
 
   const proceed = (year, startDate, endDate, reportType, forceOverwrite) => {
     if (year === null) {
-      enqueueErrorSnackbar("No reporting year selected");
+      enqueueErrorSnackbar("No reporting year selected", ERROR_SNACKBAR_DURATION);
     } else if (startDate === null) {
-      enqueueErrorSnackbar("No start month for the reporting period selected");
+      enqueueErrorSnackbar("No start month for the reporting period selected", ERROR_SNACKBAR_DURATION);
     } else if (endDate === null) {
-      enqueueErrorSnackbar("No end month for the reporting period selected");
+      enqueueErrorSnackbar("No end month for the reporting period selected", ERROR_SNACKBAR_DURATION);
     } else {
       props.onProceed(year, startDate, endDate, reportType, forceOverwrite);
     }

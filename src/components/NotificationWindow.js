@@ -153,7 +153,7 @@ class NotificationWindow extends Component {
         }
       }
       if (!found) {
-        _messages.push(m);
+        _messages.unshift(m);
       }
     }
     this.setState({messages: _messages});
