@@ -587,6 +587,13 @@ export const MenuItems = [
         tooltip: 'Manage system users',
         authmodlevel: 'basic',
       },
+      {
+        label: 'Cleanup Large Object Store',
+        value: 'sysadmin.cleanup.large.object.store',
+        title: 'Cleanup Large Object Store',
+        tooltip: 'Cleanup large object store',
+        authmodlevel: 'basic',
+      },
     ]
   },
   {

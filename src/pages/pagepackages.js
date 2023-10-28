@@ -35,6 +35,7 @@ import {
 import {OWNER_REF} from "./controlledmaterials/Owner";
 import {UNDERDEVELOPMENT_REF} from "../components/UnderDevelopment";
 import MaintenanceSchedule, {MAINTENANCESCHEDULE_REF} from "./maintenance/MaintenanceSchedule";
+import {CLEANUPLARGEOBJECTSTORE_REF} from "./sysadmin/CleanupLargeObjectStore";
 
 const Constants = require("../utils/constants");
 
@@ -58,6 +59,7 @@ const ViewSSCRecords = lazy(() => import('./maintenance/ViewSSCRecords'));
 const ViewAMPRecords = lazy(() => import('./maintenance/ViewAMPRecords'));
 const AddEditMonitors = lazy(() => import('./radiationprotection/AddEditMonitors'));
 const ManageUsers = lazy(() => import('./sysadmin/ManageUsers'));
+const CleanupLargeObjectStore = lazy(() => import('./sysadmin/CleanupLargeObjectStore'));
 const ImportICENSPersonnel = lazy(() => import('./packages/icens/ImportICENSPersonnel'));
 const ImportICENSControlledMaterialManufacturers = lazy(() => import('./packages/icens/ImportICENSControlledMaterialManufacturers'));
 const ImportICENSControlledMaterials = lazy(() => import('./packages/icens/ImportICENSControlledMaterials'));
@@ -106,6 +108,16 @@ export const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handl
   if (actionid === Constants.SYSADMIN_MANAGE_USERS) {
     return (<ManageUsers
       ref={crefs[MANAGEUSERS_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+    />)
+  }
+  else if (actionid === Constants.SYSADMIN_CLEANUP_LARGE_OBJECT_STORE) {
+    return (<CleanupLargeObjectStore
+      ref={crefs[CLEANUPLARGEOBJECTSTORE_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}

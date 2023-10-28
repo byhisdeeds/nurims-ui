@@ -60,6 +60,7 @@ module.exports = Object.freeze({
   EP_CONCEPT_OF_OPERATION: 'ep.',
 
   SYSADMIN_MANAGE_USERS: 'sysadmin.manage.users',
+  SYSADMIN_CLEANUP_LARGE_OBJECT_STORE: 'sysadmin.cleanup.large.object.store',
 
   SUPPORT_TERMS_AND_DEFINITIONS: 'support.terms.and.definitions',
 
@@ -116,6 +117,7 @@ module.exports = Object.freeze({
   CMD_SET_SYSTEM_PROPERTIES: "set_system_properties",
 
   CMD_BACKGROUND_TASKS: "background_tasks",
+  CMD_CLEANUP_UNREFERENCED_LARGE_OBJECT_STORE_FILES: "cleanup_unreferenced_large_object_store_files",
 
   CMD_GET_USER_RECORDS: "get_user_records",
   CMD_UPDATE_USER_RECORD: "update_user_record",

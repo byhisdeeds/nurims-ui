@@ -97,6 +97,7 @@ import {
 import {
   deviceDetect
 } from 'react-device-detect';
+import {CLEANUPLARGEOBJECTSTORE_REF} from "./pages/sysadmin/CleanupLargeObjectStore";
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
@@ -181,6 +182,7 @@ class App extends React.Component {
     this.crefs[PERSONNELDOSIMETRYEVALUATION_REF] = React.createRef();
     this.crefs[VIEWMATERIALSLIST_REF] = React.createRef();
     this.crefs[MANAGEUSERS_REF] = React.createRef();
+    this.crefs[CLEANUPLARGEOBJECTSTORE_REF] = React.createRef();
     this.crefs[GENERATESSCMAINTENANCEREPORT_REF] = React.createRef();
     this.crefs[ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF] = React.createRef();
     this.crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF] = React.createRef();
