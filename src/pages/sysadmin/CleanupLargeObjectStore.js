@@ -127,8 +127,8 @@ class CleanupLargeObjectStore extends Component {
           <Grid item xs={12}>
             <LogViewer
               isTextWrapped={false}
-              hasLineNumbers={true}
-              height={"calc(100vh - 240px)"}
+              hasLineNumbers={false}
+              height={"calc(100vh - 245px)"}
               data={files}
               scrollToRow={scrollToRow}
               theme={'dark'}
