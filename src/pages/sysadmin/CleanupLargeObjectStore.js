@@ -128,7 +128,7 @@ class CleanupLargeObjectStore extends Component {
             <LogViewer
               isTextWrapped={false}
               hasLineNumbers={true}
-              height={"calc(100vh - 250px)"}
+              height={"calc(100vh - 240px)"}
               data={files}
               scrollToRow={scrollToRow}
               theme={'dark'}
