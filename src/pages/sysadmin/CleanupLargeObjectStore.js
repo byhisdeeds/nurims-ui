@@ -23,7 +23,7 @@ import {
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import ReplayCircleFilledIcon from '@mui/icons-material/ReplayCircleFilled';
 import {
-  enqueueErrorSnackbar
+  enqueueErrorSnackbar, enqueueWarningSnackbar
 } from "../../utils/SnackbarVariants";
 import DeleteIcon from "@mui/icons-material/HighlightOff";
 import {Checkbox, Toolbar, ToolbarContent, ToolbarGroup, ToolbarItem, Tooltip} from "@patternfly/react-core";
@@ -31,6 +31,7 @@ import {LogViewer, LogViewerSearch} from "@patternfly/react-log-viewer";
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {isValidUserRole} from "../../utils/UserUtils";
 
 export const CLEANUPLARGEOBJECTSTORE_REF = "CleanupLargeObjectStore";
 
@@ -48,9 +49,14 @@ class CleanupLargeObjectStore extends Component {
     this.Module = CLEANUPLARGEOBJECTSTORE_REF;
   }
 
-  // toggleTextWrapping = (wrapped) => {
-  //   this.setState({ isTextWrapped: !this.state.isTextWrapped });
-  // }
+
+  componentDidMount() {
+    const user = this.props.user;
+    if (!isValidUserRole(user, "sysadmin")) {
+      enqueueWarningSnackbar(
+        `You are logged in as ${user.profile.username} but do not have sysadmin privileges required.`);
+    }
+  }
 
   removeUnreferencedFiles = () => {
     this.props.send({
@@ -93,9 +99,11 @@ class CleanupLargeObjectStore extends Component {
 
   render() {
     const { files, only_list_files, processing, scrollToRow} = this.state;
+    const {user} = this.props;
+    const isSysadmin = isValidUserRole(user, "sysadmin");
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "only_list_files", only_list_files, "scrollToRow", scrollToRow,
-        "processing", processing);
+        "processing", processing, "isSysAdmin", isSysadmin);
     }
     return (
       <React.Fragment>
@@ -110,10 +118,11 @@ class CleanupLargeObjectStore extends Component {
                 label={"Only list files, do not remove"}
                 onChange={this.onlyListFiles}
                 value={only_list_files}
-                disabled={processing}
+                disabled={processing || !isSysadmin}
               />
               <Box sx={{flexGrow: 1}} />
               <LoadingButton
+                disabled={!isSysadmin}
                 sx={{minWidth: 350}}
                 loading={processing}
                 loadingPosition="end"
