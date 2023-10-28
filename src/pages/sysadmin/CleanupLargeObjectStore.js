@@ -116,7 +116,7 @@ class CleanupLargeObjectStore extends Component {
                 sx={{minWidth: 300}}
                 loading={processing}
                 loadingPosition="start"
-                endIcon={<DeleteIcon />}
+                endIcon={<DeleteForeverIcon fontSize={"large"} />}
                 variant="outlined"
                 onClick={this.removeUnreferencedFiles}
               >
