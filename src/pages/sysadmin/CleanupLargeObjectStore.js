@@ -4,9 +4,8 @@ import {
 } from "../../utils/constants";
 import {
   Box,
-  Button,
-  Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText,
-  Stack, Typography
+  Grid,
+  Stack,
 } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
@@ -23,15 +22,30 @@ import {
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import ReplayCircleFilledIcon from '@mui/icons-material/ReplayCircleFilled';
 import {
-  enqueueErrorSnackbar, enqueueWarningSnackbar
+  enqueueErrorSnackbar,
+  enqueueWarningSnackbar
 } from "../../utils/SnackbarVariants";
 import DeleteIcon from "@mui/icons-material/HighlightOff";
-import {Checkbox, Toolbar, ToolbarContent, ToolbarGroup, ToolbarItem, Tooltip} from "@patternfly/react-core";
-import {LogViewer, LogViewerSearch} from "@patternfly/react-log-viewer";
+import {
+  Toolbar,
+  ToolbarContent,
+  ToolbarGroup,
+  ToolbarItem,
+} from "@patternfly/react-core";
+import {
+  LogViewer,
+  LogViewerSearch
+} from "@patternfly/react-log-viewer";
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
-import {isValidUserRole} from "../../utils/UserUtils";
+import {
+  isCommandResponse,
+  messageHasResponse,
+  messageStatusOk
+} from "../../utils/WebsocketUtils";
+import {
+  isValidUserRole
+} from "../../utils/UserUtils";
 
 export const CLEANUPLARGEOBJECTSTORE_REF = "CleanupLargeObjectStore";
 
