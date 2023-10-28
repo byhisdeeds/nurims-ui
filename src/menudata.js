@@ -98,7 +98,7 @@ export const MenuItems = [
           {
             label: 'List of Materials',
             value: 'cm.view.controlled.materials.list',
-            title: 'Materials List',
+            title: 'Controlled Materials List',
             tooltip: 'Human resource actions',
             authmodlevel: 'basic',
           },
