@@ -20,7 +20,7 @@ import {
   ConsoleLog,
   UserContext
 } from "../../utils/UserContext";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import ReplayCircleFilledIcon from '@mui/icons-material/ReplayCircleFilled';
 import {
   enqueueErrorSnackbar
@@ -116,7 +116,7 @@ class CleanupLargeObjectStore extends Component {
                 sx={{minWidth: 300}}
                 loading={processing}
                 loadingPosition="start"
-                endIcon={<DeleteForeverIcon fontSize={"large"} />}
+                endIcon={<DeleteSweepIcon fontSize={"large"} />}
                 variant="outlined"
                 onClick={this.removeUnreferencedFiles}
               >
@@ -128,7 +128,7 @@ class CleanupLargeObjectStore extends Component {
             <LogViewer
               isTextWrapped={false}
               hasLineNumbers={true}
-              height={500}
+              height={"calc(100vh - 180px)"}
               data={files}
               scrollToRow={scrollToRow}
               theme={'dark'}
