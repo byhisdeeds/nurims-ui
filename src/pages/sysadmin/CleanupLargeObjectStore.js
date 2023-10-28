@@ -42,7 +42,7 @@ class CleanupLargeObjectStore extends Component {
     this.state = {
       files: "",
       scrollToRow: 0,
-      only_list_files: true,
+      only_list_files: "true",
       processing: false,
     };
     this.Module = CLEANUPLARGEOBJECTSTORE_REF;
