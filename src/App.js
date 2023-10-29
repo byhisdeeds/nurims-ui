@@ -475,7 +475,6 @@ class App extends React.Component {
   }
 
   onValidAuthentication = () => {
-    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     this.setState({busy: 0});
   }
 
