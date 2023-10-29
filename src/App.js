@@ -295,10 +295,10 @@ class App extends React.Component {
         this.puk.length = 0;
         this.puk.push(data.response.public_key);
         this.setState({online: true});
-      } else if (data.cmd === CMD_GET_USER_RECORDS) {
+      } else if (data.cmd === CMD_GET_USER_RECORDS && data.module === SIGNIN_REF) {
         for (const u of data.response.users) {
           if (u.hasOwnProperty("metadata")) {
-            this.users.push([u.metadata.username, u.metadata.fullname]);
+            this.user.users.push([u.metadata.username, u.metadata.fullname]);
           }
         }
       } else if (data.cmd === CMD_PING) {
