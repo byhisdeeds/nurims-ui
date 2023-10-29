@@ -35,7 +35,7 @@ import {
   getMatchingResponseObject,
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {
   ArchiveRecordLabel
@@ -195,7 +195,7 @@ class AddEditReactorOperatingRuns extends React.Component {
     }
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_GET_REACTOR_OPERATION_RUN_RECORDS)) {
           const selection = this.state.selection;
           if (Object.keys(selection).length === 0) {

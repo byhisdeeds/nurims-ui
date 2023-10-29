@@ -14,7 +14,7 @@ import {
 import {
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
 import BusyIndicator from "../../components/BusyIndicator";
@@ -51,7 +51,7 @@ class AddEditIrradiatedSamples extends Component {
     }
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD)) {
           const messages = this.state.messages;
           if (response.message !== "") {

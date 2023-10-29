@@ -19,7 +19,7 @@ import {withTheme} from "@mui/styles";
 import {
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {
   ConsoleLog,
@@ -106,8 +106,8 @@ class ReactorOperationsReport extends Component {
     }
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
-        if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
+      if (messageResponseStatusOk(message)) {
+        if (isCommandResponse(message, CMD_GET_PROVENANCE_RECORDS)) {
           this.setProvenanceRecords(response.provenance)
         } else if (isCommandResponse(message, CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF)) {
           if (response.message !== "") {

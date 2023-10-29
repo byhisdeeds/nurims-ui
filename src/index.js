@@ -1,35 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {Routes, Route, Router, Navigate, BrowserRouter} from 'react-router-dom';
 import App from "./App";
-import Login from "./components/Login";
-
-const AuthService = {
-  isAuthenticated: false,
-  from: '',
-  profile: {},
-  users: [],
-  authenticate(valid, profile) {
-    this.isAuthenticated = valid;
-    if (valid && profile) {
-      this.profile = profile;
-    }
-  },
-  logout() {
-    this.isAuthenticated = false;
-  }
-};
-
-const ProtectedRoute = ({ authService, path, debug, children }) => {
-  authService.from = path + debug;
-  return authService.isAuthenticated ? children : <Navigate to={"/login"} replace={false}/>
-}
+import {SnackbarProvider} from "notistack";
 
 const routing = (
-  <App
-    authService={AuthService}
-    wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}
-  />
+
+  <SnackbarProvider maxSnack={5} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}>
+    <App
+      wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}
+    />
+  </SnackbarProvider>
 );
 
 ReactDOM.render(routing, document.getElementById('root'));

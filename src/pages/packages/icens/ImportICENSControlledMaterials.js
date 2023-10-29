@@ -27,7 +27,7 @@ import {
 import {
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../../utils/WebsocketUtils";
 import {withTheme} from "@mui/styles";
 import ReactJson from "react-json-view";
@@ -86,7 +86,7 @@ class ImportICENSControlledMaterials extends Component {
     console.log("ON_WS_MESSAGE", MODULE, message)
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_UPDATE_STORAGE_LOCATION_RECORD)) {
           const messages = this.state.messages;
           messages.push(`Storage location record for ${response.storage_location[NURIMS_TITLE]} updated successfully`);

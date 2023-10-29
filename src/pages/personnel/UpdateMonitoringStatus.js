@@ -24,7 +24,7 @@ import {withTheme} from "@mui/styles";
 import {
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {TitleComponent} from "../../components/CommonComponents";
 import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../../utils/SnackbarVariants";
@@ -113,7 +113,7 @@ class UpdateMonitoringStatus extends Component {
     console.log("ON_WS_MESSAGE", this.Module, message)
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_GET_PERSONNEL_RECORDS)) {
           if (this.plref.current) {
             this.plref.current.update_personnel(response.personnel)

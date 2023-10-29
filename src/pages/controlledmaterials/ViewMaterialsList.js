@@ -19,7 +19,7 @@ import {withTheme} from "@mui/styles";
 import {
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {TitleComponent} from "../../components/CommonComponents";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
@@ -41,7 +41,7 @@ class ViewMaterialsList extends Component {
     console.log("ON_WS_MESSAGE", this.Module, message)
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_GENERATE_CONTROLLED_MATERIALS_LIST_PDF)) {
           this.setState({ pdf: message.data.pdf });
         }

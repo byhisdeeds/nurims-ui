@@ -41,7 +41,7 @@ import {
   getMatchingResponseObject,
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../utils/WebsocketUtils";
 import {
   ConsoleLog,
@@ -368,7 +368,7 @@ class BaseRecordManager extends Component {
     }
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (commandHandlers) {
           if (Array.isArray(commandHandlers)) {
             for (const handler of commandHandlers) {

@@ -26,7 +26,7 @@ import {TitleComponent, AddRemoveArchiveSaveProvenanceButtonPanel} from "../../c
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {isValidUserRole} from "../../utils/UserUtils";
 import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
-import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 
@@ -60,7 +60,7 @@ class AddEditSSC extends BaseRecordManager {
     ]);
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
           this.setProvenanceRecords(response.provenance)
         }

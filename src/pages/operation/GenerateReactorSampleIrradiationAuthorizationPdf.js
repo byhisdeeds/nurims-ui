@@ -29,7 +29,7 @@ import PropTypes from "prop-types";
 import {withTheme} from "@mui/styles";
 import dayjs from 'dayjs';
 import PdfViewer from "../../components/PdfViewer";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {isCommandResponse, messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
 import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../utils/SnackbarVariants";
 
 export const GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF =
@@ -59,7 +59,7 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
     }
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF)) {
           if (response.message !== "") {
             enqueueInfoSnackbar(response.message);

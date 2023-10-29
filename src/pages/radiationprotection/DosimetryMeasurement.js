@@ -49,7 +49,7 @@ import {TitleComponent, AddRemoveArchiveSaveProvenanceButtonPanel} from "../../c
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import {isValidUserRole} from "../../utils/UserUtils";
-import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
 import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -150,7 +150,7 @@ class DosimetryMeasurement extends BaseRecordManager {
     ]);
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
           this.setProvenanceRecords(response.provenance)
         }

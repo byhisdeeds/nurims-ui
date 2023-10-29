@@ -41,7 +41,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {
   isValidUserRole
@@ -92,7 +92,7 @@ class CleanupLargeObjectStore extends Component {
     }
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_CLEANUP_UNREFERENCED_LARGE_OBJECT_STORE_FILES)) {
           if (response.hasOwnProperty("file") && response.file.toLowerCase() === "done") {
             const files = this.state.files + (this.state.files === "" ? "" : "\n") + "Completed processing."

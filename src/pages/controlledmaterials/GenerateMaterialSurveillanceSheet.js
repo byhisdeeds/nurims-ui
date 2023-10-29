@@ -19,7 +19,7 @@ import {
 import {
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {
   TitleComponent
@@ -45,7 +45,7 @@ class GenerateMaterialSurveillanceSheet extends Component {
     console.log("ON_WS_MESSAGE", this.Module, message)
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_GENERATE_CONTROLLED_MATERIALS_SURVEILLANCE_SHEET_PDF)) {
           this.setState({ pdf: message.data.pdf });
         }

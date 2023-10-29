@@ -3,7 +3,7 @@ export function messageHasResponse(message) {
   return message.hasOwnProperty("response");
 }
 
-export function messageStatusOk(message) {
+export function messageResponseStatusOk(message) {
   return messageHasResponse(message) && message.response.hasOwnProperty("status") && message.response.status === 0;
 }
 

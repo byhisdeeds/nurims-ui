@@ -47,7 +47,7 @@ import Charts from "react-apexcharts";
 import * as ss from "simple-statistics"
 import {doseProfileStats, doseStats} from "../../utils/StatsUtils";
 import {ConfirmRemoveRecordDialog, PdfViewerDialog} from "../../components/UtilityDialogs";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {isCommandResponse, messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
 import {
   PERSONNELDOSIMETRYEVALUATION_REF
 } from "./PersonnelDosimetryEvaluation";
@@ -442,7 +442,7 @@ class PersonnelDosimetryEvaluationDataView extends Component {
 
   ws_message = (message) => {
     console.log("%%%%%%%%%%%%ON_WS_MESSAGE", this.Module, message)
-    if (messageStatusOk(message)) {
+    if (messageResponseStatusOk(message)) {
       if (isCommandResponse(message, CMD_GENERATE_PERSONNEL_DOSE_EVALUATION_PDF)) {
         this.setState({ pdf: message.data.pdf, pdfReady: true });
       }

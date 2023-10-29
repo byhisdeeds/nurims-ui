@@ -19,7 +19,7 @@ import {
   AddRemoveArchiveSaveProvenanceButtonPanel
 } from "../../components/CommonComponents";
 import {ConsoleLog, UserContext} from "../../utils/UserContext";
-import {messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
 import {
   setProvenanceRecordsHelper,
   showProvenanceRecordsViewHelper
@@ -58,7 +58,7 @@ class Manufacturer extends BaseRecordManager {
     ]);
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
           this.setProvenanceRecords(response.provenance)
         }

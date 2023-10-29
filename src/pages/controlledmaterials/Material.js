@@ -30,7 +30,7 @@ import {
 import {UserContext} from "../../utils/UserContext";
 import {
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {
   setProvenanceRecordsHelper,
@@ -88,7 +88,7 @@ class Material extends BaseRecordManager {
     ]);
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
           this.setProvenanceRecords(response.provenance)
         }

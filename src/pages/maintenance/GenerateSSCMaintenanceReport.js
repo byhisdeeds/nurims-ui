@@ -13,7 +13,7 @@ import {withTheme} from "@mui/styles";
 import {
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {
   SameYearDateRangePicker,
@@ -47,7 +47,7 @@ class GenerateSSCMaintenanceReport extends Component {
     console.log("ON_WS_MESSAGE", this.Module, message)
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_GENERATE_SSC_MAINTENANCE_REPORT_PDF)) {
           this.setState({ pdf: message.data.pdf });
         }

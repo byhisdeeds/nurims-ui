@@ -30,7 +30,7 @@ import {
   getMatchingResponseObject,
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {
   ArchiveRecordLabel
@@ -195,7 +195,7 @@ class AddEditReactorWaterSamples extends React.Component {
     }
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_GET_REACTOR_WATER_SAMPLE_RECORDS)) {
           const selection = this.state.selection;
           if (Object.keys(selection).length === 0) {

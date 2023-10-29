@@ -25,15 +25,15 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {styled} from "@mui/material/styles";
 import {SnackbarProvider} from "notistack";
 import {
-  enqueueErrorSnackbar,
-  enqueueSuccessSnackbar,
   enqueueWarningSnackbar
 } from "../utils/SnackbarVariants";
-import {DeviceUUID} from "device-uuid";
-import {ConsoleLog, UserContext} from "../utils/UserContext";
+import {
+  ConsoleLog,
+  UserContext
+} from "../utils/UserContext";
 import {
   messageHasResponse,
-  messageStatusOk,
+  messageResponseStatusOk,
   isCommandResponse
 } from "../utils/WebsocketUtils";
 import {
@@ -117,7 +117,7 @@ class Signin extends React.Component {
     }
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, Constants.CMD_VERIFY_USER_PASSWORD)) {
           if (response.valid) {
             // if Remember Me selected then save the username

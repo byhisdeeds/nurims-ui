@@ -5,7 +5,7 @@ import 'react-chatbot-kit/build/main.css';
 import {
   CMD_BOT_MESSAGE_SEND,
 } from "../../utils/constants";
-import {isCommandResponse, messageHasResponse, messageStatusOk} from "../../utils/WebsocketUtils";
+import {isCommandResponse, messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
 import { ReactBot, addBotMessage, addUserMessage } from '@cozimacode/react-bot';
 import "@cozimacode/react-bot/dist/styles.css";
 
@@ -42,7 +42,7 @@ class ChatBot extends React.Component {
     }
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_BOT_MESSAGE_SEND)) {
           console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", response)
           console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", response.utterance)

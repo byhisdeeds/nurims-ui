@@ -16,7 +16,7 @@ import {
 import {
   isCommandResponse,
   messageHasResponse,
-  messageStatusOk
+  messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from '@mui/icons-material/Search';
@@ -115,7 +115,7 @@ class TermsAndDefinitions extends React.Component {
     }
     if (messageHasResponse(message)) {
       const response = message.response;
-      if (messageStatusOk(message)) {
+      if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_SUGGEST_SUPPORT_SEARCH_TERMS)) {
           this.setState({search_term_options: response.search_term_results, searching: false });
         } else if (isCommandResponse(message, CMD_GET_SEARCH_TERM_CONTENT)) {

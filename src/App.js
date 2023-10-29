@@ -14,7 +14,6 @@ import MenuDrawer from "./MenuDrawer";
 import {darkTheme, lightTheme} from "./utils/Theme";
 import {ThemeProvider} from "@mui/material/styles";
 import {MenuItems} from "./menudata";
-import {SnackbarProvider} from "notistack";
 import metadata from './metadata.json';
 import BusyIndicator from "./components/BusyIndicator";
 import "./App.css"
@@ -27,7 +26,9 @@ import {
   CMD_PING,
   CMD_GET_SERVER_INFO,
   CMD_GET_USER_NOTIFICATION_MESSAGES,
-  CMD_DELETE_USER_NOTIFICATION_MESSAGE, CMD_GET_PUBLIC_KEY, CMD_GET_USER_RECORDS
+  CMD_DELETE_USER_NOTIFICATION_MESSAGE,
+  CMD_GET_PUBLIC_KEY,
+  CMD_GET_USER_RECORDS
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -88,6 +89,7 @@ import {ADDEDITTODORECORD_REF} from "./pages/maintenance/AddEditTodoRecord";
 import {SIGNIN_REF} from "./components/Signin";
 import NotificationWindow from "./components/NotificationWindow";
 import SystemInfoBadges from "./components/SystemInfoBadges";
+import Signin from "./components/Signin";
 import {
   BackgroundTasks,
   LogWindowButton,
@@ -95,15 +97,13 @@ import {
   NotificationsButton
 } from "./components/CommonComponents";
 import {DeviceUUID} from 'device-uuid';
-import {enqueueWarningSnackbar} from "./utils/SnackbarVariants";
 import {
-  isValidUserRole
-} from "./utils/UserUtils";
+  enqueueWarningSnackbar
+} from "./utils/SnackbarVariants";
 import {
   deviceDetect
 } from 'react-device-detect';
-import Login from "./components/Login";
-import Signin from "./components/Signin";
+
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
@@ -233,7 +233,6 @@ class App extends React.Component {
       ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
     }
     // Everything here is fired on component mount.
-    // this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}/nurimsws`);
     this.ws = new ReconnectingWebSocket(this.props.wsep + "?uuid=" + this.uuid);
     this.ws.onopen = (event) => {
       if (this.debug) {
@@ -426,21 +425,6 @@ class App extends React.Component {
     this.setState({open: !this.state.open});
   };
 
-  // handleOrganisationSelected = (_org) => {
-  //   if (typeof _org === 'object') {
-  //     this.setState({ menuData: MenuData, org: _org });
-  //     // load organisation database on server
-  //     this.send({
-  //       cmd: CMD_SET_ORG_DB,
-  //       org: _org,
-  //     })
-  //     // load system properties
-  //     this.send({
-  //       cmd: CMD_GET_SYSTEM_PROPERTIES,
-  //     })
-  //   }
-  // };
-
   toggleLogWindow = () => {
     this.setState({log_window_visible: !this.state.log_window_visible});
   }
@@ -456,10 +440,12 @@ class App extends React.Component {
   }
 
   toggleNotificationsWindow = (event) => {
-    this.setState({
-      notification_window_visible: !this.state.notification_window_visible,
-      notification_window_anchor: event.currentTarget,
-    });
+    if (this.state.num_messages > 0) {
+      this.setState({
+        notification_window_visible: !this.state.notification_window_visible,
+        notification_window_anchor: event.currentTarget,
+      });
+    }
   }
 
   closeNotificationWindow = () => {
@@ -492,14 +478,6 @@ class App extends React.Component {
       <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
           <Box sx={{flexGrow: 1, height: "100%"}}>
-            <SnackbarProvider
-              autoHideDuration={2000}
-              maxSnack={5}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-            />
             {this.user.isAuthenticated ?
               <React.Fragment>
                 <AppBar position="static">
@@ -593,10 +571,8 @@ class App extends React.Component {
                 send={this.send}
                 online={online}
                 onValidAuthentication={this.onValidAuthentication}
-                // wsep={`${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.hostname}/nurimsws`}
               />
             }
-
           </Box>
         </ThemeProvider>
       </UserContext.Provider>
@@ -605,11 +581,7 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  authService: PropTypes.object.isRequired,
   wsep: PropTypes.string.isRequired,
 }
 
 export default App
-// export default withAuth0(withAuthenticationRequired(App, {
-//   onRedirecting: () => <BusyIndicator open={true} loader={"ring"}/>,
-// }));
