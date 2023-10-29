@@ -1,5 +1,4 @@
 import React from 'react';
-import {Navigate} from "react-router-dom";
 import PropTypes from 'prop-types'
 import {
   ThemeProvider,
@@ -24,16 +23,24 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {styled} from "@mui/material/styles";
-import ReconnectingWebSocket from "reconnecting-websocket";
 import {SnackbarProvider} from "notistack";
 import {
+  enqueueErrorSnackbar,
+  enqueueSuccessSnackbar,
   enqueueWarningSnackbar
 } from "../utils/SnackbarVariants";
 import {DeviceUUID} from "device-uuid";
+import {ConsoleLog, UserContext} from "../utils/UserContext";
+import {
+  messageHasResponse,
+  messageStatusOk,
+  isCommandResponse
+} from "../utils/WebsocketUtils";
+import {
+  withTheme
+} from "@mui/styles";
 
-const { v4: uuid } = require('uuid');
 const Constants = require('../utils/constants');
-
 
 const StyledAvatar = styled(Avatar)({
   margin: 2,
@@ -43,9 +50,7 @@ const StyledButton = styled(Button)({
   margin: 2,
 });
 
-function commandResponseEquals(msg, cmd) {
-  return  msg.hasOwnProperty('cmd') && msg.cmd === cmd;
-}
+export const SIGNIN_REF = "Signin";
 
 function encryptPassword(pubKey, text) {
   const jsEncrypt = new window.JSEncrypt();
@@ -53,24 +58,22 @@ function encryptPassword(pubKey, text) {
   return jsEncrypt.encrypt(text);
 }
 
-class Login extends React.Component {
+class Signin extends React.Component {
+  static contextType = UserContext;
+
   constructor(props) {
     super(props);
     this.authService = props.authService;
     this.ws = null;
-    this.puk = null;
-    this.uuid = uuid();
     this._mounted = false;
-    this.uuid = new DeviceUUID().get();
     this.debug = window.location.href.includes("debug");
-    this.Module = "Login";
+    this.Module = SIGNIN_REF;
     this.state = {
       NavigateToPreviousRoute: false,
       theme: localStorage.getItem("theme") || "light",
       username: '',
       password: '',
       remember: false,
-      online: false,
     }
   }
 
@@ -88,14 +91,12 @@ class Login extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    if (this.state.online) {
-      this.ws.send(JSON.stringify({
-        uuid: this.uuid,
-        cmd: Constants.CMD_VERIFY_USER_PASSWORD,
-        username:this.state.username,
-        password:encryptPassword(this.puk, this.state.password),
-      }));
-    }
+    this.props.send({
+      cmd: Constants.CMD_VERIFY_USER_PASSWORD,
+      username:this.state.username,
+      password:encryptPassword(this.props.puk[0], this.state.password),
+      module: this.Module,
+    }, false);
   };
 
   componentWillUnmount() {
@@ -107,49 +108,18 @@ class Login extends React.Component {
 
   componentDidMount () {
     this._mounted = true;
-    this.ws = new ReconnectingWebSocket(this.props.wsep+"?uuid="+this.uuid);
-    this.ws.onopen = () => {
-      if (this.debug) {
-        console.log(this.Module, 'websocket connection established.');
-      }
-      // get public key as base64 string
-      this.ws.send(JSON.stringify({uuid: this.uuid, cmd: Constants.CMD_GET_PUBLIC_KEY}));
-      // get list of all registered users
-      this.ws.send(JSON.stringify({uuid: this.uuid, cmd: Constants.CMD_GET_USER_RECORDS}));
-    };
-    this.ws.onerror = (error) => {
-      if (this.debug) {
-        console.log(this.Module, `websocket error - ${error}`);
-      }
-    };
-    this.ws.onclose = () => {
-      if (this.debug) {
-        console.log(this.Module, 'websocket connection closed.');
-      }
-      if (this._mounted) {
-        this.setState({ online: false });
-      }
-    };
-    this.ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (this.debug) {
-        console.log(`${this.Module}.onmessage`, "message", message);
-      }
-      if (commandResponseEquals(message, Constants.CMD_GET_PUBLIC_KEY) && message.response.status === 0) {
-        this.puk = message.response.public_key;
-        this.setState({ online: true });
-      } else if (commandResponseEquals(message, Constants.CMD_GET_USER_RECORDS) && message.response.status === 0) {
-        for (const u of message.response.users) {
-          if (u.hasOwnProperty("metadata")) {
-            this.authService.users.push([u.metadata.username, u.metadata.fullname]);
-          }
-        }
-      } else if (commandResponseEquals(message, Constants.CMD_VERIFY_USER_PASSWORD)) {
-        console.log(message)
-        if (message.hasOwnProperty("response") &&
-          message.response.hasOwnProperty('status') &&
-          message.response.status === 0) {
-          if (message.response.valid) {
+  }
+
+
+  ws_message(message) {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "ws_message", "message", message);
+    }
+    if (messageHasResponse(message)) {
+      const response = message.response;
+      if (messageStatusOk(message)) {
+        if (isCommandResponse(message, Constants.CMD_VERIFY_USER_PASSWORD)) {
+          if (response.valid) {
             // if Remember Me selected then save the username
             if (this.state.remember) {
               localStorage.setItem('rememberme', this.state.username);
@@ -157,30 +127,21 @@ class Login extends React.Component {
               localStorage.removeItem('rememberme');
             }
           } else {
-            enqueueWarningSnackbar(message.response.message);
+            enqueueWarningSnackbar(response.message);
           }
-          this.authService.authenticate(message.response.valid, message.response.profile);
-          this.setState({ NavigateToPreviousRoute: message.response.valid });
-        } else {
-          enqueueWarningSnackbar(message.response.message);
-          this.setState({ NavigateToPreviousRoute: false });
+          this.authService.authenticate(response.valid, response.profile);
+          this.props.onValidAuthentication()
         }
+      } else {
+        enqueueWarningSnackbar(response.message);
       }
-    };
-    // if remember me enabled then populate username box with last authenticated username
-    if (localStorage.getItem('rememberme')) {
-      this.setState({ username: localStorage.getItem('rememberme'), remember: true });
     }
   }
 
   render() {
     if (this.state === null) return ('');
-    const from = this.authService.from;
-    const { NavigateToPreviousRoute, remember, username, online } = this.state;
+    const { remember, username } = this.state;
     const theme = this.state.theme === 'light' ? lightTheme : darkTheme
-    if (NavigateToPreviousRoute) {
-      return <Navigate to={from} replace={true} />;
-    }
     return (
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
@@ -196,7 +157,7 @@ class Login extends React.Component {
             component="main"
             maxWidth="xs"
             style={{
-              backgroundColor: online ? theme.palette.background.default : theme.palette.action.disabledBackground,
+              backgroundColor: this.props.online ? theme.palette.background.default : theme.palette.action.disabledBackground,
               borderRadius: theme.shape.borderRadius
             }}
           >
@@ -206,8 +167,8 @@ class Login extends React.Component {
                 <LockOutlinedIcon/>
               </StyledAvatar>
               <Typography component="h1" variant="h5">
-                { online && <div>Sign in</div> }
-                { !online && <div>Off-Line</div> }
+                { this.props.online && <div>Sign in</div> }
+                { !this.props.online && <div>Off-Line</div> }
               </Typography>
               <Box component="form" sx={{'& .MuiInputBase-root': {ml: 0, mb: 0}, }} noValidate autoComplete="off">
                 <TextField
@@ -221,7 +182,7 @@ class Login extends React.Component {
                   name="email"
                   autoComplete="email"
                   autoFocus
-                  InputLabelProps={{style:{color: online ? theme.palette.primary.main : theme.palette.primary.light}}}
+                  InputLabelProps={{style:{color: this.props.online ? theme.palette.primary.main : theme.palette.primary.light}}}
                 />
                 <TextField
                   margin="normal"
@@ -233,12 +194,12 @@ class Login extends React.Component {
                   id="password"
                   onChange={this.onPasswordChange}
                   autoComplete="current-password"
-                  InputLabelProps={{style:{color: online ? theme.palette.primary.main : theme.palette.primary.light}}}
+                  InputLabelProps={{style:{color: this.props.online ? theme.palette.primary.main : theme.palette.primary.light}}}
                 />
                 <FormControlLabel
                   control={<Checkbox onChange={this.onRememberMe} checked={remember}/>}
                   label="Remember me"
-                  style={{color: online ? theme.palette.primary.main : theme.palette.primary.light}}
+                  style={{color: this.props.online ? theme.palette.primary.main : theme.palette.primary.light}}
                 />
                 <StyledButton
                   type="submit"
@@ -270,9 +231,12 @@ class Login extends React.Component {
   }
 }
 
-Login.propTypes = {
+Signin.propTypes = {
   authService: PropTypes.object.isRequired,
-  wsep: PropTypes.string.isRequired,
+  puk: PropTypes.object.isRequired,
+  online: PropTypes.bool.isRequired,
+  send: PropTypes.func.isRequired,
+  onValidAuthentication: PropTypes.func.isRequired,
 }
 
-export default Login;
+export default withTheme(Signin);

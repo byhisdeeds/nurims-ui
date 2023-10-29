@@ -27,7 +27,7 @@ import {
   CMD_PING,
   CMD_GET_SERVER_INFO,
   CMD_GET_USER_NOTIFICATION_MESSAGES,
-  CMD_DELETE_USER_NOTIFICATION_MESSAGE
+  CMD_DELETE_USER_NOTIFICATION_MESSAGE, CMD_GET_PUBLIC_KEY, CMD_GET_USER_RECORDS
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -85,6 +85,7 @@ import LogWindow from "./components/LogWindow";
 import {VIEWAMPRECORDS_REF} from "./pages/maintenance/ViewAMPRecords";
 import {CLEANUPLARGEOBJECTSTORE_REF} from "./pages/sysadmin/CleanupLargeObjectStore";
 import {ADDEDITTODORECORD_REF} from "./pages/maintenance/AddEditTodoRecord";
+import {SIGNIN_REF} from "./components/Signin";
 import NotificationWindow from "./components/NotificationWindow";
 import SystemInfoBadges from "./components/SystemInfoBadges";
 import {
@@ -101,6 +102,8 @@ import {
 import {
   deviceDetect
 } from 'react-device-detect';
+import Login from "./components/Login";
+import Signin from "./components/Signin";
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
@@ -126,6 +129,28 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
+const AuthService = {
+  isAuthenticated: false,
+  from: "",
+  profile: {
+    id: -1,
+    username: "",
+    fullname: "",
+    authorized_module_level: "",
+    role: []
+  },
+  users: [],
+  authenticate(valid, profile) {
+    this.isAuthenticated = valid;
+    if (valid && profile) {
+      this.profile = profile;
+    }
+  },
+  logout() {
+    this.isAuthenticated = false;
+  }
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -136,6 +161,7 @@ class App extends React.Component {
       menuData: MenuItems,
       org: {name: "", authorized_module_level: ""},
       ready: false,
+      online: false,
       busy: 0,
       background_tasks_active: false,
       log_window_visible: false,
@@ -145,11 +171,13 @@ class App extends React.Component {
       num_messages: 0,
     };
     this.debug = window.location.href.includes("debug");
+    this.puk = [];
     this.properties = [];
     this.menuTitle = "";
     this.ws = null;
     this.mounted = false;
-    this.user = this.props.authService;
+    // this.user = this.props.authService;
+    this.user = AuthService;
     this.uuid = `${deviceDetect()["browserName"].toLowerCase()}-${new DeviceUUID().get()}`;
     this.logRef = React.createRef();
     this.notificationRef = React.createRef();
@@ -161,6 +189,7 @@ class App extends React.Component {
     this.crefs["ImportICENSControlledMaterialManufacturers"] = React.createRef();
     this.crefs["ImportICENSControlledMaterialStorageLocations"] = React.createRef();
     this.crefs["ImportICENSControlledMaterials"] = React.createRef();
+    this.crefs[SIGNIN_REF] = React.createRef();
     this.crefs[MONITORDOSIMETRYMEASUREMENT_REF] = React.createRef();
     this.crefs[PERSONNELDOSIMETRYMEASUREMENT_REF] = React.createRef();
     this.crefs[PERSONNELDOSIMETRYREPORT_REF] = React.createRef();
@@ -195,58 +224,31 @@ class App extends React.Component {
     this.crefs[CHATBOT_REF] = React.createRef();
     this.crefs[UNDERDEVELOPMENT_REF] = React.createRef();
     this.crefs[MAINTENANCESCHEDULE_REF] = React.createRef();
-    /////////////////////////////
-    // this.du = new DeviceUUID().parse();
-    // this.dua = [
-    //   this.du.language,
-    //   this.du.platform,
-    //   this.du.os,
-    //   this.du.cpuCores,
-    //   this.du.isAuthoritative,
-    //   this.du.silkAccelerated,
-    //   this.du.isKindleFire,
-    //   this.du.isDesktop,
-    //   this.du.isMobile,
-    //   this.du.isTablet,
-    //   this.du.isWindows,
-    //   this.du.isLinux,
-    //   this.du.isLinux64,
-    //   this.du.isMac,
-    //   this.du.isiPad,
-    //   this.du.isiPhone,
-    //   this.du.isiPod,
-    //   this.du.isSmartTV,
-    //   this.du.pixelDepth,
-    //   this.du.isTouchScreen
-    // ];
-    // this.uuid2 = this.du.hashMD5(this.dua.join(':'));
-    // this.uuid3 = this.du.hashInt(this.dua.join(':'));
-    /////////////////////////////
   }
 
 
   componentDidMount() {
-    ///////////////////////////////////////////
-    // console.log("UUID", this.uuid)
-    // console.log("DUA", this.dua)
-    // console.log("UUID2", this.uuid2)
-    // console.log("UUID3", this.uuid3)
-    // console.log("NAVIGATOR, SCREEN, WINDOW.PERFORMANCE", navigator)
-    // console.log("USE_DEVICE_DATA", deviceDetect())
-    ///////////////////////////////////////////
     this.mounted = true;
     if (this.debug) {
       ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
     }
     // Everything here is fired on component mount.
     // this.ws = new ReconnectingWebSocket(`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}/nurimsws`);
-    this.ws = new ReconnectingWebSocket(this.props.wsep+"?uuid="+this.uuid);
+    this.ws = new ReconnectingWebSocket(this.props.wsep + "?uuid=" + this.uuid);
     this.ws.onopen = (event) => {
       if (this.debug) {
         ConsoleLog("App", "ws.onopen", "websocket connection established");
       }
       this.appendLog("Websocket connection established.");
       this.setState({ready: true});
+      // get public key as base64 string
+      this.send({
+        cmd: CMD_GET_PUBLIC_KEY,
+      })
+      // get list of all registered users
+      this.send({
+        cmd: CMD_GET_USER_RECORDS,
+      })
       // load organisation database on server
       this.send({
         cmd: CMD_GET_ORGANISATION,
@@ -289,7 +291,17 @@ class App extends React.Component {
           return;
         }
       }
-      if (data.cmd === CMD_PING) {
+      if (data.cmd === CMD_GET_PUBLIC_KEY) {
+        this.puk.length = 0;
+        this.puk.push(data.response.public_key);
+        this.setState({online: true});
+      } else if (data.cmd === CMD_GET_USER_RECORDS) {
+        for (const u of data.response.users) {
+          if (u.hasOwnProperty("metadata")) {
+            this.users.push([u.metadata.username, u.metadata.fullname]);
+          }
+        }
+      } else if (data.cmd === CMD_PING) {
         this.send_pong();
       } else if (data.cmd === CMD_GET_SERVER_INFO) {
         if (this.sysinfoRef.current) {
@@ -462,12 +474,19 @@ class App extends React.Component {
     this.setState({num_messages: num_messages});
   }
 
+  onValidAuthentication = () => {
+    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+    this.setState({busy: 0});
+  }
+
   render() {
-    const {theme, org, ready, menuData, actionid, open, busy, background_tasks_active, num_unread_messages,
-      log_window_visible, notification_window_visible, notification_window_anchor, num_messages} = this.state;
-    const isSysadmin = isValidUserRole(this.user, "sysadmin");
+    const {
+      theme, org, ready, menuData, actionid, open, busy, background_tasks_active, num_unread_messages,
+      log_window_visible, notification_window_visible, notification_window_anchor, num_messages, online
+    } = this.state;
+    const isSysadmin = false; //isValidUserRole(this.user, "sysadmin");
     if (this.debug) {
-      ConsoleLog("App", "render", "actionid", actionid, "busy", busy,
+      ConsoleLog("App", "render", "user", this.user, "actionid", actionid, "busy", busy,
         "num_unread_messages", num_unread_messages, "num_messages", num_messages)
     }
     return (
@@ -482,89 +501,103 @@ class App extends React.Component {
                 horizontal: 'center',
               }}
             />
-            <AppBar position="static">
-              <Toolbar>
-                <Tooltip
-                  title={`Build ${metadata.buildMajor}.${metadata.buildMinor}.${metadata.buildRevision} ${metadata.buildTag}`}
-                  placement={"bottom-start"}
-                  arrow
-                >
-                  <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                    NURIMS
-                  </Typography>
-                </Tooltip>
-                <Typography variant="h6" component="div">
-                  Organisation: {org.name.toUpperCase()}
-                </Typography>
-                <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
-                <BackgroundTasks active={background_tasks_active}/>
-                <NetworkConnection ready={ready}/>
-                <LogWindowButton onClick={this.toggleLogWindow}/>
-                {isSysadmin && <SystemInfoBadges ref={this.sysinfoRef}/>}
-                <NotificationsButton
-                  numMessages={num_messages}
-                  numUnreadMessages={num_unread_messages}
-                  id={"notification-window"}
-                  onClick={this.toggleNotificationsWindow}
-                />
-              </Toolbar>
-            </AppBar>
-            <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
-                        organisation={org}>
-              <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
-                <Box sx={{p: 3}}>
-                  <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
-                  {actionid === Constants.MY_ACCOUNT &&
-                    <MyAccount
-                      ref={this.crefs["MyAccount"]}
-                      title={this.menuTitle}
-                      user={this.user}
-                      send={this.send}
-                      properties={this.properties}
-                    />}
-                  {actionid === Constants.SETTINGS &&
-                    <Settings
-                      ref={this.crefs["Settings"]}
-                      title={this.menuTitle}
-                      user={this.user}
-                      theme={theme}
-                      onClick={this.handleMenuAction}
-                      send={this.send}
-                      properties={this.properties}
+            {this.user.isAuthenticated ?
+              <React.Fragment>
+                <AppBar position="static">
+                  <Toolbar>
+                    <Tooltip
+                      title={`Build ${metadata.buildMajor}.${metadata.buildMinor}.${metadata.buildRevision} ${metadata.buildTag}`}
+                      placement={"bottom-start"}
+                      arrow
+                    >
+                      <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                        NURIMS
+                      </Typography>
+                    </Tooltip>
+                    <Typography variant="h6" component="div">
+                      Organisation: {org.name.toUpperCase()}
+                    </Typography>
+                    <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
+                    <BackgroundTasks active={background_tasks_active}/>
+                    <NetworkConnection ready={ready}/>
+                    <LogWindowButton onClick={this.toggleLogWindow}/>
+                    {isSysadmin && <SystemInfoBadges ref={this.sysinfoRef}/>}
+                    <NotificationsButton
+                      numMessages={num_messages}
+                      numUnreadMessages={num_unread_messages}
+                      id={"notification-window"}
+                      onClick={this.toggleNotificationsWindow}
                     />
-                  }
-                  {RasaPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                  {SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                  {SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                  {SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                  {ControlledMaterialPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                  {HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                  {RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                  {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                  {OrgPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                  {EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                  <LogWindow
-                    ref={this.logRef}
-                    onClose={this.closeLogWindow}
-                    visible={log_window_visible}
-                    width={`${drawerWidth}px`}
-                    height={350}
-                  />
-                  <NotificationWindow
-                    ref={this.notificationRef}
-                    anchorEl={notification_window_anchor}
-                    id={"notification-window"}
-                    send={this.send}
-                    onClose={this.closeNotificationWindow}
-                    onChangeUnreadMessages={this.onChangeUnreadMessages}
-                    onChangeNumMessages={this.onChangeNumMessages}
-                    visible={notification_window_visible}
-                    width={500}
-                    height={600}
-                  />
-                </Box>
-              </Suspense>
-            </MenuDrawer>
+                  </Toolbar>
+                </AppBar>
+                <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
+                            organisation={org}>
+                  <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
+                    <Box sx={{p: 3}}>
+                      <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
+                      {actionid === Constants.MY_ACCOUNT &&
+                        <MyAccount
+                          ref={this.crefs["MyAccount"]}
+                          title={this.menuTitle}
+                          user={this.user}
+                          send={this.send}
+                          properties={this.properties}
+                        />}
+                      {actionid === Constants.SETTINGS &&
+                        <Settings
+                          ref={this.crefs["Settings"]}
+                          title={this.menuTitle}
+                          user={this.user}
+                          theme={theme}
+                          onClick={this.handleMenuAction}
+                          send={this.send}
+                          properties={this.properties}
+                        />
+                      }
+                      {RasaPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                      {SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                      {SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                      {SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                      {ControlledMaterialPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                      {HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                      {RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                      {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                      {OrgPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                      {EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                      <LogWindow
+                        ref={this.logRef}
+                        onClose={this.closeLogWindow}
+                        visible={log_window_visible}
+                        width={`${drawerWidth}px`}
+                        height={350}
+                      />
+                      <NotificationWindow
+                        ref={this.notificationRef}
+                        anchorEl={notification_window_anchor}
+                        id={"notification-window"}
+                        send={this.send}
+                        onClose={this.closeNotificationWindow}
+                        onChangeUnreadMessages={this.onChangeUnreadMessages}
+                        onChangeNumMessages={this.onChangeNumMessages}
+                        visible={notification_window_visible}
+                        width={500}
+                        height={600}
+                      />
+                    </Box>
+                  </Suspense>
+                </MenuDrawer>
+              </React.Fragment> :
+              <Signin
+                ref={this.crefs[SIGNIN_REF]}
+                authService={this.user}
+                puk={this.puk}
+                send={this.send}
+                online={online}
+                onValidAuthentication={this.onValidAuthentication}
+                // wsep={`${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.hostname}/nurimsws`}
+              />
+            }
+
           </Box>
         </ThemeProvider>
       </UserContext.Provider>

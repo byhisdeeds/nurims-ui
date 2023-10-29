@@ -26,30 +26,10 @@ const ProtectedRoute = ({ authService, path, debug, children }) => {
 }
 
 const routing = (
-  <BrowserRouter basename={"/nurims"}>
-    <Routes>
-      <Route
-        path="/login"
-        element={
-          <Login
-            authService={AuthService}
-            wsep={`${window.location.protocol === "https:"?"wss":"ws"}://${window.location.hostname}/nurimsws`}
-          />
-        }
-      />
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute path={"/"} debug={window.location.href.includes("debug")?"?debug":""} authService={AuthService}>
-            <App
-              authService={AuthService}
-              wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}
-            />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
-  </BrowserRouter>
+  <App
+    authService={AuthService}
+    wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}
+  />
 );
 
 ReactDOM.render(routing, document.getElementById('root'));
