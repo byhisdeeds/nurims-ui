@@ -107,10 +107,7 @@ import {
 import {
   deviceDetect
 } from 'react-device-detect';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-
-import { Toaster } from 'react-hot-toast';
-import 'react-notifications/lib/notifications.css';
+import {SnackbarProvider} from 'notistack'
 import "./App.css"
 import {MenuItems} from "./menudata";
 import metadata from './metadata.json';
@@ -388,7 +385,6 @@ class App extends React.Component {
   };
 
   send = (msg, show_busy) => {
-    enqueueWarningSnackbar("+++ SEND ***")
     if (this.debug) {
       ConsoleLog("App", "send", "ws.readyState",
         this.ws && this.ws.readyState ? this.ws.readyState : "undefined", "msg", msg, "show_busy",
@@ -408,9 +404,6 @@ class App extends React.Component {
         });
       }
     } else {
-      console.log("**********************************************************")
-      console.log("************ NURIMS server connection broken! ************")
-      console.log("**********************************************************")
       enqueueWarningSnackbar("NURIMS server connection broken!")
     }
   };
@@ -495,7 +488,7 @@ class App extends React.Component {
           <Box sx={{flexGrow: 1, height: "100%"}}>
             {this.user.isAuthenticated ?
               <React.Fragment>
-                <Toaster/>
+                <SnackbarProvider maxSnack={5} anchorOrigin={{vertical: 'bottom', horizontal: 'center',}}/>
                 <AppBar position="static">
                   <Toolbar>
                     <Tooltip

@@ -5,7 +5,7 @@ import {SnackbarProvider} from "notistack";
 
 
 const routing = (
-    <App wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`} />
+  <App wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`} />
 );
 
 ReactDOM.render(routing, document.getElementById('root'));
