@@ -111,6 +111,9 @@ import {SnackbarProvider} from 'notistack'
 import "./App.css"
 import {MenuItems} from "./menudata";
 import metadata from './metadata.json';
+import {
+  isValidUserRole
+} from "./utils/UserUtils";
 
 
 const Constants = require('./utils/constants');
