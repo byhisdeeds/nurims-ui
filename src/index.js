@@ -4,11 +4,8 @@ import App from "./App";
 import {SnackbarProvider} from "notistack";
 
 const routing = (
-
-  <SnackbarProvider maxSnack={5} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}>
-    <App
-      wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`}
-    />
+  <SnackbarProvider maxSnack={5} anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
+    <App wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`} />
   </SnackbarProvider>
 );
 

@@ -396,6 +396,9 @@ class App extends React.Component {
         });
       }
     } else {
+      console.log("**********************************************************")
+      console.log("************ NURIMS server connection broken! ************")
+      console.log("**********************************************************")
       enqueueWarningSnackbar("NURIMS server connection broken!")
     }
   };
