@@ -9,15 +9,19 @@ import {
 } from "@mui/material";
 import MuiAppBar from '@mui/material/AppBar';
 import AccountMenu from "./user/AccountMenu";
-import {styled} from '@mui/material/styles';
+import {
+  styled,
+  ThemeProvider
+} from '@mui/material/styles';
 import MenuDrawer from "./MenuDrawer";
-import {darkTheme, lightTheme} from "./utils/Theme";
-import {ThemeProvider} from "@mui/material/styles";
-import {MenuItems} from "./menudata";
-import metadata from './metadata.json';
+import {
+  darkTheme,
+  lightTheme
+} from "./utils/Theme";
 import BusyIndicator from "./components/BusyIndicator";
-import "./App.css"
-import {setPropertyValue} from "./utils/PropertyUtils";
+import {
+  setPropertyValue
+} from "./utils/PropertyUtils";
 import {
   CMD_GET_SYSTEM_PROPERTIES,
   CMD_GET_ORGANISATION,
@@ -103,6 +107,13 @@ import {
 import {
   deviceDetect
 } from 'react-device-detect';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+
+import { Toaster } from 'react-hot-toast';
+import 'react-notifications/lib/notifications.css';
+import "./App.css"
+import {MenuItems} from "./menudata";
+import metadata from './metadata.json';
 
 
 const Constants = require('./utils/constants');
@@ -377,6 +388,7 @@ class App extends React.Component {
   };
 
   send = (msg, show_busy) => {
+    enqueueWarningSnackbar("+++ SEND ***")
     if (this.debug) {
       ConsoleLog("App", "send", "ws.readyState",
         this.ws && this.ws.readyState ? this.ws.readyState : "undefined", "msg", msg, "show_busy",
@@ -483,6 +495,7 @@ class App extends React.Component {
           <Box sx={{flexGrow: 1, height: "100%"}}>
             {this.user.isAuthenticated ?
               <React.Fragment>
+                <Toaster/>
                 <AppBar position="static">
                   <Toolbar>
                     <Tooltip
