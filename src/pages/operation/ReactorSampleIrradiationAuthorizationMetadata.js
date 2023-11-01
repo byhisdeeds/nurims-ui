@@ -187,7 +187,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     const record = this.state.record;
     const user = this.context.user;
     setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
-      `${user.profile.fullname} (${user.profile.username}) on ${dayjs.toISOString()}`);
+      `${user.profile.fullname} (${user.profile.username}) on ${dayjs().toISOString()}`);
     if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
       record["record_key"] = record_uuid();
     }
