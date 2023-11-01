@@ -23,7 +23,8 @@ import MouseCoordinates from "../../components/MouseCoordinates";
 import LocationFinder from "../../components/LocationFinder";
 import "leaflet/dist/leaflet.css";
 import {
-  BlobObject, BlobPath,
+  BlobObject,
+  BlobPath,
   getMarkerImageUrl,
   getRecordMetadataValue,
   markerBounds,
@@ -45,7 +46,9 @@ import {
   HtmlTooltip,
   TooltipText
 } from "../../utils/TooltipUtils";
-import {getGlossaryValue} from "../../utils/GlossaryUtils";
+import {
+  getGlossaryValue
+} from "../../utils/GlossaryUtils";
 import ImageIcon from '@mui/icons-material/Image';
 import {
   PhotoCamera,
