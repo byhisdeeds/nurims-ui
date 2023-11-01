@@ -1258,12 +1258,17 @@ export function ApproveIrradiationMessageComponent({
                                                    }) {
   const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
   if (approver !== "") {
+    console.log("---------------------------------------------")
+    console.log("RECORD: ", record)
+    console.log("USERS: ", user.users)
     const fullname = user.users.reduce((prev, obj) => {
       if (obj[0] === approver) {
         prev = obj[1];
       }
       return prev;
     }, "");
+    console.log("FULLNAME: ", fullname)
+    console.log("---------------------------------------------")
 
     return (
       <Button
