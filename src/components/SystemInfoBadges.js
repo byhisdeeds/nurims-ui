@@ -16,6 +16,7 @@ class SystemInfoBadges extends Component {
       server_availability: 0,
       user_connections: 0,
       sensor_connections: 0,
+      title: "",
     };
     this._mounted = false;
   }
@@ -33,11 +34,16 @@ class SystemInfoBadges extends Component {
   }
 
   setServerInfo = (data) => {
-    this.setState({ user_connections: data.clients })
+    this.setState({
+      user_connections: data.clients.length,
+      title: data.clients.reduce((prev, obj) => {
+        return prev + obj.name + "<br/>";
+      }, "")
+    })
   }
 
   render() {
-    const { server_availability, user_connections, sensor_connections} = this.state
+    const { server_availability, user_connections, title} = this.state
     return (
       <React.Fragment>
         <Badge
@@ -45,7 +51,7 @@ class SystemInfoBadges extends Component {
           badgeContent={user_connections}
           showZero={true}
           color={"secondary"}
-          title={"Active user server connections."}
+          title={title}
         >
           <People/>
         </Badge>

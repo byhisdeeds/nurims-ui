@@ -189,6 +189,9 @@ class App extends React.Component {
     this.mounted = false;
     // this.user = this.props.authService;
     this.user = AuthService;
+    console.log("*************")
+    console.log(deviceDetect())
+    console.log("*************")
     this.uuid = `${deviceDetect()["browserName"].toLowerCase()}-${new DeviceUUID().get()}`;
     this.logRef = React.createRef();
     this.notificationRef = React.createRef();
@@ -268,9 +271,9 @@ class App extends React.Component {
         cmd: CMD_GET_SYSTEM_PROPERTIES,
       })
       // load system info
-      this.send({
-        cmd: CMD_GET_SERVER_INFO,
-      }, false)
+      // this.send({
+      //   cmd: CMD_GET_SERVER_INFO,
+      // }, false)
       // get user notification messages
       this.send({
         cmd: CMD_GET_USER_NOTIFICATION_MESSAGES,

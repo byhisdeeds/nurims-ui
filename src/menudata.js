@@ -107,9 +107,9 @@ export const MenuItems = [
     ]
   },
   {
-    label: 'Emergency Preparedness & Response',
+    label: 'EPR',
     value: 'emergency.preparedness.response',
-    tooltip: 'Emergency preparedness and response actions',
+    tooltip: 'Emergency Preparedness and Response actions',
     authmodlevel: 'basic',
     icon: IconPeople,
     children: [
@@ -128,13 +128,34 @@ export const MenuItems = [
         ]
       },
       {
+        label: '○ Post Event Assessment',
+        tooltip: 'A basic concept of operations describes the response process, and assigns roles and responsibilities to each group, organization or individual involved in emergency preparedness and response.',
+        authmodlevel: 'basic',
+        children: [
+          {
+            label: 'Add/Edit Capture Datasets',
+            value: 'ep.add.edit.capture.datasets',
+            title: 'Add/Edit Capture Dataset',
+            tooltip: 'Brief description of the response to an emergency used when planning the response. It ensures that all those involved in the development of a response capability share a common vision.',
+            authmodlevel: 'basic',
+          },
+          {
+            label: 'Discover Event Data',
+            value: 'ep.discover.event.data',
+            title: 'Discover Event Data',
+            tooltip: 'Brief description of the response to an emergency used when planning the response. It ensures that all those involved in the development of a response capability share a common vision.',
+            authmodlevel: 'basic',
+          },
+        ]
+      },
+      {
         label: '○ Reports',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         children: [
           {
-            label: 'Surveillance Sheet',
-            value: 'ep.',
+            label: 'Post Event Assessment Reports',
+            value: 'ep.post.event.assessment.reports',
             title: 'Controlled Material Surveillance Sheet',
             tooltip: 'Generate controlled material surveillance sheet',
             authmodlevel: 'basic',
