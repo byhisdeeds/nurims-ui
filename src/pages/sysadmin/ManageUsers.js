@@ -34,7 +34,7 @@ import {
 } from "../../utils/WebsocketUtils";
 import UserMetadata from "./UserMetadata";
 import {
-  AddRemoveArchiveSaveProvenanceButtonPanel,
+  AddRemoveArchiveSaveSubmitProvenanceButtonPanel,
   TitleComponent
 } from "../../components/CommonComponents";
 import {encryptText} from "../../utils/EncryptionUtils";
@@ -386,7 +386,7 @@ class ManageUsers extends React.Component {
             />
           </Grid>
         </Grid>
-        <AddRemoveArchiveSaveProvenanceButtonPanel
+        <AddRemoveArchiveSaveSubmitProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}

@@ -31,7 +31,7 @@ import {
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog} from "../../utils/UserContext";
-import {TitleComponent, AddRemoveArchiveSaveProvenanceButtonPanel} from "../../components/CommonComponents";
+import {TitleComponent, AddRemoveArchiveSaveSubmitProvenanceButtonPanel} from "../../components/CommonComponents";
 import BusyIndicator from "../../components/BusyIndicator";
 import {readString} from "react-papaparse";
 import {
@@ -266,7 +266,7 @@ class AddEditMonitors extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        {<AddRemoveArchiveSaveProvenanceButtonPanel
+        {<AddRemoveArchiveSaveSubmitProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}

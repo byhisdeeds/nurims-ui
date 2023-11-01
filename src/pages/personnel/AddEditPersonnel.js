@@ -20,7 +20,7 @@ import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {ConsoleLog, UserContext} from "../../utils/UserContext";
-import {TitleComponent, AddRemoveArchiveSaveProvenanceButtonPanel} from "../../components/CommonComponents";
+import {TitleComponent, AddRemoveArchiveSaveSubmitProvenanceButtonPanel} from "../../components/CommonComponents";
 import {
   CMD_DELETE_PERSONNEL_RECORD,
   CMD_GET_GLOSSARY_TERMS,
@@ -260,7 +260,7 @@ class AddEditPersonnel extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        <AddRemoveArchiveSaveProvenanceButtonPanel
+        <AddRemoveArchiveSaveSubmitProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}

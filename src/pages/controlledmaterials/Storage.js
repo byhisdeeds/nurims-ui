@@ -22,7 +22,7 @@ import {
 import StorageList from "./StorageList";
 import StorageMetadata from "./StorageMetadata";
 import {UserContext} from "../../utils/UserContext";
-import {TitleComponent, AddRemoveArchiveSaveProvenanceButtonPanel} from "../../components/CommonComponents";
+import {TitleComponent, AddRemoveArchiveSaveSubmitProvenanceButtonPanel} from "../../components/CommonComponents";
 import {
   messageHasResponse,
   messageResponseStatusOk
@@ -132,7 +132,7 @@ class Storage extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        {<AddRemoveArchiveSaveProvenanceButtonPanel
+        {<AddRemoveArchiveSaveSubmitProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}

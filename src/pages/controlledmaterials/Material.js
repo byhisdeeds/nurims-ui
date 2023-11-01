@@ -25,7 +25,7 @@ import MaterialList from "./MaterialList";
 import MaterialMetadata from "./MaterialMetadata";
 import {
   TitleComponent,
-  AddRemoveArchiveSaveProvenanceButtonPanel
+  AddRemoveArchiveSaveSubmitProvenanceButtonPanel
 } from "../../components/CommonComponents";
 import {UserContext} from "../../utils/UserContext";
 import {
@@ -150,7 +150,7 @@ class Material extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        {<AddRemoveArchiveSaveProvenanceButtonPanel
+        {<AddRemoveArchiveSaveSubmitProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}

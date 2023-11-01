@@ -11,7 +11,7 @@ import OwnerList from "./OwnerList";
 import OwnerMetadata from "./OwnerMetadata";
 import {
   TitleComponent,
-  AddRemoveArchiveSaveProvenanceButtonPanel
+  AddRemoveArchiveSaveSubmitProvenanceButtonPanel
 } from "../../components/CommonComponents";
 import {
   ConsoleLog,
@@ -130,7 +130,7 @@ class Owner extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        {<AddRemoveArchiveSaveProvenanceButtonPanel
+        {<AddRemoveArchiveSaveSubmitProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}

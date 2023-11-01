@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import {
   TitleComponent,
-  AddRemoveArchiveSaveProvenanceButtonPanel
+  AddRemoveArchiveSaveSubmitProvenanceButtonPanel
 } from "../../components/CommonComponents";
 import PropTypes from "prop-types";
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -110,6 +110,13 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
     this.setState({show_provenance_view: false,});
   }
 
+  submitAuthorizationRequest = (event, reason) => {
+    // if (reason && reason === "backdropClick") {
+    //   return;
+    // }
+    // this.setState({show_provenance_view: false,});
+  }
+
   render() {
     const {confirm_remove, include_archived, selection, show_provenance_view} = this.state;
     const {user} = this.props;
@@ -155,7 +162,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
             />
           </Grid>
         </Grid>
-        {<AddRemoveArchiveSaveProvenanceButtonPanel
+        {<AddRemoveArchiveSaveSubmitProvenanceButtonPanel
           THIS={this}
           user={user}
           onClickAddRecord={this.addRecord}
@@ -167,8 +174,11 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
           removeRecordButtonLabel={"Remove Authorization"}
           addRole={"reactor_operations_data_entry"}
           removeRole={"sysadmin"}
-          saveRole={"reactor_operations_data_entry"}
+          saveRole={"reactor_user"}
           archiveRole={"reactor_operations_data_entry"}
+          submitRole={"reactor_user"}
+          submitRecordButtonLabel={"Submit Request"}
+          onClickSubmitRecord={this.submitAuthorizationRequest}
         />}
       </React.Fragment>
     );

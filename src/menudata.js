@@ -319,7 +319,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
-            label: 'Add/Edit Modification Records',
+            label: 'Add/Edit Modification Record',
             value: 'ssc.add.edit.ssc.modification.record',
             title: 'Add/Edit SSC Modification Record',
             tooltip: 'Add or edit a new feature or upgrade modification request record for an SSC',
