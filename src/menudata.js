@@ -2,6 +2,8 @@ import IconPeople from "@mui/icons-material/People";
 import BusinessIcon from '@mui/icons-material/Business';
 import LockIcon from '@mui/icons-material/Lock';
 import EngineeringIcon from '@mui/icons-material/Engineering';
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
+import ApartmentIcon from '@mui/icons-material/Apartment';
 
 export const MenuItems = [
   {
@@ -361,7 +363,7 @@ export const MenuItems = [
     label: 'Organisation',
     value: 'organisation',
     tooltip: 'Details on the organisation',
-    icon: BusinessIcon,
+    icon: ApartmentIcon,
     authmodlevel: 'basic',
     children: [
       {
@@ -575,6 +577,7 @@ export const MenuItems = [
   {
     label: 'Safety/Security Culture',
     value: 'safety.security.culture',
+    icon: HealthAndSafetyIcon,
     tooltip: 'Safety and security culture actions',
     authmodlevel: 'basic',
     children: [
