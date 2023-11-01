@@ -267,7 +267,7 @@ class App extends React.Component {
       this.send({
         cmd: CMD_GET_SYSTEM_PROPERTIES,
       })
-      // load system properties
+      // load system info
       this.send({
         cmd: CMD_GET_SERVER_INFO,
       }, false)
@@ -472,6 +472,10 @@ class App extends React.Component {
   }
 
   onValidAuthentication = () => {
+    // update number of connected clients etc info.
+    this.send({
+      cmd: CMD_GET_SERVER_INFO,
+    }, false);
     this.setState({busy: 0});
   }
 

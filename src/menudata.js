@@ -107,7 +107,7 @@ export const MenuItems = [
     ]
   },
   {
-    label: 'Emergency Preparedness',
+    label: 'Emergency Preparedness & Response',
     value: 'emergency.preparedness.response',
     tooltip: 'Emergency preparedness and response actions',
     authmodlevel: 'basic',
