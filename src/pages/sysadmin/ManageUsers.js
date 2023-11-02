@@ -247,8 +247,6 @@ class ManageUsers extends React.Component {
               }
             }
           }
-        // } else if (isCommandResponse(message, CMD_GET_PUBLIC_KEY)) {
-        //   this.puk = message.response.public_key;
         } else if (isCommandResponse(message, CMD_UPDATE_USER_RECORD)) {
           // update existing user profile if it is for me
           if (this.props.user.profile.id ===  message.response.users[0].item_id) {

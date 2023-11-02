@@ -64,7 +64,7 @@ import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import PublishIcon from '@mui/icons-material/Publish';
 import {
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
-  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
+  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER,
   NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
   NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
   NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
@@ -1254,7 +1254,7 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
 
 export function ApproveIrradiationMessageComponent({record, user, disabled, onClickApproveRequest, theme,
                                                      approverRole}) {
-  const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
+  const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "");
   if (approver !== "") {
     const fullname = user.users.reduce((prev, obj) => {
       if (obj[0] === approver) {
