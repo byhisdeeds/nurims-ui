@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   Grid,
-  Typography,
 } from "@mui/material";
 import {
   CMD_SUGGEST_ANALYSIS_JOBS,
@@ -47,7 +46,8 @@ import {
   UserContext
 } from "../../utils/UserContext";
 import {
-  isValidUserRole
+  isValidUserRole,
+  userFullname
 } from "../../utils/UserUtils";
 import dayjs from 'dayjs';
 import {
@@ -234,11 +234,13 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
         status = "info";
       } else if (approvedby === "") {
         // request has been submitted for authorization but has not yet been authorized
-        status_message = `Request was submitted for authorization by ${submission_entity} on ${submission_date}`;
+        status_message = `Request was submitted for authorization by ${userFullname(submission_entity, this.context.user)} on ${dayjs(submission_date).format("MMMM D, YYYY h:mm A")}`;
+        // status_message = `Request was submitted for authorization by ${submission_entity} on ${submission_date}`;
         status = "warning";
       } else {
         // request has been authorized
-        status_message = `Request was authorized by ${approvedby} on ${approval_date}`;
+        status_message = `Request was authorized by ${userFullname(approvedby, this.context.user)} on ${dayjs(approval_date).format("MMMM D, YYYY h:mm A")}`;
+        // status_message = `Request was authorized by ${approvedby} on ${approval_date}`;
         status = "success";
       }
     }
@@ -258,7 +260,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
         <Alert
           severity={status}
           sx={{fontFamily: "robotoslabregular", fontSize: 16}}
-          variant={"filled"}
+          variant={"outlined"}
         >
           {status_message}
         </Alert>
