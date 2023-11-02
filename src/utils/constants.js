@@ -276,10 +276,6 @@ module.exports = Object.freeze({
   NURIMS_OPERATION_DATA_STATS: "nurims.operation.data.stats",
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB: "nurims.operation.data.irradiatedsample.job",
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST: "nurims.operation.data.irradiatedsample.list",
-  // NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER: "nurims.operation.data.irradiationauthorizer",
-  // NURIMS_SUBMISSION_DATE: "nurims.submission.date",
-  // NURIMS_SUBMISSION_ENTITY: "nurims.submission.entity",
-
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER: "nurims.operation.data.irradiationauthorization.approver",
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE: "nurims.operation.data.irradiationauthorization.approvaldate",
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE: "nurims.operation.data.irradiationauthorization.submissiondate",
