@@ -1142,7 +1142,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         onClick={onClickRemoveRecord}
         disabled={!THIS.isSelectableByRoles(selection, [removeRole, sysadminRole], true)}
       >
-        {removeRecordButtonLabel} &#160;
+        &#160; {removeRecordButtonLabel} &#160;
         {removeRecordIcon}
       </Fab>
       {isSysadmin &&
@@ -1154,7 +1154,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
           onClick={onClickViewProvenanceRecords}
           disabled={!selection.hasOwnProperty("item_id")}
         >
-          View Provenance Records &#160;
+          &#160; View Provenance Records &#160;
           <VisibilityIcon sx={{mr: 1}}/>
         </Fab>
       }
@@ -1179,7 +1179,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         onClick={onClickSaveRecordChanges}
         disabled={!(recordHasChanged && THIS.isSelectableByRoles(selection, [saveRole, sysadminRole], false))}
       >
-        Save Changes &#160;
+        &#160; Save Changes &#160;
         <SaveIcon sx={{mr: 1}}/>
       </Fab>
       {submitRecordButtonLabel &&
@@ -1191,7 +1191,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
           onClick={onClickSubmitRecord}
           disabled={!THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)}
         >
-          {submitRecordButtonLabel} &#160;
+          &#160; {submitRecordButtonLabel} &#160;
           {submitRecordIcon}
         </Fab>
       }
@@ -1203,7 +1203,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         onClick={onClickAddRecord}
         disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
       >
-        {addRecordButtonLabel} &#160;
+        &#160; {addRecordButtonLabel} &#160;
         {addRecordIcon}
       </Fab>
     </Box>
