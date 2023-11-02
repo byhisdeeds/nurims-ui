@@ -12,7 +12,7 @@ import {
   CMD_GET_PROVENANCE_RECORDS,
   CMD_SUGGEST_ANALYSIS_JOBS,
   NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
-  REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
+  REACTOR_IRRADIATION_AUTHORIZATION_TOPIC, ROLE_IRRADIATION_REQUEST_DATA_ENTRY, ROLE_IRRADIATION_REQUEST_SYSADMIN,
 } from "../../utils/constants";
 import {
   Grid,
@@ -172,11 +172,11 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRecordButtonLabel={"Add Authorization"}
           removeRecordButtonLabel={"Remove Authorization"}
-          addRole={"reactor_operations_data_entry"}
-          removeRole={"sysadmin"}
-          saveRole={"reactor_user"}
-          archiveRole={"reactor_operations_data_entry"}
-          submitRole={"reactor_user"}
+          addRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
+          removeRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
+          saveRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
+          archiveRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
+          submitRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
           submitRecordButtonLabel={"Submit Request"}
           onClickSubmitRecord={this.submitAuthorizationRequest}
         />}
