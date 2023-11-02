@@ -1127,7 +1127,8 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
                                                                   submitRole,
                                                                   onClickSubmitRecord,
                                                                   submitRecordButtonLabel,
-                                                                  submitRecordIcon
+                                                                  submitRecordIcon,
+                                                                  submitDisabled,
                                                                 }) {
   const {selection} = THIS.state;
   const isSysadmin = isValidUserRole(user, sysadminRole);
@@ -1189,7 +1190,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
           color="primary"
           aria-label="submit"
           onClick={onClickSubmitRecord}
-          disabled={!THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)}
+          disabled={submitDisabled || !THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)}
         >
           &#160; {submitRecordButtonLabel} &#160;
           {submitRecordIcon}
@@ -1231,6 +1232,7 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.propTypes = {
   onClickSubmitRecord: PropTypes.func,
   submitRecordButtonLabel: PropTypes.string,
   submitRecordIcon: PropTypes.element,
+  submitDisabled: PropTypes.bool,
 }
 
 AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
@@ -1247,6 +1249,7 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
   submitRole: "",
   submitRecordButtonLabel: null,
   onClickSubmitRecord:() => {},
+  submitDisabled: false,
 }
 
 export function ApproveIrradiationMessageComponent({record, user, disabled, onClickApproveRequest, theme,

@@ -76,9 +76,9 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
 
   ws_message = (message) => {
     super.ws_message(message, [
-      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" },
-      { cmd: CMD_SUGGEST_ANALYSIS_JOBS, func: "updateAnalysisJobs", params: "jobs" },
-      { cmd: "get_sample_types", func: "setSampleTypes", params: "sampletypes" }
+      {cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms"},
+      {cmd: CMD_SUGGEST_ANALYSIS_JOBS, func: "updateAnalysisJobs", params: "jobs"},
+      {cmd: "get_sample_types", func: "setSampleTypes", params: "sampletypes"}
     ]);
     if (messageHasResponse(message)) {
       const response = message.response;
@@ -91,22 +91,15 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   }
 
   renderCellStyle = (row, cell, theme, selected) => {
-    // const unauthorized = getRecordData(row, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, null) === null;
-    // return {
-    //   mixBlendMode: selected ? 'lighten' : 'inherit',
-    //   color: unauthorized ? theme.palette.primary.contrastText : theme.palette.primary.light,
-    //   backgroundColor: unauthorized ? theme.palette.warning.light : theme.components.MuiTableRow.styleOverrides.root.backgroundColor,
-    // }
     const submission_date =
       getRecordData(row, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "")
     const approvedby =
       getRecordData(row, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "")
     return {
       mixBlendMode: selected ? 'lighten' : 'inherit',
-      color: approvedby === "" || submission_date === "" ? theme.palette.primary.light : theme.palette.primary.contrastText,
-      backgroundColor: approvedby === "" ? submission_date === "" ? "inherit" : "#4683ff" : "rgba(119,255,7,0.52)",
+      color: approvedby === "" ? submission_date === "" ? "inherit" : theme.palette.primary.contrastText : theme.palette.primary.contrastText,
+      backgroundColor: approvedby === "" ? submission_date === "" ? "inherit" : theme.palette.warning.light : theme.palette.success.light,
     }
-
   }
 
   setProvenanceRecords = (provenance) => {
@@ -128,7 +121,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
     const user = this.context.user;
     const selection = this.state.selection;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "submitAuthorizationRequest","user", user, "record", selection);
+      ConsoleLog(this.Module, "submitAuthorizationRequest", "user", user, "record", selection);
     }
     setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, user.profile.username);
     setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, dayjs().toISOString());
@@ -141,9 +134,14 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
     const {confirm_remove, include_archived, selection, show_provenance_view} = this.state;
     const {user} = this.props;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render","confirm_removed", confirm_remove, "include_archived",
+      ConsoleLog(this.Module, "render", "confirm_removed", confirm_remove, "include_archived",
         include_archived, "selection", selection);
     }
+    const submission_date =
+      getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "")
+    const approvedby =
+      getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "")
+    const submit_disabled = approvedby !== "" || submission_date !== ""
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}
@@ -158,7 +156,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <TitleComponent title={this.props.title} />
+            <TitleComponent title={this.props.title}/>
           </Grid>
           <Grid item xs={4}>
             <ReactorSampleIrradiationAuthorizationRecordsList
@@ -199,6 +197,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
           submitRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
           submitRecordButtonLabel={"Submit Request"}
           onClickSubmitRecord={this.submitAuthorizationRequest}
+          submitDisabled={submit_disabled}
         />}
       </React.Fragment>
     );
@@ -206,7 +205,8 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
 }
 
 AddEditReactorSampleIrradiationAuthorization.defaultProps = {
-  send: (msg) => {},
+  send: (msg) => {
+  },
 };
 
 AddEditReactorSampleIrradiationAuthorization.propTypes = {

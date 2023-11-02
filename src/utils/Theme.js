@@ -414,7 +414,7 @@ export const darkTheme = createTheme({
     },
     warning: {
       main: '#ffa726',
-      light: '#ffb74d',
+      light: '#fdc97f',
       dark: '#f57c00',
       contrastText: 'rgba(0,0,0,0.87)',
     },
