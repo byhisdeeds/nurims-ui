@@ -282,8 +282,8 @@ module.exports = Object.freeze({
 
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER: "nurims.operation.data.irradiationauthorization.approver",
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE: "nurims.operation.data.irradiationauthorization.approvaldate",
-  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE: "nurims.operation.data.irradiation.authorization.submissiondate",
-  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY: "nurims.operation.data.irradiation.authorization.submissionentity",
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE: "nurims.operation.data.irradiationauthorization.submissiondate",
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY: "nurims.operation.data.irradiationauthorization.submissionentity",
 
   EMPLOYEE_RECORD_TYPE: "employee_record",
   MANUFACTURER_RECORD_TYPE: "manufacturer_record",
