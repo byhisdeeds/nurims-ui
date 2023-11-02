@@ -91,12 +91,14 @@ class Signin extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.send({
-      cmd: Constants.CMD_VERIFY_USER_PASSWORD,
-      username:this.state.username,
-      password:encryptPassword(this.props.puk[0], this.state.password),
-      module: this.Module,
-    }, false);
+    if (this.props.online) {
+      this.props.send({
+        cmd: Constants.CMD_VERIFY_USER_PASSWORD,
+        username: this.state.username,
+        password: encryptPassword(this.props.puk[0], this.state.password),
+        module: this.Module,
+      }, false);
+    }
   };
 
   componentWillUnmount() {
@@ -167,8 +169,8 @@ class Signin extends React.Component {
                 <LockOutlinedIcon/>
               </StyledAvatar>
               <Typography component="h1" variant="h5">
-                { this.props.online && <div>Sign in</div> }
-                { !this.props.online && <div>Off-Line</div> }
+                {this.props.online && <div>Sign in</div>}
+                {!this.props.online && <div>Off-Line</div>}
               </Typography>
               <Box component="form" sx={{'& .MuiInputBase-root': {ml: 0, mb: 0}, }} noValidate autoComplete="off">
                 <TextField

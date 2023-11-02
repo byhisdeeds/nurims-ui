@@ -11,6 +11,7 @@ import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_SUGGEST_ANALYSIS_JOBS,
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER,
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE,
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY,
   REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
@@ -90,7 +91,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   }
 
   renderCellStyle = (row, cell, theme, selected) => {
-    const unauthorized = getRecordData(row, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, null) === null;
+    const unauthorized = getRecordData(row, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, null) === null;
     return {
       mixBlendMode: selected ? 'lighten' : 'inherit',
       color: unauthorized ? theme.palette.primary.contrastText : theme.palette.primary.light,
