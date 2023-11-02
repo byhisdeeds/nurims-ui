@@ -160,6 +160,7 @@ class UserMetadata extends Component {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              disabled={disabled}
               required
               fullWidth
               type={"password"}
@@ -171,6 +172,7 @@ class UserMetadata extends Component {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              disabled={disabled}
               required
               fullWidth
               id="password2"

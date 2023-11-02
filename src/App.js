@@ -258,10 +258,10 @@ class App extends React.Component {
       this.send({
         cmd: CMD_GET_PUBLIC_KEY,
       })
-      // get list of all registered users
-      this.send({
-        cmd: CMD_GET_USER_RECORDS,
-      })
+      // // get list of all registered users
+      // this.send({
+      //   cmd: CMD_GET_USER_RECORDS,
+      // })
       // load organisation database on server
       this.send({
         cmd: CMD_GET_ORGANISATION,
@@ -308,7 +308,8 @@ class App extends React.Component {
         this.puk.length = 0;
         this.puk.push(data.response.public_key);
         this.setState({online: true});
-      } else if (data.cmd === CMD_GET_USER_RECORDS && data.module === SIGNIN_REF) {
+      // } else if (data.cmd === CMD_GET_USER_RECORDS && data.module === SIGNIN_REF) {
+      } else if (data.cmd === CMD_GET_USER_RECORDS && !data.hasOwnProperty("module")) {
         for (const u of data.response.users) {
           if (u.hasOwnProperty("metadata")) {
             this.user.users.push([u.metadata.username, u.metadata.fullname]);
@@ -479,6 +480,10 @@ class App extends React.Component {
     this.send({
       cmd: CMD_GET_SERVER_INFO,
     }, false);
+    // get list of all registered users
+    this.send({
+      cmd: CMD_GET_USER_RECORDS,
+    })
     this.setState({busy: 0});
   }
 
@@ -550,16 +555,16 @@ class App extends React.Component {
                           properties={this.properties}
                         />
                       }
-                      {RasaPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                      {SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                      {SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                      {SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                      {ControlledMaterialPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                      {HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                      {RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                      {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                      {OrgPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
-                      {EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties)}
+                      {RasaPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
+                      {SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
+                      {SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
+                      {SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
+                      {ControlledMaterialPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
+                      {HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
+                      {RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
+                      {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
+                      {OrgPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
+                      {EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
                       <LogWindow
                         ref={this.logRef}
                         onClose={this.closeLogWindow}

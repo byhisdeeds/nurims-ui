@@ -1228,7 +1228,7 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.propTypes = {
   removeRole: PropTypes.string,
   saveRole: PropTypes.string,
   submitRole: PropTypes.string,
-  onClickSubmitRecord: PropTypes.func.isRequired,
+  onClickSubmitRecord: PropTypes.func,
   submitRecordButtonLabel: PropTypes.string,
   submitRecordIcon: PropTypes.element,
 }
@@ -1246,30 +1246,19 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
   saveRole: "",
   submitRole: "",
   submitRecordButtonLabel: null,
+  onClickSubmitRecord:() => {},
 }
 
-export function ApproveIrradiationMessageComponent({
-                                                     record,
-                                                     user,
-                                                     disabled,
-                                                     onClickApproveRequest,
-                                                     theme,
-                                                     approverRole
-                                                   }) {
+export function ApproveIrradiationMessageComponent({record, user, disabled, onClickApproveRequest, theme,
+                                                     approverRole}) {
   const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "");
   if (approver !== "") {
-    console.log("---------------------------------------------")
-    console.log("RECORD: ", record)
-    console.log("USERS: ", user.users)
     const fullname = user.users.reduce((prev, obj) => {
       if (obj[0] === approver) {
         prev = obj[1];
       }
       return prev;
     }, "");
-    console.log("FULLNAME: ", fullname)
-    console.log("---------------------------------------------")
-
     return (
       <Button
         variant={"outlined"}

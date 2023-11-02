@@ -79,7 +79,7 @@ const ChatBot = lazy(() => import('./rasa/ChatBot'));
 const UnderDevelopment = lazy(() => import('../components/UnderDevelopment'));
 
 
-export const RasaPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+export const RasaPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
   if (actionid === Constants.RASA_CHATBOT) {
     return (<ChatBot
       ref={crefs[CHATBOT_REF]}
@@ -93,7 +93,7 @@ export const RasaPackages = (actionid, crefs, menuTitle, user, handleMenuAction,
 }
 
 
-export const SupportPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+export const SupportPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
   if (actionid === Constants.SUPPORT_TERMS_AND_DEFINITIONS) {
     return (<TermsAndDefinitions
       ref={crefs[TERMSANDDEFINITIONS_REF]}
@@ -106,12 +106,13 @@ export const SupportPackages = (actionid, crefs, menuTitle, user, handleMenuActi
   }
 }
 
-export const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+export const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
   if (actionid === Constants.SYSADMIN_MANAGE_USERS) {
     return (<ManageUsers
       ref={crefs[MANAGEUSERS_REF]}
       title={menuTitle}
       user={user}
+      puk={puk}
       onClick={handleMenuAction}
       send={send}
       properties={properties}
@@ -129,7 +130,7 @@ export const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handl
   }
 }
 
-export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
   if (actionid === Constants.HR_ADD_EDIT_PERSONNEL) {
     return (<AddEditPersonnel
       ref={crefs[ADDEDITPERSONNEL_REF]}
@@ -202,7 +203,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
   }
 }
 
-export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
   if (actionid === Constants.CM_VIEW_CONTROLLED_MATERIALS_LIST) {
     return (<ViewMaterialsList
       ref={crefs[VIEWMATERIALSLIST_REF]}
@@ -295,7 +296,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
   }
 }
 
-export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
   if (actionid === Constants.SSC_VIEW_SSC_LIST) {
     return (<ViewSSCRecords
       ref={crefs[VIEWSSCRECORDS_REF]}
@@ -390,7 +391,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
   }
 }
 
-export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
   if (actionid === Constants.BASIC_RP_ADD_EDIT_MONITORS) {
     return (<AddEditMonitors
       ref={crefs[ADDEDITMONITORS_REF]}
@@ -463,7 +464,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
   }
 }
 
-export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
   if (actionid === Constants.PRO_IMPORT_ICENS_PERSONNEL) {
     return (<ImportICENSPersonnel
       ref={crefs["ImportICENSPersonnel"]}
@@ -576,7 +577,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
   }
 }
 
-export const OrgPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+export const OrgPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
   if (actionid === Constants.ORG_EDIT_DETAILS) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
@@ -607,7 +608,7 @@ export const OrgPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
   }
 }
 
-export const EmergencyPreparednessPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties) => {
+export const EmergencyPreparednessPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
   if (actionid === Constants.EP_CONCEPT_OF_OPERATION) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}

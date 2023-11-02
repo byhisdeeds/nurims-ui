@@ -71,7 +71,7 @@ class ManageUsers extends React.Component {
       show_provenance_view: false,
     };
     this.Module = MANAGEUSERS_REF;
-    this.puk = "";
+    this.puk = props.puk[0];
     this.provenanceRecords = [];
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
@@ -80,10 +80,10 @@ class ManageUsers extends React.Component {
   componentDidMount() {
     // get public key as base64 string
     // this.ws.send(JSON.stringify({uuid:this.uuid, cmd: Constants.CMD_GET_PUBLIC_KEY}));
-    this.props.send({
-      cmd: CMD_GET_PUBLIC_KEY,
-      module: this.Module,
-    })
+    // this.props.send({
+    //   cmd: CMD_GET_PUBLIC_KEY,
+    //   module: this.Module,
+    // })
     this.requestGetRecords(this.state.include_archived);
   }
 
@@ -247,8 +247,8 @@ class ManageUsers extends React.Component {
               }
             }
           }
-        } else if (isCommandResponse(message, CMD_GET_PUBLIC_KEY)) {
-          this.puk = message.response.public_key;
+        // } else if (isCommandResponse(message, CMD_GET_PUBLIC_KEY)) {
+        //   this.puk = message.response.public_key;
         } else if (isCommandResponse(message, CMD_UPDATE_USER_RECORD)) {
           // update existing user profile if it is for me
           if (this.props.user.profile.id ===  message.response.users[0].item_id) {
