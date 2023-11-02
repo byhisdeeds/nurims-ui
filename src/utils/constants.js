@@ -184,7 +184,8 @@ module.exports = Object.freeze({
   NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY: 'nurims.leaktestsurveillancefrequency',
   NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY: 'nurims.activitysurveillancefrequency',
   NURIMS_COVERAGE_LOCATION: "nurims.coverage.location",
-
+  NURIMS_SUBMISSION_DATE: "nurims.submission.date",
+  NURIMS_SUBMISSION_ENTITY: "nurims.submission.entity",
   NURIMS_ENTITY_TYPE: 'nurims.entity.type',
   NURIMS_ENTITY_ASSIGNED_ROLE: 'nurims.entity.assignedrole',
   NURIMS_ENTITY_DATE_OF_BIRTH: 'nurims.entity.dob',

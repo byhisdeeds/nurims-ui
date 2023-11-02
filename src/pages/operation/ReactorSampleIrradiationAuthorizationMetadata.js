@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import Box from '@mui/material/Box';
 import {
+  Alert,
+  Box,
   Card,
   CardContent,
   Grid,
+  Typography,
 } from "@mui/material";
 import {
   CMD_SUGGEST_ANALYSIS_JOBS,
@@ -16,14 +18,15 @@ import {
   NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
   NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
   NURIMS_OPERATION_DATA_NEUTRONFLUX,
-  NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
+  NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE, NURIMS_SUBMISSION_DATE, NURIMS_SUBMISSION_ENTITY,
   NURIMS_TITLE,
-  NURIMS_WITHDRAWN, UNDEFINED_DATE_STRING
+  NURIMS_WITHDRAWN,
+  UNDEFINED_DATE_STRING
 } from "../../utils/constants";
 import {
   ApproveIrradiationMessageComponent,
   AutoCompleteComponent,
-  DateRangePicker, DateSelect,
+  DateSelect,
   SelectFormControlWithTooltip,
   TextFieldWithTooltip
 } from "../../components/CommonComponents";
@@ -40,9 +43,13 @@ import {
   ConsoleLog,
   UserContext
 } from "../../utils/UserContext";
-import {isValidUserRole} from "../../utils/UserUtils";
+import {
+  isValidUserRole
+} from "../../utils/UserUtils";
 import dayjs from 'dayjs';
-import {withTheme} from "@mui/styles";
+import {
+  withTheme
+} from "@mui/styles";
 import PropTypes from "prop-types";
 
 
@@ -206,6 +213,22 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     const {record, properties, selected_job, jobs, searching, busy, ac_open} = this.state;
     const disabled = Object.entries(record).length === 0;
     const can_authorize = isValidUserRole(this.context.user, "irradiation_authorizer");
+    const submission_date = getRecordData(record, NURIMS_SUBMISSION_DATE, "")
+    const submission_entity = getRecordData(record, NURIMS_SUBMISSION_ENTITY, "")
+    const authorizedby = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "")
+    let status = "";
+    if (Object.keys(record).length > 0) {
+      if (submission_date === "") {
+        // request is being prepared and has not yet been submitted for authorization
+        status = "Request is being prepared."
+      } else if (authorizedby === "") {
+        // request has been submitted for authorization but has not yet been authorized
+        status = "Request has been submitted for authorization"
+      } else {
+        // request has been authorized
+        status = "Request has been authorized by " + authorizedby
+      }
+    }
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "disabled", disabled, "record", record, "selected_job",
         selected_job, "user", this.context.user, "can_authorize", can_authorize);
@@ -219,6 +242,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
         noValidate
         autoComplete="off"
       >
+        <Alert severity="info" fontSize={"inherit"} variant="filled">{status}</Alert>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
           <CardContent>
             <Grid container spacing={2}>

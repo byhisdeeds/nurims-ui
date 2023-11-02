@@ -11,7 +11,7 @@ import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_SUGGEST_ANALYSIS_JOBS,
-  NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
+  NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, NURIMS_SUBMISSION_DATE, NURIMS_SUBMISSION_ENTITY,
   REACTOR_IRRADIATION_AUTHORIZATION_TOPIC, ROLE_IRRADIATION_REQUEST_DATA_ENTRY, ROLE_IRRADIATION_REQUEST_SYSADMIN,
 } from "../../utils/constants";
 import {
@@ -26,7 +26,7 @@ import BaseRecordManager from "../../components/BaseRecordManager";
 import ReactorSampleIrradiationAuthorizationRecordsList from "./ReactorSampleIrradiationAuthorizationRecordsList";
 import ReactorSampleIrradiationAuthorizationMetadata from "./ReactorSampleIrradiationAuthorizationMetadata";
 import {
-  getRecordData,
+  getRecordData, setRecordData,
 } from "../../utils/MetadataUtils";
 import {withTheme} from "@mui/styles";
 import dayjs from 'dayjs';
@@ -111,10 +111,19 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   }
 
   submitAuthorizationRequest = (event, reason) => {
-    // if (reason && reason === "backdropClick") {
-    //   return;
-    // }
-    // this.setState({show_provenance_view: false,});
+    const user = this.context.user;
+    const selection = this.state.selection;
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "submitAuthorizationRequest","user", user, "record", selection);
+    }
+    setRecordData(selection, NURIMS_SUBMISSION_ENTITY, user.profile.username);
+    setRecordData(selection, NURIMS_SUBMISSION_DATE, dayjs().toISOString());
+
+    console.log("===============")
+    console.log(selection)
+    console.log("===============")
+
+    this.saveChanges();
   }
 
   render() {
