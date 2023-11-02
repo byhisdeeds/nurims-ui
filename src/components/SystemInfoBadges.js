@@ -37,7 +37,7 @@ class SystemInfoBadges extends Component {
     this.setState({
       user_connections: data.clients.length,
       title: data.clients.reduce((prev, obj) => {
-        return prev + obj.name + "<br/>";
+        return prev + obj.name + "\n";
       }, "")
     })
   }

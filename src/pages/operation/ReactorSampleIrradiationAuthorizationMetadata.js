@@ -126,7 +126,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
       });
     }, 1000);
     const record = this.state.record;
-    const job = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name:""});
+    const job = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name: ""});
     job.name = event.target.value
     setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, job);
 
@@ -276,7 +276,8 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   tooltip={"Authorisation record identifier."}
                   padding={0}
                   disabled={disabled}
-                  onChange={(e)=>{}}/>
+                  onChange={(e) => {
+                  }}/>
               </Grid>
               <Grid item xs={12} sm={2}>
                 <TextFieldWithTooltip
