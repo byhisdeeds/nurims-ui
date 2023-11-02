@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 class ReactorSampleIrradiationAuthorizationRecordsList extends React.Component {
   constructor(props) {
     super(props);
-    this.ref=React.createRef();
+    this.ref = React.createRef();
   }
 
   removeRecord = (record) => {

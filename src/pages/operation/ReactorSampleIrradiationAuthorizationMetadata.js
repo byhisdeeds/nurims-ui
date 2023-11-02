@@ -234,11 +234,11 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
         status = "info";
       } else if (approvedby === "") {
         // request has been submitted for authorization but has not yet been authorized
-        status_message = "Request has been submitted for authorization";
+        status_message = `Request was submitted for authorization by ${submission_entity} on ${submission_date}`;
         status = "warning";
       } else {
         // request has been authorized
-        status_message = `Request has been authorized by ${approvedby} on ${approval_date}`;
+        status_message = `Request was authorized by ${approvedby} on ${approval_date}`;
         status = "success";
       }
     }
@@ -255,7 +255,13 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
         noValidate
         autoComplete="off"
       >
-        <Alert severity={status} sx={{fontFamily: "robotoslabregular", fontSize: 3}} variant={"filled"}>{status_message}</Alert>
+        <Alert
+          severity={status}
+          sx={{fontFamily: "robotoslabregular", fontSize: 16}}
+          variant={"filled"}
+        >
+          {status_message}
+        </Alert>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
           <CardContent>
             <Grid container spacing={2}>

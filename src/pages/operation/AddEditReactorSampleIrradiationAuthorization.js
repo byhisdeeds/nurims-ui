@@ -91,12 +91,22 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   }
 
   renderCellStyle = (row, cell, theme, selected) => {
-    const unauthorized = getRecordData(row, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, null) === null;
+    // const unauthorized = getRecordData(row, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, null) === null;
+    // return {
+    //   mixBlendMode: selected ? 'lighten' : 'inherit',
+    //   color: unauthorized ? theme.palette.primary.contrastText : theme.palette.primary.light,
+    //   backgroundColor: unauthorized ? theme.palette.warning.light : theme.components.MuiTableRow.styleOverrides.root.backgroundColor,
+    // }
+    const submission_date =
+      getRecordData(row, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "")
+    const approvedby =
+      getRecordData(row, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "")
     return {
       mixBlendMode: selected ? 'lighten' : 'inherit',
-      color: unauthorized ? theme.palette.primary.contrastText : theme.palette.primary.light,
-      backgroundColor: unauthorized ? theme.palette.warning.light : theme.components.MuiTableRow.styleOverrides.root.backgroundColor,
+      color: approvedby === "" || submission_date === "" ? theme.palette.primary.light : theme.palette.primary.contrastText,
+      backgroundColor: approvedby === "" ? submission_date === "" ? "inherit" : "#4683ff" : "rgba(119,255,7,0.52)",
     }
+
   }
 
   setProvenanceRecords = (provenance) => {
