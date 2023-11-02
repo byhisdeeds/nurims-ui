@@ -24,7 +24,7 @@ import {
   ITEM_ID,
   METADATA,
   NURIMS_TITLE,
-  NURIMS_WITHDRAWN
+  NURIMS_WITHDRAWN, ROLE_SYSADMIN
 } from "../../utils/constants";
 import {
   getMatchingResponseObject,
@@ -398,10 +398,10 @@ class ManageUsers extends React.Component {
           addRecordButtonLabel={"Add User"}
           removeRecordIcon={<PersonRemoveIcon sx={{mr: 1}}/>}
           removeRecordButtonLabel={"Remove User"}
-          addRole={"sysadmin"}
-          removeRole={"sysadmin"}
+          addRole={ROLE_SYSADMIN}
+          removeRole={ROLE_SYSADMIN}
           saveRole={"**current_user**"}
-          archiveRole={"sysadmin"}
+          archiveRole={ROLE_SYSADMIN}
         />
         {/*<Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>*/}
         {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}

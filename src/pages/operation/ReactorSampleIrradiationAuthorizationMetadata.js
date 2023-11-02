@@ -14,11 +14,14 @@ import {
   NURIMS_CREATION_DATE,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
-  NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE,
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER,
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE,
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY,
   NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
   NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
   NURIMS_OPERATION_DATA_NEUTRONFLUX,
-  NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE, NURIMS_SUBMISSION_DATE, NURIMS_SUBMISSION_ENTITY,
+  NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
   UNDEFINED_DATE_STRING
@@ -193,8 +196,8 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   onClickApproveRequest = () => {
     const record = this.state.record;
     const user = this.context.user;
-    setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, user.profile.username);
-      // `${user.profile.fullname} (${user.profile.username}) on ${dayjs().toISOString()}`);
+    setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, user.profile.username);
+    setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE, dayjs().toISOString());
     if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
       record["record_key"] = record_uuid();
     }
@@ -212,21 +215,31 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   render() {
     const {record, properties, selected_job, jobs, searching, busy, ac_open} = this.state;
     const disabled = Object.entries(record).length === 0;
-    const can_authorize = isValidUserRole(this.context.user, "irradiation_authorizer");
-    const submission_date = getRecordData(record, NURIMS_SUBMISSION_DATE, "")
-    const submission_entity = getRecordData(record, NURIMS_SUBMISSION_ENTITY, "")
-    const authorizedby = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, "")
-    let status = "";
+    const can_authorize =
+      isValidUserRole(this.context.user, "irradiation_authorizer");
+    const submission_date =
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "")
+    const submission_entity =
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, "")
+    const approvedby =
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "")
+    const approval_date =
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE, "")
+    let status = "info";
+    let status_message = "";
     if (Object.keys(record).length > 0) {
       if (submission_date === "") {
         // request is being prepared and has not yet been submitted for authorization
-        status = "Request is being prepared."
-      } else if (authorizedby === "") {
+        status_message = "Request is being prepared.";
+        status = "info";
+      } else if (approvedby === "") {
         // request has been submitted for authorization but has not yet been authorized
-        status = "Request has been submitted for authorization"
+        status_message = "Request has been submitted for authorization";
+        status = "warning";
       } else {
         // request has been authorized
-        status = "Request has been authorized by " + authorizedby
+        status_message = `Request has been authorized by ${approvedby} on ${approval_date}`;
+        status = "success";
       }
     }
     if (this.context.debug) {
@@ -242,7 +255,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
         noValidate
         autoComplete="off"
       >
-        <Alert severity="info" fontSize={"inherit"} variant="filled">{status}</Alert>
+        <Alert severity={status} fontSize={"inherit"} variant="filled">{status_message}</Alert>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
           <CardContent>
             <Grid container spacing={2}>

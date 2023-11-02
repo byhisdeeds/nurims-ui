@@ -13,7 +13,7 @@ import {
   CMD_GET_MATERIAL_RECORDS,
   CMD_GET_OWNER_RECORDS,
   CMD_GET_PROVENANCE_RECORDS,
-  CMD_GET_STORAGE_LOCATION_RECORDS, ROLE_CONTROLLED_MATERIAL_DATA_ENTRY,
+  CMD_GET_STORAGE_LOCATION_RECORDS, ROLE_CONTROLLED_MATERIAL_DATA_ENTRY, ROLE_SYSADMIN,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -161,7 +161,7 @@ class Material extends BaseRecordManager {
           addRecordButtonLabel={"Add Material"}
           removeRecordButtonLabel={"Remove Material"}
           addRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
-          removeRole={"sysadmin"}
+          removeRole={ROLE_SYSADMIN}
           saveRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
           archiveRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
         />}

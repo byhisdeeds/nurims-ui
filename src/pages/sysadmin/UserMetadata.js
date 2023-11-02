@@ -5,7 +5,7 @@ import {
   setUserRecordData
 } from "../../utils/MetadataUtils";
 import {
-  NURIMS_TITLE
+  NURIMS_TITLE, ROLE_SYSADMIN
 } from "../../utils/constants";
 import PropTypes from "prop-types";
 import {
@@ -102,7 +102,7 @@ class UserMetadata extends Component {
     }
     const authorized_module_levels = getPropertyValue(properties, "system.authorizedmodulelevels", "").split('|');
     const user_roles = getPropertyValue(properties, "system.userrole", "").split('|');
-    const isSysadmin = isValidUserRole(this.context.user, "sysadmin");
+    const isSysadmin = isValidUserRole(this.context.user, ROLE_SYSADMIN);
     return (
       <Box
         component="form"

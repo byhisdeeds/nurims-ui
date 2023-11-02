@@ -11,8 +11,11 @@ import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_SUGGEST_ANALYSIS_JOBS,
-  NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER, NURIMS_SUBMISSION_DATE, NURIMS_SUBMISSION_ENTITY,
-  REACTOR_IRRADIATION_AUTHORIZATION_TOPIC, ROLE_IRRADIATION_REQUEST_DATA_ENTRY, ROLE_IRRADIATION_REQUEST_SYSADMIN,
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE,
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY,
+  REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
+  ROLE_IRRADIATION_REQUEST_DATA_ENTRY,
+  ROLE_IRRADIATION_REQUEST_SYSADMIN,
 } from "../../utils/constants";
 import {
   Grid,
@@ -116,12 +119,9 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
     if (this.context.debug) {
       ConsoleLog(this.Module, "submitAuthorizationRequest","user", user, "record", selection);
     }
-    setRecordData(selection, NURIMS_SUBMISSION_ENTITY, user.profile.username);
-    setRecordData(selection, NURIMS_SUBMISSION_DATE, dayjs().toISOString());
-
-    console.log("===============")
-    console.log(selection)
-    console.log("===============")
+    setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, user.profile.username);
+    setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, dayjs().toISOString());
+    selection["changed"] = true
 
     this.saveChanges();
   }

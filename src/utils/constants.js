@@ -184,8 +184,6 @@ module.exports = Object.freeze({
   NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY: 'nurims.leaktestsurveillancefrequency',
   NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY: 'nurims.activitysurveillancefrequency',
   NURIMS_COVERAGE_LOCATION: "nurims.coverage.location",
-  NURIMS_SUBMISSION_DATE: "nurims.submission.date",
-  NURIMS_SUBMISSION_ENTITY: "nurims.submission.entity",
   NURIMS_ENTITY_TYPE: 'nurims.entity.type',
   NURIMS_ENTITY_ASSIGNED_ROLE: 'nurims.entity.assignedrole',
   NURIMS_ENTITY_DATE_OF_BIRTH: 'nurims.entity.dob',
@@ -267,7 +265,6 @@ module.exports = Object.freeze({
   NURIMS_AMP_SURVEILLANCE_FREQUENCY: "nurims.amp.surveillancefrequency",
 
   NURIMS_OPERATION_REPORT: "nurims.operation.report",
-  NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER: "nurims.operation.data.irradiationauthorizer",
   NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES: "nurims.operation.data.irradiationsampletypes",
   NURIMS_OPERATION_DATA_IRRADIATIONDURATION: "nurims.operation.data.irradiationduration",
   NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE: "nurims.operation.data.proposedirradiationdate",
@@ -279,6 +276,14 @@ module.exports = Object.freeze({
   NURIMS_OPERATION_DATA_STATS: "nurims.operation.data.stats",
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB: "nurims.operation.data.irradiatedsample.job",
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST: "nurims.operation.data.irradiatedsample.list",
+  // NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER: "nurims.operation.data.irradiationauthorizer",
+  // NURIMS_SUBMISSION_DATE: "nurims.submission.date",
+  // NURIMS_SUBMISSION_ENTITY: "nurims.submission.entity",
+
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER: "nurims.operation.data.irradiationauthorization.approver",
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE: "nurims.operation.data.irradiationauthorization.approvaldate",
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE: "nurims.operation.data.irradiation.authorization.submissiondate",
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY: "nurims.operation.data.irradiation.authorization.submissionentity",
 
   EMPLOYEE_RECORD_TYPE: "employee_record",
   MANUFACTURER_RECORD_TYPE: "manufacturer_record",

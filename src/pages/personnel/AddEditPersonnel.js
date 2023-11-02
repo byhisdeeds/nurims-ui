@@ -28,7 +28,7 @@ import {
   EMPLOYEE_RECORD_TYPE,
   ITEM_ID,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
-  PERSONNEL_TOPIC
+  PERSONNEL_TOPIC, ROLE_PERSONNEL_DATA_ENTRY, ROLE_SYSADMIN
 } from "../../utils/constants";
 import {readString} from "react-papaparse";
 import {
@@ -272,10 +272,10 @@ class AddEditPersonnel extends BaseRecordManager {
           addRecordButtonLabel={"Add Personnel"}
           removeRecordIcon={<PersonRemoveIcon sx={{mr: 1}}/>}
           removeRecordButtonLabel={"Remove Personnel"}
-          addRole={"personnel_data_entry"}
-          removeRole={"sysadmin"}
-          saveRole={"personnel_data_entry"}
-          archiveRole={"personnel_data_entry"}
+          addRole={ROLE_PERSONNEL_DATA_ENTRY}
+          removeRole={ROLE_SYSADMIN}
+          saveRole={ROLE_PERSONNEL_DATA_ENTRY}
+          archiveRole={ROLE_PERSONNEL_DATA_ENTRY}
         />
       </React.Fragment>
     );
