@@ -234,7 +234,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
         status = "info";
       } else if (approvedby === "") {
         // request has been submitted for authorization but has not yet been authorized
-        status_message = `Request was submitted for authorization by ${userFullname(submission_entity, this.context.user)} on ${dayjs(submission_date).format("MMMM D, YYYY h:mm A")}`;
+        status_message = `Request was submitted by ${userFullname(submission_entity, this.context.user)} on ${dayjs(submission_date).format("MMMM D, YYYY h:mm A")} for approval.`;
         // status_message = `Request was submitted for authorization by ${submission_entity} on ${submission_date}`;
         status = "warning";
       } else {

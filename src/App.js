@@ -187,11 +187,10 @@ class App extends React.Component {
     this.menuTitle = "";
     this.ws = null;
     this.mounted = false;
-    // this.user = this.props.authService;
     this.user = AuthService;
-    console.log("*************")
-    console.log(deviceDetect())
-    console.log("*************")
+    // console.log("*************")
+    // console.log(deviceDetect())
+    // console.log("*************")
     this.uuid = `${deviceDetect()["browserName"].toLowerCase()}-${new DeviceUUID().get()}`;
     this.logRef = React.createRef();
     this.notificationRef = React.createRef();
