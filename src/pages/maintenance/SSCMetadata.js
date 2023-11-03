@@ -125,15 +125,34 @@ class SSCMetadata extends Component {
     }
     // console.log(">>>", e.target.id)
     const ssc = this.state.ssc;
-    if (e.target.id === "name") {
+    const id = e.target.id === undefined ? e.target.name : e.target.id;
+    if (id === "name") {
       ssc["changed"] = true;
       ssc[NURIMS_TITLE] = e.target.value;
-    } else if (e.target.id === "description") {
+    } else if (id === "description") {
       ssc["changed"] = true;
       setMetadataValue(ssc, NURIMS_DESCRIPTION, e.target.value)
-    } else if (e.target.id === "ssc-id") {
+    } else if (id === "ssc-id") {
       ssc["changed"] = true;
       setMetadataValue(ssc, NURIMS_SSC_ID, e.target.value);
+    } else if (id === "type") {
+      ssc["changed"] = true;
+      setMetadataValue(ssc, NURIMS_SSC_TYPE, e.target.value);
+    } else if (id === "classification") {
+      ssc["changed"] = true;
+      setMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, e.target.value);
+    } else if (id === "function") {
+      ssc["changed"] = true;
+      setMetadataValue(ssc, NURIMS_SSC_FUNCTION, e.target.value);
+    } else if (id === "safety-category") {
+      ssc["changed"] = true;
+      setMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, e.target.value);
+    } else if (id === "reactor-safety-function") {
+      ssc["changed"] = true;
+      setMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, e.target.value);
+    } else if (id === "maintainability") {
+      ssc["changed"] = true;
+      setMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, e.target.value);
     }
     this.setState({ssc: ssc})
     // signal to parent that details have changed
@@ -167,77 +186,77 @@ class SSCMetadata extends Component {
     return this.state.ssc;
   }
 
-  handleSSCTypeChange = (e) => {
-    if (this.context.debug) {
-      ConsoleLog(this.module, "handleSSCTypeChange", "value", e.target.value, "id", e.target.id);
-    }
-    const ssc = this.state.ssc;
-    setMetadataValue(ssc, NURIMS_SSC_TYPE, e.target.value);
-    ssc.changed = true;
-    this.setState({ssc: ssc})
-    // signal to parent that metadata has changed
-    this.props.onChange(true);
-  }
+  // handleSSCTypeChange = (e) => {
+  //   if (this.context.debug) {
+  //     ConsoleLog(this.module, "handleSSCTypeChange", "value", e.target.value, "id", e.target.id, e.target.name);
+  //   }
+  //   const ssc = this.state.ssc;
+  //   setMetadataValue(ssc, NURIMS_SSC_TYPE, e.target.value);
+  //   ssc.changed = true;
+  //   this.setState({ssc: ssc})
+  //   // signal to parent that metadata has changed
+  //   this.props.onChange(true);
+  // }
 
-  handleSSCClassificationChange = (e) => {
-    if (this.context.debug) {
-      ConsoleLog(this.module, "handleSSCClassificationChange", "value", e.target.value);
-    }
-    const ssc = this.state.ssc;
-    ssc["changed"] = true;
-    setMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, e.target.value);
-    this.setState({ssc: ssc})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
+  // handleSSCClassificationChange = (e) => {
+  //   if (this.context.debug) {
+  //     ConsoleLog(this.module, "handleSSCClassificationChange", "value", e.target.value);
+  //   }
+  //   const ssc = this.state.ssc;
+  //   ssc["changed"] = true;
+  //   setMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, e.target.value);
+  //   this.setState({ssc: ssc})
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
 
-  handleSSCFunctionChange = (e) => {
-    if (this.context.debug) {
-      ConsoleLog(this.module, "handleSSCFunctionChange", "value", e.target.value);
-    }
-    const ssc = this.state.ssc;
-    ssc["changed"] = true;
-    setMetadataValue(ssc, NURIMS_SSC_FUNCTION, e.target.value);
-    this.setState({ssc: ssc})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
+  // handleSSCFunctionChange = (e) => {
+  //   if (this.context.debug) {
+  //     ConsoleLog(this.module, "handleSSCFunctionChange", "value", e.target.value);
+  //   }
+  //   const ssc = this.state.ssc;
+  //   ssc["changed"] = true;
+  //   setMetadataValue(ssc, NURIMS_SSC_FUNCTION, e.target.value);
+  //   this.setState({ssc: ssc})
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
 
-  handleSSCSafetyFunctionChange = (e) => {
-    if (this.context.debug) {
-      ConsoleLog(this.module, "handleSSCSafetyFunctionChange", "value", e.target.value);
-    }
-    const ssc = this.state.ssc;
-    ssc["changed"] = true;
-    setMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, e.target.value);
-    this.setState({ssc: ssc})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
+  // handleSSCSafetyFunctionChange = (e) => {
+  //   if (this.context.debug) {
+  //     ConsoleLog(this.module, "handleSSCSafetyFunctionChange", "value", e.target.value);
+  //   }
+  //   const ssc = this.state.ssc;
+  //   ssc["changed"] = true;
+  //   setMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, e.target.value);
+  //   this.setState({ssc: ssc})
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
 
-  handleSSCMaintainabilityChange = (e) => {
-    if (this.context.debug) {
-      ConsoleLog(this.module, "handleSSCMaintainabilityChange", "value", e.target.value);
-    }
-    const ssc = this.state.ssc;
-    ssc["changed"] = true;
-    setMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, e.target.value);
-    this.setState({ssc: ssc})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
+  // handleSSCMaintainabilityChange = (e) => {
+  //   if (this.context.debug) {
+  //     ConsoleLog(this.module, "handleSSCMaintainabilityChange", "value", e.target.value);
+  //   }
+  //   const ssc = this.state.ssc;
+  //   ssc["changed"] = true;
+  //   setMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, e.target.value);
+  //   this.setState({ssc: ssc})
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
 
-  handleSSCSafetyCategoryChange = (e) => {
-    if (this.context.debug) {
-      ConsoleLog(this.module, "handleSSCSafetyCategoryChange", "value", e.target.value);
-    }
-    const ssc = this.state.ssc;
-    ssc["changed"] = true;
-    setMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, e.target.value);
-    this.setState({ssc: ssc})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
+  // handleSSCSafetyCategoryChange = (e) => {
+  //   if (this.context.debug) {
+  //     ConsoleLog(this.module, "handleSSCSafetyCategoryChange", "value", e.target.value);
+  //   }
+  //   const ssc = this.state.ssc;
+  //   ssc["changed"] = true;
+  //   setMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, e.target.value);
+  //   this.setState({ssc: ssc})
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
 
   // handleSSCSurveillanceFrequencyChange = (e) => {
   //   console.log("handleSSCSurveillanceFrequencyChange", e.target.value);
@@ -328,7 +347,7 @@ class SSCMetadata extends Component {
                   label="Type"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_TYPE, "")}
-                  onChange={this.handleSSCTypeChange}
+                  onChange={this.handleChange}
                   options={["structure,Structure", "system,System", "component,Component"]}
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_TYPE, "")}
@@ -340,7 +359,7 @@ class SSCMetadata extends Component {
                   label="Classification"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, [])}
-                  onChange={this.handleSSCClassificationChange}
+                  onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_CLASSIFICATION, [])}
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_CLASSIFICATION, "")}
@@ -348,11 +367,11 @@ class SSCMetadata extends Component {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <SelectFormControlWithTooltip
-                  id={"ssc-function"}
+                  id={"function"}
                   label="Function Related To"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_FUNCTION, [])}
-                  onChange={this.handleSSCFunctionChange}
+                  onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_FUNCTION, [])}
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_FUNCTION, "")}
@@ -371,7 +390,7 @@ class SSCMetadata extends Component {
                   label="Reactor Safety Category"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, "")}
-                  onChange={this.handleSSCSafetyCategoryChange}
+                  onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_SAFETY_CATEGORY, [])}
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_SAFETY_CATEGORY, "")}
@@ -379,11 +398,11 @@ class SSCMetadata extends Component {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <SelectFormControlWithTooltip
-                  id={"safety-function"}
+                  id={"reactor-safety-function"}
                   label="Reactor Safety Function"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, "")}
-                  onChange={this.handleSSCSafetyFunctionChange}
+                  onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_SAFETY_FUNCTION, [])}
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_SAFETY_FUNCTION, "")}
@@ -395,7 +414,7 @@ class SSCMetadata extends Component {
                   label="Maintainability"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, "")}
-                  onChange={this.handleSSCMaintainabilityChange}
+                  onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_MAINTAINABILITY, [])}
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTAINABILITY, "")}
