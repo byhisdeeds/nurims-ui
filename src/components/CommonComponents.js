@@ -342,7 +342,7 @@ export function SelectFormControlWithTooltip({
       </Floater>
       <Select
         disabled={disabled}
-        sx={{'& .MuiTextField-root': {margin: 0}}}
+        margin={"none"}
         required
         fullWidth
         multiple={multiple}
@@ -403,7 +403,7 @@ export function TextFieldWithTooltip({
   return (
     <Box style={{paddingRight: padding, marginTop: padding, width: '100%'}}>
       <TextField
-        sx={{'& .MuiTextField-root': {margin: 0}}}
+        margin={"none"}
         defaultValue={" "}
         disabled={disabled}
         required={required}
