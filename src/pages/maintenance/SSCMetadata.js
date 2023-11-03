@@ -381,7 +381,7 @@ class SSCMetadata extends Component {
           </CardContent>
         </Card>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-          <CardHeader title={"Important To Reactor Safety"}/>
+          <CardHeader title={"Important To Reactor Safety"} sx={{fontSize: 10}}/>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -453,6 +453,91 @@ class SSCMetadata extends Component {
                     onChange={this.handleChange}
                   />
                 </HtmlTooltip>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <HtmlTooltip
+                  placement={'left'}
+                  title={
+                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")} />
+                  }
+                >
+                  <TextField
+                    id="description"
+                    label="SSC Description"
+                    value={getRecordMetadataValue(ssc, NURIMS_DESCRIPTION, "")}
+                    onChange={this.handleChange}
+                  />
+                </HtmlTooltip>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <HtmlTooltip
+                  placement={'left'}
+                  title={
+                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SSC_ID, "")} />
+                  }
+                >
+                  <TextField
+                    id="ssc-id"
+                    label="SSC ID"
+                    value={getRecordMetadataValue(ssc, NURIMS_SSC_ID, "")}
+                    onChange={this.handleChange}
+                  />
+                </HtmlTooltip>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    label="SSC Commissioning Date"
+                    inputFormat={"yyyy-MM-dd"}
+                    value={getDateFromDateString(getRecordMetadataValue(ssc, NURIMS_SSC_COMMISSIONING_DATE, "1970-01-01"), null)}
+                    onChange={this.handleCommissioningDateChange}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <HtmlTooltip
+                  placement={'left'}
+                  title={
+                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SSC_TYPE, "")} />
+                  }
+                >
+                  <FormControl sx={{ml: 0, mb: 0, width: '100%'}}>
+                    <InputLabel id="type">SSC Type</InputLabel>
+                    <Select
+                      disabled={disabled}
+                      required
+                      fullWidth
+                      labelId="type"
+                      label="SSC Type"
+                      id="type"
+                      value={getRecordMetadataValue(ssc, NURIMS_SSC_TYPE, "")}
+                      onChange={this.handleSSCTypeChange}
+                    >
+                      <MenuItem value='structure'>Structure</MenuItem>
+                      <MenuItem value='system'>System</MenuItem>
+                      <MenuItem value='component'>Component</MenuItem>
+                    </Select>
+                  </FormControl>
+                </HtmlTooltip>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+        <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
+          <CardHeader title={"Important To Operations"}/>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <EditableTable
+                  disable={disabled}
+                  ref={this.ref}
+                  addRowBtnText={"Add Surveillance"}
+                  initWithoutHead={false}
+                  defaultData={this.sscSurveillanceData}
+                  getData={this.saveTableData}
+                  fieldsArr={this.sscSurveillanceFields}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <HtmlTooltip
