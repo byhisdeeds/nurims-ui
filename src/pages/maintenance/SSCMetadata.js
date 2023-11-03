@@ -294,6 +294,7 @@ class SSCMetadata extends Component {
         autoComplete="off"
       >
         <Card variant={"outlined"} style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
+          <CardHeader title={"General Details"}/>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -420,17 +421,17 @@ class SSCMetadata extends Component {
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTAINABILITY, "")}
                 />
               </Grid>
-              <Grid item xs={12} sm={12}>
-                <EditableTable
-                  disable={disabled}
-                  ref={this.ref}
-                  addRowBtnText={"Add Surveillance"}
-                  initWithoutHead={false}
-                  defaultData={this.sscSurveillanceData}
-                  getData={this.saveTableData}
-                  fieldsArr={this.sscSurveillanceFields}
-                />
-              </Grid>
+              {/*<Grid item xs={12} sm={12}>*/}
+              {/*  <EditableTable*/}
+              {/*    disable={disabled}*/}
+              {/*    ref={this.ref}*/}
+              {/*    addRowBtnText={"Add Surveillance"}*/}
+              {/*    initWithoutHead={false}*/}
+              {/*    defaultData={this.sscSurveillanceData}*/}
+              {/*    getData={this.saveTableData}*/}
+              {/*    fieldsArr={this.sscSurveillanceFields}*/}
+              {/*  />*/}
+              {/*</Grid>*/}
             </Grid>
           </CardContent>
         </Card>
@@ -525,7 +526,7 @@ class SSCMetadata extends Component {
           </CardContent>
         </Card>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-          <CardHeader title={"Important To Operations"}/>
+          <CardHeader title={"Surveillance Details"}/>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
