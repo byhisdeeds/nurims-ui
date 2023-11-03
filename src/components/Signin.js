@@ -23,7 +23,6 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {styled} from "@mui/material/styles";
-import {SnackbarProvider} from "notistack";
 import {
   enqueueWarningSnackbar
 } from "../utils/SnackbarVariants";
@@ -147,14 +146,6 @@ class Signin extends React.Component {
     return (
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
-          <SnackbarProvider
-            autoHideDuration={2000}
-            maxSnack={5}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-          />
           <Container
             component="main"
             maxWidth="xs"
