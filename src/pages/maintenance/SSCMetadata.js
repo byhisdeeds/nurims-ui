@@ -294,7 +294,7 @@ class SSCMetadata extends Component {
         autoComplete="off"
       >
         <Card variant={"outlined"} style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-          <CardHeader title={"General Details"}/>
+          <CardHeader title={"General Details"} titleTypographyProps={{variant:'h2' }}/>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -382,7 +382,7 @@ class SSCMetadata extends Component {
           </CardContent>
         </Card>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-          <CardHeader title={"Reactor Safety"} sx={{fontSize: 10}}/>
+          <CardHeader title={"Reactor Safety"} titleTypographyProps={{variant:'h3' }}/>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -436,7 +436,7 @@ class SSCMetadata extends Component {
           </CardContent>
         </Card>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-          <CardHeader title={"Operations"}/>
+          <CardHeader title={"Operations"} titleTypographyProps={{variant:'h4' }}/>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -526,7 +526,7 @@ class SSCMetadata extends Component {
           </CardContent>
         </Card>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-          <CardHeader title={"Surveillance"}/>
+          <CardHeader title={"Surveillance"} titleTypographyProps={{variant:'h5' }}/>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
