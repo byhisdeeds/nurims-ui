@@ -15,7 +15,7 @@ import {
   CMD_GET_PERSONNEL_RECORDS, CMD_GET_REACTOR_OPERATING_REPORT_RECORDS,
   CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS,
   CMD_GET_SSC_RECORDS,
-  CMD_GET_STORAGE_LOCATION_RECORDS,
+  CMD_GET_STORAGE_LOCATION_RECORDS, CMD_SUBMIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
   CMD_UPDATE_MANUFACTURER_RECORD,
   CMD_UPDATE_MATERIAL_RECORD,
   CMD_UPDATE_MONITOR_RECORD,
@@ -109,6 +109,7 @@ class BaseRecordManager extends Component {
         return OWNER_TOPIC;
       case CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS:
       case CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD:
+      case CMD_SUBMIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD:
       case CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD:
         return REACTOR_IRRADIATION_AUTHORIZATION_TOPIC;
       default:
@@ -390,7 +391,6 @@ class BaseRecordManager extends Component {
           const selection = this.state.selection;
           if (Object.keys(selection).length === 0) {
             if (this.listRef.current) {
-              // this.listRef.current.setRecords(response[this.recordTopic], false);
               if (message.hasOwnProperty("append.records")) {
                 this.listRef.current.addRecords(response[this.cmdRecordTopic(message.cmd)], false);
               } else {
@@ -402,11 +402,9 @@ class BaseRecordManager extends Component {
             }
           } else {
             if (!message.hasOwnProperty("item_id") && this.listRef.current) {
-              // this.listRef.current.setRecords(response[this.recordTopic], true);
               this.listRef.current.setRecords(response[this.cmdRecordTopic(message.cmd)]);
             }
             if (message.hasOwnProperty("item_id")) {
-              // const record = getMatchingResponseObject(message, "response." + this.recordTopic, "item_id", selection["item_id"]);
               const record = getMatchingResponseObject(message, "response." + this.cmdRecordTopic(message.cmd), "item_id", selection["item_id"]);
               selection[METADATA] = [...record[METADATA]]
               if (this.metadataRef.current) {
@@ -415,12 +413,12 @@ class BaseRecordManager extends Component {
             }
           }
         } else if (this.isCommand(message, [
-          CMD_UPDATE_MONITOR_RECORD, CMD_UPDATE_PERSONNEL_RECORD, CMD_UPDATE_SSC_RECORD, CMD_UPDATE_STORAGE_LOCATION_RECORD,
+          CMD_UPDATE_MONITOR_RECORD, CMD_UPDATE_PERSONNEL_RECORD, CMD_UPDATE_SSC_RECORD,
+          CMD_UPDATE_STORAGE_LOCATION_RECORD, CMD_SUBMIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
           CMD_UPDATE_MATERIAL_RECORD, CMD_UPDATE_MANUFACTURER_RECORD, CMD_UPDATE_OWNER_RECORD,
           CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD])) {
           enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
           if (this.listRef.current) {
-            // this.listRef.current.updateRecord(response[this.recordTopic]);
             this.listRef.current.updateRecord(response[this.cmdRecordTopic(message.cmd)]);
           }
         } else if (this.isCommand(message, [
@@ -431,9 +429,6 @@ class BaseRecordManager extends Component {
           if (this.listRef.current) {
             this.listRef.current.removeRecord(this.state.selection)
           }
-          // if (this.listRef.current) {
-          //   this.listRef.current.removeRecord(this.state.selection)
-          // }
           if (this.metadataRef.current) {
             this.metadataRef.current.setRecordMetadata({})
           }

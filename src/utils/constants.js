@@ -119,6 +119,7 @@ module.exports = Object.freeze({
 
   CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS: "get_reactor_sample_irradiation_authorization_records",
   CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD: "update_reactor_sample_irradiation_authorization_record",
+  CMD_SUBMIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD: "submit_reactor_sample_irradiation_authorization_record",
   CMD_DELETE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD: "delete_reactor_sample_irradiation_authorization_record",
 
   CMD_GET_ORGANISATION: "get_organisation",
