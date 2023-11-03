@@ -234,6 +234,7 @@ module.exports = Object.freeze({
   NURIMS_SSC_ID: "nurims.ssc.id",
   NURIMS_SSC_COMMISSIONING_DATE: "nurims.ssc.commissioningdate",
   NURIMS_SSC_TYPE: "nurims.ssc.type",
+  NURIMS_SSC_FUNCTION: "nurims.ssc.function",
   NURIMS_SSC_CLASSIFICATION: "nurims.ssc.classification",
   NURIMS_SSC_SAFETY_CATEGORY: "nurims.ssc.safetycategory",
   NURIMS_SSC_SAFETY_FUNCTION: "nurims.ssc.safetyfunction",

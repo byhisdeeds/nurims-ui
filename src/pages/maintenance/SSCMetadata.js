@@ -17,6 +17,7 @@ import {
   setMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
+  getPropertyAsArray,
   getPropertyAsMenuitems,
   getPropertyValue,
 } from "../../utils/PropertyUtils";
@@ -34,7 +35,7 @@ import {
   NURIMS_SURVEILLANCE_FREQUENCY,
   NURIMS_SSC_MAINTENANCE_TASK,
   NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
-  NURIMS_SSC_MAINTENANCE_SCOPE, NURIMS_MATERIAL_TYPE,
+  NURIMS_SSC_MAINTENANCE_SCOPE, NURIMS_MATERIAL_TYPE, NURIMS_SSC_FUNCTION,
 } from "../../utils/constants";
 import {
   HtmlTooltip,
@@ -168,7 +169,7 @@ class SSCMetadata extends Component {
 
   handleSSCTypeChange = (e) => {
     if (this.context.debug) {
-      ConsoleLog(this.module, "handleSSCTypeChange", "value", e.target.value);
+      ConsoleLog(this.module, "handleSSCTypeChange", "value", e.target.value, "id", e.target.id);
     }
     const ssc = this.state.ssc;
     setMetadataValue(ssc, NURIMS_SSC_TYPE, e.target.value);
@@ -185,6 +186,18 @@ class SSCMetadata extends Component {
     const ssc = this.state.ssc;
     ssc["changed"] = true;
     setMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, e.target.value);
+    this.setState({ssc: ssc})
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
+
+  handleSSCFunctionChange = (e) => {
+    if (this.context.debug) {
+      ConsoleLog(this.module, "handleSSCFunctionChange", "value", e.target.value);
+    }
+    const ssc = this.state.ssc;
+    ssc["changed"] = true;
+    setMetadataValue(ssc, NURIMS_SSC_FUNCTION, e.target.value);
     this.setState({ssc: ssc})
     // signal to parent that details have changed
     this.props.onChange(true);
@@ -274,20 +287,6 @@ class SSCMetadata extends Component {
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_TITLE, "")}
                 />
-                {/*<HtmlTooltip*/}
-                {/*  placement={'left'}*/}
-                {/*  title={*/}
-                {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_TITLE, "")} />*/}
-                {/*  }*/}
-                {/*>*/}
-                {/*  <TextField*/}
-                {/*    required*/}
-                {/*    id="name"*/}
-                {/*    label="Name"*/}
-                {/*    value={ssc.hasOwnProperty(NURIMS_TITLE) ? ssc[NURIMS_TITLE] : ""}*/}
-                {/*    onChange={this.handleChange}*/}
-                {/*  />*/}
-                {/*</HtmlTooltip>*/}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextFieldWithTooltip
@@ -298,21 +297,7 @@ class SSCMetadata extends Component {
                   onChange={this.handleChange}
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")}
-                  // target={this.tooltipRef}
                 />
-                {/*<HtmlTooltip*/}
-                {/*  placement={'left'}*/}
-                {/*  title={*/}
-                {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")} />*/}
-                {/*  }*/}
-                {/*>*/}
-                {/*  <TextField*/}
-                {/*    id="description"*/}
-                {/*    label="SSC Description"*/}
-                {/*    value={getRecordMetadataValue(ssc, NURIMS_DESCRIPTION, "")}*/}
-                {/*    onChange={this.handleChange}*/}
-                {/*  />*/}
-                {/*</HtmlTooltip>*/}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextFieldWithTooltip
@@ -325,37 +310,18 @@ class SSCMetadata extends Component {
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_ID, "")}
                   // target={this.tooltipRef}
                 />
-                {/*<HtmlTooltip*/}
-                {/*  placement={'left'}*/}
-                {/*  title={*/}
-                {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SSC_ID, "")} />*/}
-                {/*  }*/}
-                {/*>*/}
-                {/*  <TextField*/}
-                {/*    id="ssc-id"*/}
-                {/*    label="SSC ID"*/}
-                {/*    value={getRecordMetadataValue(ssc, NURIMS_SSC_ID, "")}*/}
-                {/*    onChange={this.handleChange}*/}
-                {/*  />*/}
-                {/*</HtmlTooltip>*/}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <DatePickerWithTooltip
+                  padding={8}
+                  width={"25ch"}
                   label="SSC Commissioning Date"
-                  value={getDateFromDateString(getRecordMetadataValue(ssc, NURIMS_SSC_COMMISSIONING_DATE, "1970-01-01"), null)}
+                  value={getDateFromDateString(getRecordMetadataValue(ssc, NURIMS_SSC_COMMISSIONING_DATE,
+                    "1970-01-01"), null)}
                   onChange={this.handleCommissioningDateChange}
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_COMMISSIONING_DATE, "")}
                 />
-                {/*<LocalizationProvider dateAdapter={AdapterDateFns}>*/}
-                {/*  <DatePicker*/}
-                {/*    label="SSC Commissioning Date"*/}
-                {/*    inputFormat={"yyyy-MM-dd"}*/}
-                {/*    value={getDateFromDateString(getRecordMetadataValue(ssc, NURIMS_SSC_COMMISSIONING_DATE, "1970-01-01"), null)}*/}
-                {/*    onChange={this.handleCommissioningDateChange}*/}
-                {/*    renderInput={(params) => <TextField {...params} />}*/}
-                {/*  />*/}
-                {/*</LocalizationProvider>*/}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <SelectFormControlWithTooltip
@@ -364,34 +330,10 @@ class SSCMetadata extends Component {
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_TYPE, "")}
                   onChange={this.handleSSCTypeChange}
-                  options={["structure,Structure","system,System","component,Component"]}
+                  options={["structure,Structure", "system,System", "component,Component"]}
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_TYPE, "")}
                 />
-                {/*<HtmlTooltip*/}
-                {/*  placement={'left'}*/}
-                {/*  title={*/}
-                {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SSC_TYPE, "")} />*/}
-                {/*  }*/}
-                {/*>*/}
-                {/*  <FormControl sx={{ml: 0, mb: 0, width: '100%'}}>*/}
-                {/*    <InputLabel id="type">SSC Type</InputLabel>*/}
-                {/*    <Select*/}
-                {/*      disabled={disabled}*/}
-                {/*      required*/}
-                {/*      fullWidth*/}
-                {/*      labelId="type"*/}
-                {/*      label="SSC Type"*/}
-                {/*      id="type"*/}
-                {/*      value={getRecordMetadataValue(ssc, NURIMS_SSC_TYPE, "")}*/}
-                {/*      onChange={this.handleSSCTypeChange}*/}
-                {/*    >*/}
-                {/*      <MenuItem value='structure'>Structure</MenuItem>*/}
-                {/*      <MenuItem value='system'>System</MenuItem>*/}
-                {/*      <MenuItem value='component'>Component</MenuItem>*/}
-                {/*    </Select>*/}
-                {/*  </FormControl>*/}
-                {/*</HtmlTooltip>*/}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <SelectFormControlWithTooltip
@@ -400,33 +342,22 @@ class SSCMetadata extends Component {
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, [])}
                   onChange={this.handleSSCClassificationChange}
-                  options={getPropertyAsMenuitems(properties, NURIMS_SSC_CLASSIFICATION)}
+                  options={getPropertyAsArray(properties, NURIMS_SSC_CLASSIFICATION, [])}
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_CLASSIFICATION, "")}
                 />
-                {/*<HtmlTooltip*/}
-                {/*  placement={'left'}*/}
-                {/*  title={*/}
-                {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SSC_CLASSIFICATION, "")} />*/}
-                {/*  }*/}
-                {/*>*/}
-                {/*  <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>*/}
-                {/*    <InputLabel id="classification">SSC Classification</InputLabel>*/}
-                {/*    <Select*/}
-                {/*      disabled={disabled}*/}
-                {/*      required*/}
-                {/*      fullWidth*/}
-                {/*      multiple*/}
-                {/*      labelId="classification"*/}
-                {/*      label="SSC Classification"*/}
-                {/*      id="classification"*/}
-                {/*      value={getRecordMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, [])}*/}
-                {/*      onChange={this.handleSSCClassificationChange}*/}
-                {/*    >*/}
-                {/*      {getPropertyAsMenuitems(properties, NURIMS_SSC_CLASSIFICATION)}*/}
-                {/*    </Select>*/}
-                {/*  </FormControl>*/}
-                {/*</HtmlTooltip>*/}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <SelectFormControlWithTooltip
+                  id={"ssc-function"}
+                  label="SSC Function Related To"
+                  required={true}
+                  value={getRecordMetadataValue(ssc, NURIMS_SSC_FUNCTION, [])}
+                  onChange={this.handleSSCFunctionChange}
+                  options={getPropertyAsArray(properties, NURIMS_SSC_FUNCTION, [])}
+                  disabled={disabled}
+                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_FUNCTION, "")}
+                />
               </Grid>
             </Grid>
           </CardContent>
@@ -436,76 +367,40 @@ class SSCMetadata extends Component {
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <HtmlTooltip
-                  placement={'left'}
-                  title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SSC_SAFETY_CATEGORY, "")} />
-                  }
-                >
-                  <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
-                    <InputLabel id="safety-category">SSC Safety Category</InputLabel>
-                    <Select
-                      disabled={disabled}
-                      required
-                      fullWidth
-                      labelId="safety-category"
-                      label="SSC Safety Category"
-                      id="safety-category"
-                      value={getRecordMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, "")}
-                      onChange={this.handleSSCSafetyCategoryChange}
-                    >
-                      {getPropertyAsMenuitems(properties, NURIMS_SSC_SAFETY_CATEGORY)}
-                    </Select>
-                  </FormControl>
-                </HtmlTooltip>
+                <SelectFormControlWithTooltip
+                  id={"safety-category"}
+                  label="SSC Reactor Safety Category"
+                  required={true}
+                  value={getRecordMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, "")}
+                  onChange={this.handleSSCSafetyCategoryChange}
+                  options={getPropertyAsArray(properties, NURIMS_SSC_SAFETY_CATEGORY, [])}
+                  disabled={disabled}
+                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_SAFETY_CATEGORY, "")}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <HtmlTooltip
-                  placement={'left'}
-                  title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SSC_SAFETY_FUNCTION, "")} />
-                  }
-                >
-                  <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
-                    <InputLabel id="safety-function">SSC Safety Function</InputLabel>
-                    <Select
-                      disabled={disabled}
-                      required
-                      fullWidth
-                      labelId="safety-function"
-                      label="SSC Safety Function"
-                      id="safety-function"
-                      value={getRecordMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, "")}
-                      onChange={this.handleSSCSafetyFunctionChange}
-                    >
-                      {getPropertyAsMenuitems(properties, NURIMS_SSC_SAFETY_FUNCTION)}
-                    </Select>
-                  </FormControl>
-                </HtmlTooltip>
+                <SelectFormControlWithTooltip
+                  id={"safety-function"}
+                  label="SSC Reactor Safety Function"
+                  required={true}
+                  value={getRecordMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, "")}
+                  onChange={this.handleSSCSafetyFunctionChange}
+                  options={getPropertyAsArray(properties, NURIMS_SSC_SAFETY_FUNCTION, [])}
+                  disabled={disabled}
+                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_SAFETY_FUNCTION, "")}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <HtmlTooltip
-                  placement={'left'}
-                  title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTAINABILITY, "")} />
-                  }
-                >
-                  <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
-                    <InputLabel id="maintainability">SSC Maintainability</InputLabel>
-                    <Select
-                      disabled={disabled}
-                      required
-                      fullWidth
-                      labelId="maintainability"
-                      label="SSC Maintainability"
-                      id="maintainability"
-                      value={getRecordMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, "")}
-                      onChange={this.handleSSCMaintainabilityChange}
-                    >
-                      {getPropertyAsMenuitems(properties, NURIMS_SSC_MAINTAINABILITY)}
-                    </Select>
-                  </FormControl>
-                </HtmlTooltip>
+                <SelectFormControlWithTooltip
+                  id={"maintainability"}
+                  label="SSC Maintainability"
+                  required={true}
+                  value={getRecordMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, "")}
+                  onChange={this.handleSSCMaintainabilityChange}
+                  options={getPropertyAsArray(properties, NURIMS_SSC_MAINTAINABILITY, [])}
+                  disabled={disabled}
+                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTAINABILITY, "")}
+                />
               </Grid>
               <Grid item xs={12} sm={12}>
                 <EditableTable
@@ -517,34 +412,12 @@ class SSCMetadata extends Component {
                   getData={this.saveTableData}
                   fieldsArr={this.sscSurveillanceFields}
                 />
-                {/*<HtmlTooltip*/}
-                {/*  placement={'left'}*/}
-                {/*  title={*/}
-                {/*    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SURVEILLANCE_FREQUENCY, "")} />*/}
-                {/*  }*/}
-                {/*>*/}
-                {/*  <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>*/}
-                {/*    <InputLabel id="maintenance-surveillance">SSC Maintenance Surveillance Frequency</InputLabel>*/}
-                {/*    <Select*/}
-                {/*      disabled={disabled}*/}
-                {/*      required*/}
-                {/*      fullWidth*/}
-                {/*      labelId="maintenance-surveillance"*/}
-                {/*      label="SSC Maintenance Surveillance Frequency"*/}
-                {/*      id="maintenance-surveillance"*/}
-                {/*      value={getMetadataValue(ssc, NURIMS_SSC_SURVEILLANCE_FREQUENCY, "")}*/}
-                {/*      onChange={this.handleSSCSurveillanceFrequencyChange}*/}
-                {/*    >*/}
-                {/*      {getPropertyAsMenuitems(properties, NURIMS_SURVEILLANCE_FREQUENCY)}*/}
-                {/*    </Select>*/}
-                {/*  </FormControl>*/}
-                {/*</HtmlTooltip>*/}
               </Grid>
             </Grid>
           </CardContent>
         </Card>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-          <CardHeader title={"General Safety"}/>
+          <CardHeader title={"Important To Operations"}/>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>

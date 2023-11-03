@@ -31,8 +31,13 @@ export function setPropertyValue(properties, key, value) {
 }
 
 
+export function getPropertyAsArray(properties, key, missingValue, separator) {
+  return getPropertyValue(properties, key, missingValue).split(separator === undefined ? "|" : separator);
+}
+
+
 export function getPropertyAsMenuitems(properties, key) {
-  const items = getPropertyValue(properties, key, "").split('|');
+  const items = getPropertyAsArray(properties, key, "");
   return (
     items.map((item) => {
       const t = item.split(',');

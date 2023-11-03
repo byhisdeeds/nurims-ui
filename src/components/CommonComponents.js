@@ -298,7 +298,7 @@ export function SelectFormControlWithTooltip({
                                                padding, multiple
                                              }) {
   return (
-    <FormControl style={{paddingRight: padding, marginTop: padding, width: '100%'}} variant="outlined">
+    <FormControl style={{paddingRight: padding, marginTop: padding, marginLeft: padding, width: '100%'}} variant="outlined">
       <Floater
         content={tooltip}
         showCloseButton={true}
@@ -412,10 +412,6 @@ export function TextFieldWithTooltip({
         InputProps={readOnly ? {readOnly: true} : {}}
         label={
           <Floater
-            // callback={cb}
-            // component={TooltipContent}
-            // target={".tooltip-root div"}
-            // offset={40}
             content={tooltip}
             showCloseButton={true}
             hideArrow
