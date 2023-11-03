@@ -382,7 +382,7 @@ class SSCMetadata extends Component {
           </CardContent>
         </Card>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-          <CardHeader title={"Important To Reactor Safety"} sx={{fontSize: 10}}/>
+          <CardHeader title={"Reactor Safety"} sx={{fontSize: 10}}/>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -436,7 +436,7 @@ class SSCMetadata extends Component {
           </CardContent>
         </Card>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-          <CardHeader title={"Important To Operations"}/>
+          <CardHeader title={"Operations"}/>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -526,7 +526,7 @@ class SSCMetadata extends Component {
           </CardContent>
         </Card>
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-          <CardHeader title={"Surveillance Details"}/>
+          <CardHeader title={"Surveillance"}/>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
