@@ -291,7 +291,7 @@ class SSCMetadata extends Component {
               <Grid item xs={12} sm={6}>
                 <TextFieldWithTooltip
                   id={"description"}
-                  label="SSC Description"
+                  label="Description"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_DESCRIPTION, "")}
                   onChange={this.handleChange}
@@ -301,21 +301,20 @@ class SSCMetadata extends Component {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextFieldWithTooltip
-                  id={"description"}
-                  label="SSC Description"
+                  id={"id"}
+                  label="ID"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_ID, "")}
                   onChange={this.handleChange}
                   disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_ID, "")}
-                  // target={this.tooltipRef}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <DatePickerWithTooltip
                   padding={8}
                   width={"25ch"}
-                  label="SSC Commissioning Date"
+                  label="Commissioning Date"
                   value={getDateFromDateString(getRecordMetadataValue(ssc, NURIMS_SSC_COMMISSIONING_DATE,
                     "1970-01-01"), null)}
                   onChange={this.handleCommissioningDateChange}
@@ -326,7 +325,7 @@ class SSCMetadata extends Component {
               <Grid item xs={12} sm={6}>
                 <SelectFormControlWithTooltip
                   id={"type"}
-                  label="SSC Type"
+                  label="Type"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_TYPE, "")}
                   onChange={this.handleSSCTypeChange}
@@ -338,7 +337,7 @@ class SSCMetadata extends Component {
               <Grid item xs={12} sm={6}>
                 <SelectFormControlWithTooltip
                   id={"classification"}
-                  label="SSC Classification"
+                  label="Classification"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, [])}
                   onChange={this.handleSSCClassificationChange}
@@ -350,7 +349,7 @@ class SSCMetadata extends Component {
               <Grid item xs={12} sm={6}>
                 <SelectFormControlWithTooltip
                   id={"ssc-function"}
-                  label="SSC Function Related To"
+                  label="Function Related To"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_FUNCTION, [])}
                   onChange={this.handleSSCFunctionChange}
@@ -369,7 +368,7 @@ class SSCMetadata extends Component {
               <Grid item xs={12} sm={6}>
                 <SelectFormControlWithTooltip
                   id={"safety-category"}
-                  label="SSC Reactor Safety Category"
+                  label="Reactor Safety Category"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, "")}
                   onChange={this.handleSSCSafetyCategoryChange}
@@ -381,7 +380,7 @@ class SSCMetadata extends Component {
               <Grid item xs={12} sm={6}>
                 <SelectFormControlWithTooltip
                   id={"safety-function"}
-                  label="SSC Reactor Safety Function"
+                  label="Reactor Safety Function"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, "")}
                   onChange={this.handleSSCSafetyFunctionChange}
@@ -393,7 +392,7 @@ class SSCMetadata extends Component {
               <Grid item xs={12} sm={6}>
                 <SelectFormControlWithTooltip
                   id={"maintainability"}
-                  label="SSC Maintainability"
+                  label="Maintainability"
                   required={true}
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, "")}
                   onChange={this.handleSSCMaintainabilityChange}

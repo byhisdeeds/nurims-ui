@@ -238,6 +238,7 @@ module.exports = Object.freeze({
   NURIMS_SSC_CLASSIFICATION: "nurims.ssc.classification",
   NURIMS_SSC_SAFETY_CATEGORY: "nurims.ssc.safetycategory",
   NURIMS_SSC_SAFETY_FUNCTION: "nurims.ssc.safetyfunction",
+  NURIMS_SSC_REACTOR_SAFETY_FUNCTION: "nurims.ssc.reactorsafetyfunction",
   NURIMS_SSC_MAINTAINABILITY: "nurims.ssc.maintainability",
   NURIMS_SSC_SURVEILLANCE_FREQUENCY: "nurims.ssc.surveillancefrequency",
   NURIMS_SSC_MAINTENANCE_TASK: "nurims.ssc.maintenancetask",
