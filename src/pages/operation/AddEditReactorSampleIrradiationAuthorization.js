@@ -133,8 +133,8 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   submitAuthorizationRequest = (event, reason) => {
     const user = this.context.user;
     const selection = this.state.selection;
-    const is_submitted = getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE,
-      "") !== "";
+    const is_submitted =
+      recordHasMetadataField(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE);
     if (this.context.debug) {
       ConsoleLog(this.Module, "submitAuthorizationRequest", "user", user, "record", selection,
         "is_submitted", is_submitted);
@@ -190,11 +190,11 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   render() {
     const {confirm_remove, include_archived, selection, show_provenance_view} = this.state;
     const {user} = this.props;
-    const record_has_submission_tag =
+    const record_has_submission_metadata =
       recordHasMetadataField(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "confirm_removed", confirm_remove, "include_archived",
-        include_archived, "selection", selection, "record_has_submission_tag", record_has_submission_tag);
+        include_archived, "selection", selection, "record_has_submission_tag", record_has_submission_metadata);
     }
     const submission_date =
       getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "");
@@ -258,8 +258,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
           saveRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
           archiveRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
           submitRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
-          submitRecordButtonLabel={this.recordHasField(selection,
-            NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE) ?
+          submitRecordButtonLabel={record_has_submission_metadata ?
               <React.Fragment>&#160;Withdraw Request&#160;<UnpublishedIcon sx={{mr: 1}}/></React.Fragment> :
               <React.Fragment>&#160;Submit Request&#160;<PublishIcon sx={{mr: 1}}/></React.Fragment>
           }
