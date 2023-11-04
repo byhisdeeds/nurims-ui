@@ -38,7 +38,7 @@ import BaseRecordManager from "../../components/BaseRecordManager";
 import ReactorSampleIrradiationAuthorizationRecordsList from "./ReactorSampleIrradiationAuthorizationRecordsList";
 import ReactorSampleIrradiationAuthorizationMetadata from "./ReactorSampleIrradiationAuthorizationMetadata";
 import {
-  getRecordData, record_uuid, setRecordData,
+  getRecordData, record_uuid, recordHasMetadataField, setRecordData,
 } from "../../utils/MetadataUtils";
 import {withTheme} from "@mui/styles";
 import dayjs from 'dayjs';
@@ -51,6 +51,10 @@ import {
   messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import PublishIcon from '@mui/icons-material/Publish';
+import UnpublishedIcon from '@mui/icons-material/Unpublished';
 
 export const ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF =
   "AddEditReactorSampleIrradiationAuthorization";
@@ -129,37 +133,45 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   submitAuthorizationRequest = (event, reason) => {
     const user = this.context.user;
     const selection = this.state.selection;
+    const is_submitted = getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE,
+      "") !== "";
     if (this.context.debug) {
-      ConsoleLog(this.Module, "submitAuthorizationRequest", "user", user, "record", selection);
-    }
-    if (getRecordData(selection, NURIMS_OPERATION_DATA_NEUTRONFLUX, "") === "") {
-      enqueueErrorSnackbar("Cannot submit request with a blank neutron flux field.");
-      return;
-    }
-    if (getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "") === "") {
-      enqueueErrorSnackbar("Cannot submit request with a blank irradiation duration field.");
-      return;
-    }
-    if (getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, "") === "") {
-      enqueueErrorSnackbar("Cannot submit request with a blank list of samples to be irradiated.");
-      return;
-    }
-    if (getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,"") === "") {
-      enqueueErrorSnackbar("Cannot submit request with a blank sample types list.");
-      return;
-    }
-    const job = getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,"");
-    if (job === "") {
-      enqueueErrorSnackbar("Cannot submit request with no sample analysis job selected.");
-      return;
-    }
-    if (getRecordData(selection, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE, "") === "") {
-      enqueueErrorSnackbar("Cannot submit request with no proposed irradiation date.");
-      return;
+      ConsoleLog(this.Module, "submitAuthorizationRequest", "user", user, "record", selection,
+        "is_submitted", is_submitted);
     }
 
-    setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, user.profile.username);
-    setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, dayjs().toISOString());
+    if (is_submitted) {
+      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, null);
+      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, null);
+    } else {
+      if (getRecordData(selection, NURIMS_OPERATION_DATA_NEUTRONFLUX, "") === "") {
+        enqueueErrorSnackbar("Cannot submit request with a blank neutron flux field.");
+        return;
+      }
+      if (getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "") === "") {
+        enqueueErrorSnackbar("Cannot submit request with a blank irradiation duration field.");
+        return;
+      }
+      if (getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, "") === "") {
+        enqueueErrorSnackbar("Cannot submit request with a blank list of samples to be irradiated.");
+        return;
+      }
+      if (getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,"") === "") {
+        enqueueErrorSnackbar("Cannot submit request with a blank sample types list.");
+        return;
+      }
+      const job = getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,"");
+      if (job === "") {
+        enqueueErrorSnackbar("Cannot submit request with no sample analysis job selected.");
+        return;
+      }
+      if (getRecordData(selection, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE, "") === "") {
+        enqueueErrorSnackbar("Cannot submit request with no proposed irradiation date.");
+        return;
+      }
+      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, user.profile.username);
+      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, dayjs().toISOString());
+    }
 
     if (selection.item_id === -1 && !selection.hasOwnProperty("record_key")) {
       selection["record_key"] = record_uuid();
@@ -178,9 +190,11 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
   render() {
     const {confirm_remove, include_archived, selection, show_provenance_view} = this.state;
     const {user} = this.props;
+    const record_has_submission_tag =
+      recordHasMetadataField(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "confirm_removed", confirm_remove, "include_archived",
-        include_archived, "selection", selection);
+        include_archived, "selection", selection, "record_has_submission_tag", record_has_submission_tag);
     }
     const submission_date =
       getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "");
@@ -228,19 +242,27 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
         {<AddRemoveArchiveSaveSubmitProvenanceButtonPanel
           THIS={this}
           user={user}
+          archiveRecordButtonLabel={this.isRecordArchived(selection) ?
+            <React.Fragment><VisibilityIcon sx={{mr: 1}}/>"Restore Record"</React.Fragment> :
+            <React.Fragment><VisibilityOffIcon sx={{mr: 1}}/>"Archive Record"</React.Fragment>
+          }
           onClickAddRecord={this.addRecord}
           onClickChangeRecordArchivalStatus={this.changeRecordArchivalStatus}
           onClickRemoveRecord={this.removeRecord}
           onClickSaveRecordChanges={this.saveChanges}
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
-          addRecordButtonLabel={"Add Authorization"}
-          removeRecordButtonLabel={"Remove Authorization"}
+          addRecordButtonLabel={"Add Authorization Request"}
+          removeRecordButtonLabel={"Remove Authorization Request"}
           addRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
           removeRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
           saveRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
           archiveRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
           submitRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
-          submitRecordButtonLabel={"Submit Request"}
+          submitRecordButtonLabel={this.recordHasField(selection,
+            NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE) ?
+              <React.Fragment>&#160;Withdraw Request&#160;<UnpublishedIcon sx={{mr: 1}}/></React.Fragment> :
+              <React.Fragment>&#160;Submit Request&#160;<PublishIcon sx={{mr: 1}}/></React.Fragment>
+          }
           onClickSubmitRecord={this.submitAuthorizationRequest}
           submitDisabled={submit_disabled}
         />}

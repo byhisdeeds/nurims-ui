@@ -122,7 +122,7 @@ class SSCMetadata extends Component {
     } else if (id === "description") {
       ssc["changed"] = true;
       setMetadataValue(ssc, NURIMS_DESCRIPTION, e.target.value)
-    } else if (id === "ssc-id") {
+    } else if (id === "id") {
       ssc["changed"] = true;
       setMetadataValue(ssc, NURIMS_SSC_ID, e.target.value);
     } else if (id === "type") {
@@ -385,7 +385,7 @@ class SSCMetadata extends Component {
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, "")}
                   onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_MAINTAINABILITY, [])}
-                  disabled={no_reactor_safety_functions}
+                  disabled={disabled}
                   tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTAINABILITY, "")}
                 />
               </Grid>

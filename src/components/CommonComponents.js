@@ -298,7 +298,8 @@ export function SelectFormControlWithTooltip({
                                                padding, multiple
                                              }) {
   return (
-    <FormControl style={{paddingRight: padding, marginTop: padding, marginLeft: padding, width: '100%'}} variant="outlined">
+    <FormControl style={{paddingRight: padding, marginTop: padding, marginLeft: padding, width: '100%'}}
+                 variant="outlined">
       <Floater
         content={tooltip}
         showCloseButton={true}
@@ -1105,6 +1106,7 @@ DateSelect.defaultProps = {
 export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
                                                                   THIS,
                                                                   user,
+                                                                  archiveRecordButtonLabel,
                                                                   onClickRemoveRecord,
                                                                   removeRecordButtonLabel,
                                                                   onClickSaveRecordChanges,
@@ -1134,12 +1136,34 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         variant="extended"
         size="small"
         color="primary"
+        aria-label="add"
+        onClick={onClickAddRecord}
+        disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
+      >
+        &#160; {addRecordButtonLabel} &#160;
+        {addRecordIcon}
+      </Fab>
+      <Fab
+        variant="extended"
+        size="small"
+        color="primary"
         aria-label="remove"
         onClick={onClickRemoveRecord}
         disabled={!THIS.isSelectableByRoles(selection, [removeRole, sysadminRole], true)}
       >
         &#160; {removeRecordButtonLabel} &#160;
         {removeRecordIcon}
+      </Fab>
+      <Fab
+        variant="extended"
+        size="small"
+        color="primary"
+        aria-label="save"
+        onClick={onClickSaveRecordChanges}
+        disabled={!(recordHasChanged && THIS.isSelectableByRoles(selection, [saveRole, sysadminRole], false))}
+      >
+        &#160; Save Changes &#160;
+        <SaveIcon sx={{mr: 1}}/>
       </Fab>
       {isSysadmin &&
         <Fab
@@ -1154,30 +1178,6 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
           <VisibilityIcon sx={{mr: 1}}/>
         </Fab>
       }
-      <Fab
-        variant="extended"
-        size="small"
-        color="primary"
-        aria-label="archive"
-        component={"span"}
-        onClick={onClickChangeRecordArchivalStatus}
-        disabled={!THIS.isSelectableByRoles(selection, [archiveRole, sysadminRole], true)}
-      >
-        {THIS.isRecordArchived(selection) ?
-          <React.Fragment><VisibilityIcon sx={{mr: 1}}/> "Restore Record"</React.Fragment> :
-          <React.Fragment><VisibilityOffIcon sx={{mr: 1}}/> "Archive Record"</React.Fragment>}
-      </Fab>
-      <Fab
-        variant="extended"
-        size="small"
-        color="primary"
-        aria-label="save"
-        onClick={onClickSaveRecordChanges}
-        disabled={!(recordHasChanged && THIS.isSelectableByRoles(selection, [saveRole, sysadminRole], false))}
-      >
-        &#160; Save Changes &#160;
-        <SaveIcon sx={{mr: 1}}/>
-      </Fab>
       {submitRecordButtonLabel &&
         <Fab
           variant="extended"
@@ -1187,7 +1187,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
           onClick={onClickSubmitRecord}
           disabled={submitDisabled || !THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)}
         >
-          &#160; {submitRecordButtonLabel} &#160;
+          {submitRecordButtonLabel}
           {submitRecordIcon}
         </Fab>
       }
@@ -1195,12 +1195,12 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         variant="extended"
         size="small"
         color="primary"
-        aria-label="add"
-        onClick={onClickAddRecord}
-        disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
+        aria-label="archive"
+        component={"span"}
+        onClick={onClickChangeRecordArchivalStatus}
+        disabled={!THIS.isSelectableByRoles(selection, [archiveRole, sysadminRole], true)}
       >
-        &#160; {addRecordButtonLabel} &#160;
-        {addRecordIcon}
+        {archiveRecordButtonLabel}
       </Fab>
     </Box>
   )
@@ -1212,6 +1212,7 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.propTypes = {
   onClickRemoveRecord: PropTypes.func.isRequired,
   onClickSaveRecordChanges: PropTypes.func.isRequired,
   onClickAddRecord: PropTypes.func.isRequired,
+  archiveRecordButtonLabel: PropTypes.element.isRequired,
   addRecordButtonLabel: PropTypes.string,
   addRecordIcon: PropTypes.element,
   onClickChangeRecordArchivalStatus: PropTypes.func.isRequired,
@@ -1225,7 +1226,7 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.propTypes = {
   saveRole: PropTypes.string,
   submitRole: PropTypes.string,
   onClickSubmitRecord: PropTypes.func,
-  submitRecordButtonLabel: PropTypes.string,
+  submitRecordButtonLabel: PropTypes.element,
   submitRecordIcon: PropTypes.element,
   submitDisabled: PropTypes.bool,
 }
@@ -1233,7 +1234,7 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.propTypes = {
 AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
   removeRecordIcon: <RemoveCircleIcon sx={{mr: 1}}/>,
   addRecordIcon: <AddCircleOutlineIcon sx={{mr: 1}}/>,
-  submitRecordIcon: <PublishIcon sx={{mr: 1}}/>,
+  submitRecordIcon: null,
   addRecordButtonLabel: "Add Record",
   removeRecordButtonLabel: "Remove Record",
   addRole: "",
@@ -1243,12 +1244,15 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
   saveRole: "",
   submitRole: "",
   submitRecordButtonLabel: null,
-  onClickSubmitRecord:() => {},
+  onClickSubmitRecord: () => {
+  },
   submitDisabled: false,
 }
 
-export function ApproveIrradiationMessageComponent({record, user, disabled, onClickApproveRequest, theme,
-                                                     approverRole}) {
+export function ApproveIrradiationMessageComponent({
+                                                     record, user, disabled, onClickApproveRequest, theme,
+                                                     approverRole
+                                                   }) {
   const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "");
   if (approver !== "") {
     const fullname = user.users.reduce((prev, obj) => {

@@ -48,9 +48,9 @@ import {
   UserContext
 } from "../utils/UserContext";
 import {
-  getNextItemId,
+  getNextItemId, getRecordMetadataValue,
   new_record,
-  record_uuid
+  record_uuid, recordHasMetadataField
 } from "../utils/MetadataUtils";
 import {
   isValidUserRole

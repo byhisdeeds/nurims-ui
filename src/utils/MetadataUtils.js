@@ -75,32 +75,40 @@ export function setRecordMetadataValue(obj, key, value) {
 
 export function setRecordData(record, key, value) {
   if (key === NURIMS_TITLE) {
-    record[NURIMS_TITLE] = value;
+    record[NURIMS_TITLE] = (value) ? value : "";
     record["changed"] = true;
   } else if (key === NURIMS_WITHDRAWN) {
-    record[NURIMS_WITHDRAWN] = value;
+    record[NURIMS_WITHDRAWN] = (value) ? value : 0;
     record["changed"] = true;
   } else if (record.hasOwnProperty("metadata")) {
     if (Array.isArray(record.metadata)) {
       for (const m of record.metadata) {
         for (const [k, v] of Object.entries(m)) {
           if (k === key) {
-            m[k] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
+            if (value) {
+              m[k] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
+            } else {
+              delete m[k]
+            }
             record["changed"] = true;
             return;
           }
         }
       }
-      const v = {};
-      v[key] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
-      record.metadata.push(v);
-      record["changed"] = true;
+      if (value) {
+        const v = {};
+        v[key] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
+        record.metadata.push(v);
+        record["changed"] = true;
+      }
     }
   } else {
-    const v = {};
-    v[key] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
-    record["metadata"] = [v];
-    record["changed"] = true;
+    if (value) {
+      const v = {};
+      v[key] = (typeof value === "object") ? JSON.stringify(value).replaceAll("\"", "'") : value;
+      record["metadata"] = [v];
+      record["changed"] = true;
+    }
   }
 }
 
@@ -119,6 +127,22 @@ export function getRecordMetadataValue(obj, key, missingValue) {
     }
   }
   return missingValue;
+}
+
+export function recordHasMetadataField(obj, key) {
+  if (obj.hasOwnProperty("metadata")) {
+    const metadata = obj.metadata;
+    if (Array.isArray(metadata)) {
+      for (const m of metadata) {
+        for (const [k, v] of Object.entries(m)) {
+          if (k === key) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
 }
 
 export function getRecordData(record, key, missingValue) {
