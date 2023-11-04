@@ -141,8 +141,8 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
     }
 
     if (is_submitted) {
-      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, null);
-      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, null);
+      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, "___delete___");
+      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "___delete___");
     } else {
       if (getRecordData(selection, NURIMS_OPERATION_DATA_NEUTRONFLUX, "") === "") {
         enqueueErrorSnackbar("Cannot submit request with a blank neutron flux field.");
@@ -200,7 +200,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
       getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "");
     const approvedby =
       getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "");
-    const submit_disabled = (approvedby !== "" || submission_date !== "") && !selection.changed;
+    const submit_disabled = Object.keys(selection).length === 0 || ((approvedby !== "") && !selection.changed);
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}

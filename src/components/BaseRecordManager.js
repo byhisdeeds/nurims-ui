@@ -28,7 +28,7 @@ import {
   MANUFACTURER_TOPIC,
   MATERIAL_TOPIC,
   METADATA,
-  MONITOR_TOPIC,
+  MONITOR_TOPIC, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN, OPERATION_TOPIC,
   OWNER_TOPIC,
@@ -417,7 +417,16 @@ class BaseRecordManager extends Component {
           CMD_UPDATE_STORAGE_LOCATION_RECORD, CMD_SUBMIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
           CMD_UPDATE_MATERIAL_RECORD, CMD_UPDATE_MANUFACTURER_RECORD, CMD_UPDATE_OWNER_RECORD,
           CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD])) {
-          enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
+          if (this.isCommand(message, [CMD_SUBMIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD])) {
+            const item = message.response.reactor_irradiation_authorization;
+            if (recordHasMetadataField(item, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE)) {
+              enqueueSuccessSnackbar(`Successfully submitted request for ${message[NURIMS_TITLE]}.`);
+            } else {
+              enqueueSuccessSnackbar(`Successfully withdrew request for ${message[NURIMS_TITLE]}.`);
+            }
+          } else {
+            enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
+          }
           if (this.listRef.current) {
             this.listRef.current.updateRecord(response[this.cmdRecordTopic(message.cmd)]);
           }

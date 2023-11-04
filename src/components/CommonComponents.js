@@ -64,7 +64,9 @@ import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import PublishIcon from '@mui/icons-material/Publish';
 import {
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
-  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER,
+  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER,
+  NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE,
   NURIMS_OPERATION_DATA_IRRADIATIONAUTHORIZER,
   NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
   NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
@@ -1277,40 +1279,44 @@ export function ApproveIrradiationMessageComponent({
   }
   const can_authorize = isValidUserRole(user, approverRole);
   if (can_authorize) {
-    let disabled = false;
+    let _disabled = false;
     let disabled_hint = "";
     if (Object.keys(record).length === 0) {
-      disabled = true;
+      _disabled = true;
     } else if (getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX,
       "") === "") {
-      disabled = true;
+      _disabled = true;
       disabled_hint = "Disabled because no neutron flux specified!";
     } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION,
       "") === "") {
-      disabled = true;
+      _disabled = true;
       disabled_hint = "Disabled because no irradiation duration specified!";
     } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
       "") === "") {
-      disabled = true;
+      _disabled = true;
       disabled_hint = "Disabled because no irradiation sample list specified!";
     } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
       []).size === 0) {
-      disabled = true;
+      _disabled = true;
       disabled_hint = "Disabled because no irradiation sample types specified!";
     } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
       {name: ""}).name === "") {
-      disabled = true;
+      _disabled = true;
       disabled_hint = "Disabled because no irradiation sample job specified!";
     } else if (getRecordData(record, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
       UNDEFINED_DATE_STRING) === UNDEFINED_DATE_STRING) {
-      disabled = true;
+      _disabled = true;
       disabled_hint = "Disabled because no proposed irradiation date specified!";
+    } else if (getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE,
+      UNDEFINED_DATE_STRING) === UNDEFINED_DATE_STRING) {
+      _disabled = true;
+      disabled_hint = "Disabled because the request has not been submitted for approval.";
     }
     return (
       <Tooltip title={disabled_hint}>
         <span>
           <Button
-            disabled={disabled}
+            disabled={disabled || _disabled}
             variant={"contained"}
             endIcon={<ArchiveIcon/>}
             onClick={onClickApproveRequest}

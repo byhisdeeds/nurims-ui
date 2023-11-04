@@ -225,6 +225,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
       getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "")
     const approval_date =
       getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE, "")
+    const is_submitted = submission_date !== "";
     let status = "info";
     let status_message = "";
     if (Object.keys(record).length > 0) {
@@ -329,7 +330,6 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   disabled={disabled}
                   tooltip={"ss"}
                   multiple={true}
-                  // tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_INVENTORY_STATUS, "")}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -356,7 +356,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                 <ApproveIrradiationMessageComponent
                   record={record}
                   user={this.context.user}
-                  disabled={disabled}
+                  disabled={disabled || is_submitted}
                   onClickApproveRequest={this.onClickApproveRequest}
                   theme={this.props.theme}
                 />
