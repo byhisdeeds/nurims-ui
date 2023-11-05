@@ -55,6 +55,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import PublishIcon from '@mui/icons-material/Publish';
 import UnpublishedIcon from '@mui/icons-material/Unpublished';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export const ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF =
   "AddEditReactorSampleIrradiationAuthorization";
@@ -260,7 +261,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
           submitRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
           submitRecordButtonLabel={record_has_submission_metadata ?
               <React.Fragment>&#160;Withdraw Request&#160;<UnpublishedIcon sx={{mr: 1}}/></React.Fragment> :
-              <React.Fragment>&#160;Submit Request&#160;<PublishIcon sx={{mr: 1}}/></React.Fragment>
+              <React.Fragment>&#160;Submit Request&#160;<CheckCircleIcon sx={{mr: 1}}/></React.Fragment>
           }
           onClickSubmitRecord={this.submitAuthorizationRequest}
           submitDisabled={submit_disabled}

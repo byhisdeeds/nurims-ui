@@ -8,7 +8,8 @@ import {
 } from "@mui/material";
 import {
   CMD_SUGGEST_ANALYSIS_JOBS,
-  CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD, DELETE_METADATA_TAG,
+  CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
+  DELETE_METADATA_TAG,
   NURIMS_CREATED_BY,
   NURIMS_CREATION_DATE,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
@@ -56,7 +57,7 @@ import {
 import PropTypes from "prop-types";
 import UnpublishedIcon from "@mui/icons-material/Unpublished";
 import PublishIcon from "@mui/icons-material/Publish";
-
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   static contextType = UserContext;
@@ -373,7 +374,8 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   buttonLabel={is_approved ?
                     <React.Fragment>&#160;Withdraw Irradiation Request Approval&#160;<UnpublishedIcon
                       sx={{mr: 1}}/></React.Fragment> :
-                    <React.Fragment>&#160;Approve Irradiation Request&#160;<PublishIcon sx={{mr: 1}}/></React.Fragment>
+                    <React.Fragment>&#160;Approve Irradiation Request&#160;<CheckCircleIcon
+                      sx={{mr: 1}}/></React.Fragment>
                   }
                 />
               </Grid>
