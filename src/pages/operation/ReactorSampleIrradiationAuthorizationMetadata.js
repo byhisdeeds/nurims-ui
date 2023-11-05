@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import {
   CMD_SUGGEST_ANALYSIS_JOBS,
-  CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
+  CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD, DELETE_METADATA_TAG,
   NURIMS_CREATED_BY,
   NURIMS_CREATION_DATE,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
@@ -39,7 +39,7 @@ import {
   analysisJobAsObject,
   getRecordData,
   setRecordData,
-  record_uuid
+  record_uuid, recordHasMetadataField
 } from "../../utils/MetadataUtils";
 import {
   ConsoleLog,
@@ -54,6 +54,8 @@ import {
   withTheme
 } from "@mui/styles";
 import PropTypes from "prop-types";
+import UnpublishedIcon from "@mui/icons-material/Unpublished";
+import PublishIcon from "@mui/icons-material/Publish";
 
 
 class ReactorSampleIrradiationAuthorizationMetadata extends Component {
@@ -196,8 +198,16 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   onClickApproveRequest = () => {
     const record = this.state.record;
     const user = this.context.user;
-    setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, user.profile.username);
-    setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE, dayjs().toISOString());
+    const is_approved =
+      recordHasMetadataField(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE);
+
+    if (is_approved) {
+      setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, DELETE_METADATA_TAG);
+      setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE, DELETE_METADATA_TAG);
+    } else {
+      setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, user.profile.username);
+      setRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE, dayjs().toISOString());
+    }
     if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
       record["record_key"] = record_uuid();
     }
@@ -226,6 +236,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     const approval_date =
       getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE, "")
     const is_submitted = submission_date !== "";
+    const is_approved = approval_date !== "";
     let status = "info";
     let status_message = "";
     if (Object.keys(record).length > 0) {
@@ -276,7 +287,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   readOnly={true}
                   tooltip={"Authorisation record identifier."}
                   padding={0}
-                  disabled={disabled}
+                  disabled={disabled || is_submitted}
                   onChange={(e) => {
                   }}/>
               </Grid>
@@ -286,7 +297,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   label="Neutron Flux"
                   value={getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, "")}
                   onChange={this.handleChange}
-                  disabled={disabled}
+                  disabled={disabled || is_submitted}
                   tooltip={"ss"}
                   padding={0}
                 />
@@ -297,14 +308,14 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   label="Duration"
                   value={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "")}
                   onChange={this.handleChange}
-                  disabled={disabled}
+                  disabled={disabled || is_submitted}
                   tooltip={"ss"}
                   padding={8}
                 />
               </Grid>
               <Grid item xs={12} sm={10}>
                 <AutoCompleteComponent
-                  disabled={disabled}
+                  disabled={disabled || is_submitted}
                   defaultValue={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name: "abc"})}
                   freeInput={true}
                   label={"Analysis Job"}
@@ -327,7 +338,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   value={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, [])}
                   onChange={this.handleChange}
                   options={this.sampleTypes}
-                  disabled={disabled}
+                  disabled={disabled || is_submitted}
                   tooltip={"ss"}
                   multiple={true}
                 />
@@ -336,7 +347,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                 <DateSelect
                   label={"Proposed Irradiation Date"}
                   value={dayjs(getRecordData(record, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE, UNDEFINED_DATE_STRING))}
-                  disabled={disabled}
+                  disabled={disabled || is_submitted}
                   onChange={this.handleIrradiationDateChange}
                 />
               </Grid>
@@ -346,7 +357,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   label="Samples To Irradiate"
                   value={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, "").replaceAll(",", "\n")}
                   onChange={this.handleChange}
-                  disabled={disabled}
+                  disabled={disabled || is_submitted}
                   tooltip={"ss"}
                   lines={10}
                   padding={0}
@@ -356,9 +367,14 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                 <ApproveIrradiationMessageComponent
                   record={record}
                   user={this.context.user}
-                  disabled={disabled || is_submitted}
+                  disabled={disabled || !is_submitted}
                   onClickApproveRequest={this.onClickApproveRequest}
                   theme={this.props.theme}
+                  buttonLabel={is_approved ?
+                    <React.Fragment>&#160;Withdraw Irradiation Request Approval&#160;<UnpublishedIcon
+                      sx={{mr: 1}}/></React.Fragment> :
+                    <React.Fragment>&#160;Approve Irradiation Request&#160;<PublishIcon sx={{mr: 1}}/></React.Fragment>
+                  }
                 />
               </Grid>
             </Grid>

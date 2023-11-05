@@ -1253,30 +1253,30 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
 
 export function ApproveIrradiationMessageComponent({
                                                      record, user, disabled, onClickApproveRequest, theme,
-                                                     approverRole
+                                                     approverRole, buttonLabel
                                                    }) {
   const approver = getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "");
-  if (approver !== "") {
-    const fullname = user.users.reduce((prev, obj) => {
-      if (obj[0] === approver) {
-        prev = obj[1];
-      }
-      return prev;
-    }, "");
-    return (
-      <Button
-        variant={"outlined"}
-        endIcon={<DoneIcon/>}
-        style={{color: theme.palette.success.contrastText, backgroundColor: theme.palette.success.light}}
-        aria-label={"authorize"}
-        disableRipple={true}
-        fullWidth
-        sx={{marginTop: 1}}
-      >
-        {`Approved by ${fullname}`}
-      </Button>
-    )
-  }
+  // if (approver !== "") {
+  //   const fullname = user.users.reduce((prev, obj) => {
+  //     if (obj[0] === approver) {
+  //       prev = obj[1];
+  //     }
+  //     return prev;
+  //   }, "");
+  //   return (
+  //     <Button
+  //       variant={"outlined"}
+  //       // endIcon={<DoneIcon/>}
+  //       style={{color: theme.palette.success.contrastText, backgroundColor: theme.palette.success.light}}
+  //       aria-label={"authorize"}
+  //       disableRipple={true}
+  //       fullWidth
+  //       sx={{marginTop: 1}}
+  //     >
+  //       {`Approved by ${fullname}`}
+  //     </Button>
+  //   )
+  // }
   const can_authorize = isValidUserRole(user, approverRole);
   if (can_authorize) {
     let _disabled = false;
@@ -1318,14 +1318,14 @@ export function ApproveIrradiationMessageComponent({
           <Button
             disabled={disabled || _disabled}
             variant={"contained"}
-            endIcon={<ArchiveIcon/>}
+            // endIcon={<ArchiveIcon/>}
             onClick={onClickApproveRequest}
             color={"primary"}
             aria-label={"authorize"}
             fullWidth
             sx={{marginTop: 1}}
           >
-            {"Approve Irradiation Request"}
+            {buttonLabel}
           </Button>
         </span>
       </Tooltip>
@@ -1354,6 +1354,7 @@ ApproveIrradiationMessageComponent.propTypes = {
   onClickApproveRequest: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired,
   approverRole: PropTypes.string,
+  buttonLabel: PropTypes.element.isRequired,
 }
 
 ApproveIrradiationMessageComponent.defaultProps = {

@@ -11,7 +11,7 @@ import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_SUBMIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
-  CMD_SUGGEST_ANALYSIS_JOBS,
+  CMD_SUGGEST_ANALYSIS_JOBS, DELETE_METADATA_TAG,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER,
@@ -141,8 +141,8 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
     }
 
     if (is_submitted) {
-      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, "___delete___");
-      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "___delete___");
+      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, DELETE_METADATA_TAG);
+      setRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, DELETE_METADATA_TAG);
     } else {
       if (getRecordData(selection, NURIMS_OPERATION_DATA_NEUTRONFLUX, "") === "") {
         enqueueErrorSnackbar("Cannot submit request with a blank neutron flux field.");
@@ -243,8 +243,8 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
           THIS={this}
           user={user}
           archiveRecordButtonLabel={this.isRecordArchived(selection) ?
-            <React.Fragment><VisibilityIcon sx={{mr: 1}}/>"Restore Record"</React.Fragment> :
-            <React.Fragment><VisibilityOffIcon sx={{mr: 1}}/>"Archive Record"</React.Fragment>
+            <React.Fragment>&#160;"Restore Record"&#160;<VisibilityIcon sx={{mr: 1}}/></React.Fragment> :
+            <React.Fragment>&#160;"Archive Record"&#160;<VisibilityOffIcon sx={{mr: 1}}/></React.Fragment>
           }
           onClickAddRecord={this.addRecord}
           onClickChangeRecordArchivalStatus={this.changeRecordArchivalStatus}
