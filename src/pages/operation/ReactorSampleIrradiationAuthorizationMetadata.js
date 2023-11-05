@@ -40,7 +40,7 @@ import {
   analysisJobAsObject,
   getRecordData,
   setRecordData,
-  record_uuid, recordHasMetadataField
+  record_uuid, recordHasMetadataField, getRecordMetadataValue
 } from "../../utils/MetadataUtils";
 import {
   ConsoleLog,
@@ -229,15 +229,17 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     const can_authorize =
       isValidUserRole(this.context.user, "irradiation_authorizer");
     const submission_date =
-      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "")
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "");
     const submission_entity =
-      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, "")
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_ENTITY, "");
     const approvedby =
-      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "")
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "");
     const approval_date =
-      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE, "")
+      getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE, "");
     const is_submitted = submission_date !== "";
     const is_approved = approval_date !== "";
+    const is_not_creator =
+      getRecordMetadataValue(record, NURIMS_CREATED_BY, "") !== this.context.user.profile.username;
     let status = "info";
     let status_message = "";
     if (Object.keys(record).length > 0) {
@@ -288,7 +290,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   readOnly={true}
                   tooltip={"Authorisation record identifier."}
                   padding={0}
-                  disabled={disabled || is_submitted}
+                  disabled={disabled || is_submitted || is_not_creator}
                   onChange={(e) => {
                   }}/>
               </Grid>
@@ -298,7 +300,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   label="Neutron Flux"
                   value={getRecordData(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, "")}
                   onChange={this.handleChange}
-                  disabled={disabled || is_submitted}
+                  disabled={disabled || is_submitted || is_not_creator}
                   tooltip={"ss"}
                   padding={0}
                 />
@@ -309,14 +311,14 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   label="Duration"
                   value={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONDURATION, "")}
                   onChange={this.handleChange}
-                  disabled={disabled || is_submitted}
+                  disabled={disabled || is_submitted || is_not_creator}
                   tooltip={"ss"}
                   padding={8}
                 />
               </Grid>
               <Grid item xs={12} sm={10}>
                 <AutoCompleteComponent
-                  disabled={disabled || is_submitted}
+                  disabled={disabled || is_submitted || is_not_creator}
                   defaultValue={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB, {name: "abc"})}
                   freeInput={true}
                   label={"Analysis Job"}
@@ -339,7 +341,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   value={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, [])}
                   onChange={this.handleChange}
                   options={this.sampleTypes}
-                  disabled={disabled || is_submitted}
+                  disabled={disabled || is_submitted || is_not_creator}
                   tooltip={"ss"}
                   multiple={true}
                 />
@@ -348,7 +350,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                 <DateSelect
                   label={"Proposed Irradiation Date"}
                   value={dayjs(getRecordData(record, NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE, UNDEFINED_DATE_STRING))}
-                  disabled={disabled || is_submitted}
+                  disabled={disabled || is_submitted || is_not_creator}
                   onChange={this.handleIrradiationDateChange}
                 />
               </Grid>
@@ -358,7 +360,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                   label="Samples To Irradiate"
                   value={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, "").replaceAll(",", "\n")}
                   onChange={this.handleChange}
-                  disabled={disabled || is_submitted}
+                  disabled={disabled || is_submitted || is_not_creator}
                   tooltip={"ss"}
                   lines={10}
                   padding={0}

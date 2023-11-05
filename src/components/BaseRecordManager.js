@@ -228,7 +228,7 @@ class BaseRecordManager extends Component {
     if (must_be_creator) {
       const creator = getRecordMetadataValue(selection, NURIMS_CREATED_BY, "");
       if (this.context.user.profile.username !== creator) {
-        return
+        return false
       }
     }
     for (const r of roles) {
