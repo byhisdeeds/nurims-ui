@@ -31,7 +31,7 @@ import {
   MANUFACTURER_TOPIC,
   MATERIAL_TOPIC,
   METADATA,
-  MONITOR_TOPIC,
+  MONITOR_TOPIC, NURIMS_CREATED_BY,
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE,
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE,
   NURIMS_TITLE,
@@ -224,7 +224,13 @@ class BaseRecordManager extends Component {
     return (isValidUserRole(this.context.user, role) && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
   }
 
-  isSelectableByRoles = (selection, roles, valid_item_id) => {
+  isSelectableByRoles = (selection, roles, valid_item_id, must_be_creator) => {
+    if (must_be_creator) {
+      const creator = getRecordMetadataValue(selection, NURIMS_CREATED_BY, "");
+      if (this.context.user.profile.username !== creator) {
+        return
+      }
+    }
     for (const r of roles) {
       if (isValidUserRole(this.context.user, r)) {
         // We have at least one match, now we check for a valid item_id boolean parameter has been specified

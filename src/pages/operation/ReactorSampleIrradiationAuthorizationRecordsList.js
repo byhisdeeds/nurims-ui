@@ -1,6 +1,11 @@
 import * as React from 'react';
 import PagedRecordList from "../../components/PagedRecordList";
 import PropTypes from "prop-types";
+import {
+  ITEM_ID,
+  NURIMS_TITLE,
+  NURIMS_TITLE_SUBTITLE
+} from "../../utils/constants";
 
 class ReactorSampleIrradiationAuthorizationRecordsList extends React.Component {
   constructor(props) {
@@ -46,6 +51,32 @@ class ReactorSampleIrradiationAuthorizationRecordsList extends React.Component {
         title={this.props.title}
         enableRecordArchiveSwitch={this.props.enableRecordArchiveSwitch}
         renderCellStyle={this.props.renderCellStyle}
+        cells={[
+          {
+            id: ITEM_ID,
+            align: 'center',
+            disablePadding: true,
+            label: 'ID',
+            width: '10%',
+            sortField: true,
+          },
+          {
+            id: NURIMS_TITLE,
+            align: 'left',
+            disablePadding: true,
+            label: 'Name',
+            width: '30%',
+            sortField: true,
+          },
+          {
+            id: NURIMS_TITLE_SUBTITLE,
+            align: 'center',
+            disablePadding: true,
+            label: 'Created By',
+            width: '60%',
+            sortField: true,
+          },
+        ]}
       />
     )
   }

@@ -11,7 +11,9 @@ import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_SUBMIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
-  CMD_SUGGEST_ANALYSIS_JOBS, DELETE_METADATA_TAG,
+  CMD_SUGGEST_ANALYSIS_JOBS,
+  DELETE_METADATA_TAG,
+  NURIMS_CREATED_BY,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER,
@@ -21,7 +23,8 @@ import {
   NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES,
   NURIMS_OPERATION_DATA_NEUTRONFLUX,
   NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
-  NURIMS_TITLE, NURIMS_WITHDRAWN,
+  NURIMS_TITLE,
+  NURIMS_WITHDRAWN,
   REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
   ROLE_IRRADIATION_REQUEST_DATA_ENTRY,
   ROLE_IRRADIATION_REQUEST_SYSADMIN,
@@ -50,7 +53,9 @@ import {
   messageHasResponse,
   messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import PublishIcon from '@mui/icons-material/Publish';
@@ -86,6 +91,21 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
       module: this.Module,
     });
     this.requestGetRecords(false, true);
+  }
+
+  requestGetRecords = (include_archived, include_metadata) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived,
+        "include_metadata", include_metadata, "recordTopic", this.recordTopic, this.recordCommand("get"));
+    }
+    this.props.send({
+      cmd: this.recordCommand("get"),
+      "include.withdrawn": include_archived ? "true" : "false",
+      "include.metadata": include_metadata ? "true" : "false",
+      "include.metadata.subtitle": NURIMS_CREATED_BY,
+      module: this.Module,
+    })
+    this.setState({include_archived: include_archived});
   }
 
   ws_message = (message) => {
@@ -265,6 +285,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
           }
           onClickSubmitRecord={this.submitAuthorizationRequest}
           submitDisabled={submit_disabled}
+          onlyByCreator={true}
         />}
       </React.Fragment>
     );
