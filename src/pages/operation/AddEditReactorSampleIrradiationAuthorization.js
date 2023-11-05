@@ -41,7 +41,7 @@ import BaseRecordManager from "../../components/BaseRecordManager";
 import ReactorSampleIrradiationAuthorizationRecordsList from "./ReactorSampleIrradiationAuthorizationRecordsList";
 import ReactorSampleIrradiationAuthorizationMetadata from "./ReactorSampleIrradiationAuthorizationMetadata";
 import {
-  getRecordData, record_uuid, recordHasMetadataField, setRecordData,
+  getRecordData, isRecordCreatedBy, record_uuid, recordHasMetadataField, setRecordData,
 } from "../../utils/MetadataUtils";
 import {withTheme} from "@mui/styles";
 import dayjs from 'dayjs';
@@ -213,15 +213,17 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
     const {user} = this.props;
     const record_has_submission_metadata =
       recordHasMetadataField(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE);
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "confirm_removed", confirm_remove, "include_archived",
-        include_archived, "selection", selection, "record_has_submission_tag", record_has_submission_metadata);
-    }
     const submission_date =
       getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_SUBMISSION_DATE, "");
     const approvedby =
       getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "");
-    const submit_disabled = Object.keys(selection).length === 0 || ((approvedby !== "") && !selection.changed);
+    const is_not_creator = !isRecordCreatedBy(selection, this.context.user)
+    const submit_disabled = Object.keys(selection).length === 0 || (approvedby !== "" && !selection.changed);
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "render", "confirm_removed", confirm_remove, "include_archived",
+        include_archived, "selection", selection, "record_has_submission_tag", record_has_submission_metadata,
+        "submit_disabled", submit_disabled, "approved_by", approvedby, "is_not_creator", is_not_creator);
+    }
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}
@@ -285,7 +287,6 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
           }
           onClickSubmitRecord={this.submitAuthorizationRequest}
           submitDisabled={submit_disabled}
-          onlyByCreator={true}
         />}
       </React.Fragment>
     );

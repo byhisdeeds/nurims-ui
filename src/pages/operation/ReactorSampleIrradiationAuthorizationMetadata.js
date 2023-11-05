@@ -40,7 +40,7 @@ import {
   analysisJobAsObject,
   getRecordData,
   setRecordData,
-  record_uuid, recordHasMetadataField, getRecordMetadataValue
+  record_uuid, recordHasMetadataField, getRecordMetadataValue, isRecordCreatedBy
 } from "../../utils/MetadataUtils";
 import {
   ConsoleLog,
@@ -238,8 +238,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
       getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVAL_DATE, "");
     const is_submitted = submission_date !== "";
     const is_approved = approval_date !== "";
-    const is_not_creator =
-      getRecordMetadataValue(record, NURIMS_CREATED_BY, "") !== this.context.user.profile.username;
+    const is_not_creator = !isRecordCreatedBy(record, this.context.user)
     let status = "info";
     let status_message = "";
     if (Object.keys(record).length > 0) {
@@ -261,7 +260,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     }
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "disabled", disabled, "record", record, "selected_job",
-        selected_job, "user", this.context.user, "can_authorize", can_authorize);
+        selected_job, "user", this.context.user, "can_authorize", can_authorize, "is_not_creator", is_not_creator);
     }
     return (
       <Box

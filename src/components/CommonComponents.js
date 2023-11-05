@@ -41,7 +41,7 @@ import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import {visuallyHidden} from "@mui/utils";
 import Floater from 'react-floater';
 import {
-  getRecordData,
+  getRecordData, isRecordCreatedBy,
   toBoolean
 } from "../utils/MetadataUtils";
 import {
@@ -1128,11 +1128,16 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
                                                                   submitRecordButtonLabel,
                                                                   submitRecordIcon,
                                                                   submitDisabled,
-                                                                  onlyByCreator,
                                                                 }) {
   const {selection} = THIS.state;
   const isSysadmin = isValidUserRole(user, sysadminRole);
-  const recordHasChanged = THIS.hasChangedRecords();
+  const recordHasChanged = THIS.isRecordChanged(selection);
+  const isCreator = isRecordCreatedBy(selection, user);
+  console.log("-------------")
+  console.log("-- isCreator", isCreator, "submitDisabled", submitDisabled, "recordHasChanged", recordHasChanged,
+    "submitRole", submitRole, "sysadminRole", sysadminRole, "isSelectableByRoles(valid_item_id=false)",
+    THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false))
+  console.log("-------------")
   return (
     <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
       <Fab
@@ -1141,7 +1146,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         color="primary"
         aria-label="add"
         onClick={onClickAddRecord}
-        disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false, false)}
+        disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
       >
         &#160; {addRecordButtonLabel} &#160;
         {addRecordIcon}
@@ -1152,7 +1157,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         color="primary"
         aria-label="remove"
         onClick={onClickRemoveRecord}
-        disabled={!THIS.isSelectableByRoles(selection, [removeRole, sysadminRole], true, false)}
+        disabled={!THIS.isSelectableByRoles(selection, [removeRole, sysadminRole], true)}
       >
         &#160; {removeRecordButtonLabel} &#160;
         {removeRecordIcon}
@@ -1163,7 +1168,9 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         color="primary"
         aria-label="save"
         onClick={onClickSaveRecordChanges}
-        disabled={!(recordHasChanged && THIS.isSelectableByRoles(selection, [saveRole, sysadminRole], false, onlyByCreator))}
+        // disabled={((!isCreator && submitDisabled) && !recordHasChanged) || !THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)}
+        // disabled if no record is not changed
+        disabled={submitDisabled || (!(isCreator && THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)))}
       >
         &#160; Save Changes &#160;
         <SaveIcon sx={{mr: 1}}/>
@@ -1188,7 +1195,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
           color="primary"
           aria-label="submit"
           onClick={onClickSubmitRecord}
-          disabled={submitDisabled || !THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false, onlyByCreator)}
+          disabled={(!isCreator && submitDisabled) || !THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)}
         >
           {submitRecordButtonLabel}
           {submitRecordIcon}
@@ -1201,7 +1208,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         aria-label="archive"
         component={"span"}
         onClick={onClickChangeRecordArchivalStatus}
-        disabled={!THIS.isSelectableByRoles(selection, [archiveRole, sysadminRole], true, false)}
+        disabled={!THIS.isSelectableByRoles(selection, [archiveRole, sysadminRole], true)}
       >
         {archiveRecordButtonLabel}
       </Fab>
@@ -1232,7 +1239,8 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.propTypes = {
   submitRecordButtonLabel: PropTypes.element,
   submitRecordIcon: PropTypes.element,
   submitDisabled: PropTypes.bool,
-  onlyByCreator: PropTypes.bool,
+  saveOnlyByCreator: PropTypes.bool,
+  submitOnlyByCreator: PropTypes.bool,
 }
 
 AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
@@ -1251,7 +1259,8 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
   onClickSubmitRecord: () => {
   },
   submitDisabled: false,
-  onlyByCreator: false,
+  saveOnlyByCreator: false,
+  submitOnlyByCreator: false,
 }
 
 export function ApproveIrradiationMessageComponent({

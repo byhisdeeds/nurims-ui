@@ -224,13 +224,7 @@ class BaseRecordManager extends Component {
     return (isValidUserRole(this.context.user, role) && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
   }
 
-  isSelectableByRoles = (selection, roles, valid_item_id, must_be_creator) => {
-    if (must_be_creator) {
-      const creator = getRecordMetadataValue(selection, NURIMS_CREATED_BY, "");
-      if (this.context.user.profile.username !== creator) {
-        return false
-      }
-    }
+  isSelectableByRoles = (selection, roles, valid_item_id) => {
     for (const r of roles) {
       if (isValidUserRole(this.context.user, r)) {
         // We have at least one match, now we check for a valid item_id boolean parameter has been specified
@@ -253,6 +247,13 @@ class BaseRecordManager extends Component {
 
   onRecordMetadataChanged = (state) => {
     this.setState({metadata_changed: state});
+  }
+
+  isRecordChanged = (record) => {
+    if (record.hasOwnProperty("changed") && record.changed) {
+      return true;
+    }
+    return false;
   }
 
   hasChangedRecords = () => {

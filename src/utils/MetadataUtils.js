@@ -1,4 +1,6 @@
 import {
+  ITEM_ID, METADATA,
+  NURIMS_CREATED_BY, NURIMS_CREATION_DATE,
   NURIMS_DOSIMETRY_BATCH_ID,
   NURIMS_DOSIMETRY_DEEP_DOSE,
   NURIMS_DOSIMETRY_EXTREMITY_DOSE,
@@ -120,7 +122,7 @@ export function getRecordMetadataValue(obj, key, missingValue) {
         for (const [k, v] of Object.entries(m)) {
           if (k === key) {
             return (typeof v === "number") ? v : (v.charAt(0) === "[" || v.charAt(0) === "{") ?
-                   JSON.parse(v.replaceAll("'", "\"").replaceAll("NaN", "0")) : v;
+              JSON.parse(v.replaceAll("'", "\"").replaceAll("NaN", "0")) : v;
           }
         }
       }
@@ -463,16 +465,17 @@ export function toBoolean(s) {
 }
 
 export function new_record(item_id, title, withdrawn, createdby, fullname) {
-  return {
-    "changed": true,
-    "item_id": (item_id) ? item_id : -1,
-    "nurims.title": (title) ? title : "New Record",
-    "nurims.withdrawn": (withdrawn) ? withdrawn : 0,
-    "metadata": [
-      {"nurims.createdby": (createdby) ? (fullname) ? `${fullname} (${createdby})` : createdby : ""},
-      {"nurims.creationdate": dayjs().toISOString()}
-    ]
-  };
+  const record = {};
+  record["changed"] = true;
+  record[ITEM_ID] = (item_id) ? item_id : -1;
+  record[NURIMS_TITLE] = (title) ? title : "New Record";
+  record[NURIMS_WITHDRAWN] = (withdrawn) ? withdrawn : 0;
+  record[METADATA] = [
+    {"nurims.createdby": (createdby) ? (fullname) ? `${fullname} (${createdby})` : createdby : ""},
+    {"nurims.creationdate": dayjs().toISOString()}
+  ];
+
+  return record;
 }
 
 export function parsePersonnelRecordFromLine(line, recordType, username) {
@@ -598,4 +601,13 @@ export function analysisJobAsObject(name) {
     "info1": "",
     "kml": ""
   };
+}
+
+export function isRecordCreatedBy(record, user) {
+  const created_by = getRecordData(record, NURIMS_CREATED_BY, "");
+  const p = [...created_by.matchAll(/\((.*?)\)/g)].map(m => m[1]);
+  if (p.length === 0) {
+    return created_by === user.profile.username;
+  }
+  return p[0] === user.profile.username;
 }
