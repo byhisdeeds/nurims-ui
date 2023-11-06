@@ -19,50 +19,73 @@ import '@patternfly/patternfly/patternfly.css';
 import '@patternfly/patternfly/components/LogViewer/log-viewer.css';
 import '@patternfly/patternfly/components/Toolbar/toolbar.css';
 import ReactQuill from "react-quill";
+import JoditEditor from "jodit-react";
+// import Jodit from "jodit";
+import {
+  ConsoleLog,
+  UserContext
+} from "../utils/UserContext";
 
 const LOGWINDOW_REF = "LogWindow";
 
 class LogWindow extends Component {
+  static contextType = UserContext;
   constructor(props) {
     super(props);
     this.state = {
-      scrollToRow: 0,
-      isTextWrapped: true,
-      logs: "",
+      // scrollToRow: 0,
+      // isTextWrapped: true,
+      // logs: "",
     };
     this.Module = LOGWINDOW_REF;
-    this.modules = {
-      toolbar: false
-      // [
-      //   [{'header': [1, 2, false]}],
-      //   // [{'header': '1'}, {'header': '2'}, {'font': Font.whitelist}],
-      //   ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      //   [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-      //   ['link', 'image'],
-      //   ['clean']
-      // ]
+    this.editorRef = React.createRef();
+    // all options from https://xdsoft.net/jodit/docs/,
+    this.config = {
+      readonly: true,
+      width: "100%",
+      height: "auto",
+      spellcheck: false,
+      i18n: "en",
+      toolbar: true,
+      useSplitMode: false,
+      defaultMode: 2, // Source editor
+      buttons: [
+        'copyformat', '|',
+        'print',
+      ],
     };
-    this.formats = [
-      'header',
-      'bold', 'italic', 'underline', 'strike', 'blockquote',
-      'list', 'bullet', 'indent',
-      'link', 'image'
-    ];
+    // this.modules = {
+    //   toolbar: false
+    //   // [
+    //   //   [{'header': [1, 2, false]}],
+    //   //   // [{'header': '1'}, {'header': '2'}, {'font': Font.whitelist}],
+    //   //   ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    //   //   [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+    //   //   ['link', 'image'],
+    //   //   ['clean']
+    //   // ]
+    // };
+    // this.formats = [
+    //   'header',
+    //   'bold', 'italic', 'underline', 'strike', 'blockquote',
+    //   'list', 'bullet', 'indent',
+    //   'link', 'image'
+    // ];
   }
 
   toggleTextWrapping = (wrapped) => {
     this.setState({ isTextWrapped: !this.state.isTextWrapped });
   }
 
-  log = (msg) => {
-    let message = typeof msg === 'object' ? msg.hasOwnProperty("message") ? msg.message : JSON.stringify(msg) : msg;
-    if (!message.startsWith("[")) {
-      message = "[" + new Date().toISOString().substring(0, 19).replace("T", " ") + "] " + message;
-    }
-    const logs = this.state.logs + (this.state.logs === "" ? "" : "\n") + message;
-    const scrollToRow = logs.split("\n").length + 1;
-    this.setState({ logs: logs, scrollToRow: scrollToRow })
-  }
+  // log = (msg) => {
+  //   let message = typeof msg === 'object' ? msg.hasOwnProperty("message") ? msg.message : JSON.stringify(msg) : msg;
+  //   if (!message.startsWith("[")) {
+  //     message = "[" + new Date().toISOString().substring(0, 19).replace("T", " ") + "] " + message;
+  //   }
+  //   const logs = this.state.logs + (this.state.logs === "" ? "" : "\n") + message;
+  //   const scrollToRow = logs.split("\n").length + 1;
+  //   this.setState({ logs: logs, scrollToRow: scrollToRow })
+  // }
 
   onDownloadClick = () => {
     const element = document.createElement('a');
@@ -84,8 +107,10 @@ class LogWindow extends Component {
   }
 
   render() {
-    const {visible, onClose, width, height, theme} = this.props;
-    const {logs, isTextWrapped, scrollToRow} = this.state;
+    const {visible, onClose, width, height, theme, logs} = this.props;
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "render", "logs", logs, "width", width, "height", height);
+    }
     return (
       <Drawer
         variant="temporary"
@@ -107,12 +132,13 @@ class LogWindow extends Component {
             width: `calc(100vw - ${width})`
           }}
         >
-          <ReactQuill
-            readOnly={true}
+          <JoditEditor
+            ref={this.editorRef}
             value={logs}
-            modules={this.modules}
-            formats={this.formats}
-            onChange={this.handleChange}
+            config={this.config}
+            tabIndex={-1} // tabIndex of textarea
+            // onBlur={newContent => setContent(logs)} // preferred to use only this option to update the content for performance reasons
+            // onChange={newContent => {}}
           />
           {/*<LogViewer*/}
           {/*  isTextWrapped={isTextWrapped}*/}
@@ -169,15 +195,16 @@ class LogWindow extends Component {
 
 LogWindow.propTypes = {
   visible: PropTypes.bool.isRequired,
+  logs: PropTypes.string.isRequired,
   onClose: PropTypes.func,
   width: PropTypes.string,
-  height: PropTypes.number,
+  // height: PropTypes.number,
 }
 
 LogWindow.defaultProps = {
   onClose: () => {},
   width: '100%',
-  height: 200,
+  // height: 200,
 }
 
 export default withTheme(LogWindow)

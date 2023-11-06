@@ -187,6 +187,7 @@ class App extends React.Component {
     this.menuTitle = "";
     this.ws = null;
     this.mounted = false;
+    this.logs = "";
     this.user = AuthService;
     this.org = {name: "", authorized_module_level: ""};
     // console.log("*************")
@@ -440,9 +441,19 @@ class App extends React.Component {
   }
 
   appendLog = (msg) => {
-    if (this.logRef.current) {
-      this.logRef.current.log(msg);
-    }
+    // if (this.logRef.current) {
+    //   this.logRef.current.log(msg);
+    // }
+      let message = typeof msg === 'object' ? msg.hasOwnProperty("message") ? msg.message : JSON.stringify(msg) : msg;
+      if (!message.startsWith("[")) {
+        message = "[" + new Date().toISOString().substring(0, 19).replace("T", " ") + "] " + message;
+      }
+      this.logs = this.logs + (this.logs === "" ? "" : "\n") + message;
+      if (this.logRef.current) {
+        this.logRef.current.forceUpdate();
+      }
+      // const scrollToRow = logs.split("\n").length + 1;
+    // }
   }
 
   toggleNotificationsWindow = (event) => {
@@ -561,10 +572,11 @@ class App extends React.Component {
                       {EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
                       <LogWindow
                         ref={this.logRef}
+                        logs={this.logs}
                         onClose={this.closeLogWindow}
                         visible={log_window_visible}
                         width={`${drawerWidth}px`}
-                        height={350}
+                        height={250}
                       />
                       <NotificationWindow
                         ref={this.notificationRef}
