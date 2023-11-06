@@ -441,7 +441,7 @@ class App extends React.Component {
 
   appendLog = (msg) => {
     if (this.logRef.current) {
-      // this.logRef.current.log(msg);
+      this.logRef.current.log(msg);
     }
   }
 
