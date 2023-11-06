@@ -354,9 +354,8 @@ class App extends React.Component {
         }
       } else if (data.cmd === CMD_BACKGROUND_TASKS) {
         this.setState({background_tasks_active: data.hasOwnProperty("tasks_active"), busy: 0});
-        return;
       }
-      if (data.show_busy) {
+      if (data.hasOwnProperty("show_busy") && data.show_busy) {
         this.setState(pstate => {
           return {busy: this.state.busy - 1}
         });
@@ -442,7 +441,7 @@ class App extends React.Component {
 
   appendLog = (msg) => {
     if (this.logRef.current) {
-      this.logRef.current.log(msg);
+      // this.logRef.current.log(msg);
     }
   }
 
