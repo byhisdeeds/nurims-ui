@@ -93,7 +93,7 @@ import {ADDEDITTODORECORD_REF} from "./pages/maintenance/AddEditTodoRecord";
 import {SIGNIN_REF} from "./components/Signin";
 import NotificationWindow from "./components/NotificationWindow";
 import SystemInfoBadges from "./components/SystemInfoBadges";
-import Signin from "./components/Signin";
+
 import {
   BackgroundTasks,
   LogWindowButton,
@@ -119,6 +119,7 @@ import {
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));
+const SignIn = lazy(() => import("./components/Signin"));
 
 const drawerWidth = 300;
 
@@ -170,7 +171,6 @@ class App extends React.Component {
       open: true,
       theme: localStorage.getItem("theme") || "light",
       menuData: MenuItems,
-      org: {name: "", authorized_module_level: ""},
       ready: false,
       online: false,
       busy: 0,
@@ -188,6 +188,7 @@ class App extends React.Component {
     this.ws = null;
     this.mounted = false;
     this.user = AuthService;
+    this.org = {name: "", authorized_module_level: ""};
     // console.log("*************")
     // console.log(deviceDetect())
     // console.log("*************")
@@ -257,10 +258,6 @@ class App extends React.Component {
       this.send({
         cmd: CMD_GET_PUBLIC_KEY,
       })
-      // // get list of all registered users
-      // this.send({
-      //   cmd: CMD_GET_USER_RECORDS,
-      // })
       // load organisation database on server
       this.send({
         cmd: CMD_GET_ORGANISATION,
@@ -269,14 +266,9 @@ class App extends React.Component {
       this.send({
         cmd: CMD_GET_SYSTEM_PROPERTIES,
       })
-      // load system info
       // this.send({
-      //   cmd: CMD_GET_SERVER_INFO,
-      // }, false)
-      // get user notification messages
-      this.send({
-        cmd: CMD_GET_USER_NOTIFICATION_MESSAGES,
-      }, false);
+      //   cmd: CMD_GET_USER_NOTIFICATION_MESSAGES,
+      // }, false);
     };
     this.ws.onerror = (error) => {
       ConsoleLog("App", "ws.onerror", error);
@@ -347,7 +339,8 @@ class App extends React.Component {
           }
         }
       } else if (data.cmd === CMD_GET_ORGANISATION) {
-        this.setState({org: data.response.org});
+        // this.setState({org: data.response.org});
+        this.org = data.response.org;
       } else if (data.cmd === CMD_GET_SYSTEM_PROPERTIES) {
         if (data.hasOwnProperty("response")) {
           for (const property of data.response.properties) {
@@ -475,20 +468,23 @@ class App extends React.Component {
   }
 
   onValidAuthentication = () => {
+    // get list of all registered users
+    this.send({
+      cmd: CMD_GET_USER_RECORDS,
+    }, false);
     // update number of connected clients etc info.
     this.send({
       cmd: CMD_GET_SERVER_INFO,
     }, false);
-    // get list of all registered users
     this.send({
-      cmd: CMD_GET_USER_RECORDS,
-    })
-    this.setState({busy: 0});
+      cmd: CMD_GET_USER_NOTIFICATION_MESSAGES,
+    }, false);
+    this.setState({busy: 0, online: true});
   }
 
   render() {
     const {
-      theme, org, ready, menuData, actionid, open, busy, background_tasks_active, num_unread_messages,
+      theme, ready, menuData, actionid, open, busy, background_tasks_active, num_unread_messages,
       log_window_visible, notification_window_visible, notification_window_anchor, num_messages, online
     } = this.state;
     const isSysadmin = isValidUserRole(this.user, "sysadmin");
@@ -515,7 +511,7 @@ class App extends React.Component {
                       </Typography>
                     </Tooltip>
                     <Typography variant="h6" component="div">
-                      Organisation: {org.name.toUpperCase()}
+                      Organisation: {this.org.name.toUpperCase()}
                     </Typography>
                     <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
                     <BackgroundTasks active={background_tasks_active}/>
@@ -531,7 +527,7 @@ class App extends React.Component {
                   </Toolbar>
                 </AppBar>
                 <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
-                            organisation={org}>
+                            organisation={this.org}>
                   <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
                     <Box sx={{p: 3}}>
                       <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
@@ -587,14 +583,16 @@ class App extends React.Component {
                   </Suspense>
                 </MenuDrawer>
               </React.Fragment> :
-              <Signin
-                ref={this.crefs[SIGNIN_REF]}
-                authService={this.user}
-                puk={this.puk}
-                send={this.send}
-                online={online}
-                onValidAuthentication={this.onValidAuthentication}
-              />
+              <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
+                <SignIn
+                  ref={this.crefs[SIGNIN_REF]}
+                  authService={this.user}
+                  puk={this.puk}
+                  send={this.send}
+                  online={online}
+                  onValidAuthentication={this.onValidAuthentication}
+                />
+              </Suspense>
             }
           </Box>
         </ThemeProvider>

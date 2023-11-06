@@ -5,7 +5,8 @@ import {
   setUserRecordData
 } from "../../utils/MetadataUtils";
 import {
-  NURIMS_TITLE, ROLE_SYSADMIN
+  NURIMS_TITLE,
+  ROLE_SYSADMIN
 } from "../../utils/constants";
 import PropTypes from "prop-types";
 import {
@@ -47,7 +48,7 @@ class UserMetadata extends Component {
       ConsoleLog(this.Module, "handleChange", "id", e.target.id, "value", e.target.value);
     }
     const user = this.state.user;
-    if (e.target.id === "username") {
+    if (e.target.id === "user") {
       setUserRecordData(user, NURIMS_TITLE, e.target.value);
       setUserRecordData(user, "username", e.target.value);
     } else if (e.target.id === "fullname") {
@@ -119,8 +120,7 @@ class UserMetadata extends Component {
             <TextField
               required
               fullWidth
-              id="username"
-              autoComplete={"username"}
+              id="user"
               label="Username/Email"
               value={getUserRecordData(user, "username", "")}
               onChange={this.handleChange}
@@ -166,10 +166,8 @@ class UserMetadata extends Component {
               disabled={disabled}
               required
               fullWidth
-              type={"password"}
               id="password1"
               label="Password"
-              autoComplete={"current-password"}
               value={getUserRecordData(user, "password1", "")}
               onChange={this.handleChange}
             />
@@ -180,9 +178,7 @@ class UserMetadata extends Component {
               required
               fullWidth
               id="password2"
-              type={"password"}
               label="Password (again)"
-              autoComplete={"current-password"}
               value={getUserRecordData(user, "password2", "")}
               onChange={this.handleChange}
             />

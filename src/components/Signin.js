@@ -1,14 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import {
-  ThemeProvider,
-  StyledEngineProvider
-} from '@mui/material/styles';
-import {
-  darkTheme,
-  lightTheme
-} from "../utils/Theme";
-import {
   Avatar,
   Button,
   CssBaseline,
@@ -22,7 +14,9 @@ import {
   Box
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {styled} from "@mui/material/styles";
+import {
+  styled
+} from "@mui/material/styles";
 import {
   enqueueWarningSnackbar
 } from "../utils/SnackbarVariants";
@@ -130,93 +124,94 @@ class Signin extends React.Component {
           this.props.onValidAuthentication()
         }
       } else {
-        console.log("@@@ RESPONSE", response, "response.message", response.message)
         enqueueWarningSnackbar(response.message);
       }
     }
   }
 
   render() {
-    if (this.state === null) return ('');
-    const { remember, username } = this.state;
-    const theme = this.state.theme === 'light' ? lightTheme : darkTheme
+    const {remember, username} = this.state;
+    const {theme} = this.props;
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "render", "username", username);
+    }
     return (
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={theme}>
-          <Container
-            component="main"
-            maxWidth="xs"
-            style={{
-              backgroundColor: this.props.online ? theme.palette.background.default : theme.palette.action.disabledBackground,
-              borderRadius: theme.shape.borderRadius
+      <Container
+        component="main"
+        maxWidth="xs"
+        style={{
+          backgroundColor: this.props.online ? theme.palette.background.default : theme.palette.action.disabledBackground,
+          borderRadius: theme.shape.borderRadius
+        }}
+      >
+        <CssBaseline/>
+        <Box sx={{p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <StyledAvatar>
+            <LockOutlinedIcon/>
+          </StyledAvatar>
+          <Typography component="h1" variant="h5">
+            {this.props.online && <div>Sign in</div>}
+            {!this.props.online && <div>Off-Line</div>}
+          </Typography>
+          <Box component="form" sx={{'& .MuiInputBase-root': {ml: 0, mb: 0}, }} noValidate autoComplete="off">
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              value={username}
+              id="email"
+              onChange={this.onUsernameChange}
+              label="Username / Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              InputLabelProps={{style:{color: this.props.online ? theme.palette.primary.main : theme.palette.primary.light}}}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              onChange={this.onPasswordChange}
+              autoComplete="current-password"
+              InputLabelProps={{
+                style: {color: this.props.online ? theme.palette.primary.main : theme.palette.primary.light}
             }}
-          >
-            <CssBaseline/>
-            <Box sx={{p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-              <StyledAvatar>
-                <LockOutlinedIcon/>
-              </StyledAvatar>
-              <Typography component="h1" variant="h5">
-                {this.props.online && <div>Sign in</div>}
-                {!this.props.online && <div>Off-Line</div>}
-              </Typography>
-              <Box component="form" sx={{'& .MuiInputBase-root': {ml: 0, mb: 0}, }} noValidate autoComplete="off">
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  value={username}
-                  id="email"
-                  onChange={this.onUsernameChange}
-                  label="Username / Email Address"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  InputLabelProps={{style:{color: this.props.online ? theme.palette.primary.main : theme.palette.primary.light}}}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  onChange={this.onPasswordChange}
-                  autoComplete="current-password"
-                  InputLabelProps={{style:{color: this.props.online ? theme.palette.primary.main : theme.palette.primary.light}}}
-                />
-                <FormControlLabel
-                  control={<Checkbox onChange={this.onRememberMe} checked={remember}/>}
-                  label="Remember me"
-                  style={{color: this.props.online ? theme.palette.primary.main : theme.palette.primary.light}}
-                />
-                <StyledButton
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={this.handleSubmit}
-                >
-                  Sign In
-                </StyledButton>
-                <Grid container>
-                  <Grid item xs>
-                    <Link href="#" variant="body2">
-                      <span>Forgot password?</span>
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link href="#" variant="body2">
-                      <span>"Don't have an account? Sign Up"</span>
-                    </Link>
-                  </Grid>
-                </Grid>
-              </Box>
-            </Box>
-          </Container>
-        </ThemeProvider>
-      </StyledEngineProvider>
+            />
+            <FormControlLabel
+              control={<Checkbox onChange={this.onRememberMe} checked={remember}/>}
+              label="Remember me"
+              style={{
+                color: this.props.online ? theme.palette.primary.main : theme.palette.primary.light
+            }}
+            />
+            <StyledButton
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={this.handleSubmit}
+            >
+              Sign In
+            </StyledButton>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  <span>Forgot password?</span>
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  <span>"Don't have an account? Sign Up"</span>
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
     );
   }
 }
