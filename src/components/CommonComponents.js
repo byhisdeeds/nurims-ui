@@ -1155,7 +1155,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         aria-label="add"
         onClick={onClickAddRecord}
         // disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
-        disabled={emptyRecord || !THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
+        disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
       >
         &#160; {addRecordButtonLabel} &#160;
         {addRecordIcon}
