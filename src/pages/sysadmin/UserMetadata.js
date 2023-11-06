@@ -120,6 +120,7 @@ class UserMetadata extends Component {
               required
               fullWidth
               id="username"
+              autoComplete={"username"}
               label="Username/Email"
               value={getUserRecordData(user, "username", "")}
               onChange={this.handleChange}
