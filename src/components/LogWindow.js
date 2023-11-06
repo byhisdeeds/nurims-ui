@@ -18,6 +18,7 @@ import {
 import '@patternfly/patternfly/patternfly.css';
 import '@patternfly/patternfly/components/LogViewer/log-viewer.css';
 import '@patternfly/patternfly/components/Toolbar/toolbar.css';
+import ReactQuill from "react-quill";
 
 const LOGWINDOW_REF = "LogWindow";
 
@@ -30,6 +31,23 @@ class LogWindow extends Component {
       logs: "",
     };
     this.Module = LOGWINDOW_REF;
+    this.modules = {
+      toolbar: false
+      // [
+      //   [{'header': [1, 2, false]}],
+      //   // [{'header': '1'}, {'header': '2'}, {'font': Font.whitelist}],
+      //   ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      //   [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+      //   ['link', 'image'],
+      //   ['clean']
+      // ]
+    };
+    this.formats = [
+      'header',
+      'bold', 'italic', 'underline', 'strike', 'blockquote',
+      'list', 'bullet', 'indent',
+      'link', 'image'
+    ];
   }
 
   toggleTextWrapping = (wrapped) => {
@@ -61,6 +79,10 @@ class LogWindow extends Component {
     this.setState({ logs: '' });
   }
 
+  handleChange = (value) => {
+    this.setState({logs: value});
+  }
+
   render() {
     const {visible, onClose, width, height, theme} = this.props;
     const {logs, isTextWrapped, scrollToRow} = this.state;
@@ -85,53 +107,60 @@ class LogWindow extends Component {
             width: `calc(100vw - ${width})`
           }}
         >
-          <LogViewer
-            isTextWrapped={isTextWrapped}
-            hasLineNumbers={true}
-            height={height}
-            data={logs}
-            scrollToRow={scrollToRow}
-            theme={'dark'}
-            toolbar={
-              <Toolbar>
-                <ToolbarContent>
-                  <ToolbarGroup align={{ default: 'alignLeft' }}>
-                    <ToolbarItem>
-                      <LogViewerSearch
-                        minSearchChars={2}
-                        placeholder="Search"
-                      />
-                    </ToolbarItem>
-                    <ToolbarItem alignSelf='center'>
-                      <Checkbox
-                        label="Wrap text"
-                        aria-label="wrap text checkbox"
-                        isChecked={isTextWrapped}
-                        id="wrap-text-checkbox"
-                        onChange={this.toggleTextWrapping}
-                      />
-                    </ToolbarItem>
-                  </ToolbarGroup>
-                  <ToolbarGroup align={{ default: 'alignRight' }} variant="icon-button-group">
-                    <ToolbarItem>
-                      <Tooltip position="top" content={<div>Download</div>}>
-                        <Button onClick={this.onDownloadClick} variant="plain" aria-label="Download logs">
-                          <DownloadIcon />
-                        </Button>
-                      </Tooltip>
-                    </ToolbarItem>
-                    <ToolbarItem>
-                      <Tooltip position="top" content={<div>Clear</div>}>
-                        <Button onClick={this.onClearLogsClick} variant="plain" aria-label="Clear logs">
-                          <DeleteForeverIcon />
-                        </Button>
-                      </Tooltip>
-                    </ToolbarItem>
-                  </ToolbarGroup>
-                </ToolbarContent>
-              </Toolbar>
-            }
+          <ReactQuill
+            readOnly={true}
+            value={logs}
+            modules={this.modules}
+            formats={this.formats}
+            onChange={this.handleChange}
           />
+          {/*<LogViewer*/}
+          {/*  isTextWrapped={isTextWrapped}*/}
+          {/*  hasLineNumbers={true}*/}
+          {/*  height={height}*/}
+          {/*  data={logs}*/}
+          {/*  scrollToRow={scrollToRow}*/}
+          {/*  theme={'dark'}*/}
+          {/*  toolbar={*/}
+          {/*    <Toolbar>*/}
+          {/*      <ToolbarContent>*/}
+          {/*        <ToolbarGroup align={{ default: 'alignLeft' }}>*/}
+          {/*          <ToolbarItem>*/}
+          {/*            <LogViewerSearch*/}
+          {/*              minSearchChars={2}*/}
+          {/*              placeholder="Search"*/}
+          {/*            />*/}
+          {/*          </ToolbarItem>*/}
+          {/*          <ToolbarItem alignSelf='center'>*/}
+          {/*            <Checkbox*/}
+          {/*              label="Wrap text"*/}
+          {/*              aria-label="wrap text checkbox"*/}
+          {/*              isChecked={isTextWrapped}*/}
+          {/*              id="wrap-text-checkbox"*/}
+          {/*              onChange={this.toggleTextWrapping}*/}
+          {/*            />*/}
+          {/*          </ToolbarItem>*/}
+          {/*        </ToolbarGroup>*/}
+          {/*        <ToolbarGroup align={{ default: 'alignRight' }} variant="icon-button-group">*/}
+          {/*          <ToolbarItem>*/}
+          {/*            <Tooltip position="top" content={<div>Download</div>}>*/}
+          {/*              <Button onClick={this.onDownloadClick} variant="plain" aria-label="Download logs">*/}
+          {/*                <DownloadIcon />*/}
+          {/*              </Button>*/}
+          {/*            </Tooltip>*/}
+          {/*          </ToolbarItem>*/}
+          {/*          <ToolbarItem>*/}
+          {/*            <Tooltip position="top" content={<div>Clear</div>}>*/}
+          {/*              <Button onClick={this.onClearLogsClick} variant="plain" aria-label="Clear logs">*/}
+          {/*                <DeleteForeverIcon />*/}
+          {/*              </Button>*/}
+          {/*            </Tooltip>*/}
+          {/*          </ToolbarItem>*/}
+          {/*        </ToolbarGroup>*/}
+          {/*      </ToolbarContent>*/}
+          {/*    </Toolbar>*/}
+          {/*  }*/}
+          {/*/>*/}
         </div>
       </Drawer>
     )
