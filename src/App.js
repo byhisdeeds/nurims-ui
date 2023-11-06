@@ -499,10 +499,10 @@ class App extends React.Component {
     return (
       <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+          <SnackbarProvider maxSnack={5} anchorOrigin={{vertical: 'bottom', horizontal: 'center',}}/>
           <Box sx={{flexGrow: 1, height: "100%"}}>
             {this.user.isAuthenticated ?
               <React.Fragment>
-                <SnackbarProvider maxSnack={5} anchorOrigin={{vertical: 'bottom', horizontal: 'center',}}/>
                 <AppBar position="static">
                   <Toolbar>
                     <Tooltip

@@ -43,7 +43,9 @@ class UserMetadata extends Component {
   }
 
   handleChange = (e) => {
-    console.log(">>>", e.target.id)
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "handleChange", "id", e.target.id, "value", e.target.value);
+    }
     const user = this.state.user;
     if (e.target.id === "username") {
       setUserRecordData(user, NURIMS_TITLE, e.target.value);
@@ -98,7 +100,7 @@ class UserMetadata extends Component {
   render() {
     const {user, properties, disabled} = this.state;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "setRecordMetadata", "disabled", disabled, "user", user);
+      ConsoleLog(this.Module, "render", "disabled", disabled, "user", user);
     }
     const authorized_module_levels = getPropertyValue(properties, "system.authorizedmodulelevels", "").split('|');
     const user_roles = getPropertyValue(properties, "system.userrole", "").split('|');
@@ -166,6 +168,7 @@ class UserMetadata extends Component {
               type={"password"}
               id="password1"
               label="Password"
+              autoComplete={"current-password"}
               value={getUserRecordData(user, "password1", "")}
               onChange={this.handleChange}
             />
@@ -178,6 +181,7 @@ class UserMetadata extends Component {
               id="password2"
               type={"password"}
               label="Password (again)"
+              autoComplete={"current-password"}
               value={getUserRecordData(user, "password2", "")}
               onChange={this.handleChange}
             />
@@ -195,8 +199,6 @@ UserMetadata.propTypes = {
 }
 
 UserMetadata.defaultProps = {
-  onChange: (msg) => {
-  },
 };
 
 export default withTheme(UserMetadata);

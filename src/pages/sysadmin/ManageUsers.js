@@ -5,26 +5,20 @@ import {
 } from "../../utils/UserContext";
 import {ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog} from "../../components/UtilityDialogs";
 import {
-  Box,
-  Fab,
   Grid,
 } from "@mui/material";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import UnarchiveIcon from "@mui/icons-material/Unarchive";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import SaveIcon from "@mui/icons-material/Save";
-import AddIcon from "@mui/icons-material/Add";
 import UserList from "./UserList";
 import {
   CMD_DELETE_USER_RECORD,
   CMD_GET_PROVENANCE_RECORDS,
-  CMD_GET_PUBLIC_KEY,
   CMD_GET_USER_RECORDS,
   CMD_UPDATE_USER_RECORD,
+  CURRENT_USER,
   ITEM_ID,
   METADATA,
   NURIMS_TITLE,
-  NURIMS_WITHDRAWN, ROLE_SYSADMIN
+  NURIMS_WITHDRAWN,
+  ROLE_SYSADMIN
 } from "../../utils/constants";
 import {
   getMatchingResponseObject,
@@ -45,7 +39,6 @@ import {
 } from "../../utils/SnackbarVariants";
 import {
   getUserRecordData,
-  getUserRecordMetadataValue,
   record_uuid
 } from "../../utils/MetadataUtils";
 import {isValidUserRole} from "../../utils/UserUtils";
@@ -99,6 +92,10 @@ class ManageUsers extends React.Component {
       selection.changed = true;
       this.setState({selection: selection, metadata_changed: selection.changed});
     }
+  }
+
+  isRecordChanged = (record) => {
+    return record.hasOwnProperty("changed") && record.changed;
   }
 
   isRecordArchived = (record) => {
@@ -331,16 +328,16 @@ class ManageUsers extends React.Component {
     return false;
   }
 
-  hasChangedRecords = () => {
-    if (this.listRef.current) {
-      for (const record of this.listRef.current.getRecords()) {
-        if (record.hasOwnProperty("changed") && record.changed) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
+  // hasChangedRecords = () => {
+  //   if (this.listRef.current) {
+  //     for (const record of this.listRef.current.getRecords()) {
+  //       if (record.hasOwnProperty("changed") && record.changed) {
+  //         return true;
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
 
   render() {
     const {metadata_changed, confirm_remove, include_archived, selection, show_provenance_view} = this.state;
@@ -398,31 +395,10 @@ class ManageUsers extends React.Component {
           removeRecordButtonLabel={"Remove User"}
           addRole={ROLE_SYSADMIN}
           removeRole={ROLE_SYSADMIN}
-          saveRole={"**current_user**"}
+          saveRole={CURRENT_USER}
           archiveRole={ROLE_SYSADMIN}
+          ignoreSaveDisabledIfNotCreator={true}
         />
-        {/*<Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}
-        {/*       disabled={selection === -1}>*/}
-        {/*    <RemoveCircleIcon sx={{mr: 1}}/>*/}
-        {/*    Remove User*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}*/}
-        {/*       onClick={this.changeRecordArchivalStatus} disabled={!this.isValidSelection(selection)}>*/}
-        {/*    {this.isRecordArchived(selection) ?*/}
-        {/*      <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore User Record"</React.Fragment> :*/}
-        {/*      <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive User Record"</React.Fragment>}*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}*/}
-        {/*       disabled={!metadata_changed}>*/}
-        {/*    <SaveIcon sx={{mr: 1}}/>*/}
-        {/*    Save Changes*/}
-        {/*  </Fab>*/}
-        {/*  <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>*/}
-        {/*    <AddIcon sx={{mr: 1}}/>*/}
-        {/*    Add User*/}
-        {/*  </Fab>*/}
-        {/*</Box>*/}
       </React.Fragment>
     );
   }

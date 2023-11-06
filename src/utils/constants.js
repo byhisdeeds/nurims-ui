@@ -321,4 +321,6 @@ module.exports = Object.freeze({
   UNDEFINED_DATE_STRING: "1970-01-01T00:00:00",
 
   DELETE_METADATA_TAG: "___delete___",
+
+  CURRENT_USER: "**current_user**",
 });

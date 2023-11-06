@@ -63,7 +63,6 @@ class Signin extends React.Component {
   constructor(props) {
     super(props);
     this.authService = props.authService;
-    this.ws = null;
     this._mounted = false;
     this.debug = window.location.href.includes("debug");
     this.Module = SIGNIN_REF;
@@ -102,9 +101,6 @@ class Signin extends React.Component {
 
   componentWillUnmount() {
     this._mounted = false;
-    if (this.ws) {
-      this.ws.close();
-    }
   }
 
   componentDidMount () {
@@ -134,6 +130,7 @@ class Signin extends React.Component {
           this.props.onValidAuthentication()
         }
       } else {
+        console.log("@@@ RESPONSE", response, "response.message", response.message)
         enqueueWarningSnackbar(response.message);
       }
     }

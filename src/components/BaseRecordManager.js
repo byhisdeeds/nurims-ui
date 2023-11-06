@@ -250,10 +250,7 @@ class BaseRecordManager extends Component {
   }
 
   isRecordChanged = (record) => {
-    if (record.hasOwnProperty("changed") && record.changed) {
-      return true;
-    }
-    return false;
+    return record.hasOwnProperty("changed") && record.changed;
   }
 
   hasChangedRecords = () => {

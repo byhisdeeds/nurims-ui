@@ -265,10 +265,9 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
         {<AddRemoveArchiveSaveSubmitProvenanceButtonPanel
           THIS={this}
           user={user}
-          archiveRecordButtonLabel={this.isRecordArchived(selection) ?
-            <React.Fragment>&#160;"Restore Record"&#160;<VisibilityIcon sx={{mr: 1}}/></React.Fragment> :
-            <React.Fragment>&#160;"Archive Record"&#160;<VisibilityOffIcon sx={{mr: 1}}/></React.Fragment>
-          }
+          // archiveRecordButtonLabel={this.isRecordArchived(selection) ? "Restore Record" : "Archive Record"}
+          // archiveRecordIcon={this.isRecordArchived(selection) ?
+          //   <VisibilityIcon sx={{mr: 1}}/> : <VisibilityOffIcon sx={{mr: 1}}/>}
           onClickAddRecord={this.addRecord}
           onClickChangeRecordArchivalStatus={this.changeRecordArchivalStatus}
           onClickRemoveRecord={this.removeRecord}
@@ -281,12 +280,13 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
           saveRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
           archiveRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
           submitRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
-          submitRecordButtonLabel={record_has_submission_metadata ?
-              <React.Fragment>&#160;Withdraw Request&#160;<UnpublishedIcon sx={{mr: 1}}/></React.Fragment> :
-              <React.Fragment>&#160;Submit Request&#160;<CheckCircleIcon sx={{mr: 1}}/></React.Fragment>
+          submitRecordButtonLabel={record_has_submission_metadata ? "Withdraw Request" : "Submit Request"}
+          submitRecordIcon={record_has_submission_metadata ?
+            <UnpublishedIcon sx={{mr: 1}}/> : <CheckCircleIcon sx={{mr: 1}}/>
           }
           onClickSubmitRecord={this.submitAuthorizationRequest}
           submitDisabled={submit_disabled}
+          ignoreSaveDisabledIfNotCreator={false}
         />}
       </React.Fragment>
     );
