@@ -123,11 +123,12 @@ class LogWindow extends Component {
             readOnly={true}
             fullwidth={true}
             value={logs.join("\n")}
+            data-color-mode={theme.palette.mode}
             onValueChange={code => {
             }}
             highlight={(code) => {return highlight(code)}}
             padding={10}
-            textareaId={"area"}
+            textareaId={"hl-editor"}
             style={{
               backgroundColor: theme.palette.background.paper,
               color: theme.palette.primary.light,
