@@ -125,9 +125,8 @@ class LogWindow extends Component {
             value={logs.join("\n")}
             onValueChange={code => {
             }}
-            highlight={code => highlight(code)}
+            highlight={(code) => {return highlight(code)}}
             padding={10}
-            data-color-mode={theme.palette.mode}
             textareaId={"area"}
             style={{
               backgroundColor: theme.palette.background.paper,
