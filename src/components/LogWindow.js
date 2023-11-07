@@ -12,19 +12,12 @@ import {
 } from "@mui/styles";
 import DownloadIcon from '@mui/icons-material/Download';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import CodeEditor from '@uiw/react-textarea-code-editor';
+// import CodeEditor from '@uiw/react-textarea-code-editor';
 import {
-  ConsoleLog,
   UserContext
 } from "../utils/UserContext";
 import Editor from 'react-simple-code-editor';
-// import highlight from "../"
-// import {highlight, languages} from 'prismjs/components/prism-core';
-// import 'prismjs/components/prism-clike';
-// import 'prismjs/components/prism-javascript';
-// import '../components/prismjs/log';
-import 'prismjs/themes/prism.css';
-import {highlight} from "../utils/HighlightUtils"; //Example style, you can use another
+import {highlight} from "../utils/HighlightUtils";
 
 
 const LOGWINDOW_REF = "LogWindow";
@@ -105,21 +98,8 @@ class LogWindow extends Component {
               </ListItemButton>
             </ListItem>
           </List>
-          {/*<CodeEditor*/}
-          {/*  readOnly={true}*/}
-          {/*  fullwidth={true}*/}
-          {/*  value={logs.join("\n")}*/}
-          {/*  language={"ini"}*/}
-          {/*  data-color-mode={theme.palette.mode}*/}
-          {/*  padding={15}*/}
-          {/*  style={{*/}
-          {/*    fontSize: 12,*/}
-          {/*    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",*/}
-          {/*    width: "100%",*/}
-          {/*    overflowY: "auto",*/}
-          {/*  }}*/}
-          {/*/>*/}
           <Editor
+            className={"hl-editor"}
             readOnly={true}
             fullwidth={true}
             value={logs.join("\n")}
@@ -128,7 +108,6 @@ class LogWindow extends Component {
             }}
             highlight={(code) => {return highlight(code)}}
             padding={10}
-            textareaId={"hl-editor"}
             style={{
               backgroundColor: theme.palette.background.paper,
               color: theme.palette.primary.light,

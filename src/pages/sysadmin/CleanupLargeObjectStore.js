@@ -32,7 +32,8 @@ import {
 import {
   isValidUserRole
 } from "../../utils/UserUtils";
-import CodeEditor from "@uiw/react-textarea-code-editor";
+import {highlight} from "../../utils/HighlightUtils";
+import Editor from "react-simple-code-editor";
 
 export const CLEANUPLARGEOBJECTSTORE_REF = "CleanupLargeObjectStore";
 
@@ -132,14 +133,19 @@ class CleanupLargeObjectStore extends Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <CodeEditor
+            <Editor
+              className={"hl-editor"}
               readOnly={true}
               fullwidth={true}
               value={files}
-              language={"ini"}
               data-color-mode={theme.palette.mode}
-              padding={15}
+              onValueChange={code => {
+              }}
+              highlight={(code) => {return highlight(code)}}
+              padding={10}
               style={{
+                backgroundColor: theme.palette.background.paper,
+                color: theme.palette.primary.light,
                 fontSize: 12,
                 fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
                 width: "100%",
@@ -147,6 +153,21 @@ class CleanupLargeObjectStore extends Component {
                 overflowY: "auto",
               }}
             />
+            {/*<CodeEditor*/}
+            {/*  readOnly={true}*/}
+            {/*  fullwidth={true}*/}
+            {/*  value={files}*/}
+            {/*  language={"ini"}*/}
+            {/*  data-color-mode={theme.palette.mode}*/}
+            {/*  padding={15}*/}
+            {/*  style={{*/}
+            {/*    fontSize: 12,*/}
+            {/*    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",*/}
+            {/*    width: "100%",*/}
+            {/*    height: "calc(100vh - 245px)",*/}
+            {/*    overflowY: "auto",*/}
+            {/*  }}*/}
+            {/*/>*/}
           </Grid>
         </Grid>
       </React.Fragment>

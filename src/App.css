@@ -292,6 +292,7 @@ pre {
 }
 
 .hl-editor .token-timestamp {
+    display: inline;
     font-family: inherit;
     font-size: 12px;
     background-color: var(--color-canvas-subtle);

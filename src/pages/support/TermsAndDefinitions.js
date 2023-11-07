@@ -30,7 +30,7 @@ import sanitize from "sanitize-html";
 import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
-import CodeEditor from "@uiw/react-textarea-code-editor";
+// import CodeEditor from "@uiw/react-textarea-code-editor";
 
 export const TERMSANDDEFINITIONS_REF = "TermsAndDefinitions";
 
