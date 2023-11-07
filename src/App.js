@@ -187,7 +187,7 @@ class App extends React.Component {
     this.menuTitle = "";
     this.ws = null;
     this.mounted = false;
-    this.logs = "";
+    this.logs = []
     this.user = AuthService;
     this.org = {name: "", authorized_module_level: ""};
     // console.log("*************")
@@ -444,17 +444,27 @@ class App extends React.Component {
     // if (this.logRef.current) {
     //   this.logRef.current.log(msg);
     // }
-      let message = typeof msg === 'object' ? msg.hasOwnProperty("message") ? msg.message : JSON.stringify(msg) : msg;
-      if (!message.startsWith("[")) {
-        message = "[" + new Date().toISOString().substring(0, 19).replace("T", " ") + "] " + message;
-      }
-      this.logs = this.logs + (this.logs === "" ? "" : "\n") + message;
-      if (this.logRef.current) {
-        this.logRef.current.forceUpdate();
-      }
-      // const scrollToRow = logs.split("\n").length + 1;
+    let message = typeof msg === 'object' ? msg.hasOwnProperty("message") ? msg.message : JSON.stringify(msg) : msg;
+    if (!message.startsWith("[")) {
+      message = "[" + new Date().toISOString().substring(0, 19).replace("T", " ") + "] " + message;
+    }
+    this.logs.push(message);
+    // this.logs = this.logs + (this.logs === "" ? "" : "\n") + message;
+    if (this.logRef.current) {
+      this.logRef.current.forceUpdate();
+    }
+    // const scrollToRow = logs.split("\n").length + 1;
     // }
   }
+
+  // clearLogs = () => {
+  //   this.logs = "";
+  //   console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqq")
+  //   if (this.logRef.current) {
+  //     console.log("rrrrrrrrrrrrrrrrrrrrrrrrrr")
+  //     this.logRef.current.forceUpdate();
+  //   }
+  // }
 
   toggleNotificationsWindow = (event) => {
     if (this.state.num_messages > 0) {

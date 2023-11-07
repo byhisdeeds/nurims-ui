@@ -46,7 +46,7 @@ import {
 import {
   isValidUserRole
 } from "../../utils/UserUtils";
-// import {e} from "caniuse-lite/data/browserVersions";
+import CodeEditor from "@uiw/react-textarea-code-editor";
 
 export const CLEANUPLARGEOBJECTSTORE_REF = "CleanupLargeObjectStore";
 
@@ -63,7 +63,6 @@ class CleanupLargeObjectStore extends Component {
     };
     this.Module = CLEANUPLARGEOBJECTSTORE_REF;
   }
-
 
   componentDidMount() {
     const user = this.props.user;
@@ -114,7 +113,7 @@ class CleanupLargeObjectStore extends Component {
 
   render() {
     const { files, only_list_files, processing, scrollToRow} = this.state;
-    const {user} = this.props;
+    const {user, theme} = this.props;
     const isSysadmin = isValidUserRole(user, "sysadmin");
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "only_list_files", only_list_files, "scrollToRow", scrollToRow,
@@ -141,7 +140,7 @@ class CleanupLargeObjectStore extends Component {
                 sx={{minWidth: 350}}
                 loading={processing}
                 loadingPosition="end"
-                endIcon={<DeleteSweepIcon fontSize={"large"} />}
+                endIcon={<DeleteSweepIcon fontSize={"large"}/>}
                 variant="outlined"
                 onClick={this.removeUnreferencedFiles}
               >
@@ -150,27 +149,20 @@ class CleanupLargeObjectStore extends Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <LogViewer
-              isTextWrapped={false}
-              hasLineNumbers={false}
-              height={"calc(100vh - 245px)"}
-              data={files}
-              scrollToRow={scrollToRow}
-              theme={'dark'}
-              toolbar={
-                <Toolbar>
-                  <ToolbarContent>
-                    <ToolbarGroup align={{ default: 'alignLeft' }}>
-                      <ToolbarItem>
-                        <LogViewerSearch
-                          minSearchChars={2}
-                          placeholder="Search"
-                        />
-                      </ToolbarItem>
-                    </ToolbarGroup>
-                  </ToolbarContent>
-                </Toolbar>
-              }
+            <CodeEditor
+              readOnly={true}
+              fullwidth={true}
+              value={files}
+              language={"js"}
+              data-color-mode={theme.palette.mode}
+              padding={15}
+              style={{
+                fontSize: 12,
+                fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                width: "100%",
+                height: "calc(100vh - 245px)",
+                overflowY: "auto",
+              }}
             />
           </Grid>
         </Grid>
