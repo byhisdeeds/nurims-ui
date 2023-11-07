@@ -136,7 +136,7 @@ class CleanupLargeObjectStore extends Component {
               readOnly={true}
               fullwidth={true}
               value={files}
-              language={"js"}
+              language={"ini"}
               data-color-mode={theme.palette.mode}
               padding={15}
               style={{

@@ -1,10 +1,15 @@
 import React from 'react';
 import {
+  withTheme
+} from "@mui/styles";
+import {
   ConsoleLog,
   UserContext
 } from "../../utils/UserContext";
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
+import {
+  Grid,
+  Stack
+} from "@mui/material";
 import {
   AutoCompleteComponent,
   TitleComponent
@@ -22,9 +27,10 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import sanitize from "sanitize-html";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import ReactQuill from "react-quill"
-import 'react-quill/dist/quill.bubble.css'
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
+import CodeEditor from "@uiw/react-textarea-code-editor";
 
 export const TERMSANDDEFINITIONS_REF = "TermsAndDefinitions";
 
@@ -147,11 +153,12 @@ class TermsAndDefinitions extends React.Component {
   }
 
   render() {
-    const { user, ac_open, searching, search_term, search_term_options, text } = this.state;
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "ac_open", ac_open, "searching", searching,
-        "search_term", search_term, "text", text);
-    }
+    const {user, ac_open, searching, search_term, search_term_options, text} = this.state;
+    const {theme} = this.props;
+    // if (this.context.debug) {
+    //   ConsoleLog(this.Module, "render", "ac_open", ac_open, "searching", searching,
+    //     "search_term", search_term, "text", text);
+    // }
     return (
       <React.Fragment>
         <Grid container spacing={2}>
@@ -196,16 +203,30 @@ class TermsAndDefinitions extends React.Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            {/*<div style={{fontSize: 16, fontFamily: 'consola'}}>*/}
-            {/*  { <div dangerouslySetInnerHTML={{ __html: this.search_term_content }} /> }*/}
-            {/*</div>*/}
-            <ReactQuill
-              readOnly={true}
-              value={text}
-              modules={this.modules}
-              formats={this.formats}
-              onChange={this.handleChange}
-            />
+            <div style={{fontSize: 16, fontFamily: 'consola'}}>
+              { <div dangerouslySetInnerHTML={{ __html: this.search_term_content }} /> }
+            </div>
+            {/*<CodeEditor*/}
+            {/*  readOnly={true}*/}
+            {/*  fullwidth={true}*/}
+            {/*  value={text}*/}
+            {/*  language={"js"}*/}
+            {/*  data-color-mode={theme.palette.mode}*/}
+            {/*  padding={15}*/}
+            {/*  style={{*/}
+            {/*    fontSize: 12,*/}
+            {/*    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",*/}
+            {/*    width: "100%",*/}
+            {/*    overflowY: "auto",*/}
+            {/*  }}*/}
+            {/*/>*/}
+            {/*<ReactQuill*/}
+            {/*  readOnly={true}*/}
+            {/*  value={text}*/}
+            {/*  modules={this.modules}*/}
+            {/*  formats={this.formats}*/}
+            {/*  onChange={this.handleChange}*/}
+            {/*/>*/}
           </Grid>
         </Grid>
       </React.Fragment>
@@ -217,4 +238,4 @@ TermsAndDefinitions.defaultProps = {
   send: (msg) => {},
 };
 
-export default TermsAndDefinitions;
+export default withTheme(TermsAndDefinitions);

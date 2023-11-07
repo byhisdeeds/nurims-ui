@@ -17,6 +17,15 @@ import {
   ConsoleLog,
   UserContext
 } from "../utils/UserContext";
+import Editor from 'react-simple-code-editor';
+// import highlight from "../"
+// import {highlight, languages} from 'prismjs/components/prism-core';
+// import 'prismjs/components/prism-clike';
+// import 'prismjs/components/prism-javascript';
+// import '../components/prismjs/log';
+import 'prismjs/themes/prism.css';
+import {highlight} from "../utils/HighlightUtils"; //Example style, you can use another
+
 
 const LOGWINDOW_REF = "LogWindow";
 
@@ -96,14 +105,33 @@ class LogWindow extends Component {
               </ListItemButton>
             </ListItem>
           </List>
-          <CodeEditor
+          {/*<CodeEditor*/}
+          {/*  readOnly={true}*/}
+          {/*  fullwidth={true}*/}
+          {/*  value={logs.join("\n")}*/}
+          {/*  language={"ini"}*/}
+          {/*  data-color-mode={theme.palette.mode}*/}
+          {/*  padding={15}*/}
+          {/*  style={{*/}
+          {/*    fontSize: 12,*/}
+          {/*    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",*/}
+          {/*    width: "100%",*/}
+          {/*    overflowY: "auto",*/}
+          {/*  }}*/}
+          {/*/>*/}
+          <Editor
             readOnly={true}
             fullwidth={true}
             value={logs.join("\n")}
-            language={"js"}
+            onValueChange={code => {
+            }}
+            highlight={code => highlight(code)}
+            padding={10}
             data-color-mode={theme.palette.mode}
-            padding={15}
+            textareaId={"area"}
             style={{
+              backgroundColor: theme.palette.background.paper,
+              color: theme.palette.primary.light,
               fontSize: 12,
               fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
               width: "100%",
