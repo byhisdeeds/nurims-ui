@@ -93,7 +93,6 @@ import {ADDEDITTODORECORD_REF} from "./pages/maintenance/AddEditTodoRecord";
 import {SIGNIN_REF} from "./components/Signin";
 import NotificationWindow from "./components/NotificationWindow";
 import SystemInfoBadges from "./components/SystemInfoBadges";
-
 import {
   BackgroundTasks,
   LogWindowButton,
@@ -114,7 +113,6 @@ import metadata from './metadata.json';
 import {
   isValidUserRole
 } from "./utils/UserUtils";
-
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
@@ -441,30 +439,17 @@ class App extends React.Component {
   }
 
   appendLog = (msg) => {
-    // if (this.logRef.current) {
-    //   this.logRef.current.log(msg);
-    // }
-    let message = typeof msg === 'object' ? msg.hasOwnProperty("message") ? msg.message : JSON.stringify(msg) : msg;
+    let message = typeof msg === 'object' ?
+      msg.hasOwnProperty("message") ? msg.message : JSON.stringify(msg) : msg;
     if (!message.startsWith("[")) {
-      message = "[" + new Date().toISOString().substring(0, 19).replace("T", " ") + "] " + message;
+      message = "[" + new Date().toISOString().substring(0, 19).replace("T", " ") + "] " +
+        message;
     }
     this.logs.push(message);
-    // this.logs = this.logs + (this.logs === "" ? "" : "\n") + message;
     if (this.logRef.current) {
       this.logRef.current.forceUpdate();
     }
-    // const scrollToRow = logs.split("\n").length + 1;
-    // }
   }
-
-  // clearLogs = () => {
-  //   this.logs = "";
-  //   console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqq")
-  //   if (this.logRef.current) {
-  //     console.log("rrrrrrrrrrrrrrrrrrrrrrrrrr")
-  //     this.logRef.current.forceUpdate();
-  //   }
-  // }
 
   toggleNotificationsWindow = (event) => {
     if (this.state.num_messages > 0) {
@@ -508,10 +493,10 @@ class App extends React.Component {
       log_window_visible, notification_window_visible, notification_window_anchor, num_messages, online
     } = this.state;
     const isSysadmin = isValidUserRole(this.user, "sysadmin");
-    if (this.debug) {
-      ConsoleLog("App", "render", "user", this.user, "actionid", actionid, "busy", busy,
-        "num_unread_messages", num_unread_messages, "num_messages", num_messages)
-    }
+    // if (this.debug) {
+    //   ConsoleLog("App", "render", "user", this.user, "actionid", actionid, "busy", busy,
+    //     "num_unread_messages", num_unread_messages, "num_messages", num_messages)
+    // }
     return (
       <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>

@@ -22,18 +22,16 @@ const LOGWINDOW_REF = "LogWindow";
 
 class LogWindow extends Component {
   static contextType = UserContext;
+
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    this.state = {};
     this.Module = LOGWINDOW_REF;
   }
 
   onDownloadClick = () => {
     const element = document.createElement('a');
-    // const dataToDownload = [this.logs];
     const dataToDownload = [this.props.logs.join("\n")];
-    console.log("DATA TO DOWNLOAD", dataToDownload)
     const file = new Blob(dataToDownload, {type: 'text/plain'});
     element.href = URL.createObjectURL(file);
     element.download = 'logs.txt';
@@ -43,17 +41,12 @@ class LogWindow extends Component {
   }
 
   onClearLogsClick = () => {
-    console.log("aaaaaaaa")
     this.props.logs.length = 0;
-    console.log("bbbbbb", this.props.logs)
     this.forceUpdate();
   }
 
   render() {
     const {visible, onClose, width, height, theme, logs} = this.props;
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "logs", logs);
-    }
     return (
       <Drawer
         variant="temporary"
@@ -62,7 +55,7 @@ class LogWindow extends Component {
         onClose={onClose}
         sx={{
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { boxSizing: 'border-box', backgroundColor: 'inherit', backgroundImage: 'inherit' },
+          [`& .MuiDrawer-paper`]: {boxSizing: 'border-box', backgroundColor: 'inherit', backgroundImage: 'inherit'},
         }}
       >
         <div

@@ -20,24 +20,10 @@ import {
   UserContext
 } from "../../utils/UserContext";
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
-import ReplayCircleFilledIcon from '@mui/icons-material/ReplayCircleFilled';
 import {
   enqueueErrorSnackbar,
   enqueueWarningSnackbar
 } from "../../utils/SnackbarVariants";
-import DeleteIcon from "@mui/icons-material/HighlightOff";
-import {
-  Toolbar,
-  ToolbarContent,
-  ToolbarGroup,
-  ToolbarItem,
-} from "@patternfly/react-core";
-import {
-  LogViewer,
-  LogViewerSearch
-} from "@patternfly/react-log-viewer";
-import DownloadIcon from "@mui/icons-material/Download";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   isCommandResponse,
   messageHasResponse,
@@ -57,7 +43,6 @@ class CleanupLargeObjectStore extends Component {
     super(props);
     this.state = {
       files: "",
-      scrollToRow: 0,
       only_list_files: "true",
       processing: false,
     };
@@ -95,14 +80,12 @@ class CleanupLargeObjectStore extends Component {
         if (isCommandResponse(message, CMD_CLEANUP_UNREFERENCED_LARGE_OBJECT_STORE_FILES)) {
           if (response.hasOwnProperty("file") && response.file.toLowerCase() === "done") {
             const files = this.state.files + (this.state.files === "" ? "" : "\n") + "Completed processing."
-            const scrollToRow = files.split("\n").length + 1;
-            this.setState({ files: files, scrollToRow: scrollToRow, processing: false })
+            this.setState({files: files, processing: false})
           } else {
             const files = this.state.files +
               (this.state.files === "" ? "" : "\n") +
               (response.hasOwnProperty("file") ? response.file : "")
-            const scrollToRow = files.split("\n").length + 1;
-            this.setState({ files: files, scrollToRow: scrollToRow })
+            this.setState({files: files})
           }
         }
       } else {
@@ -112,11 +95,11 @@ class CleanupLargeObjectStore extends Component {
   }
 
   render() {
-    const { files, only_list_files, processing, scrollToRow} = this.state;
+    const { files, only_list_files, processing} = this.state;
     const {user, theme} = this.props;
     const isSysadmin = isValidUserRole(user, "sysadmin");
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "only_list_files", only_list_files, "scrollToRow", scrollToRow,
+      ConsoleLog(this.Module, "render", "only_list_files", only_list_files,
         "processing", processing, "isSysAdmin", isSysadmin);
     }
     return (
