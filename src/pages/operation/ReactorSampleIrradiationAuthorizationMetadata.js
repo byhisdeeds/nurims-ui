@@ -40,7 +40,9 @@ import {
   analysisJobAsObject,
   getRecordData,
   setRecordData,
-  record_uuid, recordHasMetadataField, getRecordMetadataValue, isRecordCreatedBy
+  record_uuid,
+  recordHasMetadataField,
+  isRecordCreatedBy
 } from "../../utils/MetadataUtils";
 import {
   ConsoleLog,
@@ -56,7 +58,6 @@ import {
 } from "@mui/styles";
 import PropTypes from "prop-types";
 import UnpublishedIcon from "@mui/icons-material/Unpublished";
-import PublishIcon from "@mui/icons-material/Publish";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 class ReactorSampleIrradiationAuthorizationMetadata extends Component {
