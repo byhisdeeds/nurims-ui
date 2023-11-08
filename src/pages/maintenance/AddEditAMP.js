@@ -146,6 +146,7 @@ class AddEditAMP extends BaseRecordManager {
           removeRole={"sysadmin"}
           saveRole={ROLE_MAINTENANCE_DATA_ENTRY}
           archiveRole={ROLE_MAINTENANCE_DATA_ENTRY}
+          ignoreSaveDisabledIfNotCreator={true}
         />}
       </React.Fragment>
     );

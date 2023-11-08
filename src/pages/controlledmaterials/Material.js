@@ -161,6 +161,7 @@ class Material extends BaseRecordManager {
           removeRole={ROLE_SYSADMIN}
           saveRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
           archiveRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
+          ignoreSaveDisabledIfNotCreator={true}
         />}
       </React.Fragment>
     );

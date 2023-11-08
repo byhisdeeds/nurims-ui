@@ -110,12 +110,12 @@ class SSCMetadata extends Component {
   }
 
   handleChange = (e) => {
-    if (this.context.debug) {
-      ConsoleLog(this.module, "handleChange", "id", e.target.id, "value", e.target.value);
-    }
     // console.log(">>>", e.target.id)
     const ssc = this.state.ssc;
     const id = e.target.id === undefined ? e.target.name : e.target.id;
+    if (this.context.debug) {
+      ConsoleLog(this.module, "handleChange", "id", id, "value", e.target.value);
+    }
     if (id === "name") {
       ssc["changed"] = true;
       ssc[NURIMS_TITLE] = e.target.value;

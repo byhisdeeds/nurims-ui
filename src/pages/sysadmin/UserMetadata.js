@@ -42,25 +42,25 @@ class UserMetadata extends Component {
   }
 
   handleChange = (e) => {
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "handleChange", "id", e.target.id, "name", e.target.name,
-        "value", e.target.value);
-    }
     const user = this.state.user;
-    if (e.target.id === "user") {
+    const id = e.target.id === undefined ? e.target.name : e.target.id;
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "handleChange", "id", id, "value", e.target.value);
+    }
+    if (id === "user") {
       setUserRecordData(user, NURIMS_TITLE, e.target.value);
       setUserRecordData(user, "username", e.target.value);
-    } else if (e.target.id === "fullname") {
+    } else if (id === "fullname") {
       setUserRecordData(user, "fullname", e.target.value);
-    } else if (e.target.id === "password1") {
+    } else if (id === "password1") {
       setUserRecordData(user, "password1", e.target.value);
       this.setState({user: user, password: e.target.value});
-    } else if (e.target.id === "password2") {
+    } else if (id === "password2") {
       setUserRecordData(user, "password2", e.target.value);
       this.setState({user: user, password_check: e.target.value});
-    } else if (e.target.name === "authorized_module_level") {
+    } else if (id === "authorized_module_level") {
       setUserRecordData(user, "authorized_module_level", e.target.value)
-    } else if (e.target.name === "user_role") {
+    } else if (id === "user_role") {
       setUserRecordData(user, "role", e.target.value)
     }
     this.setState({user: user});

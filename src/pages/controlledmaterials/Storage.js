@@ -143,6 +143,7 @@ class Storage extends BaseRecordManager {
           removeRole={"sysadmin"}
           saveRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
           archiveRole={ROLE_CONTROLLED_MATERIAL_DATA_ENTRY}
+          ignoreSaveDisabledIfNotCreator={true}
         />}
       </React.Fragment>
     );

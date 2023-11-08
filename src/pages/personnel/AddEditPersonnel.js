@@ -282,6 +282,7 @@ class AddEditPersonnel extends BaseRecordManager {
           removeRole={ROLE_SYSADMIN}
           saveRole={ROLE_PERSONNEL_DATA_ENTRY}
           archiveRole={ROLE_PERSONNEL_DATA_ENTRY}
+          ignoreSaveDisabledIfNotCreator={true}
         />
       </React.Fragment>
     );

@@ -279,6 +279,7 @@ class AddEditMonitors extends BaseRecordManager {
           removeRole={"sysadmin"}
           saveRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
           archiveRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
+          ignoreSaveDisabledIfNotCreator={true}
         />}
       </React.Fragment>
     );
