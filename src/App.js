@@ -540,11 +540,12 @@ class App extends React.Component {
                       {actionid === Constants.MY_ACCOUNT &&
                         <MyAccount
                           ref={this.crefs["MyAccount"]}
-                          title={this.menuTitle}
+                          title={this.user.profile.username === "" ? this.menuTitle : this.user.profile.username}
                           user={this.user}
                           send={this.send}
                           properties={this.properties}
-                        />}
+                        />
+                      }
                       {actionid === Constants.SETTINGS &&
                         <Settings
                           ref={this.crefs["Settings"]}

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {withTheme} from "@mui/styles";
+import {
+  withTheme
+} from "@mui/styles";
 import {
   getUserRecordData,
   setUserRecordData
@@ -26,7 +28,6 @@ import {
 } from "@mui/material";
 import {isValidUserRole} from "../../utils/UserUtils";
 
-
 class UserMetadata extends Component {
   static contextType = UserContext;
 
@@ -40,12 +41,10 @@ class UserMetadata extends Component {
     this.Module = "UserMetadata";
   }
 
-  componentDidMount() {
-  }
-
   handleChange = (e) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "handleChange", "id", e.target.id, "value", e.target.value);
+      ConsoleLog(this.Module, "handleChange", "id", e.target.id, "name", e.target.name,
+        "value", e.target.value);
     }
     const user = this.state.user;
     if (e.target.id === "user") {
@@ -59,6 +58,10 @@ class UserMetadata extends Component {
     } else if (e.target.id === "password2") {
       setUserRecordData(user, "password2", e.target.value);
       this.setState({user: user, password_check: e.target.value});
+    } else if (e.target.name === "authorized_module_level") {
+      setUserRecordData(user, "authorized_module_level", e.target.value)
+    } else if (e.target.name === "user_role") {
+      setUserRecordData(user, "role", e.target.value)
     }
     this.setState({user: user});
     // signal to parent that details have changed
@@ -72,8 +75,8 @@ class UserMetadata extends Component {
     this.setState({
       user: record,
       disabled: false,
-      password: "", // record.metadata.password,
-      password_check: "", // record.metadata.password
+      password: "",
+      password_check: "",
     })
     this.props.onChange(false);
   }
@@ -82,21 +85,21 @@ class UserMetadata extends Component {
     return this.state.user;
   }
 
-  handleModuleAuthorizationLevelChange = (e) => {
-    const user = this.state.user;
-    setUserRecordData(user, "authorized_module_level", e.target.value)
-    this.setState({user: user})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
+  // handleModuleAuthorizationLevelChange = (e) => {
+  //   const user = this.state.user;
+  //   setUserRecordData(user, "authorized_module_level", e.target.value)
+  //   this.setState({user: user})
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
 
-  handleUserRoleChange = (e) => {
-    const user = this.state.user;
-    setUserRecordData(user, "role", e.target.value)
-    this.setState({user: user})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
+  // handleUserRoleChange = (e) => {
+  //   const user = this.state.user;
+  //   setUserRecordData(user, "role", e.target.value)
+  //   this.setState({user: user})
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
 
   render() {
     const {user, properties, disabled} = this.state;
@@ -141,7 +144,8 @@ class UserMetadata extends Component {
               id={"authorized_module_level"}
               label="Module Authorization Level"
               value={getUserRecordData(user, "authorized_module_level", "")}
-              onChange={this.handleModuleAuthorizationLevelChange}
+              onChange={this.handleChange}
+              // onChange={this.handleModuleAuthorizationLevelChange}
               options={authorized_module_levels}
               disabled={disabled || !isSysadmin}
               tooltip={""}
@@ -153,7 +157,8 @@ class UserMetadata extends Component {
               id={"user_role"}
               label="User Role"
               value={getUserRecordData(user, "role", [])}
-              onChange={this.handleUserRoleChange}
+              onChange={this.handleChange}
+              // onChange={this.handleUserRoleChange}
               options={user_roles}
               disabled={disabled || !isSysadmin}
               tooltip={""}
@@ -166,8 +171,9 @@ class UserMetadata extends Component {
               disabled={disabled}
               required
               fullWidth
-              id="password1"
-              label="Password"
+              type={"password"}
+              id={"password1"}
+              label={"Password"}
               value={getUserRecordData(user, "password1", "")}
               onChange={this.handleChange}
             />
@@ -177,8 +183,9 @@ class UserMetadata extends Component {
               disabled={disabled}
               required
               fullWidth
-              id="password2"
-              label="Password (again)"
+              type={"password"}
+              id={"password2"}
+              label={"Password (again)"}
               value={getUserRecordData(user, "password2", "")}
               onChange={this.handleChange}
             />
