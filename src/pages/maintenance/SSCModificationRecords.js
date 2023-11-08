@@ -408,12 +408,12 @@ class SSCModificationRecords extends Component {
     }
   }
 
-  isSelectableByRoles = (selection, roles, valid_item_id) => {
+  isSelectableByRoles = (selection, roles, valid_selection) => {
     for (const r of roles) {
       if (isValidUserRole(this.context.user, r)) {
         // We have at least one match, now we check for a valid item_id boolean parameter has been specified
-        if (valid_item_id) {
-          return selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
+        if (valid_selection) {
+          return Object.keys(selection) > 0 && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
         }
         return true;
       }

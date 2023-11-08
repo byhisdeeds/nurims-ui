@@ -36,7 +36,7 @@ export function isRecordArchived(record) {
 }
 
 export function isRecordEmpty(record) {
-  return (Object.keys(record) === 0);
+  return (Object.keys(record).length === 0);
 }
 
 export function removeMetadataField(obj, key) {
