@@ -1306,6 +1306,11 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
                                                             addRecordButtonLabel,
                                                             addRecordRole,
                                                             disableAddRecordButton,
+                                                            onClickViewProvenanceRecords,
+                                                            viewProvenanceRecordIcon,
+                                                            viewProvenanceRecordButtonLabel,
+                                                            viewProvenanceRecordRole,
+                                                            disableViewProvenanceRecordButton,
 
 
                                                             // archiveRecordButtonLabel,
@@ -1368,6 +1373,17 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
       >
         {addRecordButtonLabel}
       </Button>
+      {onClickViewProvenanceRecords &&
+        <Button
+          size={"small"}
+          disabled={!THIS.isSelectableByRoles(selection, [addRecordRole, sysadminRole], false) || disableAddRecordButton}
+          variant="outlined"
+          endIcon={addRecordIcon}
+          onClick={onClickAddRecord}
+        >
+          {addRecordButtonLabel}
+        </Button>
+      }
     </Box>
   )
 }
@@ -1386,6 +1402,11 @@ AddRemoveArchiveSaveProvenanceButtonPanel.propTypes = {
   saveRecordButtonLabel: PropTypes.string,
   saveRecordRole: PropTypes.string,
   disableSaveRecordButton: PropTypes.bool,
+  onClickViewProvenanceRecord: PropTypes.func.isRequired,
+  viewProvenanceRecordIcon: PropTypes.element,
+  viewProvenanceRecordButtonLabel: PropTypes.string,
+  viewProvenanceRecordRole: PropTypes.string,
+  disableViewProvenanceRecordButton: PropTypes.bool,
   onClickAddRecord: PropTypes.func.isRequired,
   addRecordIcon: PropTypes.element,
   addRecordButtonLabel: PropTypes.string,
@@ -1428,6 +1449,10 @@ AddRemoveArchiveSaveProvenanceButtonPanel.defaultProps = {
   addRecordButtonLabel: "Add Record",
   addRecordRole: "",
   disableAddRecordButton: false,
+  viewProvenanceRecordIcon: <VisibilityIcon sx={{mr: 1}}/>,
+  viewProvenanceRecordButtonLabel: "View Provenance",
+  viewProvenanceRecordRole: "sysadmin",
+  disableViewProvenanceRecordButton: false,
 
   // archiveRecordButtonLabel: "Archive Record",
   // archiveRecordIcon: <VisibilityIcon sx={{mr: 1}}/>,
