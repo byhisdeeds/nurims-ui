@@ -2,18 +2,24 @@ import * as React from "react";
 import {withTheme} from "@mui/styles";
 import PropTypes from "prop-types";
 import {
-  ITEM_ID, METADATA, NURIMS_DOSIMETRY_BATCH_ID,
-  NURIMS_TITLE, NURIMS_TITLE_SUBTITLE,
+  ITEM_ID, METADATA,
+  NURIMS_DOSIMETRY_BATCH_ID,
+  NURIMS_TITLE,
+  NURIMS_TITLE_SUBTITLE,
   NURIMS_WITHDRAWN
 } from "../../utils/constants";
 import {
   Box,
   Paper,
-  Switch,
   TableCell
 } from "@mui/material";
-import {PageableTable} from "../../components/CommonComponents";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
+import {
+  PageableTable
+} from "../../components/CommonComponents";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
 
 class DosimetryMeasurementsList extends React.Component {
   static contextType = UserContext;

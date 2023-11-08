@@ -1,14 +1,7 @@
 import React from 'react';
 import {
-  Fab,
   Grid,
-  Box
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import MonitorList from "./MonitorList";
 import MonitorMetadata from "./MonitorMetadata";
 import {
@@ -19,7 +12,8 @@ import {
   ITEM_ID,
   MONITOR_RECORD_TYPE,
   MONITOR_TOPIC,
-  NURIMS_ENTITY_DOSE_PROVIDER_ID, ROLE_RADIATION_PROTECTION_DATA_ENTRY,
+  NURIMS_ENTITY_DOSE_PROVIDER_ID,
+  ROLE_RADIATION_PROTECTION_DATA_ENTRY,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -28,20 +22,25 @@ import {
   ConfirmRemoveRecordDialog,
   ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
-import UnarchiveIcon from "@mui/icons-material/Unarchive";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import {ConsoleLog} from "../../utils/UserContext";
-import {TitleComponent, AddRemoveArchiveSaveSubmitProvenanceButtonPanel} from "../../components/CommonComponents";
+import {
+  ConsoleLog
+} from "../../utils/UserContext";
+import {
+  TitleComponent,
+  AddRemoveArchiveSaveSubmitProvenanceButtonPanel
+} from "../../components/CommonComponents";
 import BusyIndicator from "../../components/BusyIndicator";
 import {readString} from "react-papaparse";
 import {
   getRecordMetadataValue,
   parseMonitorRecordFromLine,
-  parsePersonnelRecordFromLine
 } from "../../utils/MetadataUtils";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import {isValidUserRole} from "../../utils/UserUtils";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
+import {
+  isValidUserRole
+} from "../../utils/UserUtils";
 import {
   messageHasResponse,
   messageResponseStatusOk
@@ -281,67 +280,6 @@ class AddEditMonitors extends BaseRecordManager {
           saveRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
           archiveRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
         />}
-        {/*<Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>*/}
-        {/*  <Fab*/}
-        {/*    variant="extended"*/}
-        {/*    size="small"*/}
-        {/*    color="primary"*/}
-        {/*    aria-label="remove"*/}
-        {/*    onClick={this.removeRecord}*/}
-        {/*    // disabled={!((selection["nurims.withdrawn"] === 1) || selection["item_id"] === -1)}>*/}
-        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
-        {/*  >*/}
-        {/*    <RemoveCircleOutlineIcon sx={{mr: 1}}/>*/}
-        {/*    Remove Monitor*/}
-        {/*  </Fab>*/}
-        {/*  { isSysadmin &&*/}
-        {/*    <Fab*/}
-        {/*      variant="extended"*/}
-        {/*      size="small"*/}
-        {/*      color="primary"*/}
-        {/*      aria-label="save"*/}
-        {/*      onClick={this.showProvenanceRecordsView}*/}
-        {/*      disabled={!selection.hasOwnProperty("item_id")}*/}
-        {/*    >*/}
-        {/*      <VisibilityIcon sx={{mr: 1}}/>*/}
-        {/*      View Provenance Records*/}
-        {/*    </Fab>*/}
-        {/*  }*/}
-        {/*  <Fab*/}
-        {/*    variant="extended"*/}
-        {/*    size="small"*/}
-        {/*    color="primary"*/}
-        {/*    aria-label="archive"*/}
-        {/*    component={"span"}*/}
-        {/*    onClick={this.changeRecordArchivalStatus}*/}
-        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
-        {/*  >*/}
-        {/*    {this.isRecordArchived(selection) ?*/}
-        {/*      <React.Fragment><UnarchiveIcon sx={{mr: 1}}/> "Restore Monitor Record"</React.Fragment> :*/}
-        {/*      <React.Fragment><ArchiveIcon sx={{mr: 1}}/> "Archive Monitor Record"</React.Fragment>}*/}
-        {/*  </Fab>*/}
-        {/*  <Fab*/}
-        {/*    variant="extended"*/}
-        {/*    size="small"*/}
-        {/*    color="primary"*/}
-        {/*    aria-label="save"*/}
-        {/*    onClick={this.saveChanges}*/}
-        {/*    disabled={!has_changed_records}*/}
-        {/*  >*/}
-        {/*    <SaveIcon sx={{mr: 1}}/>*/}
-        {/*    Save Changes*/}
-        {/*  </Fab>*/}
-        {/*  <Fab*/}
-        {/*    variant="extended"*/}
-        {/*    size="small"*/}
-        {/*    color="primary"*/}
-        {/*    aria-label="add"*/}
-        {/*    onClick={this.addRecord}*/}
-        {/*  >*/}
-        {/*    <AddCircleOutlineIcon sx={{mr: 1}}/>*/}
-        {/*    Add Monitor*/}
-        {/*  </Fab>*/}
-        {/*</Box>*/}
       </React.Fragment>
     );
   }

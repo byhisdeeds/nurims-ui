@@ -2,12 +2,12 @@ import React, {Suspense, lazy} from 'react';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import PropTypes from 'prop-types'
 import {
+  AppBar as MuiAppBar,
   Box,
   Toolbar,
   Tooltip,
   Typography,
 } from "@mui/material";
-import MuiAppBar from '@mui/material/AppBar';
 import AccountMenu from "./user/AccountMenu";
 import {
   styled,
@@ -106,9 +106,13 @@ import {
 import {
   deviceDetect
 } from 'react-device-detect';
-import {SnackbarProvider} from 'notistack'
+import {
+  SnackbarProvider
+} from 'notistack'
 import "./App.css"
-import {MenuItems} from "./menudata";
+import {
+  MenuItems
+} from "./menudata";
 import metadata from './metadata.json';
 import {
   isValidUserRole
@@ -265,9 +269,6 @@ class App extends React.Component {
       this.send({
         cmd: CMD_GET_SYSTEM_PROPERTIES,
       })
-      // this.send({
-      //   cmd: CMD_GET_USER_NOTIFICATION_MESSAGES,
-      // }, false);
     };
     this.ws.onerror = (error) => {
       ConsoleLog("App", "ws.onerror", error);

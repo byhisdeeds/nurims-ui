@@ -1,7 +1,12 @@
 import React, {Component} from "react";
 import PagedRecordList from "../../components/PagedRecordList";
 import PropTypes from "prop-types";
-import {ITEM_ID, NURIMS_SAMPLEDATE, NURIMS_TITLE, NURIMS_TITLE_SUBTITLE} from "../../utils/constants";
+import {
+  ITEM_ID,
+  NURIMS_SAMPLEDATE,
+  NURIMS_TITLE,
+  NURIMS_TITLE_SUBTITLE
+} from "../../utils/constants";
 
 class WaterSamplesList extends Component {
   constructor(props) {

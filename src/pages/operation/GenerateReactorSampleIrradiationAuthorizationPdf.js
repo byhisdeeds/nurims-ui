@@ -29,8 +29,15 @@ import PropTypes from "prop-types";
 import {withTheme} from "@mui/styles";
 import dayjs from 'dayjs';
 import PdfViewer from "../../components/PdfViewer";
-import {isCommandResponse, messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
-import {enqueueErrorSnackbar, enqueueInfoSnackbar} from "../../utils/SnackbarVariants";
+import {
+  isCommandResponse,
+  messageHasResponse,
+  messageResponseStatusOk
+} from "../../utils/WebsocketUtils";
+import {
+  enqueueErrorSnackbar,
+  enqueueInfoSnackbar
+} from "../../utils/SnackbarVariants";
 
 export const GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF =
   "GenerateReactorSampleIrradiationAuthorizationPdf";

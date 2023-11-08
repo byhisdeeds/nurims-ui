@@ -23,7 +23,10 @@ import PersonnelList from "./PersonnelList";
 import BusyIndicator from "../../components/BusyIndicator";
 import {TitleComponent} from "../../components/CommonComponents";
 import PersonnelDosimetryEvaluationDataView from "./PersonnelDosimetryEvaluationDataView";
-import {isCommandResponse, messageHasResponse} from "../../utils/WebsocketUtils";
+import {
+  isCommandResponse,
+  messageHasResponse
+} from "../../utils/WebsocketUtils";
 
 export const PERSONNELDOSIMETRYEVALUATION_REF = "PersonnelDosimetryEvaluation";
 

@@ -33,6 +33,10 @@ import {
   Grid,
 } from "@mui/material";
 import {
+  Unpublished as UnpublishedIcon,
+  CheckCircle as CheckCircleIcon
+} from '@mui/icons-material';
+import {
   TitleComponent,
   AddRemoveArchiveSaveSubmitProvenanceButtonPanel
 } from "../../components/CommonComponents";
@@ -41,9 +45,15 @@ import BaseRecordManager from "../../components/BaseRecordManager";
 import ReactorSampleIrradiationAuthorizationRecordsList from "./ReactorSampleIrradiationAuthorizationRecordsList";
 import ReactorSampleIrradiationAuthorizationMetadata from "./ReactorSampleIrradiationAuthorizationMetadata";
 import {
-  getRecordData, isRecordCreatedBy, record_uuid, recordHasMetadataField, setRecordData,
+  getRecordData,
+  isRecordCreatedBy,
+  record_uuid,
+  recordHasMetadataField,
+  setRecordData,
 } from "../../utils/MetadataUtils";
-import {withTheme} from "@mui/styles";
+import {
+  withTheme
+} from "@mui/styles";
 import dayjs from 'dayjs';
 import {
   setProvenanceRecordsHelper,
@@ -56,11 +66,6 @@ import {
 import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import PublishIcon from '@mui/icons-material/Publish';
-import UnpublishedIcon from '@mui/icons-material/Unpublished';
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export const ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF =
   "AddEditReactorSampleIrradiationAuthorization";

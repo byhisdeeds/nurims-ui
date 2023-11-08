@@ -1,11 +1,7 @@
 import React from 'react';
 import {
-  Fab,
   Grid,
-  Box
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -16,11 +12,14 @@ import {
 } from "../../components/UtilityDialogs";
 import PersonList from "./PersonList";
 import PersonMetadata from "./PersonMetadata";
-import UnarchiveIcon from "@mui/icons-material/Unarchive";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import ArchiveIcon from "@mui/icons-material/Archive";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
-import {TitleComponent, AddRemoveArchiveSaveSubmitProvenanceButtonPanel} from "../../components/CommonComponents";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
+import {
+  TitleComponent,
+  AddRemoveArchiveSaveSubmitProvenanceButtonPanel
+} from "../../components/CommonComponents";
 import {
   CMD_DELETE_PERSONNEL_RECORD,
   CMD_GET_GLOSSARY_TERMS,
@@ -28,7 +27,9 @@ import {
   EMPLOYEE_RECORD_TYPE,
   ITEM_ID,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
-  PERSONNEL_TOPIC, ROLE_PERSONNEL_DATA_ENTRY, ROLE_SYSADMIN
+  PERSONNEL_TOPIC,
+  ROLE_PERSONNEL_DATA_ENTRY,
+  ROLE_SYSADMIN
 } from "../../utils/constants";
 import {readString} from "react-papaparse";
 import {
@@ -36,13 +37,16 @@ import {
   parsePersonnelRecordFromLine,
 } from "../../utils/MetadataUtils";
 import BusyIndicator from "../../components/BusyIndicator";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import {isValidUserRole} from "../../utils/UserUtils";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
+import {
+  isValidUserRole
+} from "../../utils/UserUtils";
 import {
   messageHasResponse,
   messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
-import {stringify} from "uuid";
 import {
   setProvenanceRecordsHelper,
   showProvenanceRecordsViewHelper

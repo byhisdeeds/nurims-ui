@@ -12,7 +12,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
 import PersonIcon from '@mui/icons-material/Person';
 import {
-  BlobObject, BlobPath,
+  BlobObject,
+  BlobPath,
   getDateFromDateString,
   getRecordMetadataValue,
   setMetadataValue
@@ -29,7 +30,8 @@ import {
   NURIMS_ENTITY_WORK_DETAILS,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
   BLANK_IMAGE_OBJECT,
-  UNDEFINED_DATE_STRING, NUBS,
+  UNDEFINED_DATE_STRING,
+  NUBS,
 } from "../../utils/constants";
 import {
   ConsoleLog,

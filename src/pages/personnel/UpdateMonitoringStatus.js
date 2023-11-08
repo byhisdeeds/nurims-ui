@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogTitle,
   DialogContentText,
-  Typography
 } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import Box from "@mui/material/Box";
@@ -26,38 +25,15 @@ import {
   messageHasResponse,
   messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
-import {TitleComponent} from "../../components/CommonComponents";
-import {enqueueErrorSnackbar, enqueueSuccessSnackbar} from "../../utils/SnackbarVariants";
+import {
+  TitleComponent
+} from "../../components/CommonComponents";
+import {
+  enqueueErrorSnackbar,
+  enqueueSuccessSnackbar
+} from "../../utils/SnackbarVariants";
 
 export const UPDATEMONITORINGSTATUS_REF = "UpdateMonitoringStatus";
-
-// function ConfirmRemoveDialog(props) {
-//   return (
-//     <div>
-//       <Dialog
-//         open={props.open}
-//         onClose={props.onCancel}
-//         aria-labelledby="alert-dialog-title"
-//         aria-describedby="alert-dialog-description"
-//       >
-//         <DialogTitle id="alert-dialog-title">
-//           {`Delete record for ${props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""}`}
-//         </DialogTitle>
-//         <DialogContent>
-//           <DialogContentText id="alert-dialog-description">
-//             Are you sure you want to delete the record
-//             for {props.person.hasOwnProperty(NURIMS_TITLE) ? props.person[NURIMS_TITLE] : ""} (
-//             {props.person.hasOwnProperty("item_id") ? props.person["item_id"] : ""})?
-//           </DialogContentText>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={props.onCancel}>No</Button>
-//           <Button onClick={props.onProceed} autoFocus>Yes</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </div>
-//   );
-// }
 
 function ConfirmSelectionChangeDialog(props) {
   return (
@@ -126,12 +102,6 @@ class UpdateMonitoringStatus extends Component {
       }
     }
   }
-
-  // on_person_selected = (previous_person, person) => {
-  //   console.log("-- on_person_selected (previous selection) --", previous_person)
-  //   console.log("-- on_person_selected (selection) --", person)
-  //   this.setState({previous_selection: previous_person, selection: person})
-  // }
 
   saveChanges = () => {
     console.log("saving changes")

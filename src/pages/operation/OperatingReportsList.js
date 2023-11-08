@@ -1,7 +1,10 @@
 import * as React from 'react';
 import PagedRecordList from "../../components/PagedRecordList";
 import PropTypes from "prop-types";
-import {ITEM_ID, NURIMS_TITLE} from "../../utils/constants";
+import {
+  ITEM_ID,
+  NURIMS_TITLE
+} from "../../utils/constants";
 
 class OperatingReportsList extends React.Component {
   constructor(props) {

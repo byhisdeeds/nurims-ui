@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import {Card, CardContent, FormControl, InputLabel, Select} from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import Avatar from "@mui/material/Avatar";
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  TextField
+} from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 import {
   BlobObject,
@@ -12,19 +14,18 @@ import {
 } from "../../utils/MetadataUtils";
 import {getPropertyValue} from "../../utils/PropertyUtils";
 import {
-  NURIMS_ENTITY_ASSIGNED_ROLE,
   NURIMS_ENTITY_AVATAR,
-  NURIMS_ENTITY_CONTACT,
-  NURIMS_ENTITY_DATE_OF_BIRTH,
-  NURIMS_ENTITY_NATIONAL_ID,
-  NURIMS_ENTITY_SEX,
   NURIMS_TITLE,
-  NURIMS_ENTITY_WORK_DETAILS,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
-  BLANK_IMAGE_OBJECT, NURIMS_DOSIMETRY_DEVICE_TYPE,
+  BLANK_IMAGE_OBJECT,
+  NURIMS_DOSIMETRY_DEVICE_TYPE,
 } from "../../utils/constants";
-import {MonitorTypeSelect} from "../../components/CommonComponents";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {
+  MonitorTypeSelect
+} from "../../components/CommonComponents";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
 
 class MonitorMetadata extends Component {
   constructor(props) {

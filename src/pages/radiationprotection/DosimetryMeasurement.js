@@ -1,18 +1,10 @@
 import React from 'react';
 import {
-  Fab,
   Grid,
-  Box, Button
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import UnarchiveIcon from "@mui/icons-material/Unarchive";
-import ArchiveIcon from "@mui/icons-material/Archive";
 import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
-  EMPLOYEE_RECORD_TYPE,
   NURIMS_DOSIMETRY_BATCH_ID,
   NURIMS_DOSIMETRY_DEEP_DOSE,
   NURIMS_DOSIMETRY_EXTREMITY_DOSE,
@@ -40,20 +32,28 @@ import {
   getMatchingEntityDoseProviderRecord,
   getRecordMetadataValue,
   parseDosimetryMeasurementRecordFromLine,
-  parsePersonnelRecordFromLine,
   setRecordMetadataValue
 } from "../../utils/MetadataUtils";
-import {transformDose} from "../../utils/DoseReportUtils";
-import PropTypes from "prop-types";
-import {TitleComponent, AddRemoveArchiveSaveSubmitProvenanceButtonPanel} from "../../components/CommonComponents";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import {isValidUserRole} from "../../utils/UserUtils";
-import {messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
-import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import {
+  transformDose
+} from "../../utils/DoseReportUtils";
+import {
+  TitleComponent,
+  AddRemoveArchiveSaveSubmitProvenanceButtonPanel} from "../../components/CommonComponents";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
+import {
+  isValidUserRole
+} from "../../utils/UserUtils";
+import {
+  messageHasResponse,
+  messageResponseStatusOk
+} from "../../utils/WebsocketUtils";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
 
 
 function assignDosimetryRecord(dosimetry, records) {
@@ -172,19 +172,6 @@ class DosimetryMeasurement extends BaseRecordManager {
     }
     this.setState({show_provenance_view: false,});
   }
-
-  // requestGetRecords = (include_archived) => {
-  //   if (this.context.debug) {
-  //     ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
-  //   }
-  //   this.props.send({
-  //     cmd: this.recordCommand("get", this.topic),
-  //     "include.withdrawn": include_archived ? "true" : "false",
-  //     "include.metadata": "true",
-  //     module: this.Module,
-  //   });
-  //   this.setState({include_archived: include_archived});
-  // }
 
   onSelection = (selection) => {
     if (this.context.debug) {
@@ -323,63 +310,6 @@ class DosimetryMeasurement extends BaseRecordManager {
           saveRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
           archiveRole={ROLE_RADIATION_PROTECTION_DATA_ENTRY}
         />}
-        {/*<Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-around", m: 1, }} >*/}
-        {/*  <Button*/}
-        {/*    variant={"contained"}*/}
-        {/*    endIcon={<RemoveCircleIcon />}*/}
-        {/*    onClick={this.removeRecord}*/}
-        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
-        {/*    size={"small"}*/}
-        {/*    color={"primary"}*/}
-        {/*    aria-label={"remove"}*/}
-        {/*  >*/}
-        {/*    Remove Measurement*/}
-        {/*  </Button>*/}
-        {/*  { isSysadmin &&*/}
-        {/*    <Button*/}
-        {/*      variant="contained"*/}
-        {/*      size="small"*/}
-        {/*      color="primary"*/}
-        {/*      aria-label="save"*/}
-        {/*      onClick={this.showProvenanceRecordsView}*/}
-        {/*      disabled={!selection.hasOwnProperty("item_id")}*/}
-        {/*    >*/}
-        {/*      <VisibilityIcon sx={{mr: 1}}/>*/}
-        {/*      View Provenance Records*/}
-        {/*    </Button>*/}
-        {/*  }*/}
-        {/*  <Button*/}
-        {/*    variant={"contained"}*/}
-        {/*    endIcon={this.isRecordArchived(selection) ? <UnarchiveIcon /> : <ArchiveIcon />}*/}
-        {/*    onClick={this.changeRecordArchivalStatus}*/}
-        {/*    disabled={!this.isSysadminButtonAccessible(selection)}*/}
-        {/*    size={"small"} color={"primary"}*/}
-        {/*    aria-label={"archive"}*/}
-        {/*  >*/}
-        {/*    {this.isRecordArchived(selection) ? "Restore Measurement Record" : "Archive Measurement Record"}*/}
-        {/*  </Button>*/}
-        {/*  <Button*/}
-        {/*    variant={"contained"}*/}
-        {/*    endIcon={<SaveIcon />}*/}
-        {/*    onClick={this.saveChanges}*/}
-        {/*    disabled={!has_changed_records}*/}
-        {/*    size={"small"}*/}
-        {/*    color={"primary"}*/}
-        {/*    aria-label={"save"}*/}
-        {/*  >*/}
-        {/*    Save Changes*/}
-        {/*  </Button>*/}
-        {/*  <Button*/}
-        {/*    variant={"contained"}*/}
-        {/*    endIcon={<AddIcon />}*/}
-        {/*    onClick={this.addRecord}*/}
-        {/*    size={"small"}*/}
-        {/*    color={"primary"}*/}
-        {/*    aria-label={"add"}*/}
-        {/*  >*/}
-        {/*    Add Measurement*/}
-        {/*  </Button>*/}
-        {/*</Box>*/}
       </React.Fragment>
     );
   }

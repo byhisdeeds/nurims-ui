@@ -3,7 +3,12 @@ import {
   BLANK_PDF,
   CMD_GENERATE_PERSONNEL_RECORDS_PDF,
 } from "../../utils/constants";
-import {Box, Button, Grid, Stack} from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Stack
+} from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
 import {
   withTheme
@@ -16,7 +21,9 @@ import {
   ConsoleLog,
   UserContext
 } from "../../utils/UserContext";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import {
+  PictureAsPdf as PictureAsPdfIcon
+} from "@mui/icons-material";
 import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";

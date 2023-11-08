@@ -1,10 +1,16 @@
 import * as React from 'react';
-import {withTheme} from "@mui/styles";
-import Box from '@mui/material/Box';
-import TableCell from '@mui/material/TableCell';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import {Component} from "react";
+import {
+  withTheme
+} from "@mui/styles";
+import {
+  Box,
+  TableCell,
+  Paper,
+  Checkbox
+} from '@mui/material';
+import {
+  Component
+} from "react";
 import "../../utils/MetadataUtils"
 import {
   getRecordMetadataValue,
@@ -16,7 +22,9 @@ import {
   NURIMS_ENTITY_IS_WRIST_MONITORED,
   NURIMS_TITLE,
 } from "../../utils/constants";
-import {PageableTable} from "../../components/CommonComponents";
+import {
+  PageableTable
+} from "../../components/CommonComponents";
 
 const TABLE_ROW_HEIGHT = 24;
 

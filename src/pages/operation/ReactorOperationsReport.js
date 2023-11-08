@@ -3,7 +3,8 @@ import {
   BLANK_PDF,
   CMD_DELETE_REACTOR_OPERATING_REPORT_RECORD,
   CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF,
-  CMD_GET_PROVENANCE_RECORDS, CMD_GET_REACTOR_OPERATING_REPORT_RECORDS,
+  CMD_GET_PROVENANCE_RECORDS,
+  CMD_GET_REACTOR_OPERATING_REPORT_RECORDS,
   ITEM_ID,
   NURIMS_OPERATION_REPORT,
   OPERATION_TOPIC,
@@ -14,8 +15,15 @@ import {
   Grid,
   Typography
 } from "@mui/material";
+import {
+  PictureAsPdf as PictureAsPdfIcon,
+  RemoveCircle as RemoveCircleIcon,
+  Visibility as VisibilityIcon
+} from '@mui/icons-material';
 import PdfViewer from "../../components/PdfViewer";
-import {withTheme} from "@mui/styles";
+import {
+  withTheme
+} from "@mui/styles";
 import {
   isCommandResponse,
   messageHasResponse,
@@ -25,8 +33,6 @@ import {
   ConsoleLog,
   UserContext
 } from "../../utils/UserContext";
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import {
   enqueueErrorSnackbar,
   enqueueInfoSnackbar, enqueueSuccessSnackbar
@@ -37,15 +43,6 @@ import {
   ConfirmRemoveRecordDialog,
   ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
-// import OperatingRunReportsList from "./OperatingReportsList";
-// import BaseRecordManager from "../../components/BaseRecordManager";
-// import {e} from "caniuse-lite/data/browserVersions";
-// import {title} from "process";
-// import PersonAddIcon from "@mui/icons-material/PersonAdd";
-// import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-// import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-// import SaveIcon from "@mui/icons-material/Save";
 import {
   isValidUserRole
 } from "../../utils/UserUtils";
@@ -54,7 +51,9 @@ import {
   showProvenanceRecordsViewHelper
 } from "../../utils/ProvenanceUtils";
 import OperatingReportsList from "./OperatingReportsList";
-import {getRecordMetadataValue} from "../../utils/MetadataUtils";
+import {
+  getRecordMetadataValue
+} from "../../utils/MetadataUtils";
 
 export const REACTOROPERATIONSREPORT_REF = "ReactorOperationsReport";
 

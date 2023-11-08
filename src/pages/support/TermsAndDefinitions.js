@@ -30,7 +30,6 @@ import sanitize from "sanitize-html";
 import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
-// import CodeEditor from "@uiw/react-textarea-code-editor";
 
 export const TERMSANDDEFINITIONS_REF = "TermsAndDefinitions";
 
@@ -52,23 +51,6 @@ class TermsAndDefinitions extends React.Component {
       text: "",
     };
     this.Module = TERMSANDDEFINITIONS_REF;
-    this.modules = {
-      toolbar: false
-      // [
-      //   [{'header': [1, 2, false]}],
-      //   // [{'header': '1'}, {'header': '2'}, {'font': Font.whitelist}],
-      //   ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      //   [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-      //   ['link', 'image'],
-      //   ['clean']
-      // ]
-    };
-    this.formats = [
-      'header',
-      'bold', 'italic', 'underline', 'strike', 'blockquote',
-      'list', 'bullet', 'indent',
-      'link', 'image'
-    ];
     this.search_term_content = "";
   }
 
@@ -206,27 +188,6 @@ class TermsAndDefinitions extends React.Component {
             <div style={{fontSize: 16, fontFamily: 'consola'}}>
               { <div dangerouslySetInnerHTML={{ __html: this.search_term_content }} /> }
             </div>
-            {/*<CodeEditor*/}
-            {/*  readOnly={true}*/}
-            {/*  fullwidth={true}*/}
-            {/*  value={text}*/}
-            {/*  language={"js"}*/}
-            {/*  data-color-mode={theme.palette.mode}*/}
-            {/*  padding={15}*/}
-            {/*  style={{*/}
-            {/*    fontSize: 12,*/}
-            {/*    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",*/}
-            {/*    width: "100%",*/}
-            {/*    overflowY: "auto",*/}
-            {/*  }}*/}
-            {/*/>*/}
-            {/*<ReactQuill*/}
-            {/*  readOnly={true}*/}
-            {/*  value={text}*/}
-            {/*  modules={this.modules}*/}
-            {/*  formats={this.formats}*/}
-            {/*  onChange={this.handleChange}*/}
-            {/*/>*/}
           </Grid>
         </Grid>
       </React.Fragment>
