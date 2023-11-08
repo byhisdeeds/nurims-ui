@@ -23,16 +23,16 @@ import {
 import {
   withTheme
 } from "@mui/styles";
-import SSCTodoRecords from "./SSCTodoRecords";
+import SSCModificationRecords from "./SSCModificationRecords";
 
-export const ADDEDITTODORECORD_REF = "AddEditTodoRecord";
+export const ADDEDITMODIFICATIONRECORD_REF = "AddEditModificationRecord";
 
-class AddEditTodoRecord extends BaseRecordManager {
+class AddEditModificationRecord extends BaseRecordManager {
   static contextType = UserContext;
 
   constructor(props) {
     super(props);
-    this.Module = ADDEDITTODORECORD_REF;
+    this.Module = ADDEDITMODIFICATIONRECORD_REF;
     this.recordTopic = SSC_TOPIC;
   }
 
@@ -89,7 +89,7 @@ class AddEditTodoRecord extends BaseRecordManager {
             />
           </Grid>
           <Grid item xs={9}>
-            <SSCTodoRecords
+            <SSCModificationRecords
               ref={this.metadataRef}
               properties={this.props.properties}
               onChange={this.onRecordMetadataChanged}
@@ -102,10 +102,10 @@ class AddEditTodoRecord extends BaseRecordManager {
   }
 }
 
-AddEditTodoRecord.defaultProps = {
+AddEditModificationRecord.defaultProps = {
   send: (msg) => {
   },
   user: {},
 };
 
-export default withTheme(AddEditTodoRecord);
+export default withTheme(AddEditModificationRecord);

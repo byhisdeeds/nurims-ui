@@ -89,7 +89,7 @@ import {UNDERDEVELOPMENT_REF} from "./components/UnderDevelopment"
 import LogWindow from "./components/LogWindow";
 import {VIEWAMPRECORDS_REF} from "./pages/maintenance/ViewAMPRecords";
 import {CLEANUPLARGEOBJECTSTORE_REF} from "./pages/sysadmin/CleanupLargeObjectStore";
-import {ADDEDITTODORECORD_REF} from "./pages/maintenance/AddEditTodoRecord";
+import {ADDEDITMODIFICATIONRECORD_REF} from "./pages/maintenance/AddEditModificationRecord";
 import {SIGNIN_REF} from "./components/Signin";
 import NotificationWindow from "./components/NotificationWindow";
 import SystemInfoBadges from "./components/SystemInfoBadges";
@@ -224,7 +224,7 @@ class App extends React.Component {
     this.crefs[GENERATEMATERIALSURVEILLANCESHEET_REF] = React.createRef();
     this.crefs[ADDEDITREACTORWATERSAMPLES_REF] = React.createRef();
     this.crefs[ADDEDITIRRADIATEDSAMPLES_REF] = React.createRef();
-    this.crefs[ADDEDITTODORECORD_REF] = React.createRef();
+    this.crefs[ADDEDITMODIFICATIONRECORD_REF] = React.createRef();
     this.crefs[REACTOROPERATIONSREPORT_REF] = React.createRef();
     this.crefs[ADDEDITREACTOROPERATINGRUNS_REF] = React.createRef();
     this.crefs[UPDATEMONITORINGSTATUS_REF] = React.createRef();

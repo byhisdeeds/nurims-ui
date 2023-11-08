@@ -35,6 +35,10 @@ export function isRecordArchived(record) {
   return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
 }
 
+export function isRecordEmpty(record) {
+  return (Object.keys(record) === 0);
+}
+
 export function removeMetadataField(obj, key) {
   if (obj.hasOwnProperty("metadata")) {
     const metadata = obj.metadata;

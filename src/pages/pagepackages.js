@@ -36,7 +36,7 @@ import {OWNER_REF} from "./controlledmaterials/Owner";
 import {UNDERDEVELOPMENT_REF} from "../components/UnderDevelopment";
 import MaintenanceSchedule, {MAINTENANCESCHEDULE_REF} from "./maintenance/MaintenanceSchedule";
 import {CLEANUPLARGEOBJECTSTORE_REF} from "./sysadmin/CleanupLargeObjectStore";
-import {ADDEDITTODORECORD_REF} from "./maintenance/AddEditTodoRecord";
+import {ADDEDITMODIFICATIONRECORD_REF} from "./maintenance/AddEditModificationRecord";
 
 const Constants = require("../utils/constants");
 
@@ -54,7 +54,7 @@ const ViewMaterialsList = lazy(() => import('./controlledmaterials/ViewMaterials
 const GenerateMaterialSurveillanceSheet = lazy(() => import('./controlledmaterials/GenerateMaterialSurveillanceSheet'));
 const GenerateSSCMaintenanceReport = lazy(() => import('./maintenance/GenerateSSCMaintenanceReport'));
 const AddEditCorrectiveMaintenanceIssueRecord = lazy(() => import('./maintenance/AddEditCorrectiveMaintenanceIssueRecord'));
-const AddEditTodoRecord = lazy(() => import('./maintenance/AddEditTodoRecord'));
+const AddEditTodoRecord = lazy(() => import('./maintenance/AddEditModificationRecord'));
 const AddEditSSC = lazy(() => import('./maintenance/AddEditSSC'));
 const AddEditAMP = lazy(() => import('./maintenance/AddEditAMP'));
 const ViewSSCRecords = lazy(() => import('./maintenance/ViewSSCRecords'));
@@ -308,7 +308,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
     />)
   } else if (actionid === Constants.SSC_ADD_EDIT_SSC_TODO_RECORD) {
     return (<AddEditTodoRecord
-      ref={crefs[ADDEDITTODORECORD_REF]}
+      ref={crefs[ADDEDITMODIFICATIONRECORD_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}

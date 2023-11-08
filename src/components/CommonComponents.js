@@ -41,7 +41,7 @@ import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import {visuallyHidden} from "@mui/utils";
 import Floater from 'react-floater';
 import {
-  getRecordData, isRecordCreatedBy,
+  getRecordData, isRecordCreatedBy, isRecordEmpty,
   toBoolean
 } from "../utils/MetadataUtils";
 import {
@@ -77,6 +77,7 @@ import {
 import DoneIcon from "@mui/icons-material/Done";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 
 export function TitleComponent({title}) {
@@ -1283,6 +1284,165 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
   submitDisabled: false,
   saveOnlyByCreator: false,
   submitOnlyByCreator: false,
+  ignoreSaveDisabledIfNotCreator: false,
+}
+
+export function AddRemoveArchiveSaveProvenanceButtonPanel({
+                                                            THIS,
+                                                            user,
+                                                            sysadminRole,
+                                                            onClickDeleteRecord,
+                                                            deleteRecordIcon,
+                                                            deleteRecordButtonLabel,
+                                                            deleteRecordRole,
+                                                            disableDeleteRecordButton,
+                                                            onClickSaveRecord,
+                                                            saveRecordIcon,
+                                                            saveRecordButtonLabel,
+                                                            saveRecordRole,
+                                                            disableSaveRecordButton,
+                                                            onClickAddRecord,
+                                                            addRecordIcon,
+                                                            addRecordButtonLabel,
+                                                            addRecordRole,
+                                                            disableAddRecordButton,
+
+
+                                                            // archiveRecordButtonLabel,
+                                                            // unarchiveRecordButtonLabel,
+                                                            // archiveRecordIcon,
+                                                            // unarchiveRecordIcon,
+                                                            // onClickSaveRecordChanges,
+                                                            // onClickChangeRecordArchivalStatus,
+                                                            // onClickViewProvenanceRecords,
+                                                            // addRole,
+                                                            // archiveRole,
+                                                            // removeRole,
+                                                            // saveRole,
+                                                            // submitRole,
+                                                            // onClickSubmitRecord,
+                                                            // submitRecordButtonLabel,
+                                                            // submitRecordIcon,
+                                                            // submitDisabled,
+                                                            ignoreSaveDisabledIfNotCreator,
+                                                          }) {
+  const {selection} = THIS.state;
+  const isSysadmin = isValidUserRole(user, sysadminRole);
+  const recordHasChanged = THIS.isRecordChanged(selection);
+  const userIsCreator = ignoreSaveDisabledIfNotCreator ? true : isRecordCreatedBy(selection, user);
+  const emptyRecord = isRecordEmpty(selection);
+  // const archiveButtonLabel = THIS.isRecordArchived(selection) ? unarchiveRecordButtonLabel : archiveRecordButtonLabel;
+  // const archiveIcon = THIS.isRecordArchived(selection) ? unarchiveRecordIcon : archiveRecordIcon;
+
+  console.log("-------------")
+  console.log("-- userIsCreator", userIsCreator,  "recordHasChanged", recordHasChanged,
+    "sysadminRole", sysadminRole, "isSelectableByRoles(valid_item_id=false)",
+    THIS.isSelectableByRoles(selection, [addRecordRole, sysadminRole], false), "emptyRecord", emptyRecord)
+  console.log("-------------")
+  return (
+    <Box style={{textAlign: 'center', display: 'flex', justifyContent: 'space-around'}}>
+      <Button
+        size={"small"}
+        disabled={!THIS.isSelectableByRoles(selection, [deleteRecordRole, sysadminRole], true) || disableDeleteRecordButton}
+        variant="outlined"
+        endIcon={deleteRecordIcon}
+        onClick={onClickDeleteRecord}
+      >
+        {deleteRecordButtonLabel}
+      </Button>
+      <Button
+        size={"small"}
+        disabled={!recordHasChanged || disableSaveRecordButton}
+        variant="outlined"
+        endIcon={saveRecordIcon}
+        onClick={onClickSaveRecord}
+      >
+        {saveRecordButtonLabel}
+      </Button>
+      <Button
+        size={"small"}
+        disabled={!THIS.isSelectableByRoles(selection, [addRecordRole, sysadminRole], false) || disableAddRecordButton}
+        variant="outlined"
+        endIcon={addRecordIcon}
+        onClick={onClickAddRecord}
+      >
+        {addRecordButtonLabel}
+      </Button>
+    </Box>
+  )
+}
+
+AddRemoveArchiveSaveProvenanceButtonPanel.propTypes = {
+  THIS: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  sysadminRole: PropTypes.string,
+  onClickDeleteRecord: PropTypes.func.isRequired,
+  deleteRecordIcon: PropTypes.element,
+  deleteRecordButtonLabel: PropTypes.string,
+  deleteRecordRole: PropTypes.string,
+  disableDeleteRecordButton: PropTypes.bool,
+  onClickSaveRecord: PropTypes.func.isRequired,
+  saveRecordIcon: PropTypes.element,
+  saveRecordButtonLabel: PropTypes.string,
+  saveRecordRole: PropTypes.string,
+  disableSaveRecordButton: PropTypes.bool,
+  onClickAddRecord: PropTypes.func.isRequired,
+  addRecordIcon: PropTypes.element,
+  addRecordButtonLabel: PropTypes.string,
+  addRecordRole: PropTypes.string,
+  disableAddRecordButton: PropTypes.bool,
+
+
+  // onClickSaveRecordChanges: PropTypes.func.isRequired,
+  // archiveRecordButtonLabel: PropTypes.string,
+  // archiveRecordIcon: PropTypes.element,
+  // unarchiveRecordButtonLabel: PropTypes.string,
+  // unarchiveRecordIcon: PropTypes.element,
+  // archiveRole: PropTypes.string,
+  // onClickChangeRecordArchivalStatus: PropTypes.func.isRequired,
+  // onClickViewProvenanceRecords: PropTypes.func.isRequired,
+  // addRole: PropTypes.string,
+  // removeRole: PropTypes.string,
+  // saveRole: PropTypes.string,
+  // submitRole: PropTypes.string,
+  // onClickSubmitRecord: PropTypes.func,
+  // submitRecordButtonLabel: PropTypes.element,
+  // submitRecordIcon: PropTypes.element,
+  // submitDisabled: PropTypes.bool,
+  // saveOnlyByCreator: PropTypes.bool,
+  // submitOnlyByCreator: PropTypes.bool,
+  ignoreSaveDisabledIfNotCreator: PropTypes.bool,
+}
+
+AddRemoveArchiveSaveProvenanceButtonPanel.defaultProps = {
+  sysadminRole: "sysadmin",
+  deleteRecordIcon: <RemoveCircleIcon sx={{mr: 1}}/>,
+  deleteRecordButtonLabel: "Delete Record",
+  deleteRecordRole: "",
+  disableDeleteRecordButton: false,
+  saveRecordIcon: <SaveIcon sx={{mr: 1}}/>,
+  saveRecordButtonLabel: "Save Record",
+  saveRecordRole: "",
+  disableSaveRecordButton: false,
+  addRecordIcon: <AddCircleOutlineIcon sx={{mr: 1}}/>,
+  addRecordButtonLabel: "Add Record",
+  addRecordRole: "",
+  disableAddRecordButton: false,
+
+  // archiveRecordButtonLabel: "Archive Record",
+  // archiveRecordIcon: <VisibilityIcon sx={{mr: 1}}/>,
+  // unarchiveRecordButtonLabel: "Restore Record",
+  // unarchiveRecordIcon: <VisibilityOffIcon sx={{mr: 1}}/>,
+  // archiveRole: "",
+  // submitRecordIcon: null,
+  // saveRole: "",
+  // submitRole: "",
+  // submitRecordButtonLabel: null,
+  // onClickSubmitRecord: () => {
+  // },
+  // submitDisabled: false,
+  // saveOnlyByCreator: false,
+  // submitOnlyByCreator: false,
   ignoreSaveDisabledIfNotCreator: false,
 }
 

@@ -10,7 +10,7 @@ import "leaflet/dist/leaflet.css";
 import {
   getDateFromDateString,
   getNextItemId,
-  getRecordMetadataValue,
+  getRecordMetadataValue, isRecordEmpty,
   new_record,
   removeMetadataField,
   setMetadataValue,
@@ -38,7 +38,7 @@ import {
   NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE,
   NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE,
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE,
-  UNDEFINED_DATE_STRING,
+  UNDEFINED_DATE_STRING, ITEM_ID, ROLE_MAINTENANCE_DATA_ENTRY,
 } from "../../utils/constants";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import dayjs from 'dayjs';
@@ -48,6 +48,7 @@ import {
 } from "../../utils/UserContext";
 import PagedRecordList from "../../components/PagedRecordList";
 import {
+  AddRemoveArchiveSaveProvenanceButtonPanel,
   CheckboxWithTooltip,
   DatePickerWithTooltip,
   SelectFormControlWithTooltip,
@@ -60,11 +61,15 @@ import PropTypes from "prop-types";
 import {
   ConfirmRemoveRecordDialog
 } from "../../components/UtilityDialogs";
+import {
+  isValidUserRole
+} from "../../utils/UserUtils";
 
 const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
-export const SSCMAINTENANCERECORDS_REF = "SSCTodoRecords";
 
-class SSCTodoRecords extends Component {
+export const SSCMODIFICATIONRECORDS_REF = "SSCModificationRecords";
+
+class SSCModificationRecords extends Component {
   static contextType = UserContext;
 
   constructor(props) {
@@ -76,7 +81,7 @@ class SSCTodoRecords extends Component {
       metadata_changed: false,
       confirm_remove: false,
     };
-    this.Module = SSCMAINTENANCERECORDS_REF;
+    this.Module = SSCMODIFICATIONRECORDS_REF;
     this.listRef = React.createRef();
     this.ref = React.createRef();
     this.glossary = {};
@@ -124,21 +129,22 @@ class SSCTodoRecords extends Component {
   }
 
   setGlossaryTerms = (terms) => {
-    // console.log("SSCTodoRecords.setGlossaryTerms", terms)
     for (const term of terms) {
       this.glossary[term.name] = term.value;
     }
   }
 
   handleChange = (e) => {
-    console.log("+++", e.target)
-    console.log(">>>", e.target.id, e.target.name, e.target.value, e.target.checked)
     const selection = this.state.selection;
+    const id = e.target.id === undefined ? e.target.name : e.target.id;
+    if (this.context.debug) {
+      ConsoleLog(this.module, "handleChange", "id", id, "value", e.target.value);
+    }
     let changed = false;
-    if (e.target.id === "name") {
+    if (id === "name") {
       selection[NURIMS_TITLE] = e.target.value;
       changed = true;
-    } else if (e.target.id === "issue") {
+    } else if (id === "issue") {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_ISSUE, e.target.value)
       changed = true;
     } else if (e.target.id === "corrective-actions") {
@@ -309,7 +315,7 @@ class SSCTodoRecords extends Component {
     return this.state.ssc;
   }
 
-  addMaintenanceRecord = () => {
+  addModificationRecord = () => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "addMaintenanceRecord");
     }
@@ -340,7 +346,7 @@ class SSCTodoRecords extends Component {
     }
   }
 
-  onMaintenanceRecordSelection = (selection) => {
+  onModificationRecordSelection = (selection) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "onMaintenanceRecordSelection", "selection", selection, "ssc", this.state.ssc);
     }
@@ -348,7 +354,7 @@ class SSCTodoRecords extends Component {
     this.setState({selection: selection, metadata_changed: false});
   }
 
-  saveMaintenanceRecord = () => {
+  saveModificationRecord = () => {
     const ssc = this.state.ssc;
     if (this.listRef.current) {
       setMetadataValue(ssc, NURIMS_SSC_MAINTENANCE_RECORDS, this.listRef.current.getRecords())
@@ -360,7 +366,7 @@ class SSCTodoRecords extends Component {
     this.props.saveChanges();
   }
 
-  removeRecord = () => {
+  deleteModificationRecord = () => {
     this.setState({confirm_remove: true,});
   }
 
@@ -386,6 +392,23 @@ class SSCTodoRecords extends Component {
     }
   }
 
+  isSelectableByRoles = (selection, roles, valid_item_id) => {
+    for (const r of roles) {
+      if (isValidUserRole(this.context.user, r)) {
+        // We have at least one match, now we check for a valid item_id boolean parameter has been specified
+        if (valid_item_id) {
+          return selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isRecordChanged = (record) => {
+    return record.hasOwnProperty("changed") && record.changed;
+  }
+
   render() {
     const {confirm_remove, ssc, selection, metadata_changed, properties} = this.state;
     const no_selection = Object.entries(selection).length === 0;
@@ -404,10 +427,10 @@ class SSCTodoRecords extends Component {
           <Grid item xs={12}>
             <PagedRecordList
               ref={this.listRef}
-              onListItemSelection={this.onMaintenanceRecordSelection}
+              onListItemSelection={this.onModificationRecordSelection}
               requestGetRecords={this.getMaintenanceRecords}
               includeArchived={true}
-              title={`'${ssc.hasOwnProperty(NURIMS_TITLE) ? ssc[NURIMS_TITLE] : ""}' Maintenance Records`}
+              title={`${ssc.hasOwnProperty(NURIMS_TITLE) ? "'" + ssc[NURIMS_TITLE] + "'" : ""} Modification Records`}
               enableRecordArchiveSwitch={false}
               enableRowFilter={true}
               height={'100%'}
@@ -416,17 +439,46 @@ class SSCTodoRecords extends Component {
             />
           </Grid>
           <Grid item xs={12}>
-            <Box style={{textAlign: 'center', display: 'flex', justifyContent: 'space-around'}}>
-              <Button size={"small"} disabled={no_selection} variant="outlined" endIcon={<DeleteIcon/>} onClick={this.removeRecord}>
-                Remove Record
-              </Button>
-              <Button size={"small"} disabled={!metadata_changed} variant="outlined" endIcon={<SaveIcon />} onClick={this.saveMaintenanceRecord}>
-                Save Record
-              </Button>
-              <Button size={"small"} disabled={no_ssc} variant="outlined" endIcon={<AddCircleOutlineIcon />} onClick={this.addMaintenanceRecord}>
-                Add Record
-              </Button>
-            </Box>
+            <AddRemoveArchiveSaveProvenanceButtonPanel
+              THIS={this}
+              user={this.context.user}
+              deleteRecordRole={ROLE_MAINTENANCE_DATA_ENTRY}
+              onClickDeleteRecord={this.deleteModificationRecord}
+              saveRecordRole={ROLE_MAINTENANCE_DATA_ENTRY}
+              onClickSaveRecord={this.saveModificationRecord}
+              addRecordRole={ROLE_MAINTENANCE_DATA_ENTRY}
+              onClickAddRecord={this.addModificationRecord}
+              disableAddRecordButton={isRecordEmpty(ssc)}
+            />
+            {/*<Box style={{textAlign: 'center', display: 'flex', justifyContent: 'space-around'}}>*/}
+            {/*  <Button*/}
+            {/*    size={"small"}*/}
+            {/*    disabled={no_selection}*/}
+            {/*    variant="outlined"*/}
+            {/*    endIcon={<DeleteIcon/>}*/}
+            {/*    onClick={this.deleteModificationRecord}*/}
+            {/*  >*/}
+            {/*    Remove Record*/}
+            {/*  </Button>*/}
+            {/*  <Button*/}
+            {/*    size={"small"}*/}
+            {/*    disabled={!metadata_changed}*/}
+            {/*    variant="outlined"*/}
+            {/*    endIcon={<SaveIcon />}*/}
+            {/*    onClick={this.saveModificationRecord}*/}
+            {/*  >*/}
+            {/*    Save Record*/}
+            {/*  </Button>*/}
+            {/*  <Button*/}
+            {/*    size={"small"}*/}
+            {/*    disabled={no_ssc}*/}
+            {/*    variant="outlined"*/}
+            {/*    endIcon={<AddCircleOutlineIcon/>}*/}
+            {/*    onClick={this.addModificationRecord}*/}
+            {/*  >*/}
+            {/*    Add Record*/}
+            {/*  </Button>*/}
+            {/*</Box>*/}
           </Grid>
           <Grid item xs={12}>
             <Box
@@ -605,18 +657,18 @@ class SSCTodoRecords extends Component {
   }
 }
 
-SSCTodoRecords.defaultProps = {
+SSCModificationRecords.defaultProps = {
   onChange: (msg) => {
   },
   saveChanges: () => {
   },
 };
 
-SSCTodoRecords.propTypes = {
+SSCModificationRecords.propTypes = {
   ref: PropTypes.element.isRequired,
   properties: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   saveChanges: PropTypes.func.isRequired,
 }
 
-export default SSCTodoRecords;
+export default SSCModificationRecords;
