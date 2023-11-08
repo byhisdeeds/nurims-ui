@@ -519,7 +519,11 @@ class App extends React.Component {
                     <Typography variant="h6" component="div">
                       Organisation: {this.org.name.toUpperCase()}
                     </Typography>
-                    <AccountMenu user={this.user} onClick={this.handleMenuAction}/>
+                    <AccountMenu
+                      title={this.user.profile.username === "" ? this.menuTitle : this.user.profile.username}
+                      user={this.user}
+                      onClick={this.handleMenuAction}
+                    />
                     <BackgroundTasks active={background_tasks_active}/>
                     <NetworkConnection ready={ready}/>
                     <LogWindowButton onClick={this.toggleLogWindow}/>
@@ -540,7 +544,6 @@ class App extends React.Component {
                       {actionid === Constants.MY_ACCOUNT &&
                         <MyAccount
                           ref={this.crefs["MyAccount"]}
-                          title={this.user.profile.username === "" ? this.menuTitle : this.user.profile.username}
                           user={this.user}
                           send={this.send}
                           properties={this.properties}
