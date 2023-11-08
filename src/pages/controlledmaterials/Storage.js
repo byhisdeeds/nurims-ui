@@ -1,12 +1,7 @@
 import React from 'react';
 import {
-  Fab,
   Grid,
-  Box
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
@@ -22,7 +17,10 @@ import {
 import StorageList from "./StorageList";
 import StorageMetadata from "./StorageMetadata";
 import {UserContext} from "../../utils/UserContext";
-import {TitleComponent, AddRemoveArchiveSaveSubmitProvenanceButtonPanel} from "../../components/CommonComponents";
+import {
+  TitleComponent,
+  AddRemoveArchiveSaveSubmitProvenanceButtonPanel
+} from "../../components/CommonComponents";
 import {
   messageHasResponse,
   messageResponseStatusOk
@@ -31,7 +29,6 @@ import {
   setProvenanceRecordsHelper,
   showProvenanceRecordsViewHelper
 } from "../../utils/ProvenanceUtils";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 export const STORAGE_REF = "Storage";
 

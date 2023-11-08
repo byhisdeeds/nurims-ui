@@ -5,14 +5,21 @@ import {
 } from "../../utils/constants";
 import {Box, Button, Grid, Stack} from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
-import {withTheme} from "@mui/styles";
+import {
+  withTheme
+} from "@mui/styles";
 import {
   SwitchComponent,
   TitleComponent
 } from "../../components/CommonComponents";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
 
 export const VIEWPERSONNELRECORDS_REF = "ViewPersonnelRecords";
 

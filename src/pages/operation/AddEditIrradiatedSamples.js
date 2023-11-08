@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
   Fab,
   Grid,
-  Typography
 } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import UploadIcon from '@mui/icons-material/Upload';

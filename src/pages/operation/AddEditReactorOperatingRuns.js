@@ -22,15 +22,12 @@ import {
   Box,
   Fab,
   Grid,
-  Typography
 } from "@mui/material";
 import {
   Add as AddIcon,
   Save as SaveIcon,
   RemoveCircle as RemoveCircleIcon,
 } from "@mui/icons-material";
-
-// import {v4 as uuid} from "uuid";
 import {
   getMatchingResponseObject,
   isCommandResponse,
@@ -42,13 +39,17 @@ import {
 } from "../../utils/RenderUtils";
 import OperatingRunList from "./OperatingRunList";
 import OperatingRunMetadata from "./OperatingRunMetadata";
-import {TitleComponent} from "../../components/CommonComponents";
+import {
+  TitleComponent
+} from "../../components/CommonComponents";
 import {
   enqueueErrorSnackbar,
   enqueueSuccessSnackbar,
   enqueueWarningSnackbar
 } from "../../utils/SnackbarVariants";
-import {record_uuid} from "../../utils/MetadataUtils";
+import {
+  record_uuid
+} from "../../utils/MetadataUtils";
 
 export const ADDEDITREACTOROPERATINGRUNS_REF = "AddEditReactorOperatingRuns";
 
