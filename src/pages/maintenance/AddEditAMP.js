@@ -4,8 +4,11 @@ import {
   Grid,
 } from "@mui/material";
 import {
-  CMD_GET_GLOSSARY_TERMS, CMD_GET_PROVENANCE_RECORDS,
-  CMD_GET_SSC_RECORDS, ROLE_MAINTENANCE_DATA_ENTRY, SSC_TOPIC,
+  CMD_GET_GLOSSARY_TERMS,
+  CMD_GET_PROVENANCE_RECORDS,
+  CMD_GET_SSC_RECORDS,
+  ROLE_MAINTENANCE_DATA_ENTRY,
+  SSC_TOPIC,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";

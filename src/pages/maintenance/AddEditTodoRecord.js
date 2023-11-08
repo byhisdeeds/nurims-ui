@@ -4,7 +4,8 @@ import {
 } from "@mui/material";
 import {
   CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_SSC_RECORDS, SSC_TOPIC,
+  CMD_GET_SSC_RECORDS,
+  SSC_TOPIC,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";

@@ -1,7 +1,8 @@
 import {convertHtmlToReact} from "@hedgedoc/html-to-react";
 
-const HIGHLIGHT_DEFN = {
+export const HIGHLIGHT_DEFN = {
   logs: RegExp(/\[(.*?)\]/,'g'),
+  files: RegExp(/([\w\d\-.]+\.[a-zA-Z0-9]+)/,'g'),
 }
 
 function render_highlight(text, regex, classname) {
@@ -13,7 +14,7 @@ function render_highlight(text, regex, classname) {
   }
   let __text = "";
   if (indexPairs.length > 0) {
-    let end = indexPairs[0][0];
+    let end = 0; //indexPairs[0][0];
     for (const pair of indexPairs) {
       if (pair.start > end) {
         __text += text.substring(end, pair.start);
@@ -29,7 +30,7 @@ function render_highlight(text, regex, classname) {
   return text;
 }
 
-export function highlight(text) {
+export function highlight(text, regex, classname) {
 
-  return convertHtmlToReact(render_highlight(text, HIGHLIGHT_DEFN.logs, "hl-editor token-timestamp"))
+  return convertHtmlToReact(render_highlight(text, regex, classname))
 }

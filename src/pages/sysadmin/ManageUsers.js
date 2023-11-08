@@ -3,7 +3,10 @@ import {
   ConsoleLog,
   UserContext
 } from "../../utils/UserContext";
-import {ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog} from "../../components/UtilityDialogs";
+import {
+  ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog
+} from "../../components/UtilityDialogs";
 import {
   Grid,
 } from "@mui/material";

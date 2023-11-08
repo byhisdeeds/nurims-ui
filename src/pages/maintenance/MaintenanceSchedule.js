@@ -6,12 +6,12 @@ import {
 import {
   Grid,
   Stack,
-  IconButton,
   Slider, Button
 } from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import {withTheme} from "@mui/styles";
+import {
+  withTheme
+} from "@mui/styles";
 import {
   DatePicker,
   LocalizationProvider

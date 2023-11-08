@@ -1,15 +1,31 @@
 import React, {Component} from 'react';
 import {
-  BLANK_PDF, CMD_GENERATE_SSC_AMP_RECORDS_PDF, CMD_GENERATE_SSC_RECORDS_PDF,
+  BLANK_PDF,
+  CMD_GENERATE_SSC_AMP_RECORDS_PDF,
 } from "../../utils/constants";
-import {Box, Button, Grid, Stack} from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Stack
+} from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
 import PropTypes from "prop-types";
-import {SwitchComponent, TitleComponent} from "../../components/CommonComponents";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {
+  SwitchComponent,
+  TitleComponent
+} from "../../components/CommonComponents";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
-import {withTheme} from "@mui/styles";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
+import {
+  withTheme
+} from "@mui/styles";
 
 export const VIEWAMPRECORDS_REF = "ViewAMPRecords";
 

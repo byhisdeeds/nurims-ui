@@ -12,12 +12,14 @@ import {
 } from "@mui/styles";
 import DownloadIcon from '@mui/icons-material/Download';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-// import CodeEditor from '@uiw/react-textarea-code-editor';
 import {
   UserContext
 } from "../utils/UserContext";
 import Editor from 'react-simple-code-editor';
-import {highlight} from "../utils/HighlightUtils";
+import {
+  highlight,
+  HIGHLIGHT_DEFN
+} from "../utils/HighlightUtils";
 
 
 const LOGWINDOW_REF = "LogWindow";
@@ -45,6 +47,10 @@ class LogWindow extends Component {
   onClearLogsClick = () => {
     this.props.logs.length = 0;
     this.forceUpdate();
+  }
+
+  highlight_logs = (code) => {
+    return highlight(code, HIGHLIGHT_DEFN.logs, "hl-editor token-timestamp");
   }
 
   render() {
@@ -106,7 +112,7 @@ class LogWindow extends Component {
             data-color-mode={theme.palette.mode}
             onValueChange={code => {
             }}
-            highlight={(code) => {return highlight(code)}}
+            highlight={this.highlight_logs}
             padding={10}
             style={{
               backgroundColor: theme.palette.background.paper,

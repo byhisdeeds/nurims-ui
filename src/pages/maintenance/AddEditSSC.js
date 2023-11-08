@@ -1,34 +1,40 @@
 import React from 'react';
 import {
-  Fab,
   Grid,
-  Typography,
-  Box
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import UnarchiveIcon from "@mui/icons-material/Unarchive";
-import ArchiveIcon from "@mui/icons-material/Archive";
 import {
-  CMD_GET_GLOSSARY_TERMS, CMD_GET_PROVENANCE_RECORDS,
-  CMD_GET_SSC_RECORDS, ROLE_MAINTENANCE_DATA_ENTRY, SSC_TOPIC,
+  CMD_GET_GLOSSARY_TERMS,
+  CMD_GET_PROVENANCE_RECORDS,
+  CMD_GET_SSC_RECORDS,
+  ROLE_MAINTENANCE_DATA_ENTRY, SSC_TOPIC,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
-  ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog,
+  ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
 import SSCList from "./SSCList";
 import SSCMetadata from "./SSCMetadata";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
-import {TitleComponent, AddRemoveArchiveSaveSubmitProvenanceButtonPanel} from "../../components/CommonComponents";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import {isValidUserRole} from "../../utils/UserUtils";
-import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
-import {messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
+import {
+  TitleComponent,
+  AddRemoveArchiveSaveSubmitProvenanceButtonPanel
+} from "../../components/CommonComponents";
+import {
+  isValidUserRole
+} from "../../utils/UserUtils";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
+import {
+  messageHasResponse,
+  messageResponseStatusOk
+} from "../../utils/WebsocketUtils";
 
 export const ADDEDITSSC_REF = "AddEditSSC";
 

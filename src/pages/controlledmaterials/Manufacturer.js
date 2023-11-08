@@ -4,7 +4,9 @@ import {
 } from "@mui/material";
 import {
   CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_MANUFACTURER_RECORDS, CMD_GET_PROVENANCE_RECORDS, ROLE_CONTROLLED_MATERIAL_DATA_ENTRY,
+  CMD_GET_MANUFACTURER_RECORDS,
+  CMD_GET_PROVENANCE_RECORDS,
+  ROLE_CONTROLLED_MATERIAL_DATA_ENTRY,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
@@ -18,8 +20,14 @@ import {
   TitleComponent,
   AddRemoveArchiveSaveSubmitProvenanceButtonPanel
 } from "../../components/CommonComponents";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
-import {messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
+import {
+  messageHasResponse,
+  messageResponseStatusOk
+} from "../../utils/WebsocketUtils";
 import {
   setProvenanceRecordsHelper,
   showProvenanceRecordsViewHelper

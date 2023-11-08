@@ -32,7 +32,7 @@ import {
 import {
   isValidUserRole
 } from "../../utils/UserUtils";
-import {highlight} from "../../utils/HighlightUtils";
+import {highlight, HIGHLIGHT_DEFN} from "../../utils/HighlightUtils";
 import Editor from "react-simple-code-editor";
 
 export const CLEANUPLARGEOBJECTSTORE_REF = "CleanupLargeObjectStore";
@@ -95,6 +95,10 @@ class CleanupLargeObjectStore extends Component {
     }
   }
 
+  highlight_files = (code) => {
+    return highlight(code, HIGHLIGHT_DEFN.files, "hl-editor token-filename");
+  }
+
   render() {
     const { files, only_list_files, processing} = this.state;
     const {user, theme} = this.props;
@@ -141,7 +145,7 @@ class CleanupLargeObjectStore extends Component {
               data-color-mode={theme.palette.mode}
               onValueChange={code => {
               }}
-              highlight={(code) => {return highlight(code)}}
+              highlight={this.highlight_files}
               padding={10}
               style={{
                 backgroundColor: theme.palette.background.paper,
@@ -153,21 +157,6 @@ class CleanupLargeObjectStore extends Component {
                 overflowY: "auto",
               }}
             />
-            {/*<CodeEditor*/}
-            {/*  readOnly={true}*/}
-            {/*  fullwidth={true}*/}
-            {/*  value={files}*/}
-            {/*  language={"ini"}*/}
-            {/*  data-color-mode={theme.palette.mode}*/}
-            {/*  padding={15}*/}
-            {/*  style={{*/}
-            {/*    fontSize: 12,*/}
-            {/*    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",*/}
-            {/*    width: "100%",*/}
-            {/*    height: "calc(100vh - 245px)",*/}
-            {/*    overflowY: "auto",*/}
-            {/*  }}*/}
-            {/*/>*/}
           </Grid>
         </Grid>
       </React.Fragment>

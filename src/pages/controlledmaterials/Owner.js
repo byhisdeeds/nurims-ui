@@ -5,7 +5,8 @@ import {
 
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
-  ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog,
+  ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog,
 } from "../../components/UtilityDialogs";
 import OwnerList from "./OwnerList";
 import OwnerMetadata from "./OwnerMetadata";

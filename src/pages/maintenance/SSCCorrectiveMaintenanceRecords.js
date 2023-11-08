@@ -14,7 +14,6 @@ import {
   new_record,
   removeMetadataField,
   setMetadataValue,
-  toBoolean,
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,

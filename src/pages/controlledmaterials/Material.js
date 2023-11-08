@@ -1,19 +1,16 @@
 import React from 'react';
 import {
-  Fab,
   Grid,
-  Box
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_MANUFACTURER_RECORDS,
   CMD_GET_MATERIAL_RECORDS,
   CMD_GET_OWNER_RECORDS,
   CMD_GET_PROVENANCE_RECORDS,
-  CMD_GET_STORAGE_LOCATION_RECORDS, ROLE_CONTROLLED_MATERIAL_DATA_ENTRY, ROLE_SYSADMIN,
+  CMD_GET_STORAGE_LOCATION_RECORDS,
+  ROLE_CONTROLLED_MATERIAL_DATA_ENTRY,
+  ROLE_SYSADMIN,
 } from "../../utils/constants";
 
 import BaseRecordManager from "../../components/BaseRecordManager";
