@@ -484,37 +484,10 @@ class SSCModificationRecords extends Component {
               addRecordRole={ROLE_MAINTENANCE_DATA_ENTRY}
               onClickAddRecord={this.addModificationRecord}
               disableAddRecordButton={isRecordEmpty(ssc)}
-              onClickViewProvenanceRecord={this.showProvenanceRecordsView}/>
+              onClickViewProvenanceRecord={this.showProvenanceRecordsView}
               showViewProvenanceRecordButton={true}
-            {/*<Box style={{textAlign: 'center', display: 'flex', justifyContent: 'space-around'}}>*/}
-            {/*  <Button*/}
-            {/*    size={"small"}*/}
-            {/*    disabled={no_selection}*/}
-            {/*    variant="outlined"*/}
-            {/*    endIcon={<DeleteIcon/>}*/}
-            {/*    onClick={this.deleteModificationRecord}*/}
-            {/*  >*/}
-            {/*    Remove Record*/}
-            {/*  </Button>*/}
-            {/*  <Button*/}
-            {/*    size={"small"}*/}
-            {/*    disabled={!metadata_changed}*/}
-            {/*    variant="outlined"*/}
-            {/*    endIcon={<SaveIcon />}*/}
-            {/*    onClick={this.saveModificationRecord}*/}
-            {/*  >*/}
-            {/*    Save Record*/}
-            {/*  </Button>*/}
-            {/*  <Button*/}
-            {/*    size={"small"}*/}
-            {/*    disabled={no_ssc}*/}
-            {/*    variant="outlined"*/}
-            {/*    endIcon={<AddCircleOutlineIcon/>}*/}
-            {/*    onClick={this.addModificationRecord}*/}
-            {/*  >*/}
-            {/*    Add Record*/}
-            {/*  </Button>*/}
-            {/*</Box>*/}
+              showArchiveRecordButton={true}
+            />
           </Grid>
           <Grid item xs={12}>
             <Box
