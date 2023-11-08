@@ -1306,6 +1306,7 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
                                                             addRecordButtonLabel,
                                                             addRecordRole,
                                                             disableAddRecordButton,
+                                                            showViewProvenanceRecordButton,
                                                             onClickViewProvenanceRecords,
                                                             viewProvenanceRecordIcon,
                                                             viewProvenanceRecordButtonLabel,
@@ -1348,7 +1349,8 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
     <Box style={{textAlign: 'center', display: 'flex', justifyContent: 'space-around'}}>
       <Button
         size={"small"}
-        disabled={!THIS.isSelectableByRoles(selection, [deleteRecordRole, sysadminRole], true) || disableDeleteRecordButton}
+        disabled={!THIS.isSelectableByRoles(selection, [deleteRecordRole, sysadminRole], true) ||
+          disableDeleteRecordButton}
         variant="outlined"
         endIcon={deleteRecordIcon}
         onClick={onClickDeleteRecord}
@@ -1366,22 +1368,24 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
       </Button>
       <Button
         size={"small"}
-        disabled={!THIS.isSelectableByRoles(selection, [addRecordRole, sysadminRole], false) || disableAddRecordButton}
+        disabled={!THIS.isSelectableByRoles(selection, [addRecordRole, sysadminRole], false) ||
+          disableAddRecordButton}
         variant="outlined"
         endIcon={addRecordIcon}
         onClick={onClickAddRecord}
       >
         {addRecordButtonLabel}
       </Button>
-      {onClickViewProvenanceRecords &&
+      {showViewProvenanceRecordButton &&
         <Button
           size={"small"}
-          disabled={!THIS.isSelectableByRoles(selection, [addRecordRole, sysadminRole], false) || disableAddRecordButton}
+          disabled={!THIS.isSelectableByRoles(selection, [viewProvenanceRecordRole, sysadminRole], true) ||
+            disableViewProvenanceRecordButton}
           variant="outlined"
-          endIcon={addRecordIcon}
-          onClick={onClickAddRecord}
+          endIcon={viewProvenanceRecordIcon}
+          onClick={onClickViewProvenanceRecords}
         >
-          {addRecordButtonLabel}
+          {viewProvenanceRecordButtonLabel}
         </Button>
       }
     </Box>
@@ -1402,7 +1406,8 @@ AddRemoveArchiveSaveProvenanceButtonPanel.propTypes = {
   saveRecordButtonLabel: PropTypes.string,
   saveRecordRole: PropTypes.string,
   disableSaveRecordButton: PropTypes.bool,
-  onClickViewProvenanceRecord: PropTypes.func.isRequired,
+  showViewProvenanceRecordButton: PropTypes.bool,
+  onClickViewProvenanceRecord: PropTypes.func,
   viewProvenanceRecordIcon: PropTypes.element,
   viewProvenanceRecordButtonLabel: PropTypes.string,
   viewProvenanceRecordRole: PropTypes.string,
@@ -1453,6 +1458,7 @@ AddRemoveArchiveSaveProvenanceButtonPanel.defaultProps = {
   viewProvenanceRecordButtonLabel: "View Provenance",
   viewProvenanceRecordRole: "sysadmin",
   disableViewProvenanceRecordButton: false,
+  showViewProvenanceRecordButton: false,
 
   // archiveRecordButtonLabel: "Archive Record",
   // archiveRecordIcon: <VisibilityIcon sx={{mr: 1}}/>,

@@ -38,7 +38,7 @@ import {
   NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE,
   NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE,
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE,
-  UNDEFINED_DATE_STRING, ITEM_ID, ROLE_MAINTENANCE_DATA_ENTRY,
+  UNDEFINED_DATE_STRING, ITEM_ID, ROLE_MAINTENANCE_DATA_ENTRY, CMD_GET_GLOSSARY_TERMS, CMD_GET_PROVENANCE_RECORDS,
 } from "../../utils/constants";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import dayjs from 'dayjs';
@@ -59,11 +59,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import PropTypes from "prop-types";
 import {
-  ConfirmRemoveRecordDialog
+  ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog
 } from "../../components/UtilityDialogs";
 import {
   isValidUserRole
 } from "../../utils/UserUtils";
+import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
+import {messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
 
 const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
 
@@ -80,10 +82,12 @@ class SSCModificationRecords extends Component {
       properties: props.properties,
       metadata_changed: false,
       confirm_remove: false,
+      show_provenance_view: false,
     };
     this.Module = SSCMODIFICATIONRECORDS_REF;
     this.listRef = React.createRef();
     this.ref = React.createRef();
+    this.provenanceRecords = [];
     this.glossary = {};
     this.sscSurveillanceData = [];
     this.sscSurveillanceFields = [
@@ -299,7 +303,19 @@ class SSCModificationRecords extends Component {
   //   // signal to parent that details have changed
   //   this.props.onChange(true);
   // };
-
+  ws_message = (message) => {
+    super.ws_message(message, [
+      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
+    ]);
+    if (messageHasResponse(message)) {
+      const response = message.response;
+      if (messageResponseStatusOk(message)) {
+        if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
+          this.setProvenanceRecords(response.provenance)
+        }
+      }
+    }
+  }
   setRecordMetadata = (record) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
@@ -404,13 +420,27 @@ class SSCModificationRecords extends Component {
     }
     return false;
   }
+  setProvenanceRecords = (provenance) => {
+    setProvenanceRecordsHelper(this, provenance);
+  }
+
+  showProvenanceRecordsView = () => {
+    showProvenanceRecordsViewHelper(this);
+  }
+
+  closeProvenanceRecordsView = (event, reason) => {
+    if (reason && reason === "backdropClick") {
+      return;
+    }
+    this.setState({show_provenance_view: false,});
+  }
 
   isRecordChanged = (record) => {
     return record.hasOwnProperty("changed") && record.changed;
   }
 
   render() {
-    const {confirm_remove, ssc, selection, metadata_changed, properties} = this.state;
+    const {confirm_remove, ssc, selection, metadata_changed, properties, show_provenance_view} = this.state;
     const no_selection = Object.entries(selection).length === 0;
     const no_ssc = Object.entries(ssc).length === 0;
     if (this.context.debug) {
@@ -422,6 +452,11 @@ class SSCModificationRecords extends Component {
                                    selection={selection}
                                    onProceed={this.proceedWithRemove}
                                    onCancel={this.cancelRemove}
+        />
+        <ShowProvenanceRecordsDialog open={show_provenance_view}
+                                     selection={selection}
+                                     body={this.provenanceRecords.join("\n")}
+                                     onCancel={this.closeProvenanceRecordsView}
         />
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -449,7 +484,8 @@ class SSCModificationRecords extends Component {
               addRecordRole={ROLE_MAINTENANCE_DATA_ENTRY}
               onClickAddRecord={this.addModificationRecord}
               disableAddRecordButton={isRecordEmpty(ssc)}
-            />
+              onClickViewProvenanceRecord={this.showProvenanceRecordsView}/>
+              showViewProvenanceRecordButton={true}
             {/*<Box style={{textAlign: 'center', display: 'flex', justifyContent: 'space-around'}}>*/}
             {/*  <Button*/}
             {/*    size={"small"}*/}
