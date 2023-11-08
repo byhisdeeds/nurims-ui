@@ -2,8 +2,10 @@ import React from 'react';
 import {
   Grid,
 } from "@mui/material";
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import {
+  PersonAdd as PersonAddIcon,
+  PersonRemove as PersonRemoveIcon
+} from '@mui/icons-material';
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
   ConfirmBatchRemoveRecordDialog,

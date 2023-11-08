@@ -198,11 +198,6 @@ class ManufacturerMetadata extends Component {
   render() {
     const {manufacturer, properties} = this.state;
     console.log("ManufacturerMetadata.RENDER - manufacturer", manufacturer)
-    // const doseProviderId = getMetadataValue(person, "nurims.entity.doseproviderid", "|").split('|');
-    // const wholeBodyMonitor = getMetadataValue(person, "nurims.entity.iswholebodymonitored", "false");
-    // const extremityMonitor = getMetadataValue(person, "nurims.entity.isextremitymonitored", "false");
-    // const wristMonitor = getMetadataValue(person, "nurims.entity.iswristmonitored", "false");
-    // const defaultUnits = getPropertyValue(properties, "nurims.property.doseunits", "");
     return (
       <Box
         component="form"

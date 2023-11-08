@@ -3,14 +3,29 @@ import {
   BLANK_PDF,
   CMD_GENERATE_SSC_RECORDS_PDF,
 } from "../../utils/constants";
-import {Box, Button, Grid, Stack} from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Stack
+} from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
 import PropTypes from "prop-types";
-import {withTheme} from "@mui/styles";
-import {SwitchComponent, TitleComponent} from "../../components/CommonComponents";
+import {
+  withTheme
+} from "@mui/styles";
+import {
+  SwitchComponent,
+  TitleComponent
+} from "../../components/CommonComponents";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
 
 export const VIEWSSCRECORDS_REF = "ViewSSCRecords";
 

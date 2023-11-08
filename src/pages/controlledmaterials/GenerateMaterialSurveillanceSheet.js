@@ -8,11 +8,11 @@ import {
   FormControl,
   Grid,
   InputLabel,
+  MenuItem,
   Select,
   Stack,
 } from "@mui/material";
 import PdfViewer from "../../components/PdfViewer";
-import MenuItem from "@mui/material/MenuItem";
 import {
   withTheme
 } from "@mui/styles";

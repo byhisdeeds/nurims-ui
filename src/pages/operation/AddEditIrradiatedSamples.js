@@ -15,13 +15,22 @@ import {
   messageHasResponse,
   messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
-import {withTheme} from "@mui/styles";
+import {
+  withTheme
+} from "@mui/styles";
 import BusyIndicator from "../../components/BusyIndicator";
 import PagedCsvTable from "../../components/PagedCsvTable";
 import {readString} from "react-papaparse";
-import {ConsoleLog, UserContext} from "../../utils/UserContext";
-import {TitleComponent} from "../../components/CommonComponents";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
+import {
+  TitleComponent
+} from "../../components/CommonComponents";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
 
 export const ADDEDITIRRADIATEDSAMPLES_REF = "AddEditIrradiatedSamples";
 
