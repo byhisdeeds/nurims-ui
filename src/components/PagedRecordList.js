@@ -67,10 +67,8 @@ class PagedRecordList extends React.Component {
     if (Array.isArray(records)) {
       for (const record of records) {
         let add_to_list = true;
-        console.log(">>>", record)
         if (skipIfRecordInList) {
           for (const row of this.rows) {
-            console.log("==>", row[ITEM_ID], row.hasOwnProperty(RECORD_KEY) ? row[RECORD_KEY] : "")
             if (row.hasOwnProperty(RECORD_KEY) && row[RECORD_KEY] === record[RECORD_KEY]) {
               add_to_list = false;
               break;
@@ -80,16 +78,14 @@ class PagedRecordList extends React.Component {
             }
           }
         }
-        console.log("add-to-list", add_to_list)
         if (add_to_list) {
           this.rows.push(record);
           refresh = true;
         }
-        console.log("aafter dd-to-list", this.rows, refresh)
       }
     }
     if (refresh) {
-      this.setState({selection: this.state.selection});
+      this.forceUpdate();
     }
   }
 
@@ -201,7 +197,8 @@ class PagedRecordList extends React.Component {
   render () {
     const {include_archived, selection} = this.state;
     if (this.context.debug) {
-      ConsoleLog(this.__Component__, "render", "include_archived", include_archived, "selection", selection);
+      ConsoleLog(this.__Component__, "render", "include_archived", include_archived,
+        "selection", selection);
     }
     return (
       <Box sx={{width: '100%'}}>
