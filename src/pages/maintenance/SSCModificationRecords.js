@@ -144,9 +144,7 @@ class SSCModificationRecords extends Component {
   }
 
   setGlossaryTerms = (terms) => {
-    console.log("+++++++++++++++")
     console.log(terms)
-    console.log("+++++++++++++++")
     for (const term of terms) {
       this.glossary[term.name] = term.value;
     }

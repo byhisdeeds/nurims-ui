@@ -79,11 +79,11 @@ class AddEditModificationRecord extends BaseRecordManager {
     }
   }
 
-  addMaintenanceRecord = () => {
-    if (this.metadataRef.current) {
-      this.metadataRef.current.addMaintenanceRecord();
-    }
-  }
+  // addMaintenanceRecord = () => {
+  //   if (this.metadataRef.current) {
+  //     this.metadataRef.current.addMaintenanceRecord();
+  //   }
+  // }
 
   onSSCRecordSelection = (selection) => {
     if (this.context.debug) {

@@ -114,7 +114,7 @@ class PagedRecordList extends React.Component {
           row[NURIMS_TITLE] = record[NURIMS_TITLE];
           row[NURIMS_WITHDRAWN] = record[NURIMS_WITHDRAWN];
           row["changed"] = false;
-          if (row.hasOwnProperty(NURIMS_TITLE_SUBTITLE)) {
+          if (record.hasOwnProperty(NURIMS_TITLE_SUBTITLE)) {
             row[NURIMS_TITLE_SUBTITLE] = record[NURIMS_TITLE_SUBTITLE];
           }
           if (Array.isArray(row[METADATA])) {
@@ -125,7 +125,7 @@ class PagedRecordList extends React.Component {
         } else if (row.item_id !== -1 && row.item_id === record[ITEM_ID]) {
           row[NURIMS_TITLE] = record[NURIMS_TITLE];
           row[NURIMS_WITHDRAWN] = record[NURIMS_WITHDRAWN];
-          if (row.hasOwnProperty(NURIMS_TITLE_SUBTITLE)) {
+          if (record.hasOwnProperty(NURIMS_TITLE_SUBTITLE)) {
             row[NURIMS_TITLE_SUBTITLE] = record[NURIMS_TITLE_SUBTITLE];
           }
           row["changed"] = false;
