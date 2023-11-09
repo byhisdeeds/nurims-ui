@@ -18,15 +18,15 @@ export function setProvenanceRecordsHelper(THIS, provenance) {
   THIS.forceUpdate();
 }
 
-export function showProvenanceRecordsViewHelper(THIS){
+export function showProvenanceRecordsViewHelper(THIS, module){
+  if (THIS.context.debug) {
+    ConsoleLog(THIS.Module, "showProvenanceRecordsViewHelper", "selection", THIS.state.selection);
+  }
   THIS.props.send({
     cmd: CMD_GET_PROVENANCE_RECORDS,
     item_id: THIS.state.selection.item_id,
-    module: THIS.Module,
+    module: (module) ? module : THIS.Module,
   });
-  if (THIS.context.debug) {
-    ConsoleLog(THIS.Module, "viewProvenanceRecords", "selection", THIS.state.selection);
-  }
   THIS.setState({show_provenance_view: true,});
 }
 

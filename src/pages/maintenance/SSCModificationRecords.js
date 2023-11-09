@@ -60,9 +60,6 @@ import {
   SelectFormControlWithTooltip,
   TextFieldWithTooltip
 } from "../../components/CommonComponents";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DeleteIcon from "@mui/icons-material/Delete";
-import SaveIcon from "@mui/icons-material/Save";
 import PropTypes from "prop-types";
 import {
   ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog
@@ -70,8 +67,16 @@ import {
 import {
   isValidUserRole
 } from "../../utils/UserUtils";
-import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
-import {isCommandResponse, messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
+import {
+  messageHasResponse,
+} from "../../utils/WebsocketUtils";
+import {
+  ADDEDITMODIFICATIONRECORD_REF
+} from "./AddEditModificationRecord";
 
 const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
 
@@ -439,9 +444,7 @@ class SSCModificationRecords extends Component {
   }
 
   showProvenanceRecordsView = () => {
-    console.log("@@@@@@@@@@@@@@@@")
-    this.props.send({cmd: "ddd"})
-    showProvenanceRecordsViewHelper(this);
+    showProvenanceRecordsViewHelper(this, ADDEDITMODIFICATIONRECORD_REF);
   }
 
   closeProvenanceRecordsView = (event, reason) => {
@@ -527,7 +530,7 @@ class SSCModificationRecords extends Component {
               addRecordRole={ROLE_MAINTENANCE_DATA_ENTRY}
               onClickAddRecord={this.addModificationRecord}
               disableAddRecordButton={isRecordEmpty(ssc)}
-              onClickViewProvenanceRecord={this.showProvenanceRecordsView}
+              onClickViewProvenanceRecords={this.showProvenanceRecordsView}
               showViewProvenanceRecordButton={true}
               showArchiveRecordButton={true}
             />
