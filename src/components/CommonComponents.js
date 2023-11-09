@@ -63,6 +63,7 @@ import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import PublishIcon from '@mui/icons-material/Publish';
 import {
+  ITEM_ID,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER,
@@ -1331,10 +1332,17 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
   const archiveIcon = isRecordArchived(selection) ? unarchiveRecordIcon : archiveRecordIcon;
 
   console.log("===")
-  console.log("= userIsCreator", userIsCreator,  "recordHasChanged", recordHasChanged,
-    "sysadminRole", sysadminRole, "isSelectableByRoles(valid_item_id=false)",
-    THIS.isSelectableByRoles(selection, [addRecordRole, sysadminRole], false), "emptyRecord", emptyRecord,
-    "showViewProvenanceRecordButton", showViewProvenanceRecordButton)
+  console.log("= userIsCreator", userIsCreator)
+  console.log("= recordHasChanged", recordHasChanged)
+  console.log("= sysadminRole", sysadminRole)
+  console.log("= addRecordRole", addRecordRole)
+  console.log("= archiveRecordRole", archiveRecordRole)
+  console.log("= isSelectableByRoles(selection, [addRecordRole, sysadminRole], false)",
+    THIS.isSelectableByRoles(selection, [addRecordRole, sysadminRole], false))
+  console.log("= isSelectableByRoles(selection, [archiveRecordRole, sysadminRole], false)",
+    THIS.isSelectableByRoles(selection, [archiveRecordRole, sysadminRole], true))
+  console.log("= emptyRecord", emptyRecord)
+  console.log("= selection", selection)
   console.log("===")
   return (
     <Box style={{textAlign: 'center', display: 'flex', justifyContent: 'space-around'}}>

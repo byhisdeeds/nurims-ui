@@ -413,7 +413,7 @@ class SSCModificationRecords extends Component {
       if (isValidUserRole(this.context.user, r)) {
         // We have at least one match, now we check for a valid item_id boolean parameter has been specified
         if (valid_selection) {
-          return Object.keys(selection) > 0 && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
+          return Object.keys(selection).length > 0 && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
         }
         return true;
       }
