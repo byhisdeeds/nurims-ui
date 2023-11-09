@@ -3,6 +3,7 @@ import {
   Grid,
 } from "@mui/material";
 import {
+  CMD_DELETE_SSC_MODIFICATION_RECORD,
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_SSC_MODIFICATION_RECORDS,
@@ -32,9 +33,17 @@ import {
   withTheme
 } from "@mui/styles";
 import SSCModificationRecords from "./SSCModificationRecords";
-import {isCommandResponse, messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import {record_uuid} from "../../utils/MetadataUtils";
+import {
+  isCommandResponse,
+  messageHasResponse,
+  messageResponseStatusOk
+} from "../../utils/WebsocketUtils";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
+import {
+  record_uuid
+} from "../../utils/MetadataUtils";
 
 export const ADDEDITMODIFICATIONRECORD_REF = "AddEditModificationRecord";
 
@@ -130,6 +139,21 @@ class AddEditModificationRecord extends BaseRecordManager {
     this.setState({metadata_changed: false})
   }
 
+  deleteRecord = (record) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "deleteRecord", record);
+    }
+    if (record.item_id === -1 && !record.hasOwnProperty(RECORD_KEY)) {
+      record[RECORD_KEY] = record_uuid();
+    }
+    this.props.send({
+      cmd: CMD_DELETE_SSC_MODIFICATION_RECORD,
+      item_id: record.item_id,
+      module: this.Module,
+    })
+    // this.setState({metadata_changed: false})
+  }
+
   render() {
     const {metadata_changed, confirm_remove, include_archived, selection, title} = this.state;
     if (this.context.debug) {
@@ -165,6 +189,7 @@ class AddEditModificationRecord extends BaseRecordManager {
               properties={this.props.properties}
               onChange={this.onRecordMetadataChanged}
               saveChanges={this.saveChanges}
+              deleteRecord={this.deleteRecord}
               send={this.props.send}
             />
           </Grid>

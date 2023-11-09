@@ -369,10 +369,10 @@ class BaseRecordManager extends Component {
     }
     return false;
   }
-
-  recordHasMetadata = (message) => {
-    return message.hasOwnProperty("include.metadata") && message["include.metadata"] === "true";
-  }
+  //
+  // recordHasMetadata = (message) => {
+  //   return message.hasOwnProperty("include.metadata") && message["include.metadata"] === "true";
+  // }
 
   ws_message(message, commandHandlers) {
     if (this.context.debug) {

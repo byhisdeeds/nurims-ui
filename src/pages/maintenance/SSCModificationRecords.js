@@ -9,10 +9,12 @@ import "leaflet/dist/leaflet.css";
 import {
   getDateFromDateString,
   getRecordMetadataValue,
+  getRecordTitle,
   isRecordEmpty,
   new_record,
   removeMetadataField,
   setMetadataValue,
+  setRecordMetadataChanged,
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
@@ -77,6 +79,7 @@ import {
 import {
   ADDEDITMODIFICATIONRECORD_REF
 } from "./AddEditModificationRecord";
+import {enqueueSuccessSnackbar} from "../../utils/SnackbarVariants";
 
 const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
 
@@ -154,7 +157,7 @@ class SSCModificationRecords extends Component {
     const selection = this.state.selection;
     const id = e.target.id === undefined ? e.target.name : e.target.id;
     if (this.context.debug) {
-      ConsoleLog(this.module, "handleChange", "id", id, "value", e.target.value);
+      ConsoleLog(this.Module, "handleChange", "id", id, "value", e.target.value);
     }
     let changed = false;
     if (id === "name") {
@@ -197,7 +200,8 @@ class SSCModificationRecords extends Component {
       changed = true;
     }
     if (changed) {
-      // update scc record with maintenance records
+      setRecordMetadataChanged(selection, changed);
+      // update scc modification records list entry
       if (this.listRef.current) {
         for (const r of this.listRef.current.getRecords()) {
           if (r.item_id === selection.item_id) {
@@ -208,7 +212,7 @@ class SSCModificationRecords extends Component {
       }
       this.setState({selection: selection, metadata_changed: true})
       // signal to parent that details have changed
-      this.props.onChange(true);
+      // this.props.onChange(true);
     }
   }
 
@@ -329,23 +333,26 @@ class SSCModificationRecords extends Component {
           this.listRef.current.setRecords(message.response.structures_systems_components);
         }
       } else if (message.cmd === CMD_UPDATE_SSC_MODIFICATION_RECORD) {
+        const record = message.response.structures_systems_components;
+        enqueueSuccessSnackbar(
+          `Successfully updated modification record ${record.length === 1 ? record[NURIMS_TITLE] : ""}.`);
         if (this.listRef.current) {
-          this.listRef.current.updateRecord(message.response.structures_systems_components);
+          this.listRef.current.updateRecord(record);
         }
       }
     }
   }
 
-  setRecordMetadata = (record) => {
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "setRecordMetadata", "record", record);
-    }
-    if (this.listRef.current) {
-      this.listRef.current.setRecords(getRecordMetadataValue(record, NURIMS_SSC_MAINTENANCE_RECORDS, []));
-    }
-    this.setState({ssc: record, selection: {}, metadata_changed: false})
-    this.props.onChange(false);
-  }
+  // setRecordMetadata = (record) => {
+  //   if (this.context.debug) {
+  //     // ConsoleLog(this.Module, "setRecordMetadata", "record", record);
+  //   }
+  //   if (this.listRef.current) {
+  //     this.listRef.current.setRecords(getRecordMetadataValue(record, NURIMS_SSC_MAINTENANCE_RECORDS, []));
+  //   }
+  //   this.setState({ssc: record, selection: {}, metadata_changed: false})
+  //   this.props.onChange(false);
+  // }
 
   setReferredToRecord = (record) => {
     if (this.context.debug) {
@@ -374,11 +381,11 @@ class SSCModificationRecords extends Component {
     }
   }
 
-  getMaintenanceRecords = (include_archived) => {
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "getMaintenanceRecords", "include_archived", include_archived);
-    }
-  }
+  // getModificationRecords = (include_archived) => {
+  //   if (this.context.debug) {
+  //     ConsoleLog(this.Module, "getModificationRecords", "include_archived", include_archived);
+  //   }
+  // }
 
   onModificationRecordSelection = (selection) => {
     if (this.context.debug) {
@@ -391,7 +398,6 @@ class SSCModificationRecords extends Component {
     const ssc = this.state.ssc;
     const selection = this.state.selection;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "saveModificationRecord", "ssc", ssc);
       ConsoleLog(this.Module, "saveModificationRecord", "selection", this.state.selection);
     }
     setMetadataValue(selection, NURIMS_RELATED_ITEM_ID, ssc[ITEM_ID]);
@@ -400,6 +406,10 @@ class SSCModificationRecords extends Component {
   }
 
   deleteModificationRecord = () => {
+    const selection = this.state.selection;
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "deleteModificationRecord", "selection", selection);
+    }
     this.setState({confirm_remove: true,});
   }
 
@@ -408,20 +418,26 @@ class SSCModificationRecords extends Component {
   }
 
   proceedWithRemove = () => {
+    const selection = this.state.selection;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "proceedWithRemove", "selection", this.state.selection);
+      ConsoleLog(this.Module, "proceedWithRemove", "selection", selection);
     }
     if (this.listRef.current) {
-      this.listRef.current.removeRecord(this.state.selection)
+      this.listRef.current.removeRecord(selection)
     }
-    this.setState({confirm_remove: false, metadata_changed: true});
+    this.setState({confirm_remove: false, metadata_changed: false});
+    this.props.deleteRecord(selection);
   }
 
-  renderCellStyle = (row, cell, theme) => {
-    const openIssue = getRecordMetadataValue(row, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, null) === null;
+  renderCellStyle = (row, cell, theme, selected) => {
+    const openIssue = getRecordMetadataValue(
+      row, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, null) === null;
     return {
-      color: openIssue ? theme.palette.primary.contrastText : theme.palette.primary.light,
-      backgroundColor: openIssue ? theme.palette.warning.light : theme.components.MuiTableRow.styleOverrides.root.backgroundColor,
+      mixBlendMode: selected ? 'lighten' : 'inherit',
+      color: openIssue ?
+        theme.palette.primary.contrastText : theme.palette.primary.light,
+      backgroundColor: openIssue ?
+        theme.palette.warning.light : theme.components.MuiTableRow.styleOverrides.root.backgroundColor,
     }
   }
 
@@ -455,8 +471,8 @@ class SSCModificationRecords extends Component {
 
   render() {
     const {confirm_remove, ssc, selection, metadata_changed, properties, show_provenance_view} = this.state;
-    const no_selection = Object.entries(selection).length === 0;
-    const no_ssc = Object.entries(ssc).length === 0;
+    const no_selection = isRecordEmpty(selection);
+    // const no_ssc = Object.entries(ssc).length === 0;
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "ssc", ssc);
       ConsoleLog(this.Module, "render", "selection", selection);
@@ -547,7 +563,7 @@ class SSCModificationRecords extends Component {
                         id={"name"}
                         label="Record Name"
                         required={true}
-                        value={selection.hasOwnProperty(NURIMS_TITLE) ? selection[NURIMS_TITLE] : ""}
+                        value={getRecordTitle(selection)}
                         onChange={this.handleChange}
                         disabled={no_selection}
                         tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_NAME, "")}
@@ -708,16 +724,13 @@ class SSCModificationRecords extends Component {
 }
 
 SSCModificationRecords.defaultProps = {
-  onChange: (msg) => {
-  },
-  saveChanges: () => {
-  },
 };
 
 SSCModificationRecords.propTypes = {
   ref: PropTypes.element.isRequired,
   properties: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
+  deleteRecord: PropTypes.func.isRequired,
   saveChanges: PropTypes.func.isRequired,
 }
 

@@ -59,6 +59,10 @@ export function removeMetadataField(obj, key) {
   }
 }
 
+export function setRecordMetadataChanged(record, state) {
+  record["changed"] = state;
+}
+
 export function setRecordMetadataValue(obj, key, value) {
   if (obj.hasOwnProperty("metadata")) {
     const metadata = obj.metadata;
@@ -122,6 +126,10 @@ export function setRecordData(record, key, value) {
   }
 }
 
+export function getRecordTitle(record) {
+  return record.hasOwnProperty(NURIMS_TITLE) ? record[NURIMS_TITLE] : "";
+}
+
 export function getRecordMetadataValue(obj, key, missingValue) {
   if (obj.hasOwnProperty("metadata")) {
     const metadata = obj.metadata;
@@ -153,6 +161,10 @@ export function recordHasMetadataField(obj, key) {
     }
   }
   return false;
+}
+
+export function recordHasIncludeMetadataField(record){
+  return record.hasOwnProperty("include.metadata") && record["include.metadata"] === "true";
 }
 
 export function getRecordData(record, key, missingValue) {

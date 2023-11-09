@@ -118,6 +118,7 @@ module.exports = Object.freeze({
   CMD_DELETE_SSC_RECORD: "delete_ssc_record",
   CMD_GET_SSC_MODIFICATION_RECORDS: "get_ssc_modification_records",
   CMD_UPDATE_SSC_MODIFICATION_RECORD: "update_ssc_modification_record",
+  CMD_DELETE_SSC_MODIFICATION_RECORD: "delete_ssc_modification_record",
 
   CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS: "get_reactor_sample_irradiation_authorization_records",
   CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD: "update_reactor_sample_irradiation_authorization_record",
