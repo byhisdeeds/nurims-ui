@@ -8,7 +8,18 @@ export function messageResponseStatusOk(message) {
 }
 
 export function isCommandResponse(message, command) {
-  return message.hasOwnProperty("cmd") && message.cmd === command;
+  if (message.hasOwnProperty("cmd")) {
+    if (Array.isArray(command)) {
+      for (const c of command) {
+        if (message.cmd === c) {
+          return true;
+        }
+      }
+    } else {
+      return message.cmd === command;
+    }
+  }
+  return false;
 }
 
 export function messageHasMetadata(message) {

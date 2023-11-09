@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
 import {
-  Button,
   Card,
   CardContent,
   Grid,
@@ -9,12 +8,11 @@ import {
 import "leaflet/dist/leaflet.css";
 import {
   getDateFromDateString,
-  getNextItemId,
-  getRecordMetadataValue, isRecordEmpty,
+  getRecordMetadataValue,
+  isRecordEmpty,
   new_record,
   removeMetadataField,
   setMetadataValue,
-  toBoolean,
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
@@ -38,7 +36,14 @@ import {
   NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE,
   NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE,
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE,
-  UNDEFINED_DATE_STRING, ITEM_ID, ROLE_MAINTENANCE_DATA_ENTRY, CMD_GET_GLOSSARY_TERMS, CMD_GET_PROVENANCE_RECORDS,
+  UNDEFINED_DATE_STRING,
+  ITEM_ID,
+  ROLE_MAINTENANCE_DATA_ENTRY,
+  CMD_GET_GLOSSARY_TERMS,
+  CMD_GET_PROVENANCE_RECORDS,
+  CMD_GET_SSC_MODIFICATION_RECORDS,
+  NURIMS_RELATED_ITEM_ID,
+  CMD_UPDATE_SSC_MODIFICATION_RECORD,
 } from "../../utils/constants";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import dayjs from 'dayjs';
@@ -65,7 +70,7 @@ import {
   isValidUserRole
 } from "../../utils/UserUtils";
 import {setProvenanceRecordsHelper, showProvenanceRecordsViewHelper} from "../../utils/ProvenanceUtils";
-import {messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
+import {isCommandResponse, messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
 
 const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
 
@@ -133,6 +138,9 @@ class SSCModificationRecords extends Component {
   }
 
   setGlossaryTerms = (terms) => {
+    console.log("+++++++++++++++")
+    console.log(terms)
+    console.log("+++++++++++++++")
     for (const term of terms) {
       this.glossary[term.name] = term.value;
     }
@@ -304,18 +312,26 @@ class SSCModificationRecords extends Component {
   //   this.props.onChange(true);
   // };
   ws_message = (message) => {
-    super.ws_message(message, [
-      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
-    ]);
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "ws_message", "message", message);
+    }
     if (messageHasResponse(message)) {
-      const response = message.response;
-      if (messageResponseStatusOk(message)) {
-        if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
-          this.setProvenanceRecords(response.provenance)
+      if (message.cmd === CMD_GET_GLOSSARY_TERMS) {
+        this.setGlossaryTerms(message.response.terms)
+      } else if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
+        this.setProvenanceRecords(message.response.provenance)
+      } else if (message.cmd === CMD_GET_SSC_MODIFICATION_RECORDS) {
+        if (this.listRef.current) {
+          this.listRef.current.addRecords(message.response.structures_systems_components, false);
+        }
+      } else if (message.cmd === CMD_UPDATE_SSC_MODIFICATION_RECORD) {
+        if (this.listRef.current) {
+          this.listRef.current.updateRecord(message.response.structures_systems_components, true);
         }
       }
     }
   }
+
   setRecordMetadata = (record) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
@@ -327,6 +343,13 @@ class SSCModificationRecords extends Component {
     this.props.onChange(false);
   }
 
+  setReferredToRecord = (record) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "setReferredToRecord", "record", record);
+    }
+    this.setState({ssc: record, selection: {}, metadata_changed: false});
+  }
+
   getRecordMetadata = () => {
     return this.state.ssc;
   }
@@ -336,17 +359,8 @@ class SSCModificationRecords extends Component {
       ConsoleLog(this.Module, "addMaintenanceRecord");
     }
     if (this.listRef.current) {
-      // this.listRef.current.addRecords([{
-      //   "changed": true,
-      //   "item_id": getNextItemId(this.listRef.current.getRecords()),
-      //   "nurims.title": "New Maintenance Record",
-      //   "nurims.withdrawn": 0,
-      //   "metadata": [
-      //     {"nurims.createdby": this.context.user.profile.username}
-      //   ]
-      // }], false);
       this.listRef.current.addRecords([new_record(
-        getNextItemId(this.listRef.current.getRecords()),
+        null,
         "New Maintenance Record",
         0,
         this.context.user.profile.username,
@@ -364,22 +378,20 @@ class SSCModificationRecords extends Component {
 
   onModificationRecordSelection = (selection) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "onMaintenanceRecordSelection", "selection", selection, "ssc", this.state.ssc);
+      ConsoleLog(this.Module, "onModificationRecordSelection", "selection", selection, "ssc", this.state.ssc);
     }
-    // display the selection metadata
     this.setState({selection: selection, metadata_changed: false});
   }
 
   saveModificationRecord = () => {
     const ssc = this.state.ssc;
-    if (this.listRef.current) {
-      setMetadataValue(ssc, NURIMS_SSC_MAINTENANCE_RECORDS, this.listRef.current.getRecords())
-      ssc["changed"] = true;
-    }
+    const selection = this.state.selection;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "saveMaintenanceRecord", "selection", this.state.selection, "ssc", ssc);
+      ConsoleLog(this.Module, "saveModificationRecord", "selection", this.state.selection, "ssc", ssc);
     }
-    this.props.saveChanges();
+    setMetadataValue(selection, NURIMS_RELATED_ITEM_ID, ssc[ITEM_ID]);
+    selection["changed"] = true;
+    this.props.saveChanges(selection);
   }
 
   deleteModificationRecord = () => {
@@ -444,7 +456,8 @@ class SSCModificationRecords extends Component {
     const no_selection = Object.entries(selection).length === 0;
     const no_ssc = Object.entries(ssc).length === 0;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "ssc", ssc, "selection", selection);
+      ConsoleLog(this.Module, "render", "ssc", ssc);
+      ConsoleLog(this.Module, "render", "selection", selection);
     }
     return (
       <React.Fragment>

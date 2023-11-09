@@ -116,6 +116,8 @@ module.exports = Object.freeze({
   CMD_GET_SSC_RECORDS: "get_ssc_records",
   CMD_UPDATE_SSC_RECORD: "update_ssc_record",
   CMD_DELETE_SSC_RECORD: "delete_ssc_record",
+  CMD_GET_SSC_MODIFICATION_RECORDS: "get_ssc_modification_records",
+  CMD_UPDATE_SSC_MODIFICATION_RECORD: "update_ssc_modification_record",
 
   CMD_GET_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORDS: "get_reactor_sample_irradiation_authorization_records",
   CMD_UPDATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD: "update_reactor_sample_irradiation_authorization_record",
@@ -179,6 +181,7 @@ module.exports = Object.freeze({
   NURIMS_WITHDRAWN: 'nurims.withdrawn',
   NURIMS_DESCRIPTION: 'nurims.description',
   NURIMS_AVAILABLE: 'nurims.available',
+  NURIMS_RELATED_ITEM_ID: "nurims.related.item_id",
   NURIMS_SAMPLEDATE: 'nurims.sampledate',
   NURIMS_SURVEILLANCE_FREQUENCY: 'nurims.surveillancefrequency',
   NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY: 'nurims.inventorysurveillancefrequency',
