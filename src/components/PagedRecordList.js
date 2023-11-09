@@ -6,7 +6,8 @@ import {
   METADATA,
   NURIMS_TITLE,
   NURIMS_TITLE_SUBTITLE,
-  NURIMS_WITHDRAWN
+  NURIMS_WITHDRAWN,
+  RECORD_KEY
 } from "../utils/constants";
 import {
   Box,
@@ -61,7 +62,7 @@ class PagedRecordList extends React.Component {
         let add_to_list = true;
         if (skipIfRecordInList && skipIfRecordInList === true) {
           for (const row of this.rows) {
-            if (row[NURIMS_TITLE] === record[NURIMS_TITLE]) {
+            if (row[NURIMS_TITLE] === record[NURIMS_TITLE] && row[RECORD_KEY] === record[RECORD_KEY]) {
               add_to_list = false;
               break;
             }

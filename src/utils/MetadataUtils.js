@@ -1,11 +1,10 @@
 import {
   ITEM_ID, METADATA,
-  NURIMS_CREATED_BY, NURIMS_CREATION_DATE,
+  NURIMS_CREATED_BY,
   NURIMS_DOSIMETRY_BATCH_ID,
   NURIMS_DOSIMETRY_DEEP_DOSE,
   NURIMS_DOSIMETRY_EXTREMITY_DOSE,
   NURIMS_DOSIMETRY_ID,
-  NURIMS_DOSIMETRY_MEASUREMENTS,
   NURIMS_DOSIMETRY_MONITOR_PERIOD,
   NURIMS_DOSIMETRY_SHALLOW_DOSE,
   NURIMS_DOSIMETRY_TIMESTAMP,
@@ -21,7 +20,8 @@ import {
   NURIMS_ENTITY_SEX,
   NURIMS_ENTITY_WORK_DETAILS,
   NURIMS_TITLE,
-  NURIMS_WITHDRAWN
+  NURIMS_WITHDRAWN,
+  RECORD_KEY
 } from "./constants";
 import {transformDose} from "./DoseReportUtils";
 import {v4 as uuid} from "uuid";
@@ -37,6 +37,10 @@ export function isRecordArchived(record) {
 
 export function isRecordEmpty(record) {
   return (Object.keys(record).length === 0);
+}
+
+export function isRecordChanged(record) {
+  return record.hasOwnProperty("changed") && record.changed;
 }
 
 export function removeMetadataField(obj, key) {
@@ -474,6 +478,7 @@ export function new_record(item_id, title, withdrawn, createdby, fullname) {
   record[ITEM_ID] = (item_id) ? item_id : -1;
   record[NURIMS_TITLE] = (title) ? title : "New Record";
   record[NURIMS_WITHDRAWN] = (withdrawn) ? withdrawn : 0;
+  record[RECORD_KEY] = record_uuid();
   record[METADATA] = [
     {"nurims.createdby": (createdby) ? (fullname) ? `${fullname} (${createdby})` : createdby : ""},
     {"nurims.creationdate": dayjs().toISOString()}

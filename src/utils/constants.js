@@ -172,6 +172,7 @@ module.exports = Object.freeze({
   METADATA: 'metadata',
   INCLUDE_METADATA: 'include.metadata',
   ITEM_ID: "item_id",
+  RECORD_KEY: "record_key",
 
   NURIMS_TITLE: 'nurims.title',
   NURIMS_CREATED_BY: 'nurims.createdby',

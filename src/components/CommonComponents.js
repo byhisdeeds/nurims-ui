@@ -41,7 +41,11 @@ import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import {visuallyHidden} from "@mui/utils";
 import Floater from 'react-floater';
 import {
-  getRecordData, isRecordArchived, isRecordCreatedBy, isRecordEmpty,
+  getRecordData,
+  isRecordArchived,
+  isRecordChanged,
+  isRecordCreatedBy,
+  isRecordEmpty,
   toBoolean
 } from "../utils/MetadataUtils";
 import {
@@ -1137,7 +1141,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
                                                                 }) {
   const {selection} = THIS.state;
   const isSysadmin = isValidUserRole(user, sysadminRole);
-  const recordHasChanged = THIS.isRecordChanged(selection);
+  const recordHasChanged = isRecordChanged(selection);
   const userIsCreator = ignoreSaveDisabledIfNotCreator ? true : isRecordCreatedBy(selection, user);
   const emptyRecord = Object.keys(selection).length === 0;
   const archiveButtonLabel = THIS.isRecordArchived(selection) ? unarchiveRecordButtonLabel : archiveRecordButtonLabel;
@@ -1325,7 +1329,7 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
                                                           }) {
   const {selection} = THIS.state;
   const isSysadmin = isValidUserRole(user, sysadminRole);
-  const recordHasChanged = THIS.isRecordChanged(selection);
+  const recordHasChanged = isRecordChanged(selection);
   const userIsCreator = ignoreSaveDisabledIfNotCreator ? true : isRecordCreatedBy(selection, user);
   const emptyRecord = isRecordEmpty(selection);
   const archiveButtonLabel = isRecordArchived(selection) ? unarchiveRecordButtonLabel : archiveRecordButtonLabel;

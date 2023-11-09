@@ -360,7 +360,7 @@ class SSCModificationRecords extends Component {
 
   addModificationRecord = () => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "addMaintenanceRecord");
+      ConsoleLog(this.Module, "addModificationRecord");
     }
     if (this.listRef.current) {
       this.listRef.current.addRecords([new_record(
@@ -382,7 +382,7 @@ class SSCModificationRecords extends Component {
 
   onModificationRecordSelection = (selection) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "saveModificationRecord", "selection", this.state.selection);
+      ConsoleLog(this.Module, "onModificationRecordSelection", "selection", this.state.selection);
     }
     this.setState({selection: selection, metadata_changed: false});
   }
@@ -437,6 +437,7 @@ class SSCModificationRecords extends Component {
     }
     return false;
   }
+
   setProvenanceRecords = (provenance) => {
     setProvenanceRecordsHelper(this, provenance);
   }
@@ -450,10 +451,6 @@ class SSCModificationRecords extends Component {
       return;
     }
     this.setState({show_provenance_view: false,});
-  }
-
-  isRecordChanged = (record) => {
-    return record.hasOwnProperty("changed") && record.changed;
   }
 
   render() {
