@@ -379,7 +379,8 @@ class SSCModificationRecords extends Component {
 
   onModificationRecordSelection = (selection) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "onModificationRecordSelection", "selection", selection, "ssc", this.state.ssc);
+      ConsoleLog(this.Module, "saveModificationRecord", "ssc", ssc);
+      ConsoleLog(this.Module, "saveModificationRecord", "selection", this.state.selection);
     }
     this.setState({selection: selection, metadata_changed: false});
   }
@@ -439,6 +440,7 @@ class SSCModificationRecords extends Component {
   }
 
   showProvenanceRecordsView = () => {
+    this.props.send({cmd: "ddd"})
     showProvenanceRecordsViewHelper(this);
   }
 
