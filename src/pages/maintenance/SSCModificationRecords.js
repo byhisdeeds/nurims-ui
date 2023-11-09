@@ -407,20 +407,17 @@ class SSCModificationRecords extends Component {
 
   deleteModificationRecord = () => {
     const selection = this.state.selection;
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "deleteModificationRecord", "selection", selection);
-    }
     this.setState({confirm_remove: true,});
   }
 
-  cancelRemove = () => {
+  cancelDelete = () => {
     this.setState({confirm_remove: false,});
   }
 
-  proceedWithRemove = () => {
+  proceedWithDelete = () => {
     const selection = this.state.selection;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "proceedWithRemove", "selection", selection);
+      ConsoleLog(this.Module, "proceedWithDelete", "selection", selection);
     }
     if (this.listRef.current) {
       this.listRef.current.removeRecord(selection)
@@ -481,8 +478,8 @@ class SSCModificationRecords extends Component {
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}
                                    selection={selection}
-                                   onProceed={this.proceedWithRemove}
-                                   onCancel={this.cancelRemove}
+                                   onProceed={this.proceedWithDelete}
+                                   onCancel={this.cancelDelete}
         />
         <ShowProvenanceRecordsDialog open={show_provenance_view}
                                      selection={selection}
@@ -516,15 +513,15 @@ class SSCModificationRecords extends Component {
                   align: 'left',
                   disablePadding: true,
                   label: 'Name',
-                  width: '30%',
+                  width: '60%',
                   sortField: true,
                 },
                 {
                   id: NURIMS_TITLE_SUBTITLE,
                   align: 'center',
                   disablePadding: true,
-                  label: 'Created By',
-                  width: '60%',
+                  label: 'Created On',
+                  width: '30%',
                   sortField: true,
                 },
               ]}
