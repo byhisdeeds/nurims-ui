@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import "leaflet/dist/leaflet.css";
 import {
+  changeRecordArchivalStatus,
   getDateFromDateString,
   getRecordMetadataValue,
   getRecordTitle,
@@ -46,7 +47,7 @@ import {
   CMD_GET_SSC_MODIFICATION_RECORDS,
   NURIMS_RELATED_ITEM_ID,
   CMD_UPDATE_SSC_MODIFICATION_RECORD,
-  NURIMS_TITLE_SUBTITLE,
+  NURIMS_TITLE_SUBTITLE, NURIMS_WITHDRAWN,
 } from "../../utils/constants";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import dayjs from 'dayjs';
@@ -95,6 +96,7 @@ class SSCModificationRecords extends Component {
       selection: {},
       properties: props.properties,
       metadata_changed: false,
+      include_archived: false,
       confirm_remove: false,
       show_provenance_view: false,
     };
@@ -381,11 +383,14 @@ class SSCModificationRecords extends Component {
     }
   }
 
-  // getModificationRecords = (include_archived) => {
-  //   if (this.context.debug) {
-  //     ConsoleLog(this.Module, "getModificationRecords", "include_archived", include_archived);
-  //   }
-  // }
+
+  getModificationRecords = (include_archived) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "getModificationRecords", "include_archived", include_archived);
+    }
+    this.props.getModificationRecords(this.state.ssc, include_archived);
+    this.setState({include_archived: include_archived});
+  }
 
   onModificationRecordSelection = (selection) => {
     if (this.context.debug) {
@@ -466,10 +471,16 @@ class SSCModificationRecords extends Component {
     this.setState({show_provenance_view: false,});
   }
 
+  toggleRecordArchivalStatus = () => {
+    console.log("***  toggleRecordArchivalStatus ", this.state.selection)
+    if (changeRecordArchivalStatus(this.state.selection)) {
+      this.setState({include_archived: true});
+    }
+  }
+
   render() {
-    const {confirm_remove, ssc, selection, metadata_changed, properties, show_provenance_view} = this.state;
+    const {confirm_remove, ssc, selection, include_archived, metadata_changed, properties, show_provenance_view} = this.state;
     const no_selection = isRecordEmpty(selection);
-    // const no_ssc = Object.entries(ssc).length === 0;
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "ssc", ssc);
       ConsoleLog(this.Module, "render", "selection", selection);
@@ -491,10 +502,10 @@ class SSCModificationRecords extends Component {
             <PagedRecordList
               ref={this.listRef}
               onListItemSelection={this.onModificationRecordSelection}
-              requestGetRecords={this.getMaintenanceRecords}
-              includeArchived={true}
+              requestGetRecords={this.getModificationRecords}
               title={`${ssc.hasOwnProperty(NURIMS_TITLE) ? "'" + ssc[NURIMS_TITLE] + "'" : ""} Modification Records`}
-              enableRecordArchiveSwitch={false}
+              enableRecordArchiveSwitch={true}
+              includeArchived={include_archived}
               enableRowFilter={true}
               height={'100%'}
               rowsPerPage={10}
@@ -541,6 +552,7 @@ class SSCModificationRecords extends Component {
               onClickViewProvenanceRecords={this.showProvenanceRecordsView}
               showViewProvenanceRecordButton={true}
               showArchiveRecordButton={true}
+              onClickArchiveRecords={this.toggleRecordArchivalStatus}
             />
           </Grid>
           <Grid item xs={12}>
@@ -729,6 +741,7 @@ SSCModificationRecords.propTypes = {
   onChange: PropTypes.func.isRequired,
   deleteRecord: PropTypes.func.isRequired,
   saveChanges: PropTypes.func.isRequired,
+  getModificationRecords: PropTypes.func.isRequired,
 }
 
 export default SSCModificationRecords;

@@ -1400,7 +1400,8 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
           endIcon={archiveRecordIcon}
           onClick={onClickArchiveRecords}
         >
-          {archiveRecordButtonLabel}
+          {archiveButtonLabel}
+          {archiveIcon}
         </Button>
       }
     </Box>

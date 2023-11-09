@@ -633,3 +633,13 @@ export function isRecordCreatedBy(record, user) {
   }
   return p[0] === user.profile.username;
 }
+
+export function changeRecordArchivalStatus(record, status) {
+  console.log("*** archive modification record", record)
+  if (record.hasOwnProperty(NURIMS_WITHDRAWN)) {
+    record[NURIMS_WITHDRAWN] = record[NURIMS_WITHDRAWN] === 0 ? 1 : 0;
+    record.changed = true;
+    return true;
+  }
+  return false;
+}

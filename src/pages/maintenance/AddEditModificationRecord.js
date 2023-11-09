@@ -96,7 +96,7 @@ class AddEditModificationRecord extends BaseRecordManager {
   //   }
   // }
 
-  onSSCRecordSelection = (selection) => {
+  onSSCRecordSelection = (selection, include_archived) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
     }
@@ -104,7 +104,7 @@ class AddEditModificationRecord extends BaseRecordManager {
       cmd: CMD_GET_SSC_MODIFICATION_RECORDS,
       referred_to_item_id: selection.item_id,
       referred_to_metadata: NURIMS_RELATED_ITEM_ID,
-      "include.metadata": "false",
+      "include.withdrawn": include_archived ? "true" : "false",
       "include.metadata.subtitle": NURIMS_CREATION_DATE,
       module: this.Module,
     })
@@ -191,6 +191,7 @@ class AddEditModificationRecord extends BaseRecordManager {
               saveChanges={this.saveChanges}
               deleteRecord={this.deleteRecord}
               send={this.props.send}
+              getModificationRecords={this.onSSCRecordSelection}
             />
           </Grid>
         </Grid>
