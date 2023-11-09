@@ -64,15 +64,11 @@ class PagedRecordList extends React.Component {
 
   addRecords = (records, skipIfRecordInList) => {
     let refresh = false;
-    console.log("???", records)
     if (Array.isArray(records)) {
       for (const record of records) {
-        console.log("?", record)
         let add_to_list = true;
         if (skipIfRecordInList) {
           for (const row of this.rows) {
-            console.log("}}}", row)
-            // if (row[NURIMS_TITLE] === record[NURIMS_TITLE] && row[RECORD_KEY] === record[RECORD_KEY]) {
             if (row.hasOwnProperty(RECORD_KEY) && row[RECORD_KEY] === record[RECORD_KEY]) {
               add_to_list = false;
               break;
@@ -83,7 +79,6 @@ class PagedRecordList extends React.Component {
           }
         }
         if (add_to_list) {
-          consolr.log("PUSH>>>", record)
           this.rows.push(record);
           refresh = true;
         }
