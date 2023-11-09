@@ -85,11 +85,11 @@ class PagedRecordList extends React.Component {
           this.rows.push(record);
           refresh = true;
         }
-        console.log("aafter dd-to-list", this.rows)
+        console.log("aafter dd-to-list", this.rows, refresh)
       }
     }
     if (refresh) {
-      this.forceUpdate();
+      this.setState({selection: this.state.selection});
     }
   }
 
