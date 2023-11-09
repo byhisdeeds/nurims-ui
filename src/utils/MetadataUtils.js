@@ -484,6 +484,7 @@ export function new_record(item_id, title, withdrawn, createdby, fullname) {
     {"nurims.creationdate": dayjs().toISOString()}
   ];
 
+  console.log("???????", record)
   return record;
 }
 

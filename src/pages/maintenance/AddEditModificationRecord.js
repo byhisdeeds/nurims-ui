@@ -10,7 +10,9 @@ import {
   CMD_UPDATE_SSC_MODIFICATION_RECORD,
   NURIMS_CREATION_DATE,
   NURIMS_RELATED_ITEM_ID,
-  NURIMS_TITLE, NURIMS_WITHDRAWN,
+  NURIMS_TITLE,
+  NURIMS_WITHDRAWN,
+  RECORD_KEY,
   SSC_TOPIC,
 } from "../../utils/constants";
 
@@ -110,8 +112,8 @@ class AddEditModificationRecord extends BaseRecordManager {
       if (this.context.debug) {
         ConsoleLog(this.Module, "saveChanges", record);
       }
-      if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
-        record["record_key"] = record_uuid();
+      if (record.item_id === -1 && !record.hasOwnProperty(RECORD_KEY)) {
+        record[RECORD_KEY] = record_uuid();
       }
       this.props.send({
         cmd: CMD_UPDATE_SSC_MODIFICATION_RECORD,
@@ -120,7 +122,7 @@ class AddEditModificationRecord extends BaseRecordManager {
         "nurims.withdrawn": record[NURIMS_WITHDRAWN],
         "include.metadata.subtitle": NURIMS_CREATION_DATE,
         metadata: record.metadata,
-        record_key: record.record_key,
+        record_key: record[RECORD_KEY],
         module: this.Module,
       })
     }
