@@ -7,8 +7,8 @@ import {
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_SSC_MODIFICATION_RECORDS,
   CMD_GET_SSC_RECORDS,
-  CMD_UPDATE_SSC_MODIFICATION_RECORD,
-  NURIMS_RELATED_ITEM_ID,
+  CMD_UPDATE_SSC_MODIFICATION_RECORD, NURIMS_CREATION_DATE,
+  NURIMS_RELATED_ITEM_ID, NURIMS_SAMPLEDATE,
   NURIMS_TITLE, NURIMS_WITHDRAWN,
   SSC_TOPIC,
 } from "../../utils/constants";
@@ -93,6 +93,7 @@ class AddEditModificationRecord extends BaseRecordManager {
       referred_to_item_id: selection.item_id,
       referred_to_metadata: NURIMS_RELATED_ITEM_ID,
       "include.metadata": "false",
+      "include.metadata.subtitle": NURIMS_CREATION_DATE,
       module: this.Module,
     })
     this.setState({selection: selection});

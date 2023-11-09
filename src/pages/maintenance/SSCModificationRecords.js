@@ -44,6 +44,7 @@ import {
   CMD_GET_SSC_MODIFICATION_RECORDS,
   NURIMS_RELATED_ITEM_ID,
   CMD_UPDATE_SSC_MODIFICATION_RECORD,
+  NURIMS_TITLE_SUBTITLE,
 } from "../../utils/constants";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import dayjs from 'dayjs';
@@ -322,11 +323,11 @@ class SSCModificationRecords extends Component {
         this.setProvenanceRecords(message.response.provenance)
       } else if (message.cmd === CMD_GET_SSC_MODIFICATION_RECORDS) {
         if (this.listRef.current) {
-          this.listRef.current.addRecords(message.response.structures_systems_components, false);
+          this.listRef.current.setRecords(message.response.structures_systems_components);
         }
       } else if (message.cmd === CMD_UPDATE_SSC_MODIFICATION_RECORD) {
         if (this.listRef.current) {
-          this.listRef.current.updateRecord(message.response.structures_systems_components, true);
+          this.listRef.current.updateRecord(message.response.structures_systems_components);
         }
       }
     }
@@ -361,7 +362,7 @@ class SSCModificationRecords extends Component {
     if (this.listRef.current) {
       this.listRef.current.addRecords([new_record(
         null,
-        "New Maintenance Record",
+        "New Modification Record",
         0,
         this.context.user.profile.username,
         this.context.user.profile.fullname
@@ -387,7 +388,8 @@ class SSCModificationRecords extends Component {
     const ssc = this.state.ssc;
     const selection = this.state.selection;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "saveModificationRecord", "selection", this.state.selection, "ssc", ssc);
+      ConsoleLog(this.Module, "saveModificationRecord", "ssc", ssc);
+      ConsoleLog(this.Module, "saveModificationRecord", "selection", this.state.selection);
     }
     setMetadataValue(selection, NURIMS_RELATED_ITEM_ID, ssc[ITEM_ID]);
     selection["changed"] = true;
@@ -484,6 +486,32 @@ class SSCModificationRecords extends Component {
               height={'100%'}
               rowsPerPage={10}
               renderCellStyle={this.renderCellStyle}
+              cells={[
+                {
+                  id: ITEM_ID,
+                  align: 'center',
+                  disablePadding: true,
+                  label: 'ID',
+                  width: '10%',
+                  sortField: true,
+                },
+                {
+                  id: NURIMS_TITLE,
+                  align: 'left',
+                  disablePadding: true,
+                  label: 'Name',
+                  width: '30%',
+                  sortField: true,
+                },
+                {
+                  id: NURIMS_TITLE_SUBTITLE,
+                  align: 'center',
+                  disablePadding: true,
+                  label: 'Created By',
+                  width: '60%',
+                  sortField: true,
+                },
+              ]}
             />
           </Grid>
           <Grid item xs={12}>
