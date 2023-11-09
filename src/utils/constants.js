@@ -264,6 +264,7 @@ module.exports = Object.freeze({
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE: "nurims.ssc.maintenancerecord.correctivemaintenance",
   NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL: "nurims.ssc.maintenancerecord.personnel",
   NURIMS_SSC_MODIFICATION_RECORDS: "nurims.ssc.modificationrecords",
+  NURIMS_SSC_MODIFICATION_RECORD_ACTIONS: "nurims.ssc.modificationrecord.actions",
   NURIMS_SSC_MODIFICATION_RECORD_STARTDATE: "nurims.ssc.modificationrecord.startdate",
   NURIMS_SSC_MODIFICATION_RECORD_ENDDATE: "nurims.ssc.modificationrecord.enddate",
   NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE: "nurims.ssc.modificationrecord.commissioneddate",

@@ -27,14 +27,10 @@ import {
   NURIMS_SSC_MAINTENANCE_TASK,
   NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
   NURIMS_SSC_MAINTENANCE_RECORD_NAME,
-  NURIMS_SSC_MAINTENANCE_RECORD_ISSUE,
   NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE,
-  NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_ACTIONS,
   NURIMS_SSC_MAINTENANCE_RECORD_DOCUMENTS,
-  NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE,
   NURIMS_SSC_MAINTENANCE_RECORD_ACCEPTANCE_CRITERIA,
   NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL,
-  NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE,
   NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE,
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE,
   UNDEFINED_DATE_STRING,
@@ -48,11 +44,14 @@ import {
   NURIMS_TITLE_SUBTITLE,
   NURIMS_SSC_MODIFICATION_RECORD_STARTDATE,
   NURIMS_SSC_MODIFICATION_RECORD_ENDDATE,
-  NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONING_DATE,
   NURIMS_SSC_MODIFICATION_RECORD_IMPACT_REACTOR_USAGE,
   NURIMS_SSC_MODIFICATION_RECORD_OBSOLESCENCE_ISSUE,
+  NURIMS_DESCRIPTION,
+  NURIMS_SSC_MODIFICATION_RECORD_ACTIONS,
 } from "../../utils/constants";
-import {getGlossaryValue} from "../../utils/GlossaryUtils";
+import {
+  getGlossaryValue
+} from "../../utils/GlossaryUtils";
 import dayjs from 'dayjs';
 import {
   ConsoleLog,
@@ -168,20 +167,23 @@ class SSCModificationRecords extends Component {
     if (id === "name") {
       selection[NURIMS_TITLE] = e.target.value;
       changed = true;
-    } else if (id === "issue") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_ISSUE, e.target.value)
+    } else if (id === "modification") {
+      setMetadataValue(selection, NURIMS_DESCRIPTION, e.target.value)
       changed = true;
-    } else if (e.target.id === "corrective-actions") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_ACTIONS, e.target.value);
+    } else if (id === "modification-actions") {
+      setMetadataValue(selection, NURIMS_DESCRIPTION, e.target.value)
+      changed = true;
+    } else if (e.target.id === "modification-actions") {
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_ACTIONS, e.target.value);
       changed = true;
     } else if (e.target.id === "documents") {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_DOCUMENTS, e.target.value);
       changed = true;
     } else if (e.target.name === "impact-reactor-usage") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE, ""+e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_IMPACT_REACTOR_USAGE, ""+e.target.checked);
       changed = true;
-    } else if (e.target.name === "obsolescence") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE, "" + e.target.checked);
+    } else if (e.target.name === "impact-obsolescence") {
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_OBSOLESCENCE_ISSUE, "" + e.target.checked);
       changed = true;
     } else if (e.target.name === "preventive-maintenance") {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE, "" + e.target.checked);
@@ -596,7 +598,7 @@ class SSCModificationRecords extends Component {
                     </Grid>
                     <Grid item xs={12} sm={3} style={{textAlign: 'center'}}>
                       <DatePickerWithTooltip
-                        width={"25ch"}
+                        width={"20ch"}
                         label="Modification started"
                         inputFormat={"yyyy-MM-dd"}
                         value={getDateFromDateString(getRecordMetadataValue(selection,
@@ -609,7 +611,7 @@ class SSCModificationRecords extends Component {
                     </Grid>
                     <Grid item xs={12} sm={3} style={{textAlign: 'center'}}>
                       <DatePickerWithTooltip
-                        width={"25ch"}
+                        width={"20ch"}
                         label="Modification Completed"
                         inputFormat={"yyyy-MM-dd"}
                         value={getDateFromDateString(getRecordMetadataValue(selection,
@@ -622,7 +624,7 @@ class SSCModificationRecords extends Component {
                     </Grid>
                     <Grid item xs={12} sm={3} style={{textAlign: 'center'}}>
                       <DatePickerWithTooltip
-                        width={"25ch"}
+                        width={"20ch"}
                         label="Modification Comissioned"
                         inputFormat={"yyyy-MM-dd"}
                         value={getDateFromDateString(getRecordMetadataValue(selection,
@@ -650,8 +652,8 @@ class SSCModificationRecords extends Component {
                         </Grid>
                         <Grid item xs={12} sm={3}>
                           <CheckboxWithTooltip
-                            id={"obsolescence"}
-                            label={"Obsolescence Issue"}
+                            id={"impact-obsolescence"}
+                            label={"Impact SSC obsolescence"}
                             onChange={this.handleChange}
                             checked={getRecordMetadataValue(selection,
                               NURIMS_SSC_MODIFICATION_RECORD_OBSOLESCENCE_ISSUE, "false")}
@@ -664,26 +666,26 @@ class SSCModificationRecords extends Component {
                     </Grid>
                     <Grid item xs={12} sm={12}>
                       <TextFieldWithTooltip
-                        id={"issue"}
-                        label="Maintenance Issue Description"
+                        id={"modification"}
+                        label="Modification Description"
                         required={true}
-                        value={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_ISSUE, "")}
+                        value={getRecordMetadataValue(selection, NURIMS_DESCRIPTION, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_ISSUE, "")}
+                        tooltip={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")}
                         lines={5}
                         padding={0}
                       />
                     </Grid>
                     <Grid item xs={12} sm={12}>
                       <TextFieldWithTooltip
-                        id={"corrective-actions"}
-                        label="Corrective actions"
+                        id={"modification-actions"}
+                        label="Modification actions"
                         required={true}
-                        value={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_ACTIONS, "")}
+                        value={getRecordMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_ACTIONS, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_ACTIONS, "")}
+                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MODIFICATION_RECORD_ACTIONS, "")}
                         lines={5}
                         padding={0}
                       />
