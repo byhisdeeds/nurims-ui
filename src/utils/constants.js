@@ -263,6 +263,12 @@ module.exports = Object.freeze({
   NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE: "nurims.ssc.maintenancerecord.preventivemaintenance",
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE: "nurims.ssc.maintenancerecord.correctivemaintenance",
   NURIMS_SSC_MAINTENANCE_RECORD_PERSONNEL: "nurims.ssc.maintenancerecord.personnel",
+  NURIMS_SSC_MODIFICATION_RECORDS: "nurims.ssc.modificationrecords",
+  NURIMS_SSC_MODIFICATION_RECORD_STARTDATE: "nurims.ssc.modificationrecord.startdate",
+  NURIMS_SSC_MODIFICATION_RECORD_ENDDATE: "nurims.ssc.modificationrecord.enddate",
+  NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE: "nurims.ssc.modificationrecord.commissioneddate",
+  NURIMS_SSC_MODIFICATION_RECORD_OBSOLESCENCE_ISSUE: "nurims.ssc.modificationrecord.obsolescenceissue",
+  NURIMS_SSC_MODIFICATION_RECORD_IMPACT_REACTOR_USAGE: "nurims.ssc.modificationrecord.impactreactorusage",
 
   NURIMS_AMP_AGEING_MECHANISM: "nurims.amp.ageingmechanism",
   NURIMS_AMP_AGEING_EFFECT: "nurims.amp.ageingeffect",

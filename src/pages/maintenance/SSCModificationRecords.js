@@ -26,10 +26,8 @@ import {
   NURIMS_SURVEILLANCE_FREQUENCY,
   NURIMS_SSC_MAINTENANCE_TASK,
   NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
-  NURIMS_SSC_MAINTENANCE_RECORDS,
   NURIMS_SSC_MAINTENANCE_RECORD_NAME,
   NURIMS_SSC_MAINTENANCE_RECORD_ISSUE,
-  NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE,
   NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE,
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_ACTIONS,
   NURIMS_SSC_MAINTENANCE_RECORD_DOCUMENTS,
@@ -47,7 +45,12 @@ import {
   CMD_GET_SSC_MODIFICATION_RECORDS,
   NURIMS_RELATED_ITEM_ID,
   CMD_UPDATE_SSC_MODIFICATION_RECORD,
-  NURIMS_TITLE_SUBTITLE, NURIMS_WITHDRAWN,
+  NURIMS_TITLE_SUBTITLE,
+  NURIMS_SSC_MODIFICATION_RECORD_STARTDATE,
+  NURIMS_SSC_MODIFICATION_RECORD_ENDDATE,
+  NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONING_DATE,
+  NURIMS_SSC_MODIFICATION_RECORD_IMPACT_REACTOR_USAGE,
+  NURIMS_SSC_MODIFICATION_RECORD_OBSOLESCENCE_ISSUE,
 } from "../../utils/constants";
 import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import dayjs from 'dayjs';
@@ -218,26 +221,39 @@ class SSCModificationRecords extends Component {
     }
   }
 
-  removedFromServiceDateChange = (date) => {
+  modificationStartedDateChange = (date) => {
     const selection = this.state.selection;
     if (date) {
       // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, date.toISOString().substring(0,10));
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, date.format('YYYY-MM-DD'));
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_STARTDATE, date.format('YYYY-MM-DD'));
     } else {
-      removeMetadataField(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE);
+      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_RECORD_STARTDATE);
     }
     this.setState({selection: selection, metadata_changed: true})
     // signal to parent that metadata has changed
     this.props.onChange(true);
   }
 
-  returnedToServiceDateChange = (date) => {
+  modificationCompletedDateChange = (date) => {
     const selection = this.state.selection;
     if (date) {
       // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, date.toISOString().substring(0,10));
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, date.format('YYYY-MM-DD'));
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_ENDDATE, date.format('YYYY-MM-DD'));
     } else {
-      removeMetadataField(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE);
+      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_RECORD_ENDDATE);
+    }
+    this.setState({selection: selection, metadata_changed: true})
+    // signal to parent that metadata has changed
+    this.props.onChange(true);
+  }
+
+  modificationCommissionedDateChange = (date) => {
+    const selection = this.state.selection;
+    if (date) {
+      // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, date.toISOString().substring(0,10));
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONING_DATE, date.format('YYYY-MM-DD'));
+    } else {
+      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONING_DATE);
     }
     this.setState({selection: selection, metadata_changed: true})
     // signal to parent that metadata has changed
@@ -472,7 +488,6 @@ class SSCModificationRecords extends Component {
   }
 
   toggleRecordArchivalStatus = () => {
-    console.log("***  toggleRecordArchivalStatus ", this.state.selection)
     if (changeRecordArchivalStatus(this.state.selection)) {
       this.setState({include_archived: true});
     }
@@ -567,7 +582,7 @@ class SSCModificationRecords extends Component {
               <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
                 <CardContent>
                   <Grid container spacing={2}>
-                    <Grid item xs={12} sm={4}>
+                    <Grid item xs={12} sm={3}>
                       <TextFieldWithTooltip
                         id={"name"}
                         label="Record Name"
@@ -579,30 +594,43 @@ class SSCModificationRecords extends Component {
                         padding={0}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={4} style={{textAlign: 'center'}}>
+                    <Grid item xs={12} sm={3} style={{textAlign: 'center'}}>
                       <DatePickerWithTooltip
                         width={"25ch"}
-                        label="Removed From Service"
+                        label="Modification started"
                         inputFormat={"yyyy-MM-dd"}
                         value={getDateFromDateString(getRecordMetadataValue(selection,
-                          NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
-                        onChange={this.removedFromServiceDateChange}
+                          NURIMS_SSC_MODIFICATION_RECORD_STARTDATE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
+                        onChange={this.modificationStartedDateChange}
                         disabled={no_selection}
                         tooltip={getGlossaryValue(
-                          this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, "")}
+                          this.glossary, NURIMS_SSC_MODIFICATION_RECORD_STARTDATE, "")}
                       />
                     </Grid>
-                    <Grid item xs={12} sm={4} style={{textAlign: 'center'}}>
+                    <Grid item xs={12} sm={3} style={{textAlign: 'center'}}>
                       <DatePickerWithTooltip
                         width={"25ch"}
-                        label="Returned To Service"
+                        label="Modification Completed"
                         inputFormat={"yyyy-MM-dd"}
                         value={getDateFromDateString(getRecordMetadataValue(selection,
-                          NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
-                        onChange={this.returnedToServiceDateChange}
+                          NURIMS_SSC_MODIFICATION_RECORD_ENDDATE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
+                        onChange={this.modificationCompletedDateChange}
                         disabled={no_selection}
                         tooltip={getGlossaryValue(
-                          this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, "")}
+                          this.glossary, NURIMS_SSC_MODIFICATION_RECORD_ENDDATE, "")}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={3} style={{textAlign: 'center'}}>
+                      <DatePickerWithTooltip
+                        width={"25ch"}
+                        label="Modification Comissioned"
+                        inputFormat={"yyyy-MM-dd"}
+                        value={getDateFromDateString(getRecordMetadataValue(selection,
+                          NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONING_DATE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
+                        onChange={this.modificationCommissionedDateChange}
+                        disabled={no_selection}
+                        tooltip={getGlossaryValue(
+                          this.glossary, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONING_DATE, "")}
                       />
                     </Grid>
                     <Grid item xs={12} sm={12}>
@@ -615,7 +643,7 @@ class SSCModificationRecords extends Component {
                             required={true}
                             disabled={no_selection}
                             checked={getRecordMetadataValue(selection,
-                              NURIMS_SSC_MAINTENANCE_RECORD_IMPACT_REACTOR_USAGE, "false")}
+                              NURIMS_SSC_MODIFICATION_RECORD_IMPACT_REACTOR_USAGE, "false")}
                             tooltip={"hg gugtt "}
                             padding={8}
                           />
@@ -626,34 +654,12 @@ class SSCModificationRecords extends Component {
                             label={"Obsolescence Issue"}
                             onChange={this.handleChange}
                             checked={getRecordMetadataValue(selection,
-                              NURIMS_SSC_MAINTENANCE_RECORD_OBSOLESCENCE_ISSUE, "false")}
+                              NURIMS_SSC_MODIFICATION_RECORD_OBSOLESCENCE_ISSUE, "false")}
                             disabled={no_selection}
                             tooltip={"hg gugtt "}
                             padding={8}
                           />
                         </Grid>
-                        {/*<Grid item xs={12} sm={3}>*/}
-                        {/*  <CheckboxWithTooltip*/}
-                        {/*    id={"preventive-maintenance"}*/}
-                        {/*    label={"Preventive Maintenance"}*/}
-                        {/*    onChange={this.handleChange}*/}
-                        {/*    checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_PREVENTIVE_MAINTENANCE, "false")}*/}
-                        {/*    disabled={no_selection}*/}
-                        {/*    tooltip={"hg gugtt "}*/}
-                        {/*    padding={8}*/}
-                        {/*  />*/}
-                        {/*</Grid>*/}
-                        {/*<Grid item xs={12} sm={3}>*/}
-                        {/*  <CheckboxWithTooltip*/}
-                        {/*    id={"corrective-maintenance"}*/}
-                        {/*    label={"Corrective Maintenance"}*/}
-                        {/*    onChange={this.handleChange}*/}
-                        {/*    checked={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE, "true")}*/}
-                        {/*    disabled={no_selection}*/}
-                        {/*    tooltip={"hg gugtt "}*/}
-                        {/*    padding={8}*/}
-                        {/*  />*/}
-                        {/*</Grid>*/}
                       </Grid>
                     </Grid>
                     <Grid item xs={12} sm={12}>
