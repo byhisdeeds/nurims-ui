@@ -389,7 +389,8 @@ export const ShowProvenanceRecordsDialog = (props) => (
       // fullWidth={800}
     >
       <DialogTitle id="alert-dialog-title">
-        {`Provenance records for ${props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""}`}
+        {`Provenance records for '${props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""}'
+         (${props.selection.hasOwnProperty(ITEM_ID) ? props.selection[ITEM_ID] : ""})`}
       </DialogTitle>
       <DialogContent dividers={true} >
         <DialogContentText

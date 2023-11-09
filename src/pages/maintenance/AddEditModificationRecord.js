@@ -118,6 +118,7 @@ class AddEditModificationRecord extends BaseRecordManager {
         item_id: record.item_id,
         "nurims.title": record[NURIMS_TITLE],
         "nurims.withdrawn": record[NURIMS_WITHDRAWN],
+        "include.metadata.subtitle": NURIMS_CREATION_DATE,
         metadata: record.metadata,
         record_key: record.record_key,
         module: this.Module,
