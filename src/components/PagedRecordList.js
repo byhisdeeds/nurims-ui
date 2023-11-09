@@ -15,9 +15,16 @@ import {
   Switch,
   TableCell
 } from "@mui/material";
-import {PageableTable} from "./CommonComponents";
-import {ConsoleLog, UserContext} from "../utils/UserContext";
-import {getRecordMetadataValue} from "../utils/MetadataUtils";
+import {
+  PageableTable
+} from "./CommonComponents";
+import {
+  ConsoleLog,
+  UserContext
+} from "../utils/UserContext";
+import {
+  getRecordMetadataValue
+} from "../utils/MetadataUtils";
 
 function filterRowsByName(rows, value) {
   const regex = new RegExp(value);
@@ -57,19 +64,26 @@ class PagedRecordList extends React.Component {
 
   addRecords = (records, skipIfRecordInList) => {
     let refresh = false;
+    console.log("???", records)
     if (Array.isArray(records)) {
       for (const record of records) {
+        console.log("?", record)
         let add_to_list = true;
-        if (skipIfRecordInList && skipIfRecordInList === true) {
+        if (skipIfRecordInList) {
           for (const row of this.rows) {
+            console.log("}}}", row)
             // if (row[NURIMS_TITLE] === record[NURIMS_TITLE] && row[RECORD_KEY] === record[RECORD_KEY]) {
-            if (row[RECORD_KEY] === record[RECORD_KEY]) {
+            if (row.hasOwnProperty(RECORD_KEY) && row[RECORD_KEY] === record[RECORD_KEY]) {
+              add_to_list = false;
+              break;
+            } else if (row[NURIMS_TITLE] === record[NURIMS_TITLE]) {
               add_to_list = false;
               break;
             }
           }
         }
         if (add_to_list) {
+          consolr.log("PUSH>>>", record)
           this.rows.push(record);
           refresh = true;
         }
