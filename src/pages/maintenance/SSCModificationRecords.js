@@ -23,20 +23,13 @@ import {
 } from "../../utils/PropertyUtils";
 import {
   NURIMS_TITLE,
-  NURIMS_SSC_SURVEILLANCE_FREQUENCY,
-  NURIMS_SURVEILLANCE_FREQUENCY,
-  NURIMS_SSC_MAINTENANCE_TASK,
-  NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
-  // NURIMS_SSC_MAINTENANCE_NAME,
   NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE,
   UNDEFINED_DATE_STRING,
   ITEM_ID,
   ROLE_MAINTENANCE_DATA_ENTRY,
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
-  CMD_GET_SSC_MODIFICATION_RECORDS,
   NURIMS_RELATED_ITEM_ID,
-  CMD_UPDATE_SSC_MODIFICATION_RECORD,
   NURIMS_TITLE_SUBTITLE,
   NURIMS_SSC_MODIFICATION_STARTDATE,
   NURIMS_SSC_MODIFICATION_ENDDATE,
@@ -45,10 +38,12 @@ import {
   NURIMS_DESCRIPTION,
   NURIMS_SSC_MODIFICATION_ACTIONS,
   NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE,
-  CMD_GET_ITEM_RECORD,
   NURIMS_SSC_MODIFICATION_PERSONNEL,
   NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA,
-  NURIMS_SSC_MODIFICATION_DOCUMENTS, CMD_UPDATE_ITEM_RECORD, CMD_GET_ITEM_RECORDS, SSC_MODIFICATION_RECORD,
+  NURIMS_SSC_MODIFICATION_DOCUMENTS,
+  CMD_UPDATE_ITEM_RECORD,
+  CMD_GET_ITEM_RECORDS,
+  SSC_MODIFICATION_RECORD,
 } from "../../utils/constants";
 import dayjs from 'dayjs';
 import {
@@ -105,47 +100,6 @@ class SSCModificationRecords extends Component {
     this.ref = React.createRef();
     this.provenanceRecords = [];
     this.glossary = {};
-    // this.sscSurveillanceData = [];
-    // this.sscSurveillanceFields = [
-    //   {
-    //     label: "Scope",
-    //     name: NURIMS_SSC_MAINTENANCE_TASK,
-    //     width: '20ch',
-    //     align: 'center',
-    //     validation: (e, a) => {
-    //       return true;
-    //     },
-    //     error: "go home kid"
-    //   },
-    //   {
-    //     label: "Acceptance",
-    //     name: NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
-    //     width: '20ch',
-    //     align: 'center',
-    //     validation: e => {
-    //       return true;
-    //     },
-    //     error: "Haha"
-    //   },
-    //   {
-    //     label: "Frequency",
-    //     name: NURIMS_SSC_SURVEILLANCE_FREQUENCY,
-    //     type: "select",
-    //     width: '16ch',
-    //     align: 'center',
-    //     options: [],
-    //     validation: (e, a) => {
-    //       return true;
-    //     },
-    //     error: "go home kid"
-    //   },
-    // ];
-    // getPropertyValue(props.properties, NURIMS_SURVEILLANCE_FREQUENCY, "").split('|').map((n) => {
-    //   const t = n.split(',');
-    //   if (t.length === 2) {
-    //     return this.sscSurveillanceFields[2].options.push({ label: t[1], value: t[0] });
-    //   }
-    // })
   }
 
   setGlossaryTerms = (terms) => {

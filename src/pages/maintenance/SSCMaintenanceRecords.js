@@ -29,7 +29,6 @@ import {
   CMD_GET_PROVENANCE_RECORDS,
   NURIMS_RELATED_ITEM_ID,
   NURIMS_TITLE_SUBTITLE,
-  NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE,
   NURIMS_SSC_MAINTENANCE_REMOVED_FROM_SERVICE,
   NURIMS_SSC_MAINTENANCE_IMPACT_REACTOR_USAGE,
   NURIMS_SSC_MAINTENANCE_OBSOLESCENCE_ISSUE,
@@ -39,7 +38,6 @@ import {
   NURIMS_SSC_MAINTENANCE_PERSONNEL,
   CMD_GET_REFERRED_TO_ITEM_RECORDS,
   CMD_UPDATE_ITEM_RECORD,
-  SSC_MODIFICATION_RECORD,
   SSC_MAINTENANCE_RECORD,
   CMD_GET_ITEM_RECORDS,
 } from "../../utils/constants";
@@ -182,16 +180,16 @@ class SSCMaintenanceRecords extends Component {
     this.setState({metadata_changed: true})
   }
 
-  modificationCommissionedDateChange = (date) => {
-    const selection = this.state.selection;
-    if (date) {
-      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE, date.format('YYYY-MM-DD'));
-    } else {
-      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE);
-    }
-    setRecordChanged(selection);
-    this.setState({metadata_changed: true})
-  }
+  // modificationCommissionedDateChange = (date) => {
+  //   const selection = this.state.selection;
+  //   if (date) {
+  //     setMetadataValue(selection, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE, date.format('YYYY-MM-DD'));
+  //   } else {
+  //     removeMetadataField(selection, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE);
+  //   }
+  //   setRecordChanged(selection);
+  //   this.setState({metadata_changed: true})
+  // }
 
   ws_message = (message) => {
     if (this.context.debug) {
