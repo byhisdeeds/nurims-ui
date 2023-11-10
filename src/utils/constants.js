@@ -170,6 +170,8 @@ module.exports = Object.freeze({
 
   CMD_BOT_MESSAGE_SEND: "bot_message_send",
 
+  CMD_GET_ITEM_RECORD: "get_item_record",
+
   METADATA: 'metadata',
   INCLUDE_METADATA: 'include.metadata',
   ITEM_ID: "item_id",
@@ -270,6 +272,9 @@ module.exports = Object.freeze({
   NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE: "nurims.ssc.modificationrecord.commissioneddate",
   NURIMS_SSC_MODIFICATION_RECORD_OBSOLESCENCE_ISSUE: "nurims.ssc.modificationrecord.obsolescenceissue",
   NURIMS_SSC_MODIFICATION_RECORD_IMPACT_REACTOR_USAGE: "nurims.ssc.modificationrecord.impactreactorusage",
+  NURIMS_SSC_MODIFICATION_RECORD_PERSONNEL: "nurims.ssc.modificationrecord.personnel",
+  NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA: "nurims.ssc.modificationrecord.acceptancecriteria",
+  NURIMS_SSC_MODIFICATION_DOCUMENTS: "nurims.ssc.modificationrecord.documents",
 
   NURIMS_AMP_AGEING_MECHANISM: "nurims.amp.ageingmechanism",
   NURIMS_AMP_AGEING_EFFECT: "nurims.amp.ageingeffect",
@@ -307,9 +312,10 @@ module.exports = Object.freeze({
   MONITOR_RECORD_TYPE: "monitor_record",
   IRRADIATED_SAMPLE_LOG_RECORD_TYPE: "irradiated_sample_log_record",
   REACTOR_WATER_CHEMISTRY_RECORD_TYPE: "reactor_water_chemistry_record",
-
+  REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD_TYPE: "reactor_sample_irradiation_authorization_record",
   EMPLOYEE_RECORD: "employee_record",
   FIXED_LOCATION_MONITOR_RECORD: "fixed_location_monitor_record",
+  SSC_MODIFICATION_RECORD: "ssc_modification_record",
 
   PERSONNEL_TOPIC: "personnel",
   MONITOR_TOPIC: "monitor",

@@ -5,15 +5,18 @@ import {
 import {
   CMD_DELETE_SSC_MODIFICATION_RECORD,
   CMD_GET_GLOSSARY_TERMS,
+  CMD_GET_ITEM_RECORD,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_SSC_MODIFICATION_RECORDS,
   CMD_GET_SSC_RECORDS,
-  CMD_UPDATE_SSC_MODIFICATION_RECORD, ITEM_ID,
+  CMD_UPDATE_SSC_MODIFICATION_RECORD,
+  ITEM_ID,
   NURIMS_CREATION_DATE,
   NURIMS_RELATED_ITEM_ID,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
   RECORD_KEY,
+  SSC_MODIFICATION_RECORD,
   SSC_TOPIC,
 } from "../../utils/constants";
 
@@ -122,7 +125,9 @@ class AddEditModificationRecord extends BaseRecordManager {
     this.props.send({
       cmd: CMD_GET_ITEM_RECORD,
       item_id: selection[ITEM_ID],
-      topic: "",
+      topic: SSC_TOPIC,
+      record_type: SSC_MODIFICATION_RECORD,
+      "include.metadata": "true",
       module: this.Module,
     })
   }
