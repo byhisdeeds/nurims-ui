@@ -48,6 +48,7 @@ import {
   NURIMS_SSC_MODIFICATION_RECORD_OBSOLESCENCE_ISSUE,
   NURIMS_DESCRIPTION,
   NURIMS_SSC_MODIFICATION_RECORD_ACTIONS,
+  NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE,
 } from "../../utils/constants";
 import {
   getGlossaryValue
@@ -253,9 +254,9 @@ class SSCModificationRecords extends Component {
     const selection = this.state.selection;
     if (date) {
       // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, date.toISOString().substring(0,10));
-      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONING_DATE, date.format('YYYY-MM-DD'));
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE, date.format('YYYY-MM-DD'));
     } else {
-      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONING_DATE);
+      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE);
     }
     this.setState({selection: selection, metadata_changed: true})
     // signal to parent that metadata has changed
