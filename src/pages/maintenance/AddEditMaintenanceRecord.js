@@ -16,7 +16,7 @@ import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
   RECORD_KEY,
-  SSC_MAINTENANCE_RECORD,
+  SSC_MAINTENANCE_RECORD, SSC_MODIFICATION_RECORD, SSC_RECORD_TYPE,
   SSC_TOPIC,
 } from "../../utils/constants";
 
@@ -44,6 +44,7 @@ import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
 import {
+  isRecordType,
   record_uuid
 } from "../../utils/MetadataUtils";
 import SSCMaintenanceRecords from "./SSCMaintenanceRecords";
@@ -66,9 +67,15 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
       module: this.Module,
     });
     this.props.send({
-      cmd: CMD_GET_SSC_RECORDS,
+      cmd: CMD_GET_ITEM_RECORDS,
+      topic: SSC_TOPIC,
+      record_type: SSC_RECORD_TYPE,
       module: this.Module,
     });
+    // this.props.send({
+    //   cmd: CMD_GET_SSC_RECORDS,
+    //   module: this.Module,
+    // });
   }
 
   ws_message = (message) => {
@@ -77,12 +84,12 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
         if (isCommandResponse(message,
           [CMD_GET_ITEM_RECORDS, CMD_UPDATE_ITEM_RECORD,
             CMD_GET_PROVENANCE_RECORDS, CMD_GET_GLOSSARY_TERMS])) {
-          if (this.maintenanceRecordsRef.current) {
+          if (isRecordType(message, SSC_RECORD_TYPE)) {
+            if (this.listRef.current) {
+              this.listRef.current.addRecords(message.response.structures_systems_components, false);
+            }
+          } else if (this.maintenanceRecordsRef.current) {
             this.maintenanceRecordsRef.current.ws_message(message);
-          }
-        } else if (isCommandResponse(message,CMD_GET_SSC_RECORDS)) {
-          if (this.listRef.current) {
-            this.listRef.current.addRecords(message.response.structures_systems_components, false);
           }
         }
       }

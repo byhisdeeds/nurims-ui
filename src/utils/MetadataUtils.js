@@ -37,6 +37,10 @@ export function isRecordArchived(record) {
   return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
 }
 
+export function isRecordType(record, type) {
+  return (record.hasOwnProperty("record_type") && record.record_type === type);
+}
+
 export function isRecordEmpty(record) {
   return (Object.keys(record).length === 0);
 }
