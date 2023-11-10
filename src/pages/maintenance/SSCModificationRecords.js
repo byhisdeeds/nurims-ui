@@ -68,7 +68,8 @@ import {
 } from "../../components/CommonComponents";
 import PropTypes from "prop-types";
 import {
-  ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog
+  ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog
 } from "../../components/UtilityDialogs";
 import {
   isValidUserRole
@@ -83,7 +84,9 @@ import {
 import {
   ADDEDITMODIFICATIONRECORD_REF
 } from "./AddEditModificationRecord";
-import {enqueueSuccessSnackbar} from "../../utils/SnackbarVariants";
+import {
+  enqueueSuccessSnackbar
+} from "../../utils/SnackbarVariants";
 
 const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
 
@@ -629,11 +632,11 @@ class SSCModificationRecords extends Component {
                         label="Modification Comissioned"
                         inputFormat={"yyyy-MM-dd"}
                         value={getDateFromDateString(getRecordMetadataValue(selection,
-                          NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONING_DATE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
+                          NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
                         onChange={this.modificationCommissionedDateChange}
                         disabled={no_selection}
                         tooltip={getGlossaryValue(
-                          this.glossary, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONING_DATE, "")}
+                          this.glossary, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE, "")}
                       />
                     </Grid>
                     <Grid item xs={12} sm={12}>
