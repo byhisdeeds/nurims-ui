@@ -8,7 +8,6 @@ import {
   CMD_GET_ITEM_RECORDS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_REFERRED_TO_ITEM_RECORDS,
-  CMD_GET_SSC_RECORDS,
   CMD_UPDATE_ITEM_RECORD,
   ITEM_ID,
   NURIMS_CREATION_DATE,
@@ -16,7 +15,8 @@ import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
   RECORD_KEY,
-  SSC_MAINTENANCE_RECORD, SSC_MODIFICATION_RECORD, SSC_RECORD_TYPE,
+  SSC_MAINTENANCE_RECORD,
+  SSC_RECORD_TYPE,
   SSC_TOPIC,
 } from "../../utils/constants";
 
@@ -72,18 +72,14 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
       record_type: SSC_RECORD_TYPE,
       module: this.Module,
     });
-    // this.props.send({
-    //   cmd: CMD_GET_SSC_RECORDS,
-    //   module: this.Module,
-    // });
   }
 
   ws_message = (message) => {
     if (messageHasResponse(message)) {
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message,
-          [CMD_GET_ITEM_RECORDS, CMD_UPDATE_ITEM_RECORD,
-            CMD_GET_PROVENANCE_RECORDS, CMD_GET_GLOSSARY_TERMS])) {
+          [CMD_GET_ITEM_RECORDS, CMD_UPDATE_ITEM_RECORD, CMD_GET_PROVENANCE_RECORDS,
+            CMD_GET_GLOSSARY_TERMS, CMD_GET_REFERRED_TO_ITEM_RECORDS, CMD_DELETE_ITEM_RECORD])) {
           if (isRecordType(message, SSC_RECORD_TYPE)) {
             if (this.listRef.current) {
               this.listRef.current.addRecords(message.response.structures_systems_components, false);
@@ -116,8 +112,8 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
       referred_to_metadata: NURIMS_RELATED_ITEM_ID,
       "include.withdrawn": include_archived ? "true" : "false",
       "include.metadata.subtitle": NURIMS_CREATION_DATE,
-      topic: SSC_MAINTENANCE_RECORD,
-      record_type: SSC_TOPIC,
+      topic: SSC_TOPIC,
+      record_type: SSC_MAINTENANCE_RECORD,
       module: this.Module,
     })
     this.setState({selection: selection});
@@ -159,7 +155,7 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
         metadata: record.metadata,
         record_key: record[RECORD_KEY],
         topic: SSC_TOPIC,
-        record_type: SSC_MAINTENANCE_RECORD,
+        record_type: record[NURIMS_WITHDRAWN],
         module: this.Module,
       })
     }
