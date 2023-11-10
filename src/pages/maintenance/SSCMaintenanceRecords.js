@@ -120,8 +120,8 @@ class SSCMaintenanceRecords extends Component {
     if (id === "name") {
       selection[NURIMS_TITLE] = e.target.value;
       changed = true;
-    } else if (id === "modification") {
-      setMetadataValue(selection, NURIMS_DESCRIPTION, e.target.value)
+    } else if (id === "maintenance") {
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_ISSUE, e.target.value)
       changed = true;
     } else if (e.target.id === "corrective-actions") {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_CORRECTIVE_ACTIONS, e.target.value);
@@ -130,10 +130,10 @@ class SSCMaintenanceRecords extends Component {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_DOCUMENTS, e.target.value);
       changed = true;
     } else if (e.target.name === "impact-reactor-usage") {
-      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_IMPACT_REACTOR_USAGE, ""+e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_IMPACT_REACTOR_USAGE, ""+e.target.checked);
       changed = true;
     } else if (e.target.name === "impact-obsolescence") {
-      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_OBSOLESCENCE_ISSUE, "" + e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_OBSOLESCENCE_ISSUE, "" + e.target.checked);
       changed = true;
     } else if (e.target.id === "acceptance-criteria") {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA, e.target.value);
