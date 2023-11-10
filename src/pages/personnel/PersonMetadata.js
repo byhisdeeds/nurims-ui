@@ -16,7 +16,8 @@ import {
   BlobPath,
   getDateFromDateString,
   getRecordMetadataValue,
-  setMetadataValue
+  setMetadataValue,
+  getGlossaryValue
 } from "../../utils/MetadataUtils";
 import {getPropertyValue} from "../../utils/PropertyUtils";
 import {
@@ -40,9 +41,6 @@ import {
 import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
-import {
-  getGlossaryValue
-} from "../../utils/GlossaryUtils";
 import {
   DatePickerWithTooltip
 } from "../../components/CommonComponents";

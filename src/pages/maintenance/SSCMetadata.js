@@ -9,6 +9,7 @@ import {
   getDateFromDateString,
   getRecordMetadataValue,
   setMetadataValue,
+  getGlossaryValue
 } from "../../utils/MetadataUtils";
 import {
   getPropertyAsArray,
@@ -33,9 +34,6 @@ import {
   NURIMS_SSC_REACTOR_SAFETY_CATEGORY,
   NURIMS_SSC_REACTOR_SAFETY_FUNCTION,
 } from "../../utils/constants";
-import {
-  getGlossaryValue
-} from "../../utils/GlossaryUtils";
 import EditableTable from "../../components/EditableTable";
 import {
   ConsoleLog,

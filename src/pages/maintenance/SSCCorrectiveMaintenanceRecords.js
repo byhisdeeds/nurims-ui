@@ -14,6 +14,7 @@ import {
   new_record,
   removeMetadataField,
   setMetadataValue,
+  getGlossaryValue,
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
@@ -39,7 +40,6 @@ import {
   NURIMS_SSC_MAINTENANCE_RECORD_CORRECTIVE_MAINTENANCE,
   UNDEFINED_DATE_STRING,
 } from "../../utils/constants";
-import {getGlossaryValue} from "../../utils/GlossaryUtils";
 import dayjs from 'dayjs';
 import {
   ConsoleLog,

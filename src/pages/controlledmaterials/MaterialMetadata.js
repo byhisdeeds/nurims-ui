@@ -10,16 +10,14 @@ import {
   setMetadataValue,
   getDateFromDateString,
   BlobObject,
-  BlobPath
+  BlobPath,
+  getGlossaryValue
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
 } from "../../utils/PropertyUtils";
 import Avatar from "@mui/material/Avatar";
 import ImageIcon from '@mui/icons-material/Image';
-import {
-  getGlossaryValue
-} from "../../utils/GlossaryUtils";
 import {
   HtmlTooltip,
   TooltipText

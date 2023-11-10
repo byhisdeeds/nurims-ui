@@ -16,6 +16,7 @@ import {
   removeMetadataField,
   setMetadataValue,
   setRecordChanged,
+  getGlossaryValue,
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
@@ -49,9 +50,6 @@ import {
   NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA,
   NURIMS_SSC_MODIFICATION_DOCUMENTS,
 } from "../../utils/constants";
-import {
-  getGlossaryValue
-} from "../../utils/GlossaryUtils";
 import dayjs from 'dayjs';
 import {
   ConsoleLog,

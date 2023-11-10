@@ -662,3 +662,7 @@ export function isSelectableByRoles(user, selection, roles, valid_selection){
   }
   return false;
 }
+
+export function getGlossaryValue(obj, key, missingValue) {
+  return obj.hasOwnProperty(key) ? obj[key] : missingValue;
+}

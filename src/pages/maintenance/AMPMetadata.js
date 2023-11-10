@@ -12,6 +12,7 @@ import "leaflet/dist/leaflet.css";
 import {
   getRecordMetadataValue,
   setMetadataValue,
+  getGlossaryValue,
 } from "../../utils/MetadataUtils";
 import {
   getPropertyAsMenuitems,
@@ -29,7 +30,6 @@ import {
   NURIMS_AMP_SURVEILLANCE_FREQUENCY,
 } from "../../utils/constants";
 import {HtmlTooltip, TooltipText} from "../../utils/TooltipUtils";
-import {getGlossaryValue} from "../../utils/GlossaryUtils";
 
 
 class AMPMetadata extends Component {

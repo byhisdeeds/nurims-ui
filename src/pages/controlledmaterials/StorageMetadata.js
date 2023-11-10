@@ -29,6 +29,7 @@ import {
   getRecordMetadataValue,
   markerBounds,
   setMetadataValue,
+  getGlossaryValue,
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
@@ -46,9 +47,6 @@ import {
   HtmlTooltip,
   TooltipText
 } from "../../utils/TooltipUtils";
-import {
-  getGlossaryValue
-} from "../../utils/GlossaryUtils";
 import ImageIcon from '@mui/icons-material/Image';
 import {
   PhotoCamera,
