@@ -15,7 +15,6 @@ import {VIEWSSCRECORDS_REF} from "./maintenance/ViewSSCRecords";
 import {VIEWAMPRECORDS_REF} from "./maintenance/ViewAMPRecords";
 import {ADDEDITAMP_REF} from "./maintenance/AddEditAMP";
 import {ADDEDITSSC_REF} from "./maintenance/AddEditSSC";
-import {ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF} from "./maintenance/AddEditCorrectiveMaintenanceIssueRecord";
 import {GENERATESSCMAINTENANCEREPORT_REF} from "./maintenance/GenerateSSCMaintenanceReport";
 import {ADDEDITMONITORS_REF} from "./radiationprotection/AddEditMonitors";
 import {PERSONNELDOSIMETRYMEASUREMENT_REF} from "./radiationprotection/PersonnelDosimetryMeasurement";
@@ -37,6 +36,7 @@ import {UNDERDEVELOPMENT_REF} from "../components/UnderDevelopment";
 import MaintenanceSchedule, {MAINTENANCESCHEDULE_REF} from "./maintenance/MaintenanceSchedule";
 import {CLEANUPLARGEOBJECTSTORE_REF} from "./sysadmin/CleanupLargeObjectStore";
 import {ADDEDITMODIFICATIONRECORD_REF} from "./maintenance/AddEditModificationRecord";
+import {ADDEDITMAINTENANCERECORD_REF} from "./maintenance/AddEditMaintenanceRecord";
 
 const Constants = require("../utils/constants");
 
@@ -291,8 +291,8 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       send={send}
       properties={properties}
     />)
-  } else if (actionid === Constants.SSC_ADD_EDIT_SSC_TODO_RECORD) {
-    return (<AddEditMaintenanceRecord
+  } else if (actionid === Constants.SSC_ADD_EDIT_SSC_MODIFICATION_RECORD) {
+    return (<AddEditModificationRecord
       ref={crefs[ADDEDITMODIFICATIONRECORD_REF]}
       title={menuTitle}
       user={user}
@@ -327,9 +327,9 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       send={send}
       properties={properties}
     />)
-  } else if (actionid === Constants.SSC_ADD_EDIT_SSC_CORRECTIVE_MAINTENANCE_ISSUE_RECORD) {
+  } else if (actionid === Constants.SSC_ADD_EDIT_SSC_MAINTENANCE_RECORD) {
     return (<AddEditMaintenanceRecord
-      ref={crefs[ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF]}
+      ref={crefs[ADDEDITMAINTENANCERECORD_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}

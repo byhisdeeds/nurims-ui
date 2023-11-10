@@ -90,6 +90,7 @@ import LogWindow from "./components/LogWindow";
 import {VIEWAMPRECORDS_REF} from "./pages/maintenance/ViewAMPRecords";
 import {CLEANUPLARGEOBJECTSTORE_REF} from "./pages/sysadmin/CleanupLargeObjectStore";
 import {ADDEDITMODIFICATIONRECORD_REF} from "./pages/maintenance/AddEditModificationRecord";
+import {ADDEDITMAINTENANCERECORD_REF} from "./pages/maintenance/AddEditMaintenanceRecord";
 import {SIGNIN_REF} from "./components/Signin";
 import NotificationWindow from "./components/NotificationWindow";
 import SystemInfoBadges from "./components/SystemInfoBadges";
@@ -217,7 +218,6 @@ class App extends React.Component {
     this.crefs[ADDEDITPERSONNEL_REF] = React.createRef();
     this.crefs[VIEWPERSONNELRECORDS_REF] = React.createRef();
     this.crefs[ADDEDITSSC_REF] = React.createRef();
-    this.crefs[ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF] = React.createRef();
     this.crefs[ADDEDITAMP_REF] = React.createRef();
     this.crefs[VIEWSSCRECORDS_REF] = React.createRef();
     this.crefs[VIEWAMPRECORDS_REF] = React.createRef();
@@ -225,6 +225,7 @@ class App extends React.Component {
     this.crefs[ADDEDITREACTORWATERSAMPLES_REF] = React.createRef();
     this.crefs[ADDEDITIRRADIATEDSAMPLES_REF] = React.createRef();
     this.crefs[ADDEDITMODIFICATIONRECORD_REF] = React.createRef();
+    this.crefs[ADDEDITMAINTENANCERECORD_REF] = React.createRef();
     this.crefs[REACTOROPERATIONSREPORT_REF] = React.createRef();
     this.crefs[ADDEDITREACTOROPERATINGRUNS_REF] = React.createRef();
     this.crefs[UPDATEMONITORINGSTATUS_REF] = React.createRef();
