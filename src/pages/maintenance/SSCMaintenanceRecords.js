@@ -23,9 +23,6 @@ import {
 } from "../../utils/PropertyUtils";
 import {
   NURIMS_TITLE,
-  NURIMS_SSC_SURVEILLANCE_FREQUENCY,
-  NURIMS_SURVEILLANCE_FREQUENCY,
-  NURIMS_SSC_MAINTENANCE_TASK,
   NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
   NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE,
   UNDEFINED_DATE_STRING,
@@ -33,26 +30,21 @@ import {
   ROLE_MAINTENANCE_DATA_ENTRY,
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
-  CMD_GET_SSC_MODIFICATION_RECORDS,
   NURIMS_RELATED_ITEM_ID,
-  CMD_UPDATE_SSC_MODIFICATION_RECORD,
   NURIMS_TITLE_SUBTITLE,
-  NURIMS_SSC_MODIFICATION_STARTDATE,
-  NURIMS_SSC_MODIFICATION_ENDDATE,
   NURIMS_SSC_MODIFICATION_IMPACT_REACTOR_USAGE,
   NURIMS_SSC_MODIFICATION_OBSOLESCENCE_ISSUE,
   NURIMS_DESCRIPTION,
-  NURIMS_SSC_MODIFICATION_ACTIONS,
   NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE,
   CMD_GET_ITEM_RECORD,
-  NURIMS_SSC_MODIFICATION_PERSONNEL,
-  NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA,
-  NURIMS_SSC_MODIFICATION_DOCUMENTS,
   NURIMS_SSC_MAINTENANCE_REMOVED_FROM_SERVICE,
   NURIMS_SSC_MAINTENANCE_IMPACT_REACTOR_USAGE,
   NURIMS_SSC_MAINTENANCE_OBSOLESCENCE_ISSUE,
   NURIMS_SSC_MAINTENANCE_ISSUE,
-  NURIMS_SSC_MAINTENANCE_CORRECTIVE_ACTIONS, NURIMS_SSC_MAINTENANCE_DOCUMENTS, NURIMS_SSC_MAINTENANCE_PERSONNEL,
+  NURIMS_SSC_MAINTENANCE_CORRECTIVE_ACTIONS,
+  NURIMS_SSC_MAINTENANCE_DOCUMENTS,
+  NURIMS_SSC_MAINTENANCE_PERSONNEL,
+  CMD_GET_REFERRED_TO_ITEM_RECORDS, CMD_UPDATE_ITEM_RECORD,
 } from "../../utils/constants";
 import dayjs from 'dayjs';
 import {
@@ -109,47 +101,6 @@ class SSCMaintenanceRecords extends Component {
     this.ref = React.createRef();
     this.provenanceRecords = [];
     this.glossary = {};
-    // this.sscSurveillanceData = [];
-    // this.sscSurveillanceFields = [
-    //   {
-    //     label: "Scope",
-    //     name: NURIMS_SSC_MAINTENANCE_TASK,
-    //     width: '20ch',
-    //     align: 'center',
-    //     validation: (e, a) => {
-    //       return true;
-    //     },
-    //     error: "go home kid"
-    //   },
-    //   {
-    //     label: "Acceptance",
-    //     name: NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
-    //     width: '20ch',
-    //     align: 'center',
-    //     validation: e => {
-    //       return true;
-    //     },
-    //     error: "Haha"
-    //   },
-    //   {
-    //     label: "Frequency",
-    //     name: NURIMS_SSC_SURVEILLANCE_FREQUENCY,
-    //     type: "select",
-    //     width: '16ch',
-    //     align: 'center',
-    //     options: [],
-    //     validation: (e, a) => {
-    //       return true;
-    //     },
-    //     error: "go home kid"
-    //   },
-    // ];
-    // getPropertyValue(props.properties, NURIMS_SURVEILLANCE_FREQUENCY, "").split('|').map((n) => {
-    //   const t = n.split(',');
-    //   if (t.length === 2) {
-    //     return this.sscSurveillanceFields[2].options.push({ label: t[1], value: t[0] });
-    //   }
-    // })
   }
 
   setGlossaryTerms = (terms) => {
@@ -254,20 +205,21 @@ class SSCMaintenanceRecords extends Component {
         this.setGlossaryTerms(message.response.terms)
       } else if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
         this.setProvenanceRecords(message.response.provenance)
-      } else if (message.cmd === CMD_GET_SSC_MODIFICATION_RECORDS) {
+      } else if (message.cmd === CMD_GET_REFERRED_TO_ITEM_RECORDS) {
         if (this.listRef.current) {
           this.listRef.current.setRecords(message.response.structures_systems_components);
         }
-      } else if (message.cmd === CMD_UPDATE_SSC_MODIFICATION_RECORD) {
+      } else if (message.cmd === CMD_UPDATE_ITEM_RECORD) {
         const record = message.response.structures_systems_components;
         enqueueSuccessSnackbar(
           `Successfully updated modification record ${record.length === 1 ? record[NURIMS_TITLE] : ""}.`);
         if (this.listRef.current) {
           this.listRef.current.updateRecord(record);
         }
-      } else if (message.cmd === CMD_GET_ITEM_RECORD) {
-        this.setState({selection: message.response.structures_systems_components});
       }
+      // else if (message.cmd === CMD_GET_ITEM_RECORD) {
+      //   this.setState({selection: message.response.structures_systems_components});
+      // }
     }
   }
 
