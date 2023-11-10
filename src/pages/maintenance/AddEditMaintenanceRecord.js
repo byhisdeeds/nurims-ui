@@ -74,34 +74,6 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
     });
   }
 
-  ws_message = (message) => {
-    if (messageHasResponse(message)) {
-      if (messageResponseStatusOk(message)) {
-        if (isCommandResponse(message,
-          [CMD_GET_ITEM_RECORDS, CMD_UPDATE_ITEM_RECORD, CMD_GET_PROVENANCE_RECORDS,
-            CMD_GET_GLOSSARY_TERMS, CMD_GET_REFERRED_TO_ITEM_RECORDS, CMD_DELETE_ITEM_RECORD])) {
-          if (isRecordType(message, SSC_RECORD_TYPE)) {
-            if (this.listRef.current) {
-              this.listRef.current.addRecords(message.response.structures_systems_components, false);
-            }
-          } else if (this.maintenanceRecordsRef.current) {
-            this.maintenanceRecordsRef.current.ws_message(message);
-          }
-        }
-      }
-    } else {
-      if (messageHasResponse(message)) {
-        enqueueErrorSnackbar(message.response.message);
-      }
-    }
-  }
-
-  // addMaintenanceRecord = () => {
-  //   if (this.metadataRef.current) {
-  //     this.metadataRef.current.addMaintenanceRecord();
-  //   }
-  // }
-
   onSSCRecordSelection = (selection, include_archived) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
@@ -176,6 +148,28 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
       module: this.Module,
     })
     // this.setState({metadata_changed: false})
+  }
+
+  ws_message = (message) => {
+    if (messageHasResponse(message)) {
+      if (messageResponseStatusOk(message)) {
+        if (isCommandResponse(message,
+          [CMD_GET_ITEM_RECORDS, CMD_UPDATE_ITEM_RECORD, CMD_GET_PROVENANCE_RECORDS,
+            CMD_GET_GLOSSARY_TERMS, CMD_GET_REFERRED_TO_ITEM_RECORDS, CMD_DELETE_ITEM_RECORD])) {
+          if (isRecordType(message, SSC_RECORD_TYPE)) {
+            if (this.listRef.current) {
+              this.listRef.current.addRecords(message.response.structures_systems_components, false);
+            }
+          } else if (this.maintenanceRecordsRef.current) {
+            this.maintenanceRecordsRef.current.ws_message(message);
+          }
+        }
+      }
+    } else {
+      if (messageHasResponse(message)) {
+        enqueueErrorSnackbar(message.response.message);
+      }
+    }
   }
 
   render() {
