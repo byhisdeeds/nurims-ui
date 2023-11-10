@@ -69,9 +69,6 @@ import {
   ShowProvenanceRecordsDialog
 } from "../../components/UtilityDialogs";
 import {
-  isValidUserRole
-} from "../../utils/UserUtils";
-import {
   setProvenanceRecordsHelper,
   showProvenanceRecordsViewHelper
 } from "../../utils/ProvenanceUtils";
@@ -108,47 +105,47 @@ class SSCModificationRecords extends Component {
     this.ref = React.createRef();
     this.provenanceRecords = [];
     this.glossary = {};
-    this.sscSurveillanceData = [];
-    this.sscSurveillanceFields = [
-      {
-        label: "Scope",
-        name: NURIMS_SSC_MAINTENANCE_TASK,
-        width: '20ch',
-        align: 'center',
-        validation: (e, a) => {
-          return true;
-        },
-        error: "go home kid"
-      },
-      {
-        label: "Acceptance",
-        name: NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
-        width: '20ch',
-        align: 'center',
-        validation: e => {
-          return true;
-        },
-        error: "Haha"
-      },
-      {
-        label: "Frequency",
-        name: NURIMS_SSC_SURVEILLANCE_FREQUENCY,
-        type: "select",
-        width: '16ch',
-        align: 'center',
-        options: [],
-        validation: (e, a) => {
-          return true;
-        },
-        error: "go home kid"
-      },
-    ];
-    getPropertyValue(props.properties, NURIMS_SURVEILLANCE_FREQUENCY, "").split('|').map((n) => {
-      const t = n.split(',');
-      if (t.length === 2) {
-        return this.sscSurveillanceFields[2].options.push({ label: t[1], value: t[0] });
-      }
-    })
+    // this.sscSurveillanceData = [];
+    // this.sscSurveillanceFields = [
+    //   {
+    //     label: "Scope",
+    //     name: NURIMS_SSC_MAINTENANCE_TASK,
+    //     width: '20ch',
+    //     align: 'center',
+    //     validation: (e, a) => {
+    //       return true;
+    //     },
+    //     error: "go home kid"
+    //   },
+    //   {
+    //     label: "Acceptance",
+    //     name: NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
+    //     width: '20ch',
+    //     align: 'center',
+    //     validation: e => {
+    //       return true;
+    //     },
+    //     error: "Haha"
+    //   },
+    //   {
+    //     label: "Frequency",
+    //     name: NURIMS_SSC_SURVEILLANCE_FREQUENCY,
+    //     type: "select",
+    //     width: '16ch',
+    //     align: 'center',
+    //     options: [],
+    //     validation: (e, a) => {
+    //       return true;
+    //     },
+    //     error: "go home kid"
+    //   },
+    // ];
+    // getPropertyValue(props.properties, NURIMS_SURVEILLANCE_FREQUENCY, "").split('|').map((n) => {
+    //   const t = n.split(',');
+    //   if (t.length === 2) {
+    //     return this.sscSurveillanceFields[2].options.push({ label: t[1], value: t[0] });
+    //   }
+    // })
   }
 
   setGlossaryTerms = (terms) => {
@@ -577,7 +574,6 @@ class SSCModificationRecords extends Component {
                       <TextFieldWithTooltip
                         id={"acceptance-criteria"}
                         label="Acceptance Criteria"
-                        required={true}
                         value={getRecordMetadataValue(selection, NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
@@ -590,7 +586,6 @@ class SSCModificationRecords extends Component {
                       <TextFieldWithTooltip
                         id={"documents"}
                         label="Documents"
-                        required={true}
                         value={getRecordMetadataValue(selection, NURIMS_SSC_MODIFICATION_DOCUMENTS, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}

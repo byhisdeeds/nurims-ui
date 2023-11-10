@@ -1336,6 +1336,7 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
   const archiveIcon = isRecordArchived(selection) ? unarchiveRecordIcon : archiveRecordIcon;
 
   console.log("===")
+  console.log("= users", user)
   console.log("= userIsCreator", userIsCreator)
   console.log("= recordHasChanged", recordHasChanged)
   console.log("= sysadminRole", sysadminRole)

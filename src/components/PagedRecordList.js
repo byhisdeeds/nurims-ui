@@ -197,8 +197,7 @@ class PagedRecordList extends React.Component {
   render () {
     const {include_archived, selection} = this.state;
     if (this.context.debug) {
-      ConsoleLog(this.__Component__, "render", "include_archived", include_archived,
-        "selection", selection);
+      ConsoleLog(this.__Component__, "render", "include_archived", include_archived);
     }
     return (
       <Box sx={{width: '100%'}}>
