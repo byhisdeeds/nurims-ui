@@ -16,11 +16,8 @@ import {
   removeMetadataField,
   setMetadataValue,
   setRecordChanged,
-  getGlossaryValue,
+  getGlossaryValue, isRecordType,
 } from "../../utils/MetadataUtils";
-import {
-  getPropertyValue,
-} from "../../utils/PropertyUtils";
 import {
   NURIMS_TITLE,
   NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
@@ -32,11 +29,7 @@ import {
   CMD_GET_PROVENANCE_RECORDS,
   NURIMS_RELATED_ITEM_ID,
   NURIMS_TITLE_SUBTITLE,
-  NURIMS_SSC_MODIFICATION_IMPACT_REACTOR_USAGE,
-  NURIMS_SSC_MODIFICATION_OBSOLESCENCE_ISSUE,
-  NURIMS_DESCRIPTION,
   NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE,
-  CMD_GET_ITEM_RECORD,
   NURIMS_SSC_MAINTENANCE_REMOVED_FROM_SERVICE,
   NURIMS_SSC_MAINTENANCE_IMPACT_REACTOR_USAGE,
   NURIMS_SSC_MAINTENANCE_OBSOLESCENCE_ISSUE,
@@ -44,7 +37,11 @@ import {
   NURIMS_SSC_MAINTENANCE_CORRECTIVE_ACTIONS,
   NURIMS_SSC_MAINTENANCE_DOCUMENTS,
   NURIMS_SSC_MAINTENANCE_PERSONNEL,
-  CMD_GET_REFERRED_TO_ITEM_RECORDS, CMD_UPDATE_ITEM_RECORD,
+  CMD_GET_REFERRED_TO_ITEM_RECORDS,
+  CMD_UPDATE_ITEM_RECORD,
+  SSC_MODIFICATION_RECORD,
+  SSC_MAINTENANCE_RECORD,
+  CMD_GET_ITEM_RECORDS,
 } from "../../utils/constants";
 import dayjs from 'dayjs';
 import {
@@ -216,10 +213,10 @@ class SSCMaintenanceRecords extends Component {
         if (this.listRef.current) {
           this.listRef.current.updateRecord(record);
         }
+      } else if (message.cmd === CMD_GET_ITEM_RECORDS &&
+        isRecordType(message.response.structures_systems_components, SSC_MAINTENANCE_RECORD)) {
+        this.setState({selection: message.response.structures_systems_components});
       }
-      // else if (message.cmd === CMD_GET_ITEM_RECORD) {
-      //   this.setState({selection: message.response.structures_systems_components});
-      // }
     }
   }
 

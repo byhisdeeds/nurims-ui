@@ -16,7 +16,7 @@ import {
   removeMetadataField,
   setMetadataValue,
   setRecordChanged,
-  getGlossaryValue,
+  getGlossaryValue, isRecordType,
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
@@ -48,7 +48,7 @@ import {
   CMD_GET_ITEM_RECORD,
   NURIMS_SSC_MODIFICATION_PERSONNEL,
   NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA,
-  NURIMS_SSC_MODIFICATION_DOCUMENTS,
+  NURIMS_SSC_MODIFICATION_DOCUMENTS, CMD_UPDATE_ITEM_RECORD, CMD_GET_ITEM_RECORDS, SSC_MODIFICATION_RECORD,
 } from "../../utils/constants";
 import dayjs from 'dayjs';
 import {
@@ -252,18 +252,19 @@ class SSCModificationRecords extends Component {
         this.setGlossaryTerms(message.response.terms)
       } else if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
         this.setProvenanceRecords(message.response.provenance)
-      } else if (message.cmd === CMD_GET_SSC_MODIFICATION_RECORDS) {
+      } else if (message.cmd === CMD_GET_ITEM_RECORDS) {
         if (this.listRef.current) {
           this.listRef.current.setRecords(message.response.structures_systems_components);
         }
-      } else if (message.cmd === CMD_UPDATE_SSC_MODIFICATION_RECORD) {
+      } else if (message.cmd === CMD_UPDATE_ITEM_RECORD) {
         const record = message.response.structures_systems_components;
         enqueueSuccessSnackbar(
           `Successfully updated modification record ${record.length === 1 ? record[NURIMS_TITLE] : ""}.`);
         if (this.listRef.current) {
           this.listRef.current.updateRecord(record);
         }
-      } else if (message.cmd === CMD_GET_ITEM_RECORD) {
+      } else if (message.cmd === CMD_GET_ITEM_RECORDS &&
+        isRecordType(message.response.structures_systems_components, SSC_MODIFICATION_RECORD)) {
         this.setState({selection: message.response.structures_systems_components});
       }
     }
