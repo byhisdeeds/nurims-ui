@@ -1,21 +1,21 @@
-// ********* DEPRECIATED ************
-
 import React, {Component} from 'react';
 import Box from '@mui/material/Box';
 import {
-  Button,
   Card,
   CardContent,
   Grid,
 } from "@mui/material";
 import "leaflet/dist/leaflet.css";
 import {
+  changeRecordArchivalStatus,
   getDateFromDateString,
-  getNextItemId,
   getRecordMetadataValue,
+  getRecordTitle,
+  isRecordEmpty,
   new_record,
   removeMetadataField,
   setMetadataValue,
+  setRecordChanged,
   getGlossaryValue,
 } from "../../utils/MetadataUtils";
 import {
@@ -27,17 +27,32 @@ import {
   NURIMS_SURVEILLANCE_FREQUENCY,
   NURIMS_SSC_MAINTENANCE_TASK,
   NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
-  NURIMS_SSC_MAINTENANCE_ISSUE,
-  NURIMS_SSC_MAINTENANCE_REMOVED_FROM_SERVICE,
   NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE,
-  NURIMS_SSC_MAINTENANCE_CORRECTIVE_ACTIONS,
-  NURIMS_SSC_MAINTENANCE_DOCUMENTS,
-  NURIMS_SSC_MAINTENANCE_IMPACT_REACTOR_USAGE,
-  NURIMS_SSC_MAINTENANCE_PERSONNEL,
-  NURIMS_SSC_MAINTENANCE_OBSOLESCENCE_ISSUE,
-  NURIMS_SSC_MAINTENANCE_PREVENTIVE_MAINTENANCE,
-  NURIMS_SSC_MAINTENANCE_CORRECTIVE_MAINTENANCE,
   UNDEFINED_DATE_STRING,
+  ITEM_ID,
+  ROLE_MAINTENANCE_DATA_ENTRY,
+  CMD_GET_GLOSSARY_TERMS,
+  CMD_GET_PROVENANCE_RECORDS,
+  CMD_GET_SSC_MODIFICATION_RECORDS,
+  NURIMS_RELATED_ITEM_ID,
+  CMD_UPDATE_SSC_MODIFICATION_RECORD,
+  NURIMS_TITLE_SUBTITLE,
+  NURIMS_SSC_MODIFICATION_STARTDATE,
+  NURIMS_SSC_MODIFICATION_ENDDATE,
+  NURIMS_SSC_MODIFICATION_IMPACT_REACTOR_USAGE,
+  NURIMS_SSC_MODIFICATION_OBSOLESCENCE_ISSUE,
+  NURIMS_DESCRIPTION,
+  NURIMS_SSC_MODIFICATION_ACTIONS,
+  NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE,
+  CMD_GET_ITEM_RECORD,
+  NURIMS_SSC_MODIFICATION_PERSONNEL,
+  NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA,
+  NURIMS_SSC_MODIFICATION_DOCUMENTS,
+  NURIMS_SSC_MAINTENANCE_REMOVED_FROM_SERVICE,
+  NURIMS_SSC_MAINTENANCE_IMPACT_REACTOR_USAGE,
+  NURIMS_SSC_MAINTENANCE_OBSOLESCENCE_ISSUE,
+  NURIMS_SSC_MAINTENANCE_ISSUE,
+  NURIMS_SSC_MAINTENANCE_CORRECTIVE_ACTIONS, NURIMS_SSC_MAINTENANCE_DOCUMENTS, NURIMS_SSC_MAINTENANCE_PERSONNEL,
 } from "../../utils/constants";
 import dayjs from 'dayjs';
 import {
@@ -46,23 +61,36 @@ import {
 } from "../../utils/UserContext";
 import PagedRecordList from "../../components/PagedRecordList";
 import {
+  AddRemoveArchiveSaveProvenanceButtonPanel,
   CheckboxWithTooltip,
   DatePickerWithTooltip,
   SelectFormControlWithTooltip,
   TextFieldWithTooltip
 } from "../../components/CommonComponents";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DeleteIcon from "@mui/icons-material/Delete";
-import SaveIcon from "@mui/icons-material/Save";
 import PropTypes from "prop-types";
 import {
-  ConfirmRemoveRecordDialog
+  ConfirmRemoveRecordDialog,
+  ShowProvenanceRecordsDialog
 } from "../../components/UtilityDialogs";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
+import {
+  messageHasResponse,
+} from "../../utils/WebsocketUtils";
+import {
+  ADDEDITMODIFICATIONRECORD_REF
+} from "./AddEditModificationRecord";
+import {
+  enqueueSuccessSnackbar
+} from "../../utils/SnackbarVariants";
 
 const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
-export const SSCMAINTENANCERECORDS_REF = "SSCCorrectiveMaintenanceRecords";
 
-class SSCCorrectiveMaintenanceRecords extends Component {
+export const SSCMAINTENANCERECORDS_REF = "SSCMaintenanceRecords";
+
+class SSCMaintenanceRecords extends Component {
   static contextType = UserContext;
 
   constructor(props) {
@@ -72,72 +100,77 @@ class SSCCorrectiveMaintenanceRecords extends Component {
       selection: {},
       properties: props.properties,
       metadata_changed: false,
+      include_archived: false,
       confirm_remove: false,
+      show_provenance_view: false,
     };
     this.Module = SSCMAINTENANCERECORDS_REF;
     this.listRef = React.createRef();
     this.ref = React.createRef();
+    this.provenanceRecords = [];
     this.glossary = {};
-    this.sscSurveillanceData = [];
-    this.sscSurveillanceFields = [
-      {
-        label: "Scope",
-        name: NURIMS_SSC_MAINTENANCE_TASK,
-        width: '20ch',
-        align: 'center',
-        validation: (e, a) => {
-          return true;
-        },
-        error: "go home kid"
-      },
-      {
-        label: "Acceptance",
-        name: NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
-        width: '20ch',
-        align: 'center',
-        validation: e => {
-          return true;
-        },
-        error: "Haha"
-      },
-      {
-        label: "Frequency",
-        name: NURIMS_SSC_SURVEILLANCE_FREQUENCY,
-        type: "select",
-        width: '16ch',
-        align: 'center',
-        options: [],
-        validation: (e, a) => {
-          return true;
-        },
-        error: "go home kid"
-      },
-    ];
-    getPropertyValue(props.properties, NURIMS_SURVEILLANCE_FREQUENCY, "").split('|').map((n) => {
-      const t = n.split(',');
-      if (t.length === 2) {
-        return this.sscSurveillanceFields[2].options.push({ label: t[1], value: t[0] });
-      }
-    })
+    // this.sscSurveillanceData = [];
+    // this.sscSurveillanceFields = [
+    //   {
+    //     label: "Scope",
+    //     name: NURIMS_SSC_MAINTENANCE_TASK,
+    //     width: '20ch',
+    //     align: 'center',
+    //     validation: (e, a) => {
+    //       return true;
+    //     },
+    //     error: "go home kid"
+    //   },
+    //   {
+    //     label: "Acceptance",
+    //     name: NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
+    //     width: '20ch',
+    //     align: 'center',
+    //     validation: e => {
+    //       return true;
+    //     },
+    //     error: "Haha"
+    //   },
+    //   {
+    //     label: "Frequency",
+    //     name: NURIMS_SSC_SURVEILLANCE_FREQUENCY,
+    //     type: "select",
+    //     width: '16ch',
+    //     align: 'center',
+    //     options: [],
+    //     validation: (e, a) => {
+    //       return true;
+    //     },
+    //     error: "go home kid"
+    //   },
+    // ];
+    // getPropertyValue(props.properties, NURIMS_SURVEILLANCE_FREQUENCY, "").split('|').map((n) => {
+    //   const t = n.split(',');
+    //   if (t.length === 2) {
+    //     return this.sscSurveillanceFields[2].options.push({ label: t[1], value: t[0] });
+    //   }
+    // })
   }
 
   setGlossaryTerms = (terms) => {
-    // console.log("SSCCorrectiveMaintenanceRecords.setGlossaryTerms", terms)
+    console.log(terms)
     for (const term of terms) {
       this.glossary[term.name] = term.value;
     }
   }
 
   handleChange = (e) => {
-    console.log("+++", e.target)
-    console.log(">>>", e.target.id, e.target.name, e.target.value, e.target.checked)
     const selection = this.state.selection;
+    const id = e.target.id === undefined ? e.target.name : e.target.id;
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "handleChange", "id", id, "value", e.target.value);
+    }
     let changed = false;
-    if (e.target.id === "name") {
+    if (id === "name") {
       selection[NURIMS_TITLE] = e.target.value;
       changed = true;
-    } else if (e.target.id === "issue") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_ISSUE, e.target.value)
+    } else if (id === "modification") {
+      setMetadataValue(selection, NURIMS_DESCRIPTION, e.target.value)
       changed = true;
     } else if (e.target.id === "corrective-actions") {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_CORRECTIVE_ACTIONS, e.target.value);
@@ -146,23 +179,15 @@ class SSCCorrectiveMaintenanceRecords extends Component {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_DOCUMENTS, e.target.value);
       changed = true;
     } else if (e.target.name === "impact-reactor-usage") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_IMPACT_REACTOR_USAGE, ""+e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_IMPACT_REACTOR_USAGE, ""+e.target.checked);
       changed = true;
-    } else if (e.target.name === "obsolescence") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_OBSOLESCENCE_ISSUE, "" + e.target.checked);
-      changed = true;
-    } else if (e.target.name === "preventive-maintenance") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_PREVENTIVE_MAINTENANCE, "" + e.target.checked);
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_CORRECTIVE_MAINTENANCE, "" + (!e.target.checked));
-      changed = true;
-    } else if (e.target.name === "corrective-maintenance") {
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_CORRECTIVE_MAINTENANCE, "" + e.target.checked);
-      setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_PREVENTIVE_MAINTENANCE, "" + (!e.target.checked));
+    } else if (e.target.name === "impact-obsolescence") {
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_OBSOLESCENCE_ISSUE, "" + e.target.checked);
       changed = true;
     } else if (e.target.id === "acceptance-criteria") {
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA, e.target.value);
       changed = true;
-    } else if (e.target.name === "maintenance-personnel") {
+    } else if (e.target.name === "personnel") {
       const values = [];
       for (const v of e.target.value) {
         if (v !== "") {
@@ -173,7 +198,8 @@ class SSCCorrectiveMaintenanceRecords extends Component {
       changed = true;
     }
     if (changed) {
-      // update scc record with maintenance records
+      setRecordChanged(selection);
+      // update scc modification records list entry
       if (this.listRef.current) {
         for (const r of this.listRef.current.getRecords()) {
           if (r.item_id === selection.item_id) {
@@ -183,124 +209,73 @@ class SSCCorrectiveMaintenanceRecords extends Component {
         }
       }
       this.setState({selection: selection, metadata_changed: true})
-      // signal to parent that details have changed
-      this.props.onChange(true);
     }
   }
 
   removedFromServiceDateChange = (date) => {
     const selection = this.state.selection;
     if (date) {
-      // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_REMOVED_FROM_SERVICE, date.toISOString().substring(0,10));
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_REMOVED_FROM_SERVICE, date.format('YYYY-MM-DD'));
     } else {
       removeMetadataField(selection, NURIMS_SSC_MAINTENANCE_REMOVED_FROM_SERVICE);
     }
-    this.setState({selection: selection, metadata_changed: true})
-    // signal to parent that metadata has changed
-    this.props.onChange(true);
+    setRecordChanged(selection);
+    this.setState({metadata_changed: true})
   }
 
   returnedToServiceDateChange = (date) => {
     const selection = this.state.selection;
     if (date) {
-      // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE, date.toISOString().substring(0,10));
       setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE, date.format('YYYY-MM-DD'));
     } else {
       removeMetadataField(selection, NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE);
     }
-    this.setState({selection: selection, metadata_changed: true})
-    // signal to parent that metadata has changed
-    this.props.onChange(true);
+    setRecordChanged(selection);
+    this.setState({metadata_changed: true})
   }
 
-  // handleCommissioningDateChange = (date) => {
-  //   const ssc = this.state.ssc;
-  //   ssc["changed"] = true;
-  //   setMetadataValue(ssc, NURIMS_SSC_COMMISSIONING_DATE, date.toISOString().substring(0,10))
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that metadata has changed
-  //   this.props.onChange(true);
-  // }
+  modificationCommissionedDateChange = (date) => {
+    const selection = this.state.selection;
+    if (date) {
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE, date.format('YYYY-MM-DD'));
+    } else {
+      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE);
+    }
+    setRecordChanged(selection);
+    this.setState({metadata_changed: true})
+  }
 
-  // handleSSCTypeChange = (e) => {
-  //   const ssc = this.state.ssc;
-  //   setMetadataValue(ssc, NURIMS_SSC_TYPE, e.target.value);
-  //   ssc.changed = true;
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that metadata has changed
-  //   this.props.onChange(true);
-  // }
-
-  // handleSSCClassificationChange = (e) => {
-  //   console.log("handleSSCClassificationChange", e.target.value);
-  //   const ssc = this.state.ssc;
-  //   ssc["changed"] = true;
-  //   setMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, e.target.value);
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
-  // handleSSCSafetyFunctionChange = (e) => {
-  //   console.log("handleSSCSafetyFunctionChange", e.target.value);
-  //   const ssc = this.state.ssc;
-  //   ssc["changed"] = true;
-  //   setMetadataValue(ssc, NURIMS_SSC_SAFETY_FUNCTION, e.target.value);
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
-  // handleSSCMaintainabilityChange = (e) => {
-  //   console.log("handleSSCMaintainabilityChange", e.target.value);
-  //   const ssc = this.state.ssc;
-  //   ssc["changed"] = true;
-  //   setMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, e.target.value);
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
-  // handleSSCSafetyCategoryChange = (e) => {
-  //   console.log("handleSSCSafetyCategoryChange", e.target.value);
-  //   const ssc = this.state.ssc;
-  //   ssc["changed"] = true;
-  //   setMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, e.target.value);
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
-  // handleSSCSurveillanceFrequencyChange = (e) => {
-  //   console.log("handleSSCSurveillanceFrequencyChange", e.target.value);
-  //   const ssc = this.state.ssc;
-  //   ssc["changed"] = true;
-  //   setMetadataValue(ssc, NURIMS_SSC_SURVEILLANCE_FREQUENCY, e.target.value);
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
-  // saveTableData = data => {
-  //   console.log("UPDATED SURVEILLANCE TABLE DATA", data);
-  //   const ssc = this.state.ssc;
-  //   ssc["changed"] = true;
-  //   setMetadataValue(ssc, NURIMS_SSC_MAINTENANCE_SCOPE, data);
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // };
-
-  setRecordMetadata = (record) => {
+  ws_message = (message) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "setRecordMetadata", "record", record);
+      ConsoleLog(this.Module, "ws_message", "message", message);
     }
-    if (this.listRef.current) {
-      // this.listRef.current.setRecords(getRecordMetadataValue(record, NURIMS_SSC_MAINTENANCES, []));
+    if (messageHasResponse(message)) {
+      if (message.cmd === CMD_GET_GLOSSARY_TERMS) {
+        this.setGlossaryTerms(message.response.terms)
+      } else if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
+        this.setProvenanceRecords(message.response.provenance)
+      } else if (message.cmd === CMD_GET_SSC_MODIFICATION_RECORDS) {
+        if (this.listRef.current) {
+          this.listRef.current.setRecords(message.response.structures_systems_components);
+        }
+      } else if (message.cmd === CMD_UPDATE_SSC_MODIFICATION_RECORD) {
+        const record = message.response.structures_systems_components;
+        enqueueSuccessSnackbar(
+          `Successfully updated modification record ${record.length === 1 ? record[NURIMS_TITLE] : ""}.`);
+        if (this.listRef.current) {
+          this.listRef.current.updateRecord(record);
+        }
+      } else if (message.cmd === CMD_GET_ITEM_RECORD) {
+        this.setState({selection: message.response.structures_systems_components});
+      }
     }
-    this.setState({ssc: record, selection: {}, metadata_changed: false})
-    this.props.onChange(false);
+  }
+
+  setReferredToRecord = (record) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "setReferredToRecord", "record", record);
+    }
+    this.setState({ssc: record, selection: {}, metadata_changed: false});
   }
 
   getRecordMetadata = () => {
@@ -312,18 +287,9 @@ class SSCCorrectiveMaintenanceRecords extends Component {
       ConsoleLog(this.Module, "addMaintenanceRecord");
     }
     if (this.listRef.current) {
-      // this.listRef.current.addRecords([{
-      //   "changed": true,
-      //   "item_id": getNextItemId(this.listRef.current.getRecords()),
-      //   "nurims.title": "New Maintenance Record",
-      //   "nurims.withdrawn": 0,
-      //   "metadata": [
-      //     {"nurims.createdby": this.context.user.profile.username}
-      //   ]
-      // }], false);
       this.listRef.current.addRecords([new_record(
-        getNextItemId(this.listRef.current.getRecords()),
-        "New Maintenance Record",
+        null,
+        "New Modification Record",
         0,
         this.context.user.profile.username,
         this.context.user.profile.fullname
@@ -332,71 +298,106 @@ class SSCCorrectiveMaintenanceRecords extends Component {
     }
   }
 
+
   getMaintenanceRecords = (include_archived) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "getMaintenanceRecords", "include_archived", include_archived);
     }
+    this.props.getMaintenanceRecords(this.state.ssc, include_archived);
+    this.setState({include_archived: include_archived});
   }
 
   onMaintenanceRecordSelection = (selection) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "onMaintenanceRecordSelection", "selection", selection, "ssc", this.state.ssc);
+      ConsoleLog(this.Module, "onMaintenanceRecordSelection", "selection", this.state.selection);
     }
-    // display the selection metadata
+    this.props.getMaintenanceRecord(selection);
     this.setState({selection: selection, metadata_changed: false});
   }
 
   saveMaintenanceRecord = () => {
     const ssc = this.state.ssc;
-    if (this.listRef.current) {
-      // setMetadataValue(ssc, NURIMS_SSC_MAINTENANCES, this.listRef.current.getRecords())
-      ssc["changed"] = true;
-    }
+    const selection = this.state.selection;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "saveMaintenanceRecord", "selection", this.state.selection, "ssc", ssc);
+      ConsoleLog(this.Module, "saveMaintenanceRecord", "selection", this.state.selection);
     }
-    this.props.saveChanges();
+    setMetadataValue(selection, NURIMS_RELATED_ITEM_ID, ssc[ITEM_ID]);
+    setRecordChanged(selection);
+    this.props.saveChanges(selection);
   }
 
-  removeRecord = () => {
+  deleteMaintenanceRecord = () => {
+    const selection = this.state.selection;
     this.setState({confirm_remove: true,});
   }
 
-  cancelRemove = () => {
+  cancelDelete = () => {
     this.setState({confirm_remove: false,});
   }
 
-  proceedWithRemove = () => {
+  proceedWithDelete = () => {
+    const selection = this.state.selection;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "proceedWithRemove", "selection", this.state.selection);
+      ConsoleLog(this.Module, "proceedWithDelete", "selection", selection);
     }
     if (this.listRef.current) {
-      this.listRef.current.removeRecord(this.state.selection)
+      this.listRef.current.removeRecord(selection)
     }
-    this.setState({confirm_remove: false, metadata_changed: true});
+    this.setState({confirm_remove: false, metadata_changed: false});
+    this.props.deleteRecord(selection);
   }
 
-  renderCellStyle = (row, cell, theme) => {
-    const openIssue = getRecordMetadataValue(row, NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE, null) === null;
+  renderCellStyle = (row, cell, theme, selected) => {
+    const openIssue = getRecordMetadataValue(
+      row, NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE, null) === null;
     return {
-      color: openIssue ? theme.palette.primary.contrastText : theme.palette.primary.light,
-      backgroundColor: openIssue ? theme.palette.warning.light : theme.components.MuiTableRow.styleOverrides.root.backgroundColor,
+      mixBlendMode: selected ? 'lighten' : 'inherit',
+      color: openIssue ?
+        theme.palette.primary.contrastText : theme.palette.primary.light,
+      backgroundColor: openIssue ?
+        theme.palette.warning.light : theme.components.MuiTableRow.styleOverrides.root.backgroundColor,
+    }
+  }
+
+  setProvenanceRecords = (provenance) => {
+    setProvenanceRecordsHelper(this, provenance);
+  }
+
+  showProvenanceRecordsView = () => {
+    showProvenanceRecordsViewHelper(this, ADDEDITMODIFICATIONRECORD_REF);
+  }
+
+  closeProvenanceRecordsView = (event, reason) => {
+    if (reason && reason === "backdropClick") {
+      return;
+    }
+    this.setState({show_provenance_view: false,});
+  }
+
+  toggleRecordArchivalStatus = () => {
+    if (changeRecordArchivalStatus(this.state.selection)) {
+      this.setState({include_archived: true});
     }
   }
 
   render() {
-    const {confirm_remove, ssc, selection, metadata_changed, properties} = this.state;
-    const no_selection = Object.entries(selection).length === 0;
-    const no_ssc = Object.entries(ssc).length === 0;
+    const {confirm_remove, ssc, selection, include_archived, metadata_changed, properties, show_provenance_view} = this.state;
+    const no_selection = isRecordEmpty(selection);
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "ssc", ssc, "selection", selection);
+      ConsoleLog(this.Module, "render", "ssc", ssc);
+      ConsoleLog(this.Module, "render", "selection", selection);
     }
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}
                                    selection={selection}
-                                   onProceed={this.proceedWithRemove}
-                                   onCancel={this.cancelRemove}
+                                   onProceed={this.proceedWithDelete}
+                                   onCancel={this.cancelDelete}
+        />
+        <ShowProvenanceRecordsDialog open={show_provenance_view}
+                                     selection={selection}
+                                     body={this.provenanceRecords.join("\n")}
+                                     onCancel={this.closeProvenanceRecordsView}
         />
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -404,27 +405,60 @@ class SSCCorrectiveMaintenanceRecords extends Component {
               ref={this.listRef}
               onListItemSelection={this.onMaintenanceRecordSelection}
               requestGetRecords={this.getMaintenanceRecords}
-              includeArchived={true}
-              title={`'${ssc.hasOwnProperty(NURIMS_TITLE) ? ssc[NURIMS_TITLE] : ""}' Maintenance Records`}
-              enableRecordArchiveSwitch={false}
+              title={`${ssc.hasOwnProperty(NURIMS_TITLE) ? "'" + ssc[NURIMS_TITLE] + "'" : ""} Modification Records`}
+              enableRecordArchiveSwitch={true}
+              includeArchived={include_archived}
               enableRowFilter={true}
               height={'100%'}
               rowsPerPage={10}
               renderCellStyle={this.renderCellStyle}
+              cells={[
+                {
+                  id: ITEM_ID,
+                  align: 'center',
+                  disablePadding: true,
+                  label: 'ID',
+                  width: '10%',
+                  sortField: true,
+                },
+                {
+                  id: NURIMS_TITLE,
+                  align: 'left',
+                  disablePadding: true,
+                  label: 'Name',
+                  width: '60%',
+                  sortField: true,
+                },
+                {
+                  id: NURIMS_TITLE_SUBTITLE,
+                  align: 'center',
+                  disablePadding: true,
+                  label: 'Created On',
+                  width: '30%',
+                  sortField: true,
+                  format: (v) => {
+                    return v.substring(0, 10)
+                  },
+                },
+              ]}
             />
           </Grid>
           <Grid item xs={12}>
-            <Box style={{textAlign: 'center', display: 'flex', justifyContent: 'space-around'}}>
-              <Button size={"small"} disabled={no_selection} variant="outlined" endIcon={<DeleteIcon/>} onClick={this.removeRecord}>
-                Remove Record
-              </Button>
-              <Button size={"small"} disabled={!metadata_changed} variant="outlined" endIcon={<SaveIcon />} onClick={this.saveMaintenanceRecord}>
-                Save Record
-              </Button>
-              <Button size={"small"} disabled={no_ssc} variant="outlined" endIcon={<AddCircleOutlineIcon />} onClick={this.addMaintenanceRecord}>
-                Add Record
-              </Button>
-            </Box>
+            <AddRemoveArchiveSaveProvenanceButtonPanel
+              THIS={this}
+              user={this.context.user}
+              deleteRecordRole={ROLE_MAINTENANCE_DATA_ENTRY}
+              onClickDeleteRecord={this.deleteMaintenanceRecord}
+              saveRecordRole={ROLE_MAINTENANCE_DATA_ENTRY}
+              onClickSaveRecord={this.saveMaintenanceRecord}
+              addRecordRole={ROLE_MAINTENANCE_DATA_ENTRY}
+              onClickAddRecord={this.addMaintenanceRecord}
+              disableAddRecordButton={isRecordEmpty(ssc)}
+              onClickViewProvenanceRecords={this.showProvenanceRecordsView}
+              showViewProvenanceRecordButton={true}
+              showArchiveRecordButton={true}
+              onClickArchiveRecords={this.toggleRecordArchivalStatus}
+            />
           </Grid>
           <Grid item xs={12}>
             <Box
@@ -443,7 +477,7 @@ class SSCCorrectiveMaintenanceRecords extends Component {
                         id={"name"}
                         label="Record Name"
                         required={true}
-                        value={selection.hasOwnProperty(NURIMS_TITLE) ? selection[NURIMS_TITLE] : ""}
+                        value={getRecordTitle(selection)}
                         onChange={this.handleChange}
                         disabled={no_selection}
                         tooltip={""} // {getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_NAME, "")}
@@ -493,7 +527,7 @@ class SSCCorrectiveMaintenanceRecords extends Component {
                         </Grid>
                         <Grid item xs={12} sm={3}>
                           <CheckboxWithTooltip
-                            id={"obsolescence"}
+                            id={"impact-obsolescence"}
                             label={"Obsolescence Issue"}
                             onChange={this.handleChange}
                             checked={getRecordMetadataValue(selection,
@@ -507,9 +541,8 @@ class SSCCorrectiveMaintenanceRecords extends Component {
                     </Grid>
                     <Grid item xs={12} sm={12}>
                       <TextFieldWithTooltip
-                        id={"issue"}
+                        id={"maintenance"}
                         label="Maintenance Issue Description"
-                        required={true}
                         value={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_ISSUE, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
@@ -522,7 +555,6 @@ class SSCCorrectiveMaintenanceRecords extends Component {
                       <TextFieldWithTooltip
                         id={"corrective-actions"}
                         label="Corrective actions"
-                        required={true}
                         value={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_CORRECTIVE_ACTIONS, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
@@ -535,7 +567,6 @@ class SSCCorrectiveMaintenanceRecords extends Component {
                       <TextFieldWithTooltip
                         id={"acceptance-criteria"}
                         label="Acceptance Criteria"
-                        required={true}
                         value={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
@@ -548,7 +579,6 @@ class SSCCorrectiveMaintenanceRecords extends Component {
                       <TextFieldWithTooltip
                         id={"documents"}
                         label="Documents"
-                        required={true}
                         value={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_DOCUMENTS, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
@@ -559,7 +589,7 @@ class SSCCorrectiveMaintenanceRecords extends Component {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <SelectFormControlWithTooltip
-                        id={"maintenance-personnel"}
+                        id={"personnel"}
                         label="Maintenance Personnel"
                         required={true}
                         multiple={true}
@@ -581,18 +611,17 @@ class SSCCorrectiveMaintenanceRecords extends Component {
   }
 }
 
-SSCCorrectiveMaintenanceRecords.defaultProps = {
-  onChange: (msg) => {
-  },
-  saveChanges: () => {
-  },
+SSCMaintenanceRecords.defaultProps = {
 };
 
-SSCCorrectiveMaintenanceRecords.propTypes = {
+SSCMaintenanceRecords.propTypes = {
   ref: PropTypes.element.isRequired,
   properties: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
+  deleteRecord: PropTypes.func.isRequired,
   saveChanges: PropTypes.func.isRequired,
+  getMaintenanceRecords: PropTypes.func.isRequired,
+  getMaintenanceRecord: PropTypes.func.isRequired,
 }
 
-export default SSCCorrectiveMaintenanceRecords;
+export default SSCMaintenanceRecords;

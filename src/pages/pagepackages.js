@@ -53,8 +53,8 @@ const Owner = lazy(() => import('./controlledmaterials/Owner'));
 const ViewMaterialsList = lazy(() => import('./controlledmaterials/ViewMaterialsList'));
 const GenerateMaterialSurveillanceSheet = lazy(() => import('./controlledmaterials/GenerateMaterialSurveillanceSheet'));
 const GenerateSSCMaintenanceReport = lazy(() => import('./maintenance/GenerateSSCMaintenanceReport'));
-const AddEditCorrectiveMaintenanceIssueRecord = lazy(() => import('./maintenance/AddEditCorrectiveMaintenanceIssueRecord'));
-const AddEditTodoRecord = lazy(() => import('./maintenance/AddEditModificationRecord'));
+const AddEditMaintenanceRecord = lazy(() => import('./maintenance/AddEditMaintenanceRecord'));
+const AddEditModificationRecord = lazy(() => import('./maintenance/AddEditModificationRecord'));
 const AddEditSSC = lazy(() => import('./maintenance/AddEditSSC'));
 const AddEditAMP = lazy(() => import('./maintenance/AddEditAMP'));
 const ViewSSCRecords = lazy(() => import('./maintenance/ViewSSCRecords'));
@@ -117,8 +117,7 @@ export const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handl
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.SYSADMIN_CLEANUP_LARGE_OBJECT_STORE) {
+  } else if (actionid === Constants.SYSADMIN_CLEANUP_LARGE_OBJECT_STORE) {
     return (<CleanupLargeObjectStore
       ref={crefs[CLEANUPLARGEOBJECTSTORE_REF]}
       title={menuTitle}
@@ -140,8 +139,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.HR_UPDATE_MONITORING_STATUS) {
+  } else if (actionid === Constants.HR_UPDATE_MONITORING_STATUS) {
     return (<UpdateMonitoringStatus
       ref={crefs[UPDATEMONITORINGSTATUS_REF]}
       title={menuTitle}
@@ -150,8 +148,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.HR_VIEW_PERSONNEL_RECORDS) {
+  } else if (actionid === Constants.HR_VIEW_PERSONNEL_RECORDS) {
     return (<ViewPersonnelRecords
       ref={crefs[VIEWPERSONNELRECORDS_REF]}
       title={menuTitle}
@@ -160,8 +157,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.HR_UPDATE_TRAINING_RECORD) {
+  } else if (actionid === Constants.HR_UPDATE_TRAINING_RECORD) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -170,8 +166,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.HR_ADD_EDIT_TRAINING_PROGRAMME) {
+  } else if (actionid === Constants.HR_ADD_EDIT_TRAINING_PROGRAMME) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -180,8 +175,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.HR_SSPI) {
+  } else if (actionid === Constants.HR_SSPI) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -190,8 +184,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.HR_TPI) {
+  } else if (actionid === Constants.HR_TPI) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -213,8 +206,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL) {
+  } else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL) {
     return (<Material
       ref={crefs[MATERIAL_REF]}
       title={menuTitle}
@@ -223,8 +215,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION) {
+  } else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION) {
     return (<Storage
       ref={crefs[STORAGE_REF]}
       title={menuTitle}
@@ -233,8 +224,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER) {
+  } else if (actionid === Constants.CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER) {
     return (<Manufacturer
       ref={crefs[MANUFACTURER_REF]}
       title={menuTitle}
@@ -243,8 +233,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET) {
+  } else if (actionid === Constants.CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET) {
     return (<GenerateMaterialSurveillanceSheet
       ref={crefs[GENERATEMATERIALSURVEILLANCESHEET_REF]}
       title={menuTitle}
@@ -253,8 +242,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.CM_UPDATE_MATERIAL_OWNER) {
+  } else if (actionid === Constants.CM_UPDATE_MATERIAL_OWNER) {
     return (<Owner
       ref={crefs[OWNER_REF]}
       title={menuTitle}
@@ -263,8 +251,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.CM_UPDATE_MATERIAL_SURVEILLANCE) {
+  } else if (actionid === Constants.CM_UPDATE_MATERIAL_SURVEILLANCE) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -273,8 +260,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.CM_RADIATION_PROTECTION_SCHEDULE) {
+  } else if (actionid === Constants.CM_RADIATION_PROTECTION_SCHEDULE) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -283,8 +269,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.CM_INVENTORY_LIST) {
+  } else if (actionid === Constants.CM_INVENTORY_LIST) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -307,7 +292,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       properties={properties}
     />)
   } else if (actionid === Constants.SSC_ADD_EDIT_SSC_TODO_RECORD) {
-    return (<AddEditTodoRecord
+    return (<AddEditMaintenanceRecord
       ref={crefs[ADDEDITMODIFICATIONRECORD_REF]}
       title={menuTitle}
       user={user}
@@ -343,7 +328,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       properties={properties}
     />)
   } else if (actionid === Constants.SSC_ADD_EDIT_SSC_CORRECTIVE_MAINTENANCE_ISSUE_RECORD) {
-    return (<AddEditCorrectiveMaintenanceIssueRecord
+    return (<AddEditMaintenanceRecord
       ref={crefs[ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF]}
       title={menuTitle}
       user={user}
@@ -369,8 +354,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.SSC_ADD_EDIT_SSC_TODO_RECORD) {
+  } else if (actionid === Constants.SSC_ADD_EDIT_SSC_TODO_RECORD) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -401,8 +385,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS) {
+  } else if (actionid === Constants.RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS) {
     return (<PersonnelDosimetryMeasurement
       ref={crefs[PERSONNELDOSIMETRYMEASUREMENT_REF]}
       title={menuTitle}
@@ -411,8 +394,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS) {
+  } else if (actionid === Constants.RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS) {
     return (<MonitorDosimetryMeasurement
       ref={crefs[MONITORDOSIMETRYMEASUREMENT_REF]}
       title={menuTitle}
@@ -421,8 +403,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RP_PERSONNEL_DOSIMETRY_EVALUATION) {
+  } else if (actionid === Constants.RP_PERSONNEL_DOSIMETRY_EVALUATION) {
     return (<PersonnelDosimetryEvaluation
       ref={crefs[PERSONNELDOSIMETRYEVALUATION_REF]}
       title={menuTitle}
@@ -431,8 +412,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RP_PERSONNEL_DOSIMETRY_REPORT) {
+  } else if (actionid === Constants.RP_PERSONNEL_DOSIMETRY_REPORT) {
     return (<PersonnelDosimetryReport
       ref={crefs[PERSONNELDOSIMETRYREPORT_REF]}
       title={menuTitle}
@@ -441,8 +421,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RP_MONITOR_LIST) {
+  } else if (actionid === Constants.RP_MONITOR_LIST) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -451,8 +430,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RP_MONITOR_DATA) {
+  } else if (actionid === Constants.RP_MONITOR_DATA) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}
@@ -474,8 +452,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS) {
+  } else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS) {
     return (<ImportICENSControlledMaterialManufacturers
       ref={crefs["ImportICENSControlledMaterialManufacturers"]}
       title={menuTitle}
@@ -484,8 +461,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS) {
+  } else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS) {
     return (<ImportICENSControlledMaterialStorageLocations
       ref={crefs["ImportICENSControlledMaterialStorageLocations"]}
       title={menuTitle}
@@ -494,8 +470,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIALS) {
+  } else if (actionid === Constants.PRO_IMPORT_ICENS_CONTROLLED_MATERIALS) {
     return (<ImportICENSControlledMaterials
       ref={crefs["ImportICENSControlledMaterials"]}
       title={menuTitle}
@@ -504,8 +479,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.PRO_IMPORT_ICENS_MONITORS) {
+  } else if (actionid === Constants.PRO_IMPORT_ICENS_MONITORS) {
     return (<ImportICENSMonitors
       ref={crefs["ImportICENSMonitors"]}
       title={menuTitle}
@@ -514,8 +488,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS) {
+  } else if (actionid === Constants.RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS) {
     return (<AddEditReactorOperatingRuns
       ref={crefs[ADDEDITREACTOROPERATINGRUNS_REF]}
       title={menuTitle}
@@ -524,8 +497,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA) {
+  } else if (actionid === Constants.RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA) {
     return (<AddEditIrradiatedSamples
       ref={crefs[ADDEDITIRRADIATEDSAMPLES_REF]}
       title={menuTitle}
@@ -534,8 +506,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RO_REACTOR_OPERATIONS_REPORT) {
+  } else if (actionid === Constants.RO_REACTOR_OPERATIONS_REPORT) {
     return (<ReactorOperationsReport
       ref={crefs[REACTOROPERATIONSREPORT_REF]}
       title={menuTitle}
@@ -544,8 +515,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RO_ADD_EDIT_REACTOR_WATER_SAMPLES) {
+  } else if (actionid === Constants.RO_ADD_EDIT_REACTOR_WATER_SAMPLES) {
     return (<AddEditReactorWaterSamples
       ref={crefs[ADDEDITREACTORWATERSAMPLES_REF]}
       title={menuTitle}
@@ -554,8 +524,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION) {
+  } else if (actionid === Constants.RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION) {
     return (<AddEditReactorSampleIrradiationAuthorization
       ref={crefs[ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF]}
       title={menuTitle}
@@ -564,8 +533,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.RO_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF) {
+  } else if (actionid === Constants.RO_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF) {
     return (<GenerateReactorSampleIrradiationAuthorizationPdf
       ref={crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF]}
       title={menuTitle}
@@ -618,8 +586,7 @@ export const EmergencyPreparednessPackages = (actionid, crefs, menuTitle, user, 
       send={send}
       properties={properties}
     />)
-  }
-  else if (actionid === Constants.EP_ADD_EDIT_EMERGENCY_SCENARIOS) {
+  } else if (actionid === Constants.EP_ADD_EDIT_EMERGENCY_SCENARIOS) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
       title={menuTitle}

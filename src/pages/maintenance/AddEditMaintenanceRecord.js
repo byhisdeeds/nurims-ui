@@ -3,20 +3,21 @@ import {
   Grid,
 } from "@mui/material";
 import {
+  CMD_DELETE_ITEM_RECORD,
   CMD_DELETE_SSC_MODIFICATION_RECORD,
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_ITEM_RECORDS,
   CMD_GET_PROVENANCE_RECORDS,
-  CMD_GET_SSC_MODIFICATION_RECORDS,
+  CMD_GET_REFERRED_TO_ITEM_RECORDS,
   CMD_GET_SSC_RECORDS,
-  CMD_UPDATE_SSC_MODIFICATION_RECORD,
+  CMD_UPDATE_ITEM_RECORD,
   ITEM_ID,
   NURIMS_CREATION_DATE,
   NURIMS_RELATED_ITEM_ID,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
   RECORD_KEY,
-  SSC_MODIFICATION_RECORD,
+  SSC_MAINTENANCE_RECORD,
   SSC_TOPIC,
 } from "../../utils/constants";
 
@@ -35,7 +36,6 @@ import {
 import {
   withTheme
 } from "@mui/styles";
-import SSCModificationRecords from "./SSCModificationRecords";
 import {
   isCommandResponse,
   messageHasResponse,
@@ -47,17 +47,18 @@ import {
 import {
   record_uuid
 } from "../../utils/MetadataUtils";
+import SSCMaintenanceRecords from "./SSCMaintenanceRecords";
 
-export const ADDEDITMODIFICATIONRECORD_REF = "AddEditModificationRecord";
+export const ADDEDITMAINTENANCERECORD_REF = "AddEditMaintenanceRecord";
 
-class AddEditModificationRecord extends BaseRecordManager {
+class AddEditMaintenanceRecord extends BaseRecordManager {
   static contextType = UserContext;
 
   constructor(props) {
     super(props);
-    this.Module = ADDEDITMODIFICATIONRECORD_REF;
+    this.Module = ADDEDITMAINTENANCERECORD_REF;
     this.recordTopic = SSC_TOPIC;
-    this.modificationRecordsRef = React.createRef();
+    this.maintenanceRecordsRef = React.createRef();
   }
 
   componentDidMount() {
@@ -75,10 +76,10 @@ class AddEditModificationRecord extends BaseRecordManager {
     if (messageHasResponse(message)) {
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message,
-          [CMD_GET_SSC_MODIFICATION_RECORDS, CMD_UPDATE_SSC_MODIFICATION_RECORD,
+          [CMD_GET_ITEM_RECORDS, CMD_UPDATE_ITEM_RECORD,
             CMD_GET_PROVENANCE_RECORDS, CMD_GET_GLOSSARY_TERMS])) {
-          if (this.modificationRecordsRef.current) {
-            this.modificationRecordsRef.current.ws_message(message);
+          if (this.maintenanceRecordsRef.current) {
+            this.maintenanceRecordsRef.current.ws_message(message);
           }
         } else if (isCommandResponse(message,CMD_GET_SSC_RECORDS)) {
           if (this.listRef.current) {
@@ -104,29 +105,31 @@ class AddEditModificationRecord extends BaseRecordManager {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
     }
     this.props.send({
-      cmd: CMD_GET_SSC_MODIFICATION_RECORDS,
+      cmd: CMD_GET_REFERRED_TO_ITEM_RECORDS,
       referred_to_item_id: selection.item_id,
       referred_to_metadata: NURIMS_RELATED_ITEM_ID,
       "include.withdrawn": include_archived ? "true" : "false",
       "include.metadata.subtitle": NURIMS_CREATION_DATE,
+      topic: SSC_MAINTENANCE_RECORD,
+      record_type: SSC_TOPIC,
       module: this.Module,
     })
     this.setState({selection: selection});
 
-    if (this.modificationRecordsRef.current) {
-      this.modificationRecordsRef.current.setReferredToRecord(selection);
+    if (this.maintenanceRecordsRef.current) {
+      this.maintenanceRecordsRef.current.setReferredToRecord(selection);
     }
   }
 
-  onModificationRecordSelection = (selection) => {
+  onMaintenanceRecordSelection = (selection) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "onModificationRecordSelection", "selection", selection);
+      ConsoleLog(this.Module, "onMaintenanceRecordSelection", "selection", selection);
     }
     this.props.send({
       cmd: CMD_GET_ITEM_RECORDS,
       item_id: selection[ITEM_ID],
       topic: SSC_TOPIC,
-      record_type: SSC_MODIFICATION_RECORD,
+      record_type: SSC_MAINTENANCE_RECORD,
       "include.metadata": "true",
       module: this.Module,
     })
@@ -142,13 +145,15 @@ class AddEditModificationRecord extends BaseRecordManager {
         record[RECORD_KEY] = record_uuid();
       }
       this.props.send({
-        cmd: CMD_UPDATE_SSC_MODIFICATION_RECORD,
+        cmd: CMD_UPDATE_ITEM_RECORD,
         item_id: record.item_id,
         "nurims.title": record[NURIMS_TITLE],
         "nurims.withdrawn": record[NURIMS_WITHDRAWN],
         "include.metadata.subtitle": NURIMS_CREATION_DATE,
         metadata: record.metadata,
         record_key: record[RECORD_KEY],
+        topic: SSC_TOPIC,
+        record_type: SSC_MAINTENANCE_RECORD,
         module: this.Module,
       })
     }
@@ -164,7 +169,7 @@ class AddEditModificationRecord extends BaseRecordManager {
       record[RECORD_KEY] = record_uuid();
     }
     this.props.send({
-      cmd: CMD_DELETE_SSC_MODIFICATION_RECORD,
+      cmd: CMD_DELETE_ITEM_RECORD,
       item_id: record.item_id,
       module: this.Module,
     })
@@ -201,15 +206,15 @@ class AddEditModificationRecord extends BaseRecordManager {
             />
           </Grid>
           <Grid item xs={9}>
-            <SSCModificationRecords
-              ref={this.modificationRecordsRef}
+            <SSCMaintenanceRecords
+              ref={this.maintenanceRecordsRef}
               properties={this.props.properties}
               onChange={this.onRecordMetadataChanged}
               saveChanges={this.saveChanges}
               deleteRecord={this.deleteRecord}
               send={this.props.send}
-              getModificationRecords={this.onSSCRecordSelection}
-              getModificationRecord={this.onModificationRecordSelection}
+              getMaintenanceRecords={this.onSSCRecordSelection}
+              getMaintenanceRecord={this.onMaintenanceRecordSelection}
             />
           </Grid>
         </Grid>
@@ -218,10 +223,10 @@ class AddEditModificationRecord extends BaseRecordManager {
   }
 }
 
-AddEditModificationRecord.defaultProps = {
+AddEditMaintenanceRecord.defaultProps = {
   send: (msg) => {
   },
   user: {},
 };
 
-export default withTheme(AddEditModificationRecord);
+export default withTheme(AddEditMaintenanceRecord);

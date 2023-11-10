@@ -27,8 +27,8 @@ import {
   NURIMS_SURVEILLANCE_FREQUENCY,
   NURIMS_SSC_MAINTENANCE_TASK,
   NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA,
-  NURIMS_SSC_MAINTENANCE_RECORD_NAME,
-  NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE,
+  // NURIMS_SSC_MAINTENANCE_NAME,
+  NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE,
   UNDEFINED_DATE_STRING,
   ITEM_ID,
   ROLE_MAINTENANCE_DATA_ENTRY,
@@ -38,15 +38,15 @@ import {
   NURIMS_RELATED_ITEM_ID,
   CMD_UPDATE_SSC_MODIFICATION_RECORD,
   NURIMS_TITLE_SUBTITLE,
-  NURIMS_SSC_MODIFICATION_RECORD_STARTDATE,
-  NURIMS_SSC_MODIFICATION_RECORD_ENDDATE,
-  NURIMS_SSC_MODIFICATION_RECORD_IMPACT_REACTOR_USAGE,
-  NURIMS_SSC_MODIFICATION_RECORD_OBSOLESCENCE_ISSUE,
+  NURIMS_SSC_MODIFICATION_STARTDATE,
+  NURIMS_SSC_MODIFICATION_ENDDATE,
+  NURIMS_SSC_MODIFICATION_IMPACT_REACTOR_USAGE,
+  NURIMS_SSC_MODIFICATION_OBSOLESCENCE_ISSUE,
   NURIMS_DESCRIPTION,
-  NURIMS_SSC_MODIFICATION_RECORD_ACTIONS,
-  NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE,
+  NURIMS_SSC_MODIFICATION_ACTIONS,
+  NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE,
   CMD_GET_ITEM_RECORD,
-  NURIMS_SSC_MODIFICATION_RECORD_PERSONNEL,
+  NURIMS_SSC_MODIFICATION_PERSONNEL,
   NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA,
   NURIMS_SSC_MODIFICATION_DOCUMENTS,
 } from "../../utils/constants";
@@ -169,16 +169,16 @@ class SSCModificationRecords extends Component {
       setMetadataValue(selection, NURIMS_DESCRIPTION, e.target.value)
       changed = true;
     } else if (e.target.id === "modification-actions") {
-      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_ACTIONS, e.target.value);
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_ACTIONS, e.target.value);
       changed = true;
     } else if (e.target.id === "documents") {
       setMetadataValue(selection, NURIMS_SSC_MODIFICATION_DOCUMENTS, e.target.value);
       changed = true;
     } else if (e.target.name === "impact-reactor-usage") {
-      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_IMPACT_REACTOR_USAGE, ""+e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_IMPACT_REACTOR_USAGE, ""+e.target.checked);
       changed = true;
     } else if (e.target.name === "impact-obsolescence") {
-      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_OBSOLESCENCE_ISSUE, "" + e.target.checked);
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_OBSOLESCENCE_ISSUE, "" + e.target.checked);
       changed = true;
     } else if (e.target.id === "acceptance-criteria") {
       setMetadataValue(selection, NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA, e.target.value);
@@ -190,7 +190,7 @@ class SSCModificationRecords extends Component {
           values.push(v);
         }
       }
-      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_PERSONNEL, values.join(","));
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_PERSONNEL, values.join(","));
       changed = true;
     }
     if (changed) {
@@ -211,10 +211,10 @@ class SSCModificationRecords extends Component {
   modificationStartedDateChange = (date) => {
     const selection = this.state.selection;
     if (date) {
-      // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_REMOVED_FROM_SERVICE, date.toISOString().substring(0,10));
-      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_STARTDATE, date.format('YYYY-MM-DD'));
+      // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_REMOVED_FROM_SERVICE, date.toISOString().substring(0,10));
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_STARTDATE, date.format('YYYY-MM-DD'));
     } else {
-      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_RECORD_STARTDATE);
+      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_STARTDATE);
     }
     setRecordChanged(selection);
     this.setState({metadata_changed: true})
@@ -223,10 +223,10 @@ class SSCModificationRecords extends Component {
   modificationCompletedDateChange = (date) => {
     const selection = this.state.selection;
     if (date) {
-      // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, date.toISOString().substring(0,10));
-      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_ENDDATE, date.format('YYYY-MM-DD'));
+      // setMetadataValue(selection, NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE, date.toISOString().substring(0,10));
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_ENDDATE, date.format('YYYY-MM-DD'));
     } else {
-      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_RECORD_ENDDATE);
+      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_ENDDATE);
     }
     setRecordChanged(selection);
     this.setState({metadata_changed: true})
@@ -235,9 +235,9 @@ class SSCModificationRecords extends Component {
   modificationCommissionedDateChange = (date) => {
     const selection = this.state.selection;
     if (date) {
-      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE, date.format('YYYY-MM-DD'));
+      setMetadataValue(selection, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE, date.format('YYYY-MM-DD'));
     } else {
-      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE);
+      removeMetadataField(selection, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE);
     }
     setRecordChanged(selection);
     this.setState({metadata_changed: true})
@@ -347,7 +347,7 @@ class SSCModificationRecords extends Component {
 
   renderCellStyle = (row, cell, theme, selected) => {
     const openIssue = getRecordMetadataValue(
-      row, NURIMS_SSC_MAINTENANCE_RECORD_RETURNED_TO_SERVICE, null) === null;
+      row, NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE, null) === null;
     return {
       mixBlendMode: selected ? 'lighten' : 'inherit',
       color: openIssue ?
@@ -434,6 +434,9 @@ class SSCModificationRecords extends Component {
                   label: 'Created On',
                   width: '30%',
                   sortField: true,
+                  format: (v) => {
+                    return v.substring(0, 10)
+                  },
                 },
               ]}
             />
@@ -475,7 +478,7 @@ class SSCModificationRecords extends Component {
                         value={getRecordTitle(selection)}
                         onChange={this.handleChange}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_RECORD_NAME, "")}
+                        tooltip={""} // {getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_NAME, "")}
                         padding={0}
                       />
                     </Grid>
@@ -485,11 +488,11 @@ class SSCModificationRecords extends Component {
                         label="Modification started"
                         inputFormat={"yyyy-MM-dd"}
                         value={getDateFromDateString(getRecordMetadataValue(selection,
-                          NURIMS_SSC_MODIFICATION_RECORD_STARTDATE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
+                          NURIMS_SSC_MODIFICATION_STARTDATE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
                         onChange={this.modificationStartedDateChange}
                         disabled={no_selection}
                         tooltip={getGlossaryValue(
-                          this.glossary, NURIMS_SSC_MODIFICATION_RECORD_STARTDATE, "")}
+                          this.glossary, NURIMS_SSC_MODIFICATION_STARTDATE, "")}
                       />
                     </Grid>
                     <Grid item xs={12} sm={3} style={{textAlign: 'center'}}>
@@ -498,11 +501,11 @@ class SSCModificationRecords extends Component {
                         label="Modification Completed"
                         inputFormat={"yyyy-MM-dd"}
                         value={getDateFromDateString(getRecordMetadataValue(selection,
-                          NURIMS_SSC_MODIFICATION_RECORD_ENDDATE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
+                          NURIMS_SSC_MODIFICATION_ENDDATE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
                         onChange={this.modificationCompletedDateChange}
                         disabled={no_selection}
                         tooltip={getGlossaryValue(
-                          this.glossary, NURIMS_SSC_MODIFICATION_RECORD_ENDDATE, "")}
+                          this.glossary, NURIMS_SSC_MODIFICATION_ENDDATE, "")}
                       />
                     </Grid>
                     <Grid item xs={12} sm={3} style={{textAlign: 'center'}}>
@@ -511,11 +514,11 @@ class SSCModificationRecords extends Component {
                         label="Modification Comissioned"
                         inputFormat={"yyyy-MM-dd"}
                         value={getDateFromDateString(getRecordMetadataValue(selection,
-                          NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
+                          NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
                         onChange={this.modificationCommissionedDateChange}
                         disabled={no_selection}
                         tooltip={getGlossaryValue(
-                          this.glossary, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE, "")}
+                          this.glossary, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE, "")}
                       />
                     </Grid>
                     <Grid item xs={12} sm={12}>
@@ -527,7 +530,7 @@ class SSCModificationRecords extends Component {
                             onChange={this.handleChange}
                             disabled={no_selection}
                             checked={getRecordMetadataValue(selection,
-                              NURIMS_SSC_MODIFICATION_RECORD_IMPACT_REACTOR_USAGE, "false")}
+                              NURIMS_SSC_MODIFICATION_IMPACT_REACTOR_USAGE, "false")}
                             tooltip={"hg gugtt "}
                             padding={8}
                           />
@@ -538,7 +541,7 @@ class SSCModificationRecords extends Component {
                             label={"Impact SSC obsolescence"}
                             onChange={this.handleChange}
                             checked={getRecordMetadataValue(selection,
-                              NURIMS_SSC_MODIFICATION_RECORD_OBSOLESCENCE_ISSUE, "false")}
+                              NURIMS_SSC_MODIFICATION_OBSOLESCENCE_ISSUE, "false")}
                             disabled={no_selection}
                             tooltip={"hg gugtt "}
                             padding={8}
@@ -562,10 +565,10 @@ class SSCModificationRecords extends Component {
                       <TextFieldWithTooltip
                         id={"modification-actions"}
                         label="Modification actions"
-                        value={getRecordMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_ACTIONS, "")}
+                        value={getRecordMetadataValue(selection, NURIMS_SSC_MODIFICATION_ACTIONS, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MODIFICATION_RECORD_ACTIONS, "")}
+                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MODIFICATION_ACTIONS, "")}
                         lines={5}
                         padding={0}
                       />
@@ -600,11 +603,11 @@ class SSCModificationRecords extends Component {
                         label="Modification Personnel"
                         required={true}
                         multiple={true}
-                        value={getRecordMetadataValue(selection, NURIMS_SSC_MODIFICATION_RECORD_PERSONNEL, "")}
+                        value={getRecordMetadataValue(selection, NURIMS_SSC_MODIFICATION_PERSONNEL, "")}
                         onChange={this.handleChange}
                         options={this.context.user.users}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MODIFICATION_RECORD_PERSONNEL, "")}
+                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MODIFICATION_PERSONNEL, "")}
                       />
                     </Grid>
                   </Grid>
