@@ -365,9 +365,15 @@ export function SelectFormControlWithTooltip({
       >
         {options.map((option) => {
           if (typeof option === 'object') {
-            return (
-              <MenuItem disabled={option.disabled || false} value={option["id"]}>{option["title"]}</MenuItem>
-            )
+            if (Array.isArray(option)) {
+              return (
+                <MenuItem disabled={option.disabled || false} value={option[0]}>{option[1]}</MenuItem>
+              )
+            } else {
+              return (
+                <MenuItem disabled={option.disabled || false} value={option["id"]}>{option["title"]}</MenuItem>
+              )
+            }
           } else {
             const t = option.split(',');
             if (t.length === 1) {
@@ -1335,20 +1341,20 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
   const archiveButtonLabel = isRecordArchived(selection) ? unarchiveRecordButtonLabel : archiveRecordButtonLabel;
   const archiveIcon = isRecordArchived(selection) ? unarchiveRecordIcon : archiveRecordIcon;
 
-  console.log("===")
-  console.log("= users", user)
-  console.log("= userIsCreator", userIsCreator)
-  console.log("= recordHasChanged", recordHasChanged)
-  console.log("= sysadminRole", sysadminRole)
-  console.log("= addRecordRole", addRecordRole)
-  console.log("= archiveRecordRole", archiveRecordRole)
-  console.log("= isSelectableByRoles(selection, [addRecordRole, sysadminRole], false)",
-    isSelectableByRoles(user, selection, [addRecordRole, sysadminRole], false))
-  console.log("= isSelectableByRoles(selection, [archiveRecordRole, sysadminRole], false)",
-    isSelectableByRoles(user, selection, [archiveRecordRole, sysadminRole], true))
-  console.log("= emptyRecord", emptyRecord)
-  console.log("= selection", selection)
-  console.log("===")
+  // console.log("===")
+  // console.log("= users", user)
+  // console.log("= userIsCreator", userIsCreator)
+  // console.log("= recordHasChanged", recordHasChanged)
+  // console.log("= sysadminRole", sysadminRole)
+  // console.log("= addRecordRole", addRecordRole)
+  // console.log("= archiveRecordRole", archiveRecordRole)
+  // console.log("= isSelectableByRoles(selection, [addRecordRole, sysadminRole], false)",
+  //   isSelectableByRoles(user, selection, [addRecordRole, sysadminRole], false))
+  // console.log("= isSelectableByRoles(selection, [archiveRecordRole, sysadminRole], false)",
+  //   isSelectableByRoles(user, selection, [archiveRecordRole, sysadminRole], true))
+  // console.log("= emptyRecord", emptyRecord)
+  // console.log("= selection", selection)
+  // console.log("===")
   return (
     <Box style={{textAlign: 'center', display: 'flex', justifyContent: 'space-around'}}>
       <Button
@@ -1398,7 +1404,6 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
           disabled={!isSelectableByRoles(user, selection, [archiveRecordRole, sysadminRole], true) ||
             disableArchiveRecordButton}
           variant="outlined"
-          endIcon={archiveRecordIcon}
           onClick={onClickArchiveRecords}
         >
           {archiveButtonLabel}
