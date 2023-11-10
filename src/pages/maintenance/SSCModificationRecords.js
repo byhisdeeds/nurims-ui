@@ -15,7 +15,7 @@ import {
   new_record,
   removeMetadataField,
   setMetadataValue,
-  setRecordMetadataChanged,
+  setRecordChanged,
 } from "../../utils/MetadataUtils";
 import {
   getPropertyValue,
@@ -211,7 +211,7 @@ class SSCModificationRecords extends Component {
       changed = true;
     }
     if (changed) {
-      setRecordMetadataChanged(selection, changed);
+      setRecordChanged(selection);
       // update scc modification records list entry
       if (this.listRef.current) {
         for (const r of this.listRef.current.getRecords()) {
@@ -235,9 +235,10 @@ class SSCModificationRecords extends Component {
     } else {
       removeMetadataField(selection, NURIMS_SSC_MODIFICATION_RECORD_STARTDATE);
     }
-    this.setState({selection: selection, metadata_changed: true})
+    setRecordChanged(selection);
+    this.setState({metadata_changed: true})
     // signal to parent that metadata has changed
-    this.props.onChange(true);
+    // this.props.onChange(true);
   }
 
   modificationCompletedDateChange = (date) => {
@@ -248,9 +249,10 @@ class SSCModificationRecords extends Component {
     } else {
       removeMetadataField(selection, NURIMS_SSC_MODIFICATION_RECORD_ENDDATE);
     }
-    this.setState({selection: selection, metadata_changed: true})
+    setRecordChanged(selection);
+    this.setState({metadata_changed: true})
     // signal to parent that metadata has changed
-    this.props.onChange(true);
+    // this.props.onChange(true);
   }
 
   modificationCommissionedDateChange = (date) => {
@@ -261,9 +263,10 @@ class SSCModificationRecords extends Component {
     } else {
       removeMetadataField(selection, NURIMS_SSC_MODIFICATION_RECORD_COMMISSIONED_DATE);
     }
-    this.setState({selection: selection, metadata_changed: true})
+    setRecordChanged(selection);
+    this.setState({metadata_changed: true})
     // signal to parent that metadata has changed
-    this.props.onChange(true);
+    // this.props.onChange(true);
   }
 
   // handleCommissioningDateChange = (date) => {
@@ -428,7 +431,7 @@ class SSCModificationRecords extends Component {
       ConsoleLog(this.Module, "saveModificationRecord", "selection", this.state.selection);
     }
     setMetadataValue(selection, NURIMS_RELATED_ITEM_ID, ssc[ITEM_ID]);
-    selection["changed"] = true;
+    setRecordChanged(selection);
     this.props.saveChanges(selection);
   }
 
@@ -465,18 +468,18 @@ class SSCModificationRecords extends Component {
     }
   }
 
-  isSelectableByRoles = (selection, roles, valid_selection) => {
-    for (const r of roles) {
-      if (isValidUserRole(this.context.user, r)) {
-        // We have at least one match, now we check for a valid item_id boolean parameter has been specified
-        if (valid_selection) {
-          return Object.keys(selection).length > 0 && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
-        }
-        return true;
-      }
-    }
-    return false;
-  }
+  // isSelectableByRoles = (selection, roles, valid_selection) => {
+  //   for (const r of roles) {
+  //     if (isValidUserRole(this.context.user, r)) {
+  //       // We have at least one match, now we check for a valid item_id boolean parameter has been specified
+  //       if (valid_selection) {
+  //         return Object.keys(selection).length > 0 && selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
+  //       }
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   setProvenanceRecords = (provenance) => {
     setProvenanceRecordsHelper(this, provenance);

@@ -44,9 +44,13 @@ import {
   getUserRecordData,
   record_uuid
 } from "../../utils/MetadataUtils";
-import {isValidUserRole} from "../../utils/UserUtils";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import {
+  isValidUserRole
+} from "../../utils/UserUtils";
+import {
+  PersonAdd as PersonAddIcon,
+  PersonRemove as PersonRemoveIcon
+} from "@mui/icons-material";
 import {
   setProvenanceRecordsHelper,
   showProvenanceRecordsViewHelper
@@ -311,25 +315,25 @@ class ManageUsers extends React.Component {
     this.setState({show_provenance_view: false,});
   }
 
-  isSelectableByRoles = (selection, roles, valid_item_id) => {
-    // console.log("== isSelectableByRoles SELECTION ==", selection)
-    // console.log("== isSelectableByRoles user ==", this.context.user)
-    for (const r of roles) {
-      // if role is **current_user** then a match between the current user and the selection user returns true
-      if (r === "**current_user**" &&
-          selection.hasOwnProperty(NURIMS_TITLE) &&
-          selection[NURIMS_TITLE] === this.context.user.profile.username) {
-        return true
-      } else if (isValidUserRole(this.context.user, r)) {
-        // We have at least one match, now we check for a valid item_id boolean parameter has been specified
-        if (valid_item_id) {
-          return selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
-        }
-        return true;
-      }
-    }
-    return false;
-  }
+  // isSelectableByRoles = (selection, roles, valid_item_id) => {
+  //   // console.log("== isSelectableByRoles SELECTION ==", selection)
+  //   // console.log("== isSelectableByRoles user ==", this.context.user)
+  //   for (const r of roles) {
+  //     // if role is **current_user** then a match between the current user and the selection user returns true
+  //     if (r === "**current_user**" &&
+  //         selection.hasOwnProperty(NURIMS_TITLE) &&
+  //         selection[NURIMS_TITLE] === this.context.user.profile.username) {
+  //       return true
+  //     } else if (isValidUserRole(this.context.user, r)) {
+  //       // We have at least one match, now we check for a valid item_id boolean parameter has been specified
+  //       if (valid_item_id) {
+  //         return selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
+  //       }
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   // hasChangedRecords = () => {
   //   if (this.listRef.current) {

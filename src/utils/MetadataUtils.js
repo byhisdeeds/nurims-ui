@@ -1,4 +1,5 @@
 import {
+  CURRENT_USER,
   ITEM_ID, METADATA,
   NURIMS_CREATED_BY,
   NURIMS_DOSIMETRY_BATCH_ID,
@@ -26,6 +27,7 @@ import {
 import {transformDose} from "./DoseReportUtils";
 import {v4 as uuid} from "uuid";
 import dayjs from 'dayjs';
+import {isValidUserRole} from "./UserUtils";
 
 export function record_uuid() {
   return uuid();
@@ -43,6 +45,10 @@ export function isRecordChanged(record) {
   return record.hasOwnProperty("changed") && record.changed;
 }
 
+export function setRecordChanged(record) {
+  record["changed"] = true;
+}
+
 export function removeMetadataField(obj, key) {
   if (obj.hasOwnProperty("metadata")) {
     const metadata = obj.metadata;
@@ -57,10 +63,6 @@ export function removeMetadataField(obj, key) {
       }
     }
   }
-}
-
-export function setRecordMetadataChanged(record, state) {
-  record["changed"] = state;
 }
 
 export function setRecordMetadataValue(obj, key, value) {
@@ -640,6 +642,23 @@ export function changeRecordArchivalStatus(record, status) {
     record[NURIMS_WITHDRAWN] = record[NURIMS_WITHDRAWN] === 0 ? 1 : 0;
     record.changed = true;
     return true;
+  }
+  return false;
+}
+
+export function isSelectableByRoles(user, selection, roles, valid_selection){
+  for (const r of roles) {
+    // if role is **current_user** then a match between the current user and the selection user returns true
+    if (r === CURRENT_USER && selection.hasOwnProperty(NURIMS_TITLE) &&
+      selection[NURIMS_TITLE] === this.context.user.profile.username) {
+      return true
+    } else if (user.hasOwnProperty("profile") && (user.profile["role"].includes(`'${r}'`))) {
+      // We have at least one match, now we check for a valid item_id boolean parameter has been specified
+      if (valid_selection) {
+        return selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1;
+      }
+      return true;
+    }
   }
   return false;
 }

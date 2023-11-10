@@ -45,7 +45,7 @@ import {
   isRecordArchived,
   isRecordChanged,
   isRecordCreatedBy,
-  isRecordEmpty,
+  isRecordEmpty, isSelectableByRoles,
   toBoolean
 } from "../utils/MetadataUtils";
 import {
@@ -1342,9 +1342,9 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
   console.log("= addRecordRole", addRecordRole)
   console.log("= archiveRecordRole", archiveRecordRole)
   console.log("= isSelectableByRoles(selection, [addRecordRole, sysadminRole], false)",
-    THIS.isSelectableByRoles(selection, [addRecordRole, sysadminRole], false))
+    isSelectableByRoles(user, selection, [addRecordRole, sysadminRole], false))
   console.log("= isSelectableByRoles(selection, [archiveRecordRole, sysadminRole], false)",
-    THIS.isSelectableByRoles(selection, [archiveRecordRole, sysadminRole], true))
+    isSelectableByRoles(user, selection, [archiveRecordRole, sysadminRole], true))
   console.log("= emptyRecord", emptyRecord)
   console.log("= selection", selection)
   console.log("===")
@@ -1352,7 +1352,7 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
     <Box style={{textAlign: 'center', display: 'flex', justifyContent: 'space-around'}}>
       <Button
         size={"small"}
-        disabled={!THIS.isSelectableByRoles(selection, [deleteRecordRole, sysadminRole], true) ||
+        disabled={!isSelectableByRoles(user, selection, [deleteRecordRole, sysadminRole], true) ||
           disableDeleteRecordButton}
         variant="outlined"
         endIcon={deleteRecordIcon}
@@ -1371,7 +1371,7 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
       </Button>
       <Button
         size={"small"}
-        disabled={!THIS.isSelectableByRoles(selection, [addRecordRole, sysadminRole], false) ||
+        disabled={!isSelectableByRoles(user, selection, [addRecordRole, sysadminRole], false) ||
           disableAddRecordButton}
         variant="outlined"
         endIcon={addRecordIcon}
@@ -1382,7 +1382,7 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
       {showViewProvenanceRecordButton &&
         <Button
           size={"small"}
-          disabled={!THIS.isSelectableByRoles(selection, [viewProvenanceRecordRole, sysadminRole], true) ||
+          disabled={!isSelectableByRoles(user, selection, [viewProvenanceRecordRole, sysadminRole], true) ||
             disableViewProvenanceRecordButton}
           variant="outlined"
           endIcon={viewProvenanceRecordIcon}
@@ -1394,7 +1394,7 @@ export function AddRemoveArchiveSaveProvenanceButtonPanel({
       {showArchiveRecordButton &&
         <Button
           size={"small"}
-          disabled={!THIS.isSelectableByRoles(selection, [archiveRecordRole, sysadminRole], true) ||
+          disabled={!isSelectableByRoles(user, selection, [archiveRecordRole, sysadminRole], true) ||
             disableArchiveRecordButton}
           variant="outlined"
           endIcon={archiveRecordIcon}

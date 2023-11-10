@@ -8,7 +8,7 @@ import {
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_SSC_MODIFICATION_RECORDS,
   CMD_GET_SSC_RECORDS,
-  CMD_UPDATE_SSC_MODIFICATION_RECORD,
+  CMD_UPDATE_SSC_MODIFICATION_RECORD, ITEM_ID,
   NURIMS_CREATION_DATE,
   NURIMS_RELATED_ITEM_ID,
   NURIMS_TITLE,
@@ -115,6 +115,18 @@ class AddEditModificationRecord extends BaseRecordManager {
     }
   }
 
+  onModificationRecordSelection = (selection) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "onModificationRecordSelection", "selection", selection);
+    }
+    this.props.send({
+      cmd: CMD_GET_ITEM_RECORD,
+      item_id: selection[ITEM_ID],
+      topic: "",
+      module: this.Module,
+    })
+  }
+
   saveChanges = (record) => {
     // only save record with changed metadata
     if (record.changed) {
@@ -192,6 +204,7 @@ class AddEditModificationRecord extends BaseRecordManager {
               deleteRecord={this.deleteRecord}
               send={this.props.send}
               getModificationRecords={this.onSSCRecordSelection}
+              getModificationRecord={this.onModificationRecordSelection}
             />
           </Grid>
         </Grid>
