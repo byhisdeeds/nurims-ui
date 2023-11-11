@@ -173,11 +173,11 @@ const AuthService = {
   }
 };
 
-function encryptMessage(pubKey, text) {
-  const jsEncrypt = new window.JSEncrypt();
-  jsEncrypt.setPublicKey(pubKey);
-  return jsEncrypt.encrypt(text);
-}
+// function encryptMessage(pubKey, text) {
+//   const jsEncrypt = new window.JSEncrypt();
+//   jsEncrypt.setPublicKey(pubKey);
+//   return jsEncrypt.encrypt(text);
+// }
 
 
 class App extends React.Component {
@@ -272,21 +272,7 @@ class App extends React.Component {
         ConsoleLog("App", "ws.onopen", "websocket connection established");
       }
       this.appendLog("Websocket connection established.");
-      this.setState({ready: true});
-      /////////////////////////////////////////////////////////////////
-      // // get public key as base64 string
-      // this.send({
-      //   cmd: CMD_GET_PUBLIC_KEY,
-      // })
-      // // load organisation database on server
-      // this.send({
-      //   cmd: CMD_GET_ORGANISATION,
-      // })
-      // // load system properties
-      // this.send({
-      //   cmd: CMD_GET_SYSTEM_PROPERTIES,
-      // })
-      /////////////////////////////////////////////////////////////////
+      this.setState({ready: true, online: false});
     };
     this.ws.onerror = (error) => {
       ConsoleLog("App", "ws.onerror", error);
@@ -307,6 +293,12 @@ class App extends React.Component {
       if (this.debug) {
         ConsoleLog("App", "onmessage", message);
       }
+      if (message.hasOwnProperty("log_message")) {
+        this.appendLog(message.response);
+        if (message.log_message === "only_logging_system") {
+          return;
+        }
+      }
       if (isValidMessageSignature(message)) {
         if (isModuleMessage(message)) {
           for (const [k, v] of Object.entries(this.crefs)) {
@@ -319,19 +311,61 @@ class App extends React.Component {
         } else {
           if (messageResponseStatusOk(message)) {
             if (isCommandResponse(message, "gpk")) {
-              console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
               this.puk.length = 0;
               this.puk.push(message.response.data);
               this.user.isAuthenticated = false;
               this.setState({online: true});
+            } else if (isCommandResponse(message, CMD_GET_ORGANISATION)) {
+              this.org = message.response.org;
+            } else if (isCommandResponse(message, CMD_GET_USER_RECORDS)) {
+              for (const u of message.response.users) {
+                if (u.hasOwnProperty("metadata")) {
+                  this.user.users.push([u.metadata.username, u.metadata.fullname]);
+                }
+              }
+            } else if (isCommandResponse(message, CMD_GET_SERVER_INFO)) {
+              if (this.sysinfoRef.current) {
+                this.sysinfoRef.current.setServerInfo(message.response);
+              }
+            } else if (isCommandResponse(message, CMD_BACKGROUND_TASKS)) {
+              this.setState({background_tasks_active: message.hasOwnProperty("tasks_active"), busy: 0});
+            } else if (isCommandResponse(message, CMD_GET_SYSTEM_PROPERTIES)) {
+              for (const property of message.response.properties) {
+                setPropertyValue(this.properties, property.name, property.value);
+              }
+            } else if (isCommandResponse(message, CMD_SET_SYSTEM_PROPERTIES)) {
+              const property = message.response.property;
+              setPropertyValue(this.properties, property.name, property.value);
+            } else if (isCommandResponse(message, [CMD_GET_USER_NOTIFICATION_MESSAGES,
+              CMD_DELETE_USER_NOTIFICATION_MESSAGE])) {
+              if (this.notificationRef.current) {
+                if (message.response.hasOwnProperty("notifications")) {
+                  this.notificationRef.current.updateMessages(message.response.notifications);
+                  let count = 0;
+                  for (const m of message.response.notifications) {
+                    if (m.archived === 0) {
+                      count++;
+                    }
+                  }
+                  this.setState(pstate => {
+                    return {
+                      num_unread_messages: count,
+                      num_messages: message.response.notifications.length,
+                    }
+                  });
+                }
+              }
+            }
+            if (message.hasOwnProperty("show_busy") && message.show_busy) {
+              this.setState(pstate => {
+                return {busy: this.state.busy - 1}
+              });
             }
           } else {
             enqueueErrorSnackbar(message.response.message);
           }
         }
-        if (isCommandResponse(message, "gpk")) {
 
-        }
       } else {
       }
       // if (isValidMessageSignature(message, "cmd", "gpk")) {
@@ -347,81 +381,80 @@ class App extends React.Component {
       // ====================================================================================================== //
       // ====================================================================================================== //
       // ====================================================================================================== //
-      const data = JSON.parse(event.data);
-      if (this.debug) {
-        ConsoleLog("App", "onmessage", data);
-      }
-      if (data.hasOwnProperty("log_message")) {
-        this.appendLog(data.response);
-        if (data.log_message === "only_logging_system") {
-          return;
-        }
-      }
-      if (data.cmd === CMD_GET_PUBLIC_KEY) {
-        this.puk.length = 0;
-        this.puk.push(data.response.public_key);
-        this.setState({online: true});
+      // const data = JSON.parse(event.data);
+      // if (this.debug) {
+      //   ConsoleLog("App", "onmessage", data);
+      // }
+      // if (data.hasOwnProperty("log_message")) {
+      //   this.appendLog(data.response);
+      //   if (data.log_message === "only_logging_system") {
+      //     return;
+      //   }
+      // }
+      // if (data.cmd === CMD_GET_PUBLIC_KEY) {
+      //   this.puk.length = 0;
+      //   this.puk.push(data.response.public_key);
+      //   this.setState({online: true});
       // } else if (data.cmd === CMD_GET_USER_RECORDS && data.module === SIGNIN_REF) {
-      } else if (data.cmd === CMD_GET_USER_RECORDS && !data.hasOwnProperty("module")) {
-        for (const u of data.response.users) {
-          if (u.hasOwnProperty("metadata")) {
-            this.user.users.push([u.metadata.username, u.metadata.fullname]);
-          }
-        }
-      } else if (data.cmd === CMD_PING) {
-        this.send_pong();
-      } else if (data.cmd === CMD_GET_SERVER_INFO) {
-        if (this.sysinfoRef.current) {
-          this.sysinfoRef.current.setServerInfo(data.response);
-        }
-      } else if (data.cmd === CMD_GET_USER_NOTIFICATION_MESSAGES || data.cmd === CMD_DELETE_USER_NOTIFICATION_MESSAGE) {
-        if (this.notificationRef.current) {
-          if (data.response.hasOwnProperty("notifications")) {
-            this.notificationRef.current.updateMessages(data.response.notifications);
-            let count = 0;
-            for (const m of data.response.notifications) {
-              if (m.archived === 0) {
-                count++;
-              }
-            }
-            this.setState(pstate => {
-              return {
-                num_unread_messages: count,
-                num_messages: data.response.notifications.length,
-              }
-            });
-          }
-        }
-      } else if (data.hasOwnProperty('module')) {
-        for (const [k, v] of Object.entries(this.crefs)) {
-          if (k === data.module) {
-            if (v.current) {
-              v.current.ws_message(data)
-            }
-          }
-        }
-      } else if (data.cmd === CMD_GET_ORGANISATION) {
-        // this.setState({org: data.response.org});
-        this.org = data.response.org;
-      } else if (data.cmd === CMD_GET_SYSTEM_PROPERTIES) {
-        if (data.hasOwnProperty("response")) {
-          for (const property of data.response.properties) {
-            setPropertyValue(this.properties, property.name, property.value);
-          }
-        }
-      } else if (data.cmd === CMD_SET_SYSTEM_PROPERTIES) {
-        if (data.hasOwnProperty("response")) {
-          const property = data.response.property;
-          setPropertyValue(this.properties, property.name, property.value);
-        }
-      } else if (data.cmd === CMD_BACKGROUND_TASKS) {
-        this.setState({background_tasks_active: data.hasOwnProperty("tasks_active"), busy: 0});
-      }
-      if (data.hasOwnProperty("show_busy") && data.show_busy) {
-        this.setState(pstate => {
-          return {busy: this.state.busy - 1}
-        });
-      }
+      // if (data.cmd === CMD_GET_USER_RECORDS && !data.hasOwnProperty("module")) {
+      //   for (const u of data.response.users) {
+      //     if (u.hasOwnProperty("metadata")) {
+      //       this.user.users.push([u.metadata.username, u.metadata.fullname]);
+      //     }
+      //   }
+      // } else if (data.cmd === CMD_PING) {
+      //   this.send_pong();
+      // } else if (data.cmd === CMD_GET_SERVER_INFO) {
+      //   if (this.sysinfoRef.current) {
+      //     this.sysinfoRef.current.setServerInfo(data.response);
+      //   }
+      // } else if (data.cmd === CMD_GET_USER_NOTIFICATION_MESSAGES || data.cmd === CMD_DELETE_USER_NOTIFICATION_MESSAGE) {
+      //   if (this.notificationRef.current) {
+      //     if (data.response.hasOwnProperty("notifications")) {
+      //       this.notificationRef.current.updateMessages(data.response.notifications);
+      //       let count = 0;
+      //       for (const m of data.response.notifications) {
+      //         if (m.archived === 0) {
+      //           count++;
+      //         }
+      //       }
+      //       this.setState(pstate => {
+      //         return {
+      //           num_unread_messages: count,
+      //           num_messages: data.response.notifications.length,
+      //         }
+      //       });
+      //     }
+      //   }
+      // } else if (data.hasOwnProperty('module')) {
+      //   for (const [k, v] of Object.entries(this.crefs)) {
+      //     if (k === data.module) {
+      //       if (v.current) {
+      //         v.current.ws_message(data)
+      //       }
+      //     }
+      //   }
+      // } else if (data.cmd === CMD_GET_ORGANISATION) {
+        // this.org = data.response.org;
+      // } else if (data.cmd === CMD_GET_SYSTEM_PROPERTIES) {
+      //   if (data.hasOwnProperty("response")) {
+      //     for (const property of data.response.properties) {
+      //       setPropertyValue(this.properties, property.name, property.value);
+      //     }
+      //   }
+      // } else if (data.cmd === CMD_SET_SYSTEM_PROPERTIES) {
+      //   if (data.hasOwnProperty("response")) {
+      //     const property = data.response.property;
+      //     setPropertyValue(this.properties, property.name, property.value);
+      //   }
+      // } else if (data.cmd === CMD_BACKGROUND_TASKS) {
+      //   this.setState({background_tasks_active: data.hasOwnProperty("tasks_active"), busy: 0});
+      // }
+      // if (data.hasOwnProperty("show_busy") && data.show_busy) {
+      //   this.setState(pstate => {
+      //     return {busy: this.state.busy - 1}
+      //   });
+      // }
     };
   }
 
