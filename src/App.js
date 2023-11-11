@@ -356,17 +356,15 @@ class App extends React.Component {
                 }
               }
             }
-            if (message.hasOwnProperty("show_busy") && message.show_busy) {
-              this.setState(pstate => {
-                return {busy: this.state.busy - 1}
-              });
-            }
           } else {
             enqueueErrorSnackbar(message.response.message);
           }
         }
-
-      } else {
+        if (message.hasOwnProperty("show_busy") && message.show_busy) {
+          this.setState(pstate => {
+            return {busy: this.state.busy - 1}
+          });
+        }
       }
       // if (isValidMessageSignature(message, "cmd", "gpk")) {
       //   console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")

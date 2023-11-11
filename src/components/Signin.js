@@ -89,7 +89,7 @@ class Signin extends React.Component {
         username: encryptMessage(this.props.puk[0], this.state.username),
         password: encryptMessage(this.props.puk[0], this.state.password),
         module: this.Module,
-      }, false, false);
+      }, true, false);
       this.setState({session_id: session_id})
     }
   };
