@@ -6,7 +6,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import PropTypes from 'prop-types'
-import DrawerMenu from "./components/DrawerMenu";
+import DrawerMenu from "./DrawerMenu";
 
 const drawerWidth = 300;
 

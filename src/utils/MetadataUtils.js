@@ -24,9 +24,12 @@ import {
   NURIMS_WITHDRAWN,
   RECORD_KEY
 } from "./constants";
-import {transformDose} from "./DoseReportUtils";
-// import {v4 as uuid} from "uuid";
-import {nanoid} from 'nanoid';
+import {
+  transformDose
+} from "./DoseReportUtils";
+import {
+  nanoid
+} from 'nanoid';
 import dayjs from 'dayjs';
 
 export function record_uuid() {

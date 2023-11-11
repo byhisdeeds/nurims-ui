@@ -13,7 +13,7 @@ import {
   styled,
   ThemeProvider
 } from '@mui/material/styles';
-import MenuDrawer from "./MenuDrawer";
+import MenuDrawer from "./components/MenuDrawer";
 import {
   darkTheme,
   lightTheme
@@ -270,7 +270,8 @@ class App extends React.Component {
       this.setState({ready: false});
     };
     this.ws.onclose = (event) => {
-      const msg = `"Websocket connection with server closed: wasClean = ${event.hasOwnProperty("wasClean") ? event.wasClean : false}, reason = ${event.hasOwnProperty("reason") ? event.reason : ""}`;
+      const msg =
+        `"Websocket connection with server closed: wasClean = ${event.hasOwnProperty("wasClean") ? event.wasClean : false}, reason = ${event.hasOwnProperty("reason") ? event.reason : ""}`;
       if (this.debug) {
         ConsoleLog("App", "ws.onclose", msg);
       }
@@ -353,9 +354,14 @@ class App extends React.Component {
         }
         if (message.hasOwnProperty("show_busy") && message.show_busy) {
           this.setState(pstate => {
-            return {busy: this.state.busy - 1}
+            return {
+              busy: pstate.busy - 1
+            }
           });
         }
+      } else {
+        enqueueErrorSnackbar(
+          `message is missing ${message.hasOwnProperty("cmd") ? "" : "cmd"}${message.hasOwnProperty("response") ? "" : "response"} field.`);
       }
     };
   }
@@ -367,17 +373,17 @@ class App extends React.Component {
     }
   }
 
-  send_pong = () => {
-    const msg = {cmd: "pong"};
-    if (this.ws && this.ws.readyState === 1) {
-      if (this.debug) {
-        ConsoleLog("App", "send", msg);
-      }
-      this.ws.send(JSON.stringify({
-        ...msg
-      }));
-    }
-  };
+  // send_pong = () => {
+  //   const msg = {cmd: "pong"};
+  //   if (this.ws && this.ws.readyState === 1) {
+  //     if (this.debug) {
+  //       ConsoleLog("App", "send", msg);
+  //     }
+  //     this.ws.send(JSON.stringify({
+  //       ...msg
+  //     }));
+  //   }
+  // };
 
   send = (msg, show_busy, include_user) => {
     if (this.debug) {
@@ -403,9 +409,7 @@ class App extends React.Component {
       }
       this.ws.send(JSON.stringify(_msg));
       if (_show_busy) {
-        this.setState(pstate => {
-          return {busy: pstate.busy + 1}
-        });
+        this.setState({busy: this.state.busy + 1});
       }
     } else {
       enqueueWarningSnackbar("NURIMS server offline!")
@@ -480,7 +484,7 @@ class App extends React.Component {
   }
 
   onValidAuthentication = (session_id) => {
-    // save session id
+    // save session id. This is the encrypted session id that we send with each request
     this.session_id = session_id;
     // get list of all registered users
     this.send({
@@ -493,7 +497,6 @@ class App extends React.Component {
     this.send({
       cmd: CMD_GET_USER_NOTIFICATION_MESSAGES,
     }, false, true);
-    this.setState({busy: 0, online: true});
   }
 
   render() {
@@ -502,10 +505,10 @@ class App extends React.Component {
       log_window_visible, notification_window_visible, notification_window_anchor, num_messages, online
     } = this.state;
     const isSysadmin = isValidUserRole(this.user, "sysadmin");
-    // if (this.debug) {
-    //   ConsoleLog("App", "render", "user", this.user, "actionid", actionid, "busy", busy,
-    //     "num_unread_messages", num_unread_messages, "num_messages", num_messages)
-    // }
+    if (this.debug) {
+      ConsoleLog("App", "render", "actionid", actionid, "busy", busy,
+        "num_unread_messages", num_unread_messages, "num_messages", num_messages)
+    }
     return (
       <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>

@@ -6,7 +6,7 @@ export function encryptMessage(pubKey, text) {
 }
 
 export function isValidMessageSignature(message) {
-  return message.hasOwnProperty("cmd");
+  return message.hasOwnProperty("cmd") && message.hasOwnProperty("response");
 }
 
 export function isModuleMessage(message) {

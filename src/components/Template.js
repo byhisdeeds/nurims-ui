@@ -1,11 +1,5 @@
 import React, {Component} from 'react';
-import {
-  CMD_GET_GLOSSARY_TERMS,
-  CMD_GET_MANUFACTURER_RECORDS,
-  CMD_GET_MATERIAL_RECORDS,
-  CMD_GET_STORAGE_RECORDS, CMD_SAVE_MATERIAL_RECORD, NURIMS_TITLE
-} from "./utils/constants";
-import {enqueueErrorSnackbar} from "./utils/SnackbarVariants";
+import {enqueueErrorSnackbar} from "../utils/SnackbarVariants";
 
 
 const MODULE = "Template";
