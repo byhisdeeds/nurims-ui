@@ -95,7 +95,6 @@ import {
   NetworkConnection,
   NotificationsButton
 } from "./components/CommonComponents";
-import {DeviceUUID} from 'device-uuid';
 import {
   enqueueErrorSnackbar,
   enqueueWarningSnackbar
@@ -321,6 +320,9 @@ class App extends React.Component {
               }
             } else if (isCommandResponse(message, CMD_BACKGROUND_TASKS)) {
               this.setState({background_tasks_active: message.hasOwnProperty("tasks_active"), busy: 0});
+            } else if (isCommandResponse(message, "get_session_info")) {
+              this.user.isAuthenticated = message.response.session.valid;
+              this.forceUpdate();
             } else if (isCommandResponse(message, CMD_GET_SYSTEM_PROPERTIES)) {
               for (const property of message.response.properties) {
                 setPropertyValue(this.properties, property.name, property.value);
@@ -417,11 +419,16 @@ class App extends React.Component {
   };
 
   handleMenuAction = (link, title) => {
-    // console.log("menu action link, title->", link, title)
+    // console.log("&&&&&&&&&&&&& menu action link, title->", link, title)
     // console.log("+++ typeof link, typeof title", typeof link, typeof title)
     if (link && typeof link === "object") {
       this.menuTitle = link.target.dataset.title ? link.target.dataset.title : "";
-      this.setState({actionid: link.target.id});
+      if (link.target.id === "logout") {
+        this.user.isAuthenticated = false;
+        this.setState({actionid: ""});
+      } else {
+        this.setState({actionid: link.target.id});
+      }
     } else if (link && typeof link === "string") {
       if (link === 'set-light-theme') {
         this.setState({theme: 'light'});
@@ -507,12 +514,13 @@ class App extends React.Component {
     const isSysadmin = isValidUserRole(this.user, "sysadmin");
     if (this.debug) {
       ConsoleLog("App", "render", "actionid", actionid, "busy", busy,
-        "num_unread_messages", num_unread_messages, "num_messages", num_messages)
+        "num_unread_messages", num_unread_messages, "num_messages", num_messages, "user.isAuthenticated",
+        this.user.isAuthenticated)
     }
     return (
       <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-          <SnackbarProvider maxSnack={5} anchorOrigin={{vertical: 'bottom', horizontal: 'center',}}/>
+          <SnackbarProvider maxSnack={6} anchorOrigin={{vertical: 'bottom', horizontal: 'center',}}/>
           <Box sx={{flexGrow: 1, height: "100%"}}>
             {this.user.isAuthenticated ?
               <React.Fragment>

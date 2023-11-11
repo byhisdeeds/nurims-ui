@@ -1,15 +1,33 @@
 import React, { Component } from 'react';
-import List from "@mui/material/List";
-import {Grid, ListItem, ListItemIcon, ListItemText, ListSubheader, Select, Switch, Typography} from "@mui/material";
-import WifiIcon from '@mui/icons-material/Wifi';
-import SettingsIcon from '@mui/icons-material/Settings';
-import MenuItem from "@mui/material/MenuItem";
-import {getPropertyValue} from "../../utils/PropertyUtils";
-import {withTheme} from "@mui/styles";
-import {TitleComponent} from "../../components/CommonComponents";
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+  Select,
+  Switch,
+} from "@mui/material";
+import {
+  Wifi as WifiIcon,
+  Settings as SettingsIcon,
+  Menu as MenuItem
+} from '@mui/icons-material';
+import {
+  getPropertyValue
+} from "../../utils/PropertyUtils";
+import {
+  withTheme
+} from "@mui/styles";
+import {
+  TitleComponent
+} from "../../components/CommonComponents";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
 
-const MODULE = "Settings";
+const SETTINGS_REF = "Settings";
 
 class Settings extends Component {
   constructor(props) {
@@ -19,6 +37,7 @@ class Settings extends Component {
       user: props.user,
       properties: props.properties,
     };
+    this.Module = SETTINGS_REF;
   }
 
   componentDidMount() {

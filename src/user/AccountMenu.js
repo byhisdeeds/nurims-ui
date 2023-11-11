@@ -93,9 +93,7 @@ export default function AccountMenu(props) {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem
-          // onClick={()=>logout()}
-        >
+        <MenuItem id={"logout"} data-title={"logout"} onClick={props.onClick}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
