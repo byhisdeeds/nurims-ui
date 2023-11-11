@@ -30,7 +30,7 @@ import {
   CMD_GET_SERVER_INFO,
   CMD_GET_USER_NOTIFICATION_MESSAGES,
   CMD_DELETE_USER_NOTIFICATION_MESSAGE,
-  CMD_GET_USER_RECORDS
+  CMD_GET_USER_RECORDS, CMD_GET_SESSION_INFO
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -320,8 +320,11 @@ class App extends React.Component {
               }
             } else if (isCommandResponse(message, CMD_BACKGROUND_TASKS)) {
               this.setState({background_tasks_active: message.hasOwnProperty("tasks_active"), busy: 0});
-            } else if (isCommandResponse(message, "get_session_info")) {
+            } else if (isCommandResponse(message, CMD_GET_SESSION_INFO)) {
               this.user.isAuthenticated = message.response.session.valid;
+              if (!message.response.session.valid) {
+                enqueueErrorSnackbar(message.response.message);
+              }
               this.forceUpdate();
             } else if (isCommandResponse(message, CMD_GET_SYSTEM_PROPERTIES)) {
               for (const property of message.response.properties) {

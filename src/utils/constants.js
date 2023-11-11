@@ -176,6 +176,8 @@ module.exports = Object.freeze({
   CMD_UPDATE_ITEM_RECORD: "update_item_record",
   CMD_DELETE_ITEM_RECORD: "delete_item_record",
 
+  CMD_GET_SESSION_INFO: "get_session_info",
+
   METADATA: 'metadata',
   INCLUDE_METADATA: 'include.metadata',
   ITEM_ID: "item_id",
