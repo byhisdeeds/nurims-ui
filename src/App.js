@@ -257,10 +257,11 @@ class App extends React.Component {
     // Everything here is fired on component mount.
     this.ws = new ReconnectingWebSocket(this.props.wsep + "?uuid=" + this.uuid);
     this.ws.onopen = (event) => {
+      const msg = "Websocket connection to server established.";
       if (this.debug) {
-        ConsoleLog("App", "ws.onopen", "websocket connection established");
+        ConsoleLog("App", "ws.onopen", msg);
       }
-      this.appendLog("Websocket connection established.");
+      this.appendLog(msg);
       this.setState({ready: true, online: false});
     };
     this.ws.onerror = (error) => {
@@ -269,10 +270,11 @@ class App extends React.Component {
       this.setState({ready: false});
     };
     this.ws.onclose = (event) => {
+      const msg = `"Websocket connection with server closed: wasClean = ${event.hasOwnProperty("wasClean") ? event.wasClean : false}, reason = ${event.hasOwnProperty("reason") ? event.reason : ""}`;
       if (this.debug) {
-        ConsoleLog("App", "ws.onclose", "websocket connection closed", event);
+        ConsoleLog("App", "ws.onclose", msg);
       }
-      this.appendLog("Websocket connection closed: " + JSON.stringify(event));
+      this.appendLog(msg);
       if (this.mounted) {
         this.setState({ready: false, busy: 0, background_tasks_active: false});
       }
