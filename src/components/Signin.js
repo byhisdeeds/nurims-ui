@@ -82,9 +82,6 @@ class Signin extends React.Component {
     event.preventDefault();
     if (this.props.online) {
       const session_uuid = record_uuid();
-      console.log("*******************")
-      console.log("*** SESSION UUID ***", session_uuid)
-      console.log("*******************")
       const session_id = encryptMessage(this.props.puk[0], session_uuid);
       this.props.send({
         cmd: CMD_VERIFY_USER_PASSWORD,
