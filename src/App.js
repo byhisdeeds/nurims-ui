@@ -102,6 +102,7 @@ import {
 } from "./components/CommonComponents";
 import {DeviceUUID} from 'device-uuid';
 import {
+  enqueueErrorSnackbar,
   enqueueWarningSnackbar
 } from "./utils/SnackbarVariants";
 import {
@@ -118,6 +119,12 @@ import metadata from './metadata.json';
 import {
   isValidUserRole
 } from "./utils/UserUtils";
+import {
+  isCommandResponse,
+  isModuleMessage,
+  isValidMessageSignature,
+  messageResponseStatusOk
+} from "./utils/WebsocketUtils";
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
@@ -166,6 +173,13 @@ const AuthService = {
   }
 };
 
+function encryptMessage(pubKey, text) {
+  const jsEncrypt = new window.JSEncrypt();
+  jsEncrypt.setPublicKey(pubKey);
+  return jsEncrypt.encrypt(text);
+}
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -186,6 +200,7 @@ class App extends React.Component {
     };
     this.debug = window.location.href.includes("debug");
     this.puk = [];
+    this.session_id = "";
     this.properties = [];
     this.menuTitle = "";
     this.ws = null;
@@ -258,18 +273,20 @@ class App extends React.Component {
       }
       this.appendLog("Websocket connection established.");
       this.setState({ready: true});
-      // get public key as base64 string
-      this.send({
-        cmd: CMD_GET_PUBLIC_KEY,
-      })
-      // load organisation database on server
-      this.send({
-        cmd: CMD_GET_ORGANISATION,
-      })
-      // load system properties
-      this.send({
-        cmd: CMD_GET_SYSTEM_PROPERTIES,
-      })
+      /////////////////////////////////////////////////////////////////
+      // // get public key as base64 string
+      // this.send({
+      //   cmd: CMD_GET_PUBLIC_KEY,
+      // })
+      // // load organisation database on server
+      // this.send({
+      //   cmd: CMD_GET_ORGANISATION,
+      // })
+      // // load system properties
+      // this.send({
+      //   cmd: CMD_GET_SYSTEM_PROPERTIES,
+      // })
+      /////////////////////////////////////////////////////////////////
     };
     this.ws.onerror = (error) => {
       ConsoleLog("App", "ws.onerror", error);
@@ -286,6 +303,50 @@ class App extends React.Component {
       }
     };
     this.ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (this.debug) {
+        ConsoleLog("App", "onmessage", message);
+      }
+      if (isValidMessageSignature(message)) {
+        if (isModuleMessage(message)) {
+          for (const [k, v] of Object.entries(this.crefs)) {
+            if (k === message.module) {
+              if (v.current) {
+                v.current.ws_message(message)
+              }
+            }
+          }
+        } else {
+          if (messageResponseStatusOk(message)) {
+            if (isCommandResponse(message, "gpk")) {
+              console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+              this.puk.length = 0;
+              this.puk.push(message.response.data);
+              this.user.isAuthenticated = false;
+              this.setState({online: true});
+            }
+          } else {
+            enqueueErrorSnackbar(message.response.message);
+          }
+        }
+        if (isCommandResponse(message, "gpk")) {
+
+        }
+      } else {
+      }
+      // if (isValidMessageSignature(message, "cmd", "gpk")) {
+      //   console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+      //   this.puk.length = 0;
+      //   this.puk.push(message.response.data);
+      //   this.user.isAuthenticated = false;
+      //   this.setState({online: true});
+      //   // } else if (data.cmd === CMD_GET_USER_RECORDS && data.module === SIGNIN_REF) {
+      // }
+      // ====================================================================================================== //
+      // ====================================================================================================== //
+      // ====================================================================================================== //
+      // ====================================================================================================== //
+      // ====================================================================================================== //
       const data = JSON.parse(event.data);
       if (this.debug) {
         ConsoleLog("App", "onmessage", data);
@@ -383,7 +444,7 @@ class App extends React.Component {
     }
   };
 
-  send = (msg, show_busy) => {
+  send = (msg, show_busy, include_user) => {
     if (this.debug) {
       ConsoleLog("App", "send", "ws.readyState",
         this.ws && this.ws.readyState ? this.ws.readyState : "undefined", "msg", msg, "show_busy",
@@ -391,19 +452,28 @@ class App extends React.Component {
     }
     if (this.ws && this.ws.readyState === 1) {
       const _show_busy = (show_busy === undefined) ? true : show_busy;
-      this.ws.send(JSON.stringify({
+      const _include_user = (include_user === undefined) ? true : include_user;
+      const _msg = {
+        session_id: this.session_id,
         uuid: this.uuid,
         user: this.user,
         show_busy: _show_busy,
         ...msg
-      }));
+      };
+      if (_show_busy) {
+        _msg["show_busy"] = _show_busy
+      }
+      if (_include_user) {
+        _msg["user"] = this.user
+      }
+      this.ws.send(JSON.stringify(_msg));
       if (_show_busy) {
         this.setState(pstate => {
           return {busy: pstate.busy + 1}
         });
       }
     } else {
-      enqueueWarningSnackbar("NURIMS server connection broken!")
+      enqueueWarningSnackbar("NURIMS server offline!")
     }
   };
 
@@ -474,18 +544,20 @@ class App extends React.Component {
     this.setState({num_messages: num_messages});
   }
 
-  onValidAuthentication = () => {
+  onValidAuthentication = (session_id) => {
+    // save session id
+    this.session_id = session_id;
     // get list of all registered users
     this.send({
       cmd: CMD_GET_USER_RECORDS,
-    }, false);
+    }, false, false);
     // update number of connected clients etc info.
     this.send({
       cmd: CMD_GET_SERVER_INFO,
-    }, false);
+    }, false, false);
     this.send({
       cmd: CMD_GET_USER_NOTIFICATION_MESSAGES,
-    }, false);
+    }, false, true);
     this.setState({busy: 0, online: true});
   }
 

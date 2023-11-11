@@ -1,4 +1,18 @@
 
+export function encryptMessage(pubKey, text) {
+  const jsEncrypt = new window.JSEncrypt();
+  jsEncrypt.setPublicKey(pubKey);
+  return jsEncrypt.encrypt(text);
+}
+
+export function isValidMessageSignature(message) {
+  return message.hasOwnProperty("cmd");
+}
+
+export function isModuleMessage(message) {
+  return message.hasOwnProperty("module");
+}
+
 export function messageHasResponse(message) {
   return message.hasOwnProperty("response");
 }
@@ -24,10 +38,6 @@ export function isCommandResponse(message, command) {
 
 export function messageHasMetadata(message) {
   return message.hasOwnProperty("include.metadata") && message["include.metadata"] === "true";
-}
-
-export function isModuleMessage(data) {
-  return data.hasOwnProperty("module");
 }
 
 export function getMatchingResponseObject(data, pobject, key, key_value, missingValue) {

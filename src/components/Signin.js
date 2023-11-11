@@ -25,15 +25,17 @@ import {
   UserContext
 } from "../utils/UserContext";
 import {
-  messageHasResponse,
   messageResponseStatusOk,
-  isCommandResponse
+  isCommandResponse,
+  encryptMessage,
 } from "../utils/WebsocketUtils";
 import {
   withTheme
 } from "@mui/styles";
-
-const Constants = require('../utils/constants');
+import {
+  CMD_VERIFY_USER_PASSWORD
+} from "../utils/constants";
+import {record_uuid} from "../utils/MetadataUtils";
 
 const StyledAvatar = styled(Avatar)({
   margin: 2,
@@ -45,12 +47,6 @@ const StyledButton = styled(Button)({
 
 export const SIGNIN_REF = "Signin";
 
-function encryptPassword(pubKey, text) {
-  const jsEncrypt = new window.JSEncrypt();
-  jsEncrypt.setPublicKey(pubKey);
-  return jsEncrypt.encrypt(text);
-}
-
 class Signin extends React.Component {
   static contextType = UserContext;
 
@@ -58,7 +54,7 @@ class Signin extends React.Component {
     super(props);
     this.authService = props.authService;
     this._mounted = false;
-    this.debug = window.location.href.includes("debug");
+    // this.debug = window.location.href.includes("debug");
     this.Module = SIGNIN_REF;
     this.state = {
       NavigateToPreviousRoute: false,
@@ -66,6 +62,7 @@ class Signin extends React.Component {
       username: '',
       password: '',
       remember: false,
+      session_id: "",
     }
   }
 
@@ -84,12 +81,15 @@ class Signin extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.props.online) {
+      const session_id = encryptMessage(this.props.puk[0], record_uuid());
       this.props.send({
-        cmd: Constants.CMD_VERIFY_USER_PASSWORD,
-        username: this.state.username,
-        password: encryptPassword(this.props.puk[0], this.state.password),
+        cmd: CMD_VERIFY_USER_PASSWORD,
+        session_id: session_id,
+        username: encryptMessage(this.props.puk[0], this.state.username),
+        password: encryptMessage(this.props.puk[0], this.state.password),
         module: this.Module,
-      }, false);
+      }, false, false);
+      this.setState({session_id: session_id})
     }
   };
 
@@ -106,34 +106,32 @@ class Signin extends React.Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "ws_message", "message", message);
     }
-    if (messageHasResponse(message)) {
-      const response = message.response;
-      if (messageResponseStatusOk(message)) {
-        if (isCommandResponse(message, Constants.CMD_VERIFY_USER_PASSWORD)) {
-          if (response.valid) {
-            // if Remember Me selected then save the username
-            if (this.state.remember) {
-              localStorage.setItem('rememberme', this.state.username);
-            } else {
-              localStorage.removeItem('rememberme');
-            }
+    const response = message.response;
+    if (messageResponseStatusOk(message)) {
+      if (isCommandResponse(message, CMD_VERIFY_USER_PASSWORD)) {
+        if (response.valid) {
+          // if Remember Me selected then save the username
+          if (this.state.remember) {
+            localStorage.setItem('rememberme', this.state.username);
           } else {
-            enqueueWarningSnackbar(response.message);
+            localStorage.removeItem('rememberme');
           }
-          this.authService.authenticate(response.valid, response.profile);
-          this.props.onValidAuthentication()
+        } else {
+          enqueueWarningSnackbar(response.message);
         }
-      } else {
-        enqueueWarningSnackbar(response.message);
+        this.authService.authenticate(response.valid, response.profile);
+        this.props.onValidAuthentication(this.state.session_id)
       }
+    } else {
+      enqueueWarningSnackbar(response.message);
     }
   }
 
   render() {
     const {remember, username} = this.state;
-    const {theme} = this.props;
+    const {theme, online} = this.props;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "username", username);
+      ConsoleLog(this.Module, "render", "online", online);
     }
     return (
       <Container

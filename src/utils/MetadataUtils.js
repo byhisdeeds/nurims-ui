@@ -27,7 +27,6 @@ import {
 import {transformDose} from "./DoseReportUtils";
 import {v4 as uuid} from "uuid";
 import dayjs from 'dayjs';
-import {isValidUserRole} from "./UserUtils";
 
 export function record_uuid() {
   return uuid();
