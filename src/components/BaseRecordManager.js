@@ -54,8 +54,6 @@ import {
   UserContext
 } from "../utils/UserContext";
 import {
-  getNextItemId,
-  getRecordMetadataValue,
   new_record,
   record_uuid,
   recordHasMetadataField

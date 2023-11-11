@@ -27,11 +27,9 @@ import {
   CMD_GET_ORGANISATION,
   CMD_SET_SYSTEM_PROPERTIES,
   CMD_BACKGROUND_TASKS,
-  CMD_PING,
   CMD_GET_SERVER_INFO,
   CMD_GET_USER_NOTIFICATION_MESSAGES,
   CMD_DELETE_USER_NOTIFICATION_MESSAGE,
-  CMD_GET_PUBLIC_KEY,
   CMD_GET_USER_RECORDS
 } from "./utils/constants";
 import {
@@ -73,9 +71,6 @@ import {PERSONNELDOSIMETRYEVALUATION_REF} from "./pages/radiationprotection/Pers
 import {VIEWMATERIALSLIST_REF} from "./pages/controlledmaterials/ViewMaterialsList"
 import {MANAGEUSERS_REF} from "./pages/sysadmin/ManageUsers"
 import {MAINTENANCESCHEDULE_REF} from "./pages/maintenance/MaintenanceSchedule"
-import {
-  ADD_EDIT_CORRECTIVE_MAINTENANCE_ISSUE_RECORD_REF
-} from "./pages/maintenance/AddEditCorrectiveMaintenanceIssueRecord"
 import {GENERATESSCMAINTENANCEREPORT_REF} from "./pages/maintenance/GenerateSSCMaintenanceReport"
 import {
   ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF
@@ -125,6 +120,7 @@ import {
   isValidMessageSignature,
   messageResponseStatusOk
 } from "./utils/WebsocketUtils";
+import {nanoid} from "nanoid";
 
 const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
@@ -173,13 +169,6 @@ const AuthService = {
   }
 };
 
-// function encryptMessage(pubKey, text) {
-//   const jsEncrypt = new window.JSEncrypt();
-//   jsEncrypt.setPublicKey(pubKey);
-//   return jsEncrypt.encrypt(text);
-// }
-
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -211,7 +200,7 @@ class App extends React.Component {
     // console.log("*************")
     // console.log(deviceDetect())
     // console.log("*************")
-    this.uuid = `${deviceDetect()["browserName"].toLowerCase()}-${new DeviceUUID().get()}`;
+    this.uuid = `${deviceDetect()["browserName"].toLowerCase()}-${nanoid()}`;
     this.logRef = React.createRef();
     this.notificationRef = React.createRef();
     this.sysinfoRef = React.createRef();
