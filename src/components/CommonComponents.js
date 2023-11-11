@@ -1156,7 +1156,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
   console.log("-------------")
   console.log("-- userIsCreator", userIsCreator, "submitDisabled", submitDisabled, "recordHasChanged", recordHasChanged,
     "submitRole", submitRole, "sysadminRole", sysadminRole, "isSelectableByRoles(valid_item_id=false)",
-    THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false), "emptyRecord", emptyRecord)
+    isSelectableByRoles(user, selection, [submitRole, sysadminRole], false), "emptyRecord", emptyRecord)
   console.log("-------------")
   return (
     <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
@@ -1167,7 +1167,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         aria-label="add"
         onClick={onClickAddRecord}
         // disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
-        disabled={!THIS.isSelectableByRoles(selection, [addRole, sysadminRole], false)}
+        disabled={!isSelectableByRoles(user, selection, [addRole, sysadminRole], false)}
       >
         &#160; {addRecordButtonLabel} &#160;
         {addRecordIcon}
@@ -1178,7 +1178,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         color="primary"
         aria-label="remove"
         onClick={onClickRemoveRecord}
-        disabled={emptyRecord || !THIS.isSelectableByRoles(selection, [removeRole, sysadminRole], true)}
+        disabled={emptyRecord || !isSelectableByRoles(user, selection, [removeRole, sysadminRole], true)}
       >
         &#160; {removeRecordButtonLabel} &#160;
         {removeRecordIcon}
@@ -1193,7 +1193,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         // disabled if no record is not changed
         // disabled={submitDisabled || (!(userIsCreator && THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)))}
         disabled={emptyRecord || !userIsCreator || !recordHasChanged ||
-          !THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)}
+          !isSelectableByRoles(user, selection, [submitRole, sysadminRole], false)}
       >
         &#160; Save Changes &#160;
         <SaveIcon sx={{mr: 1}}/>
@@ -1220,7 +1220,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
           onClick={onClickSubmitRecord}
           // disabled={(!userIsCreator && submitDisabled) || !THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)}
           disabled={emptyRecord || !userIsCreator ||
-            !THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], true)}
+            !isSelectableByRoles(user, selection, [submitRole, sysadminRole], true)}
         >
           &#160; {submitRecordButtonLabel} &#160;
           {submitRecordIcon}
@@ -1233,7 +1233,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         aria-label="archive"
         component={"span"}
         onClick={onClickChangeRecordArchivalStatus}
-        disabled={emptyRecord || !THIS.isSelectableByRoles(selection, [archiveRole, sysadminRole], true)}
+        disabled={emptyRecord || !isSelectableByRoles(user, selection, [archiveRole, sysadminRole], true)}
       >
         &#160; {archiveButtonLabel} &#160;
         {archiveIcon}
