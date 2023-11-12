@@ -84,6 +84,7 @@ import {UNDERDEVELOPMENT_REF} from "./components/UnderDevelopment"
 import LogWindow from "./components/LogWindow";
 import {VIEWAMPRECORDS_REF} from "./pages/maintenance/ViewAMPRecords";
 import {CLEANUPLARGEOBJECTSTORE_REF} from "./pages/sysadmin/CleanupLargeObjectStore";
+import {DISCOVERORPHANEDMETADATA_REF} from "./pages/sysadmin/DiscoverOrphanedMetadata";
 import {ADDEDITMODIFICATIONRECORD_REF} from "./pages/maintenance/AddEditModificationRecord";
 import {ADDEDITMAINTENANCERECORD_REF} from "./pages/maintenance/AddEditMaintenanceRecord";
 import {SIGNIN_REF} from "./components/Signin";
@@ -237,6 +238,7 @@ class App extends React.Component {
     this.crefs[VIEWMATERIALSLIST_REF] = React.createRef();
     this.crefs[MANAGEUSERS_REF] = React.createRef();
     this.crefs[CLEANUPLARGEOBJECTSTORE_REF] = React.createRef();
+    this.crefs[DISCOVERORPHANEDMETADATA_REF] = React.createRef();
     this.crefs[GENERATESSCMAINTENANCEREPORT_REF] = React.createRef();
     this.crefs[ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF] = React.createRef();
     this.crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF] = React.createRef();

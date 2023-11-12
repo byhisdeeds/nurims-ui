@@ -70,6 +70,7 @@ module.exports = Object.freeze({
 
   SYSADMIN_MANAGE_USERS: 'sysadmin.manage.users',
   SYSADMIN_CLEANUP_LARGE_OBJECT_STORE: 'sysadmin.cleanup.large.object.store',
+  SYSADMIN_DISCOVER_ORPHANED_METADATA: 'sysadmin.discover.orphaned.metadata',
 
   SUPPORT_TERMS_AND_DEFINITIONS: 'support.terms.and.definitions',
 
@@ -132,6 +133,7 @@ module.exports = Object.freeze({
 
   CMD_BACKGROUND_TASKS: "background_tasks",
   CMD_CLEANUP_UNREFERENCED_LARGE_OBJECT_STORE_FILES: "cleanup_unreferenced_large_object_store_files",
+  CMD_DISCOVER_ORPHANED_METADATA: "discover_orphaned_metadata",
 
   CMD_GET_USER_RECORDS: "get_user_records",
   CMD_UPDATE_USER_RECORD: "update_user_record",

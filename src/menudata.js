@@ -618,6 +618,13 @@ export const MenuItems = [
         tooltip: 'Cleanup large object store',
         authmodlevel: 'basic',
       },
+      {
+        label: 'Discover Orphaned Metadata',
+        value: 'sysadmin.discover.orphaned.metadata',
+        title: 'Discover Orphaned Metadata',
+        tooltip: 'Discover orphaned metadata',
+        authmodlevel: 'basic',
+      },
     ]
   },
   {
