@@ -18,7 +18,9 @@ import {
   SwitchComponent,
   TitleComponent
 } from "../../components/CommonComponents";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import {
+  PictureAsPdf as PictureAsPdfIcon
+} from "@mui/icons-material";
 import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
@@ -34,7 +36,7 @@ class ViewSSCRecords extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pdf: "blank.pdf",
+      pdf: BLANK_PDF,
       include_archived: "false",
     };
     this.Module = VIEWSSCRECORDS_REF;
