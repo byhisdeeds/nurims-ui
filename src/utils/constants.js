@@ -257,10 +257,12 @@ module.exports = Object.freeze({
   NURIMS_SSC_SAFETY_FUNCTION: "nurims.ssc.safetyfunction",
   NURIMS_SSC_MAINTAINABILITY: "nurims.ssc.maintainability",
   NURIMS_SSC_SURVEILLANCE_FREQUENCY: "nurims.ssc.surveillancefrequency",
+  NURIMS_SSC_MAINTENANCE_RECORDS: "nurims.ssc.maintenancerecords",
+  NURIMS_SSC_MODIFICATION_RECORDS: "nurims.ssc.modificationrecords",
+
   NURIMS_SSC_MAINTENANCE_TASK: "nurims.ssc.maintenance.task",
   NURIMS_SSC_MAINTENANCE_SCOPE: "nurims.ssc.maintenance.scope",
   NURIMS_SSC_MAINTENANCE_ACCEPTANCE_CRITERIA: "nurims.ssc.maintenance.acceptancecriteria",
-  NURIMS_SSC_MAINTENANCE_RECORDS: "nurims.ssc.maintenance.records",
   NURIMS_SSC_MAINTENANCE_ISSUE: "nurims.ssc.maintenance.issue",
   NURIMS_SSC_MAINTENANCE_REMOVED_FROM_SERVICE: "nurims.ssc.maintenance.removedfromservice",
   NURIMS_SSC_MAINTENANCE_RETURNED_TO_SERVICE: "nurims.ssc.maintenance.returnedtoservice",
@@ -271,7 +273,7 @@ module.exports = Object.freeze({
   NURIMS_SSC_MAINTENANCE_PREVENTIVE_MAINTENANCE: "nurims.ssc.maintenance.preventivemaintenance",
   NURIMS_SSC_MAINTENANCE_CORRECTIVE_MAINTENANCE: "nurims.ssc.maintenance.correctivemaintenance",
   NURIMS_SSC_MAINTENANCE_PERSONNEL: "nurims.ssc.maintenance.personnel",
-  NURIMS_SSC_MODIFICATION_RECORDS: "nurims.ssc.modification.records",
+
   NURIMS_SSC_MODIFICATION_ACTIONS: "nurims.ssc.modification.actions",
   NURIMS_SSC_MODIFICATION_STARTDATE: "nurims.ssc.modification.startdate",
   NURIMS_SSC_MODIFICATION_ENDDATE: "nurims.ssc.modification.enddate",
