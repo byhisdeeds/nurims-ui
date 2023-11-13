@@ -34,7 +34,7 @@ class ViewSSCRecords extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pdf: "blank.pdf", //BLANK_PDF,
+      pdf: "blank.pdf",
       include_archived: "false",
     };
     this.Module = VIEWSSCRECORDS_REF;
