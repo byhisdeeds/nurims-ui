@@ -130,7 +130,7 @@ export const MenuItems = [
         ]
       },
       {
-        label: '○ Post Event Assessment',
+        label: '○ Post Event Activities',
         tooltip: 'A basic concept of operations describes the response process, and assigns roles and responsibilities to each group, organization or individual involved in emergency preparedness and response.',
         authmodlevel: 'basic',
         children: [
@@ -151,15 +151,15 @@ export const MenuItems = [
         ]
       },
       {
-        label: '○ Reports',
+        label: '○ Routine Activities',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         children: [
           {
-            label: 'Post Event Assessment Reports',
-            value: 'ep.post.event.assessment.reports',
-            title: 'Controlled Material Surveillance Sheet',
-            tooltip: 'Generate controlled material surveillance sheet',
+            label: 'Periodic Tasks',
+            value: 'ep.routine.activities.periodic.tasks',
+            title: 'EPR Periodic Tasks',
+            tooltip: 'Emergency preparedness and response routine tasks and activities.',
             authmodlevel: 'basic',
           },
         ]

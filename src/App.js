@@ -98,12 +98,14 @@ import {
 } from "./components/CommonComponents";
 import {
   enqueueErrorSnackbar,
+  enqueueLostConnectionSnackbar,
   enqueueWarningSnackbar
 } from "./utils/SnackbarVariants";
 import {
   deviceDetect
 } from 'react-device-detect';
 import {
+  closeSnackbar,
   SnackbarProvider
 } from 'notistack'
 import "./App.css"
@@ -194,6 +196,7 @@ class App extends React.Component {
     this.menuTitle = "";
     this.ws = null;
     this.mounted = false;
+    this.lc_snackbar_id = null;
     this.logs = []
     this.user = AuthService;
     this.org = {name: "", authorized_module_level: ""};
@@ -262,10 +265,15 @@ class App extends React.Component {
         ConsoleLog("App", "ws.onopen", msg);
       }
       this.appendLog(msg);
+      if (this.lc_snackbar_id) {
+        closeSnackbar(this.lc_snackbar_id);
+        this.lc_snackbar_id = null;
+      }
       this.setState({ready: true, online: false});
     };
     this.ws.onerror = (error) => {
       ConsoleLog("App", "ws.onerror", error);
+      this.lc_snackbar_id = enqueueLostConnectionSnackbar();
       this.appendLog("Websocket error: " + JSON.stringify(error));
       this.setState({ready: false});
     };

@@ -228,40 +228,6 @@ class SSCMetadata extends Component {
   //   this.props.onChange(true);
   // }
 
-  // handleSSCMaintainabilityChange = (e) => {
-  //   if (this.context.debug) {
-  //     ConsoleLog(this.module, "handleSSCMaintainabilityChange", "value", e.target.value);
-  //   }
-  //   const ssc = this.state.ssc;
-  //   ssc["changed"] = true;
-  //   setMetadataValue(ssc, NURIMS_SSC_MAINTAINABILITY, e.target.value);
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
-  // handleSSCSafetyCategoryChange = (e) => {
-  //   if (this.context.debug) {
-  //     ConsoleLog(this.module, "handleSSCSafetyCategoryChange", "value", e.target.value);
-  //   }
-  //   const ssc = this.state.ssc;
-  //   ssc["changed"] = true;
-  //   setMetadataValue(ssc, NURIMS_SSC_SAFETY_CATEGORY, e.target.value);
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
-  // handleSSCSurveillanceFrequencyChange = (e) => {
-  //   console.log("handleSSCSurveillanceFrequencyChange", e.target.value);
-  //   const ssc = this.state.ssc;
-  //   ssc["changed"] = true;
-  //   setMetadataValue(ssc, NURIMS_SSC_SURVEILLANCE_FREQUENCY, e.target.value);
-  //   this.setState({ssc: ssc})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
   saveTableData = data => {
     console.log("UPDATED SURVEILLANCE TABLE DATA", data);
     const ssc = this.state.ssc;

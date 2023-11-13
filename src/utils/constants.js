@@ -336,6 +336,7 @@ module.exports = Object.freeze({
   SSC_TOPIC: "structures_systems_components",
   OPERATION_TOPIC: "operation",
   REACTOR_IRRADIATION_AUTHORIZATION_TOPIC: "reactor_irradiation_authorization",
+  EMERGENCY_PREPAREDNESS_AND_RESPONSE_TOPIC: "emergency_preparedness_and_response",
 
   BLANK_PDF: "blank.pdf",
 

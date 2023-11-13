@@ -31,3 +31,10 @@ export function enqueueSuccessSnackbar(message, duration, auto_close) {
     autoHideDuration: hideAfter,
   });
 }
+
+export function enqueueLostConnectionSnackbar() {
+  return enqueueSnackbar("Lost connection ...", {
+    variant: 'error',
+    persist: true
+  });
+}
