@@ -69,7 +69,7 @@ class ViewSSCRecords extends Component {
   }
 
   render() {
-    const { pdf, include_archived } = this.state;
+    const {pdf, include_archived} = this.state;
     return (
       <React.Fragment>
         <Grid container spacing={2}>
@@ -84,7 +84,7 @@ class ViewSSCRecords extends Component {
                 onChange={this.includeArchived}
                 value={include_archived}
               />
-              <Box sx={{flexGrow: 1}} />
+              <Box sx={{flexGrow: 1}}/>
               <Button
                 sx={{width: 300}}
                 variant={"contained"}
@@ -96,7 +96,7 @@ class ViewSSCRecords extends Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <PdfViewer height={"800px"} source={ pdf } />
+            <PdfViewer height={"800px"} source={pdf}/>
           </Grid>
         </Grid>
       </React.Fragment>
