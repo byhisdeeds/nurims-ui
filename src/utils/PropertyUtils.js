@@ -32,7 +32,11 @@ export function setPropertyValue(properties, key, value) {
 
 
 export function getPropertyAsArray(properties, key, missingValue, separator) {
-  return getPropertyValue(properties, key, missingValue).split(separator === undefined ? "|" : separator);
+  const value = getPropertyValue(properties, key, null);
+  if (value) {
+    return value.split(separator === undefined ? "|" : separator)
+  }
+  return missingValue;
 }
 
 

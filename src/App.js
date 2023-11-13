@@ -249,7 +249,6 @@ class App extends React.Component {
     this.crefs[MAINTENANCESCHEDULE_REF] = React.createRef();
   }
 
-
   componentDidMount() {
     this.mounted = true;
     if (this.debug) {
@@ -498,6 +497,10 @@ class App extends React.Component {
   onValidAuthentication = (session_id) => {
     // save session id. This is the encrypted session id that we send with each request
     this.session_id = session_id;
+    // get system properties
+    // this.send({
+    //   cmd: CMD_GET_SYSTEM_PROPERTIES,
+    // }, false, false);
     // get list of all registered users
     this.send({
       cmd: CMD_GET_USER_RECORDS,
