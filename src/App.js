@@ -498,9 +498,9 @@ class App extends React.Component {
     // save session id. This is the encrypted session id that we send with each request
     this.session_id = session_id;
     // get system properties
-    // this.send({
-    //   cmd: CMD_GET_SYSTEM_PROPERTIES,
-    // }, false, false);
+    this.send({
+      cmd: CMD_GET_SYSTEM_PROPERTIES,
+    }, false, false);
     // get list of all registered users
     this.send({
       cmd: CMD_GET_USER_RECORDS,

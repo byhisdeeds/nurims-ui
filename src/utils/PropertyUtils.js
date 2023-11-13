@@ -14,7 +14,6 @@ export function getPropertyValue(properties, key, missingValue) {
   return missingValue;
 }
 
-
 export function setPropertyValue(properties, key, value) {
   if (Array.isArray(properties)) {
     for (const property of properties) {
@@ -30,7 +29,6 @@ export function setPropertyValue(properties, key, value) {
   }
 }
 
-
 export function getPropertyAsArray(properties, key, missingValue, separator) {
   const value = getPropertyValue(properties, key, null);
   if (value) {
@@ -38,7 +36,6 @@ export function getPropertyAsArray(properties, key, missingValue, separator) {
   }
   return missingValue;
 }
-
 
 export function getPropertyAsMenuitems(properties, key) {
   const items = getPropertyAsArray(properties, key, "");
