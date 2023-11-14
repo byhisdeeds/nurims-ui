@@ -34,12 +34,14 @@ export function enqueueSuccessSnackbar(message, duration, auto_close) {
 
 export function enqueueConnectionSnackbar(lost_connection) {
   return enqueueSnackbar(
-    lost_connection ? "Lost connection, trying to reconnect ..." : "Connecting to server. Please wait ...", {
+    lost_connection ? "Lost connection to server, trying to reconnect ..." : "Connecting to server, please wait ...", {
       style: {
+        fontFamily: 'robotoslabregular, consola',
+        fontSize: 18,
         width: 500,
         height: 50,
-        backgroundColor: "rgba(255,0,0,0.8)",
-        color: "#d2d2d2",
+        backgroundColor: "rgb(253,172,172)",
+        color: "rgb(24,24,24)",
       },
       transitionDuration: 0,
       variant: 'error',

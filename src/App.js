@@ -274,10 +274,13 @@ class App extends React.Component {
     };
     this.ws.onerror = (error) => {
       ConsoleLog("App", "ws.onerror", error, this.conn_snackbar_id);
-      if (this.conn_snackbar_id) {
-        closeSnackbar(this.conn_snackbar_id);
+      if (this.conn_snackbar_id === null) {
+        this.conn_snackbar_id = enqueueConnectionSnackbar(true);
       }
-      this.conn_snackbar_id = enqueueConnectionSnackbar(true);
+      // if (this.conn_snackbar_id) {
+      //   closeSnackbar(this.conn_snackbar_id);
+      // }
+      // this.conn_snackbar_id = enqueueConnectionSnackbar(true);
       this.appendLog("Websocket error: " + JSON.stringify(error));
       this.setState({ready: false});
     };
@@ -288,10 +291,13 @@ class App extends React.Component {
         ConsoleLog("App", "ws.onclose", msg, this.conn_snackbar_id);
       }
       this.appendLog(msg);
-      if (this.conn_snackbar_id) {
-        closeSnackbar(this.conn_snackbar_id);
+      if (this.conn_snackbar_id === null) {
+        this.conn_snackbar_id = enqueueConnectionSnackbar(true);
       }
-      this.conn_snackbar_id = enqueueConnectionSnackbar(true);
+      // if (this.conn_snackbar_id) {
+      //   closeSnackbar(this.conn_snackbar_id);
+      // }
+      // this.conn_snackbar_id = enqueueConnectionSnackbar(true);
       if (this.mounted) {
         this.setState({ready: false, busy: 0, background_tasks_active: false});
       }
