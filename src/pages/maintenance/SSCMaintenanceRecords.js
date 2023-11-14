@@ -331,8 +331,7 @@ class SSCMaintenanceRecords extends Component {
     const {confirm_remove, ssc, selection, include_archived, metadata_changed, properties, show_provenance_view} = this.state;
     const no_selection = isRecordEmpty(selection);
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "ssc", ssc);
-      ConsoleLog(this.Module, "render", "selection", selection);
+      ConsoleLog(this.Module, "render", "users", this.context.user);
     }
     return (
       <React.Fragment>
@@ -540,7 +539,7 @@ class SSCMaintenanceRecords extends Component {
                         label="Maintenance Personnel"
                         required={true}
                         multiple={true}
-                        value={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_PERSONNEL, "")}
+                        value={getRecordMetadataValue(selection, NURIMS_SSC_MAINTENANCE_PERSONNEL, [])}
                         onChange={this.handleChange}
                         options={this.context.user.users}
                         disabled={no_selection}

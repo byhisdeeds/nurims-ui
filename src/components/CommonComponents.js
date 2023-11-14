@@ -364,6 +364,7 @@ export function SelectFormControlWithTooltip({
         input={<OutlinedInput label={label}/>}
       >
         {options.map((option) => {
+          console.log("--->", option)
           if (typeof option === 'object') {
             if (Array.isArray(option)) {
               return (
