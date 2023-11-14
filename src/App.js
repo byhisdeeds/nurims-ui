@@ -98,7 +98,7 @@ import {
 } from "./components/CommonComponents";
 import {
   enqueueErrorSnackbar,
-  enqueueLostConnectionSnackbar,
+  enqueueConnectionSnackbar,
   enqueueWarningSnackbar
 } from "./utils/SnackbarVariants";
 import {
@@ -196,7 +196,7 @@ class App extends React.Component {
     this.menuTitle = "";
     this.ws = null;
     this.mounted = false;
-    this.lc_snackbar_id = null;
+    this.conn_snackbar_id = null;
     this.logs = []
     this.user = AuthService;
     this.org = {name: "", authorized_module_level: ""};
@@ -257,6 +257,7 @@ class App extends React.Component {
     if (this.debug) {
       ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
     }
+    this.conn_snackbar_id = enqueueConnectionSnackbar(false);
     // Everything here is fired on component mount.
     this.ws = new ReconnectingWebSocket(this.props.wsep + "?uuid=" + this.uuid);
     this.ws.onopen = (event) => {
@@ -265,15 +266,19 @@ class App extends React.Component {
         ConsoleLog("App", "ws.onopen", msg);
       }
       this.appendLog(msg);
-      if (this.lc_snackbar_id) {
-        closeSnackbar(this.lc_snackbar_id);
-        this.lc_snackbar_id = null;
+      if (this.conn_snackbar_id) {
+        closeSnackbar(this.conn_snackbar_id);
+        this.conn_snackbar_id = null;
       }
       this.setState({ready: true, online: false});
     };
     this.ws.onerror = (error) => {
       ConsoleLog("App", "ws.onerror", error);
-      this.lc_snackbar_id = enqueueLostConnectionSnackbar();
+      if (this.conn_snackbar_id) {
+        closeSnackbar(this.conn_snackbar_id);
+        this.conn_snackbar_id = null;
+      }
+      this.conn_snackbar_id = enqueueConnectionSnackbar(true);
       this.appendLog("Websocket error: " + JSON.stringify(error));
       this.setState({ready: false});
     };
@@ -284,6 +289,11 @@ class App extends React.Component {
         ConsoleLog("App", "ws.onclose", msg);
       }
       this.appendLog(msg);
+      if (this.conn_snackbar_id) {
+        closeSnackbar(this.conn_snackbar_id);
+        this.conn_snackbar_id = null;
+      }
+      this.conn_snackbar_id = enqueueConnectionSnackbar(true);
       if (this.mounted) {
         this.setState({ready: false, busy: 0, background_tasks_active: false});
       }

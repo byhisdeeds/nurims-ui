@@ -1153,11 +1153,11 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
   const archiveButtonLabel = THIS.isRecordArchived(selection) ? unarchiveRecordButtonLabel : archiveRecordButtonLabel;
   const archiveIcon = THIS.isRecordArchived(selection) ? unarchiveRecordIcon : archiveRecordIcon;
 
-  console.log("-------------")
-  console.log("-- userIsCreator", userIsCreator, "submitDisabled", submitDisabled, "recordHasChanged", recordHasChanged,
-    "submitRole", submitRole, "sysadminRole", sysadminRole, "isSelectableByRoles(valid_item_id=false)",
-    isSelectableByRoles(user, selection, [submitRole, sysadminRole], false), "emptyRecord", emptyRecord)
-  console.log("-------------")
+  // console.log("-------------")
+  // console.log("-- userIsCreator", userIsCreator, "submitDisabled", submitDisabled, "recordHasChanged", recordHasChanged,
+  //   "submitRole", submitRole, "sysadminRole", sysadminRole, "isSelectableByRoles(valid_item_id=false)",
+  //   isSelectableByRoles(user, selection, [submitRole, sysadminRole], false), "emptyRecord", emptyRecord)
+  // console.log("-------------")
   return (
     <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
       <Fab
