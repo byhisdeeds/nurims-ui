@@ -38,10 +38,9 @@ export function enqueueConnectionSnackbar(lost_connection) {
       style: {
         width: 500,
         height: 50,
-        backgroundColor: "rgba(255,210,126,0.66)",
+        backgroundColor: "rgba(255,0,0,0.8)",
         color: "#d2d2d2",
       },
-      preventDuplicate: true,
       transitionDuration: 0,
       variant: 'error',
       persist: true

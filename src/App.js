@@ -273,10 +273,9 @@ class App extends React.Component {
       this.setState({ready: true, online: false});
     };
     this.ws.onerror = (error) => {
-      ConsoleLog("App", "ws.onerror", error);
+      ConsoleLog("App", "ws.onerror", error, this.conn_snackbar_id);
       if (this.conn_snackbar_id) {
         closeSnackbar(this.conn_snackbar_id);
-        this.conn_snackbar_id = null;
       }
       this.conn_snackbar_id = enqueueConnectionSnackbar(true);
       this.appendLog("Websocket error: " + JSON.stringify(error));
@@ -286,12 +285,11 @@ class App extends React.Component {
       const msg =
         `"Websocket connection with server closed: wasClean = ${event.hasOwnProperty("wasClean") ? event.wasClean : false}, reason = ${event.hasOwnProperty("reason") ? event.reason : ""}`;
       if (this.debug) {
-        ConsoleLog("App", "ws.onclose", msg);
+        ConsoleLog("App", "ws.onclose", msg, this.conn_snackbar_id);
       }
       this.appendLog(msg);
       if (this.conn_snackbar_id) {
         closeSnackbar(this.conn_snackbar_id);
-        this.conn_snackbar_id = null;
       }
       this.conn_snackbar_id = enqueueConnectionSnackbar(true);
       if (this.mounted) {
