@@ -392,6 +392,7 @@ export const MenuItems = [
   {
     label: 'Radiation Protection',
     value: 'radiation.protection',
+    icon: HealthAndSafetyIcon,
     tooltip: 'Radiation protection resource actions',
     authmodlevel: 'basic',
     children: [
