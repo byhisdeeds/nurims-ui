@@ -31,6 +31,7 @@ class LogWindow extends Component {
     super(props);
     this.state = {};
     this.Module = LOGWINDOW_REF;
+    this.ref = React.createRef();
   }
 
   onDownloadClick = () => {
@@ -51,6 +52,15 @@ class LogWindow extends Component {
 
   highlight_logs = (code) => {
     return highlight(code, HIGHLIGHT_DEFN.logs, "hl-editor token-timestamp");
+  }
+
+  scrollToEnd = () => {
+    this.ref.current.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "start"
+    });
+    this.forceUpdate();
   }
 
   render() {
@@ -105,6 +115,7 @@ class LogWindow extends Component {
             </ListItem>
           </List>
           <Editor
+            ref={this.ref}
             className={"hl-editor"}
             readOnly={true}
             fullwidth={true}
