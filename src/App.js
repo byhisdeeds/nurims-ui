@@ -268,7 +268,7 @@ class App extends React.Component {
       this.appendLog(msg);
       if (this.conn_snackbar_id) {
         // closeSnackbar(this.conn_snackbar_id);
-        closeSnackbar("abcdefg");
+        closeSnackbar("__connection_snackbar__");
         this.conn_snackbar_id = null;
       }
       this.setState({ready: true, online: true});

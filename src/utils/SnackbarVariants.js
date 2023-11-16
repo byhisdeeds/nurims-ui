@@ -43,7 +43,7 @@ export function enqueueConnectionSnackbar(lost_connection) {
         backgroundColor: "#93000A",
         color: "#FFFFFF",
       },
-      key: "abcdefg",
+      key: "__connection_snackbar__",
       transitionDuration: 0,
       variant: 'error',
       persist: true
