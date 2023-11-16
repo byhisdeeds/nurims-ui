@@ -1,7 +1,8 @@
 import {convertHtmlToReact} from "@hedgedoc/html-to-react";
 
 export const HIGHLIGHT_DEFN = {
-  logs: RegExp(/\[(.*?)\]/,'g'),
+  // logs: RegExp(/\[(.*?)\]/,'g'),
+  logs: RegExp(/\[(19|20)\d{2}-(0[1-9]|1[0-1])-(0[1-9]|1[0-9]|2[0-9]|3[0-1]) ([0-5][0-9]):([0-5][0-9]):([0-5][0-9])\]/,'g'),
   files: RegExp(/([\w\d\-.]+\.[a-zA-Z0-9]+)/,'g'),
 }
 
