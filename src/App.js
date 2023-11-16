@@ -267,7 +267,6 @@ class App extends React.Component {
       }
       this.appendLog(msg);
       if (this.conn_snackbar_id) {
-        // closeSnackbar(this.conn_snackbar_id);
         closeSnackbar("__connection_snackbar__");
         this.conn_snackbar_id = null;
       }
@@ -277,7 +276,6 @@ class App extends React.Component {
       ConsoleLog("App", "ws.onerror", error, this.conn_snackbar_id);
       if (this.conn_snackbar_id === null) {
         this.conn_snackbar_id = enqueueConnectionSnackbar(true);
-        console.log(" --- ws.onerror -- conn_snackbar_id ---", this.conn_snackbar_id)
       }
       this.appendLog("Websocket error: " + JSON.stringify(error));
       this.setState({ready: false, online: false});
@@ -291,7 +289,6 @@ class App extends React.Component {
       this.appendLog(msg);
       if (this.conn_snackbar_id === null) {
         this.conn_snackbar_id = enqueueConnectionSnackbar(true);
-        console.log(" --- ws.onclose -- conn_snackbar_id ---", this.conn_snackbar_id)
       }
       if (this.mounted) {
         this.setState({ready: false, busy: 0, online: false, background_tasks_active: false});
