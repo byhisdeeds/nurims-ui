@@ -334,7 +334,10 @@ class App extends React.Component {
                 this.sysinfoRef.current.setServerInfo(message.response);
               }
             } else if (isCommandResponse(message, CMD_BACKGROUND_TASKS)) {
-              this.setState({background_tasks_active: message.hasOwnProperty("tasks_active"), busy: 0});
+              this.setState({
+                background_tasks_active: message.hasOwnProperty("tasks_active") && message.tasks_active === "true",
+                busy: 0
+              });
             } else if (isCommandResponse(message, CMD_GET_SESSION_INFO)) {
               this.user.isAuthenticated = message.response.session.valid;
               if (!message.response.session.valid) {
