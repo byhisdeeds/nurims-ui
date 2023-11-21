@@ -199,11 +199,7 @@ class App extends React.Component {
     this.logs = []
     this.user = AuthService;
     this.org = {name: "", authorized_module_level: ""};
-    // console.log("*************")
-    // console.log(deviceDetect())
-    // console.log("*************")
-    this.uuid = UUID(true);
-    // this.uuid = `${deviceDetect()["browserName"].toLowerCase()}-${nanoid()}`;
+    this.uuid = UUID();
     this.logRef = React.createRef();
     this.notificationRef = React.createRef();
     this.sysinfoRef = React.createRef();
@@ -261,7 +257,7 @@ class App extends React.Component {
     // Everything here is fired on component mount.
     this.ws = new ReconnectingWebSocket(this.props.wsep + "?uuid=" + this.uuid);
     this.ws.onopen = (event) => {
-      const msg = "Websocket connection to server established.";
+      const msg = `Websocket connection to server established for client ${this.uuid}`;
       if (this.debug) {
         ConsoleLog("App", "ws.onopen", msg);
       }
