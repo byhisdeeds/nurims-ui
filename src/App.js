@@ -203,7 +203,8 @@ class App extends React.Component {
     // console.log("*************")
     // console.log(deviceDetect())
     // console.log("*************")
-    this.uuid = `${deviceDetect()["browserName"].toLowerCase()}-${nanoid()}`;
+    this.uuid = localStorage.getItem('uuid', `${deviceDetect()["browserName"].toLowerCase()}-${nanoid()}`);
+    // this.uuid = `${deviceDetect()["browserName"].toLowerCase()}-${nanoid()}`;
     this.logRef = React.createRef();
     this.notificationRef = React.createRef();
     this.sysinfoRef = React.createRef();
