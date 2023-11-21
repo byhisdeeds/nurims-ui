@@ -30,11 +30,15 @@ import {
   CMD_GET_SERVER_INFO,
   CMD_GET_USER_NOTIFICATION_MESSAGES,
   CMD_DELETE_USER_NOTIFICATION_MESSAGE,
-  CMD_GET_USER_RECORDS, CMD_GET_SESSION_INFO
+  CMD_GET_USER_RECORDS,
+  CMD_GET_SESSION_INFO,
+  MY_ACCOUNT,
+  SETTINGS
 } from "./utils/constants";
 import {
   ConsoleLog,
-  UserContext
+  UserContext,
+  UUID
 } from "./utils/UserContext";
 import {
   SSCPackages,
@@ -102,9 +106,6 @@ import {
   enqueueWarningSnackbar
 } from "./utils/SnackbarVariants";
 import {
-  deviceDetect
-} from 'react-device-detect';
-import {
   closeSnackbar,
   SnackbarProvider
 } from 'notistack'
@@ -122,9 +123,7 @@ import {
   isValidMessageSignature,
   messageResponseStatusOk
 } from "./utils/WebsocketUtils";
-import {nanoid} from "nanoid";
 
-const Constants = require('./utils/constants');
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));
 const SignIn = lazy(() => import("./components/Signin"));
@@ -203,7 +202,7 @@ class App extends React.Component {
     // console.log("*************")
     // console.log(deviceDetect())
     // console.log("*************")
-    this.uuid = localStorage.getItem('uuid', `${deviceDetect()["browserName"].toLowerCase()}-${nanoid()}`);
+    this.uuid = UUID(true);
     // this.uuid = `${deviceDetect()["browserName"].toLowerCase()}-${nanoid()}`;
     this.logRef = React.createRef();
     this.notificationRef = React.createRef();
@@ -594,7 +593,7 @@ class App extends React.Component {
                   <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
                     <Box sx={{p: 3}}>
                       <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
-                      {actionid === Constants.MY_ACCOUNT &&
+                      {actionid === MY_ACCOUNT &&
                         <MyAccount
                           ref={this.crefs["MyAccount"]}
                           user={this.user}
@@ -602,7 +601,7 @@ class App extends React.Component {
                           properties={this.properties}
                         />
                       }
-                      {actionid === Constants.SETTINGS &&
+                      {actionid === SETTINGS &&
                         <Settings
                           ref={this.crefs["Settings"]}
                           title={this.menuTitle}
