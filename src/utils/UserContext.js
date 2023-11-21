@@ -4,8 +4,8 @@ import {nanoid} from "nanoid";
 
 export const UserContext = React.createContext({debug: false, user: {}});
 
-export const UUID = (erase) => {
-  if (erase) {
+export const UUID = (renew) => {
+  if (renew) {
     localStorage.removeItem("uuid");
   }
   let uuid = localStorage.getItem("uuid");

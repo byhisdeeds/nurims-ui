@@ -199,7 +199,7 @@ class App extends React.Component {
     this.logs = []
     this.user = AuthService;
     this.org = {name: "", authorized_module_level: ""};
-    this.uuid = UUID();
+    this.uuid = UUID(window.location.href.includes("renew"));
     this.logRef = React.createRef();
     this.notificationRef = React.createRef();
     this.sysinfoRef = React.createRef();
