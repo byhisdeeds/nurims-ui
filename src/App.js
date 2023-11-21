@@ -390,7 +390,8 @@ class App extends React.Component {
         }
       } else {
         enqueueErrorSnackbar(
-          `message is missing ${message.hasOwnProperty("cmd") ? "" : "cmd"}${message.hasOwnProperty("response") ? "" : "response"} field.`);
+          `message is missing ${message.hasOwnProperty("cmd") ? "" : "cmd"}${message.hasOwnProperty("response") ? "" : "response"} field.`
+        );
       }
     };
   }
