@@ -40,8 +40,8 @@ class LogWindow extends Component {
     const dataToDownload = [this.props.logs.join("\n")];
     const file = new Blob(dataToDownload, {type: 'text/plain'});
     element.href = URL.createObjectURL(file);
-    element.download =
-      `logs-${dayjs().toISOString().replace("T", "-").replaceAll(":", "-").substring(0,19)}.txt`;
+    const d = dayjs();
+    element.download = `${d.year()}_${d.month()}_${d.day()}_${d.hour()}_${d.minute()}_${d.second()}.log`;
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
