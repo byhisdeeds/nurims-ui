@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -14,16 +15,17 @@ import {
   MenuItem,
   Select,
   Switch,
+  TextField
 } from "@mui/material";
 import {
   ITEM_ID,
   NURIMS_TITLE
 } from "../utils/constants";
-import CloseIcon from '@mui/icons-material/Close';
+import {
+  Close as CloseIcon
+} from '@mui/icons-material';
 import PropTypes from "prop-types";
 import {SameYearDateRangePicker} from "./CommonComponents";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
 import PdfViewer from "./PdfViewer";
 import {
   enqueueErrorSnackbar
