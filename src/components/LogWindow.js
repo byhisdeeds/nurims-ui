@@ -20,6 +20,7 @@ import {
   highlight,
   HIGHLIGHT_DEFN
 } from "../utils/HighlightUtils";
+import dayjs from 'dayjs';
 
 
 const LOGWINDOW_REF = "LogWindow";
@@ -39,7 +40,8 @@ class LogWindow extends Component {
     const dataToDownload = [this.props.logs.join("\n")];
     const file = new Blob(dataToDownload, {type: 'text/plain'});
     element.href = URL.createObjectURL(file);
-    element.download = 'logs.txt';
+    element.download =
+      `logs-${dayjs().toISOString().replace("T", "-").replaceAll(":", "-").substring(0,19)}.txt`;
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);

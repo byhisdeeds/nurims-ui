@@ -29,7 +29,9 @@ import {
   IconButton,
   TableHead,
   TableSortLabel,
-  Fab, Button, Badge
+  Fab,
+  Button,
+  Badge
 } from "@mui/material";
 import {
   DatePicker,
@@ -45,7 +47,8 @@ import {
   isRecordArchived,
   isRecordChanged,
   isRecordCreatedBy,
-  isRecordEmpty, isSelectableByRoles,
+  isRecordEmpty,
+  isSelectableByRoles,
   toBoolean
 } from "../utils/MetadataUtils";
 import {
