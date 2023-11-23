@@ -47,7 +47,7 @@ class ViewSSCRecords extends Component {
       cmd: CMD_GENERATE_SSC_RECORDS_PDF,
       module: this.Module,
       "include.withdrawn": this.state.include_archived,
-    });
+    }, true);
   }
 
   includeArchived = (e) => {

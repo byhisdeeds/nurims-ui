@@ -333,7 +333,7 @@ class App extends React.Component {
               this.setState(pstate => {
                 return {
                   background_tasks_active: message.hasOwnProperty("tasks_active") && message.tasks_active === "true",
-                  busy: pstate.busy - 1
+                  // busy: pstate.busy - 1
                 }
               });
               // this.setState({
@@ -412,26 +412,28 @@ class App extends React.Component {
   // };
 
   send = (msg, show_busy, include_user) => {
-    if (this.debug) {
-      ConsoleLog("App", "send", "ws.readyState",
-        this.ws && this.ws.readyState ? this.ws.readyState : "undefined", "msg", msg, "show_busy",
-        (show_busy === undefined) ? true : show_busy);
-    }
+    // if (this.debug) {
+    //   ConsoleLog("App", "send", "ws.readyState",
+    //     this.ws && this.ws.readyState ? this.ws.readyState : "undefined");
+    // }
     if (this.ws && this.ws.readyState === 1) {
+      const run_in_background = msg.hasOwnProperty("run_in_background") && msg.run_in_background;
       const _show_busy = (show_busy === undefined) ? true : show_busy;
       const _include_user = (include_user === undefined) ? true : include_user;
       const _msg = {
         session_id: this.session_id,
         uuid: this.uuid,
         user: this.user,
-        show_busy: _show_busy,
         ...msg
       };
-      if (_show_busy) {
+      if (_show_busy && !run_in_background) {
         _msg["show_busy"] = _show_busy
       }
       if (_include_user) {
         _msg["user"] = this.user
+      }
+      if (this.debug) {
+        ConsoleLog("App", "send", "msg", _msg);
       }
       this.ws.send(JSON.stringify(_msg));
       if (_show_busy) {
