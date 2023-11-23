@@ -436,7 +436,7 @@ class App extends React.Component {
         ConsoleLog("App", "send", "msg", _msg);
       }
       this.ws.send(JSON.stringify(_msg));
-      if (_show_busy) {
+      if (_show_busy && !run_in_background) {
         this.setState({busy: this.state.busy + 1});
       }
     } else {
