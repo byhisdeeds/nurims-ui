@@ -1,7 +1,7 @@
 // LogoutButton.js
 // import { useAuth0 } from '@auth0/auth0-react'
 import React from 'react'
-import '../App.css'
+import '../css/App.css'
 
 function Logout(props) {
   // const { logout } = useAuth0()

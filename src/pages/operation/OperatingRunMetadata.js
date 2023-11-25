@@ -21,12 +21,7 @@ import {
   CardContent,
   Card
 } from "@mui/material";
-import {
-  JsonView,
-  darkStyles,
-  collapseAllNested
-} from "react-json-view-lite";
-import "../../css/json-viewer-lite.css";
+import ReactJson from 'react-json-view'
 import {
   runidAsTitle
 } from "../../utils/OperationUtils";
@@ -50,20 +45,28 @@ class OperatingRunMetadata extends Component {
     }
     this.setState({
       record: record,
-      disabled: false,
-      password: "", // record.metadata.password,
-      password_check: "", // record.metadata.password
     })
     this.props.onChange(false);
   }
 
+  editRunData = (edit) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "editRunData", "edit", edit);
+    }
+    this.setState({
+      record: this.state.record,
+    })
+    this.props.onChange(true);
+    return true;
+  }
+
   render() {
-    const {record, disabled} = this.state;
+    const {record} = this.state;
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "record",
         getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, ""));
     }
-    let stats = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, {});
+    const stats = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, {});
     return (
       <Box
         component="form"
@@ -75,17 +78,25 @@ class OperatingRunMetadata extends Component {
       >
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
           <CardHeader
-            title={`Operating Run: ${runidAsTitle(record[NURIMS_TITLE])}`}
-            titleTypographyProps={{fontSize: "1.5em"}}
+            title={`Operating Run:  ${runidAsTitle(record[NURIMS_TITLE])}`}
+            titleTypographyProps={{fontSize: "1.5em", whiteSpace: "pre"}}
             sx={{pt: 1, pl: 3, pb: 0}}
           />
           <CardContent sx={{height: 600, overflowY: "auto"}}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
-                <JsonView
-                  data={stats}
-                  shouldExpandNode={collapseAllNested}
-                  style={darkStyles}
+                <ReactJson
+                  name={false}
+                  iconStyle={"triangle"}
+                  collapseStringsAfterLength={128}
+                  groupArraysAfterLength={100}
+                  displayObjectSize={true}
+                  onAdd={false}
+                  onDelete={false}
+                  onEdit={this.editRunData}
+                  theme={"bright"}
+                  collapsed={2}
+                  src={stats}
                 />
               </Grid>
             </Grid>

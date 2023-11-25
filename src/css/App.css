@@ -1,17 +1,17 @@
 /* App.css */
 @font-face {
     font-family: 'consola';
-    src: local('Consola'), url(./fonts/Consola.ttf) format('truetype');
+    src: local('Consola'), url(../fonts/Consola.ttf) format('truetype');
 }
 
 @font-face {
     font-family: 'robotoslabregular';
-    src: local('RobotoSlabRegular'), url(./fonts/RobotoSlabRegular.ttf) format('truetype');
+    src: local('RobotoSlabRegular'), url(../fonts/RobotoSlabRegular.ttf) format('truetype');
 }
 
 @font-face {
     font-family: 'source-code-pro';
-    src: local('SourceCodeProRegular'), url(./fonts/SourceCodePro-Regular.ttf) format('truetype');
+    src: local('SourceCodeProRegular'), url(../fonts/SourceCodePro-Regular.ttf) format('truetype');
 }
 
 body {
