@@ -21,7 +21,11 @@ import {
   CardContent,
   Card
 } from "@mui/material";
-import {JsonView, darkStyles, collapseAllNested} from "react-json-view-lite";
+import {
+  JsonView,
+  darkStyles,
+  collapseAllNested
+} from "react-json-view-lite";
 import "../../css/json-viewer-lite.css";
 import {
   runidAsTitle
@@ -38,28 +42,6 @@ class OperatingRunMetadata extends Component {
       disabled: true,
     };
     this.Module = "OperatingRunMetadata";
-  }
-
-  componentDidMount() {
-  }
-
-  handleChange = (e) => {
-    console.log(">>>", e.target.id)
-    const user = this.state.user;
-    if (e.target.id === "username") {
-      user["changed"] = true;
-      user[NURIMS_TITLE] = e.target.value;
-      user.metadata["username"] = e.target.value;
-      this.setState({user: user})
-    } else if (e.target.id === "password") {
-      user["changed"] = true;
-      this.setState({user: user, password: e.target.value})
-    } else if (e.target.id === "password2") {
-      user["changed"] = true;
-      this.setState({user: user, password_check: e.target.value})
-    }
-    // signal to parent that details have changed
-    this.props.onChange(true);
   }
 
   setRecordMetadata = (record) => {
