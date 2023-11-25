@@ -79,11 +79,6 @@ class OperatingRunMetadata extends Component {
     return this.state.user;
   }
 
-  shouldExpandNode = (level, value, field) => {
-  console.log("shouldExpandNode - level, value, field", level, value, field)
-    return level === 0;
-  };
-
   render() {
     const {record, disabled} = this.state;
     if (this.context.debug) {
