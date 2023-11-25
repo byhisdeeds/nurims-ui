@@ -53,6 +53,7 @@
     "react-frame-component": "^5.2.6",
     "react-json-pretty": "^2.2.0",
     "react-json-view": "^1.21.3",
+    "react-json-view-lite": "^1.2.1",
     "react-leaflet": "^4.2.1",
     "react-papaparse": "^4.1.0",
     "react-router-dom": "^6.9.0",

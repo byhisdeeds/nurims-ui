@@ -8,6 +8,8 @@ import {
   ConfirmRemoveRecordDialog
 } from "../../components/UtilityDialogs";
 import {
+  BOOL_FALSE_STR,
+  BOOL_TRUE_STR,
   CMD_DELETE_USER_RECORD,
   CMD_DISCOVER_REACTOR_OPERATION_RUNS,
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
@@ -155,7 +157,7 @@ class AddEditReactorOperatingRuns extends React.Component {
     }
     this.props.send({
       cmd: CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
-      "include.disabled": include_archived ? "true" : "false",
+      "include.disabled": include_archived ? BOOL_TRUE_STR : BOOL_FALSE_STR,
       "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
       module: this.Module,
     })
@@ -263,10 +265,11 @@ class AddEditReactorOperatingRuns extends React.Component {
       this.props.send({
         cmd: CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
         item_id: selection.item_id,
-        "include.metadata": "true",
+        "include.metadata": BOOL_TRUE_STR,
         "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
+        "load.metadata.from.store": ["nurims.operation.data.stats", "nurims.operation.data.neutronflux"],
         module: this.Module,
-      })
+      }, true)
     }
     this.setState({selection: selection})
   }

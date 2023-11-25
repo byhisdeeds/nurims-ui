@@ -575,8 +575,8 @@ class App extends React.Component {
                       onClick={this.handleMenuAction}
                     />
                     <BackgroundTasks active={background_tasks_active}/>
-                    <NetworkConnection ready={ready}/>
                     <LogWindowButton onClick={this.toggleLogWindow}/>
+                    <NetworkConnection ready={ready}/>
                     {isSysadmin && <SystemInfoBadges ref={this.sysinfoRef}/>}
                     <NotificationsButton
                       numMessages={num_messages}

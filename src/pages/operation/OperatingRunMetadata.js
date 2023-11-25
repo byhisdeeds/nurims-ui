@@ -16,9 +16,15 @@ import {
 import {
   Grid,
   Box,
-  TextField
+  TextField,
+  CardHeader,
+  CardContent,
+  Card
 } from "@mui/material";
-import { duration } from "duration-pretty";
+// import { duration } from "duration-pretty";
+import {JsonView, darkStyles, collapseAllNested} from "react-json-view-lite";
+import "../../css/json-viewer-lite.css";
+// import EditableTable from "../../components/EditableTable";
 
 
 class OperatingRunMetadata extends Component {
@@ -72,6 +78,11 @@ class OperatingRunMetadata extends Component {
     return this.state.user;
   }
 
+  shouldExpandNode = (level, value, field) => {
+  console.log("shouldExpandNode - level, value, field", level, value, field)
+    return level === 0;
+  };
+
   render() {
     const {record, disabled} = this.state;
     if (this.context.debug) {
@@ -79,11 +90,6 @@ class OperatingRunMetadata extends Component {
         getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, ""));
     }
     let stats = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, {});
-    if (Object.keys(stats).length > 0) {
-      if (stats.hasOwnProperty("url")) {
-        stats = stats.url;
-      }
-    }
     return (
       <Box
         component="form"
@@ -93,85 +99,24 @@ class OperatingRunMetadata extends Component {
         noValidate
         autoComplete="off"
       >
-        <Grid container spacing={2}>
-          <Grid item xs={2}>
-            <TextField
-              inputProps={
-                { readOnly: true, }
-              }
-              fullWidth
-              id="name"
-              label="Run"
-              value={record[NURIMS_TITLE] || ""}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              inputProps={
-                { readOnly: true, }
-              }
-              fullWidth
-              id="start-date"
-              label="Start Date"
-              value={stats.hasOwnProperty("start") ? formatISODateString(stats["start"]) : ""}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              inputProps={
-                { readOnly: true, }
-              }
-              fullWidth
-              id="end-date"
-              label="End Date"
-              value={stats.hasOwnProperty("end") ? formatISODateString(stats["end"]) : ""}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <TextField
-              inputProps={
-                { readOnly: true, }
-              }
-              fullWidth
-              id="duration"
-              label="Duration (HH:MM)"
-              value={stats.hasOwnProperty("duration") ? duration(stats["duration"], 'seconds').format('HH:mm') : 0}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <TextField
-              inputProps={
-                { readOnly: true, }
-              }
-              fullWidth
-              id="flux_hours"
-              label="Flux Hours"
-              value={stats.hasOwnProperty("flux_hours") ? stats["flux_hours"].toFixed(2) : 0}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <TextField
-              inputProps={
-                { readOnly: true, }
-              }
-              fullWidth
-              id="flux_runs"
-              label="Flux Runs"
-              value={stats.hasOwnProperty("flux") ? stats["flux"].reduce(function(acc, cur) {return acc.concat(cur["flux"].toFixed(1))},[]).join(", ") : ""}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <TextField
-              inputProps={
-                { readOnly: true, }
-              }
-              fullWidth
-              id="excess_reactivity"
-              label="Excess Reactivity Runs"
-              value={stats.hasOwnProperty("excess_reactivity") ? stats["excess_reactivity"].toFixed(2) : ""}
-            />
-          </Grid>
-        </Grid>
+        <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
+          <CardHeader
+            title={`Operating Run: ${record[NURIMS_TITLE] || ""}`}
+            titleTypographyProps={{fontSize: "1.5em"}}
+            sx={{pt: 1, pl: 3, pb: 0}}
+          />
+          <CardContent sx={{height: 600, overflowY: "auto"}}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <JsonView
+                  data={stats}
+                  shouldExpandNode={collapseAllNested}
+                  style={darkStyles}
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
       </Box>
     );
   }

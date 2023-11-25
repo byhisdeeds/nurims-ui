@@ -146,8 +146,13 @@ export function getRecordMetadataValue(obj, key, missingValue) {
       for (const m of metadata) {
         for (const [k, v] of Object.entries(m)) {
           if (k === key) {
-            return (typeof v === "number") ? v : (v.charAt(0) === "[" || v.charAt(0) === "{") ?
-              JSON.parse(v.replaceAll("'", "\"").replaceAll("NaN", "0")) : v;
+            if (typeof v === "number") {
+              return v;
+            } else if (typeof v === "string") {
+              return (v.charAt(0) === "[" || v.charAt(0) === "{") ?
+                JSON.parse(v.replaceAll("'", "\"").replaceAll("NaN", "0")) : v;
+            }
+            return v;
           }
         }
       }
