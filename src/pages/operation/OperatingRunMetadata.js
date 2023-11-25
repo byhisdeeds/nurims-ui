@@ -75,10 +75,6 @@ class OperatingRunMetadata extends Component {
     this.props.onChange(false);
   }
 
-  getUserMetadata = () => {
-    return this.state.user;
-  }
-
   render() {
     const {record, disabled} = this.state;
     if (this.context.debug) {
