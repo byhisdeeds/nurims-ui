@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {withTheme} from "@mui/styles";
+import {
+  withTheme
+} from "@mui/styles";
 import {
   getRecordMetadataValue,
-  formatISODateString,
 } from "../../utils/MetadataUtils";
 import {
   NURIMS_OPERATION_DATA_STATS,
@@ -16,15 +17,15 @@ import {
 import {
   Grid,
   Box,
-  TextField,
   CardHeader,
   CardContent,
   Card
 } from "@mui/material";
-// import { duration } from "duration-pretty";
 import {JsonView, darkStyles, collapseAllNested} from "react-json-view-lite";
 import "../../css/json-viewer-lite.css";
-// import EditableTable from "../../components/EditableTable";
+import {
+  runidAsTitle
+} from "../../utils/OperationUtils";
 
 
 class OperatingRunMetadata extends Component {
@@ -101,7 +102,7 @@ class OperatingRunMetadata extends Component {
       >
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
           <CardHeader
-            title={`Operating Run: ${record[NURIMS_TITLE] || ""}`}
+            title={`Operating Run: ${runidAsTitle(record[NURIMS_TITLE] || "")}`}
             titleTypographyProps={{fontSize: "1.5em"}}
             sx={{pt: 1, pl: 3, pb: 0}}
           />
