@@ -268,7 +268,7 @@ export const MenuItems = [
     children: [
       {
         label: '○ SSC\'s',
-        tooltip: 'Structures, systems and components.',
+        tooltip: 'Structures, systems, and components means the structures, systems, or components associated with the operation of the research reactor, including portions of process systems, whose preventative or mitigative function is necessary to limit radioactive hazardous material exposure to the public, as determined from safety analyses.',
         authmodlevel: 'basic',
         children: [
           {
@@ -309,7 +309,7 @@ export const MenuItems = [
         ]
       },
       {
-        label: '○ Maintenance',
+        label: '○ Issues & Modifications',
         tooltip: 'Corrective maintenance issue and SSC upgrade task records.',
         authmodlevel: 'basic',
         children: [
