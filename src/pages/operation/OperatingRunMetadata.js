@@ -53,8 +53,10 @@ class OperatingRunMetadata extends Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "editRunData", "edit", edit);
     }
+    const record = this.state.record;
+    record["changed"] = true;
     this.setState({
-      record: this.state.record,
+      record: record,
     })
     this.props.onChange(true);
     return true;

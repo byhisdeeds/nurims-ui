@@ -15,6 +15,7 @@ import {
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
   RECORD_KEY,
+  RECORD_TYPE,
   SSC_MAINTENANCE_RECORD,
   SSC_RECORD_TYPE,
   SSC_TOPIC,
@@ -127,7 +128,7 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
         metadata: record.metadata,
         record_key: record[RECORD_KEY],
         topic: SSC_TOPIC,
-        record_type: record[NURIMS_WITHDRAWN],
+        record_type: record[RECORD_TYPE],
         module: this.Module,
       })
     }

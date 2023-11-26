@@ -4,21 +4,18 @@ import {
 } from "@mui/material";
 import {
   CMD_DELETE_ITEM_RECORD,
-  CMD_DELETE_SSC_MODIFICATION_RECORD,
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_ITEM_RECORDS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_REFERRED_TO_ITEM_RECORDS,
-  CMD_GET_SSC_MODIFICATION_RECORDS,
-  CMD_GET_SSC_RECORDS,
   CMD_UPDATE_ITEM_RECORD,
-  CMD_UPDATE_SSC_MODIFICATION_RECORD,
   ITEM_ID,
   NURIMS_CREATION_DATE,
   NURIMS_RELATED_ITEM_ID,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
   RECORD_KEY,
+  RECORD_TYPE,
   SSC_MAINTENANCE_RECORD,
   SSC_MODIFICATION_RECORD,
   SSC_RECORD_TYPE,
@@ -132,7 +129,7 @@ class AddEditModificationRecord extends BaseRecordManager {
         metadata: record.metadata,
         record_key: record[RECORD_KEY],
         topic: SSC_TOPIC,
-        record_type: record[NURIMS_WITHDRAWN],
+        record_type: record[RECORD_TYPE],
         module: this.Module,
       })
     }

@@ -11,6 +11,7 @@ module.exports = Object.freeze({
   ROLE_PERSONNEL_DATA_ENTRY: "personnel_data_entry",
   ROLE_PERSONNEL_DATA_SYSADMIN: "personnel_data_sysadmin",
   ROLE_REACTOR_OPERATIONS_DATA_ENTRY: "reactor_operations_data_entry",
+  ROLE_REACTOR_OPERATIONS_DATA_EXPORT: "reactor_operations_data_export",
   ROLE_REACTOR_OPERATIONS_SYSADMIN: "reactor_operations_sysadmin",
   ROLE_SYSADMIN: "sysadmin",
   ROLE_USER: "user",
@@ -139,6 +140,7 @@ module.exports = Object.freeze({
   CMD_UPDATE_USER_RECORD: "update_user_record",
   CMD_DELETE_USER_RECORD: "delete_user_record",
 
+  CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA: "export_reactor_operation_runs_data",
   CMD_DISCOVER_REACTOR_OPERATION_RUNS: "discover_reactor_operation_runs",
   CMD_GET_REACTOR_OPERATING_REPORT_RECORDS: "get_reactor_operating_report_records",
   CMD_DELETE_REACTOR_OPERATING_REPORT_RECORD: "delete_reactor_operating_report_record",
@@ -184,6 +186,7 @@ module.exports = Object.freeze({
   INCLUDE_METADATA: 'include.metadata',
   ITEM_ID: "item_id",
   RECORD_KEY: "record_key",
+  RECORD_TYPE: "record_type",
 
   NURIMS_TITLE: 'nurims.title',
   NURIMS_CREATED_BY: 'nurims.createdby',

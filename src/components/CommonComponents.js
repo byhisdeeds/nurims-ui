@@ -59,7 +59,9 @@ import {
   Person,
   DeleteForever, People
 } from '@mui/icons-material';
-import {isValidUserRole} from "../utils/UserUtils";
+import {
+  isValidUserRole
+} from "../utils/UserUtils";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import SaveIcon from "@mui/icons-material/Save";
@@ -1152,7 +1154,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
   const isSysadmin = isValidUserRole(user, sysadminRole);
   const recordHasChanged = isRecordChanged(selection);
   const userIsCreator = ignoreSaveDisabledIfNotCreator ? true : isRecordCreatedBy(selection, user);
-  const emptyRecord = Object.keys(selection).length === 0;
+  const emptyRecord = isRecordEmpty(selection);
   const archiveButtonLabel = THIS.isRecordArchived(selection) ? unarchiveRecordButtonLabel : archiveRecordButtonLabel;
   const archiveIcon = THIS.isRecordArchived(selection) ? unarchiveRecordIcon : archiveRecordIcon;
 

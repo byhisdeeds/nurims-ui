@@ -422,3 +422,148 @@ ShowProvenanceRecordsDialog.propTypes = {
 ShowProvenanceRecordsDialog.defaultProps = {
   buttonLabel: "Close"
 }
+
+
+export const ConfirmOperatingRunDataExportDialog = (props) => {
+  const [year, setYear] = useState(null);
+  const [dataset, setDataset] = useState(null);
+  const [datasetFormat, setDatasetFormat] = useState("json");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [forceOverwrite, setForceOverwrite] = useState(false);
+
+  const handleToDateRangeChange = (range) => {
+    console.log("handleToDateRangeChange", range)
+    setEndDate(range);
+  }
+
+  const handleFromDateRangeChange = (range) => {
+    console.log("handleFromDateRangeChange", range)
+    setStartDate(range);
+  }
+
+  const handleExportDatasetSelected = (e) => {
+    console.log("handleExportDatasetSelected", e.target.value)
+    setDataset(e.target.value);
+  }
+
+  const handleExportDatasetFileFormat = (e) => {
+    console.log("handleExportDatasetFileFormat", e.target.value)
+    setDataset(e.target.value);
+  }
+
+  const handleYearDateRangeChange = (year) => {
+    console.log("handleYearDateRangeChange", year)
+    setYear(year);
+  }
+
+  const onForceOverwriteChange = (e) => {
+    setForceOverwrite(e.target.checked)
+  }
+
+  const proceed = (runYear, runStartDate, runEndDate, runDataset, runDatasetFormat) => {
+    if (runYear === null) {
+      enqueueErrorSnackbar("No operating year selected", ERROR_SNACKBAR_DURATION);
+    } else if (runStartDate === null) {
+      enqueueErrorSnackbar("No start month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
+    } else if (runEndDate === null) {
+      enqueueErrorSnackbar("No end month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
+    } else if (runDataset === null) {
+      enqueueErrorSnackbar("No operating run dataset selected", ERROR_SNACKBAR_DURATION);
+    } else {
+      props.onProceed(runYear, runStartDate, runEndDate, runDataset, runDatasetFormat);
+    }
+  }
+
+  return (
+    <div>
+      <Dialog
+        open={props.open}
+        onClose={props.onCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Export Reactor Operation Run Data"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Reactor operating data extracted from the YOKOGAWA digital chart recorder,
+            provides information on the staistics of a run and a per second accounr of
+            the control rod movement, neutron flux, inlet and outlet temperatures,
+            and gamma radiation area monitors.
+            <p/>
+            Select a year, month range, and dataset to export for a operating period.
+            <p/>
+          </DialogContentText>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <SameYearDateRangePicker
+                startText="Start Date"
+                endText="End Date"
+                from={startDate}
+                to={endDate}
+                year={year}
+                disabled={false}
+                onYearChange={handleYearDateRangeChange}
+                onToChange={handleToDateRangeChange}
+                onFromChange={handleFromDateRangeChange}
+                renderInput={(startProps, endProps) => (
+                  <React.Fragment>
+                    <TextField {...startProps}/>
+                    <Box sx={{mx: 1}}>to</Box>
+                    <TextField {...endProps}/>
+                  </React.Fragment>
+                )}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl style={{paddingRight: 8, marginTop: 8,}} variant="outlined">
+                <InputLabel id="export-dataset-select-label">Dataset To Export</InputLabel>
+                <Select
+                  style={{width: "400px"}}
+                  labelId="export-dataset-select-label"
+                  id="export-dataset"
+                  value={dataset}
+                  label="Dataset To Export"
+                  onChange={handleExportDatasetSelected}
+                >
+                  <MenuItem value={'stats'}>Operating Run Statistics</MenuItem>
+                  <MenuItem value={'rodevents'}>Operating Run Control Rod Events</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl style={{paddingRight: 8, marginTop: 8,}} variant="outlined">
+                <InputLabel id="export-dataset-format-select-label">Export File Format</InputLabel>
+                <Select
+                  style={{width: "400px"}}
+                  labelId="export-dataset-format-select-label"
+                  id="export-dataset-form,at"
+                  value={dataset}
+                  label="Export File Format"
+                  onChange={handleExportDatasetFileFormat}
+                >
+                  <MenuItem value={'json'}>Javascript Notation (.json)</MenuItem>
+                  <MenuItem value={'csv'}>Comma Seperated Values (.csv)</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Box sx={{flexGrow: 1}} />
+          <Button onClick={props.onCancel}>Cancel</Button>
+          <Button onClick={() => proceed(year, startDate, endDate, dataset, datasetFormat)} autoFocus>Continue</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  )
+}
+
+ConfirmOperatingRunDataExportDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onProceed: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+}
+

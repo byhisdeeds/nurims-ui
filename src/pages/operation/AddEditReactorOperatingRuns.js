@@ -4,6 +4,7 @@ import {
   UserContext
 } from "../../utils/UserContext";
 import {
+  ConfirmOperatingRunDataExportDialog,
   ConfirmOperatingRunDiscoveryDialog,
   ConfirmRemoveRecordDialog
 } from "../../components/UtilityDialogs";
@@ -11,14 +12,13 @@ import {
   BOOL_FALSE_STR,
   BOOL_TRUE_STR,
   CMD_DELETE_USER_RECORD,
-  CMD_DISCOVER_REACTOR_OPERATION_RUNS,
+  CMD_DISCOVER_REACTOR_OPERATION_RUNS, CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
-  CMD_UPDATE_USER_RECORD,
   ITEM_ID,
   METADATA,
   NURIMS_OPERATION_DATA_STATS,
-  NURIMS_TITLE,
-  NURIMS_WITHDRAWN
+  NURIMS_WITHDRAWN,
+  ROLE_REACTOR_OPERATIONS_DATA_EXPORT
 } from "../../utils/constants";
 import {
   Box,
@@ -50,8 +50,11 @@ import {
   enqueueWarningSnackbar
 } from "../../utils/SnackbarVariants";
 import {
+  getRecordMetadataValue,
+  isRecordEmpty,
   record_uuid
 } from "../../utils/MetadataUtils";
+import {isValidUserRole} from "../../utils/UserUtils";
 
 export const ADDEDITREACTOROPERATINGRUNS_REF = "AddEditReactorOperatingRuns";
 
@@ -63,6 +66,7 @@ class AddEditReactorOperatingRuns extends React.Component {
     this.state = {
       metadata_changed: false,
       confirm_remove: false,
+      confirm_export: false,
       confirm_discovery: false,
       selection: {},
       title: props.title,
@@ -151,6 +155,42 @@ class AddEditReactorOperatingRuns extends React.Component {
     });
   }
 
+  exportOperatingRunData = () => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "exportOperatingRunData");
+    }
+    this.setState({confirm_export: true,});
+  }
+
+  cancelExport = () => {
+    this.setState({confirm_export: false,});
+  }
+
+  proceedWithExport = (year, startMonth, endMonth, dataset, datasetFormat) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "proceedWithExport", "year", year, "startMonth", startMonth,
+        "endMonth", endMonth, "dataset", dataset);
+    }
+    this.setState({confirm_export: false,});
+
+    this.props.send({
+      cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
+      "include.metadata": BOOL_TRUE_STR,
+      "load.metadata.from.store": ["nurims.operation.data.stats"],
+      startDate: `${year.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
+      endDate: `${year.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
+      dataset: dataset,
+      datasetFormat: datasetFormat,
+      module: this.Module,
+      // cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
+      // year: year.year(),
+      // startMonth: startMonth.month() + 1,
+      // endMonth: endMonth.month() + 1,
+      // forceOverwrite: forceOverwrite,
+      // module: this.Module,
+    });
+  }
+
   requestGetRecords = (include_archived) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
@@ -165,29 +205,35 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   saveChanges = () => {
-    if (this.listRef.current) {
-      const records = this.listRef.current.getRecords();
-      for (const record of records) {
-        // only save monitor record with changed metadata
-        if (record.changed) {
-          if (this.context.debug) {
-            ConsoleLog(this.Module, "saveChanges", record);
-          }
-          if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
-            record["record_key"] = record_uuid();
-          }
-          this.props.send({
-            cmd: CMD_UPDATE_USER_RECORD,
-            item_id: record.item_id,
-            "nurims.title": record[NURIMS_TITLE],
-            "nurims.withdrawn": record[NURIMS_WITHDRAWN],
-            metadata: record.metadata,
-            record_key: record.record_key,
-            module: this.Module,
-          })
-        }
-      }
-    }
+    // save selected record if changed
+    console.log("-- SAVING RECORD --", this.state.selection)
+
+
+
+    // if (this.listRef.current) {
+    //   const records = this.listRef.current.getRecords();
+    //   for (const record of records) {
+    //     // only save monitor record with changed metadata
+    //     if (record.changed) {
+    //       if (this.context.debug) {
+    //         ConsoleLog(this.Module, "saveChanges", record);
+    //       }
+    //       if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
+    //         record["record_key"] = record_uuid();
+    //       }
+    //       console.log("-- SAVING RECORD --", record)
+    //       // this.props.send({
+    //       //   cmd: CMD_UPDATE_USER_RECORD,
+    //       //   item_id: record.item_id,
+    //       //   "nurims.title": record[NURIMS_TITLE],
+    //       //   "nurims.withdrawn": record[NURIMS_WITHDRAWN],
+    //       //   metadata: record.metadata,
+    //       //   record_key: record.record_key,
+    //       //   module: this.Module,
+    //       // })
+    //     }
+    //   }
+    // }
 
     this.setState({metadata_changed: false})
   }
@@ -219,6 +265,40 @@ class AddEditReactorOperatingRuns extends React.Component {
                 this.metadataRef.current.setRecordMetadata(selection);
               }
             }
+          }
+        } else if (isCommandResponse(message, CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA)) {
+          const data = message.response.operation;
+          if (Array.isArray(data)) {
+            const startDate = message.hasOwnProperty("startDate") ? message.startDate : "0000-00"
+            const endDate = message.hasOwnProperty("endDate") ? message.endDate.substring(5,7) : "00"
+            const dataset = message.hasOwnProperty("dataset") ? `${message.dataset}.txt` : "run-data.txt"
+            const datasetFormat = message.hasOwnProperty("datasetFormat") ? message.dataset : "xxx"
+            console.log("+++ DATASET +++", dataset)
+            console.log("+++ DATASET-FORMAT +++", datasetFormat)
+            const records = [];
+            for (const record of data) {
+              const _d = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, "");
+              console.log("-->", _d)
+              records.push(_d)
+            }
+            // Create a blob with the data we want to download as a file
+            const fileType = (datasetFormat === "json") ? "application/json" :
+              (datasetFormat === "csv") ? "application/csv" : "text/plain";
+            const blobData = (datasetFormat === "json") ? JSON.stringify(records) :
+              (datasetFormat === "csv") ? "text/csv" : "text/plain";
+            const blob = new Blob([blobData], { type: fileType })
+            // Create an anchor element and dispatch a click event on it
+            // to trigger a download
+            const a = document.createElement('a')
+            a.download = `operating-run-${dataset}-${startDate}-${endDate}.json`
+            a.href = window.URL.createObjectURL(blob)
+            const clickEvt = new MouseEvent('click', {
+              view: window,
+              bubbles: true,
+              cancelable: true,
+            })
+            a.dispatchEvent(clickEvt)
+            a.remove()
           }
         } else if (isCommandResponse(message, CMD_DISCOVER_REACTOR_OPERATION_RUNS)) {
           // enqueueSuccessSnackbar(response.message);
@@ -267,7 +347,7 @@ class AddEditReactorOperatingRuns extends React.Component {
         item_id: selection.item_id,
         "include.metadata": BOOL_TRUE_STR,
         "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
-        "load.metadata.from.store": ["nurims.operation.data.stats", "nurims.operation.data.neutronflux"],
+        "load.metadata.from.store": ["nurims.operation.data.stats"],
         module: this.Module,
       }, true)
     }
@@ -275,11 +355,14 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   render() {
-    const {metadata_changed, confirm_remove, confirm_discovery, include_archived, selection} = this.state;
+    const {metadata_changed, confirm_remove, confirm_discovery, confirm_export, include_archived, selection} = this.state;
+    const is_valid_role = isValidUserRole(this.props.user, [ROLE_REACTOR_OPERATIONS_DATA_EXPORT]);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
-        "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
+        "confirm_removed", confirm_remove, "confirm_export", confirm_export, "include_archived", include_archived,
+        "is_valid_role", is_valid_role, "selection", selection);
     }
+    const disabled = !is_valid_role;
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}
@@ -290,6 +373,10 @@ class AddEditReactorOperatingRuns extends React.Component {
         <ConfirmOperatingRunDiscoveryDialog open={confirm_discovery}
                                             onProceed={this.proceedWithDiscovery}
                                             onCancel={this.cancelDiscovery}
+        />
+        <ConfirmOperatingRunDataExportDialog open={confirm_export}
+                                             onProceed={this.proceedWithExport}
+                                             onCancel={this.cancelExport}
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
@@ -316,7 +403,7 @@ class AddEditReactorOperatingRuns extends React.Component {
         </Grid>
         <Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>
           <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
-               disabled={selection === -1}>
+               disabled={disabled}>
             <RemoveCircleIcon sx={{mr: 1}}/>
             Remove Operating Run
           </Fab>
@@ -332,6 +419,11 @@ class AddEditReactorOperatingRuns extends React.Component {
           <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.discoverOperatingRuns}>
             <AddIcon sx={{mr: 1}}/>
             Update Operating Runs
+          </Fab>
+          <Fab variant="extended" size="small" color="primary" aria-label="add" disabled={disabled}
+               onClick={this.exportOperatingRunData}>
+            <AddIcon sx={{mr: 1}}/>
+            Export Operating Run Data
           </Fab>
         </Box>
       </React.Fragment>

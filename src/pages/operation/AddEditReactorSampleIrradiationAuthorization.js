@@ -46,7 +46,7 @@ import ReactorSampleIrradiationAuthorizationRecordsList from "./ReactorSampleIrr
 import ReactorSampleIrradiationAuthorizationMetadata from "./ReactorSampleIrradiationAuthorizationMetadata";
 import {
   getRecordData,
-  isRecordCreatedBy,
+  isRecordCreatedBy, isRecordEmpty,
   record_uuid,
   recordHasMetadataField,
   setRecordData,
@@ -223,7 +223,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
     const approvedby =
       getRecordData(selection, NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER, "");
     const is_not_creator = !isRecordCreatedBy(selection, this.context.user)
-    const submit_disabled = Object.keys(selection).length === 0 || (approvedby !== "" && !selection.changed);
+    const submit_disabled = isRecordEmpty(selection) || (approvedby !== "" && !selection.changed);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "confirm_removed", confirm_remove, "include_archived",
         include_archived, "selection", selection, "record_has_submission_tag", record_has_submission_metadata,
