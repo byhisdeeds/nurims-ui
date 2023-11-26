@@ -1,4 +1,10 @@
 import dayjs from 'dayjs';
+import {
+  getRecordMetadataValue
+} from "./MetadataUtils";
+import {
+  NURIMS_OPERATION_DATA_STATS
+} from "./constants";
 
 
 export function runidAsTitle(runid) {
@@ -16,4 +22,29 @@ export function runidAsTitle(runid) {
     }
   }
   return "";
+}
+
+export function prepareExportData(message) {
+  const f = {
+    fileName: "",
+    fileType: "",
+    blobData: "",
+  }
+  const data = message.response.operation;
+  const startDate = message.hasOwnProperty("startDate") ? message.startDate : "0000-00"
+  const endDate = message.hasOwnProperty("endDate") ? message.endDate.substring(5,7) : "00"
+  const dataset = message.hasOwnProperty("dataset") ? message.dataset : ""
+  if (dataset === "stats") {
+    f.fileName = `operating-run-${dataset}-${startDate}-${endDate}.json`;
+    f.fileType = "application/json";
+    const records = [];
+    for (const record of data) {
+      const _d = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, "");
+      records.push(_d)
+    }
+    f.blobData = JSON.stringify(records,null, 2);
+  } else if (dataset === "flux") {
+
+  }
+  return f;
 }

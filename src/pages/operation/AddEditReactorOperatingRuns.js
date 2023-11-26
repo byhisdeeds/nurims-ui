@@ -55,6 +55,7 @@ import {
   record_uuid
 } from "../../utils/MetadataUtils";
 import {isValidUserRole} from "../../utils/UserUtils";
+import {prepareExportData} from "../../utils/OperationUtils";
 
 export const ADDEDITREACTOROPERATINGRUNS_REF = "AddEditReactorOperatingRuns";
 
@@ -267,38 +268,21 @@ class AddEditReactorOperatingRuns extends React.Component {
             }
           }
         } else if (isCommandResponse(message, CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA)) {
-          const data = message.response.operation;
-          if (Array.isArray(data)) {
-            const startDate = message.hasOwnProperty("startDate") ? message.startDate : "0000-00"
-            const endDate = message.hasOwnProperty("endDate") ? message.endDate.substring(5,7) : "00"
-            const dataset = message.hasOwnProperty("dataset") ? `${message.dataset}.txt` : "run-data.txt"
-            const datasetFormat = message.hasOwnProperty("datasetFormat") ? message.dataset : "xxx"
-            console.log("+++ DATASET +++", dataset)
-            console.log("+++ DATASET-FORMAT +++", datasetFormat)
-            const records = [];
-            for (const record of data) {
-              const _d = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, "");
-              console.log("-->", _d)
-              records.push(_d)
-            }
-            // Create a blob with the data we want to download as a file
-            const fileType = (datasetFormat === "json") ? "application/json" :
-              (datasetFormat === "csv") ? "application/csv" : "text/plain";
-            const blobData = (datasetFormat === "json") ? JSON.stringify(records) :
-              (datasetFormat === "csv") ? "text/csv" : "text/plain";
-            const blob = new Blob([blobData], { type: fileType })
-            // Create an anchor element and dispatch a click event on it
-            // to trigger a download
+          if (Array.isArray(message.response.operation)) {
+            const data = prepareExportData(message);
+            // Create an anchor element and dispatch a click event on it to trigger a download
             const a = document.createElement('a')
-            a.download = `operating-run-${dataset}-${startDate}-${endDate}.json`
-            a.href = window.URL.createObjectURL(blob)
+            a.download = data.fileName;
+            a.href = window.URL.createObjectURL(new Blob([data.blobData], { type: data.fileType }));
             const clickEvt = new MouseEvent('click', {
               view: window,
               bubbles: true,
               cancelable: true,
-            })
-            a.dispatchEvent(clickEvt)
-            a.remove()
+            });
+            a.dispatchEvent(clickEvt);
+            a.remove();
+          } else {
+            enqueueWarningSnackbar("Export data not an array", 3000, !response.hasOwnProperty("persist_message"));
           }
         } else if (isCommandResponse(message, CMD_DISCOVER_REACTOR_OPERATION_RUNS)) {
           // enqueueSuccessSnackbar(response.message);

@@ -449,7 +449,7 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
 
   const handleExportDatasetFileFormat = (e) => {
     console.log("handleExportDatasetFileFormat", e.target.value)
-    setDataset(e.target.value);
+    setDatasetFormat(e.target.value);
   }
 
   const handleYearDateRangeChange = (year) => {
@@ -470,6 +470,8 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
       enqueueErrorSnackbar("No end month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
     } else if (runDataset === null) {
       enqueueErrorSnackbar("No operating run dataset selected", ERROR_SNACKBAR_DURATION);
+    } else if (runDatasetFormat === null) {
+      enqueueErrorSnackbar("No operating run export file format selected", ERROR_SNACKBAR_DURATION);
     } else {
       props.onProceed(runYear, runStartDate, runEndDate, runDataset, runDatasetFormat);
     }
@@ -539,7 +541,7 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
                 <Select
                   style={{width: "400px"}}
                   labelId="export-dataset-format-select-label"
-                  id="export-dataset-form,at"
+                  id="export-dataset-format"
                   value={dataset}
                   label="Export File Format"
                   onChange={handleExportDatasetFileFormat}
