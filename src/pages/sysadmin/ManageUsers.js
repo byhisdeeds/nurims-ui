@@ -78,12 +78,6 @@ class ManageUsers extends React.Component {
   }
 
   componentDidMount() {
-    // get public key as base64 string
-    // this.ws.send(JSON.stringify({uuid:this.uuid, cmd: Constants.CMD_GET_PUBLIC_KEY}));
-    // this.props.send({
-    //   cmd: CMD_GET_PUBLIC_KEY,
-    //   module: this.Module,
-    // })
     this.requestGetRecords(this.state.include_archived);
   }
 

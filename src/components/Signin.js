@@ -18,6 +18,7 @@ import {
   styled
 } from "@mui/material/styles";
 import {
+  enqueueErrorSnackbar,
   enqueueWarningSnackbar
 } from "../utils/SnackbarVariants";
 import {
@@ -35,7 +36,9 @@ import {
 import {
   CMD_VERIFY_USER_PASSWORD
 } from "../utils/constants";
-import {record_uuid} from "../utils/MetadataUtils";
+import {
+  record_uuid
+} from "../utils/MetadataUtils";
 
 const StyledAvatar = styled(Avatar)({
   margin: 2,
@@ -78,19 +81,22 @@ class Signin extends React.Component {
     this.setState({ remember: event.target.checked });
   };
 
-  handleSubmit = (event) => {
-    event.preventDefault();
+  submit = (event) => {
     if (this.props.online) {
-      const session_uuid = record_uuid();
-      const session_id = encryptMessage(this.props.puk[0], session_uuid);
-      this.props.send({
-        cmd: CMD_VERIFY_USER_PASSWORD,
-        session_id: session_id,
-        username: encryptMessage(this.props.puk[0], this.state.username),
-        password: encryptMessage(this.props.puk[0], this.state.password),
-        module: this.Module,
-      }, true, false);
-      this.setState({session_id: session_id})
+      if (this.props.puk.length === 0) {
+        enqueueErrorSnackbar("No encryption key available.");
+      } else {
+        const session_uuid = record_uuid();
+        const session_id = encryptMessage(this.props.puk[0], session_uuid);
+        this.props.send({
+          cmd: CMD_VERIFY_USER_PASSWORD,
+          session_id: session_id,
+          username: encryptMessage(this.props.puk[0], this.state.username),
+          password: encryptMessage(this.props.puk[0], this.state.password),
+          module: this.Module,
+        }, true, false);
+        this.setState({session_id: session_id})
+      }
     }
   };
 
@@ -188,11 +194,10 @@ class Signin extends React.Component {
             }}
             />
             <StyledButton
-              type="submit"
               fullWidth
               variant="contained"
               color="primary"
-              onClick={this.handleSubmit}
+              onClick={this.submit}
             >
               Sign In
             </StyledButton>
