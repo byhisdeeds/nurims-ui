@@ -96,14 +96,16 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
     if (this.context.debug) {
       ConsoleLog(this.Module, "onMaintenanceRecordSelection", "selection", selection);
     }
-    this.props.send({
-      cmd: CMD_GET_ITEM_RECORDS,
-      item_id: selection[ITEM_ID],
-      topic: this.recordTopic,
-      record_type: this.recordType,
-      "include.metadata": "true",
-      module: this.Module,
-    })
+    if (selection.item_id !== -1) {
+      this.props.send({
+        cmd: CMD_GET_ITEM_RECORDS,
+        item_id: selection[ITEM_ID],
+        topic: this.recordTopic,
+        record_type: this.recordType,
+        "include.metadata": "true",
+        module: this.Module,
+      });
+    }
   }
 
   saveChanges = (record) => {

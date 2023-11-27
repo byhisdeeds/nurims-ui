@@ -222,7 +222,7 @@ class SSCMaintenanceRecords extends Component {
     }
     if (this.listRef.current) {
       this.listRef.current.addRecords([new_record(
-        null,
+        -1,
         "New Maintenance Record",
         0,
         this.context.user.profile.username,
@@ -317,6 +317,7 @@ class SSCMaintenanceRecords extends Component {
   render() {
     const {confirm_remove, ssc, selection, include_archived, metadata_changed, show_provenance_view} = this.state;
     const {properties, glossary} = this.props;
+    console.log("RRRRRRRRRRRR", selection)
     const no_selection = isRecordEmpty(selection);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "users", this.context.user);
