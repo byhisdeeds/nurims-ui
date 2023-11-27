@@ -8,7 +8,6 @@ import {
   ShowProvenanceRecordsDialog
 } from "../../components/UtilityDialogs";
 import {
-  CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_SUBMIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_RECORD,
   CMD_SUGGEST_ANALYSIS_JOBS,
@@ -88,10 +87,6 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
 
   componentDidMount() {
     this.props.send({
-      cmd: CMD_GET_GLOSSARY_TERMS,
-      module: this.Module,
-    });
-    this.props.send({
       cmd: "get_sample_types",
       module: this.Module,
     });
@@ -115,7 +110,6 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
 
   ws_message = (message) => {
     super.ws_message(message, [
-      {cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms"},
       {cmd: CMD_SUGGEST_ANALYSIS_JOBS, func: "updateAnalysisJobs", params: "jobs"},
       {cmd: "get_sample_types", func: "setSampleTypes", params: "sampletypes"}
     ]);
@@ -261,6 +255,7 @@ class AddEditReactorSampleIrradiationAuthorization extends BaseRecordManager {
             <ReactorSampleIrradiationAuthorizationMetadata
               ref={this.metadataRef}
               properties={this.props.properties}
+              glossary={this.props.glossary}
               user={this.props.user}
               onChange={this.onRecordMetadataChanged}
               send={this.props.send}

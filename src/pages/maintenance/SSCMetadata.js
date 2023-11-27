@@ -52,11 +52,9 @@ class SSCMetadata extends Component {
     super(props);
     this.state = {
       ssc: {},
-      properties: props.properties,
     };
     this.module = SSCMETADATA_REF;
     this.ref = React.createRef();
-    this.glossary = {};
     this.sscSurveillanceData = [];
     this.sscSurveillanceFields = [
       {
@@ -98,13 +96,6 @@ class SSCMetadata extends Component {
         return this.sscSurveillanceFields[2].options.push({ label: t[1], value: t[0] });
       }
     })
-  }
-
-  setGlossaryTerms = (terms) => {
-    // console.log("SSCMetadata.setGlossaryTerms", terms)
-    for (const term of terms) {
-      this.glossary[term.name] = term.value;
-    }
   }
 
   handleChange = (e) => {
@@ -239,7 +230,8 @@ class SSCMetadata extends Component {
   };
 
   render() {
-    const {ssc, properties} = this.state;
+    const {ssc} = this.state;
+    const {properties, glossary} = this.props;
     const disabled = Object.entries(ssc).length === 0;
     const ssc_function = getRecordMetadataValue(ssc, NURIMS_SSC_FUNCTION, "");
     const no_reactor_safety_functions = disabled || ssc_function !== "reactor_safety";
@@ -268,7 +260,7 @@ class SSCMetadata extends Component {
                   value={ssc.hasOwnProperty(NURIMS_TITLE) ? ssc[NURIMS_TITLE] : ""}
                   onChange={this.handleChange}
                   disabled={disabled}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_TITLE, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_TITLE, "")}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -279,7 +271,7 @@ class SSCMetadata extends Component {
                   value={getRecordMetadataValue(ssc, NURIMS_DESCRIPTION, "")}
                   onChange={this.handleChange}
                   disabled={disabled}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_DESCRIPTION, "")}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -290,7 +282,7 @@ class SSCMetadata extends Component {
                   value={getRecordMetadataValue(ssc, NURIMS_SSC_ID, "")}
                   onChange={this.handleChange}
                   disabled={disabled}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_ID, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_SSC_ID, "")}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -302,7 +294,7 @@ class SSCMetadata extends Component {
                     "1970-01-01"), null)}
                   onChange={this.handleCommissioningDateChange}
                   disabled={disabled}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_COMMISSIONING_DATE, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_SSC_COMMISSIONING_DATE, "")}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -314,7 +306,7 @@ class SSCMetadata extends Component {
                   onChange={this.handleChange}
                   options={["structure,Structure", "system,System", "component,Component"]}
                   disabled={disabled}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_TYPE, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_SSC_TYPE, "")}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -326,7 +318,7 @@ class SSCMetadata extends Component {
                   onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_CLASSIFICATION, [])}
                   disabled={disabled}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_CLASSIFICATION, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_SSC_CLASSIFICATION, "")}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -338,7 +330,7 @@ class SSCMetadata extends Component {
                   onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_FUNCTION, [])}
                   disabled={disabled}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_FUNCTION, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_SSC_FUNCTION, "")}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -350,7 +342,7 @@ class SSCMetadata extends Component {
                   onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_MAINTAINABILITY, [])}
                   disabled={disabled}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MAINTAINABILITY, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_SSC_MAINTAINABILITY, "")}
                 />
               </Grid>
             </Grid>
@@ -369,7 +361,7 @@ class SSCMetadata extends Component {
                   onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_REACTOR_SAFETY_CATEGORY, [])}
                   disabled={no_reactor_safety_functions}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_REACTOR_SAFETY_CATEGORY, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_SSC_REACTOR_SAFETY_CATEGORY, "")}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -381,7 +373,7 @@ class SSCMetadata extends Component {
                   onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_REACTOR_SAFETY_FUNCTION, [])}
                   disabled={no_reactor_safety_functions}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_REACTOR_SAFETY_FUNCTION, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_SSC_REACTOR_SAFETY_FUNCTION, "")}
                 />
               </Grid>
             </Grid>
@@ -400,7 +392,7 @@ class SSCMetadata extends Component {
                   onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_SAFETY_CATEGORY, [])}
                   disabled={no_operations_functions}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_SAFETY_CATEGORY, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_SSC_SAFETY_CATEGORY, "")}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -412,7 +404,7 @@ class SSCMetadata extends Component {
                   onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_SAFETY_FUNCTION, [])}
                   disabled={no_operations_functions}
-                  tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_SAFETY_FUNCTION, "")}
+                  tooltip={getGlossaryValue(glossary, NURIMS_SSC_SAFETY_FUNCTION, "")}
                 />
               </Grid>
             </Grid>

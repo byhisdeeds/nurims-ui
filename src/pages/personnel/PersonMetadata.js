@@ -57,17 +57,9 @@ class PersonMetadata extends Component {
     super(props);
     this.Module = PERSONMETADATA_REF;
     this.person = {};
-    this.glossary = {};
   }
 
   componentDidMount() {
-  }
-
-  setGlossaryTerms = (terms) => {
-    // console.log("SSCMetadata.setGlossaryTerms", terms)
-    for (const term of terms) {
-      this.glossary[term.name] = term.value;
-    }
   }
 
   handleChange = (e) => {
@@ -162,7 +154,7 @@ class PersonMetadata extends Component {
   }
 
   render() {
-    const {properties} = this.props;
+    const {properties, glossary} = this.props;
     const person = this.person;
     const blobUri = getPropertyValue(properties, "bloburi", "/")
     const assignedRole = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
@@ -220,7 +212,7 @@ class PersonMetadata extends Component {
               person, NURIMS_ENTITY_DATE_OF_BIRTH, UNDEFINED_DATE_STRING), UNDEFINED_DATE)}
             onChange={this.handleDobChange}
             disabled={disabled}
-            tooltip={getGlossaryValue(this.glossary, NURIMS_ENTITY_DATE_OF_BIRTH, "")}
+            tooltip={getGlossaryValue(glossary, NURIMS_ENTITY_DATE_OF_BIRTH, "")}
           />
           <FormControl sx={{m: 1, minWidth: 180}}>
             <InputLabel id="sex">Sex</InputLabel>
@@ -293,7 +285,6 @@ class PersonMetadata extends Component {
 
 PersonMetadata.defaultProps = {
   onChange: (msg) => {},
-  properties: {},
 };
 
 export default PersonMetadata;

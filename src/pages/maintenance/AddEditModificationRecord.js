@@ -4,7 +4,6 @@ import {
 } from "@mui/material";
 import {
   CMD_DELETE_ITEM_RECORD,
-  CMD_GET_GLOSSARY_TERMS,
   CMD_GET_ITEM_RECORDS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_REFERRED_TO_ITEM_RECORDS,
@@ -64,10 +63,6 @@ class AddEditModificationRecord extends BaseRecordManager {
   }
 
   componentDidMount() {
-    this.props.send({
-      cmd: CMD_GET_GLOSSARY_TERMS,
-      module: this.Module,
-    });
     this.props.send({
       cmd: CMD_GET_ITEM_RECORDS,
       topic: SSC_TOPIC,
@@ -157,7 +152,7 @@ class AddEditModificationRecord extends BaseRecordManager {
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message,
           [CMD_GET_ITEM_RECORDS, CMD_UPDATE_ITEM_RECORD, CMD_GET_PROVENANCE_RECORDS,
-            CMD_GET_GLOSSARY_TERMS, CMD_GET_REFERRED_TO_ITEM_RECORDS, CMD_DELETE_ITEM_RECORD])) {
+            CMD_GET_REFERRED_TO_ITEM_RECORDS, CMD_DELETE_ITEM_RECORD])) {
           if (isRecordType(message, SSC_RECORD_TYPE)) {
             if (this.listRef.current) {
               this.listRef.current.addRecords(message.response.structures_systems_components, false);
@@ -207,6 +202,7 @@ class AddEditModificationRecord extends BaseRecordManager {
             <SSCModificationRecords
               ref={this.modificationRecordsRef}
               properties={this.props.properties}
+              glossary={this.props.glossary}
               onChange={this.onRecordMetadataChanged}
               saveChanges={this.saveChanges}
               deleteRecord={this.deleteRecord}

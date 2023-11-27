@@ -136,10 +136,6 @@ class MaterialMetadata extends Component {
     })
   }
 
-  componentDidMount() {
-    console.log("componentDidMount - MaterialMetadata.properties", this.state.properties)
-  }
-
   handleChange = (e) => {
     console.log(">>>", e.target.id)
     const material = this.state.material;

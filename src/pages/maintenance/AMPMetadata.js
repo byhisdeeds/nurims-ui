@@ -37,16 +37,7 @@ class AMPMetadata extends Component {
     super(props);
     this.state = {
       ssc: {},
-      properties: props.properties,
     };
-    this.glossary = {};
-  }
-
-  setGlossaryTerms = (terms) => {
-    for (const term of terms) {
-      this.glossary[term.name] = term.value;
-    }
-    this.forceUpdate();
   }
 
   setRecordMetadata = (ssc) => {
@@ -143,7 +134,8 @@ class AMPMetadata extends Component {
   }
 
   render() {
-    const {ssc, properties} = this.state;
+    const {ssc} = this.state;
+    const {properties, glossary} = this.props;
     console.log("AMPMetadata.RENDER - ssc", ssc)
     const disabled = Object.entries(ssc).length === 0;
 
@@ -163,7 +155,7 @@ class AMPMetadata extends Component {
                 <HtmlTooltip
                   placement={'left'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_AMP_AGEING_MECHANISM, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_AMP_AGEING_MECHANISM, "")} />
                   }
                 >
                   <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
@@ -188,7 +180,7 @@ class AMPMetadata extends Component {
                 <HtmlTooltip
                   placement={'left'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_AMP_AGEING_EFFECT, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_AMP_AGEING_EFFECT, "")} />
                   }
                 >
                   <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
@@ -213,7 +205,7 @@ class AMPMetadata extends Component {
                 <HtmlTooltip
                   placement={'left'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_AMP_AGEING_DETECTION_METHOD, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_AMP_AGEING_DETECTION_METHOD, "")} />
                   }
                 >
                   <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
@@ -238,7 +230,7 @@ class AMPMetadata extends Component {
                 <HtmlTooltip
                   placement={'left'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_AMP_AGEING_DEGRADATION, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_AMP_AGEING_DEGRADATION, "")} />
                   }
                 >
                   <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
@@ -269,7 +261,7 @@ class AMPMetadata extends Component {
                 <HtmlTooltip
                   placement={'left'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_AMP_MATERIALS, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_AMP_MATERIALS, "")} />
                   }
                 >
                   <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
@@ -294,7 +286,7 @@ class AMPMetadata extends Component {
                 <HtmlTooltip
                   placement={'left'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_AMP_ACCEPTANCE_CRITERIA, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_AMP_ACCEPTANCE_CRITERIA, "")} />
                   }
                 >
                   <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
@@ -319,7 +311,7 @@ class AMPMetadata extends Component {
                 <HtmlTooltip
                   placement={'left'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_AMP_MITIGATION_STEPS, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_AMP_MITIGATION_STEPS, "")} />
                   }
                 >
                   <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>
@@ -344,7 +336,7 @@ class AMPMetadata extends Component {
                 <HtmlTooltip
                   placement={'left'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_SURVEILLANCE_FREQUENCY, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_SURVEILLANCE_FREQUENCY, "")} />
                   }
                 >
                   <FormControl sx={{ml: 0, mb: 2, width: '100%'}}>

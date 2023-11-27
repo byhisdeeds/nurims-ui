@@ -67,14 +67,12 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
     super(props);
     this.state = {
       record: {},
-      properties: props.properties,
       jobs: [],
       selected_job: {},
       ac_open: false,
       searching: false,
       busy: false,
     };
-    this.glossary = {};
     this.sampleTypes = [];
     this.timeout = null;
     this.Module = "ReactorSampleIrradiationAuthorizationMetadata";
@@ -83,13 +81,6 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   componentWillUnmount() {
     clearTimeout(this.timeout);
     this.timeout = null;
-  }
-
-  setGlossaryTerms = (terms) => {
-    for (const term of terms) {
-      this.glossary[term.name] = term.value;
-    }
-    this.forceUpdate();
   }
 
   setSampleTypes = (types) => {
@@ -225,7 +216,8 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
   };
 
   render() {
-    const {record, properties, selected_job, jobs, searching, busy, ac_open} = this.state;
+    const {record, selected_job, jobs, searching, busy, ac_open} = this.state;
+    const {properties, glossary} = this.props;
     const disabled = Object.entries(record).length === 0;
     const can_authorize =
       isValidUserRole(this.context.user, "irradiation_authorizer");

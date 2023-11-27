@@ -50,7 +50,6 @@ class DosimetryMeasurementMetadata extends Component {
     super(props);
     this.state = {
       measurements: {},
-      properties: props.properties,
       busy: 0,
       data_changed: false,
       selection: {},
@@ -187,7 +186,8 @@ class DosimetryMeasurementMetadata extends Component {
   }
 
   render() {
-    const {properties, busy, data_changed, selection, readonly} = this.state;
+    const {busy, data_changed, selection, readonly} = this.state;
+    const {properties, glossary} = this.props;
     const monitorPeriod = getMonitorPeriod(selection, NURIMS_DOSIMETRY_MONITOR_PERIOD, [null, null]);
     // const doseProviderId = getRecordMetadataValue(measurements, "nurims.entity.doseproviderid", "|").split('|');
     // const wholeBodyMonitor = getRecordMetadataValue(measurements, "nurims.entity.iswholebodymonitored", "false");

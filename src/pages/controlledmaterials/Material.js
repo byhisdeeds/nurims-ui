@@ -3,7 +3,6 @@ import {
   Grid,
 } from "@mui/material";
 import {
-  CMD_GET_GLOSSARY_TERMS,
   CMD_GET_MANUFACTURER_RECORDS,
   CMD_GET_MATERIAL_RECORDS,
   CMD_GET_OWNER_RECORDS,
@@ -48,10 +47,6 @@ class Material extends BaseRecordManager {
   }
 
   componentDidMount() {
-    // this.props.send({
-    //   cmd: CMD_GET_GLOSSARY_TERMS,
-    //   module: this.Module,
-    // });
     this.props.send({
       cmd: CMD_GET_MANUFACTURER_RECORDS,
       module: this.Module,

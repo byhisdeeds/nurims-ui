@@ -12,7 +12,6 @@ import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import {
   CMD_GENERATE_PERSONNEL_DOSE_EVALUATION_PDF,
-  CMD_GET_GLOSSARY_TERMS,
 } from "../../utils/constants";
 import BaseRecordManager from "../../components/BaseRecordManager";
 import {
@@ -49,10 +48,6 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
   }
 
   componentDidMount() {
-    this.props.send({
-      cmd: CMD_GET_GLOSSARY_TERMS,
-      module: this.Module,
-    });
     this.requestGetRecords(false);
   }
 
@@ -71,6 +66,7 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
     });
     this.setState({include_archived: include_archived});
   }
+
   ws_message(message) {
     if (isCommandResponse(message, CMD_GENERATE_PERSONNEL_DOSE_EVALUATION_PDF)) {
       if (this.dataRef.current) {
@@ -133,6 +129,7 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
               ref={this.dataRef}
               send={this.props.send}
               properties={this.props.properties}
+              glossary={this.props.glossary}
               onChange={this.onRecordMetadataChanged}
             />
           </Grid>

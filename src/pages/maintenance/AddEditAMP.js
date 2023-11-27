@@ -4,7 +4,6 @@ import {
   Grid,
 } from "@mui/material";
 import {
-  CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_SSC_RECORDS,
   ROLE_MAINTENANCE_DATA_ENTRY,
@@ -51,19 +50,13 @@ class AddEditAMP extends BaseRecordManager {
 
   componentDidMount() {
     this.props.send({
-      cmd: CMD_GET_GLOSSARY_TERMS,
-      module: this.Module,
-    });
-    this.props.send({
       cmd: CMD_GET_SSC_RECORDS,
       module: this.Module,
     });
   }
 
   ws_message = (message) => {
-    super.ws_message(message, [
-      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
-    ]);
+    super.ws_message(message);
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
@@ -128,6 +121,7 @@ class AddEditAMP extends BaseRecordManager {
             <AMPMetadata
               ref={this.metadataRef}
               properties={this.props.properties}
+              glossary={this.props.glossary}
               onChange={this.onRecordMetadataChanged}
             />
           </Grid>

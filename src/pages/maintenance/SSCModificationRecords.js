@@ -27,7 +27,6 @@ import {
   UNDEFINED_DATE_STRING,
   ITEM_ID,
   ROLE_MAINTENANCE_DATA_ENTRY,
-  CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
   NURIMS_RELATED_ITEM_ID,
   NURIMS_TITLE_SUBTITLE,
@@ -89,7 +88,6 @@ class SSCModificationRecords extends Component {
     this.state = {
       ssc: {},
       selection: {},
-      properties: props.properties,
       metadata_changed: false,
       include_archived: false,
       confirm_remove: false,
@@ -99,14 +97,6 @@ class SSCModificationRecords extends Component {
     this.listRef = React.createRef();
     this.ref = React.createRef();
     this.provenanceRecords = [];
-    this.glossary = {};
-  }
-
-  setGlossaryTerms = (terms) => {
-    console.log(terms)
-    for (const term of terms) {
-      this.glossary[term.name] = term.value;
-    }
   }
 
   handleChange = (e) => {
@@ -202,9 +192,7 @@ class SSCModificationRecords extends Component {
       ConsoleLog(this.Module, "ws_message", "message", message);
     }
     if (messageHasResponse(message)) {
-      if (message.cmd === CMD_GET_GLOSSARY_TERMS) {
-        this.setGlossaryTerms(message.response.terms)
-      } else if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
+      if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
         this.setProvenanceRecords(message.response.provenance)
       } else if (message.cmd === CMD_GET_ITEM_RECORDS) {
         if (this.listRef.current) {
@@ -334,7 +322,8 @@ class SSCModificationRecords extends Component {
   }
 
   render() {
-    const {confirm_remove, ssc, selection, include_archived, metadata_changed, properties, show_provenance_view} = this.state;
+    const {confirm_remove, ssc, selection, include_archived, metadata_changed, show_provenance_view} = this.state;
+    const {properties, glossary} = this.props;
     const no_selection = isRecordEmpty(selection);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "ssc", ssc);
@@ -433,7 +422,7 @@ class SSCModificationRecords extends Component {
                         value={getRecordTitle(selection)}
                         onChange={this.handleChange}
                         disabled={no_selection}
-                        tooltip={""} // {getGlossaryValue(this.glossary, NURIMS_SSC_MAINTENANCE_NAME, "")}
+                        tooltip={""} // {getGlossaryValue(glossary, NURIMS_SSC_MAINTENANCE_NAME, "")}
                         padding={0}
                       />
                     </Grid>
@@ -447,7 +436,7 @@ class SSCModificationRecords extends Component {
                         onChange={this.modificationStartedDateChange}
                         disabled={no_selection}
                         tooltip={getGlossaryValue(
-                          this.glossary, NURIMS_SSC_MODIFICATION_STARTDATE, "")}
+                          glossary, NURIMS_SSC_MODIFICATION_STARTDATE, "")}
                       />
                     </Grid>
                     <Grid item xs={12} sm={3} style={{textAlign: 'center'}}>
@@ -460,7 +449,7 @@ class SSCModificationRecords extends Component {
                         onChange={this.modificationCompletedDateChange}
                         disabled={no_selection}
                         tooltip={getGlossaryValue(
-                          this.glossary, NURIMS_SSC_MODIFICATION_ENDDATE, "")}
+                          glossary, NURIMS_SSC_MODIFICATION_ENDDATE, "")}
                       />
                     </Grid>
                     <Grid item xs={12} sm={3} style={{textAlign: 'center'}}>
@@ -473,7 +462,7 @@ class SSCModificationRecords extends Component {
                         onChange={this.modificationCommissionedDateChange}
                         disabled={no_selection}
                         tooltip={getGlossaryValue(
-                          this.glossary, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE, "")}
+                          glossary, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE, "")}
                       />
                     </Grid>
                     <Grid item xs={12} sm={12}>
@@ -511,7 +500,7 @@ class SSCModificationRecords extends Component {
                         value={getRecordMetadataValue(selection, NURIMS_DESCRIPTION, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")}
+                        tooltip={getGlossaryValue(glossary, NURIMS_DESCRIPTION, "")}
                         lines={5}
                         padding={0}
                       />
@@ -523,7 +512,7 @@ class SSCModificationRecords extends Component {
                         value={getRecordMetadataValue(selection, NURIMS_SSC_MODIFICATION_ACTIONS, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MODIFICATION_ACTIONS, "")}
+                        tooltip={getGlossaryValue(glossary, NURIMS_SSC_MODIFICATION_ACTIONS, "")}
                         lines={5}
                         padding={0}
                       />
@@ -535,7 +524,7 @@ class SSCModificationRecords extends Component {
                         value={getRecordMetadataValue(selection, NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA, "")}
+                        tooltip={getGlossaryValue(glossary, NURIMS_SSC_MODIFICATION_ACCEPTANCE_CRITERIA, "")}
                         padding={0}
                         lines={3}
                       />
@@ -547,7 +536,7 @@ class SSCModificationRecords extends Component {
                         value={getRecordMetadataValue(selection, NURIMS_SSC_MODIFICATION_DOCUMENTS, "")}
                         onChange={this.handleChange}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MODIFICATION_DOCUMENTS, "")}
+                        tooltip={getGlossaryValue(glossary, NURIMS_SSC_MODIFICATION_DOCUMENTS, "")}
                         padding={0}
                         lines={3}
                       />
@@ -562,7 +551,7 @@ class SSCModificationRecords extends Component {
                         onChange={this.handleChange}
                         options={this.context.user.users}
                         disabled={no_selection}
-                        tooltip={getGlossaryValue(this.glossary, NURIMS_SSC_MODIFICATION_PERSONNEL, "")}
+                        tooltip={getGlossaryValue(glossary, NURIMS_SSC_MODIFICATION_PERSONNEL, "")}
                       />
                     </Grid>
                   </Grid>

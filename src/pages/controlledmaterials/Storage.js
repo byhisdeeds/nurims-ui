@@ -3,7 +3,6 @@ import {
   Grid,
 } from "@mui/material";
 import {
-  CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_STORAGE_LOCATION_RECORDS,
   ROLE_CONTROLLED_MATERIAL_DATA_ENTRY,
@@ -44,11 +43,6 @@ class Storage extends BaseRecordManager {
   }
 
   componentDidMount() {
-    // this.props.send({
-    //   cmd: CMD_GET_GLOSSARY_TERMS,
-    //   module: this.Module,
-    // });
-    // // this.getStorageLocationRecords();
     this.requestGetRecords(false, true);
   }
 

@@ -96,7 +96,6 @@ class PersonnelDosimetryEvaluationDataView extends Component {
       groupDataRange: 1,
       measurements: {},
       dosimetryType: "",
-      properties: props.properties,
       busy: 0,
       record: {},
       selection: {},
@@ -487,10 +486,11 @@ class PersonnelDosimetryEvaluationDataView extends Component {
 
   render() {
     const {
-      properties, busy, selection, dosimetryType, options, series, nobs, d0_min, d0_max, d1_min, d1_max,
+      busy, selection, dosimetryType, options, series, nobs, d0_min, d0_max, d1_min, d1_max,
       d0_mean, d1_mean, d0_std, d1_std, d0_skewness, d1_skewness, hoptions, hseries, profile_options, profile_series,
       groupDataRange, record, pdf, pdfReady
     } = this.state;
+    const {properties, glossary} = this.props;
     const monitorPeriod = getMonitorPeriod(selection, NURIMS_DOSIMETRY_MONITOR_PERIOD, [null, null]);
     const defaultUnits = getPropertyValue(properties, "nurims.dosimetry.units", "");
     if (this.context.debug) {
@@ -707,7 +707,8 @@ class PersonnelDosimetryEvaluationDataView extends Component {
 
 PersonnelDosimetryEvaluationDataView.propTypes = {
   send: PropTypes.func.isRequired,
-  properties: PropTypes.object.isRequired,
+  properties: PropTypes.array.isRequired,
+  glossary: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
 }
 

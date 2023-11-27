@@ -442,7 +442,11 @@ class App extends React.Component {
       }
       this.ws.send(JSON.stringify(_msg));
       if (_show_busy && !run_in_background) {
-        this.setState({busy: this.state.busy + 1});
+        this.setState(pstate => {
+          return {
+            busy: pstate.busy + 1
+          }
+        });
       }
     } else {
       enqueueWarningSnackbar("NURIMS server offline!")

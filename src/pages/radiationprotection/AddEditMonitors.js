@@ -6,7 +6,6 @@ import MonitorList from "./MonitorList";
 import MonitorMetadata from "./MonitorMetadata";
 import {
   CMD_DELETE_PERSONNEL_RECORD,
-  CMD_GET_GLOSSARY_TERMS,
   CMD_GET_PROVENANCE_RECORDS,
   FIXED_LOCATION_MONITOR_RECORD,
   ITEM_ID,
@@ -70,10 +69,6 @@ class AddEditMonitors extends BaseRecordManager {
   componentDidMount() {
     document.addEventListener("keydown", this.ctrlKeyPress, false);
     this.requestGetRecords(false, true);
-    this.props.send({
-      cmd: CMD_GET_GLOSSARY_TERMS,
-      module: this.Module,
-    });
   }
 
   componentWillUnmount() {
@@ -134,9 +129,7 @@ class AddEditMonitors extends BaseRecordManager {
   }
 
   ws_message = (message) => {
-    super.ws_message(message, [
-      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
-    ]);
+    super.ws_message(message);
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
@@ -262,6 +255,7 @@ class AddEditMonitors extends BaseRecordManager {
               ref={this.metadataRef}
               onChange={this.onRecordMetadataChanged}
               properties={this.props.properties}
+              glossary={this.props.glossary}
             />
           </Grid>
         </Grid>

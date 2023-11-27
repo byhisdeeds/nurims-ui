@@ -31,12 +31,8 @@ class MonitorMetadata extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      properties: props.properties,
     };
     this.monitor = {};
-  }
-
-  setGlossaryTerms = (params) => {
   }
 
   handleChange = (e) => {
@@ -116,7 +112,7 @@ class MonitorMetadata extends Component {
   }
 
   render() {
-    const {properties} = this.state;
+    const {properties, glossary} = this.props;
     const monitor = this.monitor;
     // const assignedRole = getPropertyValue(properties, NURIMS_ENTITY_ASSIGNED_ROLE, "none,None").split('|');
     const monitorTypes = getPropertyValue(properties, NURIMS_DOSIMETRY_DEVICE_TYPE, "none,None").split('|');

@@ -20,7 +20,6 @@ import {
 } from "../../utils/UserContext";
 import PropTypes from "prop-types";
 import {
-  CMD_GET_GLOSSARY_TERMS,
   CMD_GET_OWNER_RECORDS,
   CMD_GET_PROVENANCE_RECORDS,
   ROLE_CONTROLLED_MATERIAL_DATA_ENTRY
