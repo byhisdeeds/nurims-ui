@@ -16,7 +16,7 @@ import {
   removeMetadataField,
   setMetadataValue,
   setRecordChanged,
-  getGlossaryValue, isRecordType,
+  getGlossaryValue,
 } from "../../utils/MetadataUtils";
 import {
   NURIMS_TITLE,
@@ -69,7 +69,7 @@ import {
   ADDEDITMODIFICATIONRECORD_REF
 } from "./AddEditModificationRecord";
 import {
-  enqueueSuccessSnackbar
+  successfullyUpdatedSSCRecord
 } from "../../utils/SnackbarVariants";
 
 const UNDEFINED_DATE = dayjs(UNDEFINED_DATE_STRING)
@@ -194,8 +194,9 @@ class SSCMaintenanceRecords extends Component {
         }
       } else if (message.cmd === CMD_UPDATE_ITEM_RECORD) {
         const record = message.response.structures_systems_components;
-        enqueueSuccessSnackbar(
-          `Successfully updated modification record ${record.hasOwnProperty(NURIMS_TITLE) ? record[NURIMS_TITLE] : ""}.`);
+        successfullyUpdatedSSCRecord(record);
+        // enqueueSuccessSnackbar(
+        //   `Successfully updated modification record ${record.hasOwnProperty(NURIMS_TITLE) ? record[NURIMS_TITLE] : ""}.`);
         if (this.listRef.current) {
           this.listRef.current.updateRecord(record);
         }

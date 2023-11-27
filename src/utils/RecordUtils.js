@@ -6,12 +6,11 @@ import {
   NURIMS_CREATION_DATE, NURIMS_RELATED_ITEM_ID,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
-  RECORD_KEY, SSC_RECORD_TYPE, SSC_TOPIC,
+  RECORD_KEY,
 } from "./constants";
 import {
   record_uuid
 } from "./MetadataUtils";
-import {ConsoleLog} from "./UserContext";
 
 
 export function onRecordSelectionRetrieveRecord(selection, recordTopic, recordType, module, send){

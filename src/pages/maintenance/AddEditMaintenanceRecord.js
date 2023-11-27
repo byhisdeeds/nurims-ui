@@ -63,7 +63,7 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
   }
 
   componentDidMount() {
-    getRecords(this.recordTopic, this.recordType, this.Module, this.props.send, true);
+    getRecords(this.recordTopic, SSC_RECORD_TYPE, this.Module, this.props.send, true);
     // this.props.send({
     //   cmd: CMD_GET_ITEM_RECORDS,
     //   topic: SSC_TOPIC,

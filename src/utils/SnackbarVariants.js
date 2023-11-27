@@ -1,4 +1,5 @@
 import {enqueueSnackbar} from "notistack";
+import {NURIMS_TITLE} from "./constants";
 
 export function enqueueWarningSnackbar(message, duration, auto_close) {
   const hideAfter = (auto_close || false) ? (duration || 2000) : 8000
@@ -48,4 +49,14 @@ export function enqueueConnectionSnackbar(lost_connection) {
       variant: 'error',
       persist: true
     });
+}
+
+export function successfullyUpdatedSSCRecord(record) {
+  const record_type_text = record.hasOwnProperty("record_type") ?
+    (record.record_type === "ssc_modification_record" ? "modification" :
+    record.record_type === "ssc_maintenance_record" ? "maintenance" :
+    record.record_type === "ssc_record" ? "" : "?") : "?";
+  const title = record.hasOwnProperty(NURIMS_TITLE) ? record[NURIMS_TITLE] : "";
+  enqueueSuccessSnackbar(
+    `Successfully updated ssc ${record_type_text} record '${title}'.`);
 }
