@@ -194,9 +194,8 @@ class SSCMaintenanceRecords extends Component {
         }
       } else if (message.cmd === CMD_UPDATE_ITEM_RECORD) {
         const record = message.response.structures_systems_components;
-        console.log("$$$$$$$$$$$$$$$$$$$$$$$ RECORD: ", record)
         enqueueSuccessSnackbar(
-          `Successfully updated modification record ${Object.keys(record).length === 1 ? record[NURIMS_TITLE] : ""}.`);
+          `Successfully updated modification record ${record.hasOwnProperty(NURIMS_TITLE) ? record[NURIMS_TITLE] : ""}.`);
         if (this.listRef.current) {
           this.listRef.current.updateRecord(record);
         }

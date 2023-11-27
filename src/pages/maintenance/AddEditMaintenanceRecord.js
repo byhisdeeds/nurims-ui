@@ -48,6 +48,12 @@ import {
   record_uuid
 } from "../../utils/MetadataUtils";
 import SSCMaintenanceRecords from "./SSCMaintenanceRecords";
+import {
+  deleteRecord,
+  onRecordSelectionRetrieveRecord,
+  onRecordSelectionRetrieveReferredToRecords,
+  updateChangedRecord
+} from "../../utils/RecordUtils";
 
 export const ADDEDITMAINTENANCERECORD_REF = "AddEditMaintenanceRecord";
 
@@ -68,23 +74,25 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
       topic: SSC_TOPIC,
       record_type: SSC_RECORD_TYPE,
       module: this.Module,
-    });
+    }, true);
   }
 
   onSSCRecordSelection = (selection, include_archived) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
     }
-    this.props.send({
-      cmd: CMD_GET_REFERRED_TO_ITEM_RECORDS,
-      referred_to_item_id: selection.item_id,
-      referred_to_metadata: NURIMS_RELATED_ITEM_ID,
-      "include.withdrawn": include_archived ? "true" : "false",
-      "include.metadata.subtitle": NURIMS_CREATION_DATE,
-      topic: this.recordTopic,
-      record_type: this.recordType,
-      module: this.Module,
-    })
+    onRecordSelectionRetrieveReferredToRecords (selection, include_archived, this.recordTopic, this.recordType,
+                                                this.Module, this.props.send)
+    // this.props.send({
+    //   cmd: CMD_GET_REFERRED_TO_ITEM_RECORDS,
+    //   referred_to_item_id: selection.item_id,
+    //   referred_to_metadata: NURIMS_RELATED_ITEM_ID,
+    //   "include.withdrawn": include_archived ? "true" : "false",
+    //   "include.metadata.subtitle": NURIMS_CREATION_DATE,
+    //   topic: this.recordTopic,
+    //   record_type: this.recordType,
+    //   module: this.Module,
+    // })
     this.setState({selection: selection});
 
     if (this.maintenanceRecordsRef.current) {
@@ -96,16 +104,17 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
     if (this.context.debug) {
       ConsoleLog(this.Module, "onMaintenanceRecordSelection", "selection", selection);
     }
-    if (selection.item_id !== -1) {
-      this.props.send({
-        cmd: CMD_GET_ITEM_RECORDS,
-        item_id: selection[ITEM_ID],
-        topic: this.recordTopic,
-        record_type: this.recordType,
-        "include.metadata": "true",
-        module: this.Module,
-      });
-    }
+    onRecordSelectionRetrieveRecord(selection, this.recordTopic, this.recordType, this.Module, this.props.send);
+    // if (selection.item_id !== -1) {
+    //   this.props.send({
+    //     cmd: CMD_GET_ITEM_RECORDS,
+    //     item_id: selection[ITEM_ID],
+    //     topic: this.recordTopic,
+    //     record_type: this.recordType,
+    //     "include.metadata": "true",
+    //     module: this.Module,
+    //   });
+    // }
   }
 
   saveChanges = (record) => {
@@ -114,40 +123,42 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
       if (this.context.debug) {
         ConsoleLog(this.Module, "saveChanges", record);
       }
-      if (record.item_id === -1 && !record.hasOwnProperty(RECORD_KEY)) {
-        record[RECORD_KEY] = record_uuid();
-      }
-      this.props.send({
-        cmd: CMD_UPDATE_ITEM_RECORD,
-        item_id: record.item_id,
-        "nurims.title": record[NURIMS_TITLE],
-        "nurims.withdrawn": record[NURIMS_WITHDRAWN],
-        "include.metadata.subtitle": NURIMS_CREATION_DATE,
-        return_record: "true",
-        metadata: record.metadata,
-        record_key: record[RECORD_KEY],
-        topic: this.recordTopic,
-        record_type: this.recordType,
-        module: this.Module,
-      })
+      updateChangedRecord(record, this.recordTopic, this.recordType, this.Module, this.props.send);
+      // if (record.item_id === -1 && !record.hasOwnProperty(RECORD_KEY)) {
+      //   record[RECORD_KEY] = record_uuid();
+      // }
+      // this.props.send({
+      //   cmd: CMD_UPDATE_ITEM_RECORD,
+      //   item_id: record.item_id,
+      //   "nurims.title": record[NURIMS_TITLE],
+      //   "nurims.withdrawn": record[NURIMS_WITHDRAWN],
+      //   "include.metadata.subtitle": NURIMS_CREATION_DATE,
+      //   return_record: "true",
+      //   metadata: record.metadata,
+      //   record_key: record[RECORD_KEY],
+      //   topic: this.recordTopic,
+      //   record_type: this.recordType,
+      //   module: this.Module,
+      // })
     }
 
     this.setState({metadata_changed: false})
   }
 
-  deleteRecord = (record) => {
+  deleteMaintenanceRecord = (record) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "deleteRecord", record);
+      ConsoleLog(this.Module, "deleteMaintenanceRecord", record);
     }
-    if (record.item_id === -1 && !record.hasOwnProperty(RECORD_KEY)) {
-      record[RECORD_KEY] = record_uuid();
-    }
-    this.props.send({
-      cmd: CMD_DELETE_ITEM_RECORD,
-      item_id: record.item_id,
-      module: this.Module,
-    })
-    // this.setState({metadata_changed: false})
+    deleteRecord(record, this.Module, this.props.send)
+    // if (record.item_id === -1 && !record.hasOwnProperty(RECORD_KEY)) {
+    //   record[RECORD_KEY] = record_uuid();
+    // }
+    // this.props.send({
+    //   cmd: CMD_DELETE_ITEM_RECORD,
+    //   item_id: record.item_id,
+    //   module: this.Module,
+    // })
+    // // this.setState({metadata_changed: false})
   }
 
   ws_message = (message) => {
@@ -208,7 +219,7 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
               glossary={this.props.glossary}
               onChange={this.onRecordMetadataChanged}
               saveChanges={this.saveChanges}
-              deleteRecord={this.deleteRecord}
+              deleteRecord={this.deleteMaintenanceRecord}
               send={this.props.send}
               getMaintenanceRecords={this.onSSCRecordSelection}
               getMaintenanceRecord={this.onMaintenanceRecordSelection}

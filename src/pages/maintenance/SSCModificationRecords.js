@@ -201,13 +201,12 @@ class SSCModificationRecords extends Component {
       } else if (message.cmd === CMD_UPDATE_ITEM_RECORD) {
         const record = message.response.structures_systems_components;
         enqueueSuccessSnackbar(
-          `Successfully updated modification record ${record.length === 1 ? record[NURIMS_TITLE] : ""}.`);
+          `Successfully updated modification record ${record.hasOwnProperty(NURIMS_TITLE) ? record[NURIMS_TITLE] : ""}.`);
         if (this.listRef.current) {
           this.listRef.current.updateRecord(record);
         }
-      } else if (message.cmd === CMD_GET_ITEM_RECORDS &&
-        isRecordType(message.response.structures_systems_components, SSC_MODIFICATION_RECORD)) {
-        this.setState({selection: message.response.structures_systems_components});
+      } else if (message.cmd === CMD_GET_ITEM_RECORDS) {
+        this.setState({selection: message.response.structures_systems_components[0]});
       }
     }
   }
