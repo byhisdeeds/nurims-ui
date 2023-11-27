@@ -387,6 +387,8 @@ class BaseRecordManager extends Component {
                 if (isCommandResponse(message, handler.cmd)) {
                   if (this.metadataRef.current && this.metadataRef.current.hasOwnProperty(handler.func)) {
                     this.metadataRef.current[handler.func](response[handler.params]);
+                    // message handled return
+                    return;
                   }
                 }
               }

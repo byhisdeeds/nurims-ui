@@ -64,7 +64,6 @@ class Material extends BaseRecordManager {
       cmd: CMD_GET_STORAGE_LOCATION_RECORDS,
       module: this.Module,
     });
-    // this.getMaterialsRecords();
     this.requestGetRecords(false, true);
   }
 
@@ -77,13 +76,12 @@ class Material extends BaseRecordManager {
   }
 
   ws_message = (message) => {
-    super.ws_message(message);
-    // super.ws_message(message, [
-    //   { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" },
-    //   { cmd: CMD_GET_MANUFACTURER_RECORDS, func: "setManufacturers", params: "manufacturer" },
-    //   { cmd: CMD_GET_OWNER_RECORDS, func: "setOwners", params: "owner" },
-    //   { cmd: CMD_GET_STORAGE_LOCATION_RECORDS, func: "setStorageLocations", params: "storage_location" },
-    // ]);
+    // super.ws_message(message);
+    super.ws_message(message, [
+      { cmd: CMD_GET_MANUFACTURER_RECORDS, func: "setManufacturers", params: "manufacturer" },
+      { cmd: CMD_GET_OWNER_RECORDS, func: "setOwners", params: "owner" },
+      { cmd: CMD_GET_STORAGE_LOCATION_RECORDS, func: "setStorageLocations", params: "storage_location" },
+    ]);
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
