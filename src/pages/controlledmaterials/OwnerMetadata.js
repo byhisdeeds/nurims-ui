@@ -24,7 +24,6 @@ class OwnerMetadata extends Component {
     super(props);
     this.state = {
       owner: {},
-      properties: props.properties,
     };
     this.Module = "OwnerMetadata"
   }
@@ -68,7 +67,8 @@ class OwnerMetadata extends Component {
   }
 
   render() {
-    const {owner, properties} = this.state;
+    const {owner} = this.state;
+    const {properties, glossary} = this.props;
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "owner", owner);
     }
@@ -119,7 +119,8 @@ class OwnerMetadata extends Component {
 OwnerMetadata.propTypes = {
   ref: PropTypes.element.isRequired,
   onChange: PropTypes.func.isRequired,
-  properties: PropTypes.object.isRequired,
+  properties: PropTypes.array.isRequired,
+  glossary: PropTypes.object.isRequired,
 }
 
 export default withTheme(OwnerMetadata);

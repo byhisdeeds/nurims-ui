@@ -62,9 +62,10 @@ class Owner extends BaseRecordManager {
   }
 
   ws_message = (message) => {
-    super.ws_message(message, [
-      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
-    ]);
+    super.ws_message(message);
+    // super.ws_message(message, [
+    //   { cmd: CMD_GET_OWNER_RECORDS, func: "setOwners", params: "owner" },
+    // ]);
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
@@ -128,6 +129,7 @@ class Owner extends BaseRecordManager {
               ref={this.metadataRef}
               onChange={this.onRecordMetadataChanged}
               properties={this.props.properties}
+              glossary={this.props.glossary}
             />
           </Grid>
         </Grid>

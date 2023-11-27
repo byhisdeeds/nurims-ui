@@ -135,7 +135,7 @@ const ChatBot = lazy(() => import('./rasa/ChatBot'));
 const UnderDevelopment = lazy(() => import('../components/UnderDevelopment'));
 
 
-export const RasaPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
+export const RasaPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {
   if (actionid === RASA_CHATBOT) {
     return (<ChatBot
       ref={crefs[CHATBOT_REF]}
@@ -144,12 +144,13 @@ export const RasaPackages = (actionid, crefs, menuTitle, user, handleMenuAction,
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   }
 }
 
 
-export const SupportPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
+export const SupportPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {
   if (actionid === SUPPORT_TERMS_AND_DEFINITIONS) {
     return (<TermsAndDefinitions
       ref={crefs[TERMSANDDEFINITIONS_REF]}
@@ -158,11 +159,12 @@ export const SupportPackages = (actionid, crefs, menuTitle, user, handleMenuActi
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   }
 }
 
-export const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
+export const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {
   if (actionid === SYSADMIN_MANAGE_USERS) {
     return (<ManageUsers
       ref={crefs[MANAGEUSERS_REF]}
@@ -172,6 +174,7 @@ export const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handl
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === SYSADMIN_CLEANUP_LARGE_OBJECT_STORE) {
     return (<CleanupLargeObjectStore
@@ -181,6 +184,7 @@ export const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handl
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === SYSADMIN_DISCOVER_ORPHANED_METADATA) {
     return (<DiscoverOrphanedMetadata
@@ -190,11 +194,12 @@ export const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handl
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   }
 }
 
-export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
+export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {
   if (actionid === HR_ADD_EDIT_PERSONNEL) {
     return (<AddEditPersonnel
       ref={crefs[ADDEDITPERSONNEL_REF]}
@@ -203,6 +208,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === HR_UPDATE_MONITORING_STATUS) {
     return (<UpdateMonitoringStatus
@@ -212,6 +218,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === HR_VIEW_PERSONNEL_RECORDS) {
     return (<ViewPersonnelRecords
@@ -221,6 +228,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === HR_UPDATE_TRAINING_RECORD) {
     return (<UnderDevelopment
@@ -230,6 +238,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === HR_ADD_EDIT_TRAINING_PROGRAMME) {
     return (<UnderDevelopment
@@ -239,6 +248,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === HR_SSPI) {
     return (<UnderDevelopment
@@ -248,6 +258,7 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === HR_TPI) {
     return (<UnderDevelopment
@@ -257,11 +268,12 @@ export const HumanResourcePackages = (actionid, crefs, menuTitle, user, handleMe
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   }
 }
 
-export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
+export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {
   if (actionid === CM_VIEW_CONTROLLED_MATERIALS_LIST) {
     return (<ViewMaterialsList
       ref={crefs[VIEWMATERIALSLIST_REF]}
@@ -270,6 +282,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === CM_REGISTER_CONTROLLED_MATERIAL) {
     return (<Material
@@ -279,6 +292,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === CM_REGISTER_CONTROLLED_MATERIAL_STORAGE_LOCATION) {
     return (<Storage
@@ -288,6 +302,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === CM_REGISTER_CONTROLLED_MATERIAL_MANUFACTURER) {
     return (<Manufacturer
@@ -297,6 +312,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === CM_GENERATE_MATERIAL_SURVEILLANCE_SHEET) {
     return (<GenerateMaterialSurveillanceSheet
@@ -306,6 +322,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === CM_UPDATE_MATERIAL_OWNER) {
     return (<Owner
@@ -315,6 +332,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === CM_UPDATE_MATERIAL_SURVEILLANCE) {
     return (<UnderDevelopment
@@ -324,6 +342,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === CM_RADIATION_PROTECTION_SCHEDULE) {
     return (<UnderDevelopment
@@ -333,6 +352,7 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === CM_INVENTORY_LIST) {
     return (<UnderDevelopment
@@ -342,11 +362,12 @@ export const ControlledMaterialPackages = (actionid, crefs, menuTitle, user, han
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   }
 }
 
-export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
+export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {
   if (actionid === SSC_VIEW_SSC_LIST) {
     return (<ViewSSCRecords
       ref={crefs[VIEWSSCRECORDS_REF]}
@@ -355,6 +376,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === SSC_ADD_EDIT_SSC_MODIFICATION_RECORD) {
     return (<AddEditModificationRecord
@@ -364,6 +386,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === SSC_ADD_EDIT_SSC_AMP) {
     return (<AddEditAMP
@@ -373,6 +396,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === SSC_VIEW_AMP_SSC_LIST) {
     return (<ViewAMPRecords
@@ -382,6 +406,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === SSC_ADD_EDIT_SSC) {
     return (<AddEditSSC
@@ -391,6 +416,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === SSC_ADD_EDIT_SSC_MAINTENANCE_RECORD) {
     return (<AddEditMaintenanceRecord
@@ -400,6 +426,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === SSC_GENERATE_SSC_MAINTENANCE_REPORT) {
     return (<GenerateSSCMaintenanceReport
@@ -409,6 +436,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === SSC_GENERATE_AMP_SCHEDULE) {
     return (<UnderDevelopment
@@ -418,6 +446,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === SSC_ADD_EDIT_SSC_MODIFICATION_RECORD) {
     return (<UnderDevelopment
@@ -427,6 +456,7 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === SSC_GENERATE_SSC_MAINTENANCE_SCHEDULE) {
     return (<MaintenanceSchedule
@@ -436,11 +466,12 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   }
 }
 
-export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
+export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {
   if (actionid === BASIC_RP_ADD_EDIT_MONITORS) {
     return (<AddEditMonitors
       ref={crefs[ADDEDITMONITORS_REF]}
@@ -449,6 +480,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS) {
     return (<PersonnelDosimetryMeasurement
@@ -458,6 +490,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS) {
     return (<MonitorDosimetryMeasurement
@@ -467,6 +500,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RP_PERSONNEL_DOSIMETRY_EVALUATION) {
     return (<PersonnelDosimetryEvaluation
@@ -476,6 +510,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RP_PERSONNEL_DOSIMETRY_REPORT) {
     return (<PersonnelDosimetryReport
@@ -485,6 +520,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RP_MONITOR_LIST) {
     return (<UnderDevelopment
@@ -494,6 +530,7 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RP_MONITOR_DATA) {
     return (<UnderDevelopment
@@ -503,11 +540,12 @@ export const RadiationProtectionPackages = (actionid, crefs, menuTitle, user, ha
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   }
 }
 
-export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
+export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {
   if (actionid === PRO_IMPORT_ICENS_PERSONNEL) {
     return (<ImportICENSPersonnel
       ref={crefs["ImportICENSPersonnel"]}
@@ -516,6 +554,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS) {
     return (<ImportICENSControlledMaterialManufacturers
@@ -525,6 +564,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS) {
     return (<ImportICENSControlledMaterialStorageLocations
@@ -534,6 +574,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === PRO_IMPORT_ICENS_CONTROLLED_MATERIALS) {
     return (<ImportICENSControlledMaterials
@@ -543,6 +584,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === PRO_IMPORT_ICENS_MONITORS) {
     return (<ImportICENSMonitors
@@ -552,6 +594,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS) {
     return (<AddEditReactorOperatingRuns
@@ -561,6 +604,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA) {
     return (<AddEditIrradiatedSamples
@@ -570,6 +614,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RO_REACTOR_OPERATIONS_REPORT) {
     return (<ReactorOperationsReport
@@ -579,6 +624,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RO_ADD_EDIT_REACTOR_WATER_SAMPLES) {
     return (<AddEditReactorWaterSamples
@@ -588,6 +634,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION) {
     return (<AddEditReactorSampleIrradiationAuthorization
@@ -597,6 +644,7 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === RO_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF) {
     return (<GenerateReactorSampleIrradiationAuthorizationPdf
@@ -606,11 +654,12 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   }
 }
 
-export const OrgPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
+export const OrgPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {
   if (actionid === ORG_EDIT_DETAILS) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
@@ -619,6 +668,7 @@ export const OrgPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === ORG_STATUTORY_REQUIREMENTS) {
     return (<UnderDevelopment
@@ -628,6 +678,7 @@ export const OrgPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === ORG_MAINTAIN_ORGANISATION_DOCUMENTS) {
     return (<UnderDevelopment
@@ -637,11 +688,12 @@ export const OrgPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   }
 }
 
-export const EmergencyPreparednessPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, puk) => {
+export const EmergencyPreparednessPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {
   if (actionid === EP_CONCEPT_OF_OPERATION) {
     return (<UnderDevelopment
       ref={crefs[UNDERDEVELOPMENT_REF]}
@@ -650,6 +702,7 @@ export const EmergencyPreparednessPackages = (actionid, crefs, menuTitle, user, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   } else if (actionid === EP_ADD_EDIT_EMERGENCY_SCENARIOS) {
     return (<UnderDevelopment
@@ -659,6 +712,7 @@ export const EmergencyPreparednessPackages = (actionid, crefs, menuTitle, user, 
       onClick={handleMenuAction}
       send={send}
       properties={properties}
+      glossary={glossary}
     />)
   }
 }

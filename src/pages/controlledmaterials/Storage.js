@@ -16,7 +16,7 @@ import {
 } from "../../components/UtilityDialogs";
 import StorageList from "./StorageList";
 import StorageMetadata from "./StorageMetadata";
-import {UserContext} from "../../utils/UserContext";
+import {ConsoleLog, UserContext} from "../../utils/UserContext";
 import {
   TitleComponent,
   AddRemoveArchiveSaveSubmitProvenanceButtonPanel
@@ -44,11 +44,11 @@ class Storage extends BaseRecordManager {
   }
 
   componentDidMount() {
-    this.props.send({
-      cmd: CMD_GET_GLOSSARY_TERMS,
-      module: this.Module,
-    });
-    // this.getStorageLocationRecords();
+    // this.props.send({
+    //   cmd: CMD_GET_GLOSSARY_TERMS,
+    //   module: this.Module,
+    // });
+    // // this.getStorageLocationRecords();
     this.requestGetRecords(false, true);
   }
 
@@ -58,13 +58,14 @@ class Storage extends BaseRecordManager {
       "include.withdrawn": "false",
       "include.metadata": "false",
       module: this.Module,
-    });
+    }, true);
   }
 
   ws_message = (message) => {
-    super.ws_message(message, [
-      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
-    ]);
+    super.ws_message(message);
+    // super.ws_message(message, [
+    //   {cmd: CMD_GET_STORAGE_LOCATION_RECORDS, func: "setStorageLocations", params: "storage_location"},
+    // ]);
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
@@ -93,7 +94,9 @@ class Storage extends BaseRecordManager {
   render() {
     const {metadata_changed, confirm_remove, selection, show_provenance_view, include_archived} = this.state;
     const {user} = this.props;
-    console.log("render - RECORD_TYPE", this.recordTopic);
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "render", "recordTopic", this.recordTopic);
+    }
     return (
       <React.Fragment>
         <ConfirmRemoveRecordDialog open={confirm_remove}
@@ -126,6 +129,7 @@ class Storage extends BaseRecordManager {
               ref={this.metadataRef}
               onChange={this.onRecordMetadataChanged}
               properties={this.props.properties}
+              glossary={this.props.glossary}
             />
           </Grid>
         </Grid>

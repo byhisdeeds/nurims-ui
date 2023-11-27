@@ -68,7 +68,6 @@ class MaterialMetadata extends Component {
     this.ref = React.createRef();
     this.pdfRef = React.createRef();
     this.tooltipRef = React.createRef();
-    this.glossary = {};
     this.manufacturers = [];
     this.owners = [];
     this.storageLocations = [];
@@ -267,12 +266,12 @@ class MaterialMetadata extends Component {
     this.props.onChange(true);
   }
 
-  setGlossaryTerms = (terms) => {
-    console.log("MaterialMetadata.setGlossaryTerms", terms)
-    for (const term of terms) {
-      this.glossary[term.name] = term.value;
-    }
-  }
+  // setGlossaryTerms = (terms) => {
+  //   console.log("MaterialMetadata.setGlossaryTerms", terms)
+  //   for (const term of terms) {
+  //     this.glossary[term.name] = term.value;
+  //   }
+  // }
 
   setManufacturers = (manufacturers) => {
     console.log("MaterialMetadata.setManufacturers", manufacturers)
@@ -388,7 +387,7 @@ class MaterialMetadata extends Component {
 
   render() {
     const {material} = this.state;
-    const {properties} = this.props;
+    const {properties, glossary} = this.props;
     const blobUri = getPropertyValue(properties, "bloburi", "/")
     const materialTypes = getPropertyValue(properties, NURIMS_MATERIAL_TYPE, "").split('|');
     if (this.context.debug) {
@@ -424,7 +423,7 @@ class MaterialMetadata extends Component {
                     value={material.hasOwnProperty(NURIMS_TITLE) ? material[NURIMS_TITLE] : ""}
                     onChange={this.handleChange}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_TITLE, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_TITLE, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -436,7 +435,7 @@ class MaterialMetadata extends Component {
                     value={getRecordMetadataValue(material, NURIMS_MATERIAL_ID, "")}
                     onChange={this.handleChange}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_ID, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_MATERIAL_ID, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -449,7 +448,7 @@ class MaterialMetadata extends Component {
                     onChange={this.handleMaterialTypeChange}
                     options={materialTypes}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_TYPE, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_MATERIAL_TYPE, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -466,7 +465,7 @@ class MaterialMetadata extends Component {
                     value={getRecordMetadataValue(material, NURIMS_DESCRIPTION, "")}
                     onChange={this.handleChange}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_DESCRIPTION, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -478,7 +477,7 @@ class MaterialMetadata extends Component {
                     onChange={this.handleMaterialClassificationChange}
                     options={materialClassification}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_CLASSIFICATION, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_MATERIAL_CLASSIFICATION, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -488,7 +487,7 @@ class MaterialMetadata extends Component {
                     value={getDateFromDateString(getRecordMetadataValue(material, NURIMS_MATERIAL_REGISTRATION_DATE, "1970-01-01"), null)}
                     onChange={this.handleRegistrationDateChange}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_REGISTRATION_DATE, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_MATERIAL_REGISTRATION_DATE, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -502,7 +501,7 @@ class MaterialMetadata extends Component {
                     onChange={this.handleMaterialManufacturerChange}
                     options={this.manufacturers}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_MANUFACTURER_RECORD, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_MATERIAL_MANUFACTURER_RECORD, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -514,7 +513,7 @@ class MaterialMetadata extends Component {
                     onChange={this.handleMaterialOwnerChange}
                     options={this.owners}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_OWNER_RECORD, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_MATERIAL_OWNER_RECORD, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -526,7 +525,7 @@ class MaterialMetadata extends Component {
                     onChange={this.handleInventoryStatusChange}
                     options={inventoryStatus}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_INVENTORY_STATUS, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_MATERIAL_INVENTORY_STATUS, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -540,7 +539,7 @@ class MaterialMetadata extends Component {
                     onChange={this.handlePhysicalFormChange}
                     options={physicalForm}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_PHYSICAL_FORM, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_MATERIAL_PHYSICAL_FORM, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -552,7 +551,7 @@ class MaterialMetadata extends Component {
                     onChange={this.handleStorageLocationRecordChange}
                     options={this.storageLocations}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_MATERIAL_STORAGE_LOCATION_RECORD, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -589,7 +588,7 @@ class MaterialMetadata extends Component {
                     onChange={this.handleLeakTestSurveillanceFrequencyChange}
                     options={surveillanceFrequency}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_LEAK_TEST_SURVEILLANCE_FREQUENCY, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -601,7 +600,7 @@ class MaterialMetadata extends Component {
                     onChange={this.handleInventorySurveillanceFrequencyChange}
                     options={surveillanceFrequency}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_INVENTORY_SURVEILLANCE_FREQUENCY, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -613,7 +612,7 @@ class MaterialMetadata extends Component {
                     onChange={this.handleActivitySurveillanceFrequencyChange}
                     options={surveillanceFrequency}
                     disabled={disabled}
-                    tooltip={getGlossaryValue(this.glossary, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")}
+                    tooltip={getGlossaryValue(glossary, NURIMS_ACTIVITY_SURVEILLANCE_FREQUENCY, "")}
                     // target={this.tooltipRef}
                   />
                 </Grid>
@@ -635,7 +634,7 @@ class MaterialMetadata extends Component {
                   <HtmlTooltip
                     placement={'left'}
                     title={
-                      <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_IMAGE, "")} />
+                      <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_MATERIAL_IMAGE, "")} />
                     }
                   >
                     <label htmlFor="load-material-image">
@@ -661,7 +660,7 @@ class MaterialMetadata extends Component {
                     <HtmlTooltip
                       placement={'left'}
                       title={
-                        <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_DOCUMENTS, "")} />
+                        <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_MATERIAL_DOCUMENTS, "")} />
                       }
                     >
                       <label htmlFor="load-material-doc">

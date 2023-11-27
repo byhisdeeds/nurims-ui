@@ -33,7 +33,7 @@ import {
   CMD_GET_USER_RECORDS,
   CMD_GET_SESSION_INFO,
   MY_ACCOUNT,
-  SETTINGS
+  SETTINGS, CMD_GET_GLOSSARY_TERMS
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -123,6 +123,7 @@ import {
   isValidMessageSignature,
   messageResponseStatusOk
 } from "./utils/WebsocketUtils";
+import {setGlossaryTerms} from "./utils/GlossaryUtils";
 
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));
@@ -192,6 +193,7 @@ class App extends React.Component {
     this.puk = [];
     this.session_id = "";
     this.properties = [];
+    this.glossary = {};
     this.menuTitle = "";
     this.ws = null;
     this.mounted = false;
@@ -346,6 +348,9 @@ class App extends React.Component {
                 enqueueErrorSnackbar(message.response.message);
               }
               this.forceUpdate();
+            } else if (isCommandResponse(message, CMD_GET_GLOSSARY_TERMS)) {
+              setGlossaryTerms(this.glossary, message.response.terms)
+              // this.forceUpdate();
             } else if (isCommandResponse(message, CMD_GET_SYSTEM_PROPERTIES)) {
               for (const property of message.response.properties) {
                 setPropertyValue(this.properties, property.name, property.value);
@@ -524,6 +529,9 @@ class App extends React.Component {
     this.send({
       cmd: CMD_GET_SYSTEM_PROPERTIES,
     }, false, false);
+    this.send({
+      cmd: CMD_GET_GLOSSARY_TERMS,
+    }, false, false);
     // get list of all registered users
     this.send({
       cmd: CMD_GET_USER_RECORDS,
@@ -610,16 +618,47 @@ class App extends React.Component {
                           properties={this.properties}
                         />
                       }
-                      {RasaPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
-                      {SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
-                      {SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
-                      {SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
-                      {ControlledMaterialPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
-                      {HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
-                      {RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
-                      {IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
-                      {OrgPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
-                      {EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction, this.send, this.properties, this.puk)}
+                      {
+                        RasaPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          this.send, this.properties, this.glossary, this.puk)
+                      }
+                      {
+                        SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          this.send, this.properties, this.glossary, this.puk)
+                      }
+                      {
+                        SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          this.send, this.properties, this.glossary, this.puk)
+                      }
+                      {
+                        SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          this.send, this.properties, this.glossary, this.puk)
+                      }
+                      {
+                        ControlledMaterialPackages(
+                          actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          this.send, this.properties, this.glossary, this.puk)
+                      }
+                      {
+                        HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          this.send, this.properties, this.glossary, this.puk)
+                      }
+                      {
+                        RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user,
+                          this.handleMenuAction, this.send, this.properties, this.glossary, this.puk)
+                      }
+                      {
+                        IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          this.send, this.properties, this.glossary, this.puk)
+                      }
+                      {
+                        OrgPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          this.send, this.properties, this.glossary, this.puk)
+                      }
+                      {
+                        EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.user,
+                          this.handleMenuAction, this.send, this.properties, this.glossary, this.puk)
+                      }
                       <LogWindow
                         ref={this.logRef}
                         logs={this.logs}

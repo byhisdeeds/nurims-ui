@@ -21,7 +21,6 @@ class ManufacturerMetadata extends Component {
     super(props);
     this.state = {
       manufacturer: {},
-      properties: props.properties,
     };
   }
 
@@ -196,7 +195,8 @@ class ManufacturerMetadata extends Component {
   }
 
   render() {
-    const {manufacturer, properties} = this.state;
+    const {manufacturer} = this.state;
+    const {properties, glossary} = this.props;
     console.log("ManufacturerMetadata.RENDER - manufacturer", manufacturer)
     return (
       <Box
@@ -245,11 +245,12 @@ class ManufacturerMetadata extends Component {
 ManufacturerMetadata.propTypes = {
   ref: PropTypes.element.isRequired,
   onChange: PropTypes.func.isRequired,
-  properties: PropTypes.func.isRequired,
+  properties: PropTypes.array.isRequired,
+  glossary: PropTypes.object.isRequired,
 }
 
 ManufacturerMetadata.defaultProps = {
-  onCHange: (msg) => {
+  onChange: (msg) => {
   },
 };
 

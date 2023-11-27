@@ -48,10 +48,10 @@ class Material extends BaseRecordManager {
   }
 
   componentDidMount() {
-    this.props.send({
-      cmd: CMD_GET_GLOSSARY_TERMS,
-      module: this.Module,
-    });
+    // this.props.send({
+    //   cmd: CMD_GET_GLOSSARY_TERMS,
+    //   module: this.Module,
+    // });
     this.props.send({
       cmd: CMD_GET_MANUFACTURER_RECORDS,
       module: this.Module,
@@ -77,12 +77,13 @@ class Material extends BaseRecordManager {
   }
 
   ws_message = (message) => {
-    super.ws_message(message, [
-      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" },
-      { cmd: CMD_GET_MANUFACTURER_RECORDS, func: "setManufacturers", params: "manufacturer" },
-      { cmd: CMD_GET_OWNER_RECORDS, func: "setOwners", params: "owner" },
-      { cmd: CMD_GET_STORAGE_LOCATION_RECORDS, func: "setStorageLocations", params: "storage_location" },
-    ]);
+    super.ws_message(message);
+    // super.ws_message(message, [
+    //   { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" },
+    //   { cmd: CMD_GET_MANUFACTURER_RECORDS, func: "setManufacturers", params: "manufacturer" },
+    //   { cmd: CMD_GET_OWNER_RECORDS, func: "setOwners", params: "owner" },
+    //   { cmd: CMD_GET_STORAGE_LOCATION_RECORDS, func: "setStorageLocations", params: "storage_location" },
+    // ]);
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
@@ -144,6 +145,7 @@ class Material extends BaseRecordManager {
               ref={this.metadataRef}
               onChange={this.onRecordMetadataChanged}
               properties={this.props.properties}
+              glossary={this.props.glossary}
             />
           </Grid>
         </Grid>

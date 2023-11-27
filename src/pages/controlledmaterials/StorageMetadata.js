@@ -80,17 +80,17 @@ class StorageMetadata extends Component {
       marker_bounds: markerBounds(),
     };
     this.Module = STORAGEMETADATA_REF;
-    this.glossary = {};
+    // this.glossary = {};
     this.mapRef = React.createRef();
     this.markerRef = React.createRef();
   }
 
-  setGlossaryTerms = (terms) => {
-    for (const term of terms) {
-      this.glossary[term.name] = term.value;
-    }
-    this.forceUpdate();
-  }
+  // setGlossaryTerms = (terms) => {
+  //   for (const term of terms) {
+  //     this.glossary[term.name] = term.value;
+  //   }
+  //   this.forceUpdate();
+  // }
 
   handleChange = (e) => {
     // console.log(">>>", e.target.id)
@@ -231,7 +231,7 @@ class StorageMetadata extends Component {
 
   render() {
     const {storage, marker_bounds} = this.state;
-    const {properties} = this.props;
+    const {properties, glossary} = this.props;
     const blobUri = getPropertyValue(properties, "bloburi", "/")
     const storageLocation = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_LOCATION,
       {easting: 0, northing: 0, marker: defaultMarkerIcon});
@@ -258,7 +258,7 @@ class StorageMetadata extends Component {
                 <HtmlTooltip
                   placement={'bottom-start'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_TITLE, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_TITLE, "")} />
                   }
                 >
                   <TextField
@@ -274,7 +274,7 @@ class StorageMetadata extends Component {
                 <HtmlTooltip
                   placement={'bottom-start'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_DESCRIPTION, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_DESCRIPTION, "")} />
                   }
                 >
                   <TextField
@@ -295,7 +295,7 @@ class StorageMetadata extends Component {
                 <HtmlTooltip
                   placement={'bottom-start'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_STORAGE_LOCATION, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_MATERIAL_STORAGE_LOCATION, "")} />
                   }
                 >
                   <TextField
@@ -312,7 +312,7 @@ class StorageMetadata extends Component {
                 <HtmlTooltip
                   placement={'bottom-start'}
                   title={
-                    <TooltipText htmlText={getGlossaryValue(this.glossary, NURIMS_MATERIAL_STORAGE_LOCATION, "")} />
+                    <TooltipText htmlText={getGlossaryValue(glossary, NURIMS_MATERIAL_STORAGE_LOCATION, "")} />
                   }
                 >
                   <TextField
@@ -469,7 +469,8 @@ class StorageMetadata extends Component {
 
 StorageMetadata.propTypes = {
   ref: PropTypes.element.isRequired,
-  properties: PropTypes.object.isRequired,
+  properties: PropTypes.array.isRequired,
+  glossary: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   locationMapInitialZoom: PropTypes.number,
   locationMapMaxZoom: PropTypes.number,

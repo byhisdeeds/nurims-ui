@@ -5,7 +5,7 @@ import {
 import {
   CMD_GET_GLOSSARY_TERMS,
   CMD_GET_MANUFACTURER_RECORDS,
-  CMD_GET_PROVENANCE_RECORDS,
+  CMD_GET_PROVENANCE_RECORDS, CMD_GET_STORAGE_LOCATION_RECORDS,
   ROLE_CONTROLLED_MATERIAL_DATA_ENTRY,
 } from "../../utils/constants";
 
@@ -61,9 +61,10 @@ class Manufacturer extends BaseRecordManager {
   }
 
   ws_message = (message) => {
-    super.ws_message(message, [
-      { cmd: CMD_GET_GLOSSARY_TERMS, func: "setGlossaryTerms", params: "terms" }
-    ]);
+    super.ws_message(message);
+    // super.ws_message(message, [
+    //   {cmd: CMD_GET_MANUFACTURER_RECORDS, func: "setManufacturers", params: "manufacturer"},
+    // ]);
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
@@ -128,6 +129,7 @@ class Manufacturer extends BaseRecordManager {
               ref={this.metadataRef}
               onChange={this.onRecordMetadataChanged}
               properties={this.props.properties}
+              glossary={this.props.glossary}
             />
           </Grid>
         </Grid>
