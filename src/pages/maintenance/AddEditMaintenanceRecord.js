@@ -123,10 +123,11 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
         "nurims.title": record[NURIMS_TITLE],
         "nurims.withdrawn": record[NURIMS_WITHDRAWN],
         "include.metadata.subtitle": NURIMS_CREATION_DATE,
+        return_record: "true",
         metadata: record.metadata,
         record_key: record[RECORD_KEY],
-        topic: SSC_TOPIC,
-        record_type: record[RECORD_TYPE],
+        topic: this.recordTopic,
+        record_type: this.recordType,
         module: this.Module,
       })
     }

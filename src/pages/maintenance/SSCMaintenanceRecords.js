@@ -194,8 +194,9 @@ class SSCMaintenanceRecords extends Component {
         }
       } else if (message.cmd === CMD_UPDATE_ITEM_RECORD) {
         const record = message.response.structures_systems_components;
+        console.log("$$$$$$$$$$$$$$$$$$$$$$$ RECORD: ", record)
         enqueueSuccessSnackbar(
-          `Successfully updated modification record ${record.length === 1 ? record[NURIMS_TITLE] : ""}.`);
+          `Successfully updated modification record ${Object.keys(record).length === 1 ? record[NURIMS_TITLE] : ""}.`);
         if (this.listRef.current) {
           this.listRef.current.updateRecord(record);
         }
@@ -317,10 +318,9 @@ class SSCMaintenanceRecords extends Component {
   render() {
     const {confirm_remove, ssc, selection, include_archived, metadata_changed, show_provenance_view} = this.state;
     const {properties, glossary} = this.props;
-    console.log("RRRRRRRRRRRR", selection)
     const no_selection = isRecordEmpty(selection);
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "users", this.context.user);
+      ConsoleLog(this.Module, "render", "selection", selection);
     }
     return (
       <React.Fragment>
@@ -340,7 +340,7 @@ class SSCMaintenanceRecords extends Component {
               ref={this.listRef}
               onListItemSelection={this.onMaintenanceRecordSelection}
               requestGetRecords={this.getMaintenanceRecords}
-              title={`${ssc.hasOwnProperty(NURIMS_TITLE) ? "'" + ssc[NURIMS_TITLE] + "'" : ""} Modification Records`}
+              title={`${ssc.hasOwnProperty(NURIMS_TITLE) ? "'" + ssc[NURIMS_TITLE] + "'" : ""} Maintenance Records`}
               enableRecordArchiveSwitch={true}
               includeArchived={include_archived}
               enableRowFilter={true}

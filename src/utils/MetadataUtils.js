@@ -510,8 +510,6 @@ export function new_record(item_id, title, withdrawn, createdby, fullname, recor
     {"nurims.createdby": (createdby) ? (fullname) ? `${fullname} (${createdby})` : createdby : ""},
     {"nurims.creationdate": dayjs().toISOString()}
   ];
-
-  console.log("???????", record)
   return record;
 }
 
