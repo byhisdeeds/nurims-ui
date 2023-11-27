@@ -61,9 +61,6 @@ class Manufacturer extends BaseRecordManager {
 
   ws_message = (message) => {
     super.ws_message(message);
-    // super.ws_message(message, [
-    //   {cmd: CMD_GET_MANUFACTURER_RECORDS, func: "setManufacturers", params: "manufacturer"},
-    // ]);
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {

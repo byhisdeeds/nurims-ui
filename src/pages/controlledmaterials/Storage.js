@@ -57,9 +57,6 @@ class Storage extends BaseRecordManager {
 
   ws_message = (message) => {
     super.ws_message(message);
-    // super.ws_message(message, [
-    //   {cmd: CMD_GET_STORAGE_LOCATION_RECORDS, func: "setStorageLocations", params: "storage_location"},
-    // ]);
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {

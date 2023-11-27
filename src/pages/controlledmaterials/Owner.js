@@ -51,20 +51,17 @@ class Owner extends BaseRecordManager {
     this.requestGetRecords(false, true);
   }
 
-  getOwnerRecords = () => {
-    this.props.send({
-      cmd: CMD_GET_OWNER_RECORDS,
-      "include.withdrawn": "false",
-      "include.metadata": "false",
-      module: this.Module,
-    });
-  }
+  // getOwnerRecords = () => {
+  //   this.props.send({
+  //     cmd: CMD_GET_OWNER_RECORDS,
+  //     "include.withdrawn": "false",
+  //     "include.metadata": "false",
+  //     module: this.Module,
+  //   });
+  // }
 
   ws_message = (message) => {
     super.ws_message(message);
-    // super.ws_message(message, [
-    //   { cmd: CMD_GET_OWNER_RECORDS, func: "setOwners", params: "owner" },
-    // ]);
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
