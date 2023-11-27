@@ -42,7 +42,7 @@ import {
   NURIMS_SSC_MODIFICATION_DOCUMENTS,
   CMD_UPDATE_ITEM_RECORD,
   CMD_GET_ITEM_RECORDS,
-  SSC_MODIFICATION_RECORD,
+  SSC_MODIFICATION_RECORD, CMD_GET_REFERRED_TO_ITEM_RECORDS,
 } from "../../utils/constants";
 import dayjs from 'dayjs';
 import {
@@ -194,7 +194,7 @@ class SSCModificationRecords extends Component {
     if (messageHasResponse(message)) {
       if (message.cmd === CMD_GET_PROVENANCE_RECORDS) {
         this.setProvenanceRecords(message.response.provenance)
-      } else if (message.cmd === CMD_GET_ITEM_RECORDS) {
+      } else if (message.cmd === CMD_GET_REFERRED_TO_ITEM_RECORDS) {
         if (this.listRef.current) {
           this.listRef.current.setRecords(message.response.structures_systems_components);
         }
@@ -282,7 +282,7 @@ class SSCModificationRecords extends Component {
       ConsoleLog(this.Module, "proceedWithDelete", "selection", selection);
     }
     if (this.listRef.current) {
-      this.listRef.current.removeRecord(selection)
+      this.listRef.current.removeRecord(selection, true)
     }
     this.setState({confirm_remove: false, metadata_changed: false});
     this.props.deleteRecord(selection);

@@ -52,11 +52,11 @@ class PagedRecordList extends React.Component {
     this.allRows = [];
   }
 
-  removeRecord = (record) => {
+  removeRecord = (record, match_by_id) => {
     for(let i = 0; i < this.rows.length; i++){
-      if (this.rows[i] === record) {
+      if (((match_by_id) && this.rows[i].item_id === record.item_id) || this.rows[i] === record) {
         this.rows.splice(i, 1);
-        this.setState({ selected: {}} );
+        this.setState({ selected: {} });
         return;
       }
     }

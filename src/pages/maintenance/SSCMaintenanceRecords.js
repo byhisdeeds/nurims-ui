@@ -38,7 +38,7 @@ import {
   CMD_GET_REFERRED_TO_ITEM_RECORDS,
   CMD_UPDATE_ITEM_RECORD,
   SSC_MAINTENANCE_RECORD,
-  CMD_GET_ITEM_RECORDS,
+  CMD_GET_ITEM_RECORDS, CMD_DELETE_ITEM_RECORD,
 } from "../../utils/constants";
 import dayjs from 'dayjs';
 import {
@@ -275,7 +275,7 @@ class SSCMaintenanceRecords extends Component {
       ConsoleLog(this.Module, "proceedWithDelete", "selection", selection);
     }
     if (this.listRef.current) {
-      this.listRef.current.removeRecord(selection)
+      this.listRef.current.removeRecord(selection, true)
     }
     this.setState({confirm_remove: false, metadata_changed: false});
     this.props.deleteRecord(selection);
