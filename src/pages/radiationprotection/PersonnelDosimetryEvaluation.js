@@ -41,6 +41,7 @@ class PersonnelDosimetryEvaluation extends BaseRecordManager {
       confirm_remove: false,
     }
     this.recordTopic = "personnel";
+    this.recordType = "personnel_record";
     this.listTitle = "Personnel";
     this.Module = PERSONNELDOSIMETRYEVALUATION_REF;
     this.listRef = React.createRef();

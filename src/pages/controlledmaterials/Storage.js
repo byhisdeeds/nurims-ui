@@ -39,6 +39,7 @@ class Storage extends BaseRecordManager {
     this.state["show_provenance_view"] = false;
     this.Module = STORAGE_REF;
     this.recordTopic = "storage_location";
+    this.recordType = "storage_record";
     this.provenanceRecords = [];
   }
 

@@ -97,7 +97,7 @@ class OperatingRunMetadata extends Component {
                   onDelete={false}
                   onEdit={this.editRunData}
                   theme={"bright"}
-                  collapsed={2}
+                  collapsed={1}
                   src={stats}
                 />
               </Grid>

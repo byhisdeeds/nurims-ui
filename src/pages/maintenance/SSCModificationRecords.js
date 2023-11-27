@@ -233,7 +233,8 @@ class SSCModificationRecords extends Component {
         "New Modification Record",
         0,
         this.context.user.profile.username,
-        this.context.user.profile.fullname
+        this.context.user.profile.fullname,
+        SSC_MODIFICATION_RECORD
       )], false);
       this.setState({metadata_changed: true});
     }

@@ -43,6 +43,7 @@ class Material extends BaseRecordManager {
     this.state["show_provenance_view"] = false;
     this.Module = MATERIAL_REF;
     this.recordTopic = "material";
+    this.recordType = "material_record";
     this.provenanceRecords = [];
   }
 

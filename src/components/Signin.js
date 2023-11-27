@@ -123,11 +123,11 @@ class Signin extends React.Component {
           } else {
             localStorage.removeItem('rememberme');
           }
+          this.props.onValidAuthentication(this.state.session_id)
         } else {
           enqueueWarningSnackbar(response.message);
         }
         this.authService.authenticate(response.valid, response.profile);
-        this.props.onValidAuthentication(this.state.session_id)
       }
     } else {
       enqueueWarningSnackbar(response.message);

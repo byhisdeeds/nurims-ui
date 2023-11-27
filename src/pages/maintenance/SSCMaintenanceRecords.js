@@ -224,10 +224,11 @@ class SSCMaintenanceRecords extends Component {
     if (this.listRef.current) {
       this.listRef.current.addRecords([new_record(
         null,
-        "New Modification Record",
+        "New Maintenance Record",
         0,
         this.context.user.profile.username,
-        this.context.user.profile.fullname
+        this.context.user.profile.fullname,
+        SSC_MAINTENANCE_RECORD
       )], false);
       this.setState({metadata_changed: true});
     }

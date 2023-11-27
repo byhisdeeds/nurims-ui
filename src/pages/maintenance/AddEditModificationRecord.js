@@ -59,6 +59,7 @@ class AddEditModificationRecord extends BaseRecordManager {
     super(props);
     this.Module = ADDEDITMODIFICATIONRECORD_REF;
     this.recordTopic = SSC_TOPIC;
+    this.recordType = SSC_MODIFICATION_RECORD;
     this.modificationRecordsRef = React.createRef();
   }
 

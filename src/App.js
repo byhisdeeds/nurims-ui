@@ -335,13 +335,8 @@ class App extends React.Component {
               this.setState(pstate => {
                 return {
                   background_tasks_active: message.hasOwnProperty("tasks_active") && message.tasks_active === "true",
-                  // busy: pstate.busy - 1
                 }
               });
-              // this.setState({
-              //   background_tasks_active: message.hasOwnProperty("tasks_active") && message.tasks_active === "true",
-              //   busy: 0
-              // });
             } else if (isCommandResponse(message, CMD_GET_SESSION_INFO)) {
               this.user.isAuthenticated = message.response.session.valid;
               if (!message.response.session.valid) {
@@ -532,14 +527,14 @@ class App extends React.Component {
     // get system properties
     this.send({
       cmd: CMD_GET_SYSTEM_PROPERTIES,
-    }, false, false);
+    }, true, false);
     this.send({
       cmd: CMD_GET_GLOSSARY_TERMS,
-    }, false, false);
+    }, true, false);
     // get list of all registered users
     this.send({
       cmd: CMD_GET_USER_RECORDS,
-    }, false, false);
+    }, true, false);
     // update number of connected clients etc info.
     this.send({
       cmd: CMD_GET_SERVER_INFO,

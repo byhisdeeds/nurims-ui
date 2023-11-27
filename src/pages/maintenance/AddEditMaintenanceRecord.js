@@ -58,6 +58,7 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
     super(props);
     this.Module = ADDEDITMAINTENANCERECORD_REF;
     this.recordTopic = SSC_TOPIC;
+    this.recordType = SSC_MAINTENANCE_RECORD;
     this.maintenanceRecordsRef = React.createRef();
   }
 

@@ -62,6 +62,7 @@ class AddEditMonitors extends BaseRecordManager {
     this.state["show_provenance_view"] = false;
     this.Module = ADDEDITMONITORS_REF;
     this.recordTopic = MONITOR_TOPIC;
+    this.recordType = MONITOR_RECORD_TYPE;
     this.provenanceRecords = [];
     this.importFileRef = React.createRef();
   }

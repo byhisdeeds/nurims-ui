@@ -25,6 +25,7 @@ import {
 import {
   CMD_DELETE_PERSONNEL_RECORD,
   CMD_GET_PROVENANCE_RECORDS,
+  EMPLOYEE_RECORD,
   EMPLOYEE_RECORD_TYPE,
   ITEM_ID,
   NURIMS_ENTITY_DOSE_PROVIDER_ID,
@@ -67,6 +68,7 @@ class AddEditPersonnel extends BaseRecordManager {
     this.state["batch_selection"] = {"nurims.title": "Personnel"};
     this.Module = ADDEDITPERSONNEL_REF;
     this.recordTopic = PERSONNEL_TOPIC;
+    this.recordType = EMPLOYEE_RECORD;
     this.provenanceRecords = [];
     this.importFileRef = React.createRef();
   }

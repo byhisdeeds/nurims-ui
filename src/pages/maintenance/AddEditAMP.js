@@ -6,7 +6,7 @@ import {
 import {
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_SSC_RECORDS,
-  ROLE_MAINTENANCE_DATA_ENTRY,
+  ROLE_MAINTENANCE_DATA_ENTRY, SSC_RECORD_TYPE,
   SSC_TOPIC,
 } from "../../utils/constants";
 
@@ -45,6 +45,7 @@ class AddEditAMP extends BaseRecordManager {
     this.state["show_provenance_view"] = false;
     this.Module = ADDEDITAMP_REF;
     this.recordTopic = SSC_TOPIC;
+    this.recordType = SSC_RECORD_TYPE;
     this.provenanceRecords = [];
   }
 

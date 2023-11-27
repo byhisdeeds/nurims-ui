@@ -22,7 +22,7 @@ import {
   NURIMS_ENTITY_WORK_DETAILS,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
-  RECORD_KEY
+  RECORD_KEY, RECORD_TYPE
 } from "./constants";
 import {
   transformDose
@@ -498,13 +498,14 @@ export function toBoolean(s) {
   return regex.test(s);
 }
 
-export function new_record(item_id, title, withdrawn, createdby, fullname) {
+export function new_record(item_id, title, withdrawn, createdby, fullname, record_type) {
   const record = {};
   record["changed"] = true;
   record[ITEM_ID] = (item_id) ? item_id : -1;
   record[NURIMS_TITLE] = (title) ? title : "New Record";
   record[NURIMS_WITHDRAWN] = (withdrawn) ? withdrawn : 0;
   record[RECORD_KEY] = record_uuid();
+  record[RECORD_TYPE] = record_type;
   record[METADATA] = [
     {"nurims.createdby": (createdby) ? (fullname) ? `${fullname} (${createdby})` : createdby : ""},
     {"nurims.creationdate": dayjs().toISOString()}

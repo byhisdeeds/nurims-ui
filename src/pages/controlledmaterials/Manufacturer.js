@@ -42,6 +42,7 @@ class Manufacturer extends BaseRecordManager {
     this.state["show_provenance_view"] = false;
     this.Module = MANUFACTURER_REF;
     this.recordTopic = "manufacturer";
+    this.recordType = "manufacturer_record";
     this.provenanceRecords = [];
   }
 

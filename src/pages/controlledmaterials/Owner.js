@@ -43,6 +43,7 @@ class Owner extends BaseRecordManager {
     this.state["show_provenance_view"] = false;
     this.Module = OWNER_REF;
     this.recordTopic = "owner";
+    this.recordType = "owner_record";
     this.provenanceRecords = [];
   }
 
