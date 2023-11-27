@@ -81,8 +81,8 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
       referred_to_metadata: NURIMS_RELATED_ITEM_ID,
       "include.withdrawn": include_archived ? "true" : "false",
       "include.metadata.subtitle": NURIMS_CREATION_DATE,
-      topic: SSC_TOPIC,
-      record_type: SSC_MAINTENANCE_RECORD,
+      topic: this.recordTopic,
+      record_type: this.recordType,
       module: this.Module,
     })
     this.setState({selection: selection});
@@ -99,8 +99,8 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
     this.props.send({
       cmd: CMD_GET_ITEM_RECORDS,
       item_id: selection[ITEM_ID],
-      topic: SSC_TOPIC,
-      record_type: SSC_MAINTENANCE_RECORD,
+      topic: this.recordTopic,
+      record_type: this.recordType,
       "include.metadata": "true",
       module: this.Module,
     })

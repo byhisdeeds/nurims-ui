@@ -199,9 +199,8 @@ class SSCMaintenanceRecords extends Component {
         if (this.listRef.current) {
           this.listRef.current.updateRecord(record);
         }
-      } else if (message.cmd === CMD_GET_ITEM_RECORDS &&
-        isRecordType(message.response.structures_systems_components, SSC_MAINTENANCE_RECORD)) {
-        this.setState({selection: message.response.structures_systems_components});
+      } else if (message.cmd === CMD_GET_ITEM_RECORDS) {
+        this.setState({selection: message.response.structures_systems_components[0]});
       }
     }
   }
