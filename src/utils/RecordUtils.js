@@ -6,7 +6,7 @@ import {
   NURIMS_CREATION_DATE, NURIMS_RELATED_ITEM_ID,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
-  RECORD_KEY,
+  RECORD_KEY, SSC_RECORD_TYPE, SSC_TOPIC,
 } from "./constants";
 import {
   record_uuid
@@ -71,4 +71,13 @@ export function onRecordSelectionRetrieveReferredToRecords (selection, include_a
     record_type: recordType,
     module: module,
   });
+}
+
+export function getRecords(recordTopic, recordType, module, send, show_busy){
+  send({
+    cmd: CMD_GET_ITEM_RECORDS,
+    topic: recordTopic,
+    record_type: recordType,
+    module: module,
+  }, show_busy);
 }

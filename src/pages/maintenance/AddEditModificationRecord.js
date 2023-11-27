@@ -8,14 +8,6 @@ import {
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_REFERRED_TO_ITEM_RECORDS,
   CMD_UPDATE_ITEM_RECORD,
-  ITEM_ID,
-  NURIMS_CREATION_DATE,
-  NURIMS_RELATED_ITEM_ID,
-  NURIMS_TITLE,
-  NURIMS_WITHDRAWN,
-  RECORD_KEY,
-  RECORD_TYPE,
-  SSC_MAINTENANCE_RECORD,
   SSC_MODIFICATION_RECORD,
   SSC_RECORD_TYPE,
   SSC_TOPIC,
@@ -51,6 +43,7 @@ import {
 } from "../../utils/MetadataUtils";
 import {
   deleteRecord,
+  getRecords,
   onRecordSelectionRetrieveRecord,
   onRecordSelectionRetrieveReferredToRecords,
   updateChangedRecord
@@ -70,12 +63,13 @@ class AddEditModificationRecord extends BaseRecordManager {
   }
 
   componentDidMount() {
-    this.props.send({
-      cmd: CMD_GET_ITEM_RECORDS,
-      topic: SSC_TOPIC,
-      record_type: SSC_RECORD_TYPE,
-      module: this.Module,
-    }, true);
+    getRecords(this.recordTopic, this.recordType, this.Module, this.props.send, true);
+    // this.props.send({
+    //   cmd: CMD_GET_ITEM_RECORDS,
+    //   topic: SSC_TOPIC,
+    //   record_type: SSC_RECORD_TYPE,
+    //   module: this.Module,
+    // }, true);
   }
 
   onSSCRecordSelection = (selection, include_archived) => {
@@ -84,16 +78,6 @@ class AddEditModificationRecord extends BaseRecordManager {
     }
     onRecordSelectionRetrieveReferredToRecords (selection, include_archived, this.recordTopic, this.recordType,
       this.Module, this.props.send);
-    // this.props.send({
-    //   cmd: CMD_GET_REFERRED_TO_ITEM_RECORDS,
-    //   referred_to_item_id: selection.item_id,
-    //   referred_to_metadata: NURIMS_RELATED_ITEM_ID,
-    //   "include.withdrawn": include_archived ? "true" : "false",
-    //   "include.metadata.subtitle": NURIMS_CREATION_DATE,
-    //   topic: SSC_TOPIC,
-    //   record_type: SSC_MAINTENANCE_RECORD,
-    //   module: this.Module,
-    // })
     this.setState({selection: selection});
 
     if (this.modificationRecordsRef.current) {
@@ -106,14 +90,6 @@ class AddEditModificationRecord extends BaseRecordManager {
       ConsoleLog(this.Module, "onModificationRecordSelection", "selection", selection);
     }
     onRecordSelectionRetrieveRecord(selection, this.recordTopic, this.recordType, this.Module, this.props.send);
-    // this.props.send({
-    //   cmd: CMD_GET_ITEM_RECORDS,
-    //   item_id: selection[ITEM_ID],
-    //   topic: SSC_TOPIC,
-    //   record_type: SSC_MODIFICATION_RECORD,
-    //   "include.metadata": "true",
-    //   module: this.Module,
-    // })
   }
 
   saveChanges = (record) => {
@@ -123,21 +99,6 @@ class AddEditModificationRecord extends BaseRecordManager {
         ConsoleLog(this.Module, "saveChanges", record);
       }
       updateChangedRecord(record, this.recordTopic, this.recordType, this.Module, this.props.send);
-      // if (record.item_id === -1 && !record.hasOwnProperty(RECORD_KEY)) {
-      //   record[RECORD_KEY] = record_uuid();
-      // }
-      // this.props.send({
-      //   cmd: CMD_UPDATE_ITEM_RECORD,
-      //   item_id: record.item_id,
-      //   "nurims.title": record[NURIMS_TITLE],
-      //   "nurims.withdrawn": record[NURIMS_WITHDRAWN],
-      //   "include.metadata.subtitle": NURIMS_CREATION_DATE,
-      //   metadata: record.metadata,
-      //   record_key: record[RECORD_KEY],
-      //   topic: SSC_TOPIC,
-      //   record_type: record[RECORD_TYPE],
-      //   module: this.Module,
-      // })
     }
 
     this.setState({metadata_changed: false})
@@ -148,15 +109,6 @@ class AddEditModificationRecord extends BaseRecordManager {
       ConsoleLog(this.Module, "deleteModificationRecord", record);
     }
     deleteRecord(record, this.Module, this.props.send)
-    // if (record.item_id === -1 && !record.hasOwnProperty(RECORD_KEY)) {
-    //   record[RECORD_KEY] = record_uuid();
-    // }
-    // this.props.send({
-    //   cmd: CMD_DELETE_ITEM_RECORD,
-    //   item_id: record.item_id,
-    //   module: this.Module,
-    // })
-    // // this.setState({metadata_changed: false})
   }
 
   ws_message = (message) => {
