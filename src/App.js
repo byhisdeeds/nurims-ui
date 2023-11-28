@@ -449,7 +449,7 @@ class App extends React.Component {
   };
 
   handleMenuAction = (link, title) => {
-    // console.log("&&&&&&&&&&&&& menu action link, title->", link, title)
+    console.log("&&&&&&&&&&&&& menu action link, title->", link, title)
     // console.log("+++ typeof link, typeof title", typeof link, typeof title)
     if (link && typeof link === "object") {
       this.menuTitle = link.target.dataset.title ? link.target.dataset.title : "";

@@ -45,7 +45,8 @@ class Settings extends Component {
 
   showDebugMessage = (e) => {
     this.setState({ debugging: e.target.checked })
-    this.props.onClick(e.target.checked ? 'show-debug-messages' : 'hide-debug-messages')
+    this.context.debug = e.target.checked;
+    // this.props.onClick(e.target.checked ? this.context.debugging'show-debug-messages' : 'hide-debug-messages')
   };
 
   setLightTheme = (e) => {
