@@ -466,6 +466,12 @@ class App extends React.Component {
       } else if (link === 'set-dark-theme') {
         this.setState({theme: 'dark'});
         localStorage.setItem("theme", 'dark');
+      } else if (link === 'show-debug-messages') {
+        this.debug = true;
+        localStorage.setItem("debug", 'true');
+      } else if (link === 'hide-debug-messages') {
+        this.debug = false;
+        localStorage.setItem("debug", 'false');
       } else if (link && title) {
         // console.log(">> link, title", link, title)
         this.menuTitle = title ? title : "";

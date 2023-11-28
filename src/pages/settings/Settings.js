@@ -26,16 +26,16 @@ import {
 import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
+import {UserContext} from "../../utils/UserContext";
 
 const SETTINGS_REF = "Settings";
 
 class Settings extends Component {
+  static contextType = UserContext;
   constructor(props) {
     super(props);
     this.state = {
-      theme: props.theme,
-      user: props.user,
-      properties: props.properties,
+      debugging: false,
     };
     this.Module = SETTINGS_REF;
   }
@@ -43,13 +43,18 @@ class Settings extends Component {
   componentDidMount() {
   }
 
+  showDebugMessage = (e) => {
+    this.setState({ debugging: e.target.checked })
+    this.props.onClick(e.target.checked ? 'show-debug-messages' : 'hide-debug-messages')
+  };
+
   setLightTheme = (e) => {
-    this.setState({ theme: 'light'})
+    this.props.theme = 'light';
     this.props.onClick('set-light-theme')
   };
 
   setDarkTheme = (e) => {
-    this.setState({ theme: 'dark'})
+    this.props.theme = 'dark';
     this.props.onClick('set-dark-theme')
   };
 
@@ -80,17 +85,15 @@ class Settings extends Component {
   }
 
   render() {
-    const { theme, properties } = this.state;
+    const { theme, properties, user } = this.props;
+    const { debugging } = this.state;
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
           <TitleComponent title={this.props.title} />
         </Grid>
         <Grid item xs={12}>
-          <List
-            sx={{width: '100%'}}
-            subheader={<ListSubheader>General</ListSubheader>}
-          >
+          <List sx={{width: '100%'}} subheader={<ListSubheader>General</ListSubheader>}>
             <ListItem>
               <ListItemIcon>
                 <WifiIcon />
@@ -116,6 +119,22 @@ class Settings extends Component {
                 checked={theme === 'dark'}
                 inputProps={{
                   'aria-labelledby': 'dark-theme-switch',
+                }}
+              />
+            </ListItem>
+          </List>
+          <List sx={{width: '100%'}} subheader={<ListSubheader>Debugging</ListSubheader>}>
+            <ListItem>
+              <ListItemIcon>
+                <WifiIcon />
+              </ListItemIcon>
+              <ListItemText id={"light-theme-switch"} primary="Show Debugging Messages" />
+              <Switch
+                edge="end"
+                onChange={this.showDebugMessage}
+                checked={debugging}
+                inputProps={{
+                  'aria-labelledby': 'light-theme-switch',
                 }}
               />
             </ListItem>
