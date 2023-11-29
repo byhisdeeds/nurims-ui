@@ -34,7 +34,7 @@ import {
   CMD_GET_SESSION_INFO,
   MY_ACCOUNT,
   SETTINGS,
-  CMD_GET_GLOSSARY_TERMS
+  CMD_GET_GLOSSARY_TERMS, CMD_SET_LOGGING_LEVEL
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -470,11 +470,27 @@ class App extends React.Component {
         this.setState({theme: 'dark'});
         localStorage.setItem("theme", 'dark');
       } else if (link === 'show-debug-messages') {
-        this.setState({debug: true});
+        this.send({
+          cmd: CMD_SET_LOGGING_LEVEL,
+          level: "debug"
+        }, false, false);
+        this.setState(pstate => {
+          return {
+            debug: true
+          }
+        });
         ConsoleLog("App", "handleMenuAction", "enabling debug messages.");
       } else if (link === 'hide-debug-messages') {
         ConsoleLog("App", "handleMenuAction", "disabling debug messages.");
-        this.setState({debug: false});
+        this.send({
+          cmd: CMD_SET_LOGGING_LEVEL,
+          level: "warning"
+        }, false, false);
+        this.setState(pstate => {
+          return {
+            debug: false
+          }
+        });
       } else if (link && title) {
         // console.log(">> link, title", link, title)
         this.menuTitle = title ? title : "";
