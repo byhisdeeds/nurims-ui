@@ -124,7 +124,9 @@ import {
   isValidMessageSignature,
   messageResponseStatusOk
 } from "./utils/WebsocketUtils";
-import {setGlossaryTerms} from "./utils/GlossaryUtils";
+import {
+  setGlossaryTerms
+} from "./utils/GlossaryUtils";
 
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));

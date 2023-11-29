@@ -12,7 +12,8 @@ import {
 import {
   Wifi as WifiIcon,
   Settings as SettingsIcon,
-  Menu as MenuItem
+  Menu as MenuItem,
+  ReceiptLongOutlined as ReceiptLongOutlinedIcon
 } from '@mui/icons-material';
 import {
   getPropertyValue
@@ -29,6 +30,7 @@ import {
 import {
   UserContext
 } from "../../utils/UserContext";
+// import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 
 const SETTINGS_REF = "Settings";
 
@@ -123,7 +125,7 @@ class Settings extends Component {
           <List sx={{width: '100%'}} subheader={<ListSubheader sx={{fontSize: 24}}>Debugging</ListSubheader>}>
             <ListItem>
               <ListItemIcon>
-                <WifiIcon />
+                <ReceiptLongOutlinedIcon />
               </ListItemIcon>
               <ListItemText id={"light-theme-switch"} primary="Show Debugging Messages" />
               <Switch
@@ -142,17 +144,16 @@ class Settings extends Component {
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
-              <ListItemText id={"dosimetry-units"} primary="Dosimetry Units" />
+              <ListItemText id={"dosimetry-units"} primary="Dosimetry Units"/>
               <Select
+                style={{width: "300px"}}
                 value={getPropertyValue(properties, "nurims.dosimeter.units", "")}
                 onChange={this.handleDosimetryUnits}
-                displayEmpty
-                // className={classes.selectEmpty}
                 inputProps={{ 'aria-label': 'Dosimetry Units' }}
               >
-                <MenuItem value={'msv'}>Milli Sieverts</MenuItem>
-                <MenuItem value={'usv'}>Micro Sieverts</MenuItem>
-                <MenuItem value={'mr'}>Milli Rems</MenuItem>
+                <MenuItem value={"msv"}>Milli Sieverts</MenuItem>
+                <MenuItem value={"usv"}>Micro Sieverts</MenuItem>
+                <MenuItem value={"mr"}>Milli Rems</MenuItem>
               </Select>
             </ListItem>
             <ListItem>

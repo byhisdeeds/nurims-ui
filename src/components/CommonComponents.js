@@ -40,7 +40,9 @@ import {
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/en-gb";
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
-import {visuallyHidden} from "@mui/utils";
+import {
+  visuallyHidden
+} from "@mui/utils";
 import Floater from 'react-floater';
 import {
   getRecordData,
@@ -57,7 +59,7 @@ import {
   HourglassFull,
   NetworkCheck,
   Person,
-  DeleteForever, People
+  DeleteForever
 } from '@mui/icons-material';
 import {
   isValidUserRole
