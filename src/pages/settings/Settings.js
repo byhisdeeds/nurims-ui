@@ -26,12 +26,15 @@ import {
 import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
-import {UserContext} from "../../utils/UserContext";
+import {
+  UserContext
+} from "../../utils/UserContext";
 
 const SETTINGS_REF = "Settings";
 
 class Settings extends Component {
   static contextType = UserContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -40,13 +43,8 @@ class Settings extends Component {
     this.Module = SETTINGS_REF;
   }
 
-  componentDidMount() {
-  }
-
   showDebugMessage = (e) => {
-    this.setState({ debugging: e.target.checked })
-    this.context.debug = e.target.checked;
-    // this.props.onClick(e.target.checked ? this.context.debugging'show-debug-messages' : 'hide-debug-messages')
+    this.props.onClick(e.target.checked ? 'show-debug-messages' : 'hide-debug-messages')
   };
 
   setLightTheme = (e) => {
@@ -86,15 +84,15 @@ class Settings extends Component {
   }
 
   render() {
-    const { theme, properties, user } = this.props;
-    const { debugging } = this.state;
+    const {theme, properties, user} = this.props;
+    const {debugging} = this.state;
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
           <TitleComponent title={this.props.title} />
         </Grid>
         <Grid item xs={12}>
-          <List sx={{width: '100%'}} subheader={<ListSubheader>General</ListSubheader>}>
+          <List sx={{width: '100%'}} subheader={<ListSubheader sx={{fontSize: 24}}>General</ListSubheader>}>
             <ListItem>
               <ListItemIcon>
                 <WifiIcon />
@@ -124,7 +122,7 @@ class Settings extends Component {
               />
             </ListItem>
           </List>
-          <List sx={{width: '100%'}} subheader={<ListSubheader>Debugging</ListSubheader>}>
+          <List sx={{width: '100%'}} subheader={<ListSubheader sx={{fontSize: 24}}>Debugging</ListSubheader>}>
             <ListItem>
               <ListItemIcon>
                 <WifiIcon />
@@ -133,16 +131,14 @@ class Settings extends Component {
               <Switch
                 edge="end"
                 onChange={this.showDebugMessage}
-                checked={debugging}
+                checked={this.context.debug}
                 inputProps={{
                   'aria-labelledby': 'light-theme-switch',
                 }}
               />
             </ListItem>
           </List>
-          <List
-            sx={{ width: '100%', bgcolor: 'background.paper' }}
-            subheader={<ListSubheader>Dosimetry</ListSubheader>}
+          <List sx={{ width: '100%'}} subheader={<ListSubheader sx={{fontSize: 24}}>Dosimetry</ListSubheader>}
           >
             <ListItem>
               <ListItemIcon>
@@ -156,9 +152,6 @@ class Settings extends Component {
                 // className={classes.selectEmpty}
                 inputProps={{ 'aria-label': 'Dosimetry Units' }}
               >
-                {/*<MenuItem value="">*/}
-                {/*  <em>None</em>*/}
-                {/*</MenuItem>*/}
                 <MenuItem value={'msv'}>Milli Sieverts</MenuItem>
                 <MenuItem value={'usv'}>Micro Sieverts</MenuItem>
                 <MenuItem value={'mr'}>Milli Rems</MenuItem>

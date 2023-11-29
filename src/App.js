@@ -33,7 +33,8 @@ import {
   CMD_GET_USER_RECORDS,
   CMD_GET_SESSION_INFO,
   MY_ACCOUNT,
-  SETTINGS, CMD_GET_GLOSSARY_TERMS
+  SETTINGS,
+  CMD_GET_GLOSSARY_TERMS
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -182,6 +183,7 @@ class App extends React.Component {
       ready: false,
       online: false,
       busy: 0,
+      debug: window.location.href.includes("debug"),
       background_tasks_active: false,
       log_window_visible: false,
       notification_window_visible: false,
@@ -189,7 +191,6 @@ class App extends React.Component {
       num_unread_messages: 0,
       num_messages: 0,
     };
-    this.debug = window.location.href.includes("debug");
     this.puk = [];
     this.session_id = "";
     this.properties = [];
@@ -252,7 +253,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.mounted = true;
-    if (this.debug) {
+    if (this.state.debug) {
       ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
     }
     this.conn_snackbar_id = enqueueConnectionSnackbar(false);
@@ -260,7 +261,7 @@ class App extends React.Component {
     this.ws = new ReconnectingWebSocket(this.props.wsep + "?uuid=" + this.uuid);
     this.ws.onopen = (event) => {
       const msg = `Websocket connection to server established for client ${this.uuid}`;
-      if (this.debug) {
+      if (this.state.debug) {
         ConsoleLog("App", "ws.onopen", msg);
       }
       this.appendLog(msg);
@@ -281,7 +282,7 @@ class App extends React.Component {
     this.ws.onclose = (event) => {
       const msg =
         `"Websocket connection with server closed: wasClean = ${event.hasOwnProperty("wasClean") ? event.wasClean : false}, reason = ${event.hasOwnProperty("reason") ? event.reason : ""}`;
-      if (this.debug) {
+      if (this.state.debug) {
         ConsoleLog("App", "ws.onclose", msg, this.conn_snackbar_id);
       }
       this.appendLog(msg);
@@ -294,7 +295,7 @@ class App extends React.Component {
     };
     this.ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      if (this.debug) {
+      if (this.state.debug) {
         ConsoleLog("App", "onmessage", message);
       }
       if (message.hasOwnProperty("log_message")) {
@@ -402,7 +403,7 @@ class App extends React.Component {
   // send_pong = () => {
   //   const msg = {cmd: "pong"};
   //   if (this.ws && this.ws.readyState === 1) {
-  //     if (this.debug) {
+  //     if (this.state.debug) {
   //       ConsoleLog("App", "send", msg);
   //     }
   //     this.ws.send(JSON.stringify({
@@ -412,7 +413,7 @@ class App extends React.Component {
   // };
 
   send = (msg, show_busy, include_user) => {
-    // if (this.debug) {
+    // if (this.state.debug) {
     //   ConsoleLog("App", "send", "ws.readyState",
     //     this.ws && this.ws.readyState ? this.ws.readyState : "undefined");
     // }
@@ -432,7 +433,7 @@ class App extends React.Component {
       if (_include_user) {
         _msg["user"] = this.user
       }
-      if (this.debug) {
+      if (this.state.debug) {
         ConsoleLog("App", "send", "msg", _msg);
       }
       this.ws.send(JSON.stringify(_msg));
@@ -449,7 +450,7 @@ class App extends React.Component {
   };
 
   handleMenuAction = (link, title) => {
-    console.log("&&&&&&&&&&&&& menu action link, title->", link, title)
+    // console.log("&&&&&&&&&&&&& menu action link, title->", link, title)
     // console.log("+++ typeof link, typeof title", typeof link, typeof title)
     if (link && typeof link === "object") {
       this.menuTitle = link.target.dataset.title ? link.target.dataset.title : "";
@@ -467,11 +468,9 @@ class App extends React.Component {
         this.setState({theme: 'dark'});
         localStorage.setItem("theme", 'dark');
       } else if (link === 'show-debug-messages') {
-        this.debug = true;
-        localStorage.setItem("debug", 'true');
+        this.setState({debug: true});
       } else if (link === 'hide-debug-messages') {
-        this.debug = false;
-        localStorage.setItem("debug", 'false');
+        this.setState({debug: false});
       } else if (link && title) {
         // console.log(">> link, title", link, title)
         this.menuTitle = title ? title : "";
@@ -552,17 +551,17 @@ class App extends React.Component {
 
   render() {
     const {
-      theme, ready, menuData, actionid, open, busy, background_tasks_active, num_unread_messages,
+      theme, ready, menuData, actionid, open, busy, background_tasks_active, num_unread_messages, debug,
       log_window_visible, notification_window_visible, notification_window_anchor, num_messages, online
     } = this.state;
     const isSysadmin = isValidUserRole(this.user, "sysadmin");
-    if (this.debug) {
-      ConsoleLog("App", "render", "actionid", actionid, "busy", busy,
+    if (debug) {
+      ConsoleLog("App", "render", "actionid", actionid, "busy", busy, "debug", debug,
         "num_unread_messages", num_unread_messages, "num_messages", num_messages, "user.isAuthenticated",
         this.user.isAuthenticated)
     }
     return (
-      <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: this.user}}>
+      <UserContext.Provider value={{debug: debug, user: this.user}}>
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
           <SnackbarProvider maxSnack={6} anchorOrigin={{vertical: 'bottom', horizontal: 'center',}}/>
           <Box sx={{flexGrow: 1, height: "100%"}}>
