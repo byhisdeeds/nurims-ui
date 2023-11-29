@@ -469,7 +469,9 @@ class App extends React.Component {
         localStorage.setItem("theme", 'dark');
       } else if (link === 'show-debug-messages') {
         this.setState({debug: true});
+        ConsoleLog("App", "handleMenuAction", "enabling debug messages.");
       } else if (link === 'hide-debug-messages') {
+        ConsoleLog("App", "handleMenuAction", "disabling debug messages.");
         this.setState({debug: false});
       } else if (link && title) {
         // console.log(">> link, title", link, title)
