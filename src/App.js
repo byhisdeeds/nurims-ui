@@ -558,7 +558,7 @@ class App extends React.Component {
     } = this.state;
     const isSysadmin = isValidUserRole(this.user, "sysadmin");
     if (debug) {
-      ConsoleLog("App", "render", "actionid", actionid, "busy", busy, "debug", debug,
+      ConsoleLog("App", "render", "actionid", actionid, "busy", busy,
         "num_unread_messages", num_unread_messages, "num_messages", num_messages, "user.isAuthenticated",
         this.user.isAuthenticated)
     }

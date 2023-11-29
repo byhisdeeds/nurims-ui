@@ -63,7 +63,9 @@ class PersonMetadata extends Component {
   }
 
   handleChange = (e) => {
-    console.log(">>>", e.target.id)
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "handleChange", "id", e.target.id);
+    }
     const p = this.person;
     if (e.target.id === "name") {
       p[NURIMS_TITLE] = e.target.value;
@@ -83,7 +85,9 @@ class PersonMetadata extends Component {
   }
 
   handleSexChange = (e) => {
-    console.log(">>>sex", e.target.id)
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "handleSexChange", "sex", e.target.value);
+    }
     const p = this.person;
     p["changed"] = true;
     setMetadataValue(p, NURIMS_ENTITY_SEX, e.target.value)
@@ -93,7 +97,9 @@ class PersonMetadata extends Component {
   }
 
   handleRoleChange = (e) => {
-    console.log(">>>role", e.target.value)
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "handleRoleChange", "role", e.target.value);
+    }
     const p = this.person;
     p["changed"] = true;
     setMetadataValue(p, NURIMS_ENTITY_ASSIGNED_ROLE, e.target.value)
@@ -120,8 +126,10 @@ class PersonMetadata extends Component {
   }
 
   setRecordMetadata = (record) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "setRecordMetadata", "record", record);
+    }
     record["changed"] = false;
-    console.log("PersonMetadata.setRecordMetadata", record)
     this.person = record;
     // signal to parent that metadata has changed
     this.props.onChange(false);

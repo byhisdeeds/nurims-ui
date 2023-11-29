@@ -38,7 +38,6 @@ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      debugging: false,
     };
     this.Module = SETTINGS_REF;
   }
@@ -85,7 +84,6 @@ class Settings extends Component {
 
   render() {
     const {theme, properties, user} = this.props;
-    const {debugging} = this.state;
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
