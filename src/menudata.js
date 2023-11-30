@@ -537,7 +537,7 @@ export const MenuItems = [
         authmodlevel: 'basic',
         children: [
           {
-            label: 'Discover Run Events',
+            label: 'Operating Run Data',
             value: 'ro.add.edit.reactor.operating.run.records',
             title: 'Add/Edit Operating Run Records',
             tooltip: 'Update the reactor operation run records from the YOKOGAWA operating parameters data files (*.GTE)',

@@ -546,12 +546,10 @@ export const ConfirmOperatingRunStatisticsExportDialog = (props) => {
   }
 
   const handleExportDatasetSelected = (e) => {
-    console.log("handleExportDatasetSelected", e.target.value)
     setDataset(e.target.value);
   }
 
   const handleExportDatasetFileFormat = (e) => {
-    console.log("handleExportDatasetFileFormat", e.target.value)
     setDatasetFormat(e.target.value);
   }
 
@@ -631,9 +629,6 @@ export const ConfirmOperatingRunStatisticsExportDialog = (props) => {
                   onChange={handleExportDatasetSelected}
                 >
                   <MenuItem value={'stats'}>Operating Run Statistics</MenuItem>
-                  <MenuItem value={'rodevents'}>Operating Run Control Rod Events</MenuItem>
-                  <MenuItem value={'neutronflux'}>Operating Run Neutron Flux Data</MenuItem>
-                  <MenuItem value={'controlrodposition'}>Operating Run Control Position Data</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

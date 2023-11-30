@@ -160,16 +160,10 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   exportOperatingRunStatistics = () => {
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "exportOperatingRunStatistics");
-    }
     this.setState({confirm_export: true,});
   }
 
   exportOperatingRunData = () => {
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "exportOperatingRunData");
-    }
     this.setState({confirm_export: true,});
   }
 
@@ -179,7 +173,8 @@ class AddEditReactorOperatingRuns extends React.Component {
 
   proceedWithOperatingRunDataExport = (dataset, datasetFormat) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "dataset", dataset, "datasetFormat", datasetFormat);
+      ConsoleLog(this.Module, "proceedWithOperatingRunDataExport", "dataset", dataset, "datasetFormat",
+        datasetFormat);
     }
     this.setState({confirm_export: false,});
 
@@ -195,6 +190,38 @@ class AddEditReactorOperatingRuns extends React.Component {
         // startDate: `${startYear.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
         // endDate: `${endYear.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
         "item_id": this.state.selection[ITEM_ID],
+        dataset: dataset,
+        datasetFormat: datasetFormat,
+        module: this.Module,
+        // cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
+        // year: year.year(),
+        // startMonth: startMonth.month() + 1,
+        // endMonth: endMonth.month() + 1,
+        // forceOverwrite: forceOverwrite,
+        // module: this.Module,
+      });
+    }
+  }
+
+  proceedWithOperatingRunStatisticsExport = (startYear, startMonth, endYear, endMonth, dataset, datasetFormat) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "proceedWithOperatingRunStatisticsExport", "startYear", startYear,
+        "startMonth", startMonth, "endYear", endYear, "endMonth", endMonth, "dataset", dataset,
+        "datasetFormat", datasetFormat);
+    }
+    this.setState({confirm_export: false,});
+
+    const metadata =
+      dataset === "rodevents" ? NURIMS_OPERATION_DATA_STATS :
+        dataset === "neutronflux" ? NURIMS_OPERATION_DATA_NEUTRONFLUX :
+          dataset === "controlrodposition" ? NURIMS_OPERATION_DATA_CONTROLRODPOSITION : null;
+    if (metadata) {
+      this.props.send({
+        cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
+        "include.metadata": BOOL_TRUE_STR,
+        "load.metadata.from.store": [metadata],
+        startDate: `${startYear.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
+        endDate: `${endYear.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
         dataset: dataset,
         datasetFormat: datasetFormat,
         module: this.Module,
