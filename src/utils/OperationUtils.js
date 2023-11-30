@@ -39,12 +39,16 @@ export function prepareExportData(message) {
   const endDate = message.hasOwnProperty("endDate") ? message.endDate.substring(5,7) : "00"
   const dataset = message.hasOwnProperty("dataset") ? message.dataset : ""
   const data_array = [];
+  console.log("@@@@@@@@@@@@@@@@@")
+  console.log(data)
+  console.log("@@@@@@@@@@@@@@@@@")
   if (dataset === "stats") {
     for (const record of data) {
       data_array.push(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, ""))
     }
   } else if (dataset === "neutronflux") {
     for (const record of data) {
+      // const.push(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, ""))
       data_array.push(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, ""))
     }
   } else if (dataset === "controlrodposition") {
@@ -52,6 +56,9 @@ export function prepareExportData(message) {
       data_array.push(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_CONTROLRODPOSITION, ""))
     }
   }
+  console.log("--------------------")
+  console.log(data_array)
+  console.log("--------------------")
   if (datasetFormat === "json") {
     f.fileName = `operating-run-${dataset}-${startDate}-${endDate}.json`;
     f.fileType = "application/json";
