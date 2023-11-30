@@ -40,7 +40,7 @@ export function prepareExportData(message) {
   const dataset = message.hasOwnProperty("dataset") ? message.dataset : ""
   const excludeKeys = [];
   let data_array = [];
-  console.log("@@@@@@@@@@@@@@@@@")
+  console.log("@@@@@@@@@@@@@@@@@", dataset)
   console.log(data)
   console.log("@@@@@@@@@@@@@@@@@")
   if (dataset === "stats") {
@@ -52,7 +52,7 @@ export function prepareExportData(message) {
     for (const record of data) {
       const _stats = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, {});
       if (_stats.hasOwnProperty("rod_events")) {
-        data_array.push(_stats["rod_events"]);
+        data_array = _stats["rod_events"];
       }
     }
   } else if (dataset === "neutronflux") {
