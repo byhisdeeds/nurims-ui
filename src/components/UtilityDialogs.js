@@ -460,11 +460,10 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Reactor operating data extracted from the YOKOGAWA digital chart recorder,
-            provides information on the staistics of a run and a per second accounr of
-            the control rod movement, neutron flux, inlet and outlet temperatures,
-            and gamma radiation area monitors.
+            provides a per second account of the control rod movement, neutron flux, inlet
+            and outlet temperatures, and gamma radiation area monitors.
             <p/>
-            Select a year, month range, and dataset to export for a operating period.
+            Select the dataset to export for operating run {props.run[NURIMS_TITLE]}.
             <p/>
           </DialogContentText>
           <Grid container spacing={2}>
@@ -518,6 +517,7 @@ ConfirmOperatingRunDataExportDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onProceed: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
+  run: PropTypes.object.isRequired,
 }
 
 
@@ -584,12 +584,11 @@ export const ConfirmOperatingRunStatisticsExportDialog = (props) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Reactor operating data extracted from the YOKOGAWA digital chart recorder,
-            provides information on the staistics of a run and a per second accounr of
-            the control rod movement, neutron flux, inlet and outlet temperatures,
-            and gamma radiation area monitors.
+            Reactor operating data statistics from the YOKOGAWA digital chart recorder data,
+            provides information on a per second account for the control rod movement, neutron flux,
+            inlet and outlet temperatures, and gamma radiation area monitors.
             <p/>
-            Select a year, month range, and dataset to export for a operating period.
+            Select the start year, start month, end year, end month, and dataset.
             <p/>
           </DialogContentText>
           <Grid container spacing={2}>

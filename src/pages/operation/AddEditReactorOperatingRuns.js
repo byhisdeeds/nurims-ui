@@ -404,6 +404,7 @@ class AddEditReactorOperatingRuns extends React.Component {
                                             onCancel={this.cancelDiscovery}
         />
         <ConfirmOperatingRunDataExportDialog open={confirm_export_data}
+                                             run={{selection}}
                                              onProceed={this.proceedWithOperatingRunDataExport}
                                              onCancel={this.cancelExport}
         />
