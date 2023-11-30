@@ -65,7 +65,7 @@ class OperatingRunMetadata extends Component {
   render() {
     const {record} = this.state;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "record",
+      ConsoleLog(this.Module, "render", `record.metadata.${NURIMS_OPERATION_DATA_STATS}`,
         getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, ""));
     }
     const stats = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, {});

@@ -40,9 +40,6 @@ export function prepareExportData(message) {
   const dataset = message.hasOwnProperty("dataset") ? message.dataset : ""
   const excludeKeys = [];
   let data_array = [];
-  console.log("@@@@@@@@@@@@@@@@@", dataset)
-  console.log(data)
-  console.log("@@@@@@@@@@@@@@@@@")
   if (dataset === "stats") {
     excludeKeys.push("rod_events");
     for (const record of data) {
@@ -67,9 +64,6 @@ export function prepareExportData(message) {
       data_array = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_CONTROLRODPOSITION, [])
     }
   }
-  console.log("--------------------")
-  console.log(data_array)
-  console.log("--------------------")
   if (datasetFormat === "json") {
     f.fileName = `operating-run-${dataset}${date}.json`;
     f.fileType = "application/json";
