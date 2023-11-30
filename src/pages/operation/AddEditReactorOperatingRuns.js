@@ -212,15 +212,15 @@ class AddEditReactorOperatingRuns extends React.Component {
     }
     this.setState({confirm_export_data: false,});
 
-    const metadata =
-      dataset === "rodevents" ? NURIMS_OPERATION_DATA_STATS :
-        dataset === "neutronflux" ? NURIMS_OPERATION_DATA_NEUTRONFLUX :
-          dataset === "controlrodposition" ? NURIMS_OPERATION_DATA_CONTROLRODPOSITION : null;
+    // const metadata =
+    //   dataset === "stats" ? NURIMS_OPERATION_DATA_STATS :
+    //     dataset === "neutronflux" ? NURIMS_OPERATION_DATA_NEUTRONFLUX :
+    //       dataset === "controlrodposition" ? NURIMS_OPERATION_DATA_CONTROLRODPOSITION : null;
     if (metadata) {
       this.props.send({
         cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
         "include.metadata": BOOL_TRUE_STR,
-        "load.metadata.from.store": [metadata],
+        "load.metadata.from.store": [NURIMS_OPERATION_DATA_STATS],
         startDate: `${startYear.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
         endDate: `${endYear.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
         dataset: dataset,
