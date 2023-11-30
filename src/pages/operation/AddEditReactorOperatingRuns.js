@@ -216,24 +216,22 @@ class AddEditReactorOperatingRuns extends React.Component {
     //   dataset === "stats" ? NURIMS_OPERATION_DATA_STATS :
     //     dataset === "neutronflux" ? NURIMS_OPERATION_DATA_NEUTRONFLUX :
     //       dataset === "controlrodposition" ? NURIMS_OPERATION_DATA_CONTROLRODPOSITION : null;
-    if (metadata) {
-      this.props.send({
-        cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
-        "include.metadata": BOOL_TRUE_STR,
-        "load.metadata.from.store": [NURIMS_OPERATION_DATA_STATS],
-        startDate: `${startYear.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
-        endDate: `${endYear.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
-        dataset: dataset,
-        datasetFormat: datasetFormat,
-        module: this.Module,
-        // cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
-        // year: year.year(),
-        // startMonth: startMonth.month() + 1,
-        // endMonth: endMonth.month() + 1,
-        // forceOverwrite: forceOverwrite,
-        // module: this.Module,
-      });
-    }
+    this.props.send({
+      cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
+      "include.metadata": BOOL_TRUE_STR,
+      "load.metadata.from.store": [NURIMS_OPERATION_DATA_STATS],
+      startDate: `${startYear.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
+      endDate: `${endYear.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
+      dataset: dataset,
+      datasetFormat: datasetFormat,
+      module: this.Module,
+      // cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
+      // year: year.year(),
+      // startMonth: startMonth.month() + 1,
+      // endMonth: endMonth.month() + 1,
+      // forceOverwrite: forceOverwrite,
+      // module: this.Module,
+    });
   }
 
   requestGetRecords = (include_archived) => {
