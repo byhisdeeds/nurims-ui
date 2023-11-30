@@ -534,6 +534,8 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
                 >
                   <MenuItem value={'stats'}>Operating Run Statistics</MenuItem>
                   <MenuItem value={'rodevents'}>Operating Run Control Rod Events</MenuItem>
+                  <MenuItem value={'neutronflux'}>Operating Run Neutron Flux Data</MenuItem>
+                  <MenuItem value={'controlrodposition'}>Operating Run Control Position Data</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

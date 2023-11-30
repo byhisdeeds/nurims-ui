@@ -16,7 +16,7 @@ import {
   CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
   ITEM_ID,
-  METADATA,
+  METADATA, NURIMS_OPERATION_DATA_CONTROLRODPOSITION, NURIMS_OPERATION_DATA_NEUTRONFLUX,
   NURIMS_OPERATION_DATA_STATS,
   NURIMS_WITHDRAWN,
   ROLE_REACTOR_OPERATIONS_DATA_EXPORT
@@ -175,22 +175,28 @@ class AddEditReactorOperatingRuns extends React.Component {
     }
     this.setState({confirm_export: false,});
 
-    this.props.send({
-      cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
-      "include.metadata": BOOL_TRUE_STR,
-      "load.metadata.from.store": ["nurims.operation.data.stats"],
-      startDate: `${startYear.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
-      endDate: `${endYear.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
-      dataset: dataset,
-      datasetFormat: datasetFormat,
-      module: this.Module,
-      // cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
-      // year: year.year(),
-      // startMonth: startMonth.month() + 1,
-      // endMonth: endMonth.month() + 1,
-      // forceOverwrite: forceOverwrite,
-      // module: this.Module,
-    });
+    const metadata =
+      dataset === "stats" ? NURIMS_OPERATION_DATA_STATS :
+        dataset === "neutronflux" ? NURIMS_OPERATION_DATA_NEUTRONFLUX :
+          dataset === "controlrodposition" ? NURIMS_OPERATION_DATA_CONTROLRODPOSITION : null;
+    if (metadata) {
+      this.props.send({
+        cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
+        "include.metadata": BOOL_TRUE_STR,
+        "load.metadata.from.store": [metadata],
+        startDate: `${startYear.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
+        endDate: `${endYear.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
+        dataset: dataset,
+        datasetFormat: datasetFormat,
+        module: this.Module,
+        // cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
+        // year: year.year(),
+        // startMonth: startMonth.month() + 1,
+        // endMonth: endMonth.month() + 1,
+        // forceOverwrite: forceOverwrite,
+        // module: this.Module,
+      });
+    }
   }
 
   requestGetRecords = (include_archived) => {
