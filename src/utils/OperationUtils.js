@@ -60,6 +60,10 @@ export function prepareExportData(message) {
           excludeKeys: ["rod_events"],
           prependHeader: true,
           sortHeader: false,
+          unwindArrays: true,
+          expandNestedObjects: true,
+          expandArrayObjects: true,
+          wrapHeaderFields: true,
         }
       );
     }
