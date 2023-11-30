@@ -457,7 +457,7 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
     setDatasetFormat(e.target.value);
   }
 
-  const proceed = (startYear, startMonth, endYear, endMonth, runDataset, runDatasetFormat) => {
+  const proceed = () => {
     if (startYear === null) {
       enqueueErrorSnackbar("No start year for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
     } else if (startMonth === null) {
@@ -466,12 +466,12 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
       enqueueErrorSnackbar("No end year for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
     } else if (endMonth === null) {
       enqueueErrorSnackbar("No end month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
-    } else if (runDataset === null) {
+    } else if (dataset === null) {
       enqueueErrorSnackbar("No operating run dataset selected", ERROR_SNACKBAR_DURATION);
-    } else if (runDatasetFormat === null) {
+    } else if (datasetFormat === null) {
       enqueueErrorSnackbar("No operating run export file format selected", ERROR_SNACKBAR_DURATION);
     } else {
-      props.onProceed(startYear, startMonth, endYear, endMonth, runDataset, runDatasetFormat);
+      props.onProceed(startYear, startMonth, endYear, endMonth, dataset, datasetFormat);
     }
   }
 
@@ -508,9 +508,10 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
                 toYear={endYear}
                 toMonth={endMonth}
                 disabled={false}
-                onYearChange={handleYearDateRangeChange}
-                onToChange={handleToDateRangeChange}
-                onFromChange={handleFromDateRangeChange}
+                onFromYearChange={handleFromYearChange}
+                onFromMonthChange={handleFromMonthChange}
+                onToYearChange={handleToYearChange}
+                onToMonthChange={handleToMonthChange}
                 renderInput={(startProps, endProps) => (
                   <React.Fragment>
                     <TextField {...startProps}/>
@@ -557,7 +558,8 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
         <DialogActions>
           <Box sx={{flexGrow: 1}} />
           <Button onClick={props.onCancel}>Cancel</Button>
-          <Button onClick={() => proceed(year, startDate, endDate, dataset, datasetFormat)} autoFocus>Continue</Button>
+          <Button
+            onClick={proceed} autoFocus>Continue</Button>
         </DialogActions>
       </Dialog>
     </div>
