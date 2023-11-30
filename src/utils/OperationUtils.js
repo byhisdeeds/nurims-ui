@@ -57,7 +57,7 @@ export function prepareExportData(message) {
         {
           emptyFieldValue: "-",
           excelBOM: true,
-          excludeKeys: ["flux", "rod_events"],
+          excludeKeys: ["rod_events"],
           prependHeader: true,
           sortHeader: false,
         }

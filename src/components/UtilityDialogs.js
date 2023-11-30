@@ -542,7 +542,7 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
                   style={{width: "400px"}}
                   labelId="export-dataset-format-select-label"
                   id="export-dataset-format"
-                  value={dataset}
+                  value={datasetFormat}
                   label="Export File Format"
                   onChange={handleExportDatasetFileFormat}
                 >
