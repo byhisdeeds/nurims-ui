@@ -5,7 +5,7 @@ import {
 import {
   NURIMS_OPERATION_DATA_STATS
 } from "./constants";
-import { json2csv } from 'json-2-csv';
+import {json2csv} from 'json-2-csv';
 
 
 export function runidAsTitle(runid) {
@@ -60,9 +60,7 @@ export function prepareExportData(message) {
           excludeKeys: ["rod_events"],
           prependHeader: true,
           sortHeader: false,
-          unwindArrays: true,
           expandNestedObjects: true,
-          expandArrayObjects: true,
           wrapHeaderFields: true,
         }
       );
