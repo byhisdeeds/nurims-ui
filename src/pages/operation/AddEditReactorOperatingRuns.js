@@ -168,10 +168,10 @@ class AddEditReactorOperatingRuns extends React.Component {
     this.setState({confirm_export: false,});
   }
 
-  proceedWithExport = (year, startMonth, endMonth, dataset, datasetFormat) => {
+  proceedWithExport = (startYear, startMonth, endYear, endMonth, dataset, datasetFormat) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "proceedWithExport", "year", year, "startMonth", startMonth,
-        "endMonth", endMonth, "dataset", dataset);
+      ConsoleLog(this.Module, "proceedWithExport", "startYear", startYear, "startMonth", startMonth,
+        "endYear", endYear, "endMonth", endMonth, "dataset", dataset);
     }
     this.setState({confirm_export: false,});
 
@@ -179,8 +179,8 @@ class AddEditReactorOperatingRuns extends React.Component {
       cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
       "include.metadata": BOOL_TRUE_STR,
       "load.metadata.from.store": ["nurims.operation.data.stats"],
-      startDate: `${year.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
-      endDate: `${year.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
+      startDate: `${startYear.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
+      endDate: `${endYear.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
       dataset: dataset,
       datasetFormat: datasetFormat,
       module: this.Module,

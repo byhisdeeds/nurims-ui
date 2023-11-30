@@ -692,14 +692,18 @@ DateRangePicker.propTypes = {
   views: PropTypes.array,
 }
 
-export function SameYearDateRangePicker({year, from, to, disabled, onYearChange, onToChange, onFromChange}) {
+export function SameYearDateRangePicker({
+                                          year, from, to, disabled, onYearChange, onToChange, onFromChange, startLabel,
+                                          endLabel, yearLabel
+                                        })
+{
   return (
     <Box sx={{display: 'flex'}}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
         <DatePicker
           renderInput={(props) => <TextField
             style={{width: "12ch", paddingRight: 8, marginTop: 8}} {...props} />}
-          label=" Year "
+          label={yearLabel}
           value={year}
           views={["year"]}
           inputFormat={"yyyy"}
@@ -709,7 +713,7 @@ export function SameYearDateRangePicker({year, from, to, disabled, onYearChange,
         <DatePicker
           renderInput={(props) => <TextField
             style={{width: "18ch", paddingRight: 8, marginTop: 8}} {...props} />}
-          label=" Start Month "
+          label={startLabel}
           value={from}
           views={["month"]}
           inputFormat={"MMMM"}
@@ -719,7 +723,7 @@ export function SameYearDateRangePicker({year, from, to, disabled, onYearChange,
         <DatePicker
           renderInput={(props) => <TextField
             style={{width: "18ch", paddingRight: 8, marginTop: 8}} {...props} />}
-          label=" End Month "
+          label={endLabel}
           value={to}
           views={["month"]}
           inputFormat={"MMMM"}
@@ -732,12 +736,86 @@ export function SameYearDateRangePicker({year, from, to, disabled, onYearChange,
 }
 
 SameYearDateRangePicker.propTypes = {
+  yearLabel: PropTypes.string.isRequired,
+  startLabel: PropTypes.string.isRequired,
+  endLabel: PropTypes.string.isRequired,
   year: PropTypes.object.isRequired,
   from: PropTypes.object.isRequired,
   to: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
   onToChange: PropTypes.func.isRequired,
   onFromChange: PropTypes.func.isRequired,
+}
+
+
+export function MultipleYearDateRangePicker({
+                                              fromYear, fromMonth, toYear, toMonth, disabled, onFromYearChange,
+                                              onFromMonthChange, onToYearChange, onToMonthChange, fromYearLabel,
+                                              fromMonthLabel, toYearLabel, toMonthLabel
+                                            })
+{
+  return (
+    <Box sx={{display: 'flex'}}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
+        <DatePicker
+          renderInput={(props) => <TextField
+            style={{width: "12ch", paddingRight: 8, marginTop: 8}} {...props} />}
+          label={fromYearLabel}
+          value={fromYear}
+          views={["year"]}
+          inputFormat={"yyyy"}
+          onChange={onFromYearChange}
+          disabled={disabled}
+        />
+        <DatePicker
+          renderInput={(props) => <TextField
+            style={{width: "18ch", paddingRight: 8, marginTop: 8}} {...props} />}
+          label={fromMonthLabel}
+          value={fromMonth}
+          views={["month"]}
+          inputFormat={"MMMM"}
+          onChange={onFromMonthChange}
+          disabled={disabled}
+        />
+        <DatePicker
+          renderInput={(props) => <TextField
+            style={{width: "12ch", paddingRight: 8, marginTop: 8}} {...props} />}
+          label={toYearLabel}
+          value={toYear}
+          views={["year"]}
+          inputFormat={"yyyy"}
+          onChange={onToYearChange}
+          disabled={disabled}
+        />
+        <DatePicker
+          renderInput={(props) => <TextField
+            style={{width: "18ch", paddingRight: 8, marginTop: 8}} {...props} />}
+          label={toMonthLabel}
+          value={toMonth}
+          views={["month"]}
+          inputFormat={"MMMM"}
+          onChange={onToMonthChange}
+          disabled={disabled}
+        />
+      </LocalizationProvider>
+    </Box>
+  )
+}
+
+MultipleYearDateRangePicker.propTypes = {
+  fromYearLabel: PropTypes.string.isRequired,
+  fromMonthLabel: PropTypes.string.isRequired,
+  toYearLabel: PropTypes.string.isRequired,
+  toMonthLabel: PropTypes.string.isRequired,
+  fromYear: PropTypes.object.isRequired,
+  fromMonth: PropTypes.object.isRequired,
+  toYear: PropTypes.object.isRequired,
+  toMonth: PropTypes.object.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onToYearChange: PropTypes.func.isRequired,
+  onToMonthChange: PropTypes.func.isRequired,
+  onFromYearChange: PropTypes.func.isRequired,
+  onFromMonthChange: PropTypes.func.isRequired,
 }
 
 

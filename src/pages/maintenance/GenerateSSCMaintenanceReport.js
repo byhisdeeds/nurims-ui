@@ -110,8 +110,9 @@ class GenerateSSCMaintenanceReport extends Component {
           <Grid item xs={12}>
             <Stack direction="row" spacing={1}>
               <SameYearDateRangePicker
-                startText="Start Date"
-                endText="End Date"
+                yearLabel={" Year "}
+                startLabel={" Start Month "}
+                endLabel={"End Month "}
                 from={startDate}
                 to={endDate}
                 year={year}

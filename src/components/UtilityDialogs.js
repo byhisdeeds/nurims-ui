@@ -25,7 +25,7 @@ import {
   Close as CloseIcon
 } from '@mui/icons-material';
 import PropTypes from "prop-types";
-import {SameYearDateRangePicker} from "./CommonComponents";
+import {MultipleYearDateRangePicker, SameYearDateRangePicker} from "./CommonComponents";
 import PdfViewer from "./PdfViewer";
 import {
   enqueueErrorSnackbar
@@ -131,22 +131,19 @@ export const isValidSelection = (selection) => {
 
 export const ConfirmOperatingRunDiscoveryDialog = (props) => {
   const [year, setYear] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startMonth, setStartMonth] = useState(null);
+  const [endMonth, setEndMonth] = useState(null);
   const [forceOverwrite, setForceOverwrite] = useState(false);
 
   const handleToDateRangeChange = (range) => {
-    console.log("handleToDateRangeChange", range)
-    setEndDate(range);
+    setEndMonth(range);
   }
 
   const handleFromDateRangeChange = (range) => {
-    console.log("handleFromDateRangeChange", range)
-    setStartDate(range);
+    setStartMonth(range);
   }
 
   const handleYearDateRangeChange = (year) => {
-    console.log("handleYearDateRangeChange", year)
     setYear(year);
   }
 
@@ -154,15 +151,15 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
     setForceOverwrite(e.target.checked)
   }
 
-  const proceed = (year, startDate, endDate, forceOverwrite) => {
+  const proceed = (year, startMonth, endMonth, forceOverwrite) => {
     if (year === null) {
       enqueueErrorSnackbar("No operating year selected", ERROR_SNACKBAR_DURATION);
-    } else if (startDate === null) {
+    } else if (startMonth === null) {
       enqueueErrorSnackbar("No start month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
-    } else if (endDate === null) {
+    } else if (endMonth === null) {
       enqueueErrorSnackbar("No end month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
     } else {
-      props.onProceed(year, startDate, endDate, forceOverwrite);
+      props.onProceed(year, startMonth, endMonth, forceOverwrite);
     }
   }
 
@@ -189,10 +186,11 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <SameYearDateRangePicker
-                startText="Start Date"
-                endText="End Date"
-                from={startDate}
-                to={endDate}
+                yearLabel={" Year "}
+                startLabel={" Start Month "}
+                endLabel={"End Month "}
+                from={startMonth}
+                to={endMonth}
                 year={year}
                 disabled={false}
                 onYearChange={handleYearDateRangeChange}
@@ -217,7 +215,7 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
           />
           <Box sx={{flexGrow: 1}} />
           <Button onClick={props.onCancel}>Cancel</Button>
-          <Button onClick={() => proceed(year, startDate, endDate, forceOverwrite)} autoFocus>Continue</Button>
+          <Button onClick={() => proceed(year, startMonth, endMonth, forceOverwrite)} autoFocus>Continue</Button>
         </DialogActions>
       </Dialog>
     </div>
@@ -294,8 +292,9 @@ export const ConfirmGenerateReactorOperationReportDialog = (props) => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <SameYearDateRangePicker
-                startText="Start Date"
-                endText="End Date"
+                yearLabel={" Year "}
+                startLabel={" Start Month "}
+                endLabel={"End Month "}
                 from={startDate}
                 to={endDate}
                 year={year}
@@ -425,21 +424,27 @@ ShowProvenanceRecordsDialog.defaultProps = {
 
 
 export const ConfirmOperatingRunDataExportDialog = (props) => {
-  const [year, setYear] = useState(null);
   const [dataset, setDataset] = useState(null);
   const [datasetFormat, setDatasetFormat] = useState("json");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [forceOverwrite, setForceOverwrite] = useState(false);
+  const [startYear, setStartYear] = useState(null);
+  const [startMonth, setStartMonth] = useState(null);
+  const [endYear, setEndYear] = useState(null);
+  const [endMonth, setEndMonth] = useState(null);
 
-  const handleToDateRangeChange = (range) => {
-    console.log("handleToDateRangeChange", range)
-    setEndDate(range);
+  const handleToYearChange = (range) => {
+    setEndYear(range);
   }
 
-  const handleFromDateRangeChange = (range) => {
-    console.log("handleFromDateRangeChange", range)
-    setStartDate(range);
+  const handleFromYearChange = (range) => {
+    setStartYear(range);
+  }
+
+  const handleToMonthChange = (range) => {
+    setEndMonth(range);
+  }
+
+  const handleFromMonthChange = (range) => {
+    setStartMonth(range);
   }
 
   const handleExportDatasetSelected = (e) => {
@@ -452,28 +457,21 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
     setDatasetFormat(e.target.value);
   }
 
-  const handleYearDateRangeChange = (year) => {
-    console.log("handleYearDateRangeChange", year)
-    setYear(year);
-  }
-
-  const onForceOverwriteChange = (e) => {
-    setForceOverwrite(e.target.checked)
-  }
-
-  const proceed = (runYear, runStartDate, runEndDate, runDataset, runDatasetFormat) => {
-    if (runYear === null) {
-      enqueueErrorSnackbar("No operating year selected", ERROR_SNACKBAR_DURATION);
-    } else if (runStartDate === null) {
+  const proceed = (startYear, startMonth, endYear, endMonth, runDataset, runDatasetFormat) => {
+    if (startYear === null) {
+      enqueueErrorSnackbar("No start year for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
+    } else if (startMonth === null) {
       enqueueErrorSnackbar("No start month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
-    } else if (runEndDate === null) {
+    } else if (endYear === null) {
+      enqueueErrorSnackbar("No end year for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
+    } else if (endMonth === null) {
       enqueueErrorSnackbar("No end month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
     } else if (runDataset === null) {
       enqueueErrorSnackbar("No operating run dataset selected", ERROR_SNACKBAR_DURATION);
     } else if (runDatasetFormat === null) {
       enqueueErrorSnackbar("No operating run export file format selected", ERROR_SNACKBAR_DURATION);
     } else {
-      props.onProceed(runYear, runStartDate, runEndDate, runDataset, runDatasetFormat);
+      props.onProceed(startYear, startMonth, endYear, endMonth, runDataset, runDatasetFormat);
     }
   }
 
@@ -500,12 +498,15 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
           </DialogContentText>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <SameYearDateRangePicker
-                startText="Start Date"
-                endText="End Date"
-                from={startDate}
-                to={endDate}
-                year={year}
+              <MultipleYearDateRangePicker
+                fromYearLabel={" Start Year "}
+                fromMonthLabel={" Start Month "}
+                toYearLabel={" End Year "}
+                toMonthLabel={" End Month "}
+                fromYear={startYear}
+                fromMonth={startMonth}
+                toYear={endYear}
+                toMonth={endMonth}
                 disabled={false}
                 onYearChange={handleYearDateRangeChange}
                 onToChange={handleToDateRangeChange}
