@@ -3,6 +3,8 @@ import {
   getRecordMetadataValue
 } from "./MetadataUtils";
 import {
+  NURIMS_OPERATION_DATA_CONTROLRODPOSITION,
+  NURIMS_OPERATION_DATA_NEUTRONFLUX,
   NURIMS_OPERATION_DATA_STATS
 } from "./constants";
 import {json2csv} from 'json-2-csv';
@@ -36,38 +38,72 @@ export function prepareExportData(message) {
   const startDate = message.hasOwnProperty("startDate") ? message.startDate : "0000-00"
   const endDate = message.hasOwnProperty("endDate") ? message.endDate.substring(5,7) : "00"
   const dataset = message.hasOwnProperty("dataset") ? message.dataset : ""
+  const data_array = [];
   if (dataset === "stats") {
-    if (datasetFormat === "json") {
-      f.fileName = `operating-run-${dataset}-${startDate}-${endDate}.json`;
-      f.fileType = "application/json";
-      const records = [];
-      for (const record of data) {
-        const _d = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, "");
-        records.push(_d)
-      }
-      f.blobData = JSON.stringify(records,null, 2);
-    } else if (datasetFormat === "csv") {
-      f.fileName = `operating-run-${dataset}-${startDate}-${endDate}.csv`;
-      f.fileType = "text/csv";
-      const data_array = [];
-      for (const record of data) {
-        data_array.push(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, ""));
-      }
-      f.blobData = json2csv(data_array,
-        {
-          emptyFieldValue: "-",
-          excelBOM: true,
-          excludeKeys: ["rod_events"],
-          prependHeader: true,
-          sortHeader: false,
-          expandNestedObjects: true,
-          wrapHeaderFields: true,
-          unwindArrays: true,
-        }
-      );
+    for (const record of data) {
+      data_array.push(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, ""))
     }
-  } else if (dataset === "flux") {
-
+  } else if (dataset === "neutronflux") {
+    for (const record of data) {
+      data_array.push(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, ""))
+    }
+  } else if (dataset === "controlrodposition") {
+    for (const record of data) {
+      data_array.push(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_CONTROLRODPOSITION, ""))
+    }
   }
+  if (datasetFormat === "json") {
+    f.fileName = `operating-run-${dataset}-${startDate}-${endDate}.json`;
+    f.fileType = "application/json";
+    f.blobData = JSON.stringify(data_array,null, 2);
+  } else if (datasetFormat === "csv") {
+    f.fileName = `operating-run-${dataset}-${startDate}-${endDate}.csv`;
+    f.fileType = "text/csv";
+    f.blobData = json2csv(data_array,
+      {
+        emptyFieldValue: "-",
+        excelBOM: true,
+        excludeKeys: ["rod_events"],
+        prependHeader: true,
+        sortHeader: false,
+        expandNestedObjects: true,
+        wrapHeaderFields: true,
+        unwindArrays: true,
+      }
+    );
+  }
+  // if (dataset === "stats") {
+  //   if (datasetFormat === "json") {
+  //     f.fileName = `operating-run-${dataset}-${startDate}-${endDate}.json`;
+  //     f.fileType = "application/json";
+  //     const records = [];
+  //     for (const record of data) {
+  //       const _d = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, "");
+  //       records.push(_d)
+  //     }
+  //     f.blobData = JSON.stringify(records,null, 2);
+  //   } else if (datasetFormat === "csv") {
+  //     f.fileName = `operating-run-${dataset}-${startDate}-${endDate}.csv`;
+  //     f.fileType = "text/csv";
+  //     const data_array = [];
+  //     for (const record of data) {
+  //       data_array.push(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, ""));
+  //     }
+  //     f.blobData = json2csv(data_array,
+  //       {
+  //         emptyFieldValue: "-",
+  //         excelBOM: true,
+  //         excludeKeys: ["rod_events"],
+  //         prependHeader: true,
+  //         sortHeader: false,
+  //         expandNestedObjects: true,
+  //         wrapHeaderFields: true,
+  //         unwindArrays: true,
+  //       }
+  //     );
+  //   }
+  // } else if (dataset === "flux") {
+  //
+  // }
   return f;
 }
