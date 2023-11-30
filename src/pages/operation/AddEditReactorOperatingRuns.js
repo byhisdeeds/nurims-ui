@@ -184,7 +184,7 @@ class AddEditReactorOperatingRuns extends React.Component {
     this.setState({confirm_export: false,});
 
     const metadata =
-      dataset === "stats" ? NURIMS_OPERATION_DATA_STATS :
+      dataset === "rodevents" ? NURIMS_OPERATION_DATA_STATS :
         dataset === "neutronflux" ? NURIMS_OPERATION_DATA_NEUTRONFLUX :
           dataset === "controlrodposition" ? NURIMS_OPERATION_DATA_CONTROLRODPOSITION : null;
     if (metadata) {

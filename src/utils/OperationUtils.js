@@ -38,20 +38,31 @@ export function prepareExportData(message) {
   const startDate = message.hasOwnProperty("startDate") ? message.startDate : "0000-00"
   const endDate = message.hasOwnProperty("endDate") ? message.endDate.substring(5,7) : "00"
   const dataset = message.hasOwnProperty("dataset") ? message.dataset : ""
+  const excludeKeys = [];
   let data_array = [];
   console.log("@@@@@@@@@@@@@@@@@")
   console.log(data)
   console.log("@@@@@@@@@@@@@@@@@")
   if (dataset === "stats") {
+    excludeKeys.push("rod_events");
     for (const record of data) {
       data_array.push(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, {}))
     }
+  } else if (dataset === "rodevents") {
+    for (const record of data) {
+      const _stats = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, {});
+      if (_stats.hasOwnProperty("rod_events")) {
+        data_array.push(_stats["rod_events"]);
+      }
+    }
   } else if (dataset === "neutronflux") {
+    excludeKeys.push("id");
     for (const record of data) {
       // const.push(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, ""))
       data_array = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_NEUTRONFLUX, [])
     }
   } else if (dataset === "controlrodposition") {
+    excludeKeys.push("id");
     for (const record of data) {
       data_array = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_CONTROLRODPOSITION, [])
     }
@@ -70,7 +81,7 @@ export function prepareExportData(message) {
       {
         emptyFieldValue: "-",
         excelBOM: true,
-        excludeKeys: ["rod_events"],
+        excludeKeys: excludeKeys,
         prependHeader: true,
         sortHeader: false,
         expandNestedObjects: true,
