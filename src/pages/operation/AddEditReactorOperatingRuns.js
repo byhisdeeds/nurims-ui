@@ -16,7 +16,9 @@ import {
   CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
   ITEM_ID,
-  METADATA, NURIMS_OPERATION_DATA_CONTROLRODPOSITION, NURIMS_OPERATION_DATA_NEUTRONFLUX,
+  METADATA,
+  NURIMS_OPERATION_DATA_CONTROLRODPOSITION,
+  NURIMS_OPERATION_DATA_NEUTRONFLUX,
   NURIMS_OPERATION_DATA_STATS,
   NURIMS_WITHDRAWN,
   ROLE_REACTOR_OPERATIONS_DATA_EXPORT
@@ -157,6 +159,13 @@ class AddEditReactorOperatingRuns extends React.Component {
     });
   }
 
+  exportOperatingRunStatistics = () => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "exportOperatingRunStatistics");
+    }
+    this.setState({confirm_export: true,});
+  }
+
   exportOperatingRunData = () => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "exportOperatingRunData");
@@ -168,10 +177,9 @@ class AddEditReactorOperatingRuns extends React.Component {
     this.setState({confirm_export: false,});
   }
 
-  proceedWithExport = (startYear, startMonth, endYear, endMonth, dataset, datasetFormat) => {
+  proceedWithOperatingRunDataExport = (dataset, datasetFormat) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "proceedWithExport", "startYear", startYear, "startMonth", startMonth,
-        "endYear", endYear, "endMonth", endMonth, "dataset", dataset);
+      ConsoleLog(this.Module, "dataset", dataset, "datasetFormat", datasetFormat);
     }
     this.setState({confirm_export: false,});
 
@@ -184,8 +192,9 @@ class AddEditReactorOperatingRuns extends React.Component {
         cmd: CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
         "include.metadata": BOOL_TRUE_STR,
         "load.metadata.from.store": [metadata],
-        startDate: `${startYear.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
-        endDate: `${endYear.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
+        // startDate: `${startYear.year()}-${String(startMonth.month() + 1).padStart(2, "0")}`,
+        // endDate: `${endYear.year()}-${String(endMonth.month() + 1).padStart(2, "0")}`,
+        "item_id": this.state.selection[ITEM_ID],
         dataset: dataset,
         datasetFormat: datasetFormat,
         module: this.Module,
@@ -353,6 +362,7 @@ class AddEditReactorOperatingRuns extends React.Component {
         "confirm_removed", confirm_remove, "confirm_export", confirm_export, "include_archived", include_archived,
         "is_valid_role", is_valid_role, "selection", selection);
     }
+    const no_selection = isRecordEmpty(selection);
     const disabled = !is_valid_role;
     return (
       <React.Fragment>
@@ -366,7 +376,7 @@ class AddEditReactorOperatingRuns extends React.Component {
                                             onCancel={this.cancelDiscovery}
         />
         <ConfirmOperatingRunDataExportDialog open={confirm_export}
-                                             onProceed={this.proceedWithExport}
+                                             onProceed={this.proceedWithOperatingRunDataExport}
                                              onCancel={this.cancelExport}
         />
         <Grid container spacing={2}>
@@ -411,10 +421,15 @@ class AddEditReactorOperatingRuns extends React.Component {
             <AddIcon sx={{mr: 1}}/>
             Update Operating Runs
           </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add" disabled={disabled}
+          <Fab variant="extended" size="small" color="primary" aria-label="add" disabled={disabled||no_selection}
                onClick={this.exportOperatingRunData}>
             <AddIcon sx={{mr: 1}}/>
             Export Operating Run Data
+          </Fab>
+          <Fab variant="extended" size="small" color="primary" aria-label="add" disabled={disabled}
+               onClick={this.exportOperatingRunStatistics}>
+            <AddIcon sx={{mr: 1}}/>
+            Export Operating Run Statistics
           </Fab>
         </Box>
       </React.Fragment>
