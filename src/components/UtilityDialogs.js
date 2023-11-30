@@ -580,7 +580,7 @@ export const ConfirmOperatingRunStatisticsExportDialog = (props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Export Reactor Operation Run Data"}
+          {"Export Reactor Operation Run Statistics"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

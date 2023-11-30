@@ -5,7 +5,7 @@ import {
 } from "../../utils/UserContext";
 import {
   ConfirmOperatingRunDataExportDialog,
-  ConfirmOperatingRunDiscoveryDialog,
+  ConfirmOperatingRunDiscoveryDialog, ConfirmOperatingRunStatisticsExportDialog,
   ConfirmRemoveRecordDialog
 } from "../../components/UtilityDialogs";
 import {
@@ -70,7 +70,8 @@ class AddEditReactorOperatingRuns extends React.Component {
     this.state = {
       metadata_changed: false,
       confirm_remove: false,
-      confirm_export: false,
+      confirm_export_data: false,
+      confirm_export_statistics: false,
       confirm_discovery: false,
       selection: {},
       title: props.title,
@@ -160,15 +161,15 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   exportOperatingRunStatistics = () => {
-    this.setState({confirm_export: true,});
+    this.setState({confirm_export_statistics: true,});
   }
 
   exportOperatingRunData = () => {
-    this.setState({confirm_export: true,});
+    this.setState({confirm_export_data: true,});
   }
 
   cancelExport = () => {
-    this.setState({confirm_export: false,});
+    this.setState({confirm_export_data: false, confirm_export_statistics: false});
   }
 
   proceedWithOperatingRunDataExport = (dataset, datasetFormat) => {
@@ -176,7 +177,7 @@ class AddEditReactorOperatingRuns extends React.Component {
       ConsoleLog(this.Module, "proceedWithOperatingRunDataExport", "dataset", dataset, "datasetFormat",
         datasetFormat);
     }
-    this.setState({confirm_export: false,});
+    this.setState({confirm_export_data: false,});
 
     const metadata =
       dataset === "rodevents" ? NURIMS_OPERATION_DATA_STATS :
@@ -209,7 +210,7 @@ class AddEditReactorOperatingRuns extends React.Component {
         "startMonth", startMonth, "endYear", endYear, "endMonth", endMonth, "dataset", dataset,
         "datasetFormat", datasetFormat);
     }
-    this.setState({confirm_export: false,});
+    this.setState({confirm_export_data: false,});
 
     const metadata =
       dataset === "rodevents" ? NURIMS_OPERATION_DATA_STATS :
@@ -382,12 +383,14 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   render() {
-    const {metadata_changed, confirm_remove, confirm_discovery, confirm_export, include_archived, selection} = this.state;
+    const {metadata_changed, confirm_remove, confirm_discovery, confirm_export_data, confirm_export_statistics,
+      include_archived, selection} = this.state;
     const is_valid_role = isValidUserRole(this.props.user, [ROLE_REACTOR_OPERATIONS_DATA_EXPORT]);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
-        "confirm_removed", confirm_remove, "confirm_export", confirm_export, "include_archived", include_archived,
-        "is_valid_role", is_valid_role, "selection", selection);
+        "confirm_removed", confirm_remove, "confirm_export_data", confirm_export_data, "confirm_export_statistics",
+        confirm_export_statistics, "include_archived", include_archived, "is_valid_role", is_valid_role,
+        "selection", selection);
     }
     const no_selection = isRecordEmpty(selection);
     const disabled = !is_valid_role;
@@ -402,9 +405,13 @@ class AddEditReactorOperatingRuns extends React.Component {
                                             onProceed={this.proceedWithDiscovery}
                                             onCancel={this.cancelDiscovery}
         />
-        <ConfirmOperatingRunDataExportDialog open={confirm_export}
+        <ConfirmOperatingRunDataExportDialog open={confirm_export_data}
                                              onProceed={this.proceedWithOperatingRunDataExport}
                                              onCancel={this.cancelExport}
+        />
+        <ConfirmOperatingRunStatisticsExportDialog open={confirm_export_statistics}
+                                                   onProceed={this.proceedWithOperatingRunStatisticsExport}
+                                                   onCancel={this.cancelExport}
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
