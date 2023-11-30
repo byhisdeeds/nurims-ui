@@ -62,6 +62,7 @@ export function prepareExportData(message) {
           sortHeader: false,
           expandNestedObjects: true,
           wrapHeaderFields: true,
+          unwindArrays: true,
         }
       );
     }
