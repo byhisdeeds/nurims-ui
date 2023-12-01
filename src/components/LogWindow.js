@@ -41,7 +41,9 @@ class LogWindow extends Component {
     const file = new Blob(dataToDownload, {type: 'text/plain'});
     element.href = URL.createObjectURL(file);
     const d = dayjs();
-    element.download = `nurims-${d.year()}${d.month()}${d.day()}-${d.hour()}${d.minute()}.log`;
+    const zeroPad = (n, digits) => n.toString().padStart(digits, '0');
+    element.download = "nurims-" + zeroPad(d.year(),4) + zeroPad(d.month(), 2) +
+      zeroPad(d.day(), 2) + "-" + zeroPad(d.hour(), 2) + zeroPad(d.minute(), 2) + ".log";
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
