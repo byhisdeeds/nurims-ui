@@ -130,36 +130,43 @@ export const isValidSelection = (selection) => {
 
 
 export const ConfirmOperatingRunDiscoveryDialog = (props) => {
-  const [year, setYear] = useState(null);
+  const [startYear, setStartYear] = useState(null);
+  const [endYear, setEndYear] = useState(null);
   const [startMonth, setStartMonth] = useState(null);
   const [endMonth, setEndMonth] = useState(null);
   const [forceOverwrite, setForceOverwrite] = useState(false);
 
-  const handleToDateRangeChange = (range) => {
+  const handleToMonthChange = (range) => {
     setEndMonth(range);
   }
 
-  const handleFromDateRangeChange = (range) => {
+  const handleFromMonthChange = (range) => {
     setStartMonth(range);
   }
 
-  const handleYearDateRangeChange = (year) => {
-    setYear(year);
+  const handleFromYearChange = (year) => {
+    setStartYear(year);
+  }
+
+  const handleToYearChange = (year) => {
+    setEndYear(year);
   }
 
   const onForceOverwriteChange = (e) => {
     setForceOverwrite(e.target.checked)
   }
 
-  const proceed = (year, startMonth, endMonth, forceOverwrite) => {
-    if (year === null) {
-      enqueueErrorSnackbar("No operating year selected", ERROR_SNACKBAR_DURATION);
+  const proceed = () => {
+    if (startYear === null) {
+      enqueueErrorSnackbar("No start year for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
     } else if (startMonth === null) {
       enqueueErrorSnackbar("No start month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
+    } else if (endYear === null) {
+      enqueueErrorSnackbar("No end year for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
     } else if (endMonth === null) {
       enqueueErrorSnackbar("No end month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
     } else {
-      props.onProceed(year, startMonth, endMonth, forceOverwrite);
+      props.onProceed(startYear, startMonth, endYear, endMonth, forceOverwrite);
     }
   }
 
@@ -177,25 +184,29 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Reactor operation parameters are available via the YOKOGAWA digital chart recorder, which
-            provides information on a per second basis for the control rod movement, neutron flux,
+            provides per second resolution information for the control rod movement, neutron flux,
             inlet and outlet temperatures, and gamma radiation area monitors.
             <p/>
-            Select a year, month range to extract the operating runs that occurred during the period.
+            Select the start year, start month, end year, end month, and whether
+            previously stored data should be overwritten.
             <p/>
           </DialogContentText>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <SameYearDateRangePicker
-                yearLabel={" Year "}
-                startLabel={" Start Month "}
-                endLabel={"End Month "}
-                from={startMonth}
-                to={endMonth}
-                year={year}
+              <MultipleYearDateRangePicker
+                fromYearLabel={" Start Year "}
+                fromMonthLabel={" Start Month "}
+                toYearLabel={" End Year "}
+                toMonthLabel={" End Month "}
+                fromYear={startYear}
+                fromMonth={startMonth}
+                toYear={endYear}
+                toMonth={endMonth}
                 disabled={false}
-                onYearChange={handleYearDateRangeChange}
-                onToChange={handleToDateRangeChange}
-                onFromChange={handleFromDateRangeChange}
+                onFromYearChange={handleFromYearChange}
+                onFromMonthChange={handleFromMonthChange}
+                onToYearChange={handleToYearChange}
+                onToMonthChange={handleToMonthChange}
                 renderInput={(startProps, endProps) => (
                   <React.Fragment>
                     <TextField {...startProps}/>
@@ -215,7 +226,7 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
           />
           <Box sx={{flexGrow: 1}} />
           <Button onClick={props.onCancel}>Cancel</Button>
-          <Button onClick={() => proceed(year, startMonth, endMonth, forceOverwrite)} autoFocus>Continue</Button>
+          <Button onClick={() => proceed()} autoFocus>Continue</Button>
         </DialogActions>
       </Dialog>
     </div>
@@ -427,12 +438,10 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
   const [datasetFormat, setDatasetFormat] = useState("json");
 
   const handleExportDatasetSelected = (e) => {
-    console.log("handleExportDatasetSelected", e.target.value)
     setDataset(e.target.value);
   }
 
   const handleExportDatasetFileFormat = (e) => {
-    console.log("handleExportDatasetFileFormat", e.target.value)
     setDatasetFormat(e.target.value);
   }
 
