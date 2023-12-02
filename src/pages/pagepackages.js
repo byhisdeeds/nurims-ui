@@ -3,6 +3,7 @@ import React, {lazy} from "react";
 import {CHATBOT_REF} from "./rasa/ChatBot";
 import {TERMSANDDEFINITIONS_REF} from "./support/TermsAndDefinitions";
 import {MANAGEUSERS_REF} from "./sysadmin/ManageUsers";
+import {SYSTEMCONFIGURATION_REF} from "./sysadmin/SystemConfiguration";
 import {ADDEDITPERSONNEL_REF} from "./personnel/AddEditPersonnel";
 import {UPDATEMONITORINGSTATUS_REF} from "./personnel/UpdateMonitoringStatus";
 import {VIEWPERSONNELRECORDS_REF} from "./personnel/ViewPersonnelRecords";
@@ -91,7 +92,8 @@ import {
   SUPPORT_TERMS_AND_DEFINITIONS,
   SYSADMIN_CLEANUP_LARGE_OBJECT_STORE,
   SYSADMIN_DISCOVER_ORPHANED_METADATA,
-  SYSADMIN_MANAGE_USERS
+  SYSADMIN_MANAGE_USERS,
+  SYSADMIN_SYSTEM_CONFIGURATION
 } from "../utils/constants";
 
 
@@ -115,6 +117,7 @@ const AddEditAMP = lazy(() => import('./maintenance/AddEditAMP'));
 const ViewSSCRecords = lazy(() => import('./maintenance/ViewSSCRecords'));
 const ViewAMPRecords = lazy(() => import('./maintenance/ViewAMPRecords'));
 const AddEditMonitors = lazy(() => import('./radiationprotection/AddEditMonitors'));
+const SystemConfiguration = lazy(() => import('./sysadmin/SystemConfiguration'));
 const ManageUsers = lazy(() => import('./sysadmin/ManageUsers'));
 const CleanupLargeObjectStore = lazy(() => import('./sysadmin/CleanupLargeObjectStore'));
 const DiscoverOrphanedMetadata = lazy(() => import('./sysadmin/DiscoverOrphanedMetadata'));
@@ -189,6 +192,16 @@ export const SysAdminResourcePackages = (actionid, crefs, menuTitle, user, handl
   } else if (actionid === SYSADMIN_DISCOVER_ORPHANED_METADATA) {
     return (<DiscoverOrphanedMetadata
       ref={crefs[DISCOVERORPHANEDMETADATA_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+      glossary={glossary}
+    />)
+  } else if (actionid === SYSADMIN_SYSTEM_CONFIGURATION) {
+    return (<SystemConfiguration
+      ref={crefs[SYSTEMCONFIGURATION_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}

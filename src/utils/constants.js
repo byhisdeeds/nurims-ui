@@ -72,6 +72,7 @@ module.exports = Object.freeze({
   SYSADMIN_MANAGE_USERS: 'sysadmin.manage.users',
   SYSADMIN_CLEANUP_LARGE_OBJECT_STORE: 'sysadmin.cleanup.large.object.store',
   SYSADMIN_DISCOVER_ORPHANED_METADATA: 'sysadmin.discover.orphaned.metadata',
+  SYSADMIN_SYSTEM_CONFIGURATION: 'sysadmin.systemconfiguration',
 
   SUPPORT_TERMS_AND_DEFINITIONS: 'support.terms.and.definitions',
 
@@ -84,6 +85,7 @@ module.exports = Object.freeze({
   PRO_IMPORT_ICENS_CONTROLLED_MATERIALS: 'sysadmin.import.icens.controlled.materials',
   PRO_IMPORT_ICENS_MONITORS: 'sysadmin.import.icens.monitors',
 
+  CMD_GET_CONFIG_PROPERTIES: "get_config_properties",
   CMD_SET_LOGGING_LEVEL: "set_logging_level",
   CMD_PING: "ping",
   CMD_GET_SERVER_INFO: "get_server_info",

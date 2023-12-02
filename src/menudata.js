@@ -613,6 +613,13 @@ export const MenuItems = [
         authmodlevel: 'basic',
       },
       {
+        label: 'System Configuration',
+        value: 'sysadmin.systemconfiguration',
+        title: 'System Configuration',
+        tooltip: 'System configuration',
+        authmodlevel: 'basic',
+      },
+      {
         label: 'Cleanup Large Object Store',
         value: 'sysadmin.cleanup.large.object.store',
         title: 'Cleanup Large Object Store',

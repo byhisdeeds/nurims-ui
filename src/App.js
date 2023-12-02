@@ -93,6 +93,7 @@ import {DISCOVERORPHANEDMETADATA_REF} from "./pages/sysadmin/DiscoverOrphanedMet
 import {ADDEDITMODIFICATIONRECORD_REF} from "./pages/maintenance/AddEditModificationRecord";
 import {ADDEDITMAINTENANCERECORD_REF} from "./pages/maintenance/AddEditMaintenanceRecord";
 import {SIGNIN_REF} from "./components/Signin";
+import {SYSTEMCONFIGURATION_REF} from "./pages/sysadmin/SystemConfiguration";
 import NotificationWindow from "./components/NotificationWindow";
 import SystemInfoBadges from "./components/SystemInfoBadges";
 import {
@@ -241,6 +242,7 @@ class App extends React.Component {
     this.crefs[PERSONNELDOSIMETRYEVALUATION_REF] = React.createRef();
     this.crefs[VIEWMATERIALSLIST_REF] = React.createRef();
     this.crefs[MANAGEUSERS_REF] = React.createRef();
+    this.crefs[SYSTEMCONFIGURATION_REF] = React.createRef();
     this.crefs[CLEANUPLARGEOBJECTSTORE_REF] = React.createRef();
     this.crefs[DISCOVERORPHANEDMETADATA_REF] = React.createRef();
     this.crefs[GENERATESSCMAINTENANCEREPORT_REF] = React.createRef();
