@@ -1,24 +1,17 @@
 import React, {Component} from 'react';
 import {
-  enqueueErrorSnackbar, enqueueInfoSnackbar, enqueueSuccessSnackbar
+  enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
 import {
   Box,
   Card,
   CardContent,
-  CardHeader, Fab,
+  CardHeader,
+  Fab,
   Grid
 } from "@mui/material";
 import {
-  runidAsTitle
-} from "../../utils/OperationUtils";
-import {
-  BLANK_PDF,
-  CMD_DELETE_REACTOR_OPERATING_REPORT_RECORD,
-  CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF,
-  CMD_GET_CONFIG_PROPERTIES, CMD_GET_PROVENANCE_RECORDS,
-  CMD_GET_REACTOR_OPERATING_REPORT_RECORDS,
-  NURIMS_TITLE
+  CMD_GET_CONFIG_PROPERTIES, ROLE_REACTOR_OPERATIONS_DATA_EXPORT, ROLE_SYSADMIN,
 } from "../../utils/constants";
 import ReactJson from "react-json-view";
 import {
@@ -26,10 +19,18 @@ import {
   UserContext
 } from "../../utils/UserContext";
 import PropTypes from "prop-types";
-import {config, title} from "process";
-import {isCommandResponse, messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
-import {TitleComponent} from "../../components/CommonComponents";
-import {Save as SaveIcon} from "@mui/icons-material";
+import {
+  isCommandResponse,
+  messageHasResponse,
+  messageResponseStatusOk
+} from "../../utils/WebsocketUtils";
+import {
+  TitleComponent
+} from "../../components/CommonComponents";
+import {
+  Save as SaveIcon
+} from "@mui/icons-material";
+import {isValidUserRole} from "../../utils/UserUtils";
 
 
 export const SYSTEMCONFIGURATION_REF = "SystemConfiguration";
@@ -71,17 +72,21 @@ class SystemConfiguration extends Component {
 
   editConfig = (edit) => {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "editConfig", "edit", edit);
+      ConsoleLog(this.Module, "editConfig", "edit", edit.updated_src);
     }
+    this.setState({ config: edit.updated_src, config_changed: true});
   }
 
   saveChanges = () => {
-
+    const config = this.state.config;
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "saveChanges", "config", config);
+    }
   }
 
   render() {
-    const {title} = this.props;
     const {config, config_changed} = this.state;
+    const is_valid_role = isValidUserRole(this.props.user, [ROLE_SYSADMIN]);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "config", config);
     }
@@ -100,11 +105,6 @@ class SystemConfiguration extends Component {
             autoComplete="off"
           >
             <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
-              <CardHeader
-                title={title}
-                titleTypographyProps={{fontSize: "1.5em", whiteSpace: "pre"}}
-                sx={{pt: 1, pl: 3, pb: 0}}
-              />
               <CardContent sx={{height: 600, overflowY: "auto"}}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={12}>
@@ -125,15 +125,15 @@ class SystemConfiguration extends Component {
                 </Grid>
               </CardContent>
             </Card>
+            <Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>
+              <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
+                   disabled={!(config_changed && is_valid_role)}>
+                <SaveIcon sx={{mr: 1}}/>
+                Save Changes
+              </Fab>
+            </Box>
           </Box>
         </Grid>
-        <Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>
-          <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
-               disabled={!config_changed}>
-            <SaveIcon sx={{mr: 1}}/>
-            Save Changes
-          </Fab>
-        </Box>
       </Grid>
     )
   }
