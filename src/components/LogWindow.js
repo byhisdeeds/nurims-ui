@@ -10,15 +10,16 @@ import {
 import {
   withTheme
 } from "@mui/styles";
-import DownloadIcon from '@mui/icons-material/Download';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import {
+  Download as DownloadIcon,
+  DeleteForever as DeleteForeverIcon
+} from '@mui/icons-material';
 import {
   UserContext
 } from "../utils/UserContext";
 import Editor from 'react-simple-code-editor';
 import {
-  highlight,
-  HIGHLIGHT_DEFN
+  highlight_logs,
 } from "../utils/HighlightUtils";
 import dayjs from 'dayjs';
 
@@ -54,8 +55,8 @@ class LogWindow extends Component {
     this.forceUpdate();
   }
 
-  highlight_logs = (code) => {
-    return highlight(code, HIGHLIGHT_DEFN.logs, "hl-editor token-timestamp");
+  highlight = (code) => {
+    return highlight_logs(code);
   }
 
   scrollToEnd = () => {
@@ -127,7 +128,7 @@ class LogWindow extends Component {
             data-color-mode={theme.palette.mode}
             onValueChange={code => {
             }}
-            highlight={this.highlight_logs}
+            highlight={this.highlight}
             padding={10}
             style={{
               backgroundColor: theme.palette.background.paper,

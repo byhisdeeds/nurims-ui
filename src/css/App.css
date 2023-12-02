@@ -299,6 +299,14 @@ pre {
     color: var(--color-prettylights-syntax-entity-tag);
 }
 
+.hl-editor .token-warn {
+    display: inline;
+    font-family: inherit;
+    font-size: 12px;
+    background-color: var(--color-canvas-subtle);
+    color: var(--color-prettylights-syntax-keyword);
+}
+
 .hl-editor .token-filename {
     display: inline;
     font-family: inherit;
