@@ -606,7 +606,7 @@ export const MenuItems = [
     authmodlevel: 'basic',
     children: [
       {
-        label: 'Add Users',
+        label: 'Manage Users',
         value: 'sysadmin.manage.users',
         title: 'Manage Users',
         tooltip: 'Manage system users',
