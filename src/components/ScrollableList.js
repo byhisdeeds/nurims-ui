@@ -23,7 +23,7 @@ class ScrollableList extends Component {
     const {theme, forceScroll, className, items, highlight, height, maxItems} = this.props;
     // trim messages array size to maximum
     if (items.length > maxItems) {
-      items.length -= (items.length - maxItems);
+      items.splice(0, items.length - maxItems);
       console.log("++++ trimming ", items.length)
     }
     return (

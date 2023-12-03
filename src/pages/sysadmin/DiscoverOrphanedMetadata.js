@@ -86,7 +86,7 @@ class DiscoverOrphanedMetadata extends Component {
             this.fields.push((this.fields.length === 0 ? "" : "\n") + "Completed processing.");
             this.setState({processing: false})
           } else {
-            this.fields.unshift((this.fields.length === 0 ? "" : "\n") +
+            this.fields.push((this.fields.length === 0 ? "" : "\n") +
               (response.hasOwnProperty("file") ? response.fields : ""));
             if (this.ref.current) {
               this.ref.current.forceUpdate();
@@ -150,6 +150,7 @@ class DiscoverOrphanedMetadata extends Component {
               items={this.fields}
               highlight={this.highlight_files}
               height={"calc(100vh - 245px)"}
+              maxItems={100}
             />
           </Grid>
         </Grid>

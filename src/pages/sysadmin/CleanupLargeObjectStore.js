@@ -86,7 +86,7 @@ class CleanupLargeObjectStore extends Component {
             this.files.push((this.files.length === 0 ? "" : "\n") + "Completed processing.");
             this.setState({processing: false})
           } else {
-            this.files.unshift((this.files.length === 0 ? "" : "\n") +
+            this.files.push((this.files.length === 0 ? "" : "\n") +
               (response.hasOwnProperty("file") ? response.file : ""));
             if (this.ref.current) {
               this.ref.current.forceUpdate();
@@ -149,6 +149,7 @@ class CleanupLargeObjectStore extends Component {
               items={this.files}
               highlight={this.highlight_files}
               height={"calc(100vh - 245px)"}
+              maxItems={100}
             />
           </Grid>
         </Grid>

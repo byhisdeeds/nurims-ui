@@ -123,6 +123,7 @@ class LogWindow extends Component {
             className={"hl-window"}
             items={logs}
             highlight={this.highlight}
+            maxItems={500}
           />
         </div>
       </Drawer>

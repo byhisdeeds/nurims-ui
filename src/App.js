@@ -520,7 +520,7 @@ class App extends React.Component {
       message = "[" + new Date().toISOString().substring(0, 19).replace("T", " ") + "] " +
         message;
     }
-    this.logs.unshift(message);
+    this.logs.push(message);
     if (this.logRef.current) {
       this.logRef.current.updateLogWindow();
     }
