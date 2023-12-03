@@ -34,6 +34,7 @@ import {
 } from "../../utils/UserUtils";
 import {highlight, HIGHLIGHT_DEFN} from "../../utils/HighlightUtils";
 import Editor from "react-simple-code-editor";
+import ScrollableList from "../../components/ScrollableList";
 
 export const CLEANUPLARGEOBJECTSTORE_REF = "CleanupLargeObjectStore";
 
@@ -43,11 +44,12 @@ class CleanupLargeObjectStore extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      files: "",
       only_list_files: "true",
       processing: false,
     };
     this.Module = CLEANUPLARGEOBJECTSTORE_REF;
+    this.files = [];
+    this.ref = React.createRef();
   }
 
   componentDidMount() {
@@ -79,14 +81,16 @@ class CleanupLargeObjectStore extends Component {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_CLEANUP_UNREFERENCED_LARGE_OBJECT_STORE_FILES)) {
+          let processing = this.state.processing;
           if (response.hasOwnProperty("file") && response.file.toLowerCase() === "done") {
-            const files = this.state.files + (this.state.files === "" ? "" : "\n") + "Completed processing."
-            this.setState({files: files, processing: false})
+            this.files.push((this.files.length === 0 ? "" : "\n") + "Completed processing.");
+            this.setState({processing: false})
           } else {
-            const files = this.state.files +
-              (this.state.files === "" ? "" : "\n") +
-              (response.hasOwnProperty("file") ? response.file : "")
-            this.setState({files: files})
+            this.files.unshift((this.files.length === 0 ? "" : "\n") +
+              (response.hasOwnProperty("file") ? response.file : ""));
+            if (this.ref.current) {
+              this.ref.current.forceUpdate();
+            }
           }
         }
       } else {
@@ -100,7 +104,7 @@ class CleanupLargeObjectStore extends Component {
   }
 
   render() {
-    const { files, only_list_files, processing} = this.state;
+    const { only_list_files, processing} = this.state;
     const {user, theme} = this.props;
     const isSysadmin = isValidUserRole(user, "sysadmin");
     if (this.context.debug) {
@@ -137,25 +141,14 @@ class CleanupLargeObjectStore extends Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <Editor
-              className={"hl-editor"}
-              readOnly={true}
-              fullwidth={true}
-              value={files}
-              data-color-mode={theme.palette.mode}
-              onValueChange={code => {
-              }}
+            <ScrollableList
+              ref={this.ref}
+              theme={theme}
+              forceScroll={false}
+              className={"hl-window"}
+              items={this.files}
               highlight={this.highlight_files}
-              padding={10}
-              style={{
-                backgroundColor: theme.palette.background.paper,
-                color: theme.palette.primary.light,
-                fontSize: 12,
-                fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                width: "100%",
-                height: "calc(100vh - 245px)",
-                overflowY: "auto",
-              }}
+              height={"calc(100vh - 245px)"}
             />
           </Grid>
         </Grid>

@@ -34,6 +34,7 @@ import {
 } from "../../utils/UserUtils";
 import {highlight, HIGHLIGHT_DEFN} from "../../utils/HighlightUtils";
 import Editor from "react-simple-code-editor";
+import ScrollableList from "../../components/ScrollableList";
 
 export const DISCOVERORPHANEDMETADATA_REF = "DiscoverOrphanedMetadata";
 
@@ -43,11 +44,12 @@ class DiscoverOrphanedMetadata extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fields: "",
       delete_if_unreferenced: false,
       processing: false,
     };
     this.Module = DISCOVERORPHANEDMETADATA_REF;
+    this.fields = [];
+    this.ref = React.createRef();
   }
 
   componentDidMount() {
@@ -79,15 +81,18 @@ class DiscoverOrphanedMetadata extends Component {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_DISCOVER_ORPHANED_METADATA)) {
+          let processing = this.state.processing;
           if (response.hasOwnProperty("field") && response.field.toLowerCase() === "done") {
-            const fields = this.state.fields + (this.state.fields === "" ? "" : "\n") + "Completed processing."
-            this.setState({fields: fields, processing: false})
+            this.fields.push((this.fields.length === 0 ? "" : "\n") + "Completed processing.");
+            this.setState({processing: false})
           } else {
-            const fields = this.state.fields +
-              (this.state.fields === "" ? "" : "\n") +
-              (response.hasOwnProperty("field") ? response.field : "")
-            this.setState({fields: fields})
+            this.fields.unshift((this.fields.length === 0 ? "" : "\n") +
+              (response.hasOwnProperty("file") ? response.fields : ""));
+            if (this.ref.current) {
+              this.ref.current.forceUpdate();
+            }
           }
+
         }
       } else {
         enqueueErrorSnackbar(response.message);
@@ -100,7 +105,7 @@ class DiscoverOrphanedMetadata extends Component {
   }
 
   render() {
-    const { fields, delete_if_unreferenced, processing} = this.state;
+    const { delete_if_unreferenced, processing} = this.state;
     const {user, theme} = this.props;
     const isSysadmin = isValidUserRole(user, "sysadmin");
     if (this.context.debug) {
@@ -137,25 +142,14 @@ class DiscoverOrphanedMetadata extends Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <Editor
-              className={"hl-editor"}
-              readOnly={true}
-              fullwidth={true}
-              value={fields}
-              data-color-mode={theme.palette.mode}
-              onValueChange={code => {
-              }}
-              highlight={this.highlight_fields}
-              padding={10}
-              style={{
-                backgroundColor: theme.palette.background.paper,
-                color: theme.palette.primary.light,
-                fontSize: 12,
-                fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                width: "100%",
-                height: "calc(100vh - 245px)",
-                overflowY: "auto",
-              }}
+            <ScrollableList
+              ref={this.ref}
+              theme={theme}
+              forceScroll={false}
+              className={"hl-window"}
+              items={this.fields}
+              highlight={this.highlight_files}
+              height={"calc(100vh - 245px)"}
             />
           </Grid>
         </Grid>

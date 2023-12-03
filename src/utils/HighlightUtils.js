@@ -65,5 +65,5 @@ export function highlight(text, regex, classname) {
 export function highlight_logs(text) {
 
   return convertHtmlToReact(render_highlight_with_warn(text, HIGHLIGHT_DEFN.logs,
-    "hl-editor token-timestamp", "hl-editor token-warn"))
+    "hl-window token-timestamp", "hl-window token-warn"))
 }

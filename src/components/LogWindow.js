@@ -5,7 +5,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
-  List
+  List, Box
 } from "@mui/material";
 import {
   withTheme
@@ -22,7 +22,7 @@ import {
   highlight_logs,
 } from "../utils/HighlightUtils";
 import dayjs from 'dayjs';
-
+import ScrollableList from "./ScrollableList";
 
 const LOGWINDOW_REF = "LogWindow";
 
@@ -55,17 +55,14 @@ class LogWindow extends Component {
     this.forceUpdate();
   }
 
-  highlight = (code) => {
-    return highlight_logs(code);
+  updateLogWindow = () => {
+    if (this.ref.current) {
+      this.ref.current.forceUpdate();
+    }
   }
 
-  scrollToEnd = () => {
-    document.getElementById("log-window").scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-      inline: "nearest"
-    });
-    // this.forceUpdate();
+  highlight = (code) => {
+    return highlight_logs(code);
   }
 
   render() {
@@ -119,26 +116,13 @@ class LogWindow extends Component {
               </ListItemButton>
             </ListItem>
           </List>
-          <Editor
-            textareaId={"log-window"}
+          <ScrollableList
             ref={this.ref}
-            className={"hl-editor"}
-            readOnly={true}
-            fullwidth={true}
-            value={logs.join("\n")}
-            data-color-mode={theme.palette.mode}
-            onValueChange={code => {
-            }}
+            theme={theme}
+            forceScroll={false}
+            className={"hl-window"}
+            items={logs}
             highlight={this.highlight}
-            padding={10}
-            style={{
-              backgroundColor: theme.palette.background.paper,
-              color: theme.palette.primary.light,
-              fontSize: 12,
-              fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-              width: "100%",
-              overflowY: "auto",
-            }}
           />
         </div>
       </Drawer>
@@ -147,17 +131,15 @@ class LogWindow extends Component {
 }
 
 LogWindow.propTypes = {
-  visible: PropTypes.bool.isRequired,
   logs: PropTypes.array.isRequired,
+  visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func,
   width: PropTypes.string,
-  // height: PropTypes.number,
 }
 
 LogWindow.defaultProps = {
   onClose: () => {},
   width: '100%',
-  // height: 200,
 }
 
 export default withTheme(LogWindow)

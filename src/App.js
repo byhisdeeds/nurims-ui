@@ -520,10 +520,9 @@ class App extends React.Component {
       message = "[" + new Date().toISOString().substring(0, 19).replace("T", " ") + "] " +
         message;
     }
-    this.logs.push(message);
+    this.logs.unshift(message);
     if (this.logRef.current) {
-      this.logRef.current.scrollToEnd();
-      this.logRef.current.forceUpdate();
+      this.logRef.current.updateLogWindow();
     }
   }
 
@@ -687,11 +686,11 @@ class App extends React.Component {
                       }
                       <LogWindow
                         ref={this.logRef}
-                        logs={this.logs}
                         onClose={this.closeLogWindow}
                         visible={log_window_visible}
                         width={`${drawerWidth}px`}
                         height={250}
+                        logs={this.logs}
                       />
                       <NotificationWindow
                         ref={this.notificationRef}
