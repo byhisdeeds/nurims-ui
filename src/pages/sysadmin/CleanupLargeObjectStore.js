@@ -33,7 +33,6 @@ import {
   isValidUserRole
 } from "../../utils/UserUtils";
 import {highlight, HIGHLIGHT_DEFN} from "../../utils/HighlightUtils";
-import Editor from "react-simple-code-editor";
 import ScrollableList from "../../components/ScrollableList";
 
 export const CLEANUPLARGEOBJECTSTORE_REF = "CleanupLargeObjectStore";
@@ -81,7 +80,6 @@ class CleanupLargeObjectStore extends Component {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_CLEANUP_UNREFERENCED_LARGE_OBJECT_STORE_FILES)) {
-          let processing = this.state.processing;
           if (response.hasOwnProperty("file") && response.file.toLowerCase() === "done") {
             this.files.push((this.files.length === 0 ? "" : "\n") + "Completed processing.");
             this.setState({processing: false})

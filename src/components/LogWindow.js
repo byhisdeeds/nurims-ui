@@ -17,7 +17,6 @@ import {
 import {
   UserContext
 } from "../utils/UserContext";
-import Editor from 'react-simple-code-editor';
 import {
   highlight_logs,
 } from "../utils/HighlightUtils";

@@ -33,7 +33,6 @@ import {
   isValidUserRole
 } from "../../utils/UserUtils";
 import {highlight, HIGHLIGHT_DEFN} from "../../utils/HighlightUtils";
-import Editor from "react-simple-code-editor";
 import ScrollableList from "../../components/ScrollableList";
 
 export const DISCOVERORPHANEDMETADATA_REF = "DiscoverOrphanedMetadata";
@@ -81,13 +80,12 @@ class DiscoverOrphanedMetadata extends Component {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_DISCOVER_ORPHANED_METADATA)) {
-          let processing = this.state.processing;
           if (response.hasOwnProperty("field") && response.field.toLowerCase() === "done") {
             this.fields.push((this.fields.length === 0 ? "" : "\n") + "Completed processing.");
             this.setState({processing: false})
           } else {
             this.fields.push((this.fields.length === 0 ? "" : "\n") +
-              (response.hasOwnProperty("file") ? response.fields : ""));
+              (response.hasOwnProperty("field") ? response.field : ""));
             if (this.ref.current) {
               this.ref.current.forceUpdate();
             }
@@ -105,7 +103,7 @@ class DiscoverOrphanedMetadata extends Component {
   }
 
   render() {
-    const { delete_if_unreferenced, processing} = this.state;
+    const {delete_if_unreferenced, processing} = this.state;
     const {user, theme} = this.props;
     const isSysadmin = isValidUserRole(user, "sysadmin");
     if (this.context.debug) {
