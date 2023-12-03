@@ -60,12 +60,12 @@ class LogWindow extends Component {
   }
 
   scrollToEnd = () => {
-    this.ref.current.scrollIntoView({
+    document.getElementById("log-window").scrollIntoView({
       behavior: "smooth",
-      block: "nearest",
-      inline: "start"
+      block: "end",
+      inline: "nearest"
     });
-    this.forceUpdate();
+    // this.forceUpdate();
   }
 
   render() {
@@ -120,6 +120,7 @@ class LogWindow extends Component {
             </ListItem>
           </List>
           <Editor
+            textareaId={"log-window"}
             ref={this.ref}
             className={"hl-editor"}
             readOnly={true}

@@ -522,7 +522,7 @@ class App extends React.Component {
     }
     this.logs.push(message);
     if (this.logRef.current) {
-      // this.logRef.current.scrollToEnd();
+      this.logRef.current.scrollToEnd();
       this.logRef.current.forceUpdate();
     }
   }
