@@ -24,7 +24,6 @@ class ScrollableList extends Component {
     // trim messages array size to maximum
     if (items.length > maxItems) {
       items.splice(0, items.length - maxItems);
-      console.log("++++ trimming ", items.length)
     }
     return (
       <div

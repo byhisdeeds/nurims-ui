@@ -32,7 +32,10 @@ import {
 import {
   isValidUserRole
 } from "../../utils/UserUtils";
-import {highlight, HIGHLIGHT_DEFN} from "../../utils/HighlightUtils";
+import {
+  highlight,
+  HIGHLIGHT_DEFN
+} from "../../utils/HighlightUtils";
 import ScrollableList from "../../components/ScrollableList";
 
 export const CLEANUPLARGEOBJECTSTORE_REF = "CleanupLargeObjectStore";
@@ -98,7 +101,7 @@ class CleanupLargeObjectStore extends Component {
   }
 
   highlight_files = (code) => {
-    return highlight(code, HIGHLIGHT_DEFN.files, "hl-editor token-filename");
+    return highlight(code, HIGHLIGHT_DEFN.files, "hl-window token-filename");
   }
 
   render() {

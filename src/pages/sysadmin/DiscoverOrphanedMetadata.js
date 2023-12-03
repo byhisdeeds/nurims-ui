@@ -32,7 +32,10 @@ import {
 import {
   isValidUserRole
 } from "../../utils/UserUtils";
-import {highlight, HIGHLIGHT_DEFN} from "../../utils/HighlightUtils";
+import {
+  highlight,
+  HIGHLIGHT_DEFN
+} from "../../utils/HighlightUtils";
 import ScrollableList from "../../components/ScrollableList";
 
 export const DISCOVERORPHANEDMETADATA_REF = "DiscoverOrphanedMetadata";
@@ -99,7 +102,8 @@ class DiscoverOrphanedMetadata extends Component {
   }
 
   highlight_fields = (code) => {
-    return highlight(code, HIGHLIGHT_DEFN.files, "hl-editor token-filename");
+    console.log("@@@@", code)
+    return highlight(code, HIGHLIGHT_DEFN.files, "hl-window token-filename");
   }
 
   render() {
@@ -146,7 +150,7 @@ class DiscoverOrphanedMetadata extends Component {
               forceScroll={false}
               className={"hl-window"}
               items={this.fields}
-              highlight={this.highlight_files}
+              highlight={this.highlight_fields}
               height={"calc(100vh - 245px)"}
               maxItems={100}
             />
