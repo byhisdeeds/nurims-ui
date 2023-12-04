@@ -644,7 +644,6 @@ export function DateRangePicker({
     <Box sx={{display: 'flex'}}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
         <DatePicker
-          style={{marginTop: 8}}
           renderInput={(props) => <TextField style={{paddingRight: 8, marginTop: 8}} {...props} />}
           label={fromLabel}
           value={from}
@@ -654,7 +653,6 @@ export function DateRangePicker({
           disabled={disabled}
         />
         <DatePicker
-          style={{marginTop: 8}}
           renderInput={(props) => <TextField style={{paddingRight: 8, marginTop: 8}} {...props} />}
           label={toLabel}
           value={to}

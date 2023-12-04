@@ -127,6 +127,7 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
           <Grid item xs={12}>
             <Stack direction="row" spacing={1}>
               <SelectFormControlWithTooltip
+                padding={0}
                 id={"report-type"}
                 label="Authorization Type"
                 value={reportType}
