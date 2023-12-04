@@ -6,7 +6,7 @@ import {
 } from "../../utils/UserContext";
 import {
   BLANK_PDF,
-  CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF,
+  CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF, NURIMS_MATERIAL_TYPE,
   REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
 } from "../../utils/constants";
 import {
@@ -22,7 +22,7 @@ import {
   PictureAsPdf,
 } from "@mui/icons-material";
 import {
-  DateRangePicker,
+  DateRangePicker, SelectFormControlWithTooltip,
   TitleComponent
 } from "../../components/CommonComponents";
 import PropTypes from "prop-types";
@@ -38,6 +38,7 @@ import {
   enqueueErrorSnackbar,
   enqueueInfoSnackbar
 } from "../../utils/SnackbarVariants";
+import {getGlossaryValue, getRecordMetadataValue} from "../../utils/MetadataUtils";
 
 export const GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF =
   "GenerateReactorSampleIrradiationAuthorizationPdf";
@@ -125,21 +126,18 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
           </Grid>
           <Grid item xs={12}>
             <Stack direction="row" spacing={1}>
-              <FormControl style={{paddingRight: 16, marginTop: 8,}} variant="outlined">
-                <InputLabel id="report-type-select-label">Authorization Type</InputLabel>
-                <Select
-                  fullWidth
-                  labelId="report-type-select-label"
-                  id="report-type"
-                  value={reportType}
-                  label="Authorization Type"
-                  onChange={this.handleReportTypeChange}
-                >
-                  <MenuItem value={'all'}>All Sample Irradiation Authorizations</MenuItem>
-                  <MenuItem value={'approved'}>Only Approved Sample Irradiation Authorizations</MenuItem>
-                  <MenuItem value={'submitted'}>Submitted/Approved Sample Irradiation Authorizations</MenuItem>
-                </Select>
-              </FormControl>
+              <SelectFormControlWithTooltip
+                id={"report-type"}
+                label="Authorization Type"
+                value={reportType}
+                onChange={this.handleReportTypeChange}
+                options={["all,All Sample Irradiation Authorizations",
+                  "approved,Only Approved Sample Irradiation Authorizations",
+                  "submitted,Submitted/Approved Sample Irradiation Authorizations"
+                ]}
+                tooltip={""}
+                disabled={false}
+              />
               <DateRangePicker
                 fromLabel="Records From"
                 toLabel="Records To"
@@ -151,6 +149,7 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
               />
               <div style={{flexGrow: 1}}/>
               <Button
+                sx={{width: "50ch"}}
                 variant={"contained"}
                 endIcon={<PictureAsPdf />}
                 onClick={this.submit}
