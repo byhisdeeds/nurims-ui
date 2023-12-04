@@ -516,7 +516,7 @@ export const MenuItems = [
         authmodlevel: 'basic',
         children: [
           {
-            label: 'Add/Edit Reactor Irrad.',
+            label: 'Add/Edit Irradiation Auth.',
             value: 'ro.add.edit.reactor.sample.irradiation.records',
             title: 'Add/Edit Reactor Sample Irradiation (RSI) Authorization Records',
             tooltip: 'Add or edit the irradiation request/authorization record for samples to be irradiated in the reactor.',
