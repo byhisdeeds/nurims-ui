@@ -6,23 +6,20 @@ import {
 } from "../../utils/UserContext";
 import {
   BLANK_PDF,
-  CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF, NURIMS_MATERIAL_TYPE,
+  CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF,
   REACTOR_IRRADIATION_AUTHORIZATION_TOPIC,
 } from "../../utils/constants";
 import {
   Button,
-  FormControl,
   Grid,
-  InputLabel,
-  Select,
   Stack,
-  MenuItem,
 } from "@mui/material";
 import {
   PictureAsPdf,
 } from "@mui/icons-material";
 import {
-  DateRangePicker, SelectFormControlWithTooltip,
+  DateRangePicker,
+  SelectFormControlWithTooltip,
   TitleComponent
 } from "../../components/CommonComponents";
 import PropTypes from "prop-types";
@@ -38,7 +35,6 @@ import {
   enqueueErrorSnackbar,
   enqueueInfoSnackbar
 } from "../../utils/SnackbarVariants";
-import {getGlossaryValue, getRecordMetadataValue} from "../../utils/MetadataUtils";
 
 export const GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF =
   "GenerateReactorSampleIrradiationAuthorizationPdf";
@@ -52,7 +48,7 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
       pdf: BLANK_PDF,
       startDate: dayjs(),
       endDate: dayjs().add(1, "month"),
-      reportType: "reactor_sample_irradiation_authorization",
+      reportType: "",
     };
     this.Module = GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF;
     this.recordTopic = REACTOR_IRRADIATION_AUTHORIZATION_TOPIC;
@@ -104,13 +100,17 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
   }
 
   submit = () => {
-    this.props.send({
-      cmd: CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF,
-      startDate: this.state.startDate.toISOString(),
-      endDate: this.state.endDate.toISOString(),
-      reportType: this.state.reportType,
-      module: this.Module,
-    });
+    if (this.state.reportType === "") {
+      enqueueErrorSnackbar("No report type selected!");
+    } else {
+      this.props.send({
+        cmd: CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF,
+        startDate: this.state.startDate.toISOString(),
+        endDate: this.state.endDate.toISOString(),
+        reportType: this.state.reportType,
+        module: this.Module,
+      });
+    }
   }
 
   render() {
