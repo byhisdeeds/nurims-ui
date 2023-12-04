@@ -136,9 +136,8 @@ class GenerateReactorSampleIrradiationAuthorizationPdf extends Component {
                   onChange={this.handleReportTypeChange}
                 >
                   <MenuItem value={'all'}>All Sample Irradiation Authorizations</MenuItem>
-                  <MenuItem value={'approved'}>Approved Sample Irradiation Authorizations</MenuItem>
-                  <MenuItem value={'submitted'}>Submitted Sample Irradiation Authorizations</MenuItem>
-                  <MenuItem value={'in_preparation'}>In Preparation Sample Irradiation Authorizations</MenuItem>
+                  <MenuItem value={'approved'}>Only Approved Sample Irradiation Authorizations</MenuItem>
+                  <MenuItem value={'submitted'}>Submitted/Approved Sample Irradiation Authorizations</MenuItem>
                 </Select>
               </FormControl>
               <DateRangePicker
