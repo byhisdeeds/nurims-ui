@@ -36,7 +36,6 @@ class LargeScrollableList extends Component {
     // if (items.length > maxItems) {
     //   items.splice(0, items.length - maxItems);
     // }
-    console.log(">>>>>", items)
     if (this.ref.current) {
       const scrollToIndex = this.props.items.length - 1;
       this.ref.current.scrollToIndex({

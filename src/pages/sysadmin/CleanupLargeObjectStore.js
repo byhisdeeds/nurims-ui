@@ -37,6 +37,7 @@ import {
   HIGHLIGHT_DEFN
 } from "../../utils/HighlightUtils";
 import ScrollableList from "../../components/ScrollableList";
+import LargeScrollableList from "../../components/LargeScrollableList";
 
 export const CLEANUPLARGEOBJECTSTORE_REF = "CleanupLargeObjectStore";
 
@@ -142,7 +143,7 @@ class CleanupLargeObjectStore extends Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <ScrollableList
+            <LargeScrollableList
               ref={this.ref}
               theme={theme}
               forceScroll={false}
