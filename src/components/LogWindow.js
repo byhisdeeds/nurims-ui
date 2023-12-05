@@ -22,6 +22,7 @@ import {
 } from "../utils/HighlightUtils";
 import dayjs from 'dayjs';
 import ScrollableList from "./ScrollableList";
+import LargeScrollableList from "./LargeScrollableList";
 
 const LOGWINDOW_REF = "LogWindow";
 
@@ -115,7 +116,7 @@ class LogWindow extends Component {
               </ListItemButton>
             </ListItem>
           </List>
-          <ScrollableList
+          <LargeScrollableList
             ref={this.ref}
             theme={theme}
             forceScroll={false}
