@@ -16,15 +16,20 @@ class LargeScrollableList extends Component {
   constructor(props) {
     super(props);
     this.Module = LARGESCROLLABLELIST_REF;
+    this.listRef = React.createRef();
     this.ref = React.createRef();
-    // this.items = [{id: 1, title: 'wwww'},{ id: 2, title: 'www3rt435w'},{id: 3, title: 'wwccvww'}]
   }
 
-  getItemBoundingClientRect = (element) => {
-    console.log("--->", element)
-    return element.getBoundingClientRect()
+  scroll = () => {
+    this.forceUpdate()
+    // if (this.ref.current) {
+    //   // this.ref.current.scrollToIndex({
+    //   //   index: this.props.items.length,
+    //   // });
+    //   // console.log("-- SCROLL --", this.props.items.length)
+    //   this.forceUpdate()
+    // }
   }
-
   render() {
     const {theme, forceScroll, items, className, highlight, height, maxItems} = this.props;
     // trim messages array size to maximum
@@ -32,8 +37,15 @@ class LargeScrollableList extends Component {
     //   items.splice(0, items.length - maxItems);
     // }
     console.log(">>>>>", items)
+    if (this.ref.current) {
+      const scrollToIndex = this.props.items.length - 1;
+      this.ref.current.scrollToIndex({
+        index: scrollToIndex < 0 ? 0 : scrollToIndex,
+      });
+    }
     return (
       <div
+        ref={this.listRef}
         data-color-mode={theme.palette.mode}
         style={{
           boxSizing: 'border-box',
@@ -45,14 +57,9 @@ class LargeScrollableList extends Component {
         }}
       >
         <ViewportList
-          // viewportRef={this.ref}
+          ref={this.ref}
+          viewportRef={this.listRef}
           items={items}
-          // itemSize={20}
-          // getItemBoundingClientRect={this.getItemBoundingClientRect}
-          // itemMinSize={40}
-          // margin={8}
-          // forceScroll={forceScroll}
-          // className={className}
         >
           {(item, id) => <div className={className} key={id}>{highlight(item)}</div>}
         </ViewportList>

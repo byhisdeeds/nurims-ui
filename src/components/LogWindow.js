@@ -57,7 +57,7 @@ class LogWindow extends Component {
 
   updateLogWindow = () => {
     if (this.ref.current) {
-      this.ref.current.forceUpdate();
+      this.ref.current.scroll();
     }
   }
 
