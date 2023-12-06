@@ -36,7 +36,7 @@ import {
   highlight,
   HIGHLIGHT_DEFN
 } from "../../utils/HighlightUtils";
-import ScrollableList from "../../components/ScrollableList";
+import LargeScrollableList from "../../components/LargeScrollableList";
 
 export const DISCOVERORPHANEDMETADATA_REF = "DiscoverOrphanedMetadata";
 
@@ -102,7 +102,6 @@ class DiscoverOrphanedMetadata extends Component {
   }
 
   highlight_fields = (code) => {
-    console.log("@@@@", code)
     return highlight(code, HIGHLIGHT_DEFN.files, "hl-window token-filename");
   }
 
@@ -144,7 +143,7 @@ class DiscoverOrphanedMetadata extends Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <ScrollableList
+            <LargeScrollableList
               ref={this.ref}
               theme={theme}
               forceScroll={false}
@@ -152,7 +151,6 @@ class DiscoverOrphanedMetadata extends Component {
               items={this.fields}
               highlight={this.highlight_fields}
               height={"calc(100vh - 245px)"}
-              maxItems={100}
             />
           </Grid>
         </Grid>

@@ -6,7 +6,6 @@ import {
 import {
   UserContext
 } from "../utils/UserContext";
-import { ViewportList } from 'react-viewport-list';
 import {VariableSizeList as List} from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
 import ReactDOMServer from "react-dom/server";
@@ -154,14 +153,13 @@ class LargeScrollableList extends Component {
 }
 
 LargeScrollableList.propTypes = {
-  height: PropTypes.string,
   highlight: PropTypes.func,
   theme: PropTypes.object.isRequired,
-  fontSize: PropTypes.number,
   forceScroll: PropTypes.bool,
   classname: PropTypes.string.isRequired,
   items: PropTypes.array,
-  maxItems: PropTypes.number,
+  height: PropTypes.string,
+  fontSize: PropTypes.number,
   lineHeight: PropTypes.number,
   forceScrollHysterisis: PropTypes.number,
 }
@@ -171,11 +169,10 @@ LargeScrollableList.defaultProps = {
   forceScroll: true,
   className: "",
   items: [],
-  maxItems: 100,
-  lineHeight: 16,
   height: "calc(100% - 0px)",
   fontSize: 14,
-  forceScrollHysterisis: 5,
+  lineHeight: 16,
+  forceScrollHysterisis: 100,
 }
 
 export default withTheme(LargeScrollableList)
