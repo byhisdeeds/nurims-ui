@@ -179,7 +179,7 @@ LargeScrollableList.defaultProps = {
   height: "calc(100% - 0px)",
   fontSize: 14,
   lineHeight: 16,
-  forceScrollHysterisis: 50,
+  forceScrollHysterisis: 5,
 }
 
 export default withTheme(LargeScrollableList)
