@@ -42,10 +42,8 @@ class LargeScrollableList extends Component {
     const elementString = ReactDOMServer.renderToStaticMarkup(elementJSX);
     const elementDocument = new DOMParser().parseFromString(elementString, "text/html");
     const elementNode = elementDocument.getRootNode().body.firstChild;
-
     const container = document.createElement("div");
     const containerStyle = {
-
       display: "block",
       position: "absolute",
       boxSizing: "border-box",
@@ -53,15 +51,12 @@ class LargeScrollableList extends Component {
       padding: "0",
       visibility: "hidden"
     };
-
     Object.assign(container.style, containerStyle);
 
     container.appendChild(elementNode);
     document.body.appendChild(container);
-
     const width = container.clientWidth;
     const height = container.clientHeight;
-
     container.removeChild(elementNode);
     document.body.removeChild(container);
 
@@ -71,19 +66,21 @@ class LargeScrollableList extends Component {
     };
   }
 
-  scroll = () => {
-    this.forceUpdate()
-    // if (this.ref.current) {
-    //   // this.ref.current.scrollToIndex({
-    //   //   index: this.props.items.length,
-    //   // });
-    //   // console.log("-- SCROLL --", this.props.items.length)
-    //   this.forceUpdate()
-    // }
-  }
+  // scroll = () => {
+  //   this.forceUpdate()
+  //   // if (this.ref.current) {
+  //   //   // this.ref.current.scrollToIndex({
+  //   //   //   index: this.props.items.length,
+  //   //   // });
+  //   //   // console.log("-- SCROLL --", this.props.items.length)
+  //   //   this.forceUpdate()
+  //   // }
+  // }
 
   getItemHeight = (item) => {
-    const {width, height} = this.getReactElementSize(<div style={{width: "100%"}}>{this.props.items[item]}</div>)
+    const {width, height} = this.getReactElementSize(
+      <div className={this.props.className} style={{width: "100%"}}>{this.props.items[item]}</div>
+    )
     return height;
   }
 

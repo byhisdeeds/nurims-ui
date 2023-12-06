@@ -344,13 +344,11 @@ pre {
 
 .hl-window {
     font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
-    font-size: 12px;
 }
 
 .hl-window .token-timestamp {
     display: inline;
     font-family: inherit;
-    font-size: 12px;
     background-color: var(--color-canvas-subtle);
     color: var(--color-prettylights-syntax-entity-tag);
 }
@@ -358,7 +356,6 @@ pre {
 .hl-window .token-warn {
     display: inline;
     font-family: inherit;
-    font-size: 12px;
     background-color: var(--color-canvas-subtle);
     color: var(--color-prettylights-syntax-keyword);
 }
