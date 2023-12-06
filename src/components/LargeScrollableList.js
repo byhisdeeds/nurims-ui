@@ -70,6 +70,7 @@ class LargeScrollableList extends Component {
     const {width, height} = this.getReactElementSize(
       <div className={this.props.className} style={{fontSize: "inherit"}}>{this.props.items[item]}</div>
     )
+    console.log("-- getItemHeight --", height, item.data[item.index])
     return height;
   }
 
