@@ -79,9 +79,9 @@ class LargeScrollableList extends Component {
 
   getItemHeight = (item) => {
     const {width, height} = this.getReactElementSize(
-      <div className={this.props.className} style={{width: "100%"}}>{this.props.items[item]}</div>
+      <div className={this.props.className} style={{fontSize: "inherit"}}>{this.props.items[item]}</div>
     )
-    return height;
+    return height - 4;
   }
 
   renderListItem = (item) => {
@@ -92,11 +92,31 @@ class LargeScrollableList extends Component {
     )
   }
 
+  onScroll = (scrollObject) => {
+    console.log("=======")
+    console.log("scrollObject:",scrollObject)
+    console.log("items.length:",this.props.items.length)
+    console.log("=======")
+  }
+
+  onItemsRendered = ({overscanStartIndex, overscanStopIndex, visibleStartIndex, visibleStopIndex}) => {
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("overscanStartIndex:", overscanStartIndex)
+    console.log("overscanStopIndex:", overscanStopIndex)
+    console.log("visibleStartIndex:", visibleStartIndex)
+    console.log("visibleStopIndex:", visibleStopIndex)
+    console.log("items.length:",this.props.items.length)
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+  }
+
   render() {
-    const {theme, forceScroll, items, lineHeight, highlight, height, maxItems} = this.props;
+    const {theme, forceScroll, items, lineHeight, fontSize, height, maxItems} = this.props;
+    if (this.listRef.current) {
+      // console.log("scroll to ", items.length)
+      // this.listRef.current.scrollToItem(items.length);
+    }
     return (
       <div
-        ref={this.listRef}
         data-color-mode={theme.palette.mode}
         style={{
           boxSizing: 'border-box',
@@ -104,12 +124,16 @@ class LargeScrollableList extends Component {
           color: theme.palette.primary.light,
           overflowY: "auto",
           width: "100%",
+          fontSize: fontSize,
           height: this.props.height
         }}
       >
         <AutoSizer>
           {({height, width}) => (
             <List
+              ref={this.listRef}
+              onScroll={this.onScroll}
+              onItemsRendered={this.onItemsRendered}
               height={height}
               itemCount={items.length}
               itemSize={this.getItemHeight}
@@ -130,7 +154,7 @@ LargeScrollableList.propTypes = {
   height: PropTypes.string,
   highlight: PropTypes.func,
   theme: PropTypes.object.isRequired,
-  logs: PropTypes.array.isRequired,
+  fontSize: PropTypes.number,
   forceScroll: PropTypes.bool,
   classname: PropTypes.string.isRequired,
   items: PropTypes.array,
@@ -146,6 +170,7 @@ LargeScrollableList.defaultProps = {
   maxItems: 100,
   lineHeight: 16,
   height: "calc(100% - 0px)",
+  fontSize: 14,
 }
 
 export default withTheme(LargeScrollableList)
