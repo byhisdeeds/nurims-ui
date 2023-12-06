@@ -21,6 +21,7 @@ class LargeScrollableList extends Component {
     this.Module = LARGESCROLLABLELIST_REF;
     this.listRef = React.createRef();
     this.ref = React.createRef();
+    this.scrollToLastItem = true;
   }
 
   /**
@@ -106,14 +107,16 @@ class LargeScrollableList extends Component {
     console.log("visibleStartIndex:", visibleStartIndex)
     console.log("visibleStopIndex:", visibleStopIndex)
     console.log("items.length:",this.props.items.length)
+    this.scrollToLastItem = this.props.forceScroll && Math.abs(this.props.items.length - visibleStopIndex) < this.props.forceScrollHysterisis
+    console.log("scrollToLastItem:", this.scrollToLastItem)
     console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
   }
 
   render() {
     const {theme, forceScroll, items, lineHeight, fontSize, height, maxItems} = this.props;
-    if (this.listRef.current) {
+    if (this.scrollToLastItem && this.listRef.current) {
       // console.log("scroll to ", items.length)
-      // this.listRef.current.scrollToItem(items.length);
+      this.listRef.current.scrollToItem(items.length);
     }
     return (
       <div
@@ -160,17 +163,19 @@ LargeScrollableList.propTypes = {
   items: PropTypes.array,
   maxItems: PropTypes.number,
   lineHeight: PropTypes.number,
+  forceScrollHysterisis: PropTypes.number,
 }
 
 LargeScrollableList.defaultProps = {
   highlight: () => {},
-  forceScroll: false,
+  forceScroll: true,
   className: "",
   items: [],
   maxItems: 100,
   lineHeight: 16,
   height: "calc(100% - 0px)",
   fontSize: 14,
+  forceScrollHysterisis: 5,
 }
 
 export default withTheme(LargeScrollableList)
