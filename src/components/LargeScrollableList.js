@@ -66,25 +66,15 @@ class LargeScrollableList extends Component {
     };
   }
 
-  // scroll = () => {
-  //   this.forceUpdate()
-  //   // if (this.ref.current) {
-  //   //   // this.ref.current.scrollToIndex({
-  //   //   //   index: this.props.items.length,
-  //   //   // });
-  //   //   // console.log("-- SCROLL --", this.props.items.length)
-  //   //   this.forceUpdate()
-  //   // }
-  // }
-
   getItemHeight = (item) => {
     const {width, height} = this.getReactElementSize(
       <div className={this.props.className} style={{fontSize: "inherit"}}>{this.props.items[item]}</div>
     )
-    return height - 4;
+    return height;
   }
 
   renderListItem = (item) => {
+    console.log("-- renderListItem --", item.index, item.data[item.index])
     return (
       <div key={item} style={item.style} className={this.props.className}>
         {this.props.highlight(item.data[item.index])}
