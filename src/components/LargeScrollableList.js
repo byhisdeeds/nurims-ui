@@ -93,29 +93,29 @@ class LargeScrollableList extends Component {
   }
 
   onScroll = (scrollObject) => {
-    console.log("=======")
-    console.log("scrollObject:",scrollObject)
-    console.log("items.length:",this.props.items.length)
-    console.log("scrollToLastItem:", this.scrollToLastItem)
+    // console.log("=======")
+    // console.log("scrollObject:",scrollObject)
+    // console.log("items.length:",this.props.items.length)
+    // console.log("scrollToLastItem:", this.scrollToLastItem)
     if (this.scrollToLastItem && this.listRef.current) {
       this.listRef.current.scrollToItem(this.props.items.length);
     }
-    console.log("=======")
+    // console.log("=======")
   }
 
   onItemsRendered = ({overscanStartIndex, overscanStopIndex, visibleStartIndex, visibleStopIndex}) => {
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    console.log("overscanStartIndex:", overscanStartIndex)
-    console.log("overscanStopIndex:", overscanStopIndex)
-    console.log("visibleStartIndex:", visibleStartIndex)
-    console.log("visibleStopIndex:", visibleStopIndex)
-    console.log("items.length:",this.props.items.length)
-    console.log("forceScrollHysterisis:",this.props.forceScrollHysterisis)
-    console.log("forceScroll:",this.props.forceScroll)
+    // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    // console.log("overscanStartIndex:", overscanStartIndex)
+    // console.log("overscanStopIndex:", overscanStopIndex)
+    // console.log("visibleStartIndex:", visibleStartIndex)
+    // console.log("visibleStopIndex:", visibleStopIndex)
+    // console.log("items.length:",this.props.items.length)
+    // console.log("forceScrollHysterisis:",this.props.forceScrollHysterisis)
+    // console.log("forceScroll:",this.props.forceScroll)
     // this.scrollToLastItem = this.props.forceScroll && Math.abs(this.props.items.length - visibleStopIndex) < this.props.forceScrollHysterisis
     this.scrollToLastItem = Math.abs(this.props.items.length - visibleStopIndex) < this.props.forceScrollHysterisis
-    console.log("scrollToLastItem:", this.scrollToLastItem)
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    // console.log("scrollToLastItem:", this.scrollToLastItem)
+    // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
   }
 
   render() {
