@@ -85,11 +85,13 @@ class CleanupLargeObjectStore extends Component {
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_CLEANUP_UNREFERENCED_LARGE_OBJECT_STORE_FILES)) {
           if (response.hasOwnProperty("file") && response.file.toLowerCase() === "done") {
-            this.files.push((this.files.length === 0 ? "" : "\n") + "Completed processing.");
+            // this.files.push((this.files.length === 0 ? "" : "\n") + "Completed processing.");
+            this.files.push("Completed processing.");
             this.setState({processing: false})
           } else {
-            this.files.push((this.files.length === 0 ? "" : "\n") +
-              (response.hasOwnProperty("file") ? response.file : ""));
+            // this.files.push((this.files.length === 0 ? "" : "\n") +
+            //   (response.hasOwnProperty("file") ? response.file : ""));
+            this.files.push(response.hasOwnProperty("file") ? response.file : "");
             if (this.ref.current) {
               this.ref.current.forceUpdate();
             }

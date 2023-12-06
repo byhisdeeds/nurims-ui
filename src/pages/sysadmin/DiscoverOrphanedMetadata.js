@@ -68,6 +68,7 @@ class DiscoverOrphanedMetadata extends Component {
       "delete.if.unreferenced": this.state.delete_if_unreferenced,
       module: this.Module,
     }, false, false);
+    this.fields.length = 0;
     this.setState({ fields: "", processing: true })
   }
 
@@ -84,11 +85,13 @@ class DiscoverOrphanedMetadata extends Component {
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_DISCOVER_ORPHANED_METADATA)) {
           if (response.hasOwnProperty("field") && response.field.toLowerCase() === "done") {
-            this.fields.push((this.fields.length === 0 ? "" : "\n") + "Completed processing.");
+            // this.fields.push((this.fields.length === 0 ? "" : "\n") + "Completed processing.");
+            this.fields.push("Completed processing.");
             this.setState({processing: false})
           } else {
-            this.fields.push((this.fields.length === 0 ? "" : "\n") +
-              (response.hasOwnProperty("field") ? response.field : ""));
+            // this.fields.push((this.fields.length === 0 ? "" : "\n") +
+            //   (response.hasOwnProperty("field") ? response.field : ""));
+            this.fields.push(response.hasOwnProperty("field") ? response.field : "");
             if (this.ref.current) {
               this.ref.current.forceUpdate();
             }
