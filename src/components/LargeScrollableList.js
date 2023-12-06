@@ -96,6 +96,10 @@ class LargeScrollableList extends Component {
     console.log("=======")
     console.log("scrollObject:",scrollObject)
     console.log("items.length:",this.props.items.length)
+    console.log("scrollToLastItem:", this.scrollToLastItem)
+    if (this.scrollToLastItem && this.listRef.current) {
+      this.listRef.current.scrollToItem(this.props.items.length);
+    }
     console.log("=======")
   }
 
@@ -106,7 +110,10 @@ class LargeScrollableList extends Component {
     console.log("visibleStartIndex:", visibleStartIndex)
     console.log("visibleStopIndex:", visibleStopIndex)
     console.log("items.length:",this.props.items.length)
-    this.scrollToLastItem = this.props.forceScroll && Math.abs(this.props.items.length - visibleStopIndex) < this.props.forceScrollHysterisis
+    console.log("forceScrollHysterisis:",this.props.forceScrollHysterisis)
+    console.log("forceScroll:",this.props.forceScroll)
+    // this.scrollToLastItem = this.props.forceScroll && Math.abs(this.props.items.length - visibleStopIndex) < this.props.forceScrollHysterisis
+    this.scrollToLastItem = Math.abs(this.props.items.length - visibleStopIndex) < this.props.forceScrollHysterisis
     console.log("scrollToLastItem:", this.scrollToLastItem)
     console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
   }
@@ -172,7 +179,7 @@ LargeScrollableList.defaultProps = {
   height: "calc(100% - 0px)",
   fontSize: 14,
   lineHeight: 16,
-  forceScrollHysterisis: 100,
+  forceScrollHysterisis: 50,
 }
 
 export default withTheme(LargeScrollableList)

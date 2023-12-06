@@ -146,7 +146,7 @@ class CleanupLargeObjectStore extends Component {
             <LargeScrollableList
               ref={this.ref}
               theme={theme}
-              forceScroll={false}
+              forceScroll={true}
               className={"hl-window"}
               items={this.files}
               highlight={this.highlight_files}
