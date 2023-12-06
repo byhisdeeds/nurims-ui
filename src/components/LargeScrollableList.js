@@ -9,6 +9,7 @@ import {
 import { ViewportList } from 'react-viewport-list';
 import {VariableSizeList as List} from 'react-window';
 import AutoSizer from "react-virtualized-auto-sizer";
+import ReactDOMServer from "react-dom/server";
 
 const LARGESCROLLABLELIST_REF = "LargeScrollableList";
 
@@ -20,6 +21,54 @@ class LargeScrollableList extends Component {
     this.Module = LARGESCROLLABLELIST_REF;
     this.listRef = React.createRef();
     this.ref = React.createRef();
+  }
+
+  /**
+   * @description Retrieve the width and/or heigh of a React element without rendering and committing the element to the DOM.
+   *
+   * @param {object} elementJSX - The target React element written in JSX.
+   * @return {object}
+   * @public
+   * @function
+   *
+   * @example
+   *
+   * const { width, height } = getReactElementSize( <div style={{ width: "20px", height: "40px" }} ...props /> );
+   * console.log(`W: ${width}, H: ${height});  // W: 20, H: 40
+   *
+   */
+  getReactElementSize = (elementJSX) => {
+
+    const elementString = ReactDOMServer.renderToStaticMarkup(elementJSX);
+    const elementDocument = new DOMParser().parseFromString(elementString, "text/html");
+    const elementNode = elementDocument.getRootNode().body.firstChild;
+
+    const container = document.createElement("div");
+    const containerStyle = {
+
+      display: "block",
+      position: "absolute",
+      boxSizing: "border-box",
+      margin: "0",
+      padding: "0",
+      visibility: "hidden"
+    };
+
+    Object.assign(container.style, containerStyle);
+
+    container.appendChild(elementNode);
+    document.body.appendChild(container);
+
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    container.removeChild(elementNode);
+    document.body.removeChild(container);
+
+    return {
+      width,
+      height
+    };
   }
 
   scroll = () => {
@@ -35,6 +84,8 @@ class LargeScrollableList extends Component {
 
   getItemHeight = (item) => {
     console.log("-- getItemHeight --", item, this.props.items[item])
+    const { width, height } = this.getReactElementSize( <div style={{ width: "20px", height: "40px" }} /> )
+    console.log(`W: ${width}, H: ${height}`);  // W: 20, H: 40
     return this.props.lineHeight;
   }
 
