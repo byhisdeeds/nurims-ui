@@ -84,7 +84,7 @@ class LargeScrollableList extends Component {
 
   getItemHeight = (item) => {
     console.log("-- getItemHeight --", item, this.props.items[item])
-    const { width, height } = this.getReactElementSize( <div style={{ width: "20px", height: "40px" }} /> )
+    const { width, height } = this.getReactElementSize( <div>{this.props.items[item]}</div> )
     console.log(`W: ${width}, H: ${height}`);  // W: 20, H: 40
     return this.props.lineHeight;
   }
