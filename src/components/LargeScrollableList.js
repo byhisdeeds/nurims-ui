@@ -7,6 +7,8 @@ import {
   UserContext
 } from "../utils/UserContext";
 import { ViewportList } from 'react-viewport-list';
+import {VariableSizeList as List} from 'react-window';
+import AutoSizer from "react-virtualized-auto-sizer";
 
 const LARGESCROLLABLELIST_REF = "LargeScrollableList";
 
@@ -30,18 +32,32 @@ class LargeScrollableList extends Component {
     //   this.forceUpdate()
     // }
   }
+
+  getItemHeight = (item) => {
+    console.log("-- getItemHeight --", item, this.props.items[item])
+    return this.props.lineHeight;
+  }
+
+  renderListItem = (item) => {
+    return (
+      <div key={item} style={item.style} className={this.props.className}>
+        {this.props.highlight(item.data[item.index])}
+      </div>
+    )
+  }
+
   render() {
-    const {theme, forceScroll, items, className, highlight, height, maxItems} = this.props;
+    const {theme, forceScroll, items, lineHeight, highlight, height, maxItems} = this.props;
     // trim messages array size to maximum
     // if (items.length > maxItems) {
     //   items.splice(0, items.length - maxItems);
     // }
-    if (this.ref.current) {
-      const scrollToIndex = this.props.items.length - 1;
-      this.ref.current.scrollToIndex({
-        index: scrollToIndex < 0 ? 0 : scrollToIndex,
-      });
-    }
+    // if (this.ref.current) {
+    //   const scrollToIndex = items.length - 1;
+    //   this.ref.current.scrollToIndex({
+    //     index: scrollToIndex < 0 ? 0 : scrollToIndex,
+    //   });
+    // }
     return (
       <div
         ref={this.listRef}
@@ -52,17 +68,32 @@ class LargeScrollableList extends Component {
           color: theme.palette.primary.light,
           overflowY: "auto",
           width: "100%",
-          height: height
+          height: this.props.height
         }}
       >
-        <ViewportList
-          ref={this.ref}
-          viewportRef={this.listRef}
-          items={items}
-        >
-          {(item, id) => <div className={className} key={id}>{highlight(item)}</div>}
-        </ViewportList>
-      </div>    )
+        <AutoSizer>
+          {({height, width}) => (
+            <List
+              height={height}
+              itemCount={items.length}
+              itemSize={this.getItemHeight}
+              width={width}
+              estimatedItemSize={lineHeight}
+              itemData={items}
+            >
+              {this.renderListItem}
+            </List>
+          )}
+        </AutoSizer>
+        {/*<ViewportList*/}
+        {/*  ref={this.ref}*/}
+        {/*  viewportRef={this.listRef}*/}
+        {/*  items={items}*/}
+        {/*>*/}
+        {/*  {(item, id) => <div className={className} key={id}>{highlight(item)}</div>}*/}
+        {/*</ViewportList>*/}
+      </div>
+    )
   }
 }
 
@@ -75,6 +106,7 @@ LargeScrollableList.propTypes = {
   classname: PropTypes.string.isRequired,
   items: PropTypes.array,
   maxItems: PropTypes.number,
+  lineHeight: PropTypes.number,
 }
 
 LargeScrollableList.defaultProps = {
@@ -83,6 +115,7 @@ LargeScrollableList.defaultProps = {
   className: "",
   items: [],
   maxItems: 100,
+  lineHeight: 16,
   height: "calc(100% - 0px)",
 }
 

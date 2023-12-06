@@ -8,7 +8,7 @@ export const HIGHLIGHT_DEFN = {
 
 function render_highlight(text, regex, classname) {
   const indexPairs = [];
-  console.log("IN->text:", text)
+  // console.log("IN->text:", text)
   let matchArr = regex.exec(text);
   while (matchArr) {
     indexPairs.push({start: matchArr.index, end: regex.lastIndex, text: matchArr[0]});
@@ -27,10 +27,10 @@ function render_highlight(text, regex, classname) {
     if (indexPairs.length > 0) {
       __text += text.substr(end);
     }
-    console.log("+++text:", __text)
+    // console.log("+++text:", __text)
     return __text;
   }
-  console.log("OUT->text:", text)
+  // console.log("OUT->text:", text)
   return text;
 }
 
