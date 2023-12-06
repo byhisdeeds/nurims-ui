@@ -89,7 +89,7 @@ class CleanupLargeObjectStore extends Component {
             this.setState({processing: false})
           } else {
             this.files.push((this.files.length === 0 ? "" : "\n") +
-              (response.hasOwnProperty("file") ? response.file + "  err er erfr ehrt get gtery gry jyu gy jytrjg tyrgj y rygjr hef 5uy5 \n   err er erfr ehrt get gtery gry jyu gy jytrjg tyrgj y rygjr hef 5uy5 \n   err er erfr ehrt get gtery gry jyu gy jytrjg tyrgj y rygjr hef 5uy5 \n   err er erfr ehrt get gtery gry jyu gy jytrjg tyrgj y rygjr hef 5uy5 \n   err er erfr ehrt get gtery gry jyu gy jytrjg tyrgj y rygjr hef 5uy5 \n   err er erfr ehrt get gtery gry jyu gy jytrjg tyrgj y rygjr hef 5uy5 \n   err er erfr ehrt get gtery gry jyu gy jytrjg tyrgj y rygjr hef 5uy5 \n   err er erfr ehrt get gtery gry jyu gy jytrjg tyrgj y rygjr hef 5uy5 \n   err er erfr ehrt get gtery gry jyu gy jytrjg tyrgj y rygjr hef 5uy5 \n " : ""));
+              (response.hasOwnProperty("file") ? response.file : ""));
             if (this.ref.current) {
               this.ref.current.forceUpdate();
             }

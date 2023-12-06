@@ -83,10 +83,8 @@ class LargeScrollableList extends Component {
   }
 
   getItemHeight = (item) => {
-    console.log("-- getItemHeight --", item, this.props.items[item])
-    const { width, height } = this.getReactElementSize( <div>{this.props.items[item]}</div> )
-    console.log(`W: ${width}, H: ${height}`);  // W: 20, H: 40
-    return this.props.lineHeight;
+    const {width, height} = this.getReactElementSize(<div style={{width: "100%"}}>{this.props.items[item]}</div>)
+    return height;
   }
 
   renderListItem = (item) => {
@@ -99,16 +97,6 @@ class LargeScrollableList extends Component {
 
   render() {
     const {theme, forceScroll, items, lineHeight, highlight, height, maxItems} = this.props;
-    // trim messages array size to maximum
-    // if (items.length > maxItems) {
-    //   items.splice(0, items.length - maxItems);
-    // }
-    // if (this.ref.current) {
-    //   const scrollToIndex = items.length - 1;
-    //   this.ref.current.scrollToIndex({
-    //     index: scrollToIndex < 0 ? 0 : scrollToIndex,
-    //   });
-    // }
     return (
       <div
         ref={this.listRef}
@@ -136,13 +124,6 @@ class LargeScrollableList extends Component {
             </List>
           )}
         </AutoSizer>
-        {/*<ViewportList*/}
-        {/*  ref={this.ref}*/}
-        {/*  viewportRef={this.listRef}*/}
-        {/*  items={items}*/}
-        {/*>*/}
-        {/*  {(item, id) => <div className={className} key={id}>{highlight(item)}</div>}*/}
-        {/*</ViewportList>*/}
       </div>
     )
   }
