@@ -330,6 +330,7 @@ module.exports = Object.freeze({
   MATERIAL_RECORD_TYPE: "material_record",
   DOSIMETRY_RECORD_TYPE: "dosimetry_record",
   REACTOR_OPERATING_RUN_RECORD_TYPE: "reactor_operating_run_record",
+  ROUTINE_MAINTENANCE_RECORD_TYPE: "routine_maintenance_record",
   MONITOR_RECORD_TYPE: "monitor_record",
   IRRADIATED_SAMPLE_LOG_RECORD_TYPE: "irradiated_sample_log_record",
   REACTOR_WATER_CHEMISTRY_RECORD_TYPE: "reactor_water_chemistry_record",
