@@ -43,7 +43,7 @@ import {
   ArchiveRecordLabel
 } from "../../utils/RenderUtils";
 import RoutineMaintenanceList from "./RoutineMaintenanceList";
-import OperatingRunMetadata from "./OperatingRunMetadata";
+import RoutineMaintenanceMetadata from "./RoutineMaintenanceMetadata";
 import {
   TitleComponent
 } from "../../components/CommonComponents";
@@ -426,7 +426,7 @@ class AddEditRoutineMaintenanceRecords extends React.Component {
             />
           </Grid>
           <Grid item xs={8}>
-            <OperatingRunMetadata
+            <RoutineMaintenanceMetadata
               ref={this.metadataRef}
               properties={this.props.properties}
               onChange={this.onRecordMetadataChanged}
