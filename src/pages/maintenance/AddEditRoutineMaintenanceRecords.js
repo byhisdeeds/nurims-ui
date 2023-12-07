@@ -12,7 +12,7 @@ import {
   BOOL_FALSE_STR,
   BOOL_TRUE_STR,
   CMD_DELETE_USER_RECORD,
-  CMD_DISCOVER_REACTOR_OPERATION_RUNS,
+  CMD_DISCOVER_REACTOR_OPERATION_RUNS, CMD_DISCOVER_ROUTINE_MAINTENANCE_DATA,
   CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS, CMD_GET_ROUTINE_MAINTENANCE_RECORDS,
   ITEM_ID,
@@ -286,7 +286,7 @@ class AddEditRoutineMaintenanceRecords extends React.Component {
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
-        if (isCommandResponse(message, CMD_GET_REACTOR_OPERATION_RUN_RECORDS)) {
+        if (isCommandResponse(message, CMD_GET_ROUTINE_MAINTENANCE_RECORDS)) {
           const selection = this.state.selection;
           if (Object.keys(selection).length === 0) {
             if (this.listRef.current) {
@@ -324,7 +324,7 @@ class AddEditRoutineMaintenanceRecords extends React.Component {
           } else {
             enqueueWarningSnackbar("Export data not an array", 3000, !response.hasOwnProperty("persist_message"));
           }
-        } else if (isCommandResponse(message, CMD_DISCOVER_REACTOR_OPERATION_RUNS)) {
+        } else if (isCommandResponse(message, CMD_DISCOVER_ROUTINE_MAINTENANCE_DATA)) {
           // enqueueSuccessSnackbar(response.message);
           if (response.hasOwnProperty("warning_message")) {
             enqueueWarningSnackbar(response.message, 3000, !response.hasOwnProperty("persist_message"));
@@ -367,7 +367,7 @@ class AddEditRoutineMaintenanceRecords extends React.Component {
         return {selection: selection}
       });
       this.props.send({
-        cmd: CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
+        cmd: CMD_GET_ROUTINE_MAINTENANCE_RECORDS,
         item_id: selection.item_id,
         "include.metadata": BOOL_TRUE_STR,
         "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
