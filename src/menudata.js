@@ -335,7 +335,7 @@ export const MenuItems = [
         authmodlevel: 'basic',
         children: [
           {
-            label: 'Add/Edit Weekly Maintenance Data',
+            label: 'Add/Edit Maintenance Data',
             value: 'ssc.add.edit.reactor.routine.maintenance.records',
             title: 'Add/Edit Weekly Maintenance Data',
             tooltip: 'Update the reactor weekly maintenance records from the YOKOGAWA operating parameters data files (*.GTE)',
