@@ -42,7 +42,7 @@ import {
 import {
   ArchiveRecordLabel
 } from "../../utils/RenderUtils";
-import OperatingRunList from "./OperatingRunList";
+import RoutineMaintenanceList from "./RoutineMaintenanceList";
 import OperatingRunMetadata from "./OperatingRunMetadata";
 import {
   TitleComponent
@@ -415,7 +415,7 @@ class AddEditRoutineMaintenanceRecords extends React.Component {
             <TitleComponent title={this.props.title} />
           </Grid>
           <Grid item xs={4}>
-            <OperatingRunList
+            <RoutineMaintenanceList
               ref={this.listRef}
               title={"Reactor Operation Runs"}
               properties={this.props.properties}
