@@ -77,7 +77,7 @@ class AddEditRoutineMaintenanceRecords extends React.Component {
       title: props.title,
       include_archived: false,
     };
-    this.Module = ADDEDITROUTINEMAINTYENANCERECORDS_REF;
+    this.Module = ADDEDITROUTINEMAINTENANCERECORDS_REF;
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
   }
