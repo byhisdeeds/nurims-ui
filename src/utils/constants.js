@@ -54,6 +54,7 @@ module.exports = Object.freeze({
   SSC_GENERATE_SSC_MAINTENANCE_SCHEDULE: 'ssc.generate.ssc.maintenance.schedule',
   SSC_GENERATE_AMP_SCHEDULE: 'ssc.generate.amp.schedule',
   SSC_ADD_EDIT_SSC_MODIFICATION_RECORD: 'ssc.add.edit.ssc.modification.record',
+  SSC_ADD_EDIT_ROUTINE_MAINTENANCE_RECORDS: 'ssc.add.edit.reactor.routine.maintenance.records',
 
   RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS: 'ro.add.edit.reactor.operating.run.records',
   RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA: 'ro.add.edit.irradiated.samples',

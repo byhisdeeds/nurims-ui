@@ -330,6 +330,20 @@ export const MenuItems = [
         ]
       },
       {
+        label: '○ Routine Maintenance Data',
+        tooltip: 'Data on the maintenance carried out on the reactor routinely',
+        authmodlevel: 'basic',
+        children: [
+          {
+            label: 'Add/Edit Weekly Maintenance Data',
+            value: 'ssc.add.edit.reactor.routine.maintenance.records',
+            title: 'Add/Edit Weekly Maintenance Data',
+            tooltip: 'Update the reactor weekly maintenance records from the YOKOGAWA operating parameters data files (*.GTE)',
+            authmodlevel: 'basic',
+          },
+        ]
+      },
+      {
         label: '○ Reports',
         tooltip: 'Reports.',
         authmodlevel: 'basic',

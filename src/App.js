@@ -64,6 +64,7 @@ import {ADDEDITPERSONNEL_REF} from "./pages/personnel/AddEditPersonnel"
 import {VIEWPERSONNELRECORDS_REF} from "./pages/personnel/ViewPersonnelRecords"
 import {ADDEDITSSC_REF} from "./pages/maintenance/AddEditSSC"
 import {ADDEDITAMP_REF} from "./pages/maintenance/AddEditAMP"
+import {ADDEDITROUTINEMAINTENANCERECORDS_REF} from "./pages/maintenance/AddEditRoutineMaintenanceRecords"
 import {VIEWSSCRECORDS_REF} from "./pages/maintenance/ViewSSCRecords"
 import {GENERATEMATERIALSURVEILLANCESHEET_REF} from "./pages/controlledmaterials/GenerateMaterialSurveillanceSheet"
 import {ADDEDITREACTORWATERSAMPLES_REF} from "./pages/operation/AddEditReactorWaterSamples"
@@ -230,6 +231,7 @@ class App extends React.Component {
     this.crefs[ADDEDITAMP_REF] = React.createRef();
     this.crefs[VIEWSSCRECORDS_REF] = React.createRef();
     this.crefs[VIEWAMPRECORDS_REF] = React.createRef();
+    this.crefs[ADDEDITROUTINEMAINTENANCERECORDS_REF] = React.createRef();
     this.crefs[GENERATEMATERIALSURVEILLANCESHEET_REF] = React.createRef();
     this.crefs[ADDEDITREACTORWATERSAMPLES_REF] = React.createRef();
     this.crefs[ADDEDITIRRADIATEDSAMPLES_REF] = React.createRef();

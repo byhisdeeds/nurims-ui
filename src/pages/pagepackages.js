@@ -14,6 +14,7 @@ import {MANUFACTURER_REF} from "./controlledmaterials/Manufacturer";
 import {GENERATEMATERIALSURVEILLANCESHEET_REF} from "./controlledmaterials/GenerateMaterialSurveillanceSheet";
 import {VIEWSSCRECORDS_REF} from "./maintenance/ViewSSCRecords";
 import {VIEWAMPRECORDS_REF} from "./maintenance/ViewAMPRecords";
+import {ADDEDITROUTINEMAINTENANCERECORDS_REF} from "./maintenance/AddEditRoutineMaintenanceRecords";
 import {ADDEDITAMP_REF} from "./maintenance/AddEditAMP";
 import {ADDEDITSSC_REF} from "./maintenance/AddEditSSC";
 import {GENERATESSCMAINTENANCEREPORT_REF} from "./maintenance/GenerateSSCMaintenanceReport";
@@ -79,7 +80,7 @@ import {
   RP_MONITOR_DATA,
   RP_MONITOR_LIST,
   RP_PERSONNEL_DOSIMETRY_EVALUATION,
-  RP_PERSONNEL_DOSIMETRY_REPORT,
+  RP_PERSONNEL_DOSIMETRY_REPORT, SSC_ADD_EDIT_ROUTINE_MAINTENANCE_RECORDS,
   SSC_ADD_EDIT_SSC,
   SSC_ADD_EDIT_SSC_AMP,
   SSC_ADD_EDIT_SSC_MAINTENANCE_RECORD,
@@ -116,6 +117,7 @@ const AddEditSSC = lazy(() => import('./maintenance/AddEditSSC'));
 const AddEditAMP = lazy(() => import('./maintenance/AddEditAMP'));
 const ViewSSCRecords = lazy(() => import('./maintenance/ViewSSCRecords'));
 const ViewAMPRecords = lazy(() => import('./maintenance/ViewAMPRecords'));
+const AddEditRoutineMaintenanceRecords = lazy(() => import('./maintenance/AddEditRoutineMaintenanceRecords'));
 const AddEditMonitors = lazy(() => import('./radiationprotection/AddEditMonitors'));
 const SystemConfiguration = lazy(() => import('./sysadmin/SystemConfiguration'));
 const ManageUsers = lazy(() => import('./sysadmin/ManageUsers'));
@@ -394,6 +396,16 @@ export const SSCPackages = (actionid, crefs, menuTitle, user, handleMenuAction, 
   } else if (actionid === SSC_ADD_EDIT_SSC_MODIFICATION_RECORD) {
     return (<AddEditModificationRecord
       ref={crefs[ADDEDITMODIFICATIONRECORD_REF]}
+      title={menuTitle}
+      user={user}
+      onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+      glossary={glossary}
+    />)
+  } else if (actionid === SSC_ADD_EDIT_ROUTINE_MAINTENANCE_RECORDS) {
+    return (<AddEditRoutineMaintenanceRecords
+      ref={crefs[ADDEDITROUTINEMAINTENANCERECORDS_REF]}
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
