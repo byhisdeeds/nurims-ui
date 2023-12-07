@@ -69,6 +69,7 @@ class CleanupLargeObjectStore extends Component {
       module: this.Module,
       "only.list.files": this.state.only_list_files,
     }, false);
+    this.files.length = 0;
     this.setState({ files: "", processing: true })
   }
 

@@ -72,7 +72,7 @@ class LargeScrollableList extends Component {
       <div className={this.props.className} style={{fontSize: "inherit"}}>{itemText}</div>
     )
     console.log("-- getItemHeight --", height, itemText)
-    return height;
+    return height - 8;
   }
 
   renderListItem = (item) => {
