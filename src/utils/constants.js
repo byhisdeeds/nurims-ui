@@ -151,6 +151,11 @@ module.exports = Object.freeze({
   CMD_GET_REACTOR_OPERATION_RUN_RECORDS: "get_reactor_operation_run_records",
   CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD: "update_sample_irradiation_log_record",
 
+  CMD_EXPORT_ROUTINE_MAINTENANCE_DATA: "export_routine_maintenance_data",
+  CMD_DISCOVER_ROUTINE_MAINTENANCE_DATA: "discover_routine_maintenance_data",
+  CMD_GET_ROUTINE_MAINTENANCE_RECORDS: "get_routine_maintenance_records",
+  CMD_DELETE_ROUTINE_MAINTENANCE_RECORD: "delete_routine_maintenance_record",
+
   CMD_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF: "generate_reactor_sample_irradiation_authorization_pdf",
   CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF: "generate_reactor_operation_report_pdf",
   CMD_GET_REACTOR_WATER_SAMPLE_RECORDS: "get_reactor_water_sample_records",

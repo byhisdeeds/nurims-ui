@@ -14,7 +14,7 @@ import {
   CMD_DELETE_USER_RECORD,
   CMD_DISCOVER_REACTOR_OPERATION_RUNS,
   CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA,
-  CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
+  CMD_GET_REACTOR_OPERATION_RUN_RECORDS, CMD_GET_ROUTINE_MAINTENANCE_RECORDS,
   ITEM_ID,
   METADATA,
   NURIMS_OPERATION_DATA_CONTROLRODPOSITION,
@@ -237,7 +237,7 @@ class AddEditRoutineMaintenanceRecords extends React.Component {
       ConsoleLog(this.Module, "requestGetRecords", "include_archived", include_archived);
     }
     this.props.send({
-      cmd: CMD_GET_REACTOR_OPERATION_RUN_RECORDS,
+      cmd: CMD_GET_ROUTINE_MAINTENANCE_RECORDS,
       "include.disabled": include_archived ? BOOL_TRUE_STR : BOOL_FALSE_STR,
       "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
       module: this.Module,
