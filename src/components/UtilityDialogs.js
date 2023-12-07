@@ -129,7 +129,7 @@ export const isValidSelection = (selection) => {
 }
 
 
-export const ConfirmOperatingRunDiscoveryDialog = (props) => {
+export const ConfirmDataDiscoveryDialog = (props) => {
   const [startYear, setStartYear] = useState(null);
   const [endYear, setEndYear] = useState(null);
   const [startMonth, setStartMonth] = useState(null);
@@ -158,13 +158,13 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
 
   const proceed = () => {
     if (startYear === null) {
-      enqueueErrorSnackbar("No start year for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
+      enqueueErrorSnackbar("No start year for the period selected", ERROR_SNACKBAR_DURATION);
     } else if (startMonth === null) {
-      enqueueErrorSnackbar("No start month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
+      enqueueErrorSnackbar("No start month for the period selected", ERROR_SNACKBAR_DURATION);
     } else if (endYear === null) {
-      enqueueErrorSnackbar("No end year for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
+      enqueueErrorSnackbar("No end year for the period selected", ERROR_SNACKBAR_DURATION);
     } else if (endMonth === null) {
-      enqueueErrorSnackbar("No end month for the reactor operation period selected", ERROR_SNACKBAR_DURATION);
+      enqueueErrorSnackbar("No end month for the period selected", ERROR_SNACKBAR_DURATION);
     } else {
       props.onProceed(startYear, startMonth, endYear, endMonth, forceOverwrite);
     }
@@ -179,7 +179,7 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Discover reactor operation runs"}
+          {props.title}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -221,7 +221,7 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
         <DialogActions>
           <FormControlLabel
             control={<Switch onChange={onForceOverwriteChange} checked={forceOverwrite} color="primary" />}
-            label="Overwrite existing run data"
+            label="Overwrite existing data"
             labelPlacement="start"
           />
           <Box sx={{flexGrow: 1}} />
@@ -233,7 +233,8 @@ export const ConfirmOperatingRunDiscoveryDialog = (props) => {
   )
 }
 
-ConfirmOperatingRunDiscoveryDialog.propTypes = {
+ConfirmDataDiscoveryDialog.propTypes = {
+  title: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   onProceed: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,

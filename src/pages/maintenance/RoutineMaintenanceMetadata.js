@@ -80,7 +80,7 @@ class RoutineMaintenanceMetadata extends Component {
       >
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
           <CardHeader
-            title={`Operating Run:  ${runidAsTitle(record[NURIMS_TITLE])}`}
+            title={`Routine Maintenance Record:  ${record[NURIMS_TITLE]}`}
             titleTypographyProps={{fontSize: "1.5em", whiteSpace: "pre"}}
             sx={{pt: 1, pl: 3, pb: 0}}
           />

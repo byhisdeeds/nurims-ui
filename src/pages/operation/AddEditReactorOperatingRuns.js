@@ -5,7 +5,7 @@ import {
 } from "../../utils/UserContext";
 import {
   ConfirmOperatingRunDataExportDialog,
-  ConfirmOperatingRunDiscoveryDialog, ConfirmOperatingRunStatisticsExportDialog,
+  ConfirmDataDiscoveryDialog, ConfirmOperatingRunStatisticsExportDialog,
   ConfirmRemoveRecordDialog
 } from "../../components/UtilityDialogs";
 import {
@@ -132,11 +132,15 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   discoverOperatingRuns = () => {
-    this.setState(pstate => {return {confirm_discovery: true}});
+    this.setState(pstate => {
+      return {confirm_discovery: true}
+    });
   }
 
   cancelDiscovery = () => {
-    this.setState(pstate => {return {confirm_discovery: false}});
+    this.setState(pstate => {
+      return {confirm_discovery: false}
+    });
   }
 
   proceedWithDiscovery = (startYear, startMonth, endYear, endMonth, forceOverwrite) => {
@@ -144,7 +148,9 @@ class AddEditReactorOperatingRuns extends React.Component {
       ConsoleLog(this.Module, "proceedWithDiscovery", "startYear", startYear, "startMonth", startMonth,
         "endYear", endYear, "endMonth", endMonth, "forceOverwrite", forceOverwrite);
     }
-    this.setState(pstate => {return {confirm_discovery: false}});
+    this.setState(pstate => {
+      return {confirm_discovery: false}
+    });
 
     this.props.send({
       cmd: CMD_DISCOVER_REACTOR_OPERATION_RUNS,
@@ -250,7 +256,6 @@ class AddEditReactorOperatingRuns extends React.Component {
     console.log("-- SAVING RECORD --", this.state.selection)
 
 
-
     // if (this.listRef.current) {
     //   const records = this.listRef.current.getRecords();
     //   for (const record of records) {
@@ -313,7 +318,7 @@ class AddEditReactorOperatingRuns extends React.Component {
             // Create an anchor element and dispatch a click event on it to trigger a download
             const a = document.createElement('a')
             a.download = data.fileName;
-            a.href = window.URL.createObjectURL(new Blob([data.blobData], { type: data.fileType }));
+            a.href = window.URL.createObjectURL(new Blob([data.blobData], {type: data.fileType}));
             const clickEvt = new MouseEvent('click', {
               view: window,
               bubbles: true,
@@ -379,8 +384,10 @@ class AddEditReactorOperatingRuns extends React.Component {
   }
 
   render() {
-    const {metadata_changed, confirm_remove, confirm_discovery, confirm_export_data, confirm_export_statistics,
-      include_archived, selection} = this.state;
+    const {
+      metadata_changed, confirm_remove, confirm_discovery, confirm_export_data, confirm_export_statistics,
+      include_archived, selection
+    } = this.state;
     const is_valid_role = isValidUserRole(this.props.user, [ROLE_REACTOR_OPERATIONS_DATA_EXPORT]);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
@@ -397,9 +404,18 @@ class AddEditReactorOperatingRuns extends React.Component {
                                    onProceed={this.proceedWithRemove}
                                    onCancel={this.cancelRemove}
         />
-        <ConfirmOperatingRunDiscoveryDialog open={confirm_discovery}
-                                            onProceed={this.proceedWithDiscovery}
-                                            onCancel={this.cancelDiscovery}
+        <ConfirmDataDiscoveryDialog title={"Discover reactor operation runs"}
+                                    content={
+                                      <div>Reactor operation parameters are available via the YOKOGAWA digital chart
+                                        recorder, which provides per second resolution information for the control rod
+                                        movement, neutron flux, inlet and outlet temperatures, and gamma radiation area
+                                        monitors.<p/>Select the start year, start month, end year, end month, and
+                                        whether previously stored data should be overwritten.<p/>
+                                      </div>
+                                    }
+                                    open={confirm_discovery}
+                                    onProceed={this.proceedWithDiscovery}
+                                    onCancel={this.cancelDiscovery}
         />
         <ConfirmOperatingRunDataExportDialog open={confirm_export_data}
                                              run={{selection}}
@@ -412,7 +428,7 @@ class AddEditReactorOperatingRuns extends React.Component {
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-            <TitleComponent title={this.props.title} />
+            <TitleComponent title={this.props.title}/>
           </Grid>
           <Grid item xs={4}>
             <OperatingRunList
@@ -452,7 +468,7 @@ class AddEditReactorOperatingRuns extends React.Component {
             <AddIcon sx={{mr: 1}}/>
             Update Operating Runs
           </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add" disabled={disabled||no_selection}
+          <Fab variant="extended" size="small" color="primary" aria-label="add" disabled={disabled || no_selection}
                onClick={this.exportOperatingRunData}>
             <AddIcon sx={{mr: 1}}/>
             Export Operating Run Data
@@ -469,7 +485,8 @@ class AddEditReactorOperatingRuns extends React.Component {
 }
 
 AddEditReactorOperatingRuns.defaultProps = {
-  send: (msg) => {},
+  send: (msg) => {
+  },
 };
 
 export default AddEditReactorOperatingRuns;

@@ -119,7 +119,7 @@ class LogWindow extends Component {
           <LargeScrollableList
             ref={this.ref}
             theme={theme}
-            forceScroll={false}
+            forceScroll={true}
             className={"hl-window"}
             items={logs}
             highlight={this.highlight}
