@@ -22,7 +22,7 @@ import {
   NURIMS_OPERATION_DATA_NEUTRONFLUX,
   NURIMS_OPERATION_DATA_STATS,
   NURIMS_WITHDRAWN,
-  ROLE_REACTOR_OPERATIONS_DATA_EXPORT
+  ROLE_REACTOR_OPERATIONS_DATA_EXPORT, SSC_TOPIC
 } from "../../utils/constants";
 import {
   Box,
@@ -296,17 +296,18 @@ class AddEditRoutineMaintenanceRecords extends React.Component {
           const selection = this.state.selection;
           if (Object.keys(selection).length === 0) {
             if (this.listRef.current) {
-              this.listRef.current.setRecords(response.operation);
+              this.listRef.current.setRecords(response[SSC_TOPIC]);
             }
             if (this.metadataRef.current) {
               this.metadataRef.current.setRecordMetadata(selection);
             }
           } else {
             if (!message.hasOwnProperty("item_id") && this.listRef.current) {
-              this.listRef.current.setRecords(response.operation);
+              this.listRef.current.setRecords(response[SSC_TOPIC]);
             }
             if (message.hasOwnProperty("item_id")) {
-              const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
+              const record = getMatchingResponseObject(message, `response.${[SSC_TOPIC]}`,
+                "item_id", selection["item_id"]);
               selection[METADATA] = [...record[METADATA]]
               if (this.metadataRef.current) {
                 this.metadataRef.current.setRecordMetadata(selection);
@@ -314,7 +315,7 @@ class AddEditRoutineMaintenanceRecords extends React.Component {
             }
           }
         } else if (isCommandResponse(message, CMD_EXPORT_REACTOR_OPERATION_RUNS_DATA)) {
-          if (Array.isArray(message.response.operation)) {
+          if (Array.isArray(message.response[SSC_TOPIC])) {
             const data = prepareExportData(message);
             // Create an anchor element and dispatch a click event on it to trigger a download
             const a = document.createElement('a')
