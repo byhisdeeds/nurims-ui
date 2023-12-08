@@ -2,6 +2,7 @@ module.exports = Object.freeze({
   ROLE_CONTROLLED_MATERIAL_DATA_ENTRY: "controlled_material_data_entry",
   ROLE_CONTROLLED_MATERIAL_SYSADMIN: "controlled_material_sysadmin",
   ROLE_MAINTENANCE_DATA_ENTRY: "maintenance_data_entry",
+  ROLE_MAINTENANCE_DATA_EXPORT: "maintenance_data_export",
   ROLE_MAINTENANCE_SYSADMIN: "maintenance_sysadmin",
   ROLE_RADIATION_PROTECTION_DATA_ENTRY: "radiation_protection_data_entry",
   ROLE_RADIATION_PROTECTION_SYSADMIN: "radiation_protection_sysadmin",
@@ -285,6 +286,8 @@ module.exports = Object.freeze({
   NURIMS_SSC_MAINTENANCE_PREVENTIVE_MAINTENANCE: "nurims.ssc.maintenance.preventivemaintenance",
   NURIMS_SSC_MAINTENANCE_CORRECTIVE_MAINTENANCE: "nurims.ssc.maintenance.correctivemaintenance",
   NURIMS_SSC_MAINTENANCE_PERSONNEL: "nurims.ssc.maintenance.personnel",
+
+  NURIMS_SSC_ROUTINE_MAINTENANCE_DATA_STATS: "nurims.ssc.routinemaintenance.data.stats",
 
   NURIMS_SSC_MODIFICATION_ACTIONS: "nurims.ssc.modification.actions",
   NURIMS_SSC_MODIFICATION_STARTDATE: "nurims.ssc.modification.startdate",

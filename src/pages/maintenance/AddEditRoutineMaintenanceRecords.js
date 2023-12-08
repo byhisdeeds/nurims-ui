@@ -20,7 +20,7 @@ import {
   METADATA,
   NURIMS_OPERATION_DATA_CONTROLRODPOSITION,
   NURIMS_OPERATION_DATA_NEUTRONFLUX,
-  NURIMS_OPERATION_DATA_STATS,
+  NURIMS_OPERATION_DATA_STATS, NURIMS_SSC_ROUTINE_MAINTENANCE_DATA_STATS,
   NURIMS_WITHDRAWN,
   ROLE_REACTOR_OPERATIONS_DATA_EXPORT, SSC_TOPIC
 } from "../../utils/constants";
@@ -246,7 +246,7 @@ class AddEditRoutineMaintenanceRecords extends React.Component {
     this.props.send({
       cmd: CMD_GET_ROUTINE_MAINTENANCE_RECORDS,
       "include.disabled": include_archived ? BOOL_TRUE_STR : BOOL_FALSE_STR,
-      "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
+      "include.metadata.subtitle": NURIMS_SSC_ROUTINE_MAINTENANCE_DATA_STATS + "|" + "start",
       module: this.Module,
     })
     this.setState({include_archived: include_archived});
@@ -377,8 +377,8 @@ class AddEditRoutineMaintenanceRecords extends React.Component {
         cmd: CMD_GET_ROUTINE_MAINTENANCE_RECORDS,
         item_id: selection.item_id,
         "include.metadata": BOOL_TRUE_STR,
-        "include.metadata.subtitle": NURIMS_OPERATION_DATA_STATS + "|" + "start",
-        "load.metadata.from.store": ["nurims.operation.data.stats"],
+        "include.metadata.subtitle": NURIMS_SSC_ROUTINE_MAINTENANCE_DATA_STATS + "|" + "start",
+        "load.metadata.from.store": [NURIMS_SSC_ROUTINE_MAINTENANCE_DATA_STATS],
         module: this.Module,
       }, true)
     }

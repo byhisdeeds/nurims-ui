@@ -6,7 +6,7 @@ import {
   getRecordMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
-  NURIMS_OPERATION_DATA_STATS,
+  NURIMS_OPERATION_DATA_STATS, NURIMS_SSC_ROUTINE_MAINTENANCE_DATA_STATS,
   NURIMS_TITLE
 } from "../../utils/constants";
 import PropTypes from "prop-types";
@@ -64,11 +64,10 @@ class RoutineMaintenanceMetadata extends Component {
 
   render() {
     const {record} = this.state;
+    const stats = getRecordMetadataValue(record, NURIMS_SSC_ROUTINE_MAINTENANCE_DATA_STATS, {});
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render", `record.metadata.${NURIMS_OPERATION_DATA_STATS}`,
-        getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, ""));
+      ConsoleLog(this.Module, "render", "stats", stats);
     }
-    const stats = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_STATS, {});
     return (
       <Box
         component="form"
@@ -80,7 +79,7 @@ class RoutineMaintenanceMetadata extends Component {
       >
         <Card variant="outlined" style={{marginBottom: 8}} sx={{m: 0, pl: 0, pb: 0, width: '100%'}}>
           <CardHeader
-            title={`Routine Maintenance Record:  ${record[NURIMS_TITLE]}`}
+            title={`Routine Maintenance Record:  ${runidAsTitle(record[NURIMS_TITLE])}`}
             titleTypographyProps={{fontSize: "1.5em", whiteSpace: "pre"}}
             sx={{pt: 1, pl: 3, pb: 0}}
           />
