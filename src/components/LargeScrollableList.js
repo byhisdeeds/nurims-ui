@@ -69,7 +69,7 @@ class LargeScrollableList extends Component {
   getItemHeight = (item) => {
     const itemText = this.props.items.length === 0 ? "&nbsp;" : this.props.items[item];
     const {width, height} = this.getReactElementSize(
-      <div className={this.props.className} style={{fontSize: "inherit"}}>{itemText}</div>
+      <div className={this.props.className} style={{fontSize: this.props.fontSize}}>{itemText}</div>
     )
     return height;
   }
@@ -167,7 +167,7 @@ LargeScrollableList.defaultProps = {
   className: "",
   items: [],
   height: "calc(100% - 0px)",
-  fontSize: 14,
+  fontSize: 18,
   lineHeight: 16,
   forceScrollHysterisis: 5,
 }
