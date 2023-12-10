@@ -167,7 +167,7 @@ LargeScrollableList.defaultProps = {
   className: "",
   items: [],
   height: "calc(100% - 0px)",
-  fontSize: 18,
+  fontSize: 16,
   lineHeight: 16,
   forceScrollHysterisis: 5,
 }
