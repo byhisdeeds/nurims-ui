@@ -265,7 +265,6 @@ pre {
 
 .hl-window {
     font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
-    height: 16px;
 }
 
 .hl-window .token-timestamp {
