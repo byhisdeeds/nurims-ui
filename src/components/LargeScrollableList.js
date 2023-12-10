@@ -71,12 +71,10 @@ class LargeScrollableList extends Component {
     const {width, height} = this.getReactElementSize(
       <div className={this.props.className} style={{fontSize: "inherit"}}>{itemText}</div>
     )
-    console.log("-- getItemHeight --", height, itemText)
-    return height - 6;
+    return height;
   }
 
   renderListItem = (item) => {
-    console.log("-- renderListItem --", item.index, item.data[item.index])
     return (
       <div key={item} style={item.style} className={this.props.className}>
         {this.props.highlight(item.data[item.index])}
@@ -126,7 +124,7 @@ class LargeScrollableList extends Component {
           overflowY: "auto",
           width: "100%",
           fontSize: fontSize,
-          height: this.props.height
+          height: this.props.height,
         }}
       >
         <AutoSizer>
