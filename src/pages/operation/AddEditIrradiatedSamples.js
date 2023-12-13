@@ -299,7 +299,7 @@ import {
 } from "../../components/UtilityDialogs";
 import {
   CMD_DELETE_USER_RECORD,
-  CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
+  CMD_GET_REACTOR_WATER_SAMPLE_RECORDS, CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR,
   CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
   CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
   ITEM_ID,
@@ -413,21 +413,30 @@ class AddEditIrradiatedSamples extends React.Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "addRecord");
     }
-    if (this.listRef.current) {
-      this.listRef.current.addRecords([{
-        "changed": true,
-        "item_id": -1,
-        "nurims.title": "New Record",
-        "nurims.withdrawn": 0,
-        "metadata": {
-          username: "New Record",
-          password: "",
-          authorized_module_level: "",
-          role: "",
-        }
-      }], false);
-      this.setState({metadata_changed: true});
-    }
+    this.props.send({
+      cmd: CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR,
+      "include.disabled": "true",
+      module: this.Module,
+    })
+    this.setState({include_archived: include_archived});
+
+
+
+    // if (this.listRef.current) {
+    //   this.listRef.current.addRecords([{
+    //     "changed": true,
+    //     "item_id": -1,
+    //     "nurims.title": "New Log Record",
+    //     "nurims.withdrawn": 0,
+    //     "metadata": {
+    //       username: "New Record",
+    //       password: "",
+    //       authorized_module_level: "",
+    //       role: "",
+    //     }
+    //   }], false);
+    //   this.setState({metadata_changed: true});
+    // }
   }
 
   requestGetRecords = (include_archived) => {
@@ -511,6 +520,16 @@ class AddEditIrradiatedSamples extends React.Component {
               }
             }
           }
+        } else if (isCommandResponse(message, CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR)) {
+          // const selection = this.state.selection;
+          // const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
+          // selection[METADATA] = [...record[METADATA]]
+          // if (this.listRef.current) {
+          //   this.listRef.current.updateRecord(response.operation);
+          // }
+          // if (this.metadataRef.current) {
+          //   this.metadataRef.current.setRecordMetadata(selection);
+          // }
         } else if (isCommandResponse(message, CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD)) {
           enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
           const selection = this.state.selection;
@@ -633,7 +652,7 @@ class AddEditIrradiatedSamples extends React.Component {
           </Fab>
           <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>
             <AddIcon sx={{mr: 1}}/>
-            Add SSC
+            Add Irradiated Samples Log
           </Fab>
         </Box>
       </React.Fragment>

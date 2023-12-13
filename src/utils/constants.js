@@ -160,6 +160,7 @@ module.exports = Object.freeze({
   CMD_GENERATE_REACTOR_OPERATION_REPORT_PDF: "generate_reactor_operation_report_pdf",
   CMD_GET_REACTOR_WATER_SAMPLE_RECORDS: "get_reactor_water_sample_records",
   CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD: "update_reactor_water_sample_record",
+  CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR: "get_sample_irradiation_log_record_for_year",
   CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS: "get_sample_irradiation_log_records",
   CMD_UPDATE_SAMPLE_IRRADIATION_LOG_RECORD: "update_sample_irradiation_log_record",
 
