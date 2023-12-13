@@ -17,6 +17,10 @@ export function messageHasResponse(message) {
   return message.hasOwnProperty("response");
 }
 
+export function messageHasResponseObject(message, responseObject) {
+  return message.hasOwnProperty("response") && message.response.hasOwnProperty(responseObject);
+}
+
 export function messageResponseStatusOk(message) {
   return messageHasResponse(message) && message.response.hasOwnProperty("status") && message.response.status === 0;
 }

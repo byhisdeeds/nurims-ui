@@ -307,7 +307,7 @@ import {
   METADATA,
   NURIMS_SAMPLEDATE,
   NURIMS_TITLE,
-  NURIMS_WITHDRAWN
+  NURIMS_WITHDRAWN, OPERATION_TOPIC, SSC_MAINTENANCE_RECORD
 } from "../../utils/constants";
 import {
   Box,
@@ -322,14 +322,14 @@ import {
 import {
   getMatchingResponseObject,
   isCommandResponse,
-  messageHasResponse,
+  messageHasResponse, messageHasResponseObject,
   messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {
   ArchiveRecordLabel
 } from "../../utils/RenderUtils";
 import {
-  getRecordMetadataValue,
+  getRecordMetadataValue, new_record,
   record_uuid
 } from "../../utils/MetadataUtils";
 import {
@@ -402,15 +402,15 @@ class AddEditIrradiatedSamples extends React.Component {
         this.listRef.current.removeRecord(this.state.selection)
       }
     } else {
-      const records = this.listRef.current.getRecords();
-      for (const record of records) {
-        console.log(">>>", record)
-        this.props.send({
-          cmd: CMD_DELETE_ITEM_RECORD,
-          item_id: record.item_id,
-          module: this.Module,
-        });
-      }
+      // const records = this.listRef.current.getRecords();
+      // for (const record of records) {
+      //   console.log(">>>", record)
+      //   this.props.send({
+      //     cmd: CMD_DELETE_ITEM_RECORD,
+      //     item_id: record.item_id,
+      //     module: this.Module,
+      //   });
+      // }
 
     }
   }
@@ -528,6 +528,21 @@ class AddEditIrradiatedSamples extends React.Component {
             }
           }
         } else if (isCommandResponse(message, CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR)) {
+          if (messageHasResponseObject(message, OPERATION_TOPIC)) {
+            if (message.response[OPERATION_TOPIC].length === 0) {
+              this.listRef.current.addRecords([new_record(
+                -1,
+                message.startDate.split("-")[0],
+                0,
+                this.context.user.profile.username,
+                this.context.user.profile.fullname,
+                SSC_MAINTENANCE_RECORD
+              )], false);
+              this.setState({metadata_changed: true});
+            } else {
+              enqueueErrorSnackbar("A record for ??? already exists!");
+            }
+          }
           // const selection = this.state.selection;
           // const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
           // selection[METADATA] = [...record[METADATA]]
