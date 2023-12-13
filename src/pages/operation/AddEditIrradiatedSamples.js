@@ -298,6 +298,7 @@ import {
   ConfirmRemoveRecordDialog
 } from "../../components/UtilityDialogs";
 import {
+  CMD_DELETE_ITEM_RECORD,
   CMD_DELETE_USER_RECORD,
   CMD_GET_REACTOR_WATER_SAMPLE_RECORDS, CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR,
   CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
@@ -404,7 +405,7 @@ class AddEditIrradiatedSamples extends React.Component {
       const records = this.listRef.current.getRecords();
       for (const record in records) {
         this.props.send({
-          cmd: this.recordCommand("delete"),
+          cmd: CMD_DELETE_ITEM_RECORD,
           item_id: record.item_id,
           module: this.Module,
         });
