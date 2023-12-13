@@ -416,6 +416,8 @@ class AddEditIrradiatedSamples extends React.Component {
     this.props.send({
       cmd: CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR,
       "include.disabled": "true",
+      "startDate": "2022-01-01",
+      "endDate": "2022-12-31",
       module: this.Module,
     })
     this.setState({include_archived: include_archived});
