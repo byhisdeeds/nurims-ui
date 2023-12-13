@@ -62,7 +62,7 @@ import {
 } from "../../utils/SnackbarVariants";
 import IrradiatedSamplesList from "./IrradiatedSamplesList";
 import IrradiatedSamplesMetadata from "./IrradiatedSamplesMetadata";
-import {updateChangedRecord} from "../../utils/RecordUtils";
+import {saveRecordChanges} from "../../utils/RecordUtils";
 
 export const ADDEDITIRRADIATEDSAMPLES_REF = "AddEditIrradiatedSamples";
 
@@ -185,7 +185,8 @@ class AddEditIrradiatedSamples extends React.Component {
       ConsoleLog(this.Module, "saveChanges", "record", record);
     }
     if (isRecordChanged(record)) {
-      updateChangedRecord(record, OPERATION_TOPIC, IRRADIATED_SAMPLE_LOG_RECORD_TYPE, this.Module, this.props.send);
+      saveRecordChanges(record, OPERATION_TOPIC, IRRADIATED_SAMPLE_LOG_RECORD_TYPE, this.Module,
+        null, this.props.send);
     }
 
     this.setState({metadata_changed: false})
@@ -241,8 +242,9 @@ class AddEditIrradiatedSamples extends React.Component {
         } else if (isCommandResponse(message, CMD_UPDATE_ITEM_RECORD)) {
           enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
           const selection = this.state.selection;
-          const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
-          selection[METADATA] = [...record[METADATA]]
+          // const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
+          // console.log("----->", record)
+          // selection[METADATA] = [...record[METADATA]]
           if (this.listRef.current) {
             this.listRef.current.updateRecord(response.operation);
           }

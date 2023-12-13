@@ -26,24 +26,27 @@ export function onRecordSelectionRetrieveRecord(selection, recordTopic, recordTy
   }
 }
 
-export function updateChangedRecord(record, recordTopic, recordType, module, send) {
+export function saveRecordChanges(record, recordTopic, recordType, module, subtitleMetadata, send) {
   if (record.changed) {
     if (record.item_id === -1 && !record.hasOwnProperty(RECORD_KEY)) {
       record[RECORD_KEY] = record_uuid();
     }
-    send({
+    const msg = {
       cmd: CMD_UPDATE_ITEM_RECORD,
       item_id: record.item_id,
       "nurims.title": record[NURIMS_TITLE],
       "nurims.withdrawn": record[NURIMS_WITHDRAWN],
-      "include.metadata.subtitle": NURIMS_CREATION_DATE,
       return_record: "true",
       metadata: record.metadata,
       record_key: record[RECORD_KEY],
       topic: recordTopic,
       record_type: recordType,
       module: module,
-    });
+    }
+    if (subtitleMetadata !== null) {
+      msg["nurims.withdrawn"] = subtitleMetadata
+    }
+    send(msg);
   }
 }
 

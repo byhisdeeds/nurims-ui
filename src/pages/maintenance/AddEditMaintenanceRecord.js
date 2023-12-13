@@ -7,7 +7,7 @@ import {
   CMD_GET_ITEM_RECORDS,
   CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_REFERRED_TO_ITEM_RECORDS,
-  CMD_UPDATE_ITEM_RECORD,
+  CMD_UPDATE_ITEM_RECORD, NURIMS_CREATION_DATE,
   SSC_MAINTENANCE_RECORD,
   SSC_RECORD_TYPE,
   SSC_TOPIC,
@@ -46,7 +46,7 @@ import {
   getRecords,
   onRecordSelectionRetrieveRecord,
   onRecordSelectionRetrieveReferredToRecords,
-  updateChangedRecord
+  saveRecordChanges
 } from "../../utils/RecordUtils";
 
 export const ADDEDITMAINTENANCERECORD_REF = "AddEditMaintenanceRecord";
@@ -98,7 +98,7 @@ class AddEditMaintenanceRecord extends BaseRecordManager {
       if (this.context.debug) {
         ConsoleLog(this.Module, "saveChanges", record);
       }
-      updateChangedRecord(record, this.recordTopic, this.recordType, this.Module, this.props.send);
+      saveRecordChanges(record, this.recordTopic, this.recordType, this.Module, NURIMS_CREATION_DATE, this.props.send);
     }
 
     this.setState({metadata_changed: false})
