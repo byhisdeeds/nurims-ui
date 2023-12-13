@@ -403,7 +403,8 @@ class AddEditIrradiatedSamples extends React.Component {
       }
     } else {
       const records = this.listRef.current.getRecords();
-      for (const record in records) {
+      for (const record of records) {
+        console.log(">>>", record)
         this.props.send({
           cmd: CMD_DELETE_ITEM_RECORD,
           item_id: record.item_id,
@@ -453,7 +454,6 @@ class AddEditIrradiatedSamples extends React.Component {
     this.props.send({
       cmd: CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
       "include.disabled": include_archived ? "true" : "false",
-      "include.metadata": "true",
       module: this.Module,
     })
     this.setState({include_archived: include_archived});
