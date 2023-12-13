@@ -56,6 +56,10 @@ export function isRecordChanged(record) {
   return record.hasOwnProperty("changed") && record.changed;
 }
 
+export function recordHasRecordKey(record) {
+  return record.hasOwnProperty("record_key");
+}
+
 export function setRecordChanged(record) {
   record["changed"] = true;
 }

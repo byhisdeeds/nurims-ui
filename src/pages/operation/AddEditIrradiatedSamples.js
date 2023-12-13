@@ -334,9 +334,9 @@ import {
   ArchiveRecordLabel
 } from "../../utils/RenderUtils";
 import {
-  getRecordMetadataValue, isValidSelection,
+  getRecordMetadataValue, isRecordChanged, isValidSelection,
   new_record,
-  record_uuid
+  record_uuid, recordHasRecordKey
 } from "../../utils/MetadataUtils";
 import {
   AddRemoveArchiveSaveSubmitProvenanceButtonPanel,
@@ -471,8 +471,8 @@ class AddEditIrradiatedSamples extends React.Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "saveChanges", "record", record);
     }
-    if (isValidSelection(record) && record.changed) {
-      if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
+    if (isRecordChanged(record)) {
+      if (record.item_id === -1 && !recordHasRecordKey(record)) {
         record["record_key"] = record_uuid();
       }
       this.props.send({
@@ -483,8 +483,9 @@ class AddEditIrradiatedSamples extends React.Component {
         metadata: record.metadata,
         record_key: record.record_key,
         record_type: IRRADIATED_SAMPLE_LOG_RECORD_TYPE,
+        topic: OPERATION_TOPIC,
         module: this.Module,
-      })
+      }, true);
     }
 
     this.setState({metadata_changed: false})
@@ -584,10 +585,9 @@ class AddEditIrradiatedSamples extends React.Component {
         return {selection: selection}
       });
       this.props.send({
-        cmd: CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
+        cmd: CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
         item_id: selection.item_id,
         "include.metadata": "true",
-        "include.metadata.subtitle": NURIMS_SAMPLEDATE,
         module: this.Module,
       })
     }
