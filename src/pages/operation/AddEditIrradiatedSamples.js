@@ -300,14 +300,17 @@ import {
 import {
   CMD_DELETE_ITEM_RECORD,
   CMD_DELETE_USER_RECORD,
-  CMD_GET_REACTOR_WATER_SAMPLE_RECORDS, CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR,
+  CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
+  CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR,
   CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
   CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
+  IRRADIATED_SAMPLE_LOG_RECORD_TYPE,
   ITEM_ID,
   METADATA,
   NURIMS_SAMPLEDATE,
   NURIMS_TITLE,
-  NURIMS_WITHDRAWN, OPERATION_TOPIC, SSC_MAINTENANCE_RECORD
+  NURIMS_WITHDRAWN,
+  OPERATION_TOPIC, ROLE_IRRADIATION_REQUEST_DATA_ENTRY, ROLE_IRRADIATION_REQUEST_SYSADMIN,
 } from "../../utils/constants";
 import {
   Box,
@@ -317,22 +320,25 @@ import {
 import {
   Add as AddIcon,
   Save as SaveIcon,
-  RemoveCircle as RemoveCircleIcon,
+  RemoveCircle as RemoveCircleIcon, Unpublished as UnpublishedIcon, CheckCircle as CheckCircleIcon,
 } from "@mui/icons-material";
 import {
   getMatchingResponseObject,
   isCommandResponse,
-  messageHasResponse, messageHasResponseObject,
+  messageHasResponse,
+  messageHasResponseObject,
   messageResponseStatusOk
 } from "../../utils/WebsocketUtils";
 import {
   ArchiveRecordLabel
 } from "../../utils/RenderUtils";
 import {
-  getRecordMetadataValue, new_record,
+  getRecordMetadataValue,
+  new_record,
   record_uuid
 } from "../../utils/MetadataUtils";
 import {
+  AddRemoveArchiveSaveSubmitProvenanceButtonPanel,
   TitleComponent
 } from "../../components/CommonComponents";
 import {
@@ -427,24 +433,6 @@ class AddEditIrradiatedSamples extends React.Component {
       module: this.Module,
     })
     this.setState({include_archived: true});
-
-
-
-    // if (this.listRef.current) {
-    //   this.listRef.current.addRecords([{
-    //     "changed": true,
-    //     "item_id": -1,
-    //     "nurims.title": "New Log Record",
-    //     "nurims.withdrawn": 0,
-    //     "metadata": {
-    //       username: "New Record",
-    //       password: "",
-    //       authorized_module_level: "",
-    //       role: "",
-    //     }
-    //   }], false);
-    //   this.setState({metadata_changed: true});
-    // }
   }
 
   requestGetRecords = (include_archived) => {
@@ -529,29 +517,21 @@ class AddEditIrradiatedSamples extends React.Component {
           }
         } else if (isCommandResponse(message, CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR)) {
           if (messageHasResponseObject(message, OPERATION_TOPIC)) {
+            const year = message.hasOwnProperty("startDate") ? message.startDate.split("-")[0] : "0000"
             if (message.response[OPERATION_TOPIC].length === 0) {
               this.listRef.current.addRecords([new_record(
                 -1,
-                message.startDate.split("-")[0],
+                year,
                 0,
                 this.context.user.profile.username,
                 this.context.user.profile.fullname,
-                SSC_MAINTENANCE_RECORD
+                IRRADIATED_SAMPLE_LOG_RECORD_TYPE
               )], false);
               this.setState({metadata_changed: true});
             } else {
-              enqueueErrorSnackbar("A record for ??? already exists!");
+              enqueueErrorSnackbar(`A record for year ${year} already exists!`);
             }
           }
-          // const selection = this.state.selection;
-          // const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
-          // selection[METADATA] = [...record[METADATA]]
-          // if (this.listRef.current) {
-          //   this.listRef.current.updateRecord(response.operation);
-          // }
-          // if (this.metadataRef.current) {
-          //   this.metadataRef.current.setRecordMetadata(selection);
-          // }
         } else if (isCommandResponse(message, CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD)) {
           enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
           const selection = this.state.selection;
@@ -657,26 +637,45 @@ class AddEditIrradiatedSamples extends React.Component {
             />
           </Grid>
         </Grid>
-        <Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>
-          <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}
-               disabled={selection === -1}>
-            <RemoveCircleIcon sx={{mr: 1}}/>
-            Remove SSC
-          </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}
-               onClick={this.changeRecordArchivalStatus} disabled={!this.isAccesibleButton(selection)}>
-            {ArchiveRecordLabel(selection, "Run")}
-          </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}
-               disabled={!metadata_changed}>
-            <SaveIcon sx={{mr: 1}}/>
-            Save Changes
-          </Fab>
-          <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>
-            <AddIcon sx={{mr: 1}}/>
-            Add Irradiated Samples Log
-          </Fab>
-        </Box>
+        {<AddRemoveArchiveSaveSubmitProvenanceButtonPanel
+          THIS={this}
+          user={user}
+          // archiveRecordButtonLabel={this.isRecordArchived(selection) ? "Restore Record" : "Archive Record"}
+          // archiveRecordIcon={this.isRecordArchived(selection) ?
+          //   <VisibilityIcon sx={{mr: 1}}/> : <VisibilityOffIcon sx={{mr: 1}}/>}
+          onClickAddRecord={this.addRecord}
+          onClickChangeRecordArchivalStatus={this.changeRecordArchivalStatus}
+          onClickRemoveRecord={this.removeRecord}
+          onClickSaveRecordChanges={this.saveChanges}
+          onClickViewProvenanceRecords={this.showProvenanceRecordsView}
+          addRecordButtonLabel={"Add Authorization Request"}
+          removeRecordButtonLabel={"Remove Authorization Request"}
+          addRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
+          removeRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
+          saveRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
+          archiveRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
+          enableSubmitButton={false}
+        />}
+        {/*<Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}
+        {/*       disabled={selection === -1}>*/}
+        {/*    <RemoveCircleIcon sx={{mr: 1}}/>*/}
+        {/*    Remove SSC*/}
+        {/*  </Fab>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="archive" component={"span"}*/}
+        {/*       onClick={this.changeRecordArchivalStatus} disabled={!this.isAccesibleButton(selection)}>*/}
+        {/*    {ArchiveRecordLabel(selection, "Run")}*/}
+        {/*  </Fab>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="save" onClick={this.saveChanges}*/}
+        {/*       disabled={!metadata_changed}>*/}
+        {/*    <SaveIcon sx={{mr: 1}}/>*/}
+        {/*    Save Changes*/}
+        {/*  </Fab>*/}
+        {/*  <Fab variant="extended" size="small" color="primary" aria-label="add" onClick={this.addRecord}>*/}
+        {/*    <AddIcon sx={{mr: 1}}/>*/}
+        {/*    Add Annual Irradiated Samples Log*/}
+        {/*  </Fab>*/}
+        {/*</Box>*/}
       </React.Fragment>
     );
   }

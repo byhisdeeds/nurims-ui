@@ -1223,6 +1223,7 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
                                                                   sysadminRole,
                                                                   removeRole,
                                                                   saveRole,
+                                                                  enableSubmitButton,
                                                                   submitRole,
                                                                   onClickSubmitRecord,
                                                                   submitRecordButtonLabel,
@@ -1356,6 +1357,7 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.propTypes = {
   saveOnlyByCreator: PropTypes.bool,
   submitOnlyByCreator: PropTypes.bool,
   ignoreSaveDisabledIfNotCreator: PropTypes.bool,
+  enableSubmitButton: PropTypes.bool,
 }
 
 AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
@@ -1381,6 +1383,7 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
   saveOnlyByCreator: false,
   submitOnlyByCreator: false,
   ignoreSaveDisabledIfNotCreator: false,
+  enableSubmitButton: true,
 }
 
 export function AddRemoveArchiveSaveProvenanceButtonPanel({
