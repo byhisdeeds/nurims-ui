@@ -437,7 +437,7 @@ class AddEditIrradiatedSamples extends React.Component {
     this.props.send({
       cmd: CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
       "include.disabled": include_archived ? "true" : "false",
-      "include.metadata.subtitle": NURIMS_SAMPLEDATE,
+      "include.metadata": "true",
       module: this.Module,
     })
     this.setState({include_archived: include_archived});
