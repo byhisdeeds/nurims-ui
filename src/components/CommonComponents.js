@@ -51,6 +51,7 @@ import {
   isRecordCreatedBy,
   isRecordEmpty,
   isSelectableByRoles,
+  isValidSelection,
   toBoolean
 } from "../utils/MetadataUtils";
 import {
@@ -59,7 +60,8 @@ import {
   HourglassFull,
   NetworkCheck,
   Person,
-  DeleteForever
+  DeleteForever,
+  DoNotDisturbAlt as DoNotDisturbAltIcon
 } from '@mui/icons-material';
 import {
   isValidUserRole
@@ -71,8 +73,6 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
-import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
-import PublishIcon from '@mui/icons-material/Publish';
 import {
   ITEM_ID,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB,
@@ -86,10 +86,6 @@ import {
   NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
   UNDEFINED_DATE_STRING
 } from "../utils/constants";
-import DoneIcon from "@mui/icons-material/Done";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 
 export function TitleComponent({title}) {
@@ -1223,7 +1219,9 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
                                                                   sysadminRole,
                                                                   removeRole,
                                                                   saveRole,
+                                                                  enableSaveButton,
                                                                   enableSubmitButton,
+                                                                  enableRemoveButton,
                                                                   submitRole,
                                                                   onClickSubmitRecord,
                                                                   submitRecordButtonLabel,
@@ -1236,8 +1234,8 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
   const recordHasChanged = isRecordChanged(selection);
   const userIsCreator = ignoreSaveDisabledIfNotCreator ? true : isRecordCreatedBy(selection, user);
   const emptyRecord = isRecordEmpty(selection);
-  const archiveButtonLabel = THIS.isRecordArchived(selection) ? unarchiveRecordButtonLabel : archiveRecordButtonLabel;
-  const archiveIcon = THIS.isRecordArchived(selection) ? unarchiveRecordIcon : archiveRecordIcon;
+  const archiveButtonLabel = isRecordArchived(selection) ? unarchiveRecordButtonLabel : archiveRecordButtonLabel;
+  const archiveIcon = isRecordArchived(selection) ? unarchiveRecordIcon : archiveRecordIcon;
 
   // console.log("-------------")
   // console.log("-- userIsCreator", userIsCreator, "submitDisabled", submitDisabled, "recordHasChanged", recordHasChanged,
@@ -1258,32 +1256,36 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
         &#160; {addRecordButtonLabel} &#160;
         {addRecordIcon}
       </Fab>
-      <Fab
-        variant="extended"
-        size="small"
-        color="primary"
-        aria-label="remove"
-        onClick={onClickRemoveRecord}
-        disabled={emptyRecord || !isSelectableByRoles(user, selection, [removeRole, sysadminRole], true)}
-      >
-        &#160; {removeRecordButtonLabel} &#160;
-        {removeRecordIcon}
-      </Fab>
-      <Fab
-        variant="extended"
-        size="small"
-        color="primary"
-        aria-label="save"
-        onClick={onClickSaveRecordChanges}
-        // disabled={((!isCreator && submitDisabled) && !recordHasChanged) || !THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)}
-        // disabled if no record is not changed
-        // disabled={submitDisabled || (!(userIsCreator && THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)))}
-        disabled={emptyRecord || !userIsCreator || !recordHasChanged ||
-          !isSelectableByRoles(user, selection, [submitRole, sysadminRole], false)}
-      >
-        &#160; Save Changes &#160;
-        <SaveIcon sx={{mr: 1}}/>
-      </Fab>
+      {enableRemoveButton &&
+        <Fab
+          variant="extended"
+          size="small"
+          color="primary"
+          aria-label="remove"
+          onClick={onClickRemoveRecord}
+          disabled={emptyRecord || !isSelectableByRoles(user, selection, [removeRole, sysadminRole], true)}
+        >
+          &#160; {removeRecordButtonLabel} &#160;
+          {removeRecordIcon}
+        </Fab>
+      }
+      {enableSaveButton &&
+        <Fab
+          variant="extended"
+          size="small"
+          color="primary"
+          aria-label="save"
+          onClick={onClickSaveRecordChanges}
+          // disabled={((!isCreator && submitDisabled) && !recordHasChanged) || !THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)}
+          // disabled if no record is not changed
+          // disabled={submitDisabled || (!(userIsCreator && THIS.isSelectableByRoles(selection, [submitRole, sysadminRole], false)))}
+          disabled={emptyRecord || !userIsCreator || !recordHasChanged ||
+            !isSelectableByRoles(user, selection, [submitRole, sysadminRole], false)}
+        >
+          &#160; Save Changes &#160;
+          <SaveIcon sx={{mr: 1}}/>
+        </Fab>
+      }
       {isSysadmin &&
         <Fab
           variant="extended"
@@ -1291,13 +1293,13 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
           color="primary"
           aria-label="view-provenance"
           onClick={onClickViewProvenanceRecords}
-          disabled={emptyRecord || !THIS.isValidSelection(selection)}
+          disabled={emptyRecord || !isValidSelection(selection)}
         >
           &#160; View Provenance Records &#160;
           <VisibilityIcon sx={{mr: 1}}/>
         </Fab>
       }
-      {submitRecordButtonLabel &&
+      {enableSubmitButton &&
         <Fab
           variant="extended"
           size="small"
@@ -1331,6 +1333,8 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
 AddRemoveArchiveSaveSubmitProvenanceButtonPanel.propTypes = {
   THIS: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
+  enableSaveButton: PropTypes.bool,
+  enableRemoveButton: PropTypes.bool,
   onClickRemoveRecord: PropTypes.func.isRequired,
   onClickSaveRecordChanges: PropTypes.func.isRequired,
   onClickAddRecord: PropTypes.func.isRequired,
@@ -1361,6 +1365,8 @@ AddRemoveArchiveSaveSubmitProvenanceButtonPanel.propTypes = {
 }
 
 AddRemoveArchiveSaveSubmitProvenanceButtonPanel.defaultProps = {
+  enableSaveButton: true,
+  enableRemoveButton: true,
   removeRecordIcon: <RemoveCircleIcon sx={{mr: 1}}/>,
   addRecordIcon: <AddCircleOutlineIcon sx={{mr: 1}}/>,
   archiveRecordButtonLabel: "Archive Record",

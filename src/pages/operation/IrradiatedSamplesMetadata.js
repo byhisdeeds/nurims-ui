@@ -146,20 +146,20 @@ class IrradiatedSamplesMetadata extends Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
-    if (record) {
-      record["changed"] = false;
-      record["changed.metadata"] = [];
-      this.doc = {uri: getRecordMetadataValue(
-        record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE, "").uri};
-    }
-    this.setState({
-      record: (record) ? record : [],
-      disabled: !(record),
-    })
-    if (this.ref.current && (record)) {
-      this.ref.current.setRowData(getRecordMetadataValue(
-        record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
-    }
+    // if (record) {
+    //   record["changed"] = false;
+    //   record["changed.metadata"] = [];
+    //   this.doc = {uri: getRecordMetadataValue(
+    //     record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE, "").uri};
+    // }
+    // this.setState({
+    //   record: (record) ? record : [],
+    //   disabled: !(record),
+    // })
+    // if (this.ref.current && (record)) {
+    //   this.ref.current.setRowData(getRecordMetadataValue(
+    //     record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
+    // }
     this.props.onChange(false);
   }
 

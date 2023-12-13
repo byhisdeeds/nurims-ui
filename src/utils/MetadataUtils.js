@@ -36,6 +36,10 @@ export function record_uuid() {
   return nanoid();
 }
 
+export function isValidSelection(selection){
+  return (selection.hasOwnProperty(ITEM_ID) && selection.item_id !== -1);
+}
+
 export function isRecordArchived(record) {
   return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
 }

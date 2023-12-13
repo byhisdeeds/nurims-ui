@@ -295,6 +295,7 @@ import {
   UserContext
 } from "../../utils/UserContext";
 import {
+  AddIrradiatedSampleLogRecordDialog,
   ConfirmRemoveRecordDialog
 } from "../../components/UtilityDialogs";
 import {
@@ -302,7 +303,7 @@ import {
   CMD_DELETE_USER_RECORD,
   CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
   CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR,
-  CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
+  CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS, CMD_UPDATE_ITEM_RECORD,
   CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
   IRRADIATED_SAMPLE_LOG_RECORD_TYPE,
   ITEM_ID,
@@ -333,7 +334,7 @@ import {
   ArchiveRecordLabel
 } from "../../utils/RenderUtils";
 import {
-  getRecordMetadataValue,
+  getRecordMetadataValue, isValidSelection,
   new_record,
   record_uuid
 } from "../../utils/MetadataUtils";
@@ -358,6 +359,7 @@ class AddEditIrradiatedSamples extends React.Component {
     this.state = {
       metadata_changed: false,
       confirm_remove: false,
+      confirm_add: false,
       selection: {},
       title: props.title,
       include_archived: false,
@@ -390,7 +392,6 @@ class AddEditIrradiatedSamples extends React.Component {
   }
 
   removeRecord = () => {
-    console.log("REMOVE RECORD")
     this.setState({confirm_remove: true,});
   }
 
@@ -402,7 +403,9 @@ class AddEditIrradiatedSamples extends React.Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "proceedWithRemove", "selection", this.state.selection);
     }
+
     this.setState({confirm_remove: false,});
+
     if (this.state.selection.item_id === -1) {
       if (this.listRef.current) {
         this.listRef.current.removeRecord(this.state.selection)
@@ -425,14 +428,29 @@ class AddEditIrradiatedSamples extends React.Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "addRecord");
     }
+    this.setState({confirm_add: true,});
+  }
+
+  cancelAdd = () => {
+    this.setState({confirm_add: false,});
+  }
+
+  proceedWithAdd = (year) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "proceedWithAdd", "year", year);
+    }
+
     this.props.send({
       cmd: CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR,
       "include.disabled": "true",
-      "startDate": "2022-01-01",
-      "endDate": "2022-12-31",
+      "startDate": `${year}-01-01`,
+      "endDate": `${year}-12-31`,
       module: this.Module,
     })
-    this.setState({include_archived: true});
+    // this.setState({include_archived: true});
+
+    this.setState({confirm_add: false,});
+
   }
 
   requestGetRecords = (include_archived) => {
@@ -442,47 +460,34 @@ class AddEditIrradiatedSamples extends React.Component {
     this.props.send({
       cmd: CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
       "include.disabled": include_archived ? "true" : "false",
+      "include.metadata": "true",
       module: this.Module,
     })
     this.setState({include_archived: include_archived});
   }
 
   saveChanges = () => {
-    if (this.listRef.current) {
-      const records = this.listRef.current.getRecords();
-      for (const record of records) {
-        // only save monitor record with changed metadata
-        if (record.changed) {
-          if (this.context.debug) {
-            ConsoleLog(this.Module, "saveChanges", record);
-          }
-          if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
-            record["record_key"] = record_uuid();
-          }
-          // Only update then changed metadata fields
-          console.log("CHANGED METADATA", record["changed.metadata"])
-          const metadata_entries = [];
-          for (const md of record["changed.metadata"]) {
-            const entry = {};
-            entry[md] = getRecordMetadataValue(record, md, "");
-            metadata_entries.push(entry)
-          }
-          record["metadata"] = metadata_entries;
-          console.log("SAVING RECORD", record)
-          this.props.send({
-            cmd: CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
-            item_id: record.item_id,
-            "nurims.title": record[NURIMS_TITLE],
-            "nurims.withdrawn": record[NURIMS_WITHDRAWN],
-            metadata: record.metadata,
-            record_key: record.record_key,
-            module: this.Module,
-          })
-        }
+    const record = this.state.selection;
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "saveChanges", "record", record);
+    }
+    if (isValidSelection(record) && record.changed) {
+      if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
+        record["record_key"] = record_uuid();
       }
+      this.props.send({
+        cmd: CMD_UPDATE_ITEM_RECORD,
+        item_id: record.item_id,
+        "nurims.title": record[NURIMS_TITLE],
+        "nurims.withdrawn": record[NURIMS_WITHDRAWN],
+        metadata: record.metadata,
+        record_key: record.record_key,
+        record_type: IRRADIATED_SAMPLE_LOG_RECORD_TYPE,
+        module: this.Module,
+      })
     }
 
-    // this.setState({metadata_changed: false})
+    this.setState({metadata_changed: false})
   }
 
   ws_message(message) {
@@ -589,6 +594,9 @@ class AddEditIrradiatedSamples extends React.Component {
     this.setState({selection: selection})
   }
 
+  isRecordArchived = (record) => {
+    return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
+  }
   // onRecordSelection = (selection) => {
   //   if (this.context.debug) {
   //     ConsoleLog(this.Module, "onRecordSelection", "selection", selection);
@@ -602,7 +610,7 @@ class AddEditIrradiatedSamples extends React.Component {
   // }
 
   render() {
-    const {metadata_changed, confirm_remove, include_archived, selection} = this.state;
+    const {metadata_changed, confirm_remove, confirm_add, include_archived, selection} = this.state;
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
@@ -613,6 +621,11 @@ class AddEditIrradiatedSamples extends React.Component {
                                    selection={selection}
                                    onProceed={this.proceedWithRemove}
                                    onCancel={this.cancelRemove}
+        />
+        <AddIrradiatedSampleLogRecordDialog open={confirm_add}
+                                   selection={selection}
+                                   onProceed={this.proceedWithAdd}
+                                   onCancel={this.cancelAdd}
         />
         <Grid container spacing={2}>
           <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
@@ -639,7 +652,7 @@ class AddEditIrradiatedSamples extends React.Component {
         </Grid>
         {<AddRemoveArchiveSaveSubmitProvenanceButtonPanel
           THIS={this}
-          user={user}
+          user={this.context.user}
           // archiveRecordButtonLabel={this.isRecordArchived(selection) ? "Restore Record" : "Archive Record"}
           // archiveRecordIcon={this.isRecordArchived(selection) ?
           //   <VisibilityIcon sx={{mr: 1}}/> : <VisibilityOffIcon sx={{mr: 1}}/>}
@@ -648,13 +661,15 @@ class AddEditIrradiatedSamples extends React.Component {
           onClickRemoveRecord={this.removeRecord}
           onClickSaveRecordChanges={this.saveChanges}
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
-          addRecordButtonLabel={"Add Authorization Request"}
-          removeRecordButtonLabel={"Remove Authorization Request"}
           addRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
+          addRecordButtonLabel={"Add Irradiated Samples Log"}
+          removeRecordButtonLabel={"Remove Annual Irradiated Samples Log"}
           removeRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
           saveRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
           archiveRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
           enableSubmitButton={false}
+          enableRemoveButton={true}
+          enableSaveButton={true}
         />}
         {/*<Box sx={{'& > :not(style)': {m: 2}}} style={{textAlign: 'center'}}>*/}
         {/*  <Fab variant="extended" size="small" color="primary" aria-label="remove" onClick={this.removeRecord}*/}

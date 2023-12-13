@@ -30,6 +30,14 @@ import PdfViewer from "./PdfViewer";
 import {
   enqueueErrorSnackbar
 } from "../utils/SnackbarVariants";
+import {
+  DatePicker,
+  LocalizationProvider
+} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import "dayjs/locale/en-gb";
+import dayjs from "dayjs";
+import {ConsoleLog} from "../utils/UserContext";
 
 const ERROR_SNACKBAR_DURATION = 3;
 
@@ -61,6 +69,70 @@ export const ConfirmRemoveRecordDialog = (props) => (
 )
 
 ConfirmRemoveRecordDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  selection: PropTypes.object.isRequired,
+  onProceed: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+}
+
+
+export const AddIrradiatedSampleLogRecordDialog = (props) => {
+  const [year, setYear] = useState(dayjs());
+
+  const handleYearChange = (date) => {
+    setYear(date)
+  }
+
+  const proceed = () => {
+    props.onProceed(year.year());
+  }
+
+  return (
+    <div>
+      <Dialog
+        open={props.open}
+        onClose={props.onCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Add Irradiated Samples Log Record"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            The logs of irradiated samples are kept in annual records. For example the list
+            of samples irradiated in 2017 are kept in a record with the title '2017'.
+            <p/>
+            Select the year for the new record being added.
+            <p/>
+          </DialogContentText>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'en-gb'}>
+                <DatePicker
+                  renderInput={(props) => <TextField
+                    style={{width: "12ch", paddingRight: 8, marginTop: 8}} {...props} />}
+                  label={"Irradiated Sample Log Year"}
+                  value={year}
+                  views={["year"]}
+                  inputFormat={"yyyy"}
+                  onChange={handleYearChange}
+                  disabled={false}
+                />
+              </LocalizationProvider>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.onCancel}>No</Button>
+          <Button onClick={proceed} autoFocus>Yes</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  )
+}
+
+AddIrradiatedSampleLogRecordDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   selection: PropTypes.object.isRequired,
   onProceed: PropTypes.func.isRequired,
@@ -216,15 +288,15 @@ export const ConfirmDataDiscoveryDialog = (props) => {
                 )}
               />
             </Grid>
-            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <FormControlLabel
-            control={<Switch onChange={onForceOverwriteChange} checked={forceOverwrite} color="primary" />}
+            control={<Switch onChange={onForceOverwriteChange} checked={forceOverwrite} color="primary"/>}
             label="Overwrite existing data"
             labelPlacement="start"
           />
-          <Box sx={{flexGrow: 1}} />
+          <Box sx={{flexGrow: 1}}/>
           <Button onClick={props.onCancel}>Cancel</Button>
           <Button onClick={() => proceed()} autoFocus>Continue</Button>
         </DialogActions>
@@ -342,13 +414,14 @@ export const ConfirmGenerateReactorOperationReportDialog = (props) => {
         </DialogContent>
         <DialogActions>
           <FormControlLabel
-            control={<Switch onChange={onForceOverwriteChange} checked={forceOverwrite} color="primary" />}
+            control={<Switch onChange={onForceOverwriteChange} checked={forceOverwrite} color="primary"/>}
             label="Overwrite any existing reports."
             labelPlacement="start"
           />
-          <Box sx={{flexGrow: 1}} />
+          <Box sx={{flexGrow: 1}}/>
           <Button onClick={props.onCancel}>Cancel</Button>
-          <Button onClick={() => proceed(year, startDate, endDate, reportType, forceOverwrite)} autoFocus>Continue</Button>
+          <Button onClick={() => proceed(year, startDate, endDate, reportType, forceOverwrite)}
+                  autoFocus>Continue</Button>
         </DialogActions>
       </Dialog>
     </div>
@@ -368,15 +441,15 @@ export const PdfViewerDialog = (props) => (
       open={props.open}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      sx={{ '& .MuiDialog-paper': { width: '80%', maxWidth: '80%' } }}
+      sx={{'& .MuiDialog-paper': {width: '80%', maxWidth: '80%'}}}
     >
       <DialogTitle id="alert-dialog-title" style={{display: 'flex'}}>
         {props.title}
-        <div style={{flexGrow: 1}} />
+        <div style={{flexGrow: 1}}/>
         <IconButton onClick={props.onClose} component={"span"}><CloseIcon/></IconButton>
       </DialogTitle>
       <DialogContent>
-        <PdfViewer height={"800px"} source={props.pdf} />
+        <PdfViewer height={"800px"} source={props.pdf}/>
       </DialogContent>
     </Dialog>
   </div>
@@ -397,7 +470,7 @@ export const ShowProvenanceRecordsDialog = (props) => (
       aria-labelledby="provenance-dialog-title"
       aria-describedby="provenance-dialog-description"
       scroll={"paper"}
-      sx={{ '& .MuiDialog-paper': { width: '70%', maxWidth: "70%", maxHeight: 500, height: 500 } }}
+      sx={{'& .MuiDialog-paper': {width: '70%', maxWidth: "70%", maxHeight: 500, height: 500}}}
       // maxWidth="xl"
       // fullWidth={800}
     >
@@ -405,7 +478,7 @@ export const ShowProvenanceRecordsDialog = (props) => (
         {`Provenance records for '${props.selection.hasOwnProperty(NURIMS_TITLE) ? props.selection[NURIMS_TITLE] : ""}'
          (${props.selection.hasOwnProperty(ITEM_ID) ? props.selection[ITEM_ID] : ""})`}
       </DialogTitle>
-      <DialogContent dividers={true} >
+      <DialogContent dividers={true}>
         <DialogContentText
           id="scroll-dialog-description"
           tabIndex={-1}
@@ -513,7 +586,7 @@ export const ConfirmOperatingRunDataExportDialog = (props) => {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Box sx={{flexGrow: 1}} />
+          <Box sx={{flexGrow: 1}}/>
           <Button onClick={props.onCancel}>Cancel</Button>
           <Button
             onClick={proceed} autoFocus>Continue</Button>
@@ -660,7 +733,7 @@ export const ConfirmOperatingRunStatisticsExportDialog = (props) => {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Box sx={{flexGrow: 1}} />
+          <Box sx={{flexGrow: 1}}/>
           <Button onClick={props.onCancel}>Cancel</Button>
           <Button
             onClick={proceed} autoFocus>Continue</Button>
