@@ -402,7 +402,7 @@ class AddEditIrradiatedSamples extends React.Component {
       }
     } else {
       const records = this.listRef.current.getRecords();
-      for (record in records) {
+      for (const record in records) {
         this.props.send({
           cmd: this.recordCommand("delete"),
           item_id: record.item_id,
