@@ -401,11 +401,15 @@ class AddEditIrradiatedSamples extends React.Component {
         this.listRef.current.removeRecord(this.state.selection)
       }
     } else {
-      this.props.send({
-        cmd: this.recordCommand("delete"),
-        item_id: this.state.selection.item_id,
-        module: this.Module,
-      });
+      const records = this.listRef.current.getRecords();
+      for (record in records) {
+        this.props.send({
+          cmd: this.recordCommand("delete"),
+          item_id: record.item_id,
+          module: this.Module,
+        });
+      }
+
     }
   }
 
@@ -420,7 +424,7 @@ class AddEditIrradiatedSamples extends React.Component {
       "endDate": "2022-12-31",
       module: this.Module,
     })
-    this.setState({include_archived: include_archived});
+    this.setState({include_archived: true});
 
 
 
