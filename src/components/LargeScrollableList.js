@@ -71,10 +71,20 @@ class LargeScrollableList extends Component {
     };
   }
 
+  // _getItemHeight = (logs, index) => {
+  //   if (logs[index] === undefined) return 30;
+  //   const { msg, ts } = logs[index];
+  //   const formattedTs = formatDateTimeAMPM(new Date(ts * 1000));
+  //   hiddenRowRef.current!["textContent"] = formattedTs + ": " + msg;
+  //   const hiddenRowHeight = window.getComputedStyle(hiddenRowRef.current).getPropertyValue("height").slice(0, -2);
+  //   rowHeightsRef.current.push(Number(hiddenRowHeight));
+  //   return Number(hiddenRowHeight);
+  // }
+
   getItemHeight = (item) => {
     const itemText = this.props.items.length === 0 ? "&nbsp;" : this.props.items[item];
     const {width, height} = this.getReactElementSize(
-      <div className={this.props.className} style={{width: 1500, fontSize: this.props.fontSize}}>{itemText}</div>
+      <div className={this.props.className} style={{fontSize: this.props.fontSize}}>{itemText}</div>
     )
     return height;
   }
