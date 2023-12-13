@@ -299,7 +299,8 @@ import {
 } from "../../components/UtilityDialogs";
 import {
   CMD_DELETE_USER_RECORD,
-  CMD_GET_REACTOR_WATER_SAMPLE_RECORDS, CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
+  CMD_GET_REACTOR_WATER_SAMPLE_RECORDS,
+  CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
   CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
   ITEM_ID,
   METADATA,
@@ -326,8 +327,6 @@ import {
 import {
   ArchiveRecordLabel
 } from "../../utils/RenderUtils";
-import WaterSamplesList from "./WaterSamplesList";
-import WaterSampleMetadata from "./WaterSampleMetadata";
 import {
   getRecordMetadataValue,
   record_uuid
