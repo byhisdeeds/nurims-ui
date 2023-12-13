@@ -21,6 +21,11 @@ class LargeScrollableList extends Component {
     this.listRef = React.createRef();
     this.ref = React.createRef();
     this.scrollToLastItem = true;
+    this.listWidth = "100%";
+  }
+
+  componentDidMount() {
+    // this.listWidth = this.ref.current.clientWidth;
   }
 
   /**
@@ -69,7 +74,7 @@ class LargeScrollableList extends Component {
   getItemHeight = (item) => {
     const itemText = this.props.items.length === 0 ? "&nbsp;" : this.props.items[item];
     const {width, height} = this.getReactElementSize(
-      <div className={this.props.className} style={{fontSize: this.props.fontSize}}>{itemText}</div>
+      <div className={this.props.className} style={{width: 1500, fontSize: this.props.fontSize}}>{itemText}</div>
     )
     return height;
   }
