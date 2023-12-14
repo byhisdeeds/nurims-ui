@@ -466,7 +466,7 @@ class EditableTable extends React.Component {
 
   render() {
     const {
-      disabled = false,
+      disabled,
       fieldsArr = [],
       classes = {},
       tableName,

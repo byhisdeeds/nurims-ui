@@ -55,7 +55,7 @@ class IrradiatedSamplesMetadata extends Component {
       {
         label: "ID",
         name: "id",
-        width: '10ch',
+        width: '8ch',
         align: 'center',
         validation: (e, a) => {
           return true;
