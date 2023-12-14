@@ -466,7 +466,7 @@ class EditableTable extends React.Component {
 
   render() {
     const {
-      disabled,
+      disable,
       fieldsArr = [],
       classes = {},
       tableName,
@@ -476,7 +476,7 @@ class EditableTable extends React.Component {
     const {allRowsData, isAdding, editingIndex, isEditing} = this.state;
     if (this.context.debug) {
       ConsoleLog("EditableTable", "render", "isAdding", isAdding, "editingIndex", editingIndex,
-        "isEditing", isEditing, "allRowsData", allRowsData);
+        "isEditing", isEditing, "allRowsData", allRowsData, "disable", disable);
     }
     let headRow = [
       ...fieldsArr.map(item => ({label: item.label, name: item.name, align: item.align})), {label: "Actions", name: "actions", align: 'left'}
@@ -516,7 +516,7 @@ class EditableTable extends React.Component {
             {!!allRowsData.length && allRowsData.map(({isEditing, rowData}, i) => {
               return isEditing ? (
                 <EditableRow
-                  disabled={disabled}
+                  disabled={disable}
                   tableName={tableName}
                   isEditing={isEditing}
                   editingIndex={editingIndex}
@@ -546,7 +546,7 @@ class EditableTable extends React.Component {
                 />
               ) : (
                 <Row
-                  disabled={disabled}
+                  disabled={disable}
                   key={i}
                   tableName={tableName}
                   fieldsArr={fieldsArr}
@@ -567,7 +567,7 @@ class EditableTable extends React.Component {
             })}
             {isAdding && (
               <EditableRow
-                disabled={disabled}
+                disabled={disable}
                 tableName={tableName}
                 allRowsData={this.state.allRowsData}
                 selectClasses={{
@@ -600,7 +600,7 @@ class EditableTable extends React.Component {
             variant="contained"
             startIcon={<AddIcon small />}
             className={classNames(classes.addBtn, `addBtn_${tableName}`)}
-            disabled={isAdding || isEditing || disabled}
+            disabled={isAdding || isEditing || disable}
             onClick={() => this.setState({isAdding: true})}
           >
             {addRowBtnText || "Add Row"}
