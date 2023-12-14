@@ -223,11 +223,13 @@ class AddEditIrradiatedSamples extends React.Component {
           }
         } else if (isCommandResponse(message, CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR)) {
           if (messageHasResponseObject(message, OPERATION_TOPIC)) {
-            const year = ""+message.hasOwnProperty("year") ? message.year : "0000"
+            const year = message.hasOwnProperty("year") ? "" + message.year : "0000"
             let exists = false;
             for (const record of message.response[OPERATION_TOPIC]) {
-              console.log(">>>>", record[NURIMS_TITLE], year)
+              console.log(">>>>", typeof (record[NURIMS_TITLE]), typeof (year))
+              console.log(">>>>", record[NURIMS_TITLE], year, record.hasOwnProperty(NURIMS_TITLE) && record[NURIMS_TITLE] === year)
               if (record.hasOwnProperty(NURIMS_TITLE) && record[NURIMS_TITLE] === year) {
+                console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
                 exists = true;
                 break
               }
