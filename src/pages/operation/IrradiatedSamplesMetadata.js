@@ -51,22 +51,30 @@ class IrradiatedSamplesMetadata extends Component {
     this.Module = "IrradiatedSamplesMetadata";
     this.ref = React.createRef();
     this.nuclidesData = [];
-    this.nuclideTableFields = [
+    this.tableFields = [
       {
-        label: "Nuclide",
-        name: "element",
-        width: '20ch',
+        label: "ID",
+        name: "id",
+        width: '10ch',
         align: 'center',
-        type: "select",
-        options: [],
         validation: (e, a) => {
           return true;
         },
         error: "go home kid"
       },
       {
-        label: "Activity",
-        name: "activity",
+        label: "Samples ID's",
+        name: "samples",
+        width: '18ch',
+        align: 'center',
+        validation: e => {
+          return true;
+        },
+        error: "Haha"
+      },
+      {
+        label: "Time IN",
+        name: "timein",
         width: '8ch',
         align: 'center',
         validation: e => {
@@ -75,53 +83,63 @@ class IrradiatedSamplesMetadata extends Component {
         error: "Haha"
       },
       {
-        label: "Uncert.",
-        name: "uncert",
-        width: '18ch',
-        align: 'center',
-        validation: (e, a) => {
-          return true;
-        },
-        error: "go home kid"
-      },
-      {
-        label: "Units",
-        name: "units",
-        type: "select",
+        label: "Time OUT",
+        name: "timeout",
         width: '8ch',
         align: 'center',
-        options: [],
         validation: (e, a) => {
           return true;
         },
         error: "go home kid"
       },
       {
-        label: "Status",
-        name: "status",
-        width: '18ch',
+        label: "Site",
+        name: "site",
+        width: '8ch',
         align: 'center',
+        type: "select",
+        options: [
+          {label: "Site 1", value: "1"},
+          {label: "Site 3", value: "3"},
+          {label: "Site 4", value: "4"},
+          {label: "Site 5", value: "5"}
+        ],
+        validation: (e, a) => {
+          return true;
+        },
+        error: "go home kid"
+      },
+      {
+        label: "Sample Type",
+        name: "type",
+        width: '8ch',
+        align: 'center',
+        type: "select",
+        options: [
+          {label: "Sample", value: "sample"},
+          {label: "Cadmium", value: "cadmium"}
+        ],
         validation: (e, a) => {
           return true;
         },
         error: "go home kid"
       }
     ];
-    getPropertyValue(props.properties, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDES,
-      "").split('|').map((n) => {
-      const t = n.split(',');
-      if (t.length === 2) {
-        return this.nuclideTableFields[0].options.push({ label: t[1], value: t[0] });
-      }
-    })
-    getPropertyValue(props.properties, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS,
-      "").split('|').map((n) => {
-      const t = n.split(',');
-      if (t.length === 2) {
-        return this.nuclideTableFields[3].options.push({ label: t[1], value: t[0] });
-      }
-    })
-    this.doc = { uri: "data:text/plain,test.txt\nwtewrw\nwqrwrwqr\n" };
+    // getPropertyValue(props.properties, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDES,
+    //   "").split('|').map((n) => {
+    //   const t = n.split(',');
+    //   if (t.length === 2) {
+    //     return this.tableFields[0].options.push({ label: t[1], value: t[0] });
+    //   }
+    // })
+    // getPropertyValue(props.properties, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS,
+    //   "").split('|').map((n) => {
+    //   const t = n.split(',');
+    //   if (t.length === 2) {
+    //     return this.tableFields[3].options.push({ label: t[1], value: t[0] });
+    //   }
+    // })
+    // this.doc = { uri: "data:text/plain,test.txt\nwtewrw\nwqrwrwqr\n" };
   }
 
   handleChange = (e) => {
@@ -218,59 +236,17 @@ class IrradiatedSamplesMetadata extends Component {
         autoComplete="off"
       >
         <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <TextField
-              disabled={disabled}
-              required
-              fullWidth
-              id="name"
-              label="Name"
-              value={record[NURIMS_TITLE]}
-              onChange={this.handleChange}
-            />
-          </Grid>
-          <Grid item xs={5}>
-            <TextField
-              disabled={disabled}
-              id={"description"}
-              label="Description"
-              fullWidth
-              value={getRecordMetadataValue(record, NURIMS_DESCRIPTION, "")}
-              onChange={this.handleChange}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <DateSelect
-              disabled={disabled}
-              label="Analysis Date"
-              value={dayjs(getMetadataValueAsISODateString(record, NURIMS_SAMPLEDATE, UNDEFINED_DATE_STRING))}
-              onChange={this.handleDateAvailableChange}
-            />
-          </Grid>
           <Grid item xs={12}>
             <EditableTable
-              tableName={"editable"}
+              tableName={"irradiated-samples-table"}
               disable={disabled}
               ref={this.ref}
-              addRowBtnText={"Add Nuclide"}
+              addRowBtnText={"Add Sample"}
               initWithoutHead={false}
               defaultData={this.nuclidesData}
               getData={this.saveTableData}
-              fieldsArr={this.nuclideTableFields}
+              fieldsArr={this.tableFields}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <TextFileViewer
-              style={{
-                fontSize: 16,
-                backgroundColor: "#565656",
-                height: 400,
-              }}
-              file={this.doc}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <p>sdfsfsfsf</p>
           </Grid>
         </Grid>
       </Box>

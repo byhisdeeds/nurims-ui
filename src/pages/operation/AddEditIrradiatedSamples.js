@@ -242,9 +242,6 @@ class AddEditIrradiatedSamples extends React.Component {
         } else if (isCommandResponse(message, CMD_UPDATE_ITEM_RECORD)) {
           enqueueSuccessSnackbar(`Successfully updated record for ${message[NURIMS_TITLE]}.`);
           const selection = this.state.selection;
-          // const record = getMatchingResponseObject(message, "response.operation", "item_id", selection["item_id"]);
-          // console.log("----->", record)
-          // selection[METADATA] = [...record[METADATA]]
           if (this.listRef.current) {
             this.listRef.current.updateRecord(response.operation);
           }
