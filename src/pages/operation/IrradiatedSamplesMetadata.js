@@ -35,6 +35,49 @@ import {
 import EditableTable from "../../components/EditableTable";
 import TextFileViewer from "../../components/TextFileViewer";
 import dayjs from 'dayjs';
+import DataTable from "../../components/DataTable";
+
+
+
+const tableData = [
+  {
+    id: 1,
+    name: "name1",
+    age: 25,
+    joinDate: "2015-12-18 09:42:00",
+    role: 'Market',
+  },
+  {
+    id: 2,
+    name: "name2",
+    age: 36,
+    joinDate: "2015-12-18 09:42:00",
+    role: 'Market',
+  },
+  {
+    id: 3,
+    name: "name3",
+    age: 19,
+    joinDate: "2015-12-18 09:42:00",
+    role: 'Market',
+  },
+  {
+    id: 4,
+    name: "name 4",
+    age: 28,
+    joinDate: "2015-12-18 09:42:00",
+    role: 'Market',
+  },
+  {
+    id: 5,
+    name: "name 5",
+    age: 23,
+    joinDate: "2015-12-18 09:42:00",
+    role: 'Market',
+  },
+];
+
+
 
 class IrradiatedSamplesMetadata extends Component {
   static contextType = UserContext;
@@ -247,6 +290,58 @@ class IrradiatedSamplesMetadata extends Component {
               getData={this.saveTableData}
               fieldsArr={this.tableFields}
             />
+          </Grid>
+          <Grid>
+            <DataTable
+              data={tableData}
+              columns={[
+                {
+                  field: "id",
+                  headerName: "ID",
+                  width: 80,
+                  editable: true
+                },
+                {
+                  field: "samples",
+                  headerName: "Sample ID's",
+                  width: 180,
+                  align: 'left',
+                  headerAlign: 'left',
+                  editable: true,
+                },
+                {
+                  field: 'timein',
+                  headerName: 'Time IN',
+                  type: 'date',
+                  width: 180,
+                  editable: true,
+                },
+                {
+                  field: 'timeout',
+                  headerName: 'Time OUT',
+                  type: 'datetime',
+                  width: 180,
+                  editable: true,
+                },
+                {
+                  field: 'site',
+                  headerName: 'Site',
+                  width: 120,
+                  editable: true,
+                  type: 'singleSelect',
+                  valueOptions: ['Market', 'Finance', 'Development'],
+                },
+                {
+                  field: 'type',
+                  headerName: 'Sample Type',
+                  width: 150,
+                  editable: true,
+                  type: 'singleSelect',
+                  valueOptions: ['Market', 'Finance', 'Development'],
+                }
+              ]}
+            >
+            </DataTable>
           </Grid>
         </Grid>
       </Box>
