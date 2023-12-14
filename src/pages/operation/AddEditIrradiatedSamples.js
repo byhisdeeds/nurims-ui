@@ -62,7 +62,13 @@ import {
 } from "../../utils/SnackbarVariants";
 import IrradiatedSamplesList from "./IrradiatedSamplesList";
 import IrradiatedSamplesMetadata from "./IrradiatedSamplesMetadata";
-import {saveRecordChanges} from "../../utils/RecordUtils";
+import {
+  saveRecordChanges
+} from "../../utils/RecordUtils";
+import {
+  setProvenanceRecordsHelper,
+  showProvenanceRecordsViewHelper
+} from "../../utils/ProvenanceUtils";
 
 export const ADDEDITIRRADIATEDSAMPLES_REF = "AddEditIrradiatedSamples";
 
@@ -78,6 +84,7 @@ class AddEditIrradiatedSamples extends React.Component {
       selection: {},
       title: props.title,
       include_archived: false,
+      show_provenance_view: false,
     };
     this.Module = ADDEDITIRRADIATEDSAMPLES_REF;
     this.listRef = React.createRef();
@@ -292,6 +299,21 @@ class AddEditIrradiatedSamples extends React.Component {
     this.setState({selection: selection})
   }
 
+  setProvenanceRecords = (provenance) => {
+    setProvenanceRecordsHelper(this, provenance);
+  }
+
+  showProvenanceRecordsView = () => {
+    showProvenanceRecordsViewHelper(this);
+  }
+
+  closeProvenanceRecordsView = (event, reason) => {
+    if (reason && reason === "backdropClick") {
+      return;
+    }
+    this.setState({show_provenance_view: false,});
+  }
+
   // isRecordArchived = (record) => {
   //   return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
   // }
@@ -360,8 +382,8 @@ class AddEditIrradiatedSamples extends React.Component {
           onClickSaveRecordChanges={this.saveChanges}
           onClickViewProvenanceRecords={this.showProvenanceRecordsView}
           addRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
-          addRecordButtonLabel={"Add Irradiated Samples Log"}
-          removeRecordButtonLabel={"Remove Annual Irradiated Samples Log"}
+          addRecordButtonLabel={"Add Record"}
+          removeRecordButtonLabel={"Remove Record"}
           removeRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
           saveRole={ROLE_IRRADIATION_REQUEST_DATA_ENTRY}
           archiveRole={ROLE_IRRADIATION_REQUEST_SYSADMIN}
