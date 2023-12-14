@@ -158,8 +158,7 @@ class AddEditIrradiatedSamples extends React.Component {
     this.props.send({
       cmd: CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR,
       "include.disabled": "true",
-      "startDate": `${year}-01-01`,
-      "endDate": `${year}-12-31`,
+      "year": year,
       module: this.Module,
     })
     // this.setState({include_archived: true});
@@ -224,8 +223,15 @@ class AddEditIrradiatedSamples extends React.Component {
           }
         } else if (isCommandResponse(message, CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR)) {
           if (messageHasResponseObject(message, OPERATION_TOPIC)) {
-            const year = message.hasOwnProperty("startDate") ? message.startDate.split("-")[0] : "0000"
-            if (message.response[OPERATION_TOPIC].length === 0) {
+            const year = message.hasOwnProperty("year") ? message.year : "0000"
+            let exists = false;
+            for (const record of message.response[OPERATION_TOPIC]) {
+              if (record.hasOwnProperty(NURIMS_TITLE) && record[NURIMS_TITLE] === year) {
+                exists = true;
+                break
+              }
+            }
+            if (!exists) {
               this.listRef.current.addRecords([new_record(
                 -1,
                 year,
@@ -276,9 +282,6 @@ class AddEditIrradiatedSamples extends React.Component {
         this.metadataRef.current.setRecordMetadata(selection)
       }
     } else {
-      this.setState(pstate => {
-        return {selection: selection}
-      });
       this.props.send({
         cmd: CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
         item_id: selection.item_id,
@@ -289,9 +292,9 @@ class AddEditIrradiatedSamples extends React.Component {
     this.setState({selection: selection})
   }
 
-  isRecordArchived = (record) => {
-    return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
-  }
+  // isRecordArchived = (record) => {
+  //   return (record.hasOwnProperty(NURIMS_WITHDRAWN) && record[NURIMS_WITHDRAWN] === 1);
+  // }
   // onRecordSelection = (selection) => {
   //   if (this.context.debug) {
   //     ConsoleLog(this.Module, "onRecordSelection", "selection", selection);

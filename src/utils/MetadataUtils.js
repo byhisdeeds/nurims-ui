@@ -60,8 +60,8 @@ export function recordHasRecordKey(record) {
   return record.hasOwnProperty("record_key");
 }
 
-export function setRecordChanged(record) {
-  record["changed"] = true;
+export function setRecordChanged(record, state) {
+  record["changed"] = (state === undefined) ? true : state;
 }
 
 export function removeMetadataField(obj, key) {
