@@ -46,7 +46,8 @@ const tableData = [
     age: 25,
     timein: "2015-12-18 09:42:00",
     timeout: "2015-12-18 09:42:00",
-    role: 'Market',
+    site: "1",
+    type: "sample"
   },
   {
     id: 2,
@@ -54,7 +55,8 @@ const tableData = [
     age: 36,
     timein: "2015-12-18 09:42:00",
     timeout: "2015-12-18 09:42:00",
-    role: 'Market',
+    site: "1",
+    type: "sample"
   },
   {
     id: 3,
@@ -62,7 +64,8 @@ const tableData = [
     age: 19,
     timein: "2015-12-18 09:42:00",
     timeout: "2015-12-18 09:42:00",
-    role: 'Market',
+    site: "1",
+    type: "sample"
   },
   {
     id: 4,
@@ -70,7 +73,8 @@ const tableData = [
     age: 28,
     timein: "2015-12-18 09:42:00",
     timeout: "2015-12-18 09:42:00",
-    role: 'Market',
+    site: "1",
+    type: "sample"
   },
   {
     id: 5,
@@ -78,7 +82,8 @@ const tableData = [
     age: 23,
     timein: "2015-12-18 09:42:00",
     timeout: "2015-12-18 09:42:00",
-    role: 'Market',
+    site: "1",
+    type: "sample"
   },
   {
     id: 6,
@@ -86,7 +91,8 @@ const tableData = [
     age: 23,
     timein: "2015-12-18 09:42:00",
     timeout: "2015-12-18 09:42:00",
-    role: 'Market',
+    site: "1",
+    type: "sample"
   },
   {
     id: 7,
@@ -94,7 +100,8 @@ const tableData = [
     age: 23,
     timein: "2015-12-18 09:42:00",
     timeout: "2015-12-18 09:42:00",
-    role: 'Market',
+    site: "1",
+    type: "sample"
   },
   {
     id: 8,
@@ -102,7 +109,8 @@ const tableData = [
     age: 23,
     timein: "2015-12-18 09:42:00",
     timeout: "2015-12-18 09:42:00",
-    role: 'Market',
+    site: "1",
+    type: "sample"
   },
 ];
 
@@ -148,6 +156,7 @@ class IrradiatedSamplesMetadata extends Component {
         label: "Time IN",
         name: "timein",
         width: '8ch',
+        type: "dateTime",
         align: 'center',
         validation: e => {
           return true;
@@ -158,6 +167,7 @@ class IrradiatedSamplesMetadata extends Component {
         label: "Time OUT",
         name: "timeout",
         width: '8ch',
+        type: "dateTime",
         align: 'center',
         validation: (e, a) => {
           return true;
@@ -169,7 +179,7 @@ class IrradiatedSamplesMetadata extends Component {
         name: "site",
         width: '8ch',
         align: 'center',
-        type: "select",
+        type: "singleSelect",
         options: [
           {label: "Site 1", value: "1"},
           {label: "Site 3", value: "3"},
@@ -186,7 +196,7 @@ class IrradiatedSamplesMetadata extends Component {
         name: "type",
         width: '8ch',
         align: 'center',
-        type: "select",
+        type: "singleSelect",
         options: [
           {label: "Sample", value: "sample"},
           {label: "Cadmium", value: "cadmium"}
@@ -341,14 +351,14 @@ class IrradiatedSamplesMetadata extends Component {
                 {
                   field: 'timein',
                   headerName: 'Time IN',
-                  type: 'date',
+                  type: 'dateTime',
                   width: 180,
                   editable: true,
                 },
                 {
                   field: 'timeout',
                   headerName: 'Time OUT',
-                  type: 'datetime',
+                  type: 'dateTime',
                   width: 180,
                   editable: true,
                 },
