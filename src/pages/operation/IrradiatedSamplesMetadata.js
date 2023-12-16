@@ -36,6 +36,7 @@ import EditableTable from "../../components/EditableTable";
 import TextFileViewer from "../../components/TextFileViewer";
 import dayjs from 'dayjs';
 import DataTable from "../../components/DataTable";
+import PagedEditableTable from "../../components/PagedEditableTable";
 
 
 
@@ -351,14 +352,14 @@ class IrradiatedSamplesMetadata extends Component {
                 {
                   field: 'timein',
                   headerName: 'Time IN',
-                  type: 'dateTime',
+                  type: 'datetime',
                   width: 180,
                   editable: true,
                 },
                 {
                   field: 'timeout',
                   headerName: 'Time OUT',
-                  type: 'dateTime',
+                  type: 'datetime',
                   width: 180,
                   editable: true,
                 },
@@ -381,6 +382,128 @@ class IrradiatedSamplesMetadata extends Component {
               ]}
             >
             </DataTable>
+            <PagedEditableTable
+              addButtonLabel={"Add Record"}
+              data={tableData}
+              cols={[
+                {
+                  accessorKey: 'id',
+                  header: 'Id',
+                  enableEditing: true,
+                  size: 80,
+                },
+                {
+                  accessorKey: 'samples',
+                  header: 'First Name',
+                  enableEditing: true,
+                  muiEditTextFieldProps: {
+                    required: true,
+                    // error: !!validationErrors?.firstName,
+                    // helperText: validationErrors?.firstName,
+                    // //remove any previous validation errors when user focuses on the input
+                    // onFocus: () =>
+                    //   setValidationErrors({
+                    //     ...validationErrors,
+                    //     firstName: undefined,
+                    //   }),
+                    // //optionally add validation checking for onBlur or onChange
+                  },
+                },
+                {
+                  accessorKey: 'lastName',
+                  header: 'Last Name',
+                  muiEditTextFieldProps: {
+                    type: 'email',
+                    required: true,
+                    // error: !!validationErrors?.lastName,
+                    // helperText: validationErrors?.lastName,
+                    // //remove any previous validation errors when user focuses on the input
+                    // onFocus: () =>
+                    //   setValidationErrors({
+                    //     ...validationErrors,
+                    //     lastName: undefined,
+                    //   }),
+                  },
+                },
+                {
+                  accessorKey: 'email',
+                  header: 'Email',
+                  muiEditTextFieldProps: {
+                    type: 'email',
+                    required: true,
+                    // error: !!validationErrors?.email,
+                    // helperText: validationErrors?.email,
+                    // //remove any previous validation errors when user focuses on the input
+                    // onFocus: () =>
+                    //   setValidationErrors({
+                    //     ...validationErrors,
+                    //     email: undefined,
+                    //   }),
+                  },
+                },
+                {
+                  accessorKey: 'site',
+                  header: 'Site',
+                  size: 80,
+                  editVariant: 'select',
+                  editSelectOptions: ["Site 1","Site 3","Site 4","Site 5"],
+                  muiEditTextFieldProps: {
+                    select: true,
+                    // error: !!validationErrors?.state,
+                    // helperText: validationErrors?.state,
+                  },
+                },
+              ]}
+              columnEditProps={[
+                {
+                  accessorKey: 'samples',
+                  muiEditTextFieldProps: {
+                    required: true,
+                    error: "samples",
+                    helperText: "samples",
+                    //remove any previous validation errors when user focuses on the input
+                    onFocus: {
+                      samples: undefined,
+                    },
+                    //optionally add validation checking for onBlur or onChange
+                  },
+                },
+                {
+                  accessorKey: 'lastName',
+                  muiEditTextFieldProps: {
+                    type: 'email',
+                    required: true,
+                    error: "lastName",
+                    helperText: "lastName",
+                    //remove any previous validation errors when user focuses on the input
+                    onFocus: {
+                      lastName: undefined,
+                    },
+                  },
+                },
+                {
+                  accessorKey: 'email',
+                  muiEditTextFieldProps: {
+                    type: 'email',
+                    required: true,
+                    error: "email",
+                    helperText: "email",
+                    //remove any previous validation errors when user focuses on the input
+                    onFocus: {
+                      email: undefined,
+                    },
+                  },
+                },
+                {
+                  accessorKey: 'site',
+                  muiEditTextFieldProps: {
+                    select: true,
+                    error: "state",
+                    helperText: "state",
+                  },
+                },
+              ]}
+            />
           </Grid>
         </Grid>
       </Box>
