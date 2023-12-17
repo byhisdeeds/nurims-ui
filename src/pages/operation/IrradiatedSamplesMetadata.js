@@ -430,15 +430,28 @@ class IrradiatedSamplesMetadata extends Component {
     fileReader.readAsText(selectedFile);
     fileReader.onload = function (e) {
       const results = readString(e.target.result, {header: true});
+      console.log("SELECTION", that.state.record)
+      console.log("YEAR", that.state.record[NURIMS_TITLE])
       console.log("RECORDS", that.samples)
       console.log("RESULT", results)
       const header = results.meta.fields;
       const ts_column = results.meta.fields;
       let parseHeader = true;
-      // if (results.hasOwnProperty("data")) {
-      //   const table_data = [];
-      //   for (const row of results.data) {
-      //     let found = false;
+      if (results.hasOwnProperty("data")) {
+        const table_data = [];
+        for (const row of results.data) {
+          let found = false;
+          if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
+            that.samples.push({
+              id: row.id,
+              sample_id: row.sample_id,
+              timein: row.timein,
+              timeout: row.timeout,
+              site: row.site,
+              samples: row.samples,
+              type: row.type,
+            })
+          }
       //     for (const person of that.persons) {
       //       if (row.hasOwnProperty("Id") && row.Id === getRecordMetadataValue(person, NURIMS_ENTITY_DOSE_PROVIDER_ID, null)) {
       //         found = true;
@@ -479,8 +492,8 @@ class IrradiatedSamplesMetadata extends Component {
       //       }
       //       that.persons.push(p);
       //     }
-      //   }
-      // }
+        }
+      }
       console.log("SAMPLES", that.samples)
       that.setState({busy: 0, data_changed: true});
     };
