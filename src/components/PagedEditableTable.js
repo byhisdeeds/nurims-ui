@@ -7,6 +7,8 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
   Box,
   Button,
@@ -33,7 +35,6 @@ import PropTypes from "prop-types";
 
 const PagedEditableTable = ({cols, columnEditProps, data, addButtonLabel}) => {
   const [validationErrors, setValidationErrors] = useState({});
-  const [tableData, setTableData] = useState(data);
 
   // fill out column properties object
   for (const props of columnEditProps) {
@@ -69,7 +70,7 @@ const PagedEditableTable = ({cols, columnEditProps, data, addButtonLabel}) => {
 
   const columns = useMemo(
     () => cols,
-    [],
+    [validationErrors],
   );
 
   // call CREATE hook
@@ -133,6 +134,12 @@ const PagedEditableTable = ({cols, columnEditProps, data, addButtonLabel}) => {
         border: '1px solid rgba(81, 81, 81, .5)',
       },
     },
+    // muiTableBodyRowProps: {
+    //   sx: {
+    //     height: 50,
+    //     border: '1px solid green',
+    //   }
+    // },
     muiTableHeadCellProps: {
       sx: {
         border: '1px solid rgba(81, 81, 81, .5)',
@@ -140,9 +147,21 @@ const PagedEditableTable = ({cols, columnEditProps, data, addButtonLabel}) => {
         fontWeight: 'normal',
       },
     },
+    muiTableBodyProps: {
+      sx: {
+        //stripe the rows, make odd rows a darker color
+        '& tr:nth-of-type(odd) > td': {
+          backgroundColor: 'rgba(91, 91, 91, .5)',
+        },
+        paddingTop: 0,
+        paddingBottom: 0,
+      },
+    },
     muiTableBodyCellProps: {
       sx: {
-        border: '1px solid rgba(81, 81, 81, .5)',
+        border: '1px solid blue',
+        paddingTop: 0,
+        paddingBottom: 0,
       },
     },
     muiTableContainerProps: {
@@ -150,12 +169,24 @@ const PagedEditableTable = ({cols, columnEditProps, data, addButtonLabel}) => {
         minHeight: '500px',
       },
     },
+    initialState: {
+      pagination: { pageSize: 100, pageIndex: 0 },
+      showGlobalFilter: false,
+    },
+    paginationDisplayMode: 'pages',
+    muiPaginationProps: {
+      color: 'secondary',
+      rowsPerPageOptions: [100, 200, 500],
+      shape: 'rounded',
+      variant: 'outlined',
+    },
     createDisplayMode: 'row', //default ('modal', 'row', and 'custom' are also available)
-    editDisplayMode: 'table', //default ('modal', 'row', 'cell', 'table', and 'custom' are also available)
+    editDisplayMode: 'cell', //default ('modal', 'row', 'cell', 'table', and 'custom' are also available)
     enableEditing: true,
     enableRowActions: true,
     positionActionsColumn: "last",
     getRowId: (row) => row.id,
+
     muiToolbarAlertBannerProps: true
       ? {
         color: 'error',
@@ -237,7 +268,11 @@ const PagedEditableTable = ({cols, columnEditProps, data, addButtonLabel}) => {
     },
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <MaterialReactTable table={table} />
+    </LocalizationProvider>
+  );
 };
 
 export default PagedEditableTable;

@@ -21,84 +21,46 @@ import {
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 import PropTypes from "prop-types";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 // import {
-//   randomCreatedDate,
-//   randomTraderName,
-//   randomId,
-//   randomArrayItem,
-// } from '@mui/x-data-grid-generator';
+//   RemoveCircle as RemoveCircleIcon,
+//   AddCircleOutline as AddCircleOutlineIcon,
+//   Visibility as VisibilityIcon,
+//   VisibilityOff as VisibilityOffIcon
+// } from "@mui/icons-material";
+import {nanoid} from "nanoid";
+
 const MODULE = "DataTable";
 
-const roles = ['Market', 'Finance', 'Development'];
-const randomRole = () => {
-  return "Finance";//randomArrayItem(roles);
-};
-
-const initialRows = [];
-//   {
-//     id: randomId(),
-//     name: randomTraderName(),
-//     age: 25,
-//     joinDate: randomCreatedDate(),
-//     role: randomRole(),
-//   },
-//   {
-//     id: randomId(),
-//     name: randomTraderName(),
-//     age: 36,
-//     joinDate: randomCreatedDate(),
-//     role: randomRole(),
-//   },
-//   {
-//     id: randomId(),
-//     name: randomTraderName(),
-//     age: 19,
-//     joinDate: randomCreatedDate(),
-//     role: randomRole(),
-//   },
-//   {
-//     id: randomId(),
-//     name: randomTraderName(),
-//     age: 28,
-//     joinDate: randomCreatedDate(),
-//     role: randomRole(),
-//   },
-//   {
-//     id: randomId(),
-//     name: randomTraderName(),
-//     age: 23,
-//     joinDate: randomCreatedDate(),
-//     role: randomRole(),
-//   },
-// ];
-
 function EditToolbar(props) {
-  const {setRows, setRowModesModel} = props;
+  const {addButtonLabel, addButtonIcon, setRows, setRowModesModel} = props;
 
   const handleClick = () => {
-    // const id = randomId();
-    // setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
-    // setRowModesModel((oldModel) => ({
-    //   ...oldModel,
-    //   [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-    // }));
+    const id = nanoid();
+    setRows((oldRows) => [...oldRows, { id, sample_id: "0000", samples: '', timein: '', timeout: '', site: '', type: '', isNew: true }]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'id'},
+    }));
   };
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon/>} onClick={handleClick}>
-        Add record
+      <Button color="primary" startIcon={addButtonIcon} onClick={handleClick}>
+        {addButtonLabel}
       </Button>
     </GridToolbarContainer>
   );
 }
 
-export default function DataTable({columns, data}) {
-  const [rows, setRows] = React.useState(initialRows);
+export default function DataTable({columns,
+                                   data,
+                                   addButtonLabel,
+                                   addButtonIcon,
+                                   cancelButtonIcon,
+                                   saveButtonIcon,
+                                   deleteButtonIcon,
+                                   editButtonIcon}) {
+  const [rows, setRows] = React.useState(data);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
   const handleRowEditStop = (params, event) => {
@@ -126,7 +88,7 @@ export default function DataTable({columns, data}) {
     });
 
     const editedRow = rows.find((row) => row.id === id);
-    if (editedRow.isNew) {
+    if (editedRow.hasOwnProperty("isNew") && editedRow.isNew) {
       setRows(rows.filter((row) => row.id !== id));
     }
   };
@@ -154,7 +116,7 @@ export default function DataTable({columns, data}) {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon/>}
+              icon={saveButtonIcon}
               label="Save"
               sx={{
                 color: 'primary.main',
@@ -162,7 +124,7 @@ export default function DataTable({columns, data}) {
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon/>}
+              icon={cancelButtonIcon}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -173,14 +135,14 @@ export default function DataTable({columns, data}) {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon/>}
+            icon={editButtonIcon}
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon/>}
+            icon={deleteButtonIcon}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
@@ -204,9 +166,11 @@ export default function DataTable({columns, data}) {
       }}
     >
       <DataGrid
-        rows={data}
+        rows={rows}
         columns={[...columns, ...column_actions]}
-        editMode="row"
+        editMode="table"
+        pageSizeOptions={[25,50,100]}
+        paginationMode={"client"}
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
@@ -215,8 +179,10 @@ export default function DataTable({columns, data}) {
           toolbar: EditToolbar,
         }}
         slotProps={{
-          toolbar: {setRows, setRowModesModel},
+          toolbar: {addButtonLabel, addButtonIcon, setRows, setRowModesModel},
         }}
+        density={"compact"}
+        sx={{ "--DataGrid-overlayHeight": "500px" }}
       />
     </Box>
   );
@@ -225,6 +191,19 @@ export default function DataTable({columns, data}) {
 DataTable.propTypes = {
   columns: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
+  addButtonLabel: PropTypes.string,
+  addButtonIcon: PropTypes.element,
+  editButtonIcon: PropTypes.element,
+  deleteButtonIcon: PropTypes.element,
+  saveButtonIcon: PropTypes.element,
+  cancelButtonIcon: PropTypes.element,
 }
 
-DataTable.defaultProps = {}
+DataTable.defaultProps = {
+  addButtonLabel: "Add Record",
+  addButtonIcon: <AddIcon/>,
+  editButtonIcon: <EditIcon/>,
+  deleteButtonIcon: <DeleteIcon/>,
+  saveButtonIcon: <SaveIcon/>,
+  cancelButtonIcon: <CancelIcon/>,
+}

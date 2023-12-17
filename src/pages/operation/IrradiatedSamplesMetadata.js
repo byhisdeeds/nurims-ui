@@ -8,6 +8,13 @@ import {
 } from "../../utils/MetadataUtils";
 import {
   NURIMS_DESCRIPTION,
+  NURIMS_ENTITY_DATE_OF_BIRTH,
+  NURIMS_ENTITY_DOSE_PROVIDER_ID,
+  NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
+  NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, NURIMS_ENTITY_IS_WRIST_MONITORED,
+  NURIMS_ENTITY_NATIONAL_ID,
+  NURIMS_ENTITY_SEX,
+  NURIMS_ENTITY_WORK_DETAILS,
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS,
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDES,
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS,
@@ -17,6 +24,7 @@ import {
   UNDEFINED_DATE_STRING
 } from "../../utils/constants";
 import PropTypes from "prop-types";
+import {readString} from "react-papaparse";
 import {
   DateSelect,
 } from "../../components/CommonComponents";
@@ -37,84 +45,7 @@ import TextFileViewer from "../../components/TextFileViewer";
 import dayjs from 'dayjs';
 import DataTable from "../../components/DataTable";
 import PagedEditableTable from "../../components/PagedEditableTable";
-
-
-
-const tableData = [
-  {
-    id: 1,
-    samples: "name1",
-    age: 25,
-    timein: "2015-12-18 09:42:00",
-    timeout: "2015-12-18 09:42:00",
-    site: "1",
-    type: "sample"
-  },
-  {
-    id: 2,
-    samples: "name2",
-    age: 36,
-    timein: "2015-12-18 09:42:00",
-    timeout: "2015-12-18 09:42:00",
-    site: "1",
-    type: "sample"
-  },
-  {
-    id: 3,
-    samples: "name3",
-    age: 19,
-    timein: "2015-12-18 09:42:00",
-    timeout: "2015-12-18 09:42:00",
-    site: "1",
-    type: "sample"
-  },
-  {
-    id: 4,
-    samples: "name 4",
-    age: 28,
-    timein: "2015-12-18 09:42:00",
-    timeout: "2015-12-18 09:42:00",
-    site: "1",
-    type: "sample"
-  },
-  {
-    id: 5,
-    samples: "name 5",
-    age: 23,
-    timein: "2015-12-18 09:42:00",
-    timeout: "2015-12-18 09:42:00",
-    site: "1",
-    type: "sample"
-  },
-  {
-    id: 6,
-    samples: "name 6",
-    age: 23,
-    timein: "2015-12-18 09:42:00",
-    timeout: "2015-12-18 09:42:00",
-    site: "1",
-    type: "sample"
-  },
-  {
-    id: 7,
-    samples: "name 7",
-    age: 23,
-    timein: "2015-12-18 09:42:00",
-    timeout: "2015-12-18 09:42:00",
-    site: "1",
-    type: "sample"
-  },
-  {
-    id: 8,
-    samples: "name 8",
-    age: 23,
-    timein: "2015-12-18 09:42:00",
-    timeout: "2015-12-18 09:42:00",
-    site: "1",
-    type: "sample"
-  },
-];
-
+import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 
 class IrradiatedSamplesMetadata extends Component {
@@ -125,12 +56,175 @@ class IrradiatedSamplesMetadata extends Component {
     this.state = {
       record: {},
       disabled: true,
-      password: "",
-      password_check: "",
+      data_changed: false,
       properties: props.properties,
     };
     this.Module = "IrradiatedSamplesMetadata";
     this.ref = React.createRef();
+    this.importRef = React.createRef();
+    this.samples = [
+      {
+        id: 1,
+        sample_id: "",
+        samples: "name1",
+        age: 25,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 2,
+        sample_id: "",
+        samples: "name2",
+        age: 36,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 3,
+        sample_id: "",
+        samples: "name3",
+        age: 19,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 4,
+        sample_id: "",
+        samples: "name 4",
+        age: 28,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 5,
+        sample_id: "",
+        samples: "name 5",
+        age: 23,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 6,
+        sample_id: "",
+        samples: "name 6",
+        age: 23,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 7,
+        sample_id: "",
+        samples: "name 7",
+        age: 23,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 8,
+        sample_id: "",
+        samples: "name 8",
+        age: 23,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 11,
+        sample_id: "",
+        samples: "name1",
+        age: 25,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 12,
+        sample_id: "",
+        samples: "name2",
+        age: 36,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 13,
+        sample_id: "",
+        samples: "name3",
+        age: 19,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 14,
+        sample_id: "",
+        samples: "name 4",
+        age: 28,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 15,
+        sample_id: "",
+        samples: "name 5",
+        age: 23,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 16,
+        sample_id: "",
+        samples: "name 6",
+        age: 23,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 17,
+        sample_id: "",
+        samples: "name 7",
+        age: 23,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+      {
+        id: 18,
+        sample_id: "",
+        samples: "name 8",
+        age: 23,
+        timein: "2015-12-18 09:42:00",
+        timeout: "2015-12-18 09:42:00",
+        site: "1",
+        type: "sample"
+      },
+    ];
+
     this.nuclidesData = [];
     this.tableFields = [
       {
@@ -225,6 +319,27 @@ class IrradiatedSamplesMetadata extends Component {
     // this.doc = { uri: "data:text/plain,test.txt\nwtewrw\nwqrwrwqr\n" };
   }
 
+  componentDidMount() {
+    document.addEventListener("keydown", this.ctrlKeyPress, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.ctrlKeyPress, false);
+  }
+
+  ctrlKeyPress = (event) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "ctrlKeyPress", "key", event.key, "ctrlKey", event.ctrlKey);
+    }
+    if (event.key === 'i' && event.ctrlKey) {
+      // Ctrl+i
+      event.preventDefault();
+      if (this.importRef.current) {
+        this.importRef.current.click();
+      }
+    }
+  }
+
   handleChange = (e) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "handleChange", "id", e.target.id, "value", e.target.value);
@@ -302,6 +417,75 @@ class IrradiatedSamplesMetadata extends Component {
     this.props.onChange(true);
   };
 
+  handleFileUpload = (e) => {
+    const selectedFile = e.target.files[0];
+    console.log("file uploaded", selectedFile)
+    const that = this;
+    const fileReader = new FileReader();
+    fileReader.onerror = function () {
+      alert('Unable to read ' + selectedFile.name);
+      enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
+    };
+    // this.setState({busy: 1});
+    fileReader.readAsText(selectedFile);
+    fileReader.onload = function (e) {
+      const results = readString(e.target.result, {header: true});
+      console.log("RECORDS", that.samples)
+      console.log("RESULT", results)
+      const header = results.meta.fields;
+      const ts_column = results.meta.fields;
+      let parseHeader = true;
+      // if (results.hasOwnProperty("data")) {
+      //   const table_data = [];
+      //   for (const row of results.data) {
+      //     let found = false;
+      //     for (const person of that.persons) {
+      //       if (row.hasOwnProperty("Id") && row.Id === getRecordMetadataValue(person, NURIMS_ENTITY_DOSE_PROVIDER_ID, null)) {
+      //         found = true;
+      //         break;
+      //       }
+      //     }
+      //     if (!found) {
+      //       const p = {
+      //         item_id: -1,
+      //         "nurims.title": row.Name,
+      //         "nurims.withdrawn": 0,
+      //         "record_type": row.Type === "employee_record" ? "employee_record" : row.Type === "fixed_location_monitor_record" ? "monitor_record" : "",
+      //         metadata: []
+      //       };
+      //       if (row.hasOwnProperty("DateOfBirth")) {
+      //         setMetadataValue(p, NURIMS_ENTITY_DATE_OF_BIRTH, row.DateOfBirth)
+      //       }
+      //       if (row.hasOwnProperty("WorkDetails")) {
+      //         setMetadataValue(p, NURIMS_ENTITY_WORK_DETAILS, row.WorkDetails)
+      //       }
+      //       if (row.hasOwnProperty("Sex")) {
+      //         setMetadataValue(p, NURIMS_ENTITY_SEX, row.Sex)
+      //       }
+      //       if (row.hasOwnProperty("NID")) {
+      //         setMetadataValue(p, NURIMS_ENTITY_NATIONAL_ID, row.NID)
+      //       }
+      //       if (row.hasOwnProperty("Id")) {
+      //         setMetadataValue(p, NURIMS_ENTITY_DOSE_PROVIDER_ID, row.Id)
+      //       }
+      //       if (row.hasOwnProperty("IsWholeBodyMonitored")) {
+      //         setMetadataValue(p, NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, isPersonMonitored(row.IsWholeBodyMonitored))
+      //       }
+      //       if (row.hasOwnProperty("IsExtremityMonitored")) {
+      //         setMetadataValue(p, NURIMS_ENTITY_IS_EXTREMITY_MONITORED, isPersonMonitored(row.IsExtremityMonitored))
+      //       }
+      //       if (row.hasOwnProperty("IsWristMonitored")) {
+      //         setMetadataValue(p, NURIMS_ENTITY_IS_WRIST_MONITORED, isPersonMonitored(row.IsWristMonitored))
+      //       }
+      //       that.persons.push(p);
+      //     }
+      //   }
+      // }
+      console.log("SAMPLES", that.samples)
+      that.setState({busy: 0, data_changed: true});
+    };
+  }
+
   render() {
     const {record, disabled} = this.state;
     if (this.context.debug) {
@@ -318,40 +502,38 @@ class IrradiatedSamplesMetadata extends Component {
         noValidate
         autoComplete="off"
       >
+        <input
+          ref={this.importRef}
+          accept="*.csv"
+          id="import-file-uploader"
+          style={{display: 'none',}}
+          onChange={this.handleFileUpload}
+          type="file"
+        />
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <EditableTable
-              tableName={"irradiated-samples-table"}
-              disable={disabled}
-              ref={this.ref}
-              addRowBtnText={"Add Sample"}
-              initWithoutHead={false}
-              defaultData={this.nuclidesData}
-              getData={this.saveTableData}
-              fieldsArr={this.tableFields}
-            />
-          </Grid>
           <Grid>
             <DataTable
-              data={tableData}
+              data={this.samples}
               columns={[
                 {
-                  field: "id",
+                  field: "sample_id",
                   headerName: "ID",
+                  headerAlign: 'center',
                   width: 80,
-                  editable: true
+                  editable: true,
                 },
                 {
                   field: "samples",
                   headerName: "Sample ID's",
                   width: 180,
                   align: 'left',
-                  headerAlign: 'left',
+                  headerAlign: 'center',
                   editable: true,
                 },
                 {
                   field: 'timein',
                   headerName: 'Time IN',
+                  headerAlign: 'center',
                   type: 'datetime',
                   width: 180,
                   editable: true,
@@ -359,6 +541,7 @@ class IrradiatedSamplesMetadata extends Component {
                 {
                   field: 'timeout',
                   headerName: 'Time OUT',
+                  headerAlign: 'center',
                   type: 'datetime',
                   width: 180,
                   editable: true,
@@ -366,144 +549,160 @@ class IrradiatedSamplesMetadata extends Component {
                 {
                   field: 'site',
                   headerName: 'Site',
+                  headerAlign: 'center',
+                  align: 'center',
                   width: 120,
                   editable: true,
                   type: 'singleSelect',
-                  valueOptions: ['Market', 'Finance', 'Development'],
+                  valueOptions: [
+                    {label: "Site 1", value: "1"},
+                    {label: "Site 3", value: "3"},
+                    {label: "Site 4", value: "4"},
+                    {label: "Site 5", value: "5"}
+                  ],
                 },
                 {
                   field: 'type',
                   headerName: 'Sample Type',
+                  headerAlign: 'center',
+                  align: 'center',
                   width: 150,
                   editable: true,
                   type: 'singleSelect',
-                  valueOptions: ['Market', 'Finance', 'Development'],
+                  valueOptions: [
+                    {label: "Sample", value: "sample"},
+                    {label: "Cadmium", value: "cadmium"},
+                  ],
                 }
               ]}
             >
             </DataTable>
-            <PagedEditableTable
-              addButtonLabel={"Add Record"}
-              data={tableData}
-              cols={[
-                {
-                  accessorKey: 'id',
-                  header: 'Id',
-                  enableEditing: true,
-                  size: 80,
-                },
-                {
-                  accessorKey: 'samples',
-                  header: 'First Name',
-                  enableEditing: true,
-                  muiEditTextFieldProps: {
-                    required: true,
-                    // error: !!validationErrors?.firstName,
-                    // helperText: validationErrors?.firstName,
-                    // //remove any previous validation errors when user focuses on the input
-                    // onFocus: () =>
-                    //   setValidationErrors({
-                    //     ...validationErrors,
-                    //     firstName: undefined,
-                    //   }),
-                    // //optionally add validation checking for onBlur or onChange
-                  },
-                },
-                {
-                  accessorKey: 'lastName',
-                  header: 'Last Name',
-                  muiEditTextFieldProps: {
-                    type: 'email',
-                    required: true,
-                    // error: !!validationErrors?.lastName,
-                    // helperText: validationErrors?.lastName,
-                    // //remove any previous validation errors when user focuses on the input
-                    // onFocus: () =>
-                    //   setValidationErrors({
-                    //     ...validationErrors,
-                    //     lastName: undefined,
-                    //   }),
-                  },
-                },
-                {
-                  accessorKey: 'email',
-                  header: 'Email',
-                  muiEditTextFieldProps: {
-                    type: 'email',
-                    required: true,
-                    // error: !!validationErrors?.email,
-                    // helperText: validationErrors?.email,
-                    // //remove any previous validation errors when user focuses on the input
-                    // onFocus: () =>
-                    //   setValidationErrors({
-                    //     ...validationErrors,
-                    //     email: undefined,
-                    //   }),
-                  },
-                },
-                {
-                  accessorKey: 'site',
-                  header: 'Site',
-                  size: 80,
-                  editVariant: 'select',
-                  editSelectOptions: ["Site 1","Site 3","Site 4","Site 5"],
-                  muiEditTextFieldProps: {
-                    select: true,
-                    // error: !!validationErrors?.state,
-                    // helperText: validationErrors?.state,
-                  },
-                },
-              ]}
-              columnEditProps={[
-                {
-                  accessorKey: 'samples',
-                  muiEditTextFieldProps: {
-                    required: true,
-                    error: "samples",
-                    helperText: "samples",
-                    //remove any previous validation errors when user focuses on the input
-                    onFocus: {
-                      samples: undefined,
-                    },
-                    //optionally add validation checking for onBlur or onChange
-                  },
-                },
-                {
-                  accessorKey: 'lastName',
-                  muiEditTextFieldProps: {
-                    type: 'email',
-                    required: true,
-                    error: "lastName",
-                    helperText: "lastName",
-                    //remove any previous validation errors when user focuses on the input
-                    onFocus: {
-                      lastName: undefined,
-                    },
-                  },
-                },
-                {
-                  accessorKey: 'email',
-                  muiEditTextFieldProps: {
-                    type: 'email',
-                    required: true,
-                    error: "email",
-                    helperText: "email",
-                    //remove any previous validation errors when user focuses on the input
-                    onFocus: {
-                      email: undefined,
-                    },
-                  },
-                },
-                {
-                  accessorKey: 'site',
-                  muiEditTextFieldProps: {
-                    select: true,
-                    error: "state",
-                    helperText: "state",
-                  },
-                },
-              ]}
-            />
+            {/*<PagedEditableTable*/}
+            {/*  addButtonLabel={"Add Record"}*/}
+            {/*  data={tableData}*/}
+            {/*  cols={[*/}
+            {/*    {*/}
+            {/*      accessorKey: 'id',*/}
+            {/*      header: 'Id',*/}
+            {/*      enableEditing: true,*/}
+            {/*      size: 80,*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      accessorKey: 'samples',*/}
+            {/*      header: 'Samples',*/}
+            {/*      enableEditing: true,*/}
+            {/*      muiEditTextFieldProps: {*/}
+            {/*        required: true,*/}
+            {/*        // error: !!validationErrors?.firstName,*/}
+            {/*        // helperText: validationErrors?.firstName,*/}
+            {/*        // //remove any previous validation errors when user focuses on the input*/}
+            {/*        // onFocus: () =>*/}
+            {/*        //   setValidationErrors({*/}
+            {/*        //     ...validationErrors,*/}
+            {/*        //     firstName: undefined,*/}
+            {/*        //   }),*/}
+            {/*        // //optionally add validation checking for onBlur or onChange*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      accessorKey: 'timein',*/}
+            {/*      header: 'Time IN',*/}
+            {/*      muiEditTextFieldProps: {*/}
+            {/*        type: 'datetime',*/}
+            {/*        required: true,*/}
+            {/*        // error: !!validationErrors?.lastName,*/}
+            {/*        // helperText: validationErrors?.lastName,*/}
+            {/*        // //remove any previous validation errors when user focuses on the input*/}
+            {/*        // onFocus: () =>*/}
+            {/*        //   setValidationErrors({*/}
+            {/*        //     ...validationErrors,*/}
+            {/*        //     lastName: undefined,*/}
+            {/*        //   }),*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      accessorKey: 'timeout',*/}
+            {/*      header: 'Time OUT',*/}
+            {/*      muiEditTextFieldProps: {*/}
+            {/*        type: 'datetime',*/}
+            {/*        required: true,*/}
+            {/*        // error: !!validationErrors?.email,*/}
+            {/*        // helperText: validationErrors?.email,*/}
+            {/*        // //remove any previous validation errors when user focuses on the input*/}
+            {/*        // onFocus: () =>*/}
+            {/*        //   setValidationErrors({*/}
+            {/*        //     ...validationErrors,*/}
+            {/*        //     email: undefined,*/}
+            {/*        //   }),*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      accessorKey: 'site',*/}
+            {/*      header: 'Site',*/}
+            {/*      size: 80,*/}
+            {/*      editVariant: 'select',*/}
+            {/*      editSelectOptions: [*/}
+            {/*        {label: "Site 1", value: "1"},*/}
+            {/*        {label: "Site 3", value: "3"},*/}
+            {/*        {label: "Site 4", value: "4"},*/}
+            {/*        {label: "Site 5", value: "5"}*/}
+            {/*      ],*/}
+            {/*      muiEditTextFieldProps: {*/}
+            {/*        // error: !!validationErrors?.state,*/}
+            {/*        // helperText: validationErrors?.state,*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*  ]}*/}
+            {/*  columnEditProps={[*/}
+            {/*    {*/}
+            {/*      accessorKey: 'samples',*/}
+            {/*      muiEditTextFieldProps: {*/}
+            {/*        required: true,*/}
+            {/*        error: "samples",*/}
+            {/*        helperText: "samples",*/}
+            {/*        //remove any previous validation errors when user focuses on the input*/}
+            {/*        onFocus: {*/}
+            {/*          samples: undefined,*/}
+            {/*        },*/}
+            {/*        //optionally add validation checking for onBlur or onChange*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      accessorKey: 'timein',*/}
+            {/*      muiEditTextFieldProps: {*/}
+            {/*        type: 'datetime',*/}
+            {/*        required: true,*/}
+            {/*        error: "timein",*/}
+            {/*        helperText: "timein",*/}
+            {/*        //remove any previous validation errors when user focuses on the input*/}
+            {/*        onFocus: {*/}
+            {/*          timein: undefined,*/}
+            {/*        },*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      accessorKey: 'timeout',*/}
+            {/*      muiEditTextFieldProps: {*/}
+            {/*        type: 'datetime',*/}
+            {/*        required: true,*/}
+            {/*        error: "timeout",*/}
+            {/*        helperText: "timeout",*/}
+            {/*        //remove any previous validation errors when user focuses on the input*/}
+            {/*        onFocus: {*/}
+            {/*          timeout: undefined,*/}
+            {/*        },*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      accessorKey: 'site',*/}
+            {/*      muiEditTextFieldProps: {*/}
+            {/*        select: true,*/}
+            {/*        error: "site",*/}
+            {/*        helperText: "site",*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*  ]}*/}
+            {/*/>*/}
           </Grid>
         </Grid>
       </Box>
