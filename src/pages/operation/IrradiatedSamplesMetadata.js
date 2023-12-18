@@ -3,34 +3,26 @@ import {withTheme} from "@mui/styles";
 import {
   isRecordEmpty,
   getRecordMetadataValue,
-  recordHasMetadataField,
-  setRecordMetadataValue,
+  setRecordMetadataValue, setRecordChanged,
 } from "../../utils/MetadataUtils";
 import {
-  NURIMS_DESCRIPTION,
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
-  NURIMS_SAMPLEDATE,
   NURIMS_TITLE,
 } from "../../utils/constants";
 import PropTypes from "prop-types";
 import {readString} from "react-papaparse";
 import {
-  DateSelect,
-} from "../../components/CommonComponents";
-import {
   ConsoleLog,
   UserContext
 } from "../../utils/UserContext";
 import {
-  getPropertyValue
-} from "../../utils/PropertyUtils";
-import {
   Grid,
   Box,
-  TextField
 } from "@mui/material";
 import PagedDataTable from "../../components/PagedDataTable"
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
 
 
 class IrradiatedSamplesMetadata extends Component {
@@ -159,9 +151,10 @@ class IrradiatedSamplesMetadata extends Component {
       record: (record) ? record : [],
       disabled: !(record),
     })
-    // if (record) {
-    //   this.tableData = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, []);
-    // }
+    if (record) {
+      this.ref.current.updateRows(getRecordMetadataValue(
+        record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, []));
+    }
     this.props.onChange(false);
   }
 
@@ -222,8 +215,10 @@ class IrradiatedSamplesMetadata extends Component {
   onDataChanged = (state, rows) => {
     console.log("onDataChanged", state)
     // console.log("onDataChanged - tableData", this.tableData)
-    setRecordMetadataValue(this.state.record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, rows);
-    console.log("onDataChanged - record", this.state.record)
+    const record = this.state.record;
+    setRecordChanged(record, true);
+    setRecordMetadataValue(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, rows);
+    console.log("onDataChanged - record", record)
     this.props.onChange(state);
   }
 
@@ -232,9 +227,9 @@ class IrradiatedSamplesMetadata extends Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "disabled", disabled, "record", record);
     }
-    // const samples = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, []);
-    // const authorized_module_levels = getPropertyValue(properties, "system.authorizedmodulelevels", "").split('|');
-    // const user_roles = getPropertyValue(properties, "system.userrole", "").split('|');
+    console.log("$$$")
+    console.log(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, []))
+    console.log("$$$")
     return (
       <Box
         component="form"

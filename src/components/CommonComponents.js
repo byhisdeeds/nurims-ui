@@ -1238,9 +1238,13 @@ export function AddRemoveArchiveSaveSubmitProvenanceButtonPanel({
   const archiveIcon = isRecordArchived(selection) ? unarchiveRecordIcon : archiveRecordIcon;
 
   // console.log("-------------")
-  // console.log("-- userIsCreator", userIsCreator, "submitDisabled", submitDisabled, "recordHasChanged", recordHasChanged,
-  //   "submitRole", submitRole, "sysadminRole", sysadminRole, "isSelectableByRoles(valid_item_id=false)",
-  //   isSelectableByRoles(user, selection, [submitRole, sysadminRole], false), "emptyRecord", emptyRecord)
+  // console.log("--recordHasChanged: ", recordHasChanged)
+  // console.log("--userIsCreator: ", userIsCreator)
+  // console.log("--emptyRecord: ", emptyRecord)
+  // console.log("--isSelectableByRoles: ", isSelectableByRoles(user, selection, [submitRole, sysadminRole], false))
+  // // console.log("-- userIsCreator", userIsCreator, "submitDisabled", submitDisabled, "recordHasChanged", recordHasChanged,
+  // //   "submitRole", submitRole, "sysadminRole", sysadminRole, "isSelectableByRoles(valid_item_id=false)",
+  // //   isSelectableByRoles(user, selection, [submitRole, sysadminRole], false), "emptyRecord", emptyRecord)
   // console.log("-------------")
   return (
     <Box sx={{'& > :not(style)': {m: 1}}} style={{textAlign: 'center'}}>
