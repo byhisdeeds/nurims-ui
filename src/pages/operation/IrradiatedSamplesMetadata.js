@@ -11,6 +11,8 @@ import {
 } from "../../utils/constants";
 import PropTypes from "prop-types";
 import {readString} from "react-papaparse";
+import dayjs from 'dayjs';
+import "dayjs/locale/en-gb";
 import {
   ConsoleLog,
   UserContext
@@ -23,6 +25,7 @@ import PagedDataTable from "../../components/PagedDataTable"
 import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
+import BusyIndicator from "../../components/BusyIndicator";
 
 
 class IrradiatedSamplesMetadata extends Component {
@@ -32,6 +35,7 @@ class IrradiatedSamplesMetadata extends Component {
     super(props);
     this.state = {
       record: {},
+      busy: 0,
       disabled: true,
       data_changed: false,
       properties: props.properties,
@@ -159,6 +163,7 @@ class IrradiatedSamplesMetadata extends Component {
   }
 
   handleFileUpload = (e) => {
+    console.log("111111111111111111111111111111111111111111111")
     const selectedFile = e.target.files[0];
     console.log("file uploaded", selectedFile)
     const that = this;
@@ -167,7 +172,7 @@ class IrradiatedSamplesMetadata extends Component {
       alert('Unable to read ' + selectedFile.name);
       enqueueErrorSnackbar(`Error occurred reading file: ${selectedFile.name}`)
     };
-    // this.setState({busy: 1});
+    this.setState({busy: 1});
     fileReader.readAsText(selectedFile);
     fileReader.onload = function (e) {
       const results = readString(e.target.result, {header: true});
@@ -179,31 +184,120 @@ class IrradiatedSamplesMetadata extends Component {
       const ts_column = results.meta.fields;
       let parseHeader = true;
       if (results.hasOwnProperty("data")) {
-        const table_data = [];
+        let p_dmy = null;
+        let p_tin = null;
+        let p_tout = null;
+        let p_id = null;
+        let p_sample_type = null;
+        let p_label = null;
+        let p_site = null;
+        let p_comments = null;
         for (const row of results.data) {
-          let found = false;
-          if (row.id.length > 0) {
-            if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
-              if (that.ref.current) {
-                that.ref.current.addRow({
-                  id: row.id,
-                  sample_id: row.sample_id,
-                  timein: row.timein,
-                  timeout: row.timeout,
-                  site: row.site,
-                  samples: row.samples,
-                  type: row.type,
-                })
+          if (results.meta.fields.includes("Comments")) {
+            // "Date","Time Stamp In","Time Stamp Out","ID","Sample Type","Label","Site","Comments"
+            let dmy = dayjs(row["Date"], "D-MMM-YY")
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            console.log(">>>>> ROW[DATE]: ", row["Date"])
+            console.log(">>>>> YEAR.VALID: ",
+              dmy.isValid(), dmy.isValid() ? `${dmy.year()}, ${dmy.month()}, ${dmy.date()}` : "")
+            // if this rows date is not valid then use the previous rows value
+            if (!dmy.isValid()) {
+              dmy = p_dmy;
+            }
+            let tin = dayjs(row["Time Stamp In"], "HH:mm:ss A")
+            console.log(">>>>> ROW[Time Stamp In]: ", row["Time Stamp In"])
+            console.log(">>>>> ROW[Time Stamp In].VALID: ",
+              tin.isValid(), tin.isValid() ? `${tin.hour()}, ${tin.minute()}, ${tin.second()}` : "")
+            // if this rows timestamp IN is not valid then use the previous rows value
+            if (!tin.isValid()) {
+              tin = p_tin;
+            }
+            let tout = dayjs(row["Time Stamp Out"], "HH:mm:ss A")
+            console.log(">>>>> ROW[Time Stamp Out]: ", row["Time Stamp Out"])
+            console.log(">>>>> ROW[Time Stamp Out].VALID: ",
+              tout.isValid(), tout.isValid() ? `${tout.hour()}, ${tout.minute()}, ${tout.second()}` : "")
+            // if this rows timestamp OUT is not valid then use the previous rows value
+            if (!tout.isValid()) {
+              tout = p_tout;
+            }
+            let id = row["ID"];
+            console.log(">>>>> ROW[ID]: ", id);
+            if (id && id.length === 0) {
+              id = p_id;
+            }
+            let sample_type = row["Sample Type"];
+            if (dmy) {
+              const tsin = dayjs({
+                year: dmy.year(),
+                month: dmy.month()+1,
+                day: dmy.date(),
+                hour: tin.hour(),
+                minute: tin.minute(),
+                second: tin.second()
+              });
+              const tsout = dayjs({
+                year: dmy.year(),
+                month: dmy.month()+1,
+                day: dmy.date(),
+                hour: tout.hour(),
+                minute: tout.minute(),
+                second: tout.second()
+              });
+              console.log("----- SAMPLE TYPE: ", sample_type);
+              console.log("----- ID: ", id);
+              console.log("----- IN: ", tsin);
+              console.log("----- IN: ", tsin.toISOString());
+              console.log("----- OUT: ", tsout.toISOString);
+            } else {
+              console.log("----- INVALID ENTRY (COMMENT): ", row["Comments"])
+            }
+
+            if (1 !== 1) {
+              if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
+                if (that.ref.current) {
+                  that.ref.current.addRow({
+                    id: row.id,
+                    sample_id: row.sample_id,
+                    timein: row.timein,
+                    timeout: row.timeout,
+                    site: row.site,
+                    samples: row.samples,
+                    type: row.type,
+                  }, true)
+                }
               }
-              // that.samples.push({
-              //   id: row.id,
-              //   sample_id: row.sample_id,
-              //   timein: row.timein,
-              //   timeout: row.timeout,
-              //   site: row.site,
-              //   samples: row.samples,
-              //   type: row.type,
-              // })
+            }
+            // save for next row
+            if (dmy && dmy.isValid()) {
+              p_dmy = dmy;
+            }
+            if (tin && tin.isValid()) {
+              p_tin = tin;
+            }
+            if (tout && tout.isValid()) {
+              p_tout = tout;
+            }
+            if (id && id.length > 0) {
+              p_id = id;
+            }
+            if (sample_type && sample_type.length > 0) {
+              p_sample_type = sample_type;
+            }
+          } else if (results.meta.fields.includes("timein")) {
+            if (row.id.length > 0) {
+              if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
+                if (that.ref.current) {
+                  that.ref.current.addRow({
+                    id: row.id,
+                    sample_id: row.sample_id,
+                    timein: row.timein,
+                    timeout: row.timeout,
+                    site: row.site,
+                    samples: row.samples,
+                    type: row.type,
+                  }, true)
+                }
+              }
             }
           }
         }
@@ -223,7 +317,7 @@ class IrradiatedSamplesMetadata extends Component {
   }
 
   render() {
-    const {record, disabled} = this.state;
+    const {record, disabled, busy} = this.state;
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "disabled", disabled, "record", record);
     }
@@ -236,6 +330,7 @@ class IrradiatedSamplesMetadata extends Component {
         noValidate
         autoComplete="off"
       >
+        <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
         <input
           ref={this.importRef}
           accept="*.csv"

@@ -6,7 +6,7 @@ import {
   getRecordMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
-  NURIMS_OPERATION_DATA_STATS, NURIMS_SSC_ROUTINE_MAINTENANCE_DATA_STATS,
+  NURIMS_SSC_ROUTINE_MAINTENANCE_DATA_STATS,
   NURIMS_TITLE
 } from "../../utils/constants";
 import PropTypes from "prop-types";
