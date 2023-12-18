@@ -199,7 +199,7 @@ class IrradiatedSamplesMetadata extends Component {
             console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             console.log(">>>>> ROW[DATE]: ", row["Date"])
             console.log(">>>>> YEAR.VALID: ",
-              dmy.isValid(), dmy.isValid() ? `${dmy.year()}, ${dmy.month()}, ${dmy.date()}` : "")
+              dmy.isValid(), dmy.isValid() ? `${dmy.year()}, ${dmy.month()+1}, ${dmy.date()}` : "")
             // if this rows date is not valid then use the previous rows value
             if (!dmy.isValid()) {
               dmy = p_dmy;
@@ -227,25 +227,24 @@ class IrradiatedSamplesMetadata extends Component {
             }
             let sample_type = row["Sample Type"];
             if (dmy) {
-              const tsin = dayjs({
+              console.log("----- ", {
                 year: dmy.year(),
                 month: dmy.month()+1,
                 day: dmy.date(),
                 hour: tin.hour(),
                 minute: tin.minute(),
                 second: tin.second()
-              });
-              const tsout = dayjs({
-                year: dmy.year(),
-                month: dmy.month()+1,
-                day: dmy.date(),
-                hour: tout.hour(),
-                minute: tout.minute(),
-                second: tout.second()
-              });
+              })
+              const tsin = dmy.clone();
+              tsin.hour(tin.hour())
+              tsin.minute(tin.minute())
+              tsin.second(tin.second())
+              const tsout = dmy.clone();
+              tsout.hour(tout.hour())
+              tsout.minute(tout.minute())
+              tsout.second(tout.second())
               console.log("----- SAMPLE TYPE: ", sample_type);
               console.log("----- ID: ", id);
-              console.log("----- IN: ", tsin);
               console.log("----- IN: ", tsin.toISOString());
               console.log("----- OUT: ", tsout.toISOString);
             } else {
