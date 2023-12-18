@@ -88,17 +88,16 @@ class PagedDataTable extends React.Component {
   }
 
   EditToolbar = ({addButtonLabel, addButtonIcon}) => {
-    // const { rows, rowModesModel} = props;
     return (
       <GridToolbarContainer>
-        <Button color="primary" startIcon={addButtonIcon} onClick={this.handleClick}>
+        <Button color="primary" startIcon={addButtonIcon} onClick={this.handleAddClick}>
           {addButtonLabel}
         </Button>
       </GridToolbarContainer>
     );
   }
 
-  handleClick = () => {
+  handleAddClick = () => {
     const id = nanoid();
     // setRows((oldRows) => [...oldRows, { id, sample_id: "0000", samples: '', timein: '', timeout: '', site: '', type: '', isNew: true }]);
     this.setState({
@@ -117,6 +116,7 @@ class PagedDataTable extends React.Component {
       rowModesModel: this.state.rowModesModel,
       [id]: {mode: GridRowModes.Edit, fieldToFocus: "sample_id"},
     });
+    this.props.onDataChanged(true, this.state.rows);
     // setRowModesModel((oldModel) => ({
     //   ...oldModel,
     //   [id]: { mode: GridRowModes.Edit, fieldToFocus: "sample_id"},
@@ -127,6 +127,7 @@ class PagedDataTable extends React.Component {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
+    this.props.onDataChanged(false, this.state.rows);
   };
 
   handleEditClick = (id) => () => {
@@ -137,11 +138,13 @@ class PagedDataTable extends React.Component {
   handleSaveClick = (id) => () => {
     this.setState({rowModesModel: {...this.state.rowModesModel, [id]: {mode: GridRowModes.View}}});
     // setRowModesModel({...rowModesModel, [id]: {mode: GridRowModes.View}});
+    this.props.onDataChanged(true, this.state.rows);
   };
 
   handleDeleteClick = (id) => () => {
     this.setState({rows: this.state.rows.filter((row) => row.id !== id)});
     // setRows(rows.filter((row) => row.id !== id));
+    this.props.onDataChanged(true, this.state.rows);
   };
 
   handleCancelClick = (id) => () => {
@@ -160,12 +163,14 @@ class PagedDataTable extends React.Component {
       this.setState({rows: this.state.rows.filter((row) => row.id !== id)});
       // setRows(rows.filter((row) => row.id !== id));
     }
+    this.props.onDataChanged(false, this.state.rows);
   };
 
   processRowUpdate = (newRow) => {
     const updatedRow = {...newRow, isNew: false};
     this.setState({rows: this.state.rows.map((row) => (row.id === newRow.id ? updatedRow : row))});
     // setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    this.props.onDataChanged(true, this.state.rows);
     return updatedRow;
   };
 
@@ -176,6 +181,7 @@ class PagedDataTable extends React.Component {
 
   addRow = (row) => {
     this.setState({rows: [...this.state.rows, row]});
+    this.props.onDataChanged(true, this.state.rows);
   }
 
   render() {
@@ -229,6 +235,7 @@ PagedDataTable.propTypes = {
   deleteButtonIcon: PropTypes.element,
   saveButtonIcon: PropTypes.element,
   cancelButtonIcon: PropTypes.element,
+  onDataChanged: PropTypes.func,
 }
 
 PagedDataTable.defaultProps = {
@@ -239,6 +246,8 @@ PagedDataTable.defaultProps = {
   deleteButtonIcon: <DeleteIcon/>,
   saveButtonIcon: <SaveIcon/>,
   cancelButtonIcon: <CancelIcon/>,
+  onDataChanged: (state, rows) => {
+  },
 }
 
 export default PagedDataTable;

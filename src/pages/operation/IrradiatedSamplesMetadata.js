@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {withTheme} from "@mui/styles";
 import {
-  setMetadataValue,
-  appendMetadataChangedField,
- isRecordEmpty,
+  isRecordEmpty,
+  getRecordMetadataValue,
+  recordHasMetadataField,
+  setRecordMetadataValue,
 } from "../../utils/MetadataUtils";
 import {
   NURIMS_DESCRIPTION,
+  NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST,
   NURIMS_SAMPLEDATE,
   NURIMS_TITLE,
 } from "../../utils/constants";
@@ -46,98 +48,68 @@ class IrradiatedSamplesMetadata extends Component {
     this.ref = React.createRef();
     this.importRef = React.createRef();
     this.samples = [];
-    this.nuclidesData = [];
-    this.tableFields = [
+    this.tableData = [];
+    this.tableColumns = [
       {
-        label: "ID",
-        name: "id",
-        width: '8ch',
-        align: 'center',
-        validation: (e, a) => {
-          return true;
-        },
-        error: "go home kid"
+        field: "sample_id",
+        headerName: "ID",
+        headerAlign: 'center',
+        width: 80,
+        editable: true,
       },
       {
-        label: "Samples ID's",
-        name: "samples",
-        width: '18ch',
-        align: 'center',
-        validation: e => {
-          return true;
-        },
-        error: "Haha"
+        field: "samples",
+        headerName: "Sample ID's",
+        width: 180,
+        align: 'left',
+        headerAlign: 'center',
+        editable: true,
       },
       {
-        label: "Time IN",
-        name: "timein",
-        width: '8ch',
-        type: "dateTime",
-        align: 'center',
-        validation: e => {
-          return true;
-        },
-        error: "Haha"
+        field: 'timein',
+        headerName: 'Time IN',
+        headerAlign: 'center',
+        type: 'datetime',
+        width: 180,
+        editable: true,
       },
       {
-        label: "Time OUT",
-        name: "timeout",
-        width: '8ch',
-        type: "dateTime",
-        align: 'center',
-        validation: (e, a) => {
-          return true;
-        },
-        error: "go home kid"
+        field: 'timeout',
+        headerName: 'Time OUT',
+        headerAlign: 'center',
+        type: 'datetime',
+        width: 180,
+        editable: true,
       },
       {
-        label: "Site",
-        name: "site",
-        width: '8ch',
+        field: 'site',
+        headerName: 'Site',
+        headerAlign: 'center',
         align: 'center',
-        type: "singleSelect",
-        options: [
+        width: 120,
+        editable: true,
+        type: 'singleSelect',
+        valueOptions: [
           {label: "Site 1", value: "1"},
           {label: "Site 3", value: "3"},
           {label: "Site 4", value: "4"},
           {label: "Site 5", value: "5"}
         ],
-        validation: (e, a) => {
-          return true;
-        },
-        error: "go home kid"
       },
       {
-        label: "Sample Type",
-        name: "type",
-        width: '8ch',
+        field: 'type',
+        headerName: 'Sample Type',
+        headerAlign: 'center',
         align: 'center',
-        type: "singleSelect",
-        options: [
+        width: 150,
+        editable: true,
+        type: 'singleSelect',
+        valueOptions: [
           {label: "Sample", value: "sample"},
-          {label: "Cadmium", value: "cadmium"}
+          {label: "Cadmium", value: "cadmium"},
         ],
-        validation: (e, a) => {
-          return true;
-        },
-        error: "go home kid"
       }
     ];
-    // getPropertyValue(props.properties, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDES,
-    //   "").split('|').map((n) => {
-    //   const t = n.split(',');
-    //   if (t.length === 2) {
-    //     return this.tableFields[0].options.push({ label: t[1], value: t[0] });
-    //   }
-    // })
-    // getPropertyValue(props.properties, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS,
-    //   "").split('|').map((n) => {
-    //   const t = n.split(',');
-    //   if (t.length === 2) {
-    //     return this.tableFields[3].options.push({ label: t[1], value: t[0] });
-    //   }
-    // })
-    // this.doc = { uri: "data:text/plain,test.txt\nwtewrw\nwqrwrwqr\n" };
   }
 
   componentDidMount() {
@@ -161,82 +133,37 @@ class IrradiatedSamplesMetadata extends Component {
     }
   }
 
-  handleChange = (e) => {
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "handleChange", "id", e.target.id, "value", e.target.value);
-    }
-    const record = this.state.record;
-    if (e.target.id === "name") {
-      record["changed"] = true;
-      record[NURIMS_TITLE] = e.target.value;
-      this.setState({record: record})
-    } else if (e.target.id === "description") {
-      appendMetadataChangedField(record["changed.metadata"], NURIMS_DESCRIPTION);
-      setMetadataValue(record, NURIMS_DESCRIPTION, e.target.value, "");
-      this.setState({record: record})
-    }
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
+  // handleChange = (e) => {
+  //   if (this.context.debug) {
+  //     ConsoleLog(this.Module, "handleChange", "id", e.target.id, "value", e.target.value);
+  //   }
+  //   const record = this.state.record;
+  //   if (e.target.id === "name") {
+  //     record["changed"] = true;
+  //     record[NURIMS_TITLE] = e.target.value;
+  //     this.setState({record: record})
+  //   } else if (e.target.id === "description") {
+  //     appendMetadataChangedField(record["changed.metadata"], NURIMS_DESCRIPTION);
+  //     setMetadataValue(record, NURIMS_DESCRIPTION, e.target.value, "");
+  //     this.setState({record: record})
+  //   }
+  //   // signal to parent that details have changed
+  //   this.props.onChange(true);
+  // }
 
   setRecordMetadata = (record) => {
     if (this.context.debug) {
       ConsoleLog(this.Module, "setRecordMetadata", "record", record);
     }
-    // if (record) {
-    //   setRecordChanged(record, false);
-    //   // record["changed.metadata"] = [];
-    //   // this.doc = {uri: getRecordMetadataValue(
-    //   //   record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE, "").uri};
-    // }
     this.setState({
       record: (record) ? record : [],
       disabled: !(record),
     })
-    if (this.ref.current && (record)) {
-      // this.ref.current.setRowData(getRecordMetadataValue(
-      //   record, NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS, []));
-    }
+    // if (record) {
+    //   this.tableData = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, []);
+    // }
     this.props.onChange(false);
   }
-
-  getUserMetadata = () => {
-    return this.state.user;
-  }
-
-  handleModuleAuthorizationLevelChange = (e) => {
-    const user = this.state.user;
-    user["changed"] = true;
-    user.metadata["authorized_module_level"] = e.target.value;
-    this.setState({user: user})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
-
-  handleDateAvailableChange = (e) => {
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "handleDateAvailableChange", "date", e.format("YYYY-MM-DD"));
-    }
-    const record = this.state.record;
-    record["changed"] = true;
-    appendMetadataChangedField(record["changed.metadata"], NURIMS_SAMPLEDATE);
-    setMetadataValue(record, NURIMS_SAMPLEDATE, e.format("YYYY-MM-DD"), "");
-    this.setState({record: record})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  }
-
-  saveTableData = data => {
-    if (this.context.debug) {
-      ConsoleLog(this.Module, "saveTableData", "data", data);
-    }
-    // const material = this.state.material;
-    // material["changed"] = true;
-    // setMetadataValue(material, "nurims.material.nuclides", data);
-    // this.setState({material: material})
-    // signal to parent that details have changed
-    this.props.onChange(true);
-  };
 
   handleFileUpload = (e) => {
     const selectedFile = e.target.files[0];
@@ -262,11 +189,8 @@ class IrradiatedSamplesMetadata extends Component {
         const table_data = [];
         for (const row of results.data) {
           let found = false;
-          console.log("row.id", typeof(row.id), `[${row.id}]`)
-          console.log("row.id", row.id.length)
           if (row.id.length > 0) {
             if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
-              console.log("%%%%%%%%%", that.ref.current)
               if (that.ref.current) {
                 that.ref.current.addRow({
                   id: row.id,
@@ -291,9 +215,16 @@ class IrradiatedSamplesMetadata extends Component {
           }
         }
       }
-      console.log("SAMPLES", that.samples)
       that.setState({busy: 0, data_changed: true});
     };
+  }
+
+  onDataChanged = (state, rows) => {
+    console.log("onDataChanged", state)
+    // console.log("onDataChanged - tableData", this.tableData)
+    setRecordMetadataValue(this.state.record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, rows);
+    console.log("onDataChanged - record", this.state.record)
+    this.props.onChange(state);
   }
 
   render() {
@@ -301,6 +232,7 @@ class IrradiatedSamplesMetadata extends Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "disabled", disabled, "record", record);
     }
+    // const samples = getRecordMetadataValue(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, []);
     // const authorized_module_levels = getPropertyValue(properties, "system.authorizedmodulelevels", "").split('|');
     // const user_roles = getPropertyValue(properties, "system.userrole", "").split('|');
     return (
@@ -325,196 +257,11 @@ class IrradiatedSamplesMetadata extends Component {
           <Grid>
             <PagedDataTable
               ref={this.ref}
-              data={this.samples}
-              columns={[
-                {
-                  field: "sample_id",
-                  headerName: "ID",
-                  headerAlign: 'center',
-                  width: 80,
-                  editable: true,
-                },
-                {
-                  field: "samples",
-                  headerName: "Sample ID's",
-                  width: 180,
-                  align: 'left',
-                  headerAlign: 'center',
-                  editable: true,
-                },
-                {
-                  field: 'timein',
-                  headerName: 'Time IN',
-                  headerAlign: 'center',
-                  type: 'datetime',
-                  width: 180,
-                  editable: true,
-                },
-                {
-                  field: 'timeout',
-                  headerName: 'Time OUT',
-                  headerAlign: 'center',
-                  type: 'datetime',
-                  width: 180,
-                  editable: true,
-                },
-                {
-                  field: 'site',
-                  headerName: 'Site',
-                  headerAlign: 'center',
-                  align: 'center',
-                  width: 120,
-                  editable: true,
-                  type: 'singleSelect',
-                  valueOptions: [
-                    {label: "Site 1", value: "1"},
-                    {label: "Site 3", value: "3"},
-                    {label: "Site 4", value: "4"},
-                    {label: "Site 5", value: "5"}
-                  ],
-                },
-                {
-                  field: 'type',
-                  headerName: 'Sample Type',
-                  headerAlign: 'center',
-                  align: 'center',
-                  width: 150,
-                  editable: true,
-                  type: 'singleSelect',
-                  valueOptions: [
-                    {label: "Sample", value: "sample"},
-                    {label: "Cadmium", value: "cadmium"},
-                  ],
-                }
-              ]}
+              data={getRecordMetadataValue(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, [])}
+              columns={this.tableColumns}
+              onDataChanged={this.onDataChanged}
             >
             </PagedDataTable>
-            {/*<PagedEditableTable*/}
-            {/*  addButtonLabel={"Add Record"}*/}
-            {/*  data={tableData}*/}
-            {/*  cols={[*/}
-            {/*    {*/}
-            {/*      accessorKey: 'id',*/}
-            {/*      header: 'Id',*/}
-            {/*      enableEditing: true,*/}
-            {/*      size: 80,*/}
-            {/*    },*/}
-            {/*    {*/}
-            {/*      accessorKey: 'samples',*/}
-            {/*      header: 'Samples',*/}
-            {/*      enableEditing: true,*/}
-            {/*      muiEditTextFieldProps: {*/}
-            {/*        required: true,*/}
-            {/*        // error: !!validationErrors?.firstName,*/}
-            {/*        // helperText: validationErrors?.firstName,*/}
-            {/*        // //remove any previous validation errors when user focuses on the input*/}
-            {/*        // onFocus: () =>*/}
-            {/*        //   setValidationErrors({*/}
-            {/*        //     ...validationErrors,*/}
-            {/*        //     firstName: undefined,*/}
-            {/*        //   }),*/}
-            {/*        // //optionally add validation checking for onBlur or onChange*/}
-            {/*      },*/}
-            {/*    },*/}
-            {/*    {*/}
-            {/*      accessorKey: 'timein',*/}
-            {/*      header: 'Time IN',*/}
-            {/*      muiEditTextFieldProps: {*/}
-            {/*        type: 'datetime',*/}
-            {/*        required: true,*/}
-            {/*        // error: !!validationErrors?.lastName,*/}
-            {/*        // helperText: validationErrors?.lastName,*/}
-            {/*        // //remove any previous validation errors when user focuses on the input*/}
-            {/*        // onFocus: () =>*/}
-            {/*        //   setValidationErrors({*/}
-            {/*        //     ...validationErrors,*/}
-            {/*        //     lastName: undefined,*/}
-            {/*        //   }),*/}
-            {/*      },*/}
-            {/*    },*/}
-            {/*    {*/}
-            {/*      accessorKey: 'timeout',*/}
-            {/*      header: 'Time OUT',*/}
-            {/*      muiEditTextFieldProps: {*/}
-            {/*        type: 'datetime',*/}
-            {/*        required: true,*/}
-            {/*        // error: !!validationErrors?.email,*/}
-            {/*        // helperText: validationErrors?.email,*/}
-            {/*        // //remove any previous validation errors when user focuses on the input*/}
-            {/*        // onFocus: () =>*/}
-            {/*        //   setValidationErrors({*/}
-            {/*        //     ...validationErrors,*/}
-            {/*        //     email: undefined,*/}
-            {/*        //   }),*/}
-            {/*      },*/}
-            {/*    },*/}
-            {/*    {*/}
-            {/*      accessorKey: 'site',*/}
-            {/*      header: 'Site',*/}
-            {/*      size: 80,*/}
-            {/*      editVariant: 'select',*/}
-            {/*      editSelectOptions: [*/}
-            {/*        {label: "Site 1", value: "1"},*/}
-            {/*        {label: "Site 3", value: "3"},*/}
-            {/*        {label: "Site 4", value: "4"},*/}
-            {/*        {label: "Site 5", value: "5"}*/}
-            {/*      ],*/}
-            {/*      muiEditTextFieldProps: {*/}
-            {/*        // error: !!validationErrors?.state,*/}
-            {/*        // helperText: validationErrors?.state,*/}
-            {/*      },*/}
-            {/*    },*/}
-            {/*  ]}*/}
-            {/*  columnEditProps={[*/}
-            {/*    {*/}
-            {/*      accessorKey: 'samples',*/}
-            {/*      muiEditTextFieldProps: {*/}
-            {/*        required: true,*/}
-            {/*        error: "samples",*/}
-            {/*        helperText: "samples",*/}
-            {/*        //remove any previous validation errors when user focuses on the input*/}
-            {/*        onFocus: {*/}
-            {/*          samples: undefined,*/}
-            {/*        },*/}
-            {/*        //optionally add validation checking for onBlur or onChange*/}
-            {/*      },*/}
-            {/*    },*/}
-            {/*    {*/}
-            {/*      accessorKey: 'timein',*/}
-            {/*      muiEditTextFieldProps: {*/}
-            {/*        type: 'datetime',*/}
-            {/*        required: true,*/}
-            {/*        error: "timein",*/}
-            {/*        helperText: "timein",*/}
-            {/*        //remove any previous validation errors when user focuses on the input*/}
-            {/*        onFocus: {*/}
-            {/*          timein: undefined,*/}
-            {/*        },*/}
-            {/*      },*/}
-            {/*    },*/}
-            {/*    {*/}
-            {/*      accessorKey: 'timeout',*/}
-            {/*      muiEditTextFieldProps: {*/}
-            {/*        type: 'datetime',*/}
-            {/*        required: true,*/}
-            {/*        error: "timeout",*/}
-            {/*        helperText: "timeout",*/}
-            {/*        //remove any previous validation errors when user focuses on the input*/}
-            {/*        onFocus: {*/}
-            {/*          timeout: undefined,*/}
-            {/*        },*/}
-            {/*      },*/}
-            {/*    },*/}
-            {/*    {*/}
-            {/*      accessorKey: 'site',*/}
-            {/*      muiEditTextFieldProps: {*/}
-            {/*        select: true,*/}
-            {/*        error: "site",*/}
-            {/*        helperText: "site",*/}
-            {/*      },*/}
-            {/*    },*/}
-            {/*  ]}*/}
-            {/*/>*/}
           </Grid>
         </Grid>
       </Box>
