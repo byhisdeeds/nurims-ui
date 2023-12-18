@@ -4,7 +4,7 @@ import {
   setMetadataValue,
   getRecordMetadataValue,
   appendMetadataChangedField,
-  getMetadataValueAsISODateString, setRecordChanged,
+  getMetadataValueAsISODateString, setRecordChanged, isRecordEmpty,
 } from "../../utils/MetadataUtils";
 import {
   NURIMS_DESCRIPTION,
@@ -452,46 +452,6 @@ class IrradiatedSamplesMetadata extends Component {
               type: row.type,
             })
           }
-      //     for (const person of that.persons) {
-      //       if (row.hasOwnProperty("Id") && row.Id === getRecordMetadataValue(person, NURIMS_ENTITY_DOSE_PROVIDER_ID, null)) {
-      //         found = true;
-      //         break;
-      //       }
-      //     }
-      //     if (!found) {
-      //       const p = {
-      //         item_id: -1,
-      //         "nurims.title": row.Name,
-      //         "nurims.withdrawn": 0,
-      //         "record_type": row.Type === "employee_record" ? "employee_record" : row.Type === "fixed_location_monitor_record" ? "monitor_record" : "",
-      //         metadata: []
-      //       };
-      //       if (row.hasOwnProperty("DateOfBirth")) {
-      //         setMetadataValue(p, NURIMS_ENTITY_DATE_OF_BIRTH, row.DateOfBirth)
-      //       }
-      //       if (row.hasOwnProperty("WorkDetails")) {
-      //         setMetadataValue(p, NURIMS_ENTITY_WORK_DETAILS, row.WorkDetails)
-      //       }
-      //       if (row.hasOwnProperty("Sex")) {
-      //         setMetadataValue(p, NURIMS_ENTITY_SEX, row.Sex)
-      //       }
-      //       if (row.hasOwnProperty("NID")) {
-      //         setMetadataValue(p, NURIMS_ENTITY_NATIONAL_ID, row.NID)
-      //       }
-      //       if (row.hasOwnProperty("Id")) {
-      //         setMetadataValue(p, NURIMS_ENTITY_DOSE_PROVIDER_ID, row.Id)
-      //       }
-      //       if (row.hasOwnProperty("IsWholeBodyMonitored")) {
-      //         setMetadataValue(p, NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, isPersonMonitored(row.IsWholeBodyMonitored))
-      //       }
-      //       if (row.hasOwnProperty("IsExtremityMonitored")) {
-      //         setMetadataValue(p, NURIMS_ENTITY_IS_EXTREMITY_MONITORED, isPersonMonitored(row.IsExtremityMonitored))
-      //       }
-      //       if (row.hasOwnProperty("IsWristMonitored")) {
-      //         setMetadataValue(p, NURIMS_ENTITY_IS_WRIST_MONITORED, isPersonMonitored(row.IsWristMonitored))
-      //       }
-      //       that.persons.push(p);
-      //     }
         }
       }
       console.log("SAMPLES", that.samples)
@@ -522,6 +482,7 @@ class IrradiatedSamplesMetadata extends Component {
           style={{display: 'none',}}
           onChange={this.handleFileUpload}
           type="file"
+          disabled={isRecordEmpty(record)}
         />
         <Grid container spacing={2}>
           <Grid>
