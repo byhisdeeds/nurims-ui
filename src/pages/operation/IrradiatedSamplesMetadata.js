@@ -235,18 +235,12 @@ class IrradiatedSamplesMetadata extends Component {
                 minute: tin.minute(),
                 second: tin.second()
               })
-              const tsin = dmy.clone();
-              tsin.hour(tin.hour())
-              tsin.minute(tin.minute())
-              tsin.second(tin.second())
-              const tsout = dmy.clone();
-              tsout.hour(tout.hour())
-              tsout.minute(tout.minute())
-              tsout.second(tout.second())
+              const tsin = dmy.clone().hour(tin.hour()).minute(tin.minute()).second(tin.second())
+              const tsout = dmy.clone().hour(tout.hour()).minute(tout.minute()).second(tout.second())
               console.log("----- SAMPLE TYPE: ", sample_type);
               console.log("----- ID: ", id);
               console.log("----- IN: ", tsin.toISOString());
-              console.log("----- OUT: ", tsout.toISOString);
+              console.log("----- OUT: ", tsout.toISOString());
             } else {
               console.log("----- INVALID ENTRY (COMMENT): ", row["Comments"])
             }
