@@ -2,26 +2,13 @@ import React, {Component} from 'react';
 import {withTheme} from "@mui/styles";
 import {
   setMetadataValue,
-  getRecordMetadataValue,
   appendMetadataChangedField,
-  getMetadataValueAsISODateString, setRecordChanged, isRecordEmpty,
+ isRecordEmpty,
 } from "../../utils/MetadataUtils";
 import {
   NURIMS_DESCRIPTION,
-  NURIMS_ENTITY_DATE_OF_BIRTH,
-  NURIMS_ENTITY_DOSE_PROVIDER_ID,
-  NURIMS_ENTITY_IS_EXTREMITY_MONITORED,
-  NURIMS_ENTITY_IS_WHOLE_BODY_MONITORED, NURIMS_ENTITY_IS_WRIST_MONITORED,
-  NURIMS_ENTITY_NATIONAL_ID,
-  NURIMS_ENTITY_SEX,
-  NURIMS_ENTITY_WORK_DETAILS,
-  NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS,
-  NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDES,
-  NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_NUCLIDEUNITS,
-  NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE,
   NURIMS_SAMPLEDATE,
   NURIMS_TITLE,
-  UNDEFINED_DATE_STRING
 } from "../../utils/constants";
 import PropTypes from "prop-types";
 import {readString} from "react-papaparse";
@@ -40,11 +27,7 @@ import {
   Box,
   TextField
 } from "@mui/material";
-import EditableTable from "../../components/EditableTable";
-import TextFileViewer from "../../components/TextFileViewer";
-import dayjs from 'dayjs';
-import DataTable from "../../components/DataTable";
-import PagedEditableTable from "../../components/PagedEditableTable";
+import PagedDataTable from "../../components/PagedDataTable"
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 
 
@@ -62,169 +45,7 @@ class IrradiatedSamplesMetadata extends Component {
     this.Module = "IrradiatedSamplesMetadata";
     this.ref = React.createRef();
     this.importRef = React.createRef();
-    this.samples = [
-      {
-        id: 1,
-        sample_id: "",
-        samples: "name1",
-        age: 25,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 2,
-        sample_id: "",
-        samples: "name2",
-        age: 36,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 3,
-        sample_id: "",
-        samples: "name3",
-        age: 19,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 4,
-        sample_id: "",
-        samples: "name 4",
-        age: 28,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 5,
-        sample_id: "",
-        samples: "name 5",
-        age: 23,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 6,
-        sample_id: "",
-        samples: "name 6",
-        age: 23,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 7,
-        sample_id: "",
-        samples: "name 7",
-        age: 23,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 8,
-        sample_id: "",
-        samples: "name 8",
-        age: 23,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 11,
-        sample_id: "",
-        samples: "name1",
-        age: 25,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 12,
-        sample_id: "",
-        samples: "name2",
-        age: 36,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 13,
-        sample_id: "",
-        samples: "name3",
-        age: 19,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 14,
-        sample_id: "",
-        samples: "name 4",
-        age: 28,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 15,
-        sample_id: "",
-        samples: "name 5",
-        age: 23,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 16,
-        sample_id: "",
-        samples: "name 6",
-        age: 23,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 17,
-        sample_id: "",
-        samples: "name 7",
-        age: 23,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-      {
-        id: 18,
-        sample_id: "",
-        samples: "name 8",
-        age: 23,
-        timein: "2015-12-18 09:42:00",
-        timeout: "2015-12-18 09:42:00",
-        site: "1",
-        type: "sample"
-      },
-    ];
-
+    this.samples = [];
     this.nuclidesData = [];
     this.tableFields = [
       {
@@ -441,16 +262,32 @@ class IrradiatedSamplesMetadata extends Component {
         const table_data = [];
         for (const row of results.data) {
           let found = false;
-          if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
-            that.samples.push({
-              id: row.id,
-              sample_id: row.sample_id,
-              timein: row.timein,
-              timeout: row.timeout,
-              site: row.site,
-              samples: row.samples,
-              type: row.type,
-            })
+          console.log("row.id", typeof(row.id), `[${row.id}]`)
+          console.log("row.id", row.id.length)
+          if (row.id.length > 0) {
+            if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
+              console.log("%%%%%%%%%", that.ref.current)
+              if (that.ref.current) {
+                that.ref.current.addRow({
+                  id: row.id,
+                  sample_id: row.sample_id,
+                  timein: row.timein,
+                  timeout: row.timeout,
+                  site: row.site,
+                  samples: row.samples,
+                  type: row.type,
+                })
+              }
+              // that.samples.push({
+              //   id: row.id,
+              //   sample_id: row.sample_id,
+              //   timein: row.timein,
+              //   timeout: row.timeout,
+              //   site: row.site,
+              //   samples: row.samples,
+              //   type: row.type,
+              // })
+            }
           }
         }
       }
@@ -486,7 +323,8 @@ class IrradiatedSamplesMetadata extends Component {
         />
         <Grid container spacing={2}>
           <Grid>
-            <DataTable
+            <PagedDataTable
+              ref={this.ref}
               data={this.samples}
               columns={[
                 {
@@ -550,7 +388,7 @@ class IrradiatedSamplesMetadata extends Component {
                 }
               ]}
             >
-            </DataTable>
+            </PagedDataTable>
             {/*<PagedEditableTable*/}
             {/*  addButtonLabel={"Add Record"}*/}
             {/*  data={tableData}*/}
