@@ -227,9 +227,6 @@ class IrradiatedSamplesMetadata extends Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "disabled", disabled, "record", record);
     }
-    console.log("$$$")
-    console.log(getRecordMetadataValue(record, NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST, []))
-    console.log("$$$")
     return (
       <Box
         component="form"

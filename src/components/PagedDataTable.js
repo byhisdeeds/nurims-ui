@@ -31,9 +31,6 @@ class PagedDataTable extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@")
-    console.log(props.data)
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@")
     this.state = {
       rows: props.data,
       rowModesModel: {},
@@ -85,11 +82,6 @@ class PagedDataTable extends React.Component {
         },
       }
     ];
-  }
-
-  componentDidMount() {
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@")
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@")
   }
 
   EditToolbar = ({addButtonLabel, addButtonIcon}) => {
@@ -200,10 +192,6 @@ class PagedDataTable extends React.Component {
   }
 
   render() {
-    console.log("************************************************************************")
-    console.log(this.state.rows)
-    console.log(this.props.data)
-    console.log("************************************************************************")
     const {rowModesModel, rows} = this.state;
     const {columns, addButtonLabel, addButtonIcon, editMode, data} = this.props;
     return (
@@ -220,7 +208,7 @@ class PagedDataTable extends React.Component {
         }}
       >
         <DataGrid
-          rows={data}
+          rows={rows}
           columns={[...columns, ...this.column_actions]}
           editMode={editMode}
           pageSizeOptions={[25, 50, 100]}
