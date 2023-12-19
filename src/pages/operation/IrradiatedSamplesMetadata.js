@@ -49,11 +49,11 @@ function isWordInString(needle, haystack) {
 // isWordInString('eat', 'hello great world!'); // false
 
 function filter_duplicate_sample_entries(rows, row) {
-  console.log("ROW.LENGTH", rows.length, row)
   // check for id already registered
   for (const r of rows) {
     if (r.id === row.id) {
       // ID already registered, now we check if the sample label already registered also
+      console.log("-- isWordInString --", row.samples, r.samples, isWordInString(row.samples, r.samples))
       if (!isWordInString(row.samples, r.samples)) {
         // if sample entry not already registered then we add it now
         r.samples += ` ${row.samples}`;
@@ -238,50 +238,40 @@ class IrradiatedSamplesMetadata extends Component {
             // "Date","Time Stamp In","Time Stamp Out","ID","Sample Type","Label","Site","Comments"
             let dmy = dayjs(row["Date"], "D-MMM-YY")
             console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-            console.log(">>>>> p_dmy, p_tin, p_tout, p_id, p_sample_type, p_label, p_site: ",
-              p_dmy ? p_dmy.toISOString() : "p_dmy_undefined",
-              p_tin ? p_tin.toISOString() : "p_tin_undefined",
-              p_tout ? p_tout.toISOString() : "p_tout_undefined",
-              p_id ? p_id : "p_id_undefined",
-              p_sample_type ? p_sample_type : "p_sample_type_undefined",
-              p_label ? p_label : "p_label_undefined",
-              p_site ? p_site : "p_site_undefined")
-            console.log(">>>>> ROW[DATE]: ", row["Date"], row["Date"] === undefined ? "undefined" : row["Date"].length,
-              dmy.isValid())
+            // console.log(">>>>> ROW[DATE]: ", row["Date"], row["Date"] === undefined ? "undefined" : row["Date"].length, dmy.isValid())
             // if this rows date is not valid then use the previous rows value
             if (!dmy.isValid()) {
               dmy = p_dmy;
             }
             let tin = get_field_timestamp(row["Time Stamp In"])
-            console.log(">>>>> ROW[Time Stamp In]: ",tin.isValid(), row["Time Stamp In"])
+            // console.log(">>>>> ROW[Time Stamp In]: ",tin.isValid(), row["Time Stamp In"])
             // if this rows timestamp IN is not valid then use the previous rows value
             if (!tin.isValid()) {
               tin = p_tin;
             }
             let tout = get_field_timestamp(row["Time Stamp Out"])
-            console.log(">>>>> ROW[Time Stamp Out]: ", tout.isValid(),  row["Time Stamp Out"])
+            // console.log(">>>>> ROW[Time Stamp Out]: ", tout.isValid(),  row["Time Stamp Out"])
             // if this rows timestamp OUT is not valid then use the previous rows value
             if (!tout.isValid()) {
               tout = p_tout;
             }
             let id = row["ID"];
-            console.log(">>>>> ROW[ID]: ", id === undefined ? "undefined" : id.length, id);
+            // console.log(">>>>> ROW[ID]: ", id === undefined ? "undefined" : id.length, id);
             if (id === undefined || id.length === 0) {
               id = p_id;
             }
             let sample_type = row["Sample Type"];
-            console.log(">>>>> ROW[Sample Type]: ", sample_type === undefined ? "undefined" : sample_type.length,
-              sample_type);
+            // console.log(">>>>> ROW[Sample Type]: ", sample_type === undefined ? "undefined" : sample_type.length, sample_type);
             if (sample_type === undefined || sample_type.length === 0) {
               sample_type = p_sample_type;
             }
             let label = row["Label"];
-            console.log(">>>>> ROW[Label]: ", label === undefined ? "undefined" : label.length, label);
+            // console.log(">>>>> ROW[Label]: ", label === undefined ? "undefined" : label.length, label);
             if (label === undefined || label.length === 0) {
               label = p_label;
             }
             let site = row["Site"];
-            console.log(">>>>> ROW[Site]: ", site === undefined ? "undefined" : site.length, site);
+            // console.log(">>>>> ROW[Site]: ", site === undefined ? "undefined" : site.length, site);
             if (site === undefined || site.length === 0) {
               site = p_site;
             }
