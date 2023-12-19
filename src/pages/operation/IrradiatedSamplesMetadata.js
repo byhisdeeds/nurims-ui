@@ -336,7 +336,7 @@ class IrradiatedSamplesMetadata extends Component {
             if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
               if (that.ref.current) {
                 that.ref.current.addRow({
-                  id: row.id,
+                  id: row.hasOwnProperty("id") ? row.id : nanoid(),
                   sample_id: row.sample_id,
                   timein: row.timein,
                   timeout: row.timeout,
