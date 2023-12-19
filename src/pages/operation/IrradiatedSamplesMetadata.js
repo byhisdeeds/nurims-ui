@@ -31,7 +31,13 @@ import {nanoid} from "nanoid";
 
 
 function timestampToString(ts) {
-  return `${ts.year()}-${ts.month() + 1}-${ts.date()} ${ts.hour()}:${ts.minute()}:${ts.second()}`;
+  const year = ts.year().toString().padStart(4, "0");
+  const month = (ts.month() + 1).toString().padStart(2, "0");
+  const day = ts.date().toString().padStart(2, "0");
+  const hour = ts.hour().toString().padStart(2, "0");
+  const minute = ts.minute().toString().padStart(2, "0");
+  const second = ts.second().toString().padStart(2, "0");
+  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
 function get_field_timestamp(field) {
   if (field) {
