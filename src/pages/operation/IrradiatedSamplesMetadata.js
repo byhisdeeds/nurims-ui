@@ -243,7 +243,9 @@ class IrradiatedSamplesMetadata extends Component {
         let p_site = null;
         let p_comments = null;
         let count = 0;
+        let lines = 0;
         for (const row of results.data) {
+          lines++;
           if (results.meta.fields.includes("Comments")) {
             let dmy = dayjs(row["Date"], "D-MMM-YY");
             console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -331,24 +333,22 @@ class IrradiatedSamplesMetadata extends Component {
             p_label = label;
             p_site = site;
           } else if (results.meta.fields.includes("timein")) {
-            if (row.id.length > 0) {
-              if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
-                if (that.ref.current) {
-                  that.ref.current.addRow({
-                    id: row.id,
-                    sample_id: row.sample_id,
-                    timein: row.timein,
-                    timeout: row.timeout,
-                    site: row.site,
-                    samples: row.samples,
-                    type: row.type,
-                  }, filter_duplicate_sample_entries)
-                }
+            if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
+              if (that.ref.current) {
+                that.ref.current.addRow({
+                  id: row.id,
+                  sample_id: row.sample_id,
+                  timein: row.timein,
+                  timeout: row.timeout,
+                  site: row.site,
+                  samples: row.samples,
+                  type: row.type,
+                }, filter_duplicate_sample_entries)
               }
             }
           }
         }
-        enqueueInfoSnackbar(`Imported ${count} log entries from '${selectedFile.name}'.`)
+        enqueueInfoSnackbar(`Imported ${count}/${lines} log entries from '${selectedFile.name}'.`)
       }
       that.setState({busy: 0, data_changed: true});
     };
