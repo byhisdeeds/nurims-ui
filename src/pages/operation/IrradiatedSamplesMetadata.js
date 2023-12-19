@@ -39,6 +39,7 @@ function timestampToString(ts) {
   const second = ts.second().toString().padStart(2, "0");
   return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
+
 function get_field_timestamp(field) {
   if (field) {
     const ls_field = field.toLowerCase();
@@ -351,6 +352,8 @@ class IrradiatedSamplesMetadata extends Component {
       }
       that.setState({busy: 0, data_changed: true});
     };
+    // 👇️ reset file input
+    e.target.value = null;
   }
 
   onDataChanged = (state, rows) => {
