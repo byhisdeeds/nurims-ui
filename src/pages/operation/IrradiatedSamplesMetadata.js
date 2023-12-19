@@ -51,9 +51,9 @@ function isWordInString(needle, haystack) {
 function filter_duplicate_sample_entries(rows, row) {
   // check for id already registered
   for (const r of rows) {
-    if (r.id === row.id) {
+    if (r.sample_id === row.sample_id) {
       // ID already registered, now we check if the sample label already registered also
-      console.log("-- isWordInString --", row.samples, r.samples, isWordInString(row.samples, r.samples))
+      console.log(`-- isWordInString (${row.samples}, ${r.samples}) = `, isWordInString(row.samples, r.samples))
       if (!isWordInString(row.samples, r.samples)) {
         // if sample entry not already registered then we add it now
         r.samples += ` ${row.samples}`;
@@ -61,6 +61,7 @@ function filter_duplicate_sample_entries(rows, row) {
       return true;
     }
   }
+  console.log(`-- isWordInString (${row.samples}, *) = NOT FOUND`)
   // row not already registered so we don't filter it
   return false;
 }
