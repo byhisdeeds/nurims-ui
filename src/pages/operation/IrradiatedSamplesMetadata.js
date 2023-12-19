@@ -281,12 +281,14 @@ class IrradiatedSamplesMetadata extends Component {
               // if SampleType contains Cadmium and Label contains Capsule then this is a 'cadmium' capsule.
               // All other samples are called 'capsules'
               if (sample_type.toLowerCase().includes("cadmium") && label.toLowerCase().includes("capsule")) {
-                sample_type = "cadmium"
+                sample_type = "cadmium";
               } else {
-                sample_type = "sample"
+                sample_type = "sample";
               }
-              const tsin = timestampToString(dmy.clone().hour(tin.hour()).minute(tin.minute()).second(tin.second()))
-              const tsout = timestampToString(dmy.clone().hour(tout.hour()).minute(tout.minute()).second(tout.second()))
+              const tsin =
+                timestampToString(dmy.clone().hour(tin.hour()).minute(tin.minute()).second(tin.second()))
+              const tsout =
+                timestampToString(dmy.clone().hour(tout.hour()).minute(tout.minute()).second(tout.second()))
               console.log("----- LABEL: ", label);
               console.log("----- SAMPLE TYPE: ", sample_type);
               console.log("----- ID: ", id);
@@ -294,7 +296,7 @@ class IrradiatedSamplesMetadata extends Component {
               console.log("----- OUT: ", tsout);
               console.log("----- SITE: ",site);
               // only import sample entries for the record year
-              if ("" + tsin.year() === that.state.record[NURIMS_TITLE]) {
+              if ("" + dmy.year() === that.state.record[NURIMS_TITLE]) {
                 if (that.ref.current) {
                   if (that.ref.current.addRow({
                     id: nanoid(),
