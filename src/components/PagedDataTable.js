@@ -185,7 +185,7 @@ class PagedDataTable extends React.Component {
   addRow = (row, filter) => {
     if (filter) {
       if (filter(this.state.rows, row)) {
-        return;
+        return false;
       }
     }
     const rows = [...this.state.rows, row];
@@ -194,6 +194,7 @@ class PagedDataTable extends React.Component {
     // const rows = [...this.state.rows, row];
     // this.setState({rows: rows});
     // this.props.onDataChanged(true, rows);
+    return true;
   }
 
   render() {

@@ -11,8 +11,9 @@ import {
 } from "../../utils/constants";
 import PropTypes from "prop-types";
 import {readString} from "react-papaparse";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import "dayjs/locale/en-gb";
+import utc from "dayjs/plugin/utc";
 import {
   ConsoleLog,
   UserContext
@@ -23,12 +24,15 @@ import {
 } from "@mui/material";
 import PagedDataTable from "../../components/PagedDataTable"
 import {
-  enqueueErrorSnackbar
+  enqueueErrorSnackbar, enqueueInfoSnackbar
 } from "../../utils/SnackbarVariants";
 import BusyIndicator from "../../components/BusyIndicator";
 import {nanoid} from "nanoid";
 
 
+function timestampToString(ts) {
+  return `${ts.year()}-${ts.month() + 1}-${ts.date()} ${ts.hour()}:${ts.minute()}:${ts.second()}`;
+}
 function get_field_timestamp(field) {
   if (field) {
     const ls_field = field.toLowerCase();
@@ -42,11 +46,9 @@ function get_field_timestamp(field) {
 
 function isWordInString(needle, haystack) {
   return haystack
-    .split(' ')
+    .split(',')
     .some(p => (p === needle));
 }
-// isWordInString('hello', 'hello great world!'); // true
-// isWordInString('eat', 'hello great world!'); // false
 
 function filter_duplicate_sample_entries(rows, row) {
   // check for id already registered
@@ -56,7 +58,11 @@ function filter_duplicate_sample_entries(rows, row) {
       console.log(`-- isWordInString (${row.samples}, ${r.samples}) = `, isWordInString(row.samples, r.samples))
       if (!isWordInString(row.samples, r.samples)) {
         // if sample entry not already registered then we add it now
-        r.samples += ` ${row.samples}`;
+        if (r.samples.length === 0) {
+          r.samples = row.samples;
+        } else {
+          r.samples += `,${row.samples}`;
+        }
       }
       return true;
     }
@@ -212,12 +218,7 @@ class IrradiatedSamplesMetadata extends Component {
     this.setState({busy: 1});
     fileReader.readAsText(selectedFile);
     fileReader.onload = function (e) {
-      const results = readString(e.target.result,
-        {
-          header: true,
-          dynamicTyping: false,
-          // transform(value, column) { if (value === "") { return ""; } else { return value; }}
-        });
+      const results = readString(e.target.result, {header: true, dynamicTyping: false});
       console.log("SELECTION", that.state.record)
       console.log("YEAR", that.state.record[NURIMS_TITLE])
       console.log("RECORDS", that.samples)
@@ -234,10 +235,10 @@ class IrradiatedSamplesMetadata extends Component {
         let p_label = null;
         let p_site = null;
         let p_comments = null;
+        let count = 0;
         for (const row of results.data) {
           if (results.meta.fields.includes("Comments")) {
-            // "Date","Time Stamp In","Time Stamp Out","ID","Sample Type","Label","Site","Comments"
-            let dmy = dayjs(row["Date"], "D-MMM-YY")
+            let dmy = dayjs(row["Date"], "D-MMM-YY");
             console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             // console.log(">>>>> ROW[DATE]: ", row["Date"], row["Date"] === undefined ? "undefined" : row["Date"].length, dmy.isValid())
             // if this rows date is not valid then use the previous rows value
@@ -245,13 +246,13 @@ class IrradiatedSamplesMetadata extends Component {
               dmy = p_dmy;
             }
             let tin = get_field_timestamp(row["Time Stamp In"])
-            // console.log(">>>>> ROW[Time Stamp In]: ",tin.isValid(), row["Time Stamp In"])
+            console.log(">>>>> ROW[Time Stamp In]: ",tin.isValid(), row["Time Stamp In"])
             // if this rows timestamp IN is not valid then use the previous rows value
             if (!tin.isValid()) {
               tin = p_tin;
             }
             let tout = get_field_timestamp(row["Time Stamp Out"])
-            // console.log(">>>>> ROW[Time Stamp Out]: ", tout.isValid(),  row["Time Stamp Out"])
+            console.log(">>>>> ROW[Time Stamp Out]: ", tout.isValid(),  row["Time Stamp Out"])
             // if this rows timestamp OUT is not valid then use the previous rows value
             if (!tout.isValid()) {
               tout = p_tout;
@@ -277,26 +278,37 @@ class IrradiatedSamplesMetadata extends Component {
               site = p_site;
             }
             if (dmy) {
-              const tsin = dmy.clone().hour(tin.hour()).minute(tin.minute()).second(tin.second())
-              const tsout = dmy.clone().hour(tout.hour()).minute(tout.minute()).second(tout.second())
+              // if SampleType contains Cadmium and Label contains Capsule then this is a 'cadmium' capsule.
+              // All other samples are called 'capsules'
+              if (sample_type.toLowerCase().includes("cadmium") && label.toLowerCase().includes("capsule")) {
+                sample_type = "cadmium"
+              } else {
+                sample_type = "sample"
+              }
+              const tsin = timestampToString(dmy.clone().hour(tin.hour()).minute(tin.minute()).second(tin.second()))
+              const tsout = timestampToString(dmy.clone().hour(tout.hour()).minute(tout.minute()).second(tout.second()))
               console.log("----- LABEL: ", label);
               console.log("----- SAMPLE TYPE: ", sample_type);
               console.log("----- ID: ", id);
-              console.log("----- IN: ", tsin.toISOString());
-              console.log("----- OUT: ", tsout.toISOString());
+              console.log("----- IN: ", tsin);
+              console.log("----- OUT: ", tsout);
               console.log("----- SITE: ",site);
               // only import sample entries for the record year
               if ("" + tsin.year() === that.state.record[NURIMS_TITLE]) {
                 if (that.ref.current) {
-                  that.ref.current.addRow({
+                  if (that.ref.current.addRow({
                     id: nanoid(),
                     sample_id: id,
-                    timein: tsin.toISOString().replace("T", " ").substring(0, 19),
-                    timeout: tsout.toISOString().replace("T", " ").substring(0, 19),
+                    timein: tsin,
+                    // timein: timestampToString(tsin),
+                    timeout: tsout,
+                    // timeout: timestampToString(tsout),
                     site: site,
                     samples: label,
                     type: sample_type,
-                  }, filter_duplicate_sample_entries)
+                  }, filter_duplicate_sample_entries)) {
+                    count++;
+                  }
                 }
               }
             } else {
@@ -327,6 +339,7 @@ class IrradiatedSamplesMetadata extends Component {
             }
           }
         }
+        enqueueInfoSnackbar(`Imported ${count} log entries from '${selectedFile.name}'.`)
       }
       that.setState({busy: 0, data_changed: true});
     };
