@@ -26,7 +26,44 @@ import {
   enqueueErrorSnackbar
 } from "../../utils/SnackbarVariants";
 import BusyIndicator from "../../components/BusyIndicator";
+import {nanoid} from "nanoid";
 
+
+function get_field_timestamp(field) {
+  if (field) {
+    const ls_field = field.toLowerCase();
+    if (ls_field.includes("am") || ls_field.includes("pm")) {
+      return dayjs(field, "HH:mm:ss A")
+    }
+    return dayjs(field, "HH:mm:ss")
+  }
+  return dayjs("", "HH:mm:ss")
+}
+
+function isWordInString(needle, haystack) {
+  return haystack
+    .split(' ')
+    .some(p => (p === needle));
+}
+// isWordInString('hello', 'hello great world!'); // true
+// isWordInString('eat', 'hello great world!'); // false
+
+function filter_duplicate_sample_entries(rows, row) {
+  console.log("ROW.LENGTH", rows.length, row)
+  // check for id already registered
+  for (const r of rows) {
+    if (r.id === row.id) {
+      // ID already registered, now we check if the sample label already registered also
+      if (!isWordInString(row.samples, r.samples)) {
+        // if sample entry not already registered then we add it now
+        r.samples += ` ${row.samples}`;
+      }
+      return true;
+    }
+  }
+  // row not already registered so we don't filter it
+  return false;
+}
 
 class IrradiatedSamplesMetadata extends Component {
   static contextType = UserContext;
@@ -163,7 +200,6 @@ class IrradiatedSamplesMetadata extends Component {
   }
 
   handleFileUpload = (e) => {
-    console.log("111111111111111111111111111111111111111111111")
     const selectedFile = e.target.files[0];
     console.log("file uploaded", selectedFile)
     const that = this;
@@ -175,7 +211,12 @@ class IrradiatedSamplesMetadata extends Component {
     this.setState({busy: 1});
     fileReader.readAsText(selectedFile);
     fileReader.onload = function (e) {
-      const results = readString(e.target.result, {header: true});
+      const results = readString(e.target.result,
+        {
+          header: true,
+          dynamicTyping: false,
+          // transform(value, column) { if (value === "") { return ""; } else { return value; }}
+        });
       console.log("SELECTION", that.state.record)
       console.log("YEAR", that.state.record[NURIMS_TITLE])
       console.log("RECORDS", that.samples)
@@ -197,58 +238,54 @@ class IrradiatedSamplesMetadata extends Component {
             // "Date","Time Stamp In","Time Stamp Out","ID","Sample Type","Label","Site","Comments"
             let dmy = dayjs(row["Date"], "D-MMM-YY")
             console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-            console.log(">>>>> ROW[DATE]: ", row["Date"])
-            console.log(">>>>> YEAR.VALID: ",
-              dmy.isValid(), dmy.isValid() ? `${dmy.year()}, ${dmy.month()+1}, ${dmy.date()}` : "")
+            console.log(">>>>> p_dmy, p_tin, p_tout, p_id, p_sample_type, p_label, p_site: ",
+              p_dmy ? p_dmy.toISOString() : "p_dmy_undefined",
+              p_tin ? p_tin.toISOString() : "p_tin_undefined",
+              p_tout ? p_tout.toISOString() : "p_tout_undefined",
+              p_id ? p_id : "p_id_undefined",
+              p_sample_type ? p_sample_type : "p_sample_type_undefined",
+              p_label ? p_label : "p_label_undefined",
+              p_site ? p_site : "p_site_undefined")
+            console.log(">>>>> ROW[DATE]: ", row["Date"], row["Date"] === undefined ? "undefined" : row["Date"].length,
+              dmy.isValid())
             // if this rows date is not valid then use the previous rows value
             if (!dmy.isValid()) {
               dmy = p_dmy;
             }
-            let tin = dayjs(row["Time Stamp In"], "HH:mm:ss A")
-            console.log(">>>>> ROW[Time Stamp In]: ", row["Time Stamp In"])
-            console.log(">>>>> ROW[Time Stamp In].VALID: ",
-              tin.isValid(), tin.isValid() ? `${tin.hour()}, ${tin.minute()}, ${tin.second()}` : "")
+            let tin = get_field_timestamp(row["Time Stamp In"])
+            console.log(">>>>> ROW[Time Stamp In]: ",tin.isValid(), row["Time Stamp In"])
             // if this rows timestamp IN is not valid then use the previous rows value
             if (!tin.isValid()) {
               tin = p_tin;
             }
-            let tout = dayjs(row["Time Stamp Out"], "HH:mm:ss A")
-            console.log(">>>>> ROW[Time Stamp Out]: ", row["Time Stamp Out"])
-            console.log(">>>>> ROW[Time Stamp Out].VALID: ",
-              tout.isValid(), tout.isValid() ? `${tout.hour()}, ${tout.minute()}, ${tout.second()}` : "")
+            let tout = get_field_timestamp(row["Time Stamp Out"])
+            console.log(">>>>> ROW[Time Stamp Out]: ", tout.isValid(),  row["Time Stamp Out"])
             // if this rows timestamp OUT is not valid then use the previous rows value
             if (!tout.isValid()) {
               tout = p_tout;
             }
             let id = row["ID"];
-            console.log(">>>>> ROW[ID]: ", id);
-            if (id && id.length === 0) {
+            console.log(">>>>> ROW[ID]: ", id === undefined ? "undefined" : id.length, id);
+            if (id === undefined || id.length === 0) {
               id = p_id;
             }
             let sample_type = row["Sample Type"];
-            console.log(">>>>> ROW[Sample Type]: ", sample_type);
-            if (sample_type && sample_type.length === 0) {
+            console.log(">>>>> ROW[Sample Type]: ", sample_type === undefined ? "undefined" : sample_type.length,
+              sample_type);
+            if (sample_type === undefined || sample_type.length === 0) {
               sample_type = p_sample_type;
             }
             let label = row["Label"];
-            console.log(">>>>> ROW[Label]: ", label);
-            if (label && label.length === 0) {
+            console.log(">>>>> ROW[Label]: ", label === undefined ? "undefined" : label.length, label);
+            if (label === undefined || label.length === 0) {
               label = p_label;
             }
             let site = row["Site"];
-            console.log(">>>>> ROW[Site]: ", site);
-            if (site && site.length === 0) {
+            console.log(">>>>> ROW[Site]: ", site === undefined ? "undefined" : site.length, site);
+            if (site === undefined || site.length === 0) {
               site = p_site;
             }
             if (dmy) {
-              console.log("----- ", {
-                year: dmy.year(),
-                month: dmy.month()+1,
-                day: dmy.date(),
-                hour: tin.hour(),
-                minute: tin.minute(),
-                second: tin.second()
-              })
               const tsin = dmy.clone().hour(tin.hour()).minute(tin.minute()).second(tin.second())
               const tsout = dmy.clone().hour(tout.hour()).minute(tout.minute()).second(tout.second())
               console.log("----- LABEL: ", label);
@@ -257,44 +294,30 @@ class IrradiatedSamplesMetadata extends Component {
               console.log("----- IN: ", tsin.toISOString());
               console.log("----- OUT: ", tsout.toISOString());
               console.log("----- SITE: ",site);
+              // only import sample entries for the record year
+              if ("" + tsin.year() === that.state.record[NURIMS_TITLE]) {
+                if (that.ref.current) {
+                  that.ref.current.addRow({
+                    id: nanoid(),
+                    sample_id: id,
+                    timein: tsin.toISOString().replace("T", " ").substring(0, 19),
+                    timeout: tsout.toISOString().replace("T", " ").substring(0, 19),
+                    site: site,
+                    samples: label,
+                    type: sample_type,
+                  }, filter_duplicate_sample_entries)
+                }
+              }
             } else {
               console.log("----- INVALID ENTRY (COMMENT): ", row["Comments"])
             }
-
-            if (1 !== 1) {
-              if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
-                if (that.ref.current) {
-                  that.ref.current.addRow({
-                    id: row.id,
-                    sample_id: row.sample_id,
-                    timein: row.timein,
-                    timeout: row.timeout,
-                    site: row.site,
-                    samples: row.samples,
-                    type: row.type,
-                  }, true)
-                }
-              }
-            }
-            // save for next row
-            if (dmy && dmy.isValid()) {
-              p_dmy = dmy;
-            }
-            if (tin && tin.isValid()) {
-              p_tin = tin;
-            }
-            if (tout && tout.isValid()) {
-              p_tout = tout;
-            }
-            if (id && id.length > 0) {
-              p_id = id;
-            }
-            if (sample_type && sample_type.length > 0) {
-              p_sample_type = sample_type;
-            }
-            if (label && label.length > 0) {
-              p_label = label;
-            }
+            p_dmy = dmy;
+            p_tin = tin;
+            p_tout = tout;
+            p_id = id;
+            p_sample_type = sample_type;
+            p_label = label;
+            p_site = site;
           } else if (results.meta.fields.includes("timein")) {
             if (row.id.length > 0) {
               if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
@@ -307,7 +330,7 @@ class IrradiatedSamplesMetadata extends Component {
                     site: row.site,
                     samples: row.samples,
                     type: row.type,
-                  }, true)
+                  }, filter_duplicate_sample_entries)
                 }
               }
             }

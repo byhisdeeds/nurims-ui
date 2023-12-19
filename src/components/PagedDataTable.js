@@ -182,12 +182,10 @@ class PagedDataTable extends React.Component {
     this.setState({rows: rows});
   }
 
-  addRow = (row, noDuplicates) => {
-    if (noDuplicates) {
-      for (const r of this.state.rows) {
-        if (row.id === r.id) {
-          return;
-        }
+  addRow = (row, filter) => {
+    if (filter) {
+      if (filter(this.state.rows, row)) {
+        return;
       }
     }
     const rows = [...this.state.rows, row];
