@@ -226,6 +226,20 @@ class IrradiatedSamplesMetadata extends Component {
               id = p_id;
             }
             let sample_type = row["Sample Type"];
+            console.log(">>>>> ROW[Sample Type]: ", sample_type);
+            if (sample_type && sample_type.length === 0) {
+              sample_type = p_sample_type;
+            }
+            let label = row["Label"];
+            console.log(">>>>> ROW[Label]: ", label);
+            if (label && label.length === 0) {
+              label = p_label;
+            }
+            let site = row["Site"];
+            console.log(">>>>> ROW[Site]: ", site);
+            if (site && site.length === 0) {
+              site = p_site;
+            }
             if (dmy) {
               console.log("----- ", {
                 year: dmy.year(),
@@ -237,10 +251,12 @@ class IrradiatedSamplesMetadata extends Component {
               })
               const tsin = dmy.clone().hour(tin.hour()).minute(tin.minute()).second(tin.second())
               const tsout = dmy.clone().hour(tout.hour()).minute(tout.minute()).second(tout.second())
+              console.log("----- LABEL: ", label);
               console.log("----- SAMPLE TYPE: ", sample_type);
               console.log("----- ID: ", id);
               console.log("----- IN: ", tsin.toISOString());
               console.log("----- OUT: ", tsout.toISOString());
+              console.log("----- SITE: ",site);
             } else {
               console.log("----- INVALID ENTRY (COMMENT): ", row["Comments"])
             }
@@ -275,6 +291,9 @@ class IrradiatedSamplesMetadata extends Component {
             }
             if (sample_type && sample_type.length > 0) {
               p_sample_type = sample_type;
+            }
+            if (label && label.length > 0) {
+              p_label = label;
             }
           } else if (results.meta.fields.includes("timein")) {
             if (row.id.length > 0) {
