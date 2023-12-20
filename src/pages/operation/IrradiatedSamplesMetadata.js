@@ -101,7 +101,7 @@ class IrradiatedSamplesMetadata extends Component {
         field: "sample_id",
         headerName: "ID",
         headerAlign: 'center',
-        width: 180,
+        width: 80,
         editable: true,
       },
       {
