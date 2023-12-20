@@ -101,7 +101,7 @@ class IrradiatedSamplesMetadata extends Component {
         field: "sample_id",
         headerName: "ID",
         headerAlign: 'center',
-        width: 80,
+        width: 180,
         editable: true,
       },
       {
@@ -322,8 +322,6 @@ class IrradiatedSamplesMetadata extends Component {
                   }
                 }
               }
-            } else {
-              console.log("----- INVALID ENTRY (COMMENT): ", row["Comments"])
             }
             p_dmy = dmy;
             p_tin = tin;
