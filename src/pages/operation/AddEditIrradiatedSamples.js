@@ -347,11 +347,11 @@ class AddEditIrradiatedSamples extends React.Component {
                                    onProceed={this.proceedWithAdd}
                                    onCancel={this.cancelAdd}
         />
-        <Grid container spacing={2}>
-          <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
+        <Grid container spacing={2} style={{paddingLeft: 0, paddingTop: 0}}>
+          <Grid item xs={12}>
             <TitleComponent title={this.props.title} />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <IrradiatedSamplesList
               ref={this.listRef}
               title={"Irradiated Samples"}
@@ -362,7 +362,7 @@ class AddEditIrradiatedSamples extends React.Component {
               enableRecordArchiveSwitch={true}
             />
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={9}>
             <IrradiatedSamplesMetadata
               ref={this.metadataRef}
               properties={this.props.properties}

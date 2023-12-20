@@ -376,6 +376,8 @@ class IrradiatedSamplesMetadata extends Component {
         component="form"
         sx={{
           '& .MuiTextField-root': {m: 1, width: '100%'},
+          paddingLeft: 2,
+          paddingTop: 2,
         }}
         noValidate
         autoComplete="off"
