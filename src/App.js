@@ -34,7 +34,7 @@ import {
   CMD_GET_SESSION_INFO,
   MY_ACCOUNT,
   SETTINGS,
-  CMD_GET_GLOSSARY_TERMS, CMD_SET_LOGGING_LEVEL
+  CMD_GET_GLOSSARY_TERMS, CMD_SET_LOGGING_LEVEL, CMD_INTERRUPT_BACKGROUND_TASK
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -539,7 +539,9 @@ class App extends React.Component {
   }
 
   proceedWithInterruptBackgroundTask = () => {
-    // send message
+    this.send({
+      cmd: CMD_INTERRUPT_BACKGROUND_TASK,
+    }, false, false);
     this.setState({confirm_interrupt_background_task: false});
   }
 
