@@ -595,7 +595,8 @@ class App extends React.Component {
   render() {
     const {
       theme, ready, menuData, actionid, open, busy, background_tasks_active, num_unread_messages, debug,
-      log_window_visible, notification_window_visible, notification_window_anchor, num_messages, online
+      log_window_visible, notification_window_visible, notification_window_anchor, num_messages, online,
+      confirm_interrupt_background_task
     } = this.state;
     const isSysadmin = isValidUserRole(this.user, "sysadmin");
     if (debug) {

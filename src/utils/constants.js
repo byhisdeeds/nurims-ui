@@ -193,6 +193,7 @@ module.exports = Object.freeze({
   CMD_DELETE_ITEM_RECORD: "delete_item_record",
 
   CMD_GET_SESSION_INFO: "get_session_info",
+  CMD_INTERRUPT_BACKGROUND_TASK: "interrupt_background_task",
 
   METADATA: 'metadata',
   INCLUDE_METADATA: 'include.metadata',
