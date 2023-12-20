@@ -333,17 +333,19 @@ class IrradiatedSamplesMetadata extends Component {
             p_label = label;
             p_site = site;
           } else if (results.meta.fields.includes("timein")) {
-            if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
-              if (that.ref.current) {
-                that.ref.current.addRow({
-                  id: row.hasOwnProperty("id") ? row.id : nanoid(),
-                  sample_id: row.sample_id,
-                  timein: row.timein,
-                  timeout: row.timeout,
-                  site: row.site,
-                  samples: row.samples,
-                  type: row.type,
-                }, filter_duplicate_sample_entries)
+            if (row.hasOwnProperty("id") && row.id.length > 0) {
+              if (row.timein.startsWith(that.state.record[NURIMS_TITLE])) {
+                if (that.ref.current) {
+                  that.ref.current.addRow({
+                    id: row.hasOwnProperty("id") ? row.id : nanoid(),
+                    sample_id: row.sample_id,
+                    timein: row.timein,
+                    timeout: row.timeout,
+                    site: row.site,
+                    samples: row.samples,
+                    type: row.type,
+                  }, filter_duplicate_sample_entries)
+                }
               }
             }
           }
