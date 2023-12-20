@@ -42,6 +42,39 @@ import {ConsoleLog} from "../utils/UserContext";
 const ERROR_SNACKBAR_DURATION = 3;
 
 
+
+
+export const ConfirmInterruptBackgroundTaskDialog = (props) => (
+  <div>
+    <Dialog
+      open={props.open}
+      onClose={props.onCancel}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        {"Interrupt background task"}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          Are you sure you want to interrupt the background task ?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onCancel}>No</Button>
+        <Button onClick={props.onProceed} autoFocus>Yes</Button>
+      </DialogActions>
+    </Dialog>
+  </div>
+)
+
+ConfirmInterruptBackgroundTaskDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onProceed: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+}
+
+
 export const ConfirmRemoveRecordDialog = (props) => (
   <div>
     <Dialog

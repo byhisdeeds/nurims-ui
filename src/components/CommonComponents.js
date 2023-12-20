@@ -119,10 +119,16 @@ function TooltipContent(closeFn) {
 
 export function BackgroundTasks(props) {
   const theme = useTheme();
+
+  const handleOnClick = (event) => {
+    props.onClick(props.active);
+  }
+
   if (props.active) {
     return (
       <Tooltip title="Background tasks active.">
         {<HourglassFull
+          onClick={handleOnClick}
           sx={{
             color: theme.palette.warning.light,
             paddingLeft: '10px',
@@ -138,6 +144,7 @@ export function BackgroundTasks(props) {
     return (
       <Tooltip title="No background tasks active.">
         {<HourglassEmpty
+          onClick={handleOnClick}
           sx={{
             color: theme.palette.text.disabled,
             paddingLeft: '10px',
@@ -153,7 +160,8 @@ export function BackgroundTasks(props) {
 }
 
 BackgroundTasks.propTypes = {
-  active: PropTypes.bool.isRequired
+  active: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired
 }
 
 export function NetworkConnection(props) {

@@ -129,6 +129,9 @@ import {
 import {
   setGlossaryTerms
 } from "./utils/GlossaryUtils";
+import {
+  ConfirmInterruptBackgroundTaskDialog,
+} from "./components/UtilityDialogs";
 
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));
@@ -187,6 +190,7 @@ class App extends React.Component {
       ready: false,
       online: false,
       busy: 0,
+      confirm_interrupt_background_task: false,
       debug: window.location.href.includes("debug"),
       background_tasks_active: false,
       log_window_visible: false,
@@ -528,6 +532,22 @@ class App extends React.Component {
     }
   }
 
+  interruptBackgroundTask = (active) => {
+    if (active) {
+      this.setState({confirm_interrupt_background_task: true});
+    }
+  }
+
+  proceedWithInterruptBackgroundTask = () => {
+    // send message
+    this.setState({confirm_interrupt_background_task: false});
+  }
+
+  cancelInterruptBackgroundTask = () => {
+    this.setState({confirm_interrupt_background_task: false});
+  }
+
+
   toggleNotificationsWindow = (event) => {
     if (this.state.num_messages > 0) {
       this.setState({
@@ -590,6 +610,10 @@ class App extends React.Component {
           <Box sx={{flexGrow: 1, height: "100%"}}>
             {this.user.isAuthenticated ?
               <React.Fragment>
+                <ConfirmInterruptBackgroundTaskDialog open={confirm_interrupt_background_task}
+                                                      onProceed={this.proceedWithInterruptBackgroundTask}
+                                                      onCancel={this.cancelInterruptBackgroundTask}
+                />
                 <AppBar position="static">
                   <Toolbar>
                     <Tooltip
@@ -609,7 +633,7 @@ class App extends React.Component {
                       user={this.user}
                       onClick={this.handleMenuAction}
                     />
-                    <BackgroundTasks active={background_tasks_active}/>
+                    <BackgroundTasks active={background_tasks_active} onClick={this.interruptBackgroundTask}/>
                     <LogWindowButton onClick={this.toggleLogWindow}/>
                     <NetworkConnection ready={ready}/>
                     {isSysadmin && <SystemInfoBadges ref={this.sysinfoRef}/>}
