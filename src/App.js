@@ -542,6 +542,7 @@ class App extends React.Component {
     this.send({
       cmd: CMD_INTERRUPT_BACKGROUND_TASK,
     }, false, false);
+    enqueueWarningSnackbar("Interrupt background task request sent ...");
     this.setState({confirm_interrupt_background_task: false});
   }
 
