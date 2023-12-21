@@ -39,7 +39,7 @@ class ScrollableList extends Component {
         }}
       >
         <Highlight className='accesslog' language="accesslog">
-          {`WARNING
+          {`::1 - - [18/Dec/2023:07:23:42 -0500] "GET /nurims/css/leaflet.css HTTP/1.1" 200 14657 "http://localhost/nurims/?debug" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
           function foo() { return 'bar' }`}
         </Highlight>
       </div>
