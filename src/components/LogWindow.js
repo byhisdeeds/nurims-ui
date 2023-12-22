@@ -212,9 +212,9 @@ class LogWindow extends Component {
     }
   }
 
-  // highlight = (code) => {
-  //   return highlight_logs(code);
-  // }
+  highlight = (code) => {
+    return highlight_logs(code);
+  }
 
   setCode = (code) => {
   }

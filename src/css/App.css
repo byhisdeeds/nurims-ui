@@ -265,29 +265,28 @@ pre {
 
 .hl-window {
     font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
+    display: inline;
+    text-wrap: initial;
 }
 
 .hl-window .token-timestamp {
-    display: inline;
     font-family: inherit;
     background-color: var(--color-canvas-subtle);
     color: var(--color-prettylights-syntax-entity-tag);
 }
 
 .hl-window .token-warn {
-    display: inline;
     font-family: inherit;
     background-color: var(--color-canvas-subtle);
     color: var(--color-prettylights-syntax-keyword);
 }
 
 .hl-window .token-filename {
-    display: inline;
     font-family: inherit;
     background-color: var(--color-canvas-subtle);
     color: var(--color-prettylights-syntax-keyword);
 }
 
-.logger {
+.feed {
     text-wrap: initial;
 }
