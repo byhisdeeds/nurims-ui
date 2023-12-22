@@ -38,7 +38,11 @@ class ScrollableList extends Component {
           height: height
         }}
       >
-        <Highlight className='accesslog' language="logger">
+        <Highlight
+          className='logger'
+          // innerHTML={true}
+          language="logger"
+        >
           {`[2023-12-21 00:29:04] Websocket connection to server (GETTTTT) (GETTTTTTT) (GETT) established for client chrome-p6qD-7zzq1JkaS-OXR2Yn
 [2023-12-20 19:29:04] Re-connecting client {'chrome-p6qD-7zzq1JkaS-OXR2Yn (::1)'}
 [2023-12-20 19:29:22] Scan of 001570_SLOWPOKE190424_144159.GTE took 20 seconds
