@@ -35,7 +35,8 @@ class ScrollableList extends Component {
           color: theme.palette.primary.light,
           overflowY: "auto",
           width: "100%",
-          height: height
+          height: height,
+          textWrap: "balance"
         }}
       >
         <Highlight
