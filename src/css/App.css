@@ -287,3 +287,7 @@ pre {
     background-color: var(--color-canvas-subtle);
     color: var(--color-prettylights-syntax-keyword);
 }
+
+.logger {
+    text-wrap: initial;
+}
