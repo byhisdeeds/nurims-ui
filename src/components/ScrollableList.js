@@ -6,8 +6,6 @@ import {
 import {
   UserContext
 } from "../utils/UserContext";
-import Highlight from "react-highlight";
-import 'react-highlight/node_modules/highlight.js/styles/agate.css'
 import ScrollableFeed from "react-scrollable-feed";
 
 
@@ -18,7 +16,29 @@ class ScrollableList extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isAtBottom: true,
+    };
     this.Module = SCROLLABLELIST_REF;
+  }
+
+  changeDetectionFilter = (previousProps, newProps) => {
+    // const prevChildren = previousProps.children;
+    // const newChildren = newProps.children;
+    const prevChildrenCount = React.Children.count(previousProps.children);
+    const newChildrenCount = React.Children.count(newProps.children);
+    console.log("### changeDetectionFilter ###", prevChildrenCount, newChildrenCount)
+
+    return prevChildrenCount !== newChildrenCount;
+    // return prevChildrenCount !== newChildrenCount
+    //   && prevChildren[prevChildren.length - 1] !== newChildren[newChildren.length - 1];
+  }
+
+  updateIsAtBottomState = (atBottom) => {
+    console.log("### updateIsAtBottomState ###", atBottom)
+    this.setState({
+      isAtBottom: atBottom
+    });
   }
 
   render() {
@@ -43,6 +63,7 @@ class ScrollableList extends Component {
         <ScrollableFeed
           className={className}
           forceScroll={forceScroll}
+          onScroll={this.updateIsAtBottomState}
         >
           {items.map((item, i) => <div key={i}>{highlight(item)}</div>)}
         </ScrollableFeed>
@@ -63,7 +84,7 @@ ScrollableList.propTypes = {
 }
 
 ScrollableList.defaultProps = {
-  highlight: () => {},
+  highlight: (text) => {return text},
   forceScroll: false,
   className: "",
   items: [],
