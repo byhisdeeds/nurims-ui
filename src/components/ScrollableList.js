@@ -23,15 +23,9 @@ class ScrollableList extends Component {
   }
 
   changeDetectionFilter = (previousProps, newProps) => {
-    // const prevChildren = previousProps.children;
-    // const newChildren = newProps.children;
     const prevChildrenCount = React.Children.count(previousProps.children);
     const newChildrenCount = React.Children.count(newProps.children);
-    console.log("### changeDetectionFilter ###", prevChildrenCount, newChildrenCount,  prevChildrenCount !== newChildrenCount)
-
     return prevChildrenCount !== newChildrenCount;
-    // return prevChildrenCount !== newChildrenCount
-    //   && prevChildren[prevChildren.length - 1] !== newChildren[newChildren.length - 1];
   }
 
   updateIsAtBottomState = (atBottom) => {
@@ -71,7 +65,7 @@ class ScrollableList extends Component {
       >
         <ScrollableFeed
           className={"feed"}
-          forceScroll={forceScroll}
+          forceScroll={false}
           onScroll={this.updateIsAtBottomState}
           changeDetectionFilter={this.changeDetectionFilter}
         >
