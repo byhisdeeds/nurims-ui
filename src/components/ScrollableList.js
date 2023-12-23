@@ -29,7 +29,6 @@ class ScrollableList extends Component {
   }
 
   updateIsAtBottomState = (atBottom) => {
-    console.log("### updateIsAtBottomState ###", atBottom)
     this.setState({
       isAtBottom: atBottom
     });
