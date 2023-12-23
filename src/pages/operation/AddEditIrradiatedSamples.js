@@ -5,19 +5,17 @@ import {
 } from "../../utils/UserContext";
 import {
   AddIrradiatedSampleLogRecordDialog,
-  ConfirmRemoveRecordDialog
+  ConfirmRemoveRecordDialog, ShowProvenanceRecordsDialog
 } from "../../components/UtilityDialogs";
 import {
-  CMD_DELETE_ITEM_RECORD,
   CMD_DELETE_USER_RECORD,
+  CMD_GET_PROVENANCE_RECORDS,
   CMD_GET_SAMPLE_IRRADIATION_LOG_RECORD_FOR_YEAR,
   CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
   CMD_UPDATE_ITEM_RECORD,
-  CMD_UPDATE_REACTOR_WATER_SAMPLE_RECORD,
   IRRADIATED_SAMPLE_LOG_RECORD_TYPE,
   ITEM_ID,
   METADATA,
-  NURIMS_SAMPLEDATE,
   NURIMS_TITLE,
   NURIMS_WITHDRAWN,
   OPERATION_TOPIC,
@@ -25,15 +23,8 @@ import {
   ROLE_IRRADIATION_REQUEST_SYSADMIN,
 } from "../../utils/constants";
 import {
-  Box,
-  Fab,
   Grid,
 } from "@mui/material";
-import {
-  Add as AddIcon,
-  Save as SaveIcon,
-  RemoveCircle as RemoveCircleIcon, Unpublished as UnpublishedIcon, CheckCircle as CheckCircleIcon,
-} from "@mui/icons-material";
 import {
   getMatchingResponseObject,
   isCommandResponse,
@@ -45,12 +36,8 @@ import {
   ArchiveRecordLabel
 } from "../../utils/RenderUtils";
 import {
-  getRecordMetadataValue,
   isRecordChanged,
-  isValidSelection,
   new_record,
-  record_uuid,
-  recordHasRecordKey
 } from "../../utils/MetadataUtils";
 import {
   AddRemoveArchiveSaveSubmitProvenanceButtonPanel,
@@ -87,6 +74,7 @@ class AddEditIrradiatedSamples extends React.Component {
       show_provenance_view: false,
     };
     this.Module = ADDEDITIRRADIATEDSAMPLES_REF;
+    this.provenanceRecords = [];
     this.listRef = React.createRef();
     this.metadataRef = React.createRef();
   }
@@ -273,6 +261,8 @@ class AddEditIrradiatedSamples extends React.Component {
             this.metadataRef.current.setRecordMetadata({})
           }
           this.setState({selection: {}, metadata_changed: false});
+        } else if (isCommandResponse(message, CMD_GET_PROVENANCE_RECORDS)) {
+          this.setProvenanceRecords(response.provenance)
         }
       } else {
         enqueueErrorSnackbar(response.message);
@@ -330,7 +320,10 @@ class AddEditIrradiatedSamples extends React.Component {
   // }
 
   render() {
-    const {metadata_changed, confirm_remove, confirm_add, include_archived, selection} = this.state;
+    const {
+      metadata_changed, confirm_remove, confirm_add,
+      include_archived, selection, show_provenance_view
+    } = this.state;
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "metadata_changed", metadata_changed,
         "confirm_removed", confirm_remove, "include_archived", include_archived, "selection", selection);
@@ -343,13 +336,18 @@ class AddEditIrradiatedSamples extends React.Component {
                                    onCancel={this.cancelRemove}
         />
         <AddIrradiatedSampleLogRecordDialog open={confirm_add}
-                                   selection={selection}
-                                   onProceed={this.proceedWithAdd}
-                                   onCancel={this.cancelAdd}
+                                            selection={selection}
+                                            onProceed={this.proceedWithAdd}
+                                            onCancel={this.cancelAdd}
+        />
+        <ShowProvenanceRecordsDialog open={show_provenance_view}
+                                     selection={selection}
+                                     body={this.provenanceRecords.join("\n")}
+                                     onCancel={this.closeProvenanceRecordsView}
         />
         <Grid container spacing={2} style={{paddingLeft: 0, paddingTop: 0}}>
           <Grid item xs={12}>
-            <TitleComponent title={this.props.title} />
+            <TitleComponent title={this.props.title}/>
           </Grid>
           <Grid item xs={3}>
             <IrradiatedSamplesList
@@ -417,7 +415,8 @@ class AddEditIrradiatedSamples extends React.Component {
 }
 
 AddEditIrradiatedSamples.defaultProps = {
-  send: (msg) => {},
+  send: (msg) => {
+  },
 };
 
 export default AddEditIrradiatedSamples;
