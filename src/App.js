@@ -397,7 +397,8 @@ class App extends React.Component {
         }
       } else {
         enqueueErrorSnackbar(
-          `message is missing ${message.hasOwnProperty("cmd") ? "" : "cmd"}${message.hasOwnProperty("response") ? "" : "response"} field.`
+          `message is missing ${message.hasOwnProperty("cmd") ?
+            "" : "cmd"}${message.hasOwnProperty("response") ? "" : "response"} field.`
         );
       }
     };
@@ -542,7 +543,7 @@ class App extends React.Component {
     this.send({
       cmd: CMD_INTERRUPT_BACKGROUND_TASK,
     }, false, false);
-    enqueueWarningSnackbar("Interrupt background task request sent ...");
+    enqueueWarningSnackbar("Background task interrupt request sent ...");
     this.setState({confirm_interrupt_background_task: false});
   }
 
