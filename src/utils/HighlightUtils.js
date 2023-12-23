@@ -70,3 +70,13 @@ export function highlight_logs(text, className) {
   return convertHtmlToReact(render_highlight_with_warn(text, HIGHLIGHT_DEFN.logs,
     `${className} token-timestamp`, `${className} token-warn`))
 }
+
+export function highlight_fields(text, className) {
+
+  return convertHtmlToReact(render_highlight(text, HIGHLIGHT_DEFN.files, `${className} token-filename`));
+}
+
+export function highlight_files(text, className) {
+
+  return convertHtmlToReact(render_highlight(text, HIGHLIGHT_DEFN.files, `${className} token-filename`));
+}

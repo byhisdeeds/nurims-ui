@@ -33,11 +33,10 @@ import {
   isValidUserRole
 } from "../../utils/UserUtils";
 import {
-  highlight,
-  HIGHLIGHT_DEFN
+  highlight_files,
 } from "../../utils/HighlightUtils";
 import ScrollableList from "../../components/ScrollableList";
-import LargeScrollableList from "../../components/LargeScrollableList";
+// import LargeScrollableList from "../../components/LargeScrollableList";
 
 export const CLEANUPLARGEOBJECTSTORE_REF = "CleanupLargeObjectStore";
 
@@ -94,7 +93,7 @@ class CleanupLargeObjectStore extends Component {
             //   (response.hasOwnProperty("file") ? response.file : ""));
             this.files.push(response.hasOwnProperty("file") ? response.file : "");
             if (this.ref.current) {
-              this.ref.current.forceUpdate();
+              this.ref.current.updateScroll(true);
             }
           }
         }
@@ -104,8 +103,9 @@ class CleanupLargeObjectStore extends Component {
     }
   }
 
-  highlight_files = (code) => {
-    return highlight(code, HIGHLIGHT_DEFN.files, "hl-window token-filename");
+  highlight_files = (code, className) => {
+    // return highlight(code, HIGHLIGHT_DEFN.files, "hl-window token-filename");
+    return highlight_files(code, className);
   }
 
   render() {
@@ -146,10 +146,10 @@ class CleanupLargeObjectStore extends Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <LargeScrollableList
+            <ScrollableList
               ref={this.ref}
               theme={theme}
-              forceScroll={true}
+              // forceScroll={true}
               className={"hl-window"}
               items={this.files}
               highlight={this.highlight_files}

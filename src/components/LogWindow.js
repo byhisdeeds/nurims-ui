@@ -22,160 +22,45 @@ import {
 } from "../utils/HighlightUtils";
 import dayjs from 'dayjs';
 import ScrollableList from "./ScrollableList";
-// import LargeScrollableList from "./LargeScrollableList";
-// import SyntaxHighlighter from "react-syntax-highlighter/src/light";
-// import Editor from "react-simple-code-editor";
-// import {highlight, languages} from 'prismjs/components/prism-core';
-// import 'prismjs/components/prism-log';
-// import 'prismjs/components/prism-javascript';
-// import 'prismjs/themes/prism.css'; //Example style, you can use another
-// import Highlight from 'react-highlight'
 
 const LOGWINDOW_REF = "LogWindow";
 
 
-// export default [
-//   'a11y-dark',
-//   'a11y-light',
-//   'agate',
-//   'an-old-hope',
-//   'androidstudio',
-//   'arduino-light',
-//   'arta',
-//   'ascetic',
-//   'atelier-cave-dark',
-//   'atelier-cave-light',
-//   'atelier-dune-dark',
-//   'atelier-dune-light',
-//   'atelier-estuary-dark',
-//   'atelier-estuary-light',
-//   'atelier-forest-dark',
-//   'atelier-forest-light',
-//   'atelier-heath-dark',
-//   'atelier-heath-light',
-//   'atelier-lakeside-dark',
-//   'atelier-lakeside-light',
-//   'atelier-plateau-dark',
-//   'atelier-plateau-light',
-//   'atelier-savanna-dark',
-//   'atelier-savanna-light',
-//   'atelier-seaside-dark',
-//   'atelier-seaside-light',
-//   'atelier-sulphurpool-dark',
-//   'atelier-sulphurpool-light',
-//   'atom-one-dark',
-//   'atom-one-dark-reasonable',
-//   'atom-one-light',
-//   'brown-paper',
-//   'codepen-embed',
-//   'color-brewer',
-//   'darcula',
-//   'dark',
-//   'default-style',
-//   'docco',
-//   'dracula',
-//   'far',
-//   'foundation',
-//   'github',
-//   'github-gist',
-//   'gml',
-//   'googlecode',
-//   'gradient-dark',
-//   'gradient-light',
-//   'grayscale',
-//   'gruvbox-dark',
-//   'gruvbox-light',
-//   'hopscotch',
-//   'hybrid',
-//   'idea',
-//   'ir-black',
-//   'isbl-editor-dark',
-//   'isbl-editor-light',
-//   'kimbie.dark',
-//   'kimbie.light',
-//   'lightfair',
-//   'lioshi',
-//   'magula',
-//   'mono-blue',
-//   'monokai',
-//   'monokai-sublime',
-//   'night-owl',
-//   'nnfx',
-//   'nnfx-dark',
-//   'nord',
-//   'obsidian',
-//   'ocean',
-//   'paraiso-dark',
-//   'paraiso-light',
-//   'pojoaque',
-//   'purebasic',
-//   'qtcreator_dark',
-//   'qtcreator_light',
-//   'railscasts',
-//   'rainbow',
-//   'routeros',
-//   'school-book',
-//   'shades-of-purple',
-//   'solarized-dark',
-//   'solarized-light',
-//   'srcery',
-//   'stackoverflow-dark',
-//   'stackoverflow-light',
-//   'sunburst',
-//   'tomorrow',
-//   'tomorrow-night',
-//   'tomorrow-night-blue',
-//   'tomorrow-night-bright',
-//   'tomorrow-night-eighties',
-//   'vs',
-//   'vs2015',
-//   'xcode',
-//   'xt256',
-//   'zenburn'
-// ];
-
-
-const initialCodeString = `function createStyleObject(classNames, style) {
-  return classNames.reduce((styleObject, className) => {
-    return {...styleObject, ...style[className]};
-  }, {});
-}
-
-function createClassNameString(classNames) {
-  return classNames.join(' ');
-}
-
-// this comment is here to demonstrate an extremely long line length, well beyond what you should probably allow in your own code, though sometimes you'll be highlighting code you can't refactor, which is unfortunate but should be handled gracefully
-
-function createChildren(style, useInlineStyles) {
-  let childrenCount = 0;
-  return children => {
-    childrenCount += 1;
-    return children.map((child, i) => createElement({
-      node: child,
-      style,
-      useInlineStyles,
-    }));
-  }
-}
-
-function createElement({ node, style, useInlineStyles, key }) {
-  const { properties, type, tagName, value } = node;
-  if (type === 'text') {
-    return value;
-  } else if (tagName) {
-    const TagName = tagName;
-    const childrenCreator = createChildren(style, useInlineStyles);
-    const props = (
-      useInlineStyles
-      ? { style: createStyleObject(properties.className, style) }
-      : { className: createClassNameString(properties.className) }
-    );
-    const children = childrenCreator(node.children);
-    return <TagName key={key} {...props}>{children}</TagName>;
-  }
-}
-  `;
+// function createClassNameString(classNames) {
+//   return classNames.join(' ');
+// }
+//
+// // this comment is here to demonstrate an extremely long line length, well beyond what you should probably allow in your own code, though sometimes you'll be highlighting code you can't refactor, which is unfortunate but should be handled gracefully
+//
+// function createChildren(style, useInlineStyles) {
+//   let childrenCount = 0;
+//   return children => {
+//     childrenCount += 1;
+//     return children.map((child, i) => createElement({
+//       node: child,
+//       style,
+//       useInlineStyles,
+//     }));
+//   }
+// }
+//
+// function createElement({ node, style, useInlineStyles, key }) {
+//   const { properties, type, tagName, value } = node;
+//   if (type === 'text') {
+//     return value;
+//   } else if (tagName) {
+//     const TagName = tagName;
+//     const childrenCreator = createChildren(style, useInlineStyles);
+//     const props = (
+//       useInlineStyles
+//       ? { style: createStyleObject(properties.className, style) }
+//       : { className: createClassNameString(properties.className) }
+//     );
+//     const children = childrenCreator(node.children);
+//     return <TagName key={key} {...props}>{children}</TagName>;
+//   }
+// }
+//   `;
 
 class LogWindow extends Component {
   static contextType = UserContext;
@@ -209,6 +94,7 @@ class LogWindow extends Component {
   updateLogWindow = () => {
     if (this.ref.current) {
       this.ref.current.updateScroll(true);
+      // this.ref.current.forceUpdate();
     }
   }
 
@@ -273,7 +159,6 @@ class LogWindow extends Component {
           <ScrollableList
             ref={this.ref}
             theme={theme}
-            forceScroll={true}
             className={"hl-window"}
             items={logs}
             highlight={this.highlight}

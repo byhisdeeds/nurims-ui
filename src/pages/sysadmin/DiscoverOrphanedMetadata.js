@@ -33,10 +33,10 @@ import {
   isValidUserRole
 } from "../../utils/UserUtils";
 import {
-  highlight,
-  HIGHLIGHT_DEFN
+  highlight_fields,
 } from "../../utils/HighlightUtils";
-import LargeScrollableList from "../../components/LargeScrollableList";
+// import LargeScrollableList from "../../components/LargeScrollableList";
+import ScrollableList from "../../components/ScrollableList";
 
 export const DISCOVERORPHANEDMETADATA_REF = "DiscoverOrphanedMetadata";
 
@@ -93,7 +93,7 @@ class DiscoverOrphanedMetadata extends Component {
             //   (response.hasOwnProperty("field") ? response.field : ""));
             this.fields.push(response.hasOwnProperty("field") ? response.field : "");
             if (this.ref.current) {
-              this.ref.current.forceUpdate();
+              this.ref.current.updateScroll(true);
             }
           }
 
@@ -104,8 +104,9 @@ class DiscoverOrphanedMetadata extends Component {
     }
   }
 
-  highlight_fields = (code) => {
-    return highlight(code, HIGHLIGHT_DEFN.files, "hl-window token-filename");
+  highlight_fields = (code, className) => {
+    // return highlight(code, HIGHLIGHT_DEFN.files, "hl-window token-filename");
+    return highlight_fields(code, className);
   }
 
   render() {
@@ -146,10 +147,10 @@ class DiscoverOrphanedMetadata extends Component {
             </Stack>
           </Grid>
           <Grid item xs={12}>
-            <LargeScrollableList
+            <ScrollableList
               ref={this.ref}
               theme={theme}
-              forceScroll={false}
+              // forceScroll={false}
               className={"hl-window"}
               items={this.fields}
               highlight={this.highlight_fields}

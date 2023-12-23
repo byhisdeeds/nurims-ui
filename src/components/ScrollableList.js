@@ -49,7 +49,6 @@ class ScrollableList extends Component {
     if (items.length > maxItems) {
       items.splice(0, items.length - maxItems);
     }
-    console.log("@@@ SCROLLABLE FEED RENDER @@@")
     return (
       <div
         data-color-mode={theme.palette.mode}
@@ -70,7 +69,6 @@ class ScrollableList extends Component {
           changeDetectionFilter={this.changeDetectionFilter}
         >
           {items.map((item, i) => <div key={i}>{highlight(item, className)}</div>)}
-          {/*{items.map((item, i) => item)}*/}
         </ScrollableFeed>
       </div>
     )
@@ -82,7 +80,6 @@ ScrollableList.propTypes = {
   highlight: PropTypes.func,
   theme: PropTypes.object.isRequired,
   logs: PropTypes.array.isRequired,
-  forceScroll: PropTypes.bool,
   classname: PropTypes.string,
   items: PropTypes.array,
   maxItems: PropTypes.number,
@@ -90,7 +87,6 @@ ScrollableList.propTypes = {
 
 ScrollableList.defaultProps = {
   highlight: (text) => {return text},
-  forceScroll: false,
   className: "",
   items: [],
   maxItems: 100,
