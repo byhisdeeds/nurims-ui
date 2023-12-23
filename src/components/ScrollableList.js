@@ -27,7 +27,7 @@ class ScrollableList extends Component {
     // const newChildren = newProps.children;
     const prevChildrenCount = React.Children.count(previousProps.children);
     const newChildrenCount = React.Children.count(newProps.children);
-    console.log("### changeDetectionFilter ###", prevChildrenCount, newChildrenCount)
+    console.log("### changeDetectionFilter ###", prevChildrenCount, newChildrenCount,  prevChildrenCount !== newChildrenCount)
 
     return prevChildrenCount !== newChildrenCount;
     // return prevChildrenCount !== newChildrenCount
@@ -41,12 +41,21 @@ class ScrollableList extends Component {
     });
   }
 
+  updateScroll = (updateWhenAtBottom) => {
+    if (updateWhenAtBottom && this.state.isAtBottom) {
+      this.setState({
+        isAtBottom: true
+      });
+    }
+  }
+
   render() {
     const {theme, forceScroll, className, items, highlight, height, maxItems} = this.props;
     // trim messages array size to maximum
     if (items.length > maxItems) {
       items.splice(0, items.length - maxItems);
     }
+    console.log("@@@ SCROLLABLE FEED RENDER @@@")
     return (
       <div
         data-color-mode={theme.palette.mode}
@@ -61,11 +70,13 @@ class ScrollableList extends Component {
         }}
       >
         <ScrollableFeed
-          className={className}
+          className={"feed"}
           forceScroll={forceScroll}
           onScroll={this.updateIsAtBottomState}
+          changeDetectionFilter={this.changeDetectionFilter}
         >
-          {items.map((item, i) => <div key={i}>{highlight(item)}</div>)}
+          {items.map((item, i) => <div key={i}>{highlight(item, className)}</div>)}
+          {/*{items.map((item, i) => item)}*/}
         </ScrollableFeed>
       </div>
     )
@@ -78,7 +89,7 @@ ScrollableList.propTypes = {
   theme: PropTypes.object.isRequired,
   logs: PropTypes.array.isRequired,
   forceScroll: PropTypes.bool,
-  classname: PropTypes.string.isRequired,
+  classname: PropTypes.string,
   items: PropTypes.array,
   maxItems: PropTypes.number,
 }

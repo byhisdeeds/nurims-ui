@@ -264,29 +264,26 @@ pre {
 }
 
 .hl-window {
-    font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
+    /*font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;*/
     display: inline;
-    text-wrap: initial;
 }
 
-.hl-window .token-timestamp {
-    font-family: inherit;
+.token-timestamp {
     background-color: var(--color-canvas-subtle);
     color: var(--color-prettylights-syntax-entity-tag);
 }
 
-.hl-window .token-warn {
-    font-family: inherit;
+.token-warn {
     background-color: var(--color-canvas-subtle);
     color: var(--color-prettylights-syntax-keyword);
 }
 
-.hl-window .token-filename {
-    font-family: inherit;
+.token-filename {
     background-color: var(--color-canvas-subtle);
     color: var(--color-prettylights-syntax-keyword);
 }
 
 .feed {
+    font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
     text-wrap: initial;
 }

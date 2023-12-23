@@ -208,12 +208,12 @@ class LogWindow extends Component {
 
   updateLogWindow = () => {
     if (this.ref.current) {
-      this.ref.current.forceUpdate();
+      this.ref.current.updateScroll(true);
     }
   }
 
-  highlight = (code) => {
-    return highlight_logs(code);
+  highlight = (code, className) => {
+    return highlight_logs(code, className);
   }
 
   setCode = (code) => {
