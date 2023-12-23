@@ -46,7 +46,7 @@ class ScrollableList extends Component {
   render() {
     const {theme, forceScroll, className, items, highlight, height, maxItems} = this.props;
     // trim messages array size to maximum
-    if (items.length > maxItems) {
+    if (maxItems !== -1 && items.length > maxItems) {
       items.splice(0, items.length - maxItems);
     }
     return (
@@ -89,7 +89,7 @@ ScrollableList.defaultProps = {
   highlight: (text) => {return text},
   className: "",
   items: [],
-  maxItems: 100,
+  maxItems: 5000,
   height: "calc(100% - 0px)",
 }
 

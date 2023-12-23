@@ -161,6 +161,7 @@ class LogWindow extends Component {
             theme={theme}
             className={"hl-window"}
             items={logs}
+            maxItems={5000}
             highlight={this.highlight}
           />
         </div>

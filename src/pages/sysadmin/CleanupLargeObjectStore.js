@@ -154,7 +154,7 @@ class CleanupLargeObjectStore extends Component {
               items={this.files}
               highlight={this.highlight_files}
               height={"calc(100vh - 245px)"}
-              maxItems={100}
+              maxItems={5000}
             />
           </Grid>
         </Grid>

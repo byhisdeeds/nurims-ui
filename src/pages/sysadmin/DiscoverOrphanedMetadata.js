@@ -150,6 +150,7 @@ class DiscoverOrphanedMetadata extends Component {
             <ScrollableList
               ref={this.ref}
               theme={theme}
+              maxItems={5000}
               // forceScroll={false}
               className={"hl-window"}
               items={this.fields}
