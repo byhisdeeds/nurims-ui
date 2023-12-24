@@ -33,12 +33,13 @@ class OperatingRunDataMetrics extends Component {
   }
 
   ColoredDateCellWrapper = ({children, value}) => {
+    console.log(">>>", value)
     return React.cloneElement(Children.only(children), {
         style: {
             ...children.style,
-          backgroundColor: value === this.state.currentDay ?
-            this.props.theme.palette.primary.main : this.props.theme.palette.primary.light,
-          color: value === this.state.currentDay ?
+          backgroundColor: this.state.currentDay.isSame(value) ?
+            this.props.theme.palette.primary.light : this.props.theme.palette.primary.main,
+          color: this.state.currentDay.isSame(value) ?
             this.props.theme.palette.primary.contrastText : this.props.theme.palette.primary.contrastText,
         },
     });
