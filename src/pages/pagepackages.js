@@ -27,6 +27,7 @@ import {ADDEDITREACTOROPERATINGRUNS_REF} from "./operation/AddEditReactorOperati
 import {ADDEDITIRRADIATEDSAMPLES_REF} from "./operation/AddEditIrradiatedSamples";
 import {REACTOROPERATIONSREPORT_REF} from "./operation/ReactorOperationsReport";
 import {ADDEDITREACTORWATERSAMPLES_REF} from "./operation/AddEditReactorWaterSamples";
+import {OPERATINGRUNDATAMETRICS_REF} from "./operation/OperatingRunDataMetrics";
 import {
   ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF
 } from "./operation/AddEditReactorSampleIrradiationAuthorization";
@@ -74,13 +75,15 @@ import {
   RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION,
   RO_ADD_EDIT_REACTOR_WATER_SAMPLES,
   RO_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF,
+  RO_OPERATING_RUN_DATA_METRICS,
   RO_REACTOR_OPERATIONS_REPORT,
   RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS,
   RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS,
   RP_MONITOR_DATA,
   RP_MONITOR_LIST,
   RP_PERSONNEL_DOSIMETRY_EVALUATION,
-  RP_PERSONNEL_DOSIMETRY_REPORT, SSC_ADD_EDIT_ROUTINE_MAINTENANCE_RECORDS,
+  RP_PERSONNEL_DOSIMETRY_REPORT,
+  SSC_ADD_EDIT_ROUTINE_MAINTENANCE_RECORDS,
   SSC_ADD_EDIT_SSC,
   SSC_ADD_EDIT_SSC_AMP,
   SSC_ADD_EDIT_SSC_MAINTENANCE_RECORD,
@@ -135,6 +138,7 @@ const AddEditReactorWaterSamples = lazy(() => import('./operation/AddEditReactor
 const PersonnelDosimetryEvaluation = lazy(() => import('./radiationprotection/PersonnelDosimetryEvaluation'));
 const AddEditReactorSampleIrradiationAuthorization = lazy(() => import('./operation/AddEditReactorSampleIrradiationAuthorization'));
 const GenerateReactorSampleIrradiationAuthorizationPdf = lazy(() => import('./operation/GenerateReactorSampleIrradiationAuthorizationPdf'));
+const OperatingRunDataMetrics = lazy(() => import('./operation/OperatingRunDataMetrics'));
 const TermsAndDefinitions = lazy(() => import('./support/TermsAndDefinitions'));
 const ChatBot = lazy(() => import('./rasa/ChatBot'));
 const UnderDevelopment = lazy(() => import('../components/UnderDevelopment'));
@@ -677,6 +681,15 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
       title={menuTitle}
       user={user}
       onClick={handleMenuAction}
+      send={send}
+      properties={properties}
+      glossary={glossary}
+    />)
+  } else if (actionid === RO_OPERATING_RUN_DATA_METRICS) {
+    return (<OperatingRunDataMetrics
+      ref={crefs[OPERATINGRUNDATAMETRICS_REF]}
+      title={menuTitle}
+      user={user}
       send={send}
       properties={properties}
       glossary={glossary}

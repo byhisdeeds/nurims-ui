@@ -63,6 +63,7 @@ module.exports = Object.freeze({
   RO_ADD_EDIT_REACTOR_WATER_SAMPLES: 'ro.add.edit.reactor.water.samples',
   RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION: 'ro.add.edit.reactor.sample.irradiation.records',
   RO_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF: 'ro.generate.reactor.sample.irradiation.authorization.pdf',
+  RO_OPERATING_RUN_DATA_METRICS: 'ro.operating.run.data.metrics',
 
   ORG_EDIT_DETAILS: 'org.edit.details',
   ORG_STATUTORY_REQUIREMENTS: 'org.statutory.requirements',

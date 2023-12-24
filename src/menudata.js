@@ -558,6 +558,13 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            label: 'Operating Run Data Metrics',
+            value: 'ro.operating.run.data.metrics',
+            title: 'Add/Edit Operating Run Records',
+            tooltip: 'Update the reactor operation run records from the YOKOGAWA operating parameters data files (*.GTE)',
+            authmodlevel: 'basic',
+          },
+          {
             label: 'Add/Edit Irrad. Samples',
             value: 'ro.add.edit.irradiated.samples',
             title: 'Add/Edit Irradiated Sample Records',
