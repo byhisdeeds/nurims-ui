@@ -1,19 +1,26 @@
 import React, {Children, Component} from 'react';
-import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
-import {withTheme} from "@mui/styles";
+import {
+  enqueueErrorSnackbar
+} from "../../utils/SnackbarVariants";
+import {
+  withTheme
+} from "@mui/styles";
 import {
   Calendar,
   dayjsLocalizer
 } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import dayjs from 'dayjs'
+import {
+  Grid
+} from "@mui/material";
+import {
+  TitleComponent
+} from "../../components/CommonComponents";
 
 const localizer = dayjsLocalizer(dayjs)
 
-
 export const OPERATINGRUNDATAMETRICS_REF = "OperatingRunDataMetrics";
-
-
 
 class OperatingRunDataMetrics extends Component {
   constructor(props) {
@@ -26,10 +33,13 @@ class OperatingRunDataMetrics extends Component {
   }
 
   ColoredDateCellWrapper = ({children, value}) => {
-    React.cloneElement(Children.only(children), {
+    return React.cloneElement(Children.only(children), {
         style: {
             ...children.style,
-            backgroundColor: value < this.state.currentDay ? 'lightgreen' : 'lightblue',
+          backgroundColor: value === this.state.currentDay ?
+            this.props.theme.palette.primary.main : this.props.theme.palette.primary.light,
+          color: value === this.state.currentDay ?
+            this.props.theme.palette.primary.contrastText : this.props.theme.palette.primary.contrastText,
         },
     });
   }
@@ -45,25 +55,27 @@ class OperatingRunDataMetrics extends Component {
   }
   render() {
     return (
-      <Calendar
-        localizer={localizer}
-        defaultDate={new Date()}
-        defaultView="month"
-        events={this.state.events}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 500 }}
-        showMultiDayTimes
-        selectable
-        selected={this.state.selected}
-        onSelectEvent={this.onSelectEvent}
-        onSelectSlot={this.onSelectSlot}
-        step={60}
-        timeslots={1}
-        components={{
-          dateCellWrapper: this.ColoredDateCellWrapper
-        }}
-      />
+      <React.Fragment>
+        <Grid container spacing={2} style={{paddingLeft: 0, paddingTop: 0}}>
+          <Grid item xs={12}>
+            <TitleComponent title={this.props.title}/>
+          </Grid>
+          <Grid item xs={12}>
+            <Calendar
+              localizer={localizer}
+              defaultDate={new Date()}
+              defaultView="month"
+              events={this.state.events}
+              startAccessor="start"
+              endAccessor="end"
+              style={{ height: 500 }}
+              components={{
+                dateCellWrapper: this.ColoredDateCellWrapper
+              }}
+            />
+          </Grid>
+        </Grid>
+      </React.Fragment>
     )
   }
 }
