@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Children, Component} from 'react';
 import {enqueueErrorSnackbar} from "../../utils/SnackbarVariants";
 import {withTheme} from "@mui/styles";
 import {
@@ -13,15 +13,26 @@ const localizer = dayjsLocalizer(dayjs)
 
 export const OPERATINGRUNDATAMETRICS_REF = "OperatingRunDataMetrics";
 
+
+
 class OperatingRunDataMetrics extends Component {
   constructor(props) {
     super(props);
     this.state = {
       event: [],
+      currentDay: dayjs(),
     };
     this.Module = OPERATINGRUNDATAMETRICS_REF;
   }
 
+  ColoredDateCellWrapper = ({children, value}) => {
+    React.cloneElement(Children.only(children), {
+        style: {
+            ...children.style,
+            backgroundColor: value < this.state.currentDay ? 'lightgreen' : 'lightblue',
+        },
+    });
+  }
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", this.Module, message)
     if (message.hasOwnProperty("response")) {
@@ -42,6 +53,16 @@ class OperatingRunDataMetrics extends Component {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 500 }}
+        showMultiDayTimes
+        selectable
+        selected={this.state.selected}
+        onSelectEvent={this.onSelectEvent}
+        onSelectSlot={this.onSelectSlot}
+        step={60}
+        timeslots={1}
+        components={{
+          dateCellWrapper: this.ColoredDateCellWrapper
+        }}
       />
     )
   }
