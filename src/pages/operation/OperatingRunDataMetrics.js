@@ -22,6 +22,19 @@ const localizer = dayjsLocalizer(dayjs)
 
 export const OPERATINGRUNDATAMETRICS_REF = "OperatingRunDataMetrics";
 
+const MetricsEventTypes = [
+  {
+    type: 1,
+    title: 'DRM Day Data',
+    details: {},
+  },
+  {
+    type: 2,
+    title: 'Yokogawa Day Data',
+    details: {},
+  },
+];
+
 class OperatingRunDataMetrics extends Component {
   constructor(props) {
     super(props);
@@ -33,14 +46,14 @@ class OperatingRunDataMetrics extends Component {
   }
 
   ColoredDateCellWrapper = ({children, value}) => {
-    console.log(">>>", value)
+    const dayjs_value = dayjs(value);
+    const is_same = this.state.currentDay.year() === dayjs_value.year() &&
+      this.state.currentDay.month() === dayjs_value.month() && this.state.currentDay.date() === dayjs_value.date();
     return React.cloneElement(Children.only(children), {
         style: {
             ...children.style,
-          backgroundColor: this.state.currentDay.isSame(value) ?
-            this.props.theme.palette.primary.light : this.props.theme.palette.primary.main,
-          color: this.state.currentDay.isSame(value) ?
-            this.props.theme.palette.primary.contrastText : this.props.theme.palette.primary.contrastText,
+          backgroundColor: is_same ? this.props.theme.palette.primary.main : this.props.theme.palette.background.paper1,
+          // color: is_same ? this.props.theme.palette.error.main : this.props.theme.palette.primary.contrastText,
         },
     });
   }
