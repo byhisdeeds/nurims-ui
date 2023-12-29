@@ -19,7 +19,13 @@ import {
 } from "../../components/CommonComponents";
 import {
   CMD_GENERATE_STREAM_DATA_METRICS,
+  CMD_GET_DATA_STREAM_METRICS_RECORDS,
+  CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
+  CMD_GET_STREAM_DATA_METRICS_RECORDS, ITEM_ID, NURIMS_OPERATION_DATA_STREAM_METRICS,
 } from "../../utils/constants";
+import {isCommandResponse, messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
+import {renderEditSingleSelectCell} from "@mui/x-data-grid";
+import {getRecordData} from "../../utils/MetadataUtils";
 
 const localizer = dayjsLocalizer(dayjs)
 
@@ -83,221 +89,44 @@ class OperatingRunDataMetrics extends Component {
     this.state = {
       events: [
         {
-          id: 0,
-          title: 'All Day Event very long title',
-          allDay: true,
-          start: new Date(2023, 3, 0),
-          end: new Date(2023, 3, 1),
-        },
-        {
-          id: 1,
-          title: 'Long Event',
-          start: new Date(2023, 3, 7),
-          end: new Date(2023, 3, 10),
-        },
-
-        {
-          id: 2,
-          title: 'DTS STARTS',
-          start: new Date(2016, 2, 13, 0, 0, 0),
-          end: new Date(2016, 2, 20, 0, 0, 0),
-        },
-
-        {
-          id: 3,
-          title: 'DTS ENDS',
-          start: new Date(2016, 10, 6, 0, 0, 0),
-          end: new Date(2016, 10, 13, 0, 0, 0),
-        },
-
-        {
-          id: 4,
-          title: 'Some Event',
-          start: new Date(2023, 3, 9, 0, 0, 0),
-          end: new Date(2023, 3, 10, 0, 0, 0),
-        },
-        {
-          id: 5,
-          title: 'Conference',
-          start: new Date(2023, 3, 11),
-          end: new Date(2023, 3, 13),
-          desc: 'Big conference for important people',
-        },
-        {
-          id: 6,
-          title: 'Meeting',
-          start: new Date(2023, 3, 12, 10, 30, 0, 0),
-          end: new Date(2023, 3, 12, 12, 30, 0, 0),
-          desc: 'Pre-meeting meeting, to prepare for the meeting',
-        },
-        {
-          id: 7,
-          title: 'Lunch',
-          start: new Date(2023, 3, 12, 12, 0, 0, 0),
-          end: new Date(2023, 3, 12, 13, 0, 0, 0),
-          desc: 'Power lunch',
-        },
-        {
-          id: 8,
-          title: 'Meeting',
-          start: new Date(2023, 3, 12, 14, 0, 0, 0),
-          end: new Date(2023, 3, 12, 15, 0, 0, 0),
-        },
-        {
-          id: 9,
-          title: 'Happy Hour',
-          start: new Date(2023, 3, 12, 17, 0, 0, 0),
-          end: new Date(2023, 3, 12, 17, 30, 0, 0),
-          desc: 'Most important meal of the day',
-        },
-        {
-          id: 10,
-          title: 'Dinner',
-          start: new Date(2023, 3, 12, 20, 0, 0, 0),
-          end: new Date(2023, 3, 12, 21, 0, 0, 0),
-        },
-        {
-          id: 11,
-          title: 'Planning Meeting with Paige',
-          start: new Date(2023, 3, 13, 8, 0, 0),
-          end: new Date(2023, 3, 13, 10, 30, 0),
-        },
-        {
-          id: 11.1,
-          title: 'Inconvenient Conference Call',
-          start: new Date(2023, 3, 13, 9, 30, 0),
-          end: new Date(2023, 3, 13, 12, 0, 0),
-        },
-        {
-          id: 11.2,
-          title: "Project Kickoff - Lou's Shoes",
-          start: new Date(2023, 3, 13, 11, 30, 0),
-          end: new Date(2023, 3, 13, 14, 0, 0),
-        },
-        {
-          id: 11.3,
-          title: 'Quote Follow-up - Tea by Tina',
-          start: new Date(2023, 3, 13, 15, 30, 0),
-          end: new Date(2023, 3, 13, 16, 0, 0),
-        },
-        {
-          id: 12,
-          title: 'Late Night Event',
-          start: new Date(2023, 3, 17, 19, 30, 0),
-          end: new Date(2023, 3, 18, 2, 0, 0),
-        },
-        {
-          id: 12.5,
-          title: 'Late Same Night Event',
-          start: new Date(2023, 3, 17, 19, 30, 0),
-          end: new Date(2023, 3, 17, 23, 30, 0),
-        },
-        {
-          id: 13,
-          title: 'Multi-day Event',
-          start: new Date(2023, 3, 20, 19, 30, 0),
-          end: new Date(2023, 3, 22, 2, 0, 0),
-        },
-        {
-          id: 14,
-          title: 'Today',
-          start: new Date(new Date().setHours(new Date().getHours() - 1)),
-          end: new Date(new Date().setHours(new Date().getHours() + 1)),
-        },
-        {
-          id: 144,
-          title: 'Today',
-          start: new Date(new Date().setHours(new Date().getHours() - 2)),
-          end: new Date(new Date().setHours(new Date().getHours() + 2)),
-        },
-        {
-          id: 1444,
-          title: 'Today',
-          start: new Date(new Date().setHours(new Date().getHours() - 3)),
-          end: new Date(new Date().setHours(new Date().getHours() + 3)),
-        },
-        {
-          id: 16,
-          title: 'Video Record',
-          start: new Date(2023, 3, 14, 15, 30, 0),
-          end: new Date(2023, 3, 14, 19, 0, 0),
-        },
-        {
-          id: 17,
-          title: 'Dutch Song Producing',
-          start: new Date(2023, 3, 14, 16, 30, 0),
-          end: new Date(2023, 3, 14, 20, 0, 0),
-        },
-        {
-          id: 18,
-          title: 'Itaewon Meeting',
-          start: new Date(2023, 3, 14, 16, 30, 0),
-          end: new Date(2023, 3, 14, 17, 30, 0),
-        },
-        {
-          id: 19,
-          title: 'Online Coding Test',
-          start: new Date(2023, 3, 14, 17, 30, 0),
-          end: new Date(2023, 3, 14, 20, 30, 0),
-        },
-        {
-          id: 20,
-          title: 'An overlapped Event',
-          start: new Date(2023, 3, 14, 17, 0, 0),
-          end: new Date(2023, 3, 14, 18, 30, 0),
-        },
-        {
-          id: 21,
-          title: 'Phone Interview',
-          start: new Date(2023, 3, 14, 17, 0, 0),
-          end: new Date(2023, 3, 14, 18, 30, 0),
-        },
-        {
-          id: 22,
-          title: 'Cooking Class',
-          start: new Date(2023, 3, 14, 17, 30, 0),
-          end: new Date(2023, 3, 14, 19, 0, 0),
-        },
-        {
-          id: 23,
-          title: 'Go to the gym',
-          start: new Date(2023, 3, 14, 18, 30, 0),
-          end: new Date(2023, 3, 14, 20, 0, 0),
-        },
-        {
           id: 24,
           title: '971070',
           start: new Date(2023, 9, 30, 0, 0, 1),
           end: new Date(2023, 9, 30, 23, 59, 57),
-          resourceId: "971070"
+          quality: 1,
+          count: 0
         },
         {
           id: 25,
           title: '971073',
           start: new Date(2023, 9, 30, 0, 0, 1),
           end: new Date(2023, 9, 30, 23, 59, 58),
-          resourceId: "971073"
+          quality: 1,
+          count: 0
         },
         {
           id: 26,
           title: '971098',
           start: new Date(2023, 9, 30, 0, 0, 1),
           end: new Date(2023, 9, 30, 23, 59, 56),
-          resourceId: "971098"
+          quality: 1,
+          count: 0
         },
         {
           id: 27,
           title: '973014',
           start: new Date(2023, 9, 30, 0, 0, 1),
           end: new Date(2023, 9, 30, 23, 59, 56),
-          resourceId: "973014"
+          quality: 1,
+          count: 0
         },
         {
           id: 28,
           title: '974017',
           start: new Date(2023, 9, 30, 0, 0, 3),
           end: new Date(2023, 9, 30, 9, 33, 32),
-          resourceId: "974017"
+          quality: 1,
+          count: 0
         },
       ],
       currentDay: dayjs(),
@@ -330,16 +159,56 @@ class OperatingRunDataMetrics extends Component {
 
 
   componentDidMount() {
-      this.props.send({
-        cmd: CMD_GENERATE_STREAM_DATA_METRICS,
-        module: this.Module,
-        startYear: 2023,
-        endYear: 2023,
-        startMonth: 12,
-        endMonth: 12,
-        "run_in_background": "true",
-        "forceOverwrite": true
-      });
+      // this.props.send({
+      //   cmd: CMD_DISCOVER_DATA_STREAM_METRICS,
+      //   module: this.Module,
+      //   startYear: 2023,
+      //   endYear: 2023,
+      //   startMonth: 12,
+      //   endMonth: 12,
+      //   "run_in_background": "true",
+      //   "forceOverwrite": true
+      // });
+    this.props.send({
+      cmd: CMD_GET_DATA_STREAM_METRICS_RECORDS,
+      module: this.Module,
+      startDate: "2023-12-01",
+      endDate: "2023-12-31",
+      "include.metadata": "true",
+    });
+  }
+
+  addEventFromMetrics = (records) => {
+    const events = this.state.events;
+    let update = false;
+    for (const record of records) {
+      const r = getRecordData(record, NURIMS_OPERATION_DATA_STREAM_METRICS, {});
+      let found = false;
+      for (const event of events) {
+        if (event.id === record[ITEM_ID]) {
+          found = true;
+          update = true;
+          event.title = r.id;
+          event.start = new Date(r.min_ts);
+          event.end = new Date(r.max_ts);
+          event.quality = r.quality;
+          event.count = r.count;
+        }
+      }
+      if (!found) {
+        events.push({
+          id: record[ITEM_ID],
+          title: r.id,
+          start: new Date(r.min_ts),
+          end: new Date(r.max_ts),
+          quality: 1,
+          count: r.count
+        })
+      }
+    }
+    if (update) {
+      this.setState({events: events});
+    }
   }
 
   ColoredDateCellWrapper = ({children, value}) => {
@@ -356,9 +225,13 @@ class OperatingRunDataMetrics extends Component {
   }
   ws_message = (message) => {
     console.log("ON_WS_MESSAGE", this.Module, message)
-    if (message.hasOwnProperty("response")) {
+    if (messageHasResponse(message)) {
       const response = message.response;
-      if (response.hasOwnProperty("status") && response.status === 0) {
+      if (messageResponseStatusOk(message)) {
+        if (isCommandResponse(message, CMD_GET_DATA_STREAM_METRICS_RECORDS)) {
+          console.log("RESPONSE. OPERATION", response.operation)
+          addEventFromMetrics(response.operation);
+        }
       } else {
         enqueueErrorSnackbar(response.message);
       }

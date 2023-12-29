@@ -196,8 +196,8 @@ module.exports = Object.freeze({
   CMD_GET_SESSION_INFO: "get_session_info",
   CMD_INTERRUPT_BACKGROUND_TASK: "interrupt_background_task",
 
-  CMD_GET_STREAM_DATA_METRICS_RECORDS: "get_stream_data_metrics_records",
-  CMD_GENERATE_STREAM_DATA_METRICS: "generate_stream_data_metrics",
+  CMD_GET_DATA_STREAM_METRICS_RECORDS: "get_data_stream_metrics_records",
+  CMD_DISCOVER_DATA_STREAM_METRICS: "discover_data_stream_metrics",
 
   METADATA: 'metadata',
   INCLUDE_METADATA: 'include.metadata',
@@ -326,6 +326,7 @@ module.exports = Object.freeze({
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_ANALYSIS: "nurims.operation.data.reactorwaterchemistry.analysis",
   NURIMS_OPERATION_DATA_REACTORWATERCHEMISTRY_REPORTFILE: "nurims.operation.data.reactorwaterchemistry.reportfile",
   NURIMS_OPERATION_DATA_STATS: "nurims.operation.data.stats",
+  NURIMS_OPERATION_DATA_STREAM_METRICS: "nurims.operation.datastream.metrics",
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_JOB: "nurims.operation.data.irradiatedsample.job",
   NURIMS_OPERATION_DATA_IRRADIATEDSAMPLE_LIST: "nurims.operation.data.irradiatedsample.list",
   NURIMS_OPERATION_DATA_IRRADIATION_AUTHORIZATION_APPROVER: "nurims.operation.data.irradiationauthorization.approver",
