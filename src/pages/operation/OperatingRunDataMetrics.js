@@ -75,10 +75,9 @@ const MetricEventStyles = [
 function EventAgenda({ event }) {
   return (
     <span>
-      <em style={{ color: 'magenta' }}>{event.title}</em>
-      {"event.desc"}<br/>
-      {"event.desc"}<br/>
-      {"event.desc"}
+      <em style={{ color: 'magenta' }}>{event.title}</em><br/>
+      Count: {event.count}<br/>
+      Quality: {event.quality}<br/>
     </span>
   )
 }
