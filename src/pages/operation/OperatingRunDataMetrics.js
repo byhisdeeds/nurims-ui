@@ -46,12 +46,12 @@ const MetricsEventTypes = [
 
 const MetricEventStyles = [
   {
-    type: "974017",
+    quality: 1,
     color: '#dedede',
     backgroundColor: '#408040',
   },
   {
-    type: "973014",
+    quality: 0,
     color: '#dedede',
     backgroundColor: '#b5843b',
   },
@@ -131,29 +131,6 @@ class OperatingRunDataMetrics extends Component {
       currentDay: dayjs(),
     };
     this.Module = OPERATINGRUNDATAMETRICS_REF;
-    this.MetricResources = [
-      {
-        id: "974017",
-        title: '974017 ttile',
-      },
-      {
-        id: "973014",
-        title: '973014 title',
-        backgroundColor: '#b5843b',
-      },
-      {
-        id: "971070",
-        color: '971070 title',
-      },
-      {
-        id: "971098",
-        color: '971098 title',
-      },
-      {
-        id: "971073",
-        color: '971073 title',
-      }
-    ];
   }
 
 
@@ -201,7 +178,7 @@ class OperatingRunDataMetrics extends Component {
           title: r.id,
           start: new Date(r.min_ts),
           end: new Date(r.max_ts),
-          quality: 1,
+          quality: r.quality,
           count: r.count
         })
       }
@@ -239,7 +216,7 @@ class OperatingRunDataMetrics extends Component {
   }
 
   getEventStyle = (event) => {
-    const event_style  = MetricEventStyles.find(css => css.type === event.title);
+    const event_style  = MetricEventStyles.find(css => css.quality === event.quality);
     return {
       className: 'special-day',
       style: {
