@@ -193,6 +193,7 @@ class OperatingRunDataMetrics extends Component {
           event.end = new Date(r.max_ts);
           event.quality = r.quality;
           event.count = r.count;
+          break;
         }
       }
       if (!found) {
@@ -230,7 +231,7 @@ class OperatingRunDataMetrics extends Component {
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_GET_DATA_STREAM_METRICS_RECORDS)) {
           console.log("RESPONSE. OPERATION", response.operation)
-          addEventFromMetrics(response.operation);
+          this.addEventFromMetrics(response.operation);
         }
       } else {
         enqueueErrorSnackbar(response.message);

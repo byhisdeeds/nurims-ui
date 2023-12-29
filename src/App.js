@@ -34,7 +34,9 @@ import {
   CMD_GET_SESSION_INFO,
   MY_ACCOUNT,
   SETTINGS,
-  CMD_GET_GLOSSARY_TERMS, CMD_SET_LOGGING_LEVEL, CMD_INTERRUPT_BACKGROUND_TASK
+  CMD_GET_GLOSSARY_TERMS,
+  CMD_SET_LOGGING_LEVEL,
+  CMD_INTERRUPT_BACKGROUND_TASK
 } from "./utils/constants";
 import {
   ConsoleLog,
@@ -95,6 +97,7 @@ import {ADDEDITMODIFICATIONRECORD_REF} from "./pages/maintenance/AddEditModifica
 import {ADDEDITMAINTENANCERECORD_REF} from "./pages/maintenance/AddEditMaintenanceRecord";
 import {SIGNIN_REF} from "./components/Signin";
 import {SYSTEMCONFIGURATION_REF} from "./pages/sysadmin/SystemConfiguration";
+import {OPERATINGRUNDATAMETRICS_REF} from "./pages/operation/OperatingRunDataMetrics";
 import NotificationWindow from "./components/NotificationWindow";
 import SystemInfoBadges from "./components/SystemInfoBadges";
 import {
@@ -259,6 +262,7 @@ class App extends React.Component {
     this.crefs[CHATBOT_REF] = React.createRef();
     this.crefs[UNDERDEVELOPMENT_REF] = React.createRef();
     this.crefs[MAINTENANCESCHEDULE_REF] = React.createRef();
+    this.crefs[OPERATINGRUNDATAMETRICS_REF] = React.createRef();
   }
 
   componentDidMount() {
