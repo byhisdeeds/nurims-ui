@@ -46,19 +46,19 @@ const MetricsEventTypes = [
 
 const MetricEventStyles = [
   {
-    quality: 1,
+    type: "quality-1",
     color: '#dedede',
     backgroundColor: '#408040',
   },
   {
-    quality: 0,
+    type: "quality-0",
     color: '#dedede',
-    backgroundColor: '#b5843b',
+    backgroundColor: 'rgba(255,91,91,0.52)',
   },
   {
-    type: "971070",
-    color: '#535353',
-    backgroundColor: '#efcda4',
+    type: "<50%",
+    color: '#bebebe',
+    backgroundColor: 'rgb(154,111,58)',
   },
   {
     type: "971098",
@@ -86,48 +86,7 @@ class OperatingRunDataMetrics extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: [
-        {
-          id: 24,
-          title: '971070',
-          start: new Date(2023, 9, 30, 0, 0, 1),
-          end: new Date(2023, 9, 30, 23, 59, 57),
-          quality: 1,
-          count: 0
-        },
-        {
-          id: 25,
-          title: '971073',
-          start: new Date(2023, 9, 30, 0, 0, 1),
-          end: new Date(2023, 9, 30, 23, 59, 58),
-          quality: 1,
-          count: 0
-        },
-        {
-          id: 26,
-          title: '971098',
-          start: new Date(2023, 9, 30, 0, 0, 1),
-          end: new Date(2023, 9, 30, 23, 59, 56),
-          quality: 1,
-          count: 0
-        },
-        {
-          id: 27,
-          title: '973014',
-          start: new Date(2023, 9, 30, 0, 0, 1),
-          end: new Date(2023, 9, 30, 23, 59, 56),
-          quality: 1,
-          count: 0
-        },
-        {
-          id: 28,
-          title: '974017',
-          start: new Date(2023, 9, 30, 0, 0, 3),
-          end: new Date(2023, 9, 30, 9, 33, 32),
-          quality: 1,
-          count: 0
-        },
-      ],
+      events: [],
       currentDay: dayjs(),
     };
     this.Module = OPERATINGRUNDATAMETRICS_REF;
@@ -201,12 +160,10 @@ class OperatingRunDataMetrics extends Component {
     });
   }
   ws_message = (message) => {
-    console.log("ON_WS_MESSAGE", this.Module, message)
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_GET_DATA_STREAM_METRICS_RECORDS)) {
-          console.log("RESPONSE. OPERATION", response.operation)
           this.addEventFromMetrics(response.operation);
         }
       } else {
@@ -216,7 +173,14 @@ class OperatingRunDataMetrics extends Component {
   }
 
   getEventStyle = (event) => {
-    const event_style  = MetricEventStyles.find(css => css.quality === event.quality);
+    let event_style = "#abc";
+    if (event.quality === 0 || event.count === 0) {
+      event_style  = MetricEventStyles.find(css => css.type === "quality-0")
+    } else if (event.count < 10000) {
+      event_style  = MetricEventStyles.find(css => css.type === "<50%")
+    } else {
+      event_style  = MetricEventStyles.find(css => css.type === "quality-1")
+    }
     return {
       className: 'special-day',
       style: {
