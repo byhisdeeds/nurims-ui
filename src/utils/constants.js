@@ -196,6 +196,9 @@ module.exports = Object.freeze({
   CMD_GET_SESSION_INFO: "get_session_info",
   CMD_INTERRUPT_BACKGROUND_TASK: "interrupt_background_task",
 
+  CMD_GET_STREAM_DATA_METRICS_RECORDS: "get_stream_data_metrics_records",
+  CMD_GENERATE_STREAM_DATA_METRICS: "generate_stream_data_metrics",
+
   METADATA: 'metadata',
   INCLUDE_METADATA: 'include.metadata',
   ITEM_ID: "item_id",
