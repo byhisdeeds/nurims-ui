@@ -551,14 +551,14 @@ export const MenuItems = [
         authmodlevel: 'basic',
         children: [
           {
-            label: 'Operating Run Data',
+            label: 'Reactor Run Data',
             value: 'ro.add.edit.reactor.operating.run.records',
             title: 'Add/Edit Operating Run Records',
             tooltip: 'Update the reactor operation run records from the YOKOGAWA operating parameters data files (*.GTE)',
             authmodlevel: 'basic',
           },
           {
-            label: 'Operating Data Stream Metrics',
+            label: 'Reactor Data Stream Metrics',
             value: 'ro.operating.datastream.metrics',
             title: 'Add/Edit Operating Data Stream Metrics',
             tooltip: 'Display reactor operation data stream metrics from the YOKOGAWA and DRM data files.',
