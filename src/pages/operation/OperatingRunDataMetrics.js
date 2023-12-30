@@ -7,6 +7,7 @@ import {
 } from "@mui/styles";
 import {
   Calendar,
+  Views,
   dayjsLocalizer
 } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
@@ -245,7 +246,8 @@ class OperatingRunDataMetrics extends Component {
             <Calendar
               localizer={localizer}
               defaultDate={new Date()}
-              defaultView={["month", "day", "agenda"]}
+              defaultView={"month"}
+              views={[Views.MONTH, Views.DAY, Views.AGENDA]}
               dateFormat={"YYYY-MM-DD"}
               events={events}
               startAccessor="start"

@@ -558,10 +558,10 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
-            label: 'Operating Run Data Metrics',
-            value: 'ro.operating.run.data.metrics',
-            title: 'Add/Edit Operating Run Records',
-            tooltip: 'Update the reactor operation run records from the YOKOGAWA operating parameters data files (*.GTE)',
+            label: 'Operating Data Stream Metrics',
+            value: 'ro.operating.datastream.metrics',
+            title: 'Add/Edit Operating Data Stream Metrics',
+            tooltip: 'Display the reactor operation data stream metrics from the YOKOGAWA and DRM sata files.',
             authmodlevel: 'basic',
           },
           {
