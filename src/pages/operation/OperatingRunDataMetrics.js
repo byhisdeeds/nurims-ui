@@ -18,14 +18,22 @@ import {
   TitleComponent
 } from "../../components/CommonComponents";
 import {
-  CMD_GENERATE_STREAM_DATA_METRICS,
   CMD_GET_DATA_STREAM_METRICS_RECORDS,
-  CMD_GET_SAMPLE_IRRADIATION_LOG_RECORDS,
-  CMD_GET_STREAM_DATA_METRICS_RECORDS, ITEM_ID, NURIMS_OPERATION_DATA_STREAM_METRICS,
+  ITEM_ID,
+  NURIMS_OPERATION_DATA_STREAM_METRICS,
 } from "../../utils/constants";
-import {isCommandResponse, messageHasResponse, messageResponseStatusOk} from "../../utils/WebsocketUtils";
-import {renderEditSingleSelectCell} from "@mui/x-data-grid";
-import {getRecordData} from "../../utils/MetadataUtils";
+import {
+  isCommandResponse,
+  messageHasResponse,
+  messageResponseStatusOk
+} from "../../utils/WebsocketUtils";
+import {
+  getRecordData
+} from "../../utils/MetadataUtils";
+import {
+  ConsoleLog,
+  UserContext
+} from "../../utils/UserContext";
 
 const localizer = dayjsLocalizer(dayjs)
 
@@ -83,6 +91,8 @@ function EventAgenda({ event }) {
 }
 
 class OperatingRunDataMetrics extends Component {
+  static contextType = UserContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -147,6 +157,22 @@ class OperatingRunDataMetrics extends Component {
     }
   }
 
+  refreshEventsFromMetrics = (records) => {
+    const events = [];
+    for (const record of records) {
+      const r = getRecordData(record, NURIMS_OPERATION_DATA_STREAM_METRICS, {});
+      events.push({
+        id: record[ITEM_ID],
+        title: r.id,
+        start: new Date(r.min_ts),
+        end: new Date(r.max_ts),
+        quality: r.quality,
+        count: r.count
+      });
+    }
+    this.setState({events: events});
+  }
+
   ColoredDateCellWrapper = ({children, value}) => {
     const dayjs_value = dayjs(value);
     const is_same = this.state.currentDay.year() === dayjs_value.year() &&
@@ -164,7 +190,8 @@ class OperatingRunDataMetrics extends Component {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_GET_DATA_STREAM_METRICS_RECORDS)) {
-          this.addEventFromMetrics(response.operation);
+          // this.addEventFromMetrics(response.operation);
+          this.refreshEventsFromMetrics(response.operation);
         }
       } else {
         enqueueErrorSnackbar(response.message);
@@ -191,6 +218,21 @@ class OperatingRunDataMetrics extends Component {
     }
   }
 
+  onRangeChange = (range) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "onRangeChange", "range", range);
+    }
+    if (range.hasOwnProperty("start") && range.hasOwnProperty("end")) {
+      this.props.send({
+        cmd: CMD_GET_DATA_STREAM_METRICS_RECORDS,
+        module: this.Module,
+        startDate: range.start.toISOString(),
+        endDate: range.end.toISOString(),
+        "include.metadata": "true",
+      });
+    }
+  }
+
   render() {
     const {events} = this.state;
     return (
@@ -203,7 +245,7 @@ class OperatingRunDataMetrics extends Component {
             <Calendar
               localizer={localizer}
               defaultDate={new Date()}
-              defaultView={"month"}
+              defaultView={["month", "day", "agenda"]}
               dateFormat={"YYYY-MM-DD"}
               events={events}
               startAccessor="start"
@@ -211,10 +253,7 @@ class OperatingRunDataMetrics extends Component {
               titleAccessor="title"
               style={{ height: 500 }}
               eventPropGetter={this.getEventStyle}
-              // resourceAccessor="resourceId"
-              // resourceIdAccessor="id"
-              // resources={this.MetricResources}
-              // resourceTitleAccessor="resourceTitle"
+              onRangeChange={this.onRangeChange}
               components={{
                 dateCellWrapper: this.ColoredDateCellWrapper,
                 agenda: {
