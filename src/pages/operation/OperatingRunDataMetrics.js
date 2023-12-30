@@ -84,7 +84,7 @@ const MetricEventStyles = [
 function EventAgenda({ event }) {
   return (
     <span>
-      <em style={{ color: 'magenta' }}>{event.title}</em><br/>
+      <em style={{ color: '#e8e8e8' }}>{event.title}</em><br/>
       Count: {event.count}<br/>
       Quality: {event.quality}<br/>
     </span>
@@ -105,16 +105,6 @@ class OperatingRunDataMetrics extends Component {
 
 
   componentDidMount() {
-      // this.props.send({
-      //   cmd: CMD_DISCOVER_DATA_STREAM_METRICS,
-      //   module: this.Module,
-      //   startYear: 2023,
-      //   endYear: 2023,
-      //   startMonth: 12,
-      //   endMonth: 12,
-      //   "run_in_background": "true",
-      //   "forceOverwrite": true
-      // });
     this.props.send({
       cmd: CMD_GET_DATA_STREAM_METRICS_RECORDS,
       module: this.Module,
@@ -253,14 +243,18 @@ class OperatingRunDataMetrics extends Component {
               startAccessor="start"
               endAccessor="end"
               titleAccessor="title"
-              style={{ height: 500 }}
+              style={{ height: 'calc(100vh - 200px)' }}
               eventPropGetter={this.getEventStyle}
               onRangeChange={this.onRangeChange}
               components={{
                 dateCellWrapper: this.ColoredDateCellWrapper,
                 agenda: {
-                  event: EventAgenda
-                }
+                  event: EventAgenda,
+                  header: ({ date, localizer }) => localizer.format(date, 'yyyy-MM-dd')
+                },
+                day: {
+                  header: ({ date, localizer }) => localizer.format(date, 'yyyy-MM-dd')
+                },
               }}
             />
           </Grid>

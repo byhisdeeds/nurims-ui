@@ -287,3 +287,8 @@ pre {
     font-family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
     text-wrap: initial;
 }
+
+.rbc-toolbar button {
+    color: #262626;
+    background: #7e7d7d;
+}
