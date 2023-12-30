@@ -561,7 +561,7 @@ export const MenuItems = [
             label: 'Operating Data Stream Metrics',
             value: 'ro.operating.datastream.metrics',
             title: 'Add/Edit Operating Data Stream Metrics',
-            tooltip: 'Display the reactor operation data stream metrics from the YOKOGAWA and DRM sata files.',
+            tooltip: 'Display reactor operation data stream metrics from the YOKOGAWA and DRM data files.',
             authmodlevel: 'basic',
           },
           {
