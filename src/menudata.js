@@ -560,7 +560,7 @@ export const MenuItems = [
           {
             label: 'Reactor Data Stream Metrics',
             value: 'ro.operating.datastream.metrics',
-            title: 'Add/Edit Reactor Data Stream Metrics',
+            title: 'View Reactor Data Stream Metrics',
             tooltip: 'Display reactor operation data stream metrics from the YOKOGAWA and DRM data files.',
             authmodlevel: 'basic',
           },
