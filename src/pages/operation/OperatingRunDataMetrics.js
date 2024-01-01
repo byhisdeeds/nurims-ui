@@ -154,7 +154,7 @@ class OperatingRunDataMetrics extends Component {
       const r = getRecordData(record, NURIMS_OPERATION_DATA_STREAM_METRICS, {});
       events.push({
         id: record[ITEM_ID],
-        title: r.hasOwnProperty("label") ? r.label : r.id,
+        title: r.hasOwnProperty("label") ? `${r.label} (${r.id})` : r.id,
         start: new Date(r.min_ts),
         end: new Date(r.max_ts),
         quality: r.quality,
