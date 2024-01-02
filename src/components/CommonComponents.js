@@ -376,6 +376,9 @@ export function SelectFormControlWithTooltip({
       >
         {options.map((option) => {
           if (typeof option === 'object') {
+            console.log("============")
+            console.log("=== SelectFormControlWithTooltip.option: ", option)
+            console.log("============")
             if (Array.isArray(option)) {
               return (
                 <MenuItem disabled={option.disabled || false} value={option[0]}>{option[1]}</MenuItem>

@@ -96,7 +96,7 @@ class AddEditModificationRecord extends BaseRecordManager {
     // only save record with changed metadata
     if (record.changed) {
       if (this.context.debug) {
-        ConsoleLog(this.Module, "saveChanges", record);
+        ConsoleLog(this.Module, "saveChanges", "record", record);
       }
       saveRecordChanges(record, this.recordTopic, this.recordType, this.Module, NURIMS_CREATION_DATE, this.props.send);
     }
