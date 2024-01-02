@@ -44,7 +44,7 @@ export function saveRecordChanges(record, recordTopic, recordType, module, subti
       module: module,
     }
     if (subtitleMetadata !== null) {
-      msg["nurims.withdrawn"] = subtitleMetadata
+      msg["include.metadata.subtitle"] = subtitleMetadata
     }
     send(msg);
   }

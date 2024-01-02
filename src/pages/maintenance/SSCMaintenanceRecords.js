@@ -135,7 +135,7 @@ class SSCMaintenanceRecords extends Component {
     }
     if (changed) {
       setRecordChanged(selection);
-      // update scc modification records list entry
+      // update scc records list entry
       if (this.listRef.current) {
         for (const r of this.listRef.current.getRecords()) {
           if (r.item_id === selection.item_id) {
@@ -169,17 +169,6 @@ class SSCMaintenanceRecords extends Component {
     setRecordChanged(selection);
     this.setState({metadata_changed: true})
   }
-
-  // modificationCommissionedDateChange = (date) => {
-  //   const selection = this.state.selection;
-  //   if (date) {
-  //     setMetadataValue(selection, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE, date.format('YYYY-MM-DD'));
-  //   } else {
-  //     removeMetadataField(selection, NURIMS_SSC_MODIFICATION_COMMISSIONED_DATE);
-  //   }
-  //   setRecordChanged(selection);
-  //   this.setState({metadata_changed: true})
-  // }
 
   ws_message = (message) => {
     if (this.context.debug) {
