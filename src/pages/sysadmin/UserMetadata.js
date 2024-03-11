@@ -3,7 +3,7 @@ import {
   withTheme
 } from "@mui/styles";
 import {
-  getUserRecordData,
+  getUserRecordData, isSelectableByRoles, record_uuid,
   setUserRecordData
 } from "../../utils/MetadataUtils";
 import {
@@ -24,7 +24,7 @@ import {
 import {
   Grid,
   TextField,
-  Box
+  Box, Fab, Button
 } from "@mui/material";
 import {isValidUserRole} from "../../utils/UserUtils";
 
@@ -52,6 +52,8 @@ class UserMetadata extends Component {
       setUserRecordData(user, "username", e.target.value);
     } else if (id === "fullname") {
       setUserRecordData(user, "fullname", e.target.value);
+    } else if (id === "api_token") {
+      setUserRecordData(user, "api_token", e.target.value);
     } else if (id === "password1") {
       setUserRecordData(user, "password1", e.target.value);
       this.setState({user: user, password: e.target.value});
@@ -85,21 +87,13 @@ class UserMetadata extends Component {
     return this.state.user;
   }
 
-  // handleModuleAuthorizationLevelChange = (e) => {
-  //   const user = this.state.user;
-  //   setUserRecordData(user, "authorized_module_level", e.target.value)
-  //   this.setState({user: user})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
-
-  // handleUserRoleChange = (e) => {
-  //   const user = this.state.user;
-  //   setUserRecordData(user, "role", e.target.value)
-  //   this.setState({user: user})
-  //   // signal to parent that details have changed
-  //   this.props.onChange(true);
-  // }
+  onGenerateApiKey = () => {
+    const user = this.state.user;
+    setUserRecordData(user, "api_token", record_uuid());
+    this.setState({user: user});
+    // signal to parent that details have changed
+    this.props.onChange(true);
+  }
 
   render() {
     const {user, properties, disabled} = this.state;
@@ -153,17 +147,41 @@ class UserMetadata extends Component {
             />
           </Grid>
           <Grid item xs={4}>
-            <SelectFormControlWithTooltip
-              id={"user_role"}
-              label="User Role"
-              value={getUserRecordData(user, "role", [])}
+          <SelectFormControlWithTooltip
+            id={"user_role"}
+            label="User Role"
+            value={getUserRecordData(user, "role", [])}
+            onChange={this.handleChange}
+            // onChange={this.handleUserRoleChange}
+            options={user_roles}
+            disabled={disabled || !isSysadmin}
+            tooltip={""}
+            multiple={true}
+            // target={this.tooltipRef}
+          />
+        </Grid>
+          <Grid item xs={2}>
+            <Box sx={{textAlign: 'center', pt:2}}>
+              <Fab
+                variant="extended"
+                size="small"
+                color="primary"
+                aria-label="remove"
+                onClick={this.onGenerateApiKey}
+                disabled={disabled}
+              >
+                &#160; {"Generate ApiKey"} &#160;
+              </Fab>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              aria-readonly={true}
+              fullWidth
+              id="api_token"
+              label="Api Key"
+              value={getUserRecordData(user, "api_token", "")}
               onChange={this.handleChange}
-              // onChange={this.handleUserRoleChange}
-              options={user_roles}
-              disabled={disabled || !isSysadmin}
-              tooltip={""}
-              multiple={true}
-              // target={this.tooltipRef}
             />
           </Grid>
           <Grid item xs={12}>

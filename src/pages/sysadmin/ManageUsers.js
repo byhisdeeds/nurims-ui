@@ -151,6 +151,7 @@ class ManageUsers extends React.Component {
           password2: "",
           authorized_module_level: "",
           role: "[]",
+          api_token: "",
         }
       }], false);
       this.setState({metadata_changed: true});
@@ -196,6 +197,7 @@ class ManageUsers extends React.Component {
           if (record.item_id === -1 && !record.hasOwnProperty("record_key")) {
             record["record_key"] = record_uuid();
           }
+          record.metadata.api_token = encryptText(this.puk, record.metadata.api_token);
           record.metadata.password = encryptText(this.puk, record.metadata.password1);
           delete record.metadata.password1;
           delete record.metadata.password2;

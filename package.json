@@ -74,7 +74,7 @@
   "scripts": {
     "start": "react-scripts start --openssl-legacy-provider",
     "build": "node --openssl-legacy-provider generate-buildno.js && react-scripts build --legacy-peer-deps",
-    "postbuild": "rsync -avr --delete-after build/* ../nurims-server/public/nurims",
+    "postbuild": "rsync -avr --delete-after build/* ../nurims-server-docker/public/nurims",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
