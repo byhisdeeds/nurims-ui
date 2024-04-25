@@ -1,6 +1,5 @@
 import React, {lazy} from "react";
 
-import {CHATBOT_REF} from "./rasa/ChatBot";
 import {TERMSANDDEFINITIONS_REF} from "./support/TermsAndDefinitions";
 import {MANAGEUSERS_REF} from "./sysadmin/ManageUsers";
 import {SYSTEMCONFIGURATION_REF} from "./sysadmin/SystemConfiguration";
@@ -69,7 +68,6 @@ import {
   PRO_IMPORT_ICENS_CONTROLLED_MATERIALS,
   PRO_IMPORT_ICENS_MONITORS,
   PRO_IMPORT_ICENS_PERSONNEL,
-  RASA_CHATBOT,
   RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA,
   RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS,
   RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION,
@@ -140,23 +138,7 @@ const AddEditReactorSampleIrradiationAuthorization = lazy(() => import('./operat
 const GenerateReactorSampleIrradiationAuthorizationPdf = lazy(() => import('./operation/GenerateReactorSampleIrradiationAuthorizationPdf'));
 const OperatingRunDataMetrics = lazy(() => import('./operation/OperatingRunDataMetrics'));
 const TermsAndDefinitions = lazy(() => import('./support/TermsAndDefinitions'));
-const ChatBot = lazy(() => import('./rasa/ChatBot'));
 const UnderDevelopment = lazy(() => import('../components/UnderDevelopment'));
-
-
-export const RasaPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {
-  if (actionid === RASA_CHATBOT) {
-    return (<ChatBot
-      ref={crefs[CHATBOT_REF]}
-      title={menuTitle}
-      user={user}
-      onClick={handleMenuAction}
-      send={send}
-      properties={properties}
-      glossary={glossary}
-    />)
-  }
-}
 
 
 export const SupportPackages = (actionid, crefs, menuTitle, user, handleMenuAction, send, properties, glossary, puk) => {

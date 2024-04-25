@@ -51,7 +51,6 @@ import {
   RadiationProtectionPackages,
   IcensPackages,
   SupportPackages,
-  RasaPackages,
   OrgPackages,
   EmergencyPreparednessPackages
 } from "./pages/pagepackages";
@@ -86,7 +85,6 @@ import {
 import {
   GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF
 } from "./pages/operation/GenerateReactorSampleIrradiationAuthorizationPdf"
-import {CHATBOT_REF} from "./pages/rasa/ChatBot"
 import {TERMSANDDEFINITIONS_REF} from "./pages/support/TermsAndDefinitions"
 import {UNDERDEVELOPMENT_REF} from "./components/UnderDevelopment"
 import LogWindow from "./components/LogWindow";
@@ -259,7 +257,6 @@ class App extends React.Component {
     this.crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF] = React.createRef();
     this.crefs[GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF] = React.createRef();
     this.crefs[TERMSANDDEFINITIONS_REF] = React.createRef();
-    this.crefs[CHATBOT_REF] = React.createRef();
     this.crefs[UNDERDEVELOPMENT_REF] = React.createRef();
     this.crefs[MAINTENANCESCHEDULE_REF] = React.createRef();
     this.crefs[OPERATINGRUNDATAMETRICS_REF] = React.createRef();
@@ -677,10 +674,6 @@ class App extends React.Component {
                           send={this.send}
                           properties={this.properties}
                         />
-                      }
-                      {
-                        RasaPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
-                          this.send, this.properties, this.glossary, this.puk)
                       }
                       {
                         SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
