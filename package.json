@@ -45,7 +45,6 @@
     "pdfjs-dist": "^3.4.120",
     "process": "^0.11.10",
     "prop-types": "^15.8.1",
-    "rasa-webchat": "^1.0.0",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",
     "react-big-calendar": "^1.8.5",

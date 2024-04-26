@@ -266,6 +266,7 @@ class App extends React.Component {
     this.mounted = true;
     if (this.state.debug) {
       ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
+      ConsoleLog("App", "websocket.url -", this.props.wsep + "?uuid=" + this.uuid);
     }
     this.conn_snackbar_id = enqueueConnectionSnackbar(false);
     // Everything here is fired on component mount.

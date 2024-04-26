@@ -6,7 +6,10 @@ import {SnackbarProvider} from "notistack";
 
 const routing = (
   // <App wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`} />
-  <App wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`} />
+  // <App wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}/nurimsws`} />
+  <App
+    wsep={`${window.location.protocol === 'https:'?'wss':'ws'}://${window.location.hostname}:${window.location.port === ''?'80':window.location.port}/nurimsws`}
+  />
 );
 
 ReactDOM.render(routing, document.getElementById('root'));
