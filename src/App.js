@@ -122,6 +122,7 @@ import {
   isValidUserRole
 } from "./utils/UserUtils";
 import {
+  getErrorMessage,
   isCommandResponse,
   isModuleMessage,
   isValidMessageSignature,
@@ -192,7 +193,6 @@ class App extends React.Component {
       online: false,
       busy: 0,
       confirm_interrupt_background_task: false,
-      debug: window.location.href.includes("debug"),
       background_tasks_active: false,
       log_window_visible: false,
       notification_window_visible: false,
@@ -200,6 +200,7 @@ class App extends React.Component {
       num_unread_messages: 0,
       num_messages: 0,
     };
+    this.debug = window.location.href.includes("debug");
     this.puk = [];
     this.session_id = "";
     this.properties = [];
@@ -264,7 +265,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.mounted = true;
-    if (this.state.debug) {
+    if (this.debug) {
       ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
       ConsoleLog("App", "websocket.url -", this.props.wsep + "?uuid=" + this.uuid);
     }
@@ -273,7 +274,7 @@ class App extends React.Component {
     this.ws = new ReconnectingWebSocket(this.props.wsep + "?uuid=" + this.uuid);
     this.ws.onopen = (event) => {
       const msg = `Websocket connection to server established for client ${this.uuid}`;
-      if (this.state.debug) {
+      if (this.debug) {
         ConsoleLog("App", "ws.onopen", msg);
       }
       this.appendLog(msg);
@@ -292,22 +293,25 @@ class App extends React.Component {
       this.setState({ready: false, online: false});
     };
     this.ws.onclose = (event) => {
-      const msg =
-        `"Websocket connection with server closed: wasClean = ${event.hasOwnProperty("wasClean") ? event.wasClean : false}, reason = ${event.hasOwnProperty("reason") ? event.reason : ""}`;
-      if (this.state.debug) {
-        ConsoleLog("App", "ws.onclose", msg, this.conn_snackbar_id);
-      }
-      this.appendLog(msg);
-      if (this.conn_snackbar_id === null) {
-        this.conn_snackbar_id = enqueueConnectionSnackbar(true);
-      }
+      console.log(event)
+      console.log(this.mounted)
+      // enqueueConnectionSnackbar(true)
+      // const msg =
+      //   `"Websocket connection with server closed: wasClean = ${event.hasOwnProperty("wasClean") ? event.wasClean : false}, reason = ${getErrorMessage(event.code)}`;
+      // if (this.debug) {
+      //   ConsoleLog("App", "ws.onclose", msg);
+      // }
+      // this.appendLog(msg);
+      // if (this.conn_snackbar_id === null) {
+      //   this.conn_snackbar_id = enqueueConnectionSnackbar(true);
+      // }
       if (this.mounted) {
         this.setState({ready: false, busy: 0, online: false, background_tasks_active: false});
       }
     };
     this.ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      if (this.state.debug) {
+      if (this.debug) {
         ConsoleLog("App", "onmessage", message);
       }
       if (message.hasOwnProperty("log_message")) {
@@ -407,16 +411,20 @@ class App extends React.Component {
   }
 
   componentWillUnmount() {
+    console.log("###################################")
+    if (this.debug) {
+      ConsoleLog("App", "componentWillUnmount");
+    }
     this.mounted = false;
     if (this.state.ready) {
-      this.ws.close();
+      // this.ws.close();
     }
   }
 
   // send_pong = () => {
   //   const msg = {cmd: "pong"};
   //   if (this.ws && this.ws.readyState === 1) {
-  //     if (this.state.debug) {
+  //     if (this.debug) {
   //       ConsoleLog("App", "send", msg);
   //     }
   //     this.ws.send(JSON.stringify({
@@ -426,7 +434,7 @@ class App extends React.Component {
   // };
 
   send = (msg, show_busy, include_user) => {
-    // if (this.state.debug) {
+    // if (this.debug) {
     //   ConsoleLog("App", "send", "ws.readyState",
     //     this.ws && this.ws.readyState ? this.ws.readyState : "undefined");
     // }
@@ -446,7 +454,7 @@ class App extends React.Component {
       if (_include_user) {
         _msg["user"] = this.user
       }
-      if (this.state.debug) {
+      if (this.debug) {
         ConsoleLog("App", "send", "msg", _msg);
       }
       this.ws.send(JSON.stringify(_msg));
@@ -612,144 +620,145 @@ class App extends React.Component {
     }
     return (
       <UserContext.Provider value={{debug: debug, user: this.user}}>
-        <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-          <SnackbarProvider maxSnack={6} anchorOrigin={{vertical: 'bottom', horizontal: 'center',}}/>
-          <Box sx={{flexGrow: 1, height: "100%"}}>
-            {this.user.isAuthenticated ?
-              <React.Fragment>
-                <ConfirmInterruptBackgroundTaskDialog open={confirm_interrupt_background_task}
-                                                      onProceed={this.proceedWithInterruptBackgroundTask}
-                                                      onCancel={this.cancelInterruptBackgroundTask}
-                />
-                <AppBar position="static">
-                  <Toolbar>
-                    <Tooltip
-                      title={`Build ${metadata.buildMajor}.${metadata.buildMinor}.${metadata.buildRevision} ${metadata.buildTag}`}
-                      placement={"bottom-start"}
-                      arrow
-                    >
-                      <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                        NURIMS
+        <SnackbarProvider maxSnack={6} anchorOrigin={{vertical: 'bottom', horizontal: 'center',}}>
+          <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+            <Box sx={{flexGrow: 1, height: "100%"}}>
+              {this.user.isAuthenticated ?
+                <React.Fragment>
+                  <ConfirmInterruptBackgroundTaskDialog open={confirm_interrupt_background_task}
+                                                        onProceed={this.proceedWithInterruptBackgroundTask}
+                                                        onCancel={this.cancelInterruptBackgroundTask}
+                  />
+                  <AppBar position="static">
+                    <Toolbar>
+                      <Tooltip
+                        title={`Build ${metadata.buildMajor}.${metadata.buildMinor}.${metadata.buildRevision} ${metadata.buildTag}`}
+                        placement={"bottom-start"}
+                        arrow
+                      >
+                        <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                          NURIMS
+                        </Typography>
+                      </Tooltip>
+                      <Typography variant="h6" component="div">
+                        Organisation: {this.org.name.toUpperCase()}
                       </Typography>
-                    </Tooltip>
-                    <Typography variant="h6" component="div">
-                      Organisation: {this.org.name.toUpperCase()}
-                    </Typography>
-                    <AccountMenu
-                      title={this.user.profile.username === "" ? this.menuTitle : this.user.profile.username}
-                      user={this.user}
-                      onClick={this.handleMenuAction}
-                    />
-                    <BackgroundTasks active={background_tasks_active} onClick={this.interruptBackgroundTask}/>
-                    <LogWindowButton onClick={this.toggleLogWindow}/>
-                    <NetworkConnection ready={ready}/>
-                    {isSysadmin && <SystemInfoBadges ref={this.sysinfoRef}/>}
-                    <NotificationsButton
-                      numMessages={num_messages}
-                      numUnreadMessages={num_unread_messages}
-                      id={"notification-window"}
-                      onClick={this.toggleNotificationsWindow}
-                    />
-                  </Toolbar>
-                </AppBar>
-                <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
-                            organisation={this.org}>
-                  <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
-                    <Box sx={{p: 3}}>
-                      <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
-                      {actionid === MY_ACCOUNT &&
-                        <MyAccount
-                          ref={this.crefs["MyAccount"]}
-                          user={this.user}
-                          send={this.send}
-                          properties={this.properties}
-                        />
-                      }
-                      {actionid === SETTINGS &&
-                        <Settings
-                          ref={this.crefs["Settings"]}
-                          title={this.menuTitle}
-                          user={this.user}
-                          theme={theme}
-                          onClick={this.handleMenuAction}
-                          send={this.send}
-                          properties={this.properties}
-                        />
-                      }
-                      {
-                        SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
-                          this.send, this.properties, this.glossary, this.puk)
-                      }
-                      {
-                        SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
-                          this.send, this.properties, this.glossary, this.puk)
-                      }
-                      {
-                        SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
-                          this.send, this.properties, this.glossary, this.puk)
-                      }
-                      {
-                        ControlledMaterialPackages(
-                          actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
-                          this.send, this.properties, this.glossary, this.puk)
-                      }
-                      {
-                        HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
-                          this.send, this.properties, this.glossary, this.puk)
-                      }
-                      {
-                        RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user,
-                          this.handleMenuAction, this.send, this.properties, this.glossary, this.puk)
-                      }
-                      {
-                        IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
-                          this.send, this.properties, this.glossary, this.puk)
-                      }
-                      {
-                        OrgPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
-                          this.send, this.properties, this.glossary, this.puk)
-                      }
-                      {
-                        EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.user,
-                          this.handleMenuAction, this.send, this.properties, this.glossary, this.puk)
-                      }
-                      <LogWindow
-                        ref={this.logRef}
-                        onClose={this.closeLogWindow}
-                        visible={log_window_visible}
-                        width={`${drawerWidth}px`}
-                        height={250}
-                        logs={this.logs}
+                      <AccountMenu
+                        title={this.user.profile.username === "" ? this.menuTitle : this.user.profile.username}
+                        user={this.user}
+                        onClick={this.handleMenuAction}
                       />
-                      <NotificationWindow
-                        ref={this.notificationRef}
-                        anchorEl={notification_window_anchor}
+                      <BackgroundTasks active={background_tasks_active} onClick={this.interruptBackgroundTask}/>
+                      <LogWindowButton onClick={this.toggleLogWindow}/>
+                      <NetworkConnection ready={ready}/>
+                      {isSysadmin && <SystemInfoBadges ref={this.sysinfoRef}/>}
+                      <NotificationsButton
+                        numMessages={num_messages}
+                        numUnreadMessages={num_unread_messages}
                         id={"notification-window"}
-                        send={this.send}
-                        onClose={this.closeNotificationWindow}
-                        onChangeUnreadMessages={this.onChangeUnreadMessages}
-                        onChangeNumMessages={this.onChangeNumMessages}
-                        visible={notification_window_visible}
-                        width={500}
-                        height={600}
+                        onClick={this.toggleNotificationsWindow}
                       />
-                    </Box>
-                  </Suspense>
-                </MenuDrawer>
-              </React.Fragment> :
-              <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
-                <SignIn
-                  ref={this.crefs[SIGNIN_REF]}
-                  authService={this.user}
-                  puk={this.puk}
-                  send={this.send}
-                  online={online}
-                  onValidAuthentication={this.onValidAuthentication}
-                />
-              </Suspense>
-            }
-          </Box>
-        </ThemeProvider>
+                    </Toolbar>
+                  </AppBar>
+                  <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
+                              organisation={this.org}>
+                    <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
+                      <Box sx={{p: 3}}>
+                        <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
+                        {actionid === MY_ACCOUNT &&
+                          <MyAccount
+                            ref={this.crefs["MyAccount"]}
+                            user={this.user}
+                            send={this.send}
+                            properties={this.properties}
+                          />
+                        }
+                        {actionid === SETTINGS &&
+                          <Settings
+                            ref={this.crefs["Settings"]}
+                            title={this.menuTitle}
+                            user={this.user}
+                            theme={theme}
+                            onClick={this.handleMenuAction}
+                            send={this.send}
+                            properties={this.properties}
+                          />
+                        }
+                        {
+                          SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                            this.send, this.properties, this.glossary, this.puk)
+                        }
+                        {
+                          SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                            this.send, this.properties, this.glossary, this.puk)
+                        }
+                        {
+                          SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                            this.send, this.properties, this.glossary, this.puk)
+                        }
+                        {
+                          ControlledMaterialPackages(
+                            actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                            this.send, this.properties, this.glossary, this.puk)
+                        }
+                        {
+                          HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                            this.send, this.properties, this.glossary, this.puk)
+                        }
+                        {
+                          RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user,
+                            this.handleMenuAction, this.send, this.properties, this.glossary, this.puk)
+                        }
+                        {
+                          IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                            this.send, this.properties, this.glossary, this.puk)
+                        }
+                        {
+                          OrgPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                            this.send, this.properties, this.glossary, this.puk)
+                        }
+                        {
+                          EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.user,
+                            this.handleMenuAction, this.send, this.properties, this.glossary, this.puk)
+                        }
+                        <LogWindow
+                          ref={this.logRef}
+                          onClose={this.closeLogWindow}
+                          visible={log_window_visible}
+                          width={`${drawerWidth}px`}
+                          height={250}
+                          logs={this.logs}
+                        />
+                        <NotificationWindow
+                          ref={this.notificationRef}
+                          anchorEl={notification_window_anchor}
+                          id={"notification-window"}
+                          send={this.send}
+                          onClose={this.closeNotificationWindow}
+                          onChangeUnreadMessages={this.onChangeUnreadMessages}
+                          onChangeNumMessages={this.onChangeNumMessages}
+                          visible={notification_window_visible}
+                          width={500}
+                          height={600}
+                        />
+                      </Box>
+                    </Suspense>
+                  </MenuDrawer>
+                </React.Fragment> :
+                <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
+                  <SignIn
+                    ref={this.crefs[SIGNIN_REF]}
+                    authService={this.user}
+                    puk={this.puk}
+                    send={this.send}
+                    online={online}
+                    onValidAuthentication={this.onValidAuthentication}
+                  />
+                </Suspense>
+              }
+            </Box>
+          </ThemeProvider>
+        </SnackbarProvider>
       </UserContext.Provider>
     )
   }

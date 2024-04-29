@@ -145,6 +145,7 @@ class ManageUsers extends React.Component {
         "item_id": -1,
         "nurims.title": "New Record",
         "nurims.withdrawn": 0,
+        "record_key": record_uuid(),
         "metadata": {
           username: "New Record",
           password1: "",

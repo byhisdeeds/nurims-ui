@@ -66,3 +66,30 @@ export function getMatchingResponseObject(data, pobject, key, key_value, missing
   }
   return missingValue;
 }
+
+export function getErrorMessage(code) {
+  switch (code) {
+    case 1005:
+      return "(1005) No error specified.";
+    case 1001:
+      return "(1001) Indicates an endpoint is being removed. Either the server or client will become unavailable.";
+    case 1011:
+      return "(1011) The connection will be closed by the server because of an error on the server.";
+    case 1003:
+      return "(1003) The client or server is terminating the connection because it cannot accept the data type it received.";
+    case 1007:
+      return "(1007) The client or server is terminating the connection because it has received data inconsistent with the message type.";
+    case 1010:
+      return "(1010) The client is terminating the connection because it expected the server to negotiate an extension.";
+    case 1009:
+      return "(1009) The client or server is terminating the connection because it has received a message that is too big for it to process.";
+    case 1000:
+      return "(1000) The connection has closed after the request was fulfilled.";
+    case 1008:
+      return "(1008) The connection will be closed because an endpoint has received a message that violates its policy.";
+    case 1002:
+      return "(1002) The client or server is terminating the connection because of a protocol error.";
+    default:
+      return `(${code}) unknown error code.`;
+  }
+}
