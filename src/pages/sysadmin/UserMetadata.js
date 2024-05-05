@@ -215,7 +215,6 @@ class UserMetadata extends Component {
 }
 
 UserMetadata.propTypes = {
-  ref: PropTypes.element.isRequired,
   onChange: PropTypes.func.isRequired,
   properties: PropTypes.func.isRequired,
 }

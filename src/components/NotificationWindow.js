@@ -248,7 +248,7 @@ class NotificationWindow extends Component {
 
 NotificationWindow.propTypes = {
   visible: PropTypes.bool.isRequired,
-  anchorEl: PropTypes.element.isRequired,
+  anchorEl: PropTypes.element,
   onClose: PropTypes.func,
   onChangeUnreadMessages: PropTypes.func.isRequired,
   onChangeNumMessages: PropTypes.func.isRequired,

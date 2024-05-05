@@ -55,7 +55,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 MenuDrawer.propTypes = {
   open: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
-  menuItems: PropTypes.object.isRequired,
+  menuItems: PropTypes.array.isRequired,
   user: PropTypes.object.isRequired,
   organisation: PropTypes.object.isRequired,
 }

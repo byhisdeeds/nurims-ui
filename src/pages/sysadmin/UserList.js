@@ -55,7 +55,7 @@ UserList.propTypes = {
   ref: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
   onSelection: PropTypes.func.isRequired,
-  properties: PropTypes.func.isRequired,
+  properties: PropTypes.array.isRequired,
   enableRecordArchiveSwitch: PropTypes.bool.isRequired,
 }
 

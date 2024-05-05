@@ -4,17 +4,11 @@ import LockIcon from '@mui/icons-material/Lock';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 import ApartmentIcon from '@mui/icons-material/Apartment';
+import {nanoid} from "nanoid";
 
 export const MenuItems = [
   {
-    label: 'Chat With NURIMS',
-    value: 'chat.bot',
-    icon: LockIcon,
-    tooltip: 'Natural language interface to NURIMS',
-    title: 'Chat With NURIMS',
-    authmodlevel: 'basic',
-  },
-  {
+    key: nanoid(),
     label: 'Controlled Materials',
     value: 'controlled.materials',
     icon: LockIcon,
@@ -22,11 +16,13 @@ export const MenuItems = [
     authmodlevel: 'basic',
     children: [
       {
+        key: nanoid(),
         label: '○ Materials',
         tooltip: 'Actions related to the management of controlled materials',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Storage',
             value: 'cm.register.update.material.storage.location',
             title: 'Register/Update Controlled Material Storage',
@@ -34,6 +30,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Manufacturer',
             value: 'cm.register.update.material.manufacturer',
             title: 'Register/Update Controlled Material Manufacturer',
@@ -41,6 +38,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Owner',
             value: 'cm.update.material.owner',
             title: 'Register/Update Controlled Material Owner',
@@ -48,6 +46,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Material',
             value: 'cm.register.update.material',
             title: 'Register/Update Controlled Material',
@@ -57,11 +56,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Surveillance',
         tooltip: 'Actions related to the surveillance of controlled materials.',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Surveillance Sheet',
             value: 'cm.generate.material.surveillance.sheet',
             title: 'Controlled Material Surveillance Sheet',
@@ -69,6 +70,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Update Surveillance',
             value: 'cm.update.material.surveillance',
             title: 'Update Surveillance Record',
@@ -78,12 +80,14 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Reports',
         value: '',
         tooltip: 'Controlled material resource actions',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'RadPro Schedule',
             value: 'cm.radiation.protection.schedule',
             title: 'sss',
@@ -91,6 +95,7 @@ export const MenuItems = [
             authmodlevel: 'pro',
           },
           {
+            key: nanoid(),
             label: 'Inventory',
             value: 'cm.inventory.list',
             title: 'ssss',
@@ -98,6 +103,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'List of Materials',
             value: 'cm.view.controlled.materials.list',
             title: 'Controlled Materials List',
@@ -109,6 +115,7 @@ export const MenuItems = [
     ]
   },
   {
+    key: nanoid(),
     label: 'EPR',
     value: 'emergency.preparedness.response',
     tooltip: 'Emergency Preparedness and Response actions',
@@ -116,11 +123,13 @@ export const MenuItems = [
     icon: IconPeople,
     children: [
       {
+        key: nanoid(),
         label: '○ Concept of Operations',
         tooltip: 'A basic concept of operations describes the response process, and assigns roles and responsibilities to each group, organization or individual involved in emergency preparedness and response.',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Add/Edit Scenarios',
             value: 'ep.add.edit.emergency.scenarios',
             title: 'Add/Edit Emergency Scenarios',
@@ -130,11 +139,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Post Event Activities',
         tooltip: 'A basic concept of operations describes the response process, and assigns roles and responsibilities to each group, organization or individual involved in emergency preparedness and response.',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Add/Edit Capture Datasets',
             value: 'ep.add.edit.capture.datasets',
             title: 'Add/Edit Capture Dataset',
@@ -142,6 +153,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Discover Event Data',
             value: 'ep.discover.event.data',
             title: 'Discover Event Data',
@@ -151,11 +163,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Routine Activities',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Periodic Tasks',
             value: 'ep.routine.activities.periodic.tasks',
             title: 'EPR Periodic Tasks',
@@ -165,11 +179,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Documents',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'RadPro Schedule',
             value: 'ep.',
             title: 'eeeee',
@@ -181,6 +197,7 @@ export const MenuItems = [
     ]
   },
   {
+    key: nanoid(),
     label: 'Human Resource',
     value: 'human.resource',
     tooltip: 'Human resource actions',
@@ -188,11 +205,13 @@ export const MenuItems = [
     authmodlevel: 'basic',
     children: [
       {
+        key: nanoid(),
         label: '○ Personnel',
         tooltip: 'Personnel action',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Add/Edit Personnel',
             value: 'hr.add.edit.personnel',
             title: 'Add/Edit Personnel Records',
@@ -200,6 +219,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Monitoring Status',
             value: 'hr.update.personnel.monitoring.status',
             title: 'Update Personnel Monitoring Status',
@@ -207,6 +227,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label:  'Update Training',
             value: 'hr.update.person.training.record',
             title: 'Update Personnel Training Record',
@@ -214,6 +235,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'View Records',
             value: 'hr.view.person.records',
             title: 'View Personnel Records',
@@ -223,11 +245,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Training',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Add/Edit Training Program',
             value: 'hr.add.edit.training.programme',
             title: 'Add/Edit Training Programs',
@@ -237,11 +261,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Assessment',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'SSPI',
             value: 'hr.sspi',
             title: 'Personnel Safety/Security Performance Indicators',
@@ -249,6 +275,7 @@ export const MenuItems = [
             authmodlevel: 'pro',
           },
           {
+            key: nanoid(),
             label: 'TPI',
             value: 'hr.tpi',
             title: 'Personnel Training Performance Indicators',
@@ -260,6 +287,7 @@ export const MenuItems = [
     ]
   },
   {
+    key: nanoid(),
     label: 'Maintenance',
     value: 'maintenance',
     tooltip: 'Maintenance of Structures, Systems, & Components',
@@ -267,11 +295,13 @@ export const MenuItems = [
     authmodlevel: 'basic',
     children: [
       {
+        key: nanoid(),
         label: '○ SSC\'s',
         tooltip: 'Structures, systems, and components means the structures, systems, or components associated with the operation of the research reactor, including portions of process systems, whose preventative or mitigative function is necessary to limit radioactive hazardous material exposure to the public, as determined from safety analyses.',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Add/Edit SSC Record',
             value: 'ssc.add.edit.ssc',
             title: 'Add/Edit Structures, Systems, and Components',
@@ -279,6 +309,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'View SSC List',
             value: 'ssc.view.ssc.list',
             title: 'View SSC Records',
@@ -288,11 +319,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Aging Management',
         tooltip: 'Aging management programme (AMP) for Structures, systems and components.',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Add/Edit AMP Record',
             value: 'ssc.add.edit.ssc.amp',
             title: 'Add/Edit SSC Aging Management Program',
@@ -300,6 +333,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'View AMP List',
             value: 'ssc.amp.list',
             title: 'View Aging Management Program SSC List',
@@ -309,11 +343,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Issues & Modifications',
         tooltip: 'Corrective maintenance issue and SSC upgrade task records.',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Add/Edit Issue Record',
             value: 'ssc.add.edit.ssc.corrective.maintenance.issue.record',
             title: 'Add/Edit SSC Corrective Maintenance Issue Record',
@@ -321,6 +357,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Add/Edit Modification Record',
             value: 'ssc.add.edit.ssc.modification.record',
             title: 'Add/Edit SSC Modification Record',
@@ -330,11 +367,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Routine Maintenance Data',
         tooltip: 'Data on the maintenance carried out on the reactor routinely',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Add/Edit Maintenance Data',
             value: 'ssc.add.edit.reactor.routine.maintenance.records',
             title: 'Add/Edit Weekly Maintenance Data',
@@ -344,11 +383,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Reports',
         tooltip: 'Reports.',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Maintenance Schedule',
             value: 'ssc.generate.ssc.maintenance.schedule',
             title: 'Generate SSC Maintenance Schedule',
@@ -356,6 +397,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Maintenance Report',
             value: 'ssc.generate.ssc.maintenance.report',
             title: 'Generate SSC Maintenance Report',
@@ -363,6 +405,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'AMP Schedule',
             value: 'ssc.generate.amp.schedule',
             title: 'Add/Edit Structures, Systems, and Components',
@@ -374,6 +417,7 @@ export const MenuItems = [
     ]
   },
   {
+    key: nanoid(),
     label: 'Organisation',
     value: 'organisation',
     tooltip: 'Details on the organisation',
@@ -381,6 +425,7 @@ export const MenuItems = [
     authmodlevel: 'basic',
     children: [
       {
+        key: nanoid(),
         label: 'Update Details',
         value: 'org.edit.details',
         title: 'Update Organisation details',
@@ -388,6 +433,7 @@ export const MenuItems = [
         authmodlevel: 'basic',
       },
       {
+        key: nanoid(),
         label: 'Statutory Requirements',
         value: 'org.statutory.requirements',
         title: 'Add/Edit/Print Statutory Requirements',
@@ -395,6 +441,7 @@ export const MenuItems = [
         authmodlevel: 'basic',
       },
       {
+        key: nanoid(),
         label: 'Documents',
         value: 'org.maintain.organisation.documents',
         title: 'Organisation Document Repository',
@@ -404,6 +451,7 @@ export const MenuItems = [
     ]
   },
   {
+    key: nanoid(),
     label: 'Radiation Protection',
     value: 'radiation.protection',
     icon: HealthAndSafetyIcon,
@@ -411,11 +459,13 @@ export const MenuItems = [
     authmodlevel: 'basic',
     children: [
       {
+        key: nanoid(),
         label: '○ Monitors',
         tooltip: 'Radiation protection resource actions',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Add/Edit Monitors',
             value: 'rp.add.edit.monitors',
             title: 'Add/Edit Monitor Records',
@@ -425,11 +475,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Dosimetry',
         tooltip: 'Dosimetry resource actions',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Personnel Measurements',
             value: 'rp.add.edit.personnel.dosimetry.measurements',
             title: 'Add/Edit Personnel Dosimetry Measurement Record',
@@ -437,6 +489,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Monitor Measurements',
             value: 'rp.add.edit.monitor.dosimetry.measurements',
             title: 'Add/Edit Monitor Dosimetry Measurement Record',
@@ -446,11 +499,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Reports',
         tooltip: 'Radiation protection resource actions',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Monitors List',
             value: 'rp.monitors.list',
             title: 'list',
@@ -458,6 +513,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Monitor Data',
             value: 'rp.monitor.data.statistics',
             title: 'data',
@@ -465,6 +521,7 @@ export const MenuItems = [
             authmodlevel: 'pro',
           },
           {
+            key: nanoid(),
             label: 'Personnel Dose Report',
             value: 'rp.personnel.dosimetry.report',
             title: 'Personnel Dosimetry Report',
@@ -472,6 +529,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Personnel Dose Profile',
             value: 'rp.personnel.dosimetry.evaluation',
             title: 'Evaluate Personnel Dosimetry',
@@ -486,6 +544,7 @@ export const MenuItems = [
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Add Dosimetry Reports',
             value: 'rp.documents.add.dosimetry.reports',
             title: 'Add Dosimetry Reports',
@@ -493,23 +552,26 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Monitor Data',
             value: 'rp.monitor.data.statistics',
-            title: '',
+            title: 'Monitor Data',
             tooltip: 'Human resource actions',
             authmodlevel: 'pro',
           },
           {
+            key: nanoid(),
             label: 'Personnel Dose Evaluation',
             value: 'rp.personnel.dose.evaluation.report',
-            title: '',
+            title: 'Personnel Dose Evaluation',
             tooltip: 'Human resource actions',
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Personnel Dose Profile',
             value: 'rp.personnel.dose.profile.report',
-            title: '',
+            title: 'Personnel Dose Profile',
             tooltip: 'Human resource actions',
             authmodlevel: 'pro',
           },
@@ -518,6 +580,7 @@ export const MenuItems = [
     ]
   },
   {
+    key: nanoid(),
     label: 'Reactor Operations',
     value: 'reactoroperations',
     tooltip: 'Reactor Operations',
@@ -525,11 +588,13 @@ export const MenuItems = [
     authmodlevel: 'basic',
     children: [
       {
+        key: nanoid(),
         label: '○ Authorizations',
         tooltip: 'Authorizations for reactor utilization',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Add/Edit Irradiation Auth.',
             value: 'ro.add.edit.reactor.sample.irradiation.records',
             title: 'Add/Edit Reactor Sample Irradiation (RSI) Authorization Records',
@@ -537,6 +602,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Print Auth. Records',
             value: 'ro.generate.reactor.sample.irradiation.authorization.pdf',
             title: 'Print Reactor Sample Irradiation Authorization Pdf',
@@ -546,11 +612,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Operating Data',
         tooltip: 'Data on the reactor operating runs',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Reactor Run Data',
             value: 'ro.add.edit.reactor.operating.run.records',
             title: 'Add/Edit Operating Run Records',
@@ -558,6 +626,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Reactor Data Stream Metrics',
             value: 'ro.operating.datastream.metrics',
             title: 'View Reactor Data Stream Metrics',
@@ -565,6 +634,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Add/Edit Irrad. Samples',
             value: 'ro.add.edit.irradiated.samples',
             title: 'Add/Edit Irradiated Sample Records',
@@ -572,6 +642,7 @@ export const MenuItems = [
             authmodlevel: 'basic',
           },
           {
+            key: nanoid(),
             label: 'Add/Edit Water Samples',
             value: 'ro.add.edit.reactor.water.samples',
             title: 'Add/Edit Reactor Water Records',
@@ -581,11 +652,13 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Reports',
         tooltip: 'Human resource actions',
         authmodlevel: 'basic',
         children: [
           {
+            key: nanoid(),
             label: 'Reactor Operations',
             value: 'ro.reactor.operations.report',
             title: 'Reactor Operation Reports',
@@ -597,6 +670,7 @@ export const MenuItems = [
     ]
   },
   {
+    key: nanoid(),
     label: 'Safety/Security Culture',
     value: 'safety.security.culture',
     icon: HealthAndSafetyIcon,
@@ -604,6 +678,7 @@ export const MenuItems = [
     authmodlevel: 'basic',
     children: [
       {
+        key: nanoid(),
         label: '○ Safety',
         tooltip: 'Safety culture programs and activities',
         authmodlevel: 'basic',
@@ -611,6 +686,7 @@ export const MenuItems = [
         ]
       },
       {
+        key: nanoid(),
         label: '○ Security',
         tooltip: 'Security culture programs and activities',
         authmodlevel: 'basic',
@@ -620,6 +696,7 @@ export const MenuItems = [
     ]
   },
   {
+    key: nanoid(),
     label: 'System Admin',
     value: 'sysadmin',
     tooltip: 'System Administration',
@@ -627,6 +704,7 @@ export const MenuItems = [
     authmodlevel: 'basic',
     children: [
       {
+        key: nanoid(),
         label: 'Manage Users',
         value: 'sysadmin.manage.users',
         title: 'Manage Users',
@@ -634,6 +712,7 @@ export const MenuItems = [
         authmodlevel: 'basic',
       },
       {
+        key: nanoid(),
         label: 'System Configuration',
         value: 'sysadmin.systemconfiguration',
         title: 'System Configuration',
@@ -641,6 +720,7 @@ export const MenuItems = [
         authmodlevel: 'basic',
       },
       {
+        key: nanoid(),
         label: 'Cleanup Large Object Store',
         value: 'sysadmin.cleanup.large.object.store',
         title: 'Cleanup Large Object Store',
@@ -648,6 +728,7 @@ export const MenuItems = [
         authmodlevel: 'basic',
       },
       {
+        key: nanoid(),
         label: 'Discover Orphaned Metadata',
         value: 'sysadmin.discover.orphaned.metadata',
         title: 'Discover Orphaned Metadata',
@@ -657,6 +738,7 @@ export const MenuItems = [
     ]
   },
   {
+    key: nanoid(),
     label: 'Support',
     value: 'support',
     tooltip: 'Support',
@@ -664,6 +746,7 @@ export const MenuItems = [
     authmodlevel: 'sysadmin',
     children: [
       {
+        key: nanoid(),
         label: 'Glossary',
         value: 'support.terms.and.definitions',
         title: 'Glossary of Terms and Definitions',

@@ -159,30 +159,32 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const AuthService = {
-  isAuthenticated: false,
-  from: "",
-  profile: {
-    id: -1,
-    username: "",
-    fullname: "",
-    authorized_module_level: "",
-    role: []
-  },
-  users: [],
-  authenticate(valid, profile) {
-    this.isAuthenticated = valid;
-    if (valid && profile) {
-      this.profile = profile;
-    }
-  },
-  logout() {
-    this.isAuthenticated = false;
-  }
-};
+// const AuthService = {
+//   isAuthenticated: false,
+//   from: "",
+//   profile: {
+//     id: -1,
+//     username: "",
+//     fullname: "",
+//     authorized_module_level: "",
+//     role: []
+//   },
+//   users: [],
+//   authenticate(valid, profile) {
+//     this.isAuthenticated = valid;
+//     if (valid && profile) {
+//       this.profile = profile;
+//     }
+//   },
+//   logout() {
+//     this.isAuthenticated = false;
+//   }
+// };
 
 class App extends React.Component {
+  static contextType = UserContext;
   constructor(props) {
+    console.log("INSIDE CONSTRUCTOR ......")
     super(props);
     this.state = {
       actionid: '',
@@ -210,7 +212,7 @@ class App extends React.Component {
     this.mounted = false;
     this.conn_snackbar_id = null;
     this.logs = []
-    this.user = AuthService;
+    // this.user = AuthService;
     this.org = {name: "", authorized_module_level: ""};
     this.uuid = UUID(window.location.href.includes("renew"));
     this.logRef = React.createRef();
@@ -263,168 +265,183 @@ class App extends React.Component {
     this.crefs[OPERATINGRUNDATAMETRICS_REF] = React.createRef();
   }
 
+  componentDidCatch(error, info) {
+    // Example "componentStack":
+    //   in ComponentThatThrows (created by App)
+    //   in ErrorBoundary (created by App)
+    //   in div (created by App)
+    //   in App
+    console.log(error, info.componentStack);
+  }
+
   componentDidMount() {
     this.mounted = true;
-    if (this.debug) {
+    if (this.context.debug) {
       ConsoleLog("App", "componentDidMount", `uuid: ${this.uuid}`);
-      ConsoleLog("App", "websocket.url -", this.props.wsep + "?uuid=" + this.uuid);
     }
-    this.conn_snackbar_id = enqueueConnectionSnackbar(false);
     // Everything here is fired on component mount.
-    this.ws = new ReconnectingWebSocket(this.props.wsep + "?uuid=" + this.uuid);
-    this.ws.onopen = (event) => {
-      const msg = `Websocket connection to server established for client ${this.uuid}`;
-      if (this.debug) {
-        ConsoleLog("App", "ws.onopen", msg);
+    if (this.ws === null || this.ws === undefined) {
+      this.conn_snackbar_id = enqueueConnectionSnackbar(false);
+      const ws_url = this.props.wsep + "?uuid=" + this.uuid
+      if (this.context.debug) {
+        ConsoleLog("App", "componentDidMount", `connecting to ${ws_url}`);
       }
-      this.appendLog(msg);
-      if (this.conn_snackbar_id) {
-        closeSnackbar("__connection_snackbar__");
-        this.conn_snackbar_id = null;
-      }
-      this.setState({ready: true, online: true});
-    };
-    this.ws.onerror = (error) => {
-      ConsoleLog("App", "ws.onerror", error, this.conn_snackbar_id);
-      if (this.conn_snackbar_id === null) {
-        this.conn_snackbar_id = enqueueConnectionSnackbar(true);
-      }
-      this.appendLog("Websocket error: " + JSON.stringify(error));
-      this.setState({ready: false, online: false});
-    };
-    this.ws.onclose = (event) => {
-      console.log(event)
-      console.log(this.mounted)
-      // enqueueConnectionSnackbar(true)
-      // const msg =
-      //   `"Websocket connection with server closed: wasClean = ${event.hasOwnProperty("wasClean") ? event.wasClean : false}, reason = ${getErrorMessage(event.code)}`;
-      // if (this.debug) {
-      //   ConsoleLog("App", "ws.onclose", msg);
-      // }
-      // this.appendLog(msg);
-      // if (this.conn_snackbar_id === null) {
-      //   this.conn_snackbar_id = enqueueConnectionSnackbar(true);
-      // }
-      if (this.mounted) {
-        this.setState({ready: false, busy: 0, online: false, background_tasks_active: false});
-      }
-    };
-    this.ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (this.debug) {
-        ConsoleLog("App", "onmessage", message);
-      }
-      if (message.hasOwnProperty("log_message")) {
-        this.appendLog(message.response);
-        if (message.log_message === "only_logging_system") {
-          return;
+      this.ws = new ReconnectingWebSocket(ws_url);
+      this.ws.onopen = (event) => {
+        const msg = `Websocket connection to server established for client ${this.uuid}`;
+        console.log("aaaaaaaaaaaaaa")
+        if (this.context.debug) {
+          ConsoleLog("App", "ws.onopen", msg);
         }
-      }
-      if (isValidMessageSignature(message)) {
-        if (isModuleMessage(message)) {
-          for (const [k, v] of Object.entries(this.crefs)) {
-            if (k === message.module) {
-              if (v.current) {
-                v.current.ws_message(message)
-              }
-            }
+        this.appendLog(msg);
+        if (this.conn_snackbar_id) {
+          closeSnackbar("__connection_snackbar__");
+          this.conn_snackbar_id = null;
+        }
+        this.setState({ready: true, online: true});
+      };
+      this.ws.onerror = (error) => {
+        ConsoleLog("App", "ws.onerror", error, this.conn_snackbar_id);
+        if (this.conn_snackbar_id === null) {
+          this.conn_snackbar_id = enqueueConnectionSnackbar(true);
+        }
+        this.appendLog("Websocket error: " + JSON.stringify(error));
+        this.setState({ready: false, online: false});
+      };
+      this.ws.onclose = (event) => {
+        console.log(event)
+        console.log(this.mounted)
+        // enqueueConnectionSnackbar(true)
+        const msg =
+          `"Websocket connection with server closed: wasClean = ${event.hasOwnProperty("wasClean") ? event.wasClean : false}, reason = ${getErrorMessage(event.code)}`;
+        if (this.context.debug) {
+          ConsoleLog("App", "ws.onclose", msg);
+        }
+        this.appendLog(msg);
+        if (this.conn_snackbar_id === null) {
+          this.conn_snackbar_id = enqueueConnectionSnackbar(true);
+        }
+        if (this.mounted) {
+          this.setState({ready: false, busy: 0, online: false, background_tasks_active: false});
+        }
+      };
+      this.ws.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        if (this.context.debug) {
+          ConsoleLog("App", "onmessage", message);
+        }
+        if (message.hasOwnProperty("log_message")) {
+          this.appendLog(message.response);
+          if (message.log_message === "only_logging_system") {
+            return;
           }
-        } else {
-          if (messageResponseStatusOk(message)) {
-            if (isCommandResponse(message, "gpk")) {
-              this.puk.length = 0;
-              this.puk.push(message.response.data);
-              this.user.isAuthenticated = false;
-              this.setState({online: true});
-            } else if (isCommandResponse(message, CMD_GET_ORGANISATION)) {
-              this.org = message.response.org;
-            } else if (isCommandResponse(message, CMD_GET_USER_RECORDS)) {
-              for (const u of message.response.users) {
-                if (u.hasOwnProperty("metadata")) {
-                  this.user.users.push([u.metadata.username, u.metadata.fullname]);
-                }
-              }
-            } else if (isCommandResponse(message, CMD_GET_SERVER_INFO)) {
-              if (this.sysinfoRef.current) {
-                this.sysinfoRef.current.setServerInfo(message.response);
-              }
-            } else if (isCommandResponse(message, CMD_BACKGROUND_TASKS)) {
-              this.setState(pstate => {
-                return {
-                  background_tasks_active: message.hasOwnProperty("tasks_active") && message.tasks_active === "true",
-                }
-              });
-            } else if (isCommandResponse(message, CMD_GET_SESSION_INFO)) {
-              this.user.isAuthenticated = message.response.session.valid;
-              if (!message.response.session.valid) {
-                enqueueErrorSnackbar(message.response.message);
-              }
-              this.forceUpdate();
-            } else if (isCommandResponse(message, CMD_GET_GLOSSARY_TERMS)) {
-              setGlossaryTerms(this.glossary, message.response.terms)
-              // this.forceUpdate();
-            } else if (isCommandResponse(message, CMD_GET_SYSTEM_PROPERTIES)) {
-              for (const property of message.response.properties) {
-                setPropertyValue(this.properties, property.name, property.value);
-              }
-            } else if (isCommandResponse(message, CMD_SET_SYSTEM_PROPERTIES)) {
-              const property = message.response.property;
-              setPropertyValue(this.properties, property.name, property.value);
-            } else if (isCommandResponse(message, [CMD_GET_USER_NOTIFICATION_MESSAGES,
-              CMD_DELETE_USER_NOTIFICATION_MESSAGE])) {
-              if (this.notificationRef.current) {
-                if (message.response.hasOwnProperty("notifications")) {
-                  this.notificationRef.current.updateMessages(message.response.notifications);
-                  let count = 0;
-                  for (const m of message.response.notifications) {
-                    if (m.archived === 0) {
-                      count++;
-                    }
-                  }
-                  this.setState(pstate => {
-                    return {
-                      num_unread_messages: count,
-                      num_messages: message.response.notifications.length,
-                    }
-                  });
+        }
+        if (isValidMessageSignature(message)) {
+          if (isModuleMessage(message)) {
+            for (const [k, v] of Object.entries(this.crefs)) {
+              if (k === message.module) {
+                if (v.current) {
+                  v.current.ws_message(message)
                 }
               }
             }
           } else {
-            enqueueErrorSnackbar(message.response.message);
-          }
-        }
-        if (message.hasOwnProperty("show_busy") && message.show_busy) {
-          this.setState(pstate => {
-            return {
-              busy: pstate.busy - 1
+            if (messageResponseStatusOk(message)) {
+              if (isCommandResponse(message, "gpk")) {
+                this.puk.length = 0;
+                this.puk.push(message.response.data);
+                this.context.user.isAuthenticated = false;
+                this.setState({online: true});
+              } else if (isCommandResponse(message, CMD_GET_ORGANISATION)) {
+                this.org = message.response.org;
+              } else if (isCommandResponse(message, CMD_GET_USER_RECORDS)) {
+                for (const u of message.response.users) {
+                  if (u.hasOwnProperty("metadata")) {
+                    this.context.user.users.push([u.metadata.username, u.metadata.fullname]);
+                  }
+                }
+              } else if (isCommandResponse(message, CMD_GET_SERVER_INFO)) {
+                if (this.sysinfoRef.current) {
+                  this.sysinfoRef.current.setServerInfo(message.response);
+                }
+              } else if (isCommandResponse(message, CMD_BACKGROUND_TASKS)) {
+                this.setState(pstate => {
+                  return {
+                    background_tasks_active: message.hasOwnProperty("tasks_active") && message.tasks_active === "true",
+                  }
+                });
+              } else if (isCommandResponse(message, CMD_GET_SESSION_INFO)) {
+                this.context.user.isAuthenticated = message.response.session.valid;
+                if (!message.response.session.valid) {
+                  enqueueErrorSnackbar(message.response.message);
+                }
+                this.forceUpdate();
+              } else if (isCommandResponse(message, CMD_GET_GLOSSARY_TERMS)) {
+                setGlossaryTerms(this.glossary, message.response.terms)
+                // this.forceUpdate();
+              } else if (isCommandResponse(message, CMD_GET_SYSTEM_PROPERTIES)) {
+                for (const property of message.response.properties) {
+                  setPropertyValue(this.properties, property.name, property.value);
+                }
+              } else if (isCommandResponse(message, CMD_SET_SYSTEM_PROPERTIES)) {
+                const property = message.response.property;
+                setPropertyValue(this.properties, property.name, property.value);
+              } else if (isCommandResponse(message, [CMD_GET_USER_NOTIFICATION_MESSAGES,
+                CMD_DELETE_USER_NOTIFICATION_MESSAGE])) {
+                if (this.notificationRef.current) {
+                  if (message.response.hasOwnProperty("notifications")) {
+                    this.notificationRef.current.updateMessages(message.response.notifications);
+                    let count = 0;
+                    for (const m of message.response.notifications) {
+                      if (m.archived === 0) {
+                        count++;
+                      }
+                    }
+                    this.setState(pstate => {
+                      return {
+                        num_unread_messages: count,
+                        num_messages: message.response.notifications.length,
+                      }
+                    });
+                  }
+                }
+              }
+            } else {
+              enqueueErrorSnackbar(message.response.message);
             }
-          });
+          }
+          if (message.hasOwnProperty("show_busy") && message.show_busy) {
+            this.setState(pstate => {
+              return {
+                busy: pstate.busy - 1
+              }
+            });
+          }
+        } else {
+          enqueueErrorSnackbar(
+            `message is missing ${message.hasOwnProperty("cmd") ?
+              "" : "cmd"}${message.hasOwnProperty("response") ? "" : "response"} field.`
+          );
         }
-      } else {
-        enqueueErrorSnackbar(
-          `message is missing ${message.hasOwnProperty("cmd") ?
-            "" : "cmd"}${message.hasOwnProperty("response") ? "" : "response"} field.`
-        );
-      }
-    };
+      };
+    }
   }
 
   componentWillUnmount() {
-    console.log("###################################")
-    if (this.debug) {
-      ConsoleLog("App", "componentWillUnmount");
+    console.log("################## C O M P O N E N T W I L L U N M O U N T #################", this.context.debug)
+    if (this.context.debug) {
+      ConsoleLog("App", "componentWillUnmount", "mounted", this.mounted);
     }
     this.mounted = false;
-    if (this.state.ready) {
-      // this.ws.close();
-    }
+    // if (this.state.ready) {
+    //   this.ws.close();
+    // }
   }
 
   // send_pong = () => {
   //   const msg = {cmd: "pong"};
   //   if (this.ws && this.ws.readyState === 1) {
-  //     if (this.debug) {
+  //     if (this.context.debug) {
   //       ConsoleLog("App", "send", msg);
   //     }
   //     this.ws.send(JSON.stringify({
@@ -434,7 +451,7 @@ class App extends React.Component {
   // };
 
   send = (msg, show_busy, include_user) => {
-    // if (this.debug) {
+    // if (this.context.debug) {
     //   ConsoleLog("App", "send", "ws.readyState",
     //     this.ws && this.ws.readyState ? this.ws.readyState : "undefined");
     // }
@@ -445,16 +462,16 @@ class App extends React.Component {
       const _msg = {
         session_id: this.session_id,
         uuid: this.uuid,
-        user: this.user,
+        user: this.context.user,
         ...msg
       };
       if (_show_busy && !run_in_background) {
         _msg["show_busy"] = _show_busy
       }
       if (_include_user) {
-        _msg["user"] = this.user
+        _msg["user"] = this.context.user
       }
-      if (this.debug) {
+      if (this.context.debug) {
         ConsoleLog("App", "send", "msg", _msg);
       }
       this.ws.send(JSON.stringify(_msg));
@@ -476,7 +493,7 @@ class App extends React.Component {
     if (link && typeof link === "object") {
       this.menuTitle = link.target.dataset.title ? link.target.dataset.title : "";
       if (link.target.id === "logout") {
-        this.user.isAuthenticated = false;
+        this.context.user.isAuthenticated = false;
         this.setState({actionid: ""});
       } else {
         this.setState({actionid: link.target.id});
@@ -608,22 +625,21 @@ class App extends React.Component {
 
   render() {
     const {
-      theme, ready, menuData, actionid, open, busy, background_tasks_active, num_unread_messages, debug,
+      theme, ready, menuData, actionid, open, busy, background_tasks_active, num_unread_messages,
       log_window_visible, notification_window_visible, notification_window_anchor, num_messages, online,
       confirm_interrupt_background_task
     } = this.state;
-    const isSysadmin = isValidUserRole(this.user, "sysadmin");
-    if (debug) {
+    const isSysadmin = isValidUserRole(this.context.user, "sysadmin");
+    if (this.context.debug) {
       ConsoleLog("App", "render", "actionid", actionid, "busy", busy,
         "num_unread_messages", num_unread_messages, "num_messages", num_messages, "user.isAuthenticated",
-        this.user.isAuthenticated)
+        this.context.user.isAuthenticated)
     }
     return (
-      <UserContext.Provider value={{debug: debug, user: this.user}}>
         <SnackbarProvider maxSnack={6} anchorOrigin={{vertical: 'bottom', horizontal: 'center',}}>
           <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
             <Box sx={{flexGrow: 1, height: "100%"}}>
-              {this.user.isAuthenticated ?
+              {this.context.user.isAuthenticated ?
                 <React.Fragment>
                   <ConfirmInterruptBackgroundTaskDialog open={confirm_interrupt_background_task}
                                                         onProceed={this.proceedWithInterruptBackgroundTask}
@@ -644,8 +660,8 @@ class App extends React.Component {
                         Organisation: {this.org.name.toUpperCase()}
                       </Typography>
                       <AccountMenu
-                        title={this.user.profile.username === "" ? this.menuTitle : this.user.profile.username}
-                        user={this.user}
+                        title={this.context.user.profile.username === "" ? this.menuTitle : this.context.user.profile.username}
+                        user={this.context.user}
                         onClick={this.handleMenuAction}
                       />
                       <BackgroundTasks active={background_tasks_active} onClick={this.interruptBackgroundTask}/>
@@ -660,7 +676,7 @@ class App extends React.Component {
                       />
                     </Toolbar>
                   </AppBar>
-                  <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.user}
+                  <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.context.user}
                               organisation={this.org}>
                     <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
                       <Box sx={{p: 3}}>
@@ -668,7 +684,7 @@ class App extends React.Component {
                         {actionid === MY_ACCOUNT &&
                           <MyAccount
                             ref={this.crefs["MyAccount"]}
-                            user={this.user}
+                            user={this.context.user}
                             send={this.send}
                             properties={this.properties}
                           />
@@ -677,7 +693,7 @@ class App extends React.Component {
                           <Settings
                             ref={this.crefs["Settings"]}
                             title={this.menuTitle}
-                            user={this.user}
+                            user={this.context.user}
                             theme={theme}
                             onClick={this.handleMenuAction}
                             send={this.send}
@@ -685,40 +701,40 @@ class App extends React.Component {
                           />
                         }
                         {
-                          SupportPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          SupportPackages(actionid, this.crefs, this.menuTitle, this.context.user, this.handleMenuAction,
                             this.send, this.properties, this.glossary, this.puk)
                         }
                         {
-                          SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          SysAdminResourcePackages(actionid, this.crefs, this.menuTitle, this.context.user, this.handleMenuAction,
                             this.send, this.properties, this.glossary, this.puk)
                         }
                         {
-                          SSCPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          SSCPackages(actionid, this.crefs, this.menuTitle, this.context.user, this.handleMenuAction,
                             this.send, this.properties, this.glossary, this.puk)
                         }
                         {
                           ControlledMaterialPackages(
-                            actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                            actionid, this.crefs, this.menuTitle, this.context.user, this.handleMenuAction,
                             this.send, this.properties, this.glossary, this.puk)
                         }
                         {
-                          HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          HumanResourcePackages(actionid, this.crefs, this.menuTitle, this.context.user, this.handleMenuAction,
                             this.send, this.properties, this.glossary, this.puk)
                         }
                         {
-                          RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.user,
+                          RadiationProtectionPackages(actionid, this.crefs, this.menuTitle, this.context.user,
                             this.handleMenuAction, this.send, this.properties, this.glossary, this.puk)
                         }
                         {
-                          IcensPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          IcensPackages(actionid, this.crefs, this.menuTitle, this.context.user, this.handleMenuAction,
                             this.send, this.properties, this.glossary, this.puk)
                         }
                         {
-                          OrgPackages(actionid, this.crefs, this.menuTitle, this.user, this.handleMenuAction,
+                          OrgPackages(actionid, this.crefs, this.menuTitle, this.context.user, this.handleMenuAction,
                             this.send, this.properties, this.glossary, this.puk)
                         }
                         {
-                          EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.user,
+                          EmergencyPreparednessPackages(actionid, this.crefs, this.menuTitle, this.context.user,
                             this.handleMenuAction, this.send, this.properties, this.glossary, this.puk)
                         }
                         <LogWindow
@@ -748,7 +764,7 @@ class App extends React.Component {
                 <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
                   <SignIn
                     ref={this.crefs[SIGNIN_REF]}
-                    authService={this.user}
+                    authService={this.context.user}
                     puk={this.puk}
                     send={this.send}
                     online={online}
@@ -759,7 +775,6 @@ class App extends React.Component {
             </Box>
           </ThemeProvider>
         </SnackbarProvider>
-      </UserContext.Provider>
     )
   }
 }

@@ -229,7 +229,7 @@ export function getUserRecordData(record, key, missingValue) {
     const metadata = record.metadata;
     if (metadata.hasOwnProperty(key)) {
       const v = metadata[key];
-      return (typeof v === "number") ? v : (v.charAt(0) === "[" || v.charAt(0) === "{") ?
+      return (typeof v === "number") || typeof v === "boolean" ? v : (v.charAt(0) === "[" || v.charAt(0) === "{") ?
         JSON.parse(v.replaceAll("'", "\"").replaceAll("NaN", "0")) : v;
     }
   }

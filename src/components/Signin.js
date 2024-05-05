@@ -57,7 +57,6 @@ class Signin extends React.Component {
     super(props);
     this.authService = props.authService;
     this._mounted = false;
-    // this.debug = window.location.href.includes("debug");
     this.Module = SIGNIN_REF;
     this.state = {
       NavigateToPreviousRoute: false,
@@ -82,12 +81,19 @@ class Signin extends React.Component {
   };
 
   submit = (event) => {
+    console.log("11111111111111111111111111111111111111", this.props.online)
     if (this.props.online) {
+      console.log("11111111111111111111111111111111111111", this.props.puk.length)
       if (this.props.puk.length === 0) {
         enqueueErrorSnackbar("No encryption key available.");
       } else {
+        console.log("22222222222222222")
         const session_uuid = record_uuid();
+        console.log("333333333333333", session_uuid)
+        console.log("444444444444444", this.props.puk[0])
+        console.log("5555555555555555555", this.props.puk[0])
         const session_id = encryptMessage(this.props.puk[0], session_uuid);
+        console.log("sending ...", session_id)
         this.props.send({
           cmd: CMD_VERIFY_USER_PASSWORD,
           session_id: session_id,
@@ -222,7 +228,7 @@ class Signin extends React.Component {
 
 Signin.propTypes = {
   authService: PropTypes.object.isRequired,
-  puk: PropTypes.object.isRequired,
+  puk: PropTypes.array.isRequired,
   online: PropTypes.bool.isRequired,
   send: PropTypes.func.isRequired,
   onValidAuthentication: PropTypes.func.isRequired,

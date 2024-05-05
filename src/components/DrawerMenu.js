@@ -34,9 +34,6 @@ export default class DrawerMenu extends Component {
     this.state = { itemTree: [], componentStateTree: [] }
   }
 
-  componentWillMount () {
-  }
-
   componentDidMount () {
     if (this.props.children) {
       this.setState(pstate => {
@@ -109,7 +106,7 @@ export default class DrawerMenu extends Component {
   activateParentsComponentTree (item, activeBefore) {
     if (item) {
       const isLeaf = !item.children || item.children.length === 0
-      // We don't want to inacivate an active leaf item
+      // We don't want to inactivate an active leaf item
       if (isLeaf && activeBefore) {
         item.active = true
       } else if (!activeBefore) {
@@ -317,7 +314,7 @@ export default class DrawerMenu extends Component {
     // console.log("== renderItem.props ==", this.props)
     if (item.divider) {
       return (
-        <div key={item.value} className={`divider divider-level-${level}`}>
+        <div key={item.key} className={`divider divider-level-${level}`}>
           { item.label }
         </div>
       )
@@ -325,10 +322,10 @@ export default class DrawerMenu extends Component {
     const disabled = this.menu_disabled(this.props.organisation,
       item.authmodlevel, isValidUserRole(this.props.user, "sysadmin"));
     return (
-      <div key={item.value} className={`item item-level-${level} ${disabled?"item-disabled":""} ${item.active ? 'active' : ''}`}>
+      <div className={`item item-level-${level} ${disabled?"item-disabled":""} ${item.active ? 'active' : ''}`}>
         <Tooltip title={item.tooltip} placement={'right-end'} arrow>
           <div
-            title={item.tooltip}
+            key={item.key}
             className="item-title"
             onClick={this.onItemClick(item)}>
             { this.handleRenderMenuItemContent(item) }
