@@ -40,7 +40,9 @@ import {
   UserContext
 } from "../../utils/UserContext";
 import {
-  DatePickerWithTooltip, SelectFormControlWithTooltip, TextFieldWithTooltip
+  DatePickerWithTooltip,
+  SelectFormControlWithTooltip,
+  TextFieldWithTooltip
 } from "../../components/CommonComponents";
 
 export const SSCMETADATA_REF = "SSCMetadata";
@@ -314,7 +316,7 @@ class SSCMetadata extends Component {
                   id={"classification"}
                   label="Classification"
                   required={true}
-                  value={getRecordMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, [])}
+                  value={getRecordMetadataValue(ssc, NURIMS_SSC_CLASSIFICATION, "")}
                   onChange={this.handleChange}
                   options={getPropertyAsArray(properties, NURIMS_SSC_CLASSIFICATION, [])}
                   disabled={disabled}

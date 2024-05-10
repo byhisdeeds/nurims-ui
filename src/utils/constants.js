@@ -79,9 +79,6 @@ module.exports = Object.freeze({
 
   SUPPORT_TERMS_AND_DEFINITIONS: 'support.terms.and.definitions',
 
-  RASA_CHATBOT: 'chat.bot',
-
-
   PRO_IMPORT_ICENS_PERSONNEL: 'sysadmin.import.icens.personnel',
   PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_MANUFACTURERS: 'sysadmin.import.icens.controlled.material.manufacturers',
   PRO_IMPORT_ICENS_CONTROLLED_MATERIAL_STORAGE_LOCATIONS: 'sysadmin.import.icens.controlled.material.storage.locations',

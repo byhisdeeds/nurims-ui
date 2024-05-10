@@ -144,7 +144,7 @@ class Signin extends React.Component {
     const {remember, username} = this.state;
     const {theme, online} = this.props;
     if (this.context.debug) {
-      ConsoleLog(this.Module, "render", "online", online);
+      ConsoleLog(this.Module, "render", "online", online, "authService", this.authService);
     }
     return (
       <Container

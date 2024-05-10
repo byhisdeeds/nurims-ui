@@ -26,12 +26,14 @@ const AuthService = {
     this.isAuthenticated = false;
   }
 };
+const port = window.location.href.includes("strict") ? "5040" : "5040"
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <UserContext.Provider value={{debug: true, user: AuthService}}>
+  <UserContext.Provider value={{debug: window.location.href.includes("debug"), user: AuthService}}>
     <React.StrictMode>
       <App
-        wsep={`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}:${window.location.port === '' ? '5040' : "5040"}/nurimsws`}
+        wsep={`${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}:${port}/nurimsws`}
       />
     </React.StrictMode>
 

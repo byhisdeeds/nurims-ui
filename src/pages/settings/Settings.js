@@ -30,6 +30,7 @@ import {
 import {
   UserContext
 } from "../../utils/UserContext";
+import PropTypes from "prop-types";
 // import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 
 const SETTINGS_REF = "Settings";
@@ -40,6 +41,7 @@ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      theme: this.props.theme
     };
     this.Module = SETTINGS_REF;
   }
@@ -49,12 +51,14 @@ class Settings extends Component {
   };
 
   setLightTheme = (e) => {
-    this.props.theme = 'light';
+    this.setState({theme: 'light'});
+    console.log("****** set-light-theme", )
     this.props.onClick('set-light-theme')
   };
 
   setDarkTheme = (e) => {
-    this.props.theme = 'dark';
+    this.setState({theme: 'dark'});
+    console.log("****** set-dark-theme", )
     this.props.onClick('set-dark-theme')
   };
 
@@ -85,11 +89,13 @@ class Settings extends Component {
   }
 
   render() {
-    const {theme, properties, user} = this.props;
+    const {properties, title} = this.props;
+    const {theme} = this.state;
+    console.log("######### R E N D E R #########", properties, theme, title)
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} style={{paddingLeft: 0, paddingTop: 0}}>
-          <TitleComponent title={this.props.title} />
+          <TitleComponent title={title} />
         </Grid>
         <Grid item xs={12}>
           <List sx={{width: '100%'}} subheader={<ListSubheader sx={{fontSize: 24}}>General</ListSubheader>}>
@@ -138,8 +144,7 @@ class Settings extends Component {
               />
             </ListItem>
           </List>
-          <List sx={{ width: '100%'}} subheader={<ListSubheader sx={{fontSize: 24}}>Dosimetry</ListSubheader>}
-          >
+          <List sx={{ width: '100%'}} subheader={<ListSubheader sx={{fontSize: 24}}>Dosimetry</ListSubheader>}>
             <ListItem>
               <ListItemIcon>
                 <SettingsIcon />
@@ -156,20 +161,20 @@ class Settings extends Component {
                 <MenuItem value={"mr"}>Milli Rems</MenuItem>
               </Select>
             </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <WifiIcon />
-              </ListItemIcon>
-              <ListItemText id={"dark-theme-switch"} primary="Dark Theme" />
-              <Switch
-                edge="end"
-                onChange={this.setDarkTheme}
-                checked={theme === 'dark'}
-                inputProps={{
-                  'aria-labelledby': 'dark-theme-switch',
-                }}
-              />
-            </ListItem>
+            {/*<ListItem>*/}
+            {/*  <ListItemIcon>*/}
+            {/*    <WifiIcon />*/}
+            {/*  </ListItemIcon>*/}
+            {/*  <ListItemText id={"dark-theme-switch"} primary="Dark Theme" />*/}
+            {/*  <Switch*/}
+            {/*    edge="end"*/}
+            {/*    onChange={this.setDarkTheme}*/}
+            {/*    checked={theme === 'dark'}*/}
+            {/*    inputProps={{*/}
+            {/*      'aria-labelledby': 'dark-theme-switch',*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*</ListItem>*/}
           </List>
         </Grid>
       </Grid>
@@ -177,8 +182,17 @@ class Settings extends Component {
   }
 }
 
+
+Settings.propTypes = {
+  properties: PropTypes.array.isRequired,
+  send: PropTypes.func.isRequired,
+  theme: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+}
+
 Settings.defaultProps = {
   send: (msg) => {},
 };
 
-export default withTheme(Settings);
+// export default withTheme(Settings);
+export default Settings;

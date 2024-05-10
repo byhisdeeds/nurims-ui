@@ -86,6 +86,7 @@ import {
   NURIMS_OPERATION_DATA_PROPOSED_IRRADIATION_DATE,
   UNDEFINED_DATE_STRING
 } from "../utils/constants";
+import {nanoid} from "nanoid";
 
 
 export function TitleComponent({title}) {
@@ -377,26 +378,27 @@ export function SelectFormControlWithTooltip({
         {options.map((option) => {
           if (typeof option === 'object') {
             console.log("============")
-            console.log("=== SelectFormControlWithTooltip.option: ", option)
+            console.log("=+= SelectFormControlWithTooltip.value: ", value)
+            console.log("=+= SelectFormControlWithTooltip.option: ", option)
             console.log("============")
             if (Array.isArray(option)) {
               return (
-                <MenuItem disabled={option.disabled || false} value={option[0]}>{option[1]}</MenuItem>
+                <MenuItem key={nanoid()} disabled={option.disabled || false} value={option[0]}>{option[1]}</MenuItem>
               )
             } else {
               return (
-                <MenuItem disabled={option.disabled || false} value={option["id"]}>{option["title"]}</MenuItem>
+                <MenuItem key={nanoid()} disabled={option.disabled || false} value={option["id"]}>{option["title"]}</MenuItem>
               )
             }
           } else {
             const t = option.split(',');
             if (t.length === 1) {
               return (
-                <MenuItem value={t[0]}>{t[0]}</MenuItem>
+                <MenuItem key={nanoid()} value={t[0]}>{t[0]}</MenuItem>
               )
             } else if (t.length === 2) {
               return (
-                <MenuItem value={t[0]}>{t[1]}</MenuItem>
+                <MenuItem key={nanoid()} value={t[0]}>{t[1]}</MenuItem>
               )
             }
           }
@@ -425,6 +427,120 @@ SelectFormControlWithTooltip.propTypes = {
   multiple: PropTypes.bool,
 }
 
+export function MultipleSelectFormControlWithTooltip({
+                                               id, label, value, onChange, options, disabled, tooltip, placement,
+                                               padding, multiple
+                                             }) {
+  return (
+    <FormControl style={{paddingRight: padding, marginTop: padding, marginLeft: padding, width: '100%'}}
+                 variant="outlined">
+      <Floater
+        content={tooltip}
+        showCloseButton={true}
+        hideArrow
+        placement={placement}
+        styles={{
+          options: {
+            zIndex: 1000,
+          },
+          floater: {
+            filter: 'none',
+          },
+          close: {
+            color: '#ffffff',
+          },
+          container: {
+            backgroundColor: 'rgba(14,14,14,0.87)',
+            borderRadius: 5,
+            borderWidth: 1,
+            borderColor: '#dedede',
+            borderStyle: 'solid',
+            color: '#dedede',
+            filter: 'none',
+            maxWidth: 400,
+            minHeight: 40,
+            padding: '4px 30px 4px 8px',
+            textAlign: 'left',
+            top: 8,
+          },
+          content: {
+            fontSize: 16,
+          },
+          arrow: {
+            color: '#000',
+            length: 8,
+            spread: 10,
+          },
+        }}
+      >
+        <InputLabel id={id}>{label}</InputLabel>
+      </Floater>
+      <Select
+        disabled={disabled}
+        margin={"none"}
+        required
+        fullWidth
+        multiple={multiple}
+        labelId={id}
+        label={label}
+        id={id}
+        name={id}
+        value={typeof value === 'string' ? value.split(",") : value}
+        onChange={onChange}
+        input={<OutlinedInput label={label}/>}
+      >
+        {options.map((option) => {
+          if (typeof option === 'object') {
+            console.log("============")
+            console.log("=+= SelectFormControlWithTooltip.value: ", value)
+            console.log("=+= SelectFormControlWithTooltip.option: ", option)
+            console.log("============")
+            if (Array.isArray(option)) {
+              return (
+                <MenuItem key={nanoid()} disabled={option.disabled || false} value={option[0]}>{option[1]}</MenuItem>
+              )
+            } else {
+              return (
+                <MenuItem key={nanoid()} disabled={option.disabled || false} value={option["id"]}>{option["title"]}</MenuItem>
+              )
+            }
+          } else {
+            const t = option.split(',');
+            if (t.length === 1) {
+              return (
+                <MenuItem key={nanoid()} value={t[0]}>{t[0]}</MenuItem>
+              )
+            } else if (t.length === 2) {
+              return (
+                <MenuItem key={nanoid()} value={t[0]}>{t[1]}</MenuItem>
+              )
+            }
+          }
+        })}
+      </Select>
+    </FormControl>
+  );
+}
+
+MultipleSelectFormControlWithTooltip.defaultProps = {
+  placement: "left-start",
+  padding: 8,
+  multiple: false,
+};
+
+MultipleSelectFormControlWithTooltip.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired,
+  options: PropTypes.array.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  tooltip: PropTypes.string.isRequired,
+  placement: PropTypes.string,
+  padding: PropTypes.number,
+  multiple: PropTypes.bool,
+}
+
 export function TextFieldWithTooltip({
                                        id, label, value, onChange, disabled, tooltip, placement, required, lines,
                                        padding, readOnly
@@ -433,7 +549,7 @@ export function TextFieldWithTooltip({
     <Box style={{paddingRight: padding, marginTop: padding, width: '100%'}}>
       <TextField
         margin={"none"}
-        defaultValue={" "}
+        // defaultValue={" "}
         disabled={disabled}
         required={required}
         fullWidth
@@ -851,7 +967,7 @@ export function PageableTable({
           {cells.map((cell) => (
             <TableCell
               style={{width: cell.width}}
-              key={cell.id}
+              key={nanoid()}
               align={"center"} // {cell.align}
               padding={cell.disablePadding ? 'none' : 'normal'}
               sortDirection={cell.sortField ? order : false}
@@ -942,7 +1058,7 @@ export function PageableTable({
           label={"Filter"}
           onChange={onFilterRows}
           value={rowFilterValue}
-          defaultValue={""}
+          // defaultValue={""}
           InputLabelProps={{
             shrink: true,
             transform: 'translate(14px, 4px) scale(1)',
@@ -988,7 +1104,8 @@ export function PageableTable({
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.item_id}
+                    // key={row.item_id}
+                    key={index}
                     selected={isItemSelected}
                     sx={{height: rowHeight}}
                   >{cells.map((cell) => {
@@ -1001,11 +1118,12 @@ export function PageableTable({
               })}
             {emptyRows() > 0 && (
               <TableRow
+                key={nanoid()}
                 style={{
                   height: (rowHeight * emptyRows()),
                 }}
               >
-                <TableCell colSpan={6}/>
+                <TableCell key={nanoid()} colSpan={6}/>
               </TableRow>
             )}
           </TableBody>

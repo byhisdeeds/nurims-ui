@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {Tooltip} from "@mui/material";
 import {isValidUserRole} from "../utils/UserUtils";
+import {nanoid} from "nanoid";
 
 
 // A fork of react-sidemenu, a lightweight side menu component written in React.js. No jQuery, just CSS3.
@@ -322,7 +323,7 @@ export default class DrawerMenu extends Component {
     const disabled = this.menu_disabled(this.props.organisation,
       item.authmodlevel, isValidUserRole(this.props.user, "sysadmin"));
     return (
-      <div className={`item item-level-${level} ${disabled?"item-disabled":""} ${item.active ? 'active' : ''}`}>
+      <div key={nanoid()} className={`item item-level-${level} ${disabled?"item-disabled":""} ${item.active ? 'active' : ''}`}>
         <Tooltip title={item.tooltip} placement={'right-end'} arrow>
           <div
             key={item.key}
@@ -332,7 +333,7 @@ export default class DrawerMenu extends Component {
           </div>
         </Tooltip>
         {/* render children */}
-        <div className={`children ${item.active ? 'active' : 'inactive'}`}>
+        <div key={nanoid()} className={`children ${item.active ? 'active' : 'inactive'}`}>
           {item.children && item.children.map((child) =>
             this.renderItem(child, level + 1)
           )}

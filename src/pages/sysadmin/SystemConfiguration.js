@@ -143,7 +143,7 @@ SystemConfiguration.propTypes = {
   user: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
   send: PropTypes.func.isRequired,
-  properties: PropTypes.object.isRequired,
+  properties: PropTypes.array.isRequired,
   glossary: PropTypes.object.isRequired,
 }
 

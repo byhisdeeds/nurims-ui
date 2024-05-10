@@ -134,6 +134,7 @@ import {
 import {
   ConfirmInterruptBackgroundTaskDialog,
 } from "./components/UtilityDialogs";
+import LazyLoaderIndicator from "./components/LazyLoaderIndicator";
 
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));
@@ -202,7 +203,7 @@ class App extends React.Component {
       num_unread_messages: 0,
       num_messages: 0,
     };
-    this.debug = window.location.href.includes("debug");
+    // this.debug = window.location.href.includes("debug");
     this.puk = [];
     this.session_id = "";
     this.properties = [];
@@ -488,10 +489,11 @@ class App extends React.Component {
   };
 
   handleMenuAction = (link, title) => {
-    // console.log("&&&&&&&&&&&&& menu action link, title->", link, title)
-    // console.log("+++ typeof link, typeof title", typeof link, typeof title)
+    console.log("&&&&&&&&&&&&& menu action link, title->", link, title)
+    console.log("+++ typeof link, typeof title", typeof link, typeof title)
     if (link && typeof link === "object") {
       this.menuTitle = link.target.dataset.title ? link.target.dataset.title : "";
+      console.log(">>>>>>>>>>>>>>> menuTitle: ", this.menuTitle)
       if (link.target.id === "logout") {
         this.context.user.isAuthenticated = false;
         this.setState({actionid: ""});
@@ -678,9 +680,9 @@ class App extends React.Component {
                   </AppBar>
                   <MenuDrawer open={open} onClick={this.handleMenuAction} menuItems={menuData} user={this.context.user}
                               organisation={this.org}>
-                    <Suspense fallback={<BusyIndicator open={true} loader={"pulse"} size={30}/>}>
+                    <Suspense fallback={<div/>}>
                       <Box sx={{p: 3}}>
-                        <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
+                        {/*<BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>*/}
                         {actionid === MY_ACCOUNT &&
                           <MyAccount
                             ref={this.crefs["MyAccount"]}
@@ -693,7 +695,6 @@ class App extends React.Component {
                           <Settings
                             ref={this.crefs["Settings"]}
                             title={this.menuTitle}
-                            user={this.context.user}
                             theme={theme}
                             onClick={this.handleMenuAction}
                             send={this.send}

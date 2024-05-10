@@ -55,6 +55,7 @@ import {
   setProvenanceRecordsHelper,
   showProvenanceRecordsViewHelper
 } from "../../utils/ProvenanceUtils";
+import {nanoid} from "nanoid";
 
 export const MANAGEUSERS_REF = "ManageUsers";
 
@@ -370,7 +371,7 @@ class ManageUsers extends React.Component {
             <UserList
               ref={this.listRef}
               title={"Users"}
-              properties={this.props.properties}
+a              properties={this.props.properties}
               onSelection={this.onRecordSelection}
               includeArchived={include_archived}
               requestGetRecords={this.requestGetRecords}

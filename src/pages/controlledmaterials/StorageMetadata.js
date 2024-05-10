@@ -229,6 +229,15 @@ class StorageMetadata extends Component {
     this.setState({ mapclick: e.target.checked });
   }
 
+  componentDidCatch(error, info) {
+    // Example "componentStack":
+    //   in ComponentThatThrows (created by App)
+    //   in ErrorBoundary (created by App)
+    //   in div (created by App)
+    //   in App
+    console.log(error, info.componentStack);
+  }
+
   render() {
     const {storage, marker_bounds} = this.state;
     const {properties, glossary} = this.props;
@@ -240,7 +249,7 @@ class StorageMetadata extends Component {
     const storageMapImage = getRecordMetadataValue(storage, NURIMS_MATERIAL_STORAGE_MAP_IMAGE, BLANK_IMAGE_OBJECT);
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "storage", storage, "storageImage", storageImage,
-        "storageLocation", storageLocation, "storageImage", storageImage, "storageMapImage", storageMapImage);
+        "storageLocation", storageLocation, "storageMapImage", storageMapImage, "blobUri", blobUri);
     }
     return (
       <Box
@@ -435,7 +444,7 @@ class StorageMetadata extends Component {
                 </Box>
                 <Box sx={{width:'100%', height: 400}}>
                   <MapContainer
-                    whenCreated={ mapInstance => { this.mapRef.current = mapInstance } }
+                    // whenCreated={ mapInstance => { this.mapRef.current = mapInstance } }
                     bounds={[[0, 0],[1, 1]]}
                     center={[.5, .5]}
                     scrollWheelZoom={false}

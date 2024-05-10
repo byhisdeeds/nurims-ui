@@ -52,7 +52,7 @@ class UserList extends React.Component {
 }
 
 UserList.propTypes = {
-  ref: PropTypes.element.isRequired,
+  // ref: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
   onSelection: PropTypes.func.isRequired,
   properties: PropTypes.array.isRequired,

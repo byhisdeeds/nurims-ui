@@ -330,7 +330,7 @@ class ReactorSampleIrradiationAuthorizationMetadata extends Component {
                 <SelectFormControlWithTooltip
                   id={"sample-type"}
                   label="Sample Material Type(s)"
-                  value={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, [])}
+                  value={getRecordData(record, NURIMS_OPERATION_DATA_IRRADIATIONSAMPLETYPES, "")}
                   onChange={this.handleChange}
                   options={this.sampleTypes}
                   disabled={disabled || is_submitted || is_not_creator}

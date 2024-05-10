@@ -25,6 +25,7 @@ import {
 import {
   getRecordMetadataValue
 } from "../utils/MetadataUtils";
+import {nanoid} from "nanoid";
 
 function filterRowsByName(rows, value) {
   const regex = new RegExp(value);
@@ -174,6 +175,7 @@ class PagedRecordList extends React.Component {
     }
     return (
       <TableCell
+        key={nanoid()}
         align={cell.align}
         padding={cell.disablePadding ? 'none' : 'normal'}
         style={this.props.renderCellStyle(row, cell, this.props.theme, this.state.selection === row)}

@@ -12,6 +12,7 @@ import {
 } from "../../utils/constants";
 import PropTypes from "prop-types";
 import {
+  MultipleSelectFormControlWithTooltip,
   SelectFormControlWithTooltip
 } from "../../components/CommonComponents";
 import {
@@ -27,6 +28,7 @@ import {
   Box, Fab, Button
 } from "@mui/material";
 import {isValidUserRole} from "../../utils/UserUtils";
+import app from "../../App";
 
 class UserMetadata extends Component {
   static contextType = UserContext;
@@ -100,9 +102,13 @@ class UserMetadata extends Component {
     if (this.context.debug) {
       ConsoleLog(this.Module, "render", "disabled", disabled, "user", user);
     }
-    const authorized_module_levels = getPropertyValue(properties, "system.authorizedmodulelevels", "").split('|');
+    const  authorized_module_levels = (",|" + getPropertyValue(properties, "system.authorizedmodulelevels", "")).split('|');
     const user_roles = getPropertyValue(properties, "system.userrole", "").split('|');
     const isSysadmin = isValidUserRole(this.context.user, ROLE_SYSADMIN);
+    console.log(">>>>>> authorized_module_levels: ", authorized_module_levels)
+    console.log(">>>>>> authorized_module_levels value: ", getUserRecordData(user, "authorized_module_level", ""))
+    console.log(">>>>>> user_roles: ", user_roles)
+    console.log(">>>>>> user_roles value: ", getUserRecordData(user, "role", []))
     return (
       <Box
         component="form"
@@ -147,7 +153,7 @@ class UserMetadata extends Component {
             />
           </Grid>
           <Grid item xs={4}>
-          <SelectFormControlWithTooltip
+          <MultipleSelectFormControlWithTooltip
             id={"user_role"}
             label="User Role"
             value={getUserRecordData(user, "role", [])}
@@ -216,7 +222,7 @@ class UserMetadata extends Component {
 
 UserMetadata.propTypes = {
   onChange: PropTypes.func.isRequired,
-  properties: PropTypes.func.isRequired,
+  properties: PropTypes.array.isRequired,
 }
 
 UserMetadata.defaultProps = {
