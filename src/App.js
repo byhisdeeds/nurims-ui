@@ -489,8 +489,9 @@ class App extends React.Component {
   };
 
   handleMenuAction = (link, title) => {
-    console.log("&&&&&&&&&&&&& menu action link, title->", link, title)
-    console.log("+++ typeof link, typeof title", typeof link, typeof title)
+    if (this.context.debug) {
+      ConsoleLog("App", "handleMenuAction", "link", link, "title", title);
+    }
     if (link && typeof link === "object") {
       this.menuTitle = link.target.dataset.title ? link.target.dataset.title : "";
       if (link.target.id === "logout") {
@@ -511,23 +512,11 @@ class App extends React.Component {
           cmd: CMD_SET_LOGGING_LEVEL,
           level: "debug"
         }, false, false);
-        this.setState(pstate => {
-          return {
-            debug: true
-          }
-        });
-        ConsoleLog("App", "handleMenuAction", "enabling debug messages.");
       } else if (link === 'hide-debug-messages') {
-        ConsoleLog("App", "handleMenuAction", "disabling debug messages.");
         this.send({
           cmd: CMD_SET_LOGGING_LEVEL,
           level: "warning"
         }, false, false);
-        this.setState(pstate => {
-          return {
-            debug: false
-          }
-        });
       } else if (link && title) {
         // console.log(">> link, title", link, title)
         this.menuTitle = title ? title : "";
