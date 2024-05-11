@@ -63,7 +63,9 @@ class ViewPersonnelRecords extends Component {
       const response = message.response;
       if (response.hasOwnProperty("status") && response.status === 0) {
         if (message.hasOwnProperty("cmd") && message.cmd === CMD_GENERATE_PERSONNEL_RECORDS_PDF) {
-          this.setState({ pdf: message.data.pdf });
+          if (message.hasOwnProperty("data") && message.data.hasOwnProperty("pdf")) {
+            this.setState({ pdf: message.data.pdf });
+          }
         }
       } else {
         enqueueErrorSnackbar(response.message);
