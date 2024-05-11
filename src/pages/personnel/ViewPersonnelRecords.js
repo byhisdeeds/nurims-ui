@@ -48,7 +48,7 @@ class ViewPersonnelRecords extends Component {
       cmd: CMD_GENERATE_PERSONNEL_RECORDS_PDF,
       module: this.Module,
       "include.withdrawn": this.state.include_archived,
-    });
+    }, true);
   }
 
   includeArchived = (e) => {

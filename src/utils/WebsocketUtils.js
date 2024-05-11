@@ -1,8 +1,6 @@
 import {JSEncrypt} from "jsencrypt";
 
 export function encryptMessage(pubKey, text) {
-  console.log(">>>", window)
-  console.log(">>>>>", typeof JSEncrypt !== "undefined")
   const jsEncrypt = new JSEncrypt();
   jsEncrypt.setPublicKey(pubKey);
   return jsEncrypt.encrypt(text);

@@ -463,7 +463,7 @@ class App extends React.Component {
       const _msg = {
         session_id: this.session_id,
         uuid: this.uuid,
-        user: this.context.user,
+        // user: this.context.user,
         ...msg
       };
       if (_show_busy && !run_in_background) {
