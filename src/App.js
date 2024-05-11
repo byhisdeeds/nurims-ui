@@ -493,7 +493,6 @@ class App extends React.Component {
     console.log("+++ typeof link, typeof title", typeof link, typeof title)
     if (link && typeof link === "object") {
       this.menuTitle = link.target.dataset.title ? link.target.dataset.title : "";
-      console.log(">>>>>>>>>>>>>>> menuTitle: ", this.menuTitle)
       if (link.target.id === "logout") {
         this.context.user.isAuthenticated = false;
         this.setState({actionid: ""});
@@ -682,7 +681,7 @@ class App extends React.Component {
                               organisation={this.org}>
                     <Suspense fallback={<div/>}>
                       <Box sx={{p: 3}}>
-                        {/*<BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>*/}
+                        <BusyIndicator open={busy > 0} loader={"pulse"} size={40}/>
                         {actionid === MY_ACCOUNT &&
                           <MyAccount
                             ref={this.crefs["MyAccount"]}

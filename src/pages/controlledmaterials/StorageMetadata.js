@@ -493,7 +493,7 @@ StorageMetadata.defaultProps = {
   locationMapInitialZoom: 9,
   locationMapMaxZoom: 18,
   locationIconOpacity: 0.7,
-  locationMarkerUrlPrefix: "nurims/",
+  locationMarkerUrlPrefix: "",
 };
 
 export default StorageMetadata;
