@@ -26,7 +26,7 @@ const AuthService = {
     this.isAuthenticated = false;
   }
 };
-const port = window.location.href.includes("strict") ? "5040" : "5040"
+const port = window.location.port == "" ? "80" : "5040"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
