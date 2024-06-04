@@ -71,7 +71,7 @@ const CEILING_RADIATION_MONITOR_ID = "971098"
 const IC1_RADIATION_MONITOR_ID = "973014"
 const IC3_RADIATION_MONITOR_ID = "971070"
 
-  CHERENKOV_COLOR = "#256dfc"
+  const CHERENKOV_COLOR = "#256dfc"
 
 const MetricsEventTypes = [
   {
@@ -264,6 +264,10 @@ class ReactorAreaMonitorsDashboard extends Component {
 
   render() {
     const {events} = this.state;
+    const {titleFontSize, labelsFontSize, unitsFontSize, valueFontSize} = this.props;
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "render",);
+    }
     return (
       <Grid container>
         <Grid item xs={12} sm={12} md={12} lg={6}>
