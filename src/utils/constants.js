@@ -167,7 +167,7 @@ module.exports = Object.freeze({
   CMD_GENERATE_CONTROLLED_MATERIALS_SURVEILLANCE_SHEET_PDF: "generate_controlled_materials_surveillance_sheet_pdf",
 
   CMD_GENERATE_SSC_RECORDS_PDF: "generate_ssc_records_pdf",
-  CMD_GENERATE_SSC_AMP_RECORDS_PDF: "generate_ssc_amp_records_pdf",
+  CMD_GENERATE_SSC_AMP_RECORDS_PDF: "generate_amp_records_pdf",
   CMD_GENERATE_SSC_MAINTENANCE_REPORT_PDF: "generate_ssc_maintenance_report_pdf",
 
   CMD_GENERATE_PERSONNEL_DOSE_EVALUATION_PDF: "generate_personnel_dose_evaluation_pdf",
