@@ -28,6 +28,10 @@ import {REACTOROPERATIONSREPORT_REF} from "./operation/ReactorOperationsReport";
 import {ADDEDITREACTORWATERSAMPLES_REF} from "./operation/AddEditReactorWaterSamples";
 import {OPERATINGRUNDATAMETRICS_REF} from "./operation/OperatingRunDataMetrics";
 import {
+  REACTOR_OPERATION_PARAMETERS_DASHBOARD_REF
+} from "./operation/ReactorOperationParametersDashboard";
+import {REACTOR_AREA_MONITORS_DASHBOARD_REF} from "./operation/ReactorAreaMonitorsDashboard";
+import {
   ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF
 } from "./operation/AddEditReactorSampleIrradiationAuthorization";
 import {
@@ -71,9 +75,9 @@ import {
   RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA,
   RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS,
   RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION,
-  RO_ADD_EDIT_REACTOR_WATER_SAMPLES,
+  RO_ADD_EDIT_REACTOR_WATER_SAMPLES, RO_AREA_MONITORS_DASHBOARD,
   RO_GENERATE_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION_PDF,
-  RO_OPERATING_RUN_DATA_METRICS,
+  RO_OPERATING_RUN_DATA_METRICS, RO_REACTOR_OPERATION_PARAMETERS_DASHBOARD, RO_REACTOR_OPERATIONS_DASHBOARD,
   RO_REACTOR_OPERATIONS_REPORT,
   RP_ADD_EDIT_MONITOR_DOSIMETRY_MEASUREMENTS,
   RP_ADD_EDIT_PERSONNEL_DOSIMETRY_MEASUREMENTS,
@@ -137,6 +141,8 @@ const PersonnelDosimetryEvaluation = lazy(() => import('./radiationprotection/Pe
 const AddEditReactorSampleIrradiationAuthorization = lazy(() => import('./operation/AddEditReactorSampleIrradiationAuthorization'));
 const GenerateReactorSampleIrradiationAuthorizationPdf = lazy(() => import('./operation/GenerateReactorSampleIrradiationAuthorizationPdf'));
 const OperatingRunDataMetrics = lazy(() => import('./operation/OperatingRunDataMetrics'));
+const ReactorOperationParametersDashboard = lazy(() => import('./operation/ReactorOperationParametersDashboard'));
+const ReactorAreaMonitorsDashboard = lazy(() => import('./operation/ReactorAreaMonitorsDashboard'));
 const TermsAndDefinitions = lazy(() => import('./support/TermsAndDefinitions'));
 const UnderDevelopment = lazy(() => import('../components/UnderDevelopment'));
 
@@ -670,6 +676,24 @@ export const IcensPackages = (actionid, crefs, menuTitle, user, handleMenuAction
   } else if (actionid === RO_OPERATING_RUN_DATA_METRICS) {
     return (<OperatingRunDataMetrics
       ref={crefs[OPERATINGRUNDATAMETRICS_REF]}
+      title={menuTitle}
+      user={user}
+      send={send}
+      properties={properties}
+      glossary={glossary}
+    />)
+  } else if (actionid === RO_REACTOR_OPERATION_PARAMETERS_DASHBOARD) {
+    return (<ReactorOperationParametersDashboard
+      ref={crefs[REACTOR_OPERATION_PARAMETERS_DASHBOARD_REF]}
+      title={menuTitle}
+      user={user}
+      send={send}
+      properties={properties}
+      glossary={glossary}
+    />)
+  } else if (actionid === RO_AREA_MONITORS_DASHBOARD) {
+    return (<ReactorAreaMonitorsDashboard
+      ref={crefs[REACTOR_AREA_MONITORS_DASHBOARD_REF]}
       title={menuTitle}
       user={user}
       send={send}

@@ -135,6 +135,8 @@ import {
   ConfirmInterruptBackgroundTaskDialog,
 } from "./components/UtilityDialogs";
 import LazyLoaderIndicator from "./components/LazyLoaderIndicator";
+import {REACTOR_AREA_MONITORS_DASHBOARD_REF} from "./pages/operation/ReactorAreaMonitorsDashboard";
+import {REACTOR_OPERATION_PARAMETERS_DASHBOARD_REF} from "./pages/operation/ReactorOperationParametersDashboard";
 
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));
@@ -263,7 +265,9 @@ class App extends React.Component {
     this.crefs[TERMSANDDEFINITIONS_REF] = React.createRef();
     this.crefs[UNDERDEVELOPMENT_REF] = React.createRef();
     this.crefs[MAINTENANCESCHEDULE_REF] = React.createRef();
-    this.crefs[OPERATINGRUNDATAMETRICS_REF] = React.createRef();
+    this.crefs[MAINTENANCESCHEDULE_REF] = React.createRef();
+    this.crefs[REACTOR_AREA_MONITORS_DASHBOARD_REF] = React.createRef();
+    this.crefs[REACTOR_OPERATION_PARAMETERS_DASHBOARD_REF] = React.createRef();
   }
 
   componentDidCatch(error, info) {

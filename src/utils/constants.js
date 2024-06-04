@@ -59,6 +59,8 @@ module.exports = Object.freeze({
 
   RO_ADD_EDIT_REACTOR_OPERATING_RUN_RECORDS: 'ro.add.edit.reactor.operating.run.records',
   RO_ADD_EDIT_IRRADIATED_SAMPLES_DATA: 'ro.add.edit.irradiated.samples',
+  RO_REACTOR_OPERATION_PARAMETERS_DASHBOARD: 'ro.reactor.operation.parameters.dashboard',
+  RO_AREA_MONITORS_DASHBOARD: 'ro.area.monitors.dashboard',
   RO_REACTOR_OPERATIONS_REPORT: 'ro.reactor.operations.report',
   RO_ADD_EDIT_REACTOR_WATER_SAMPLES: 'ro.add.edit.reactor.water.samples',
   RO_ADD_EDIT_REACTOR_SAMPLE_IRRADIATION_AUTHORIZATION: 'ro.add.edit.reactor.sample.irradiation.records',

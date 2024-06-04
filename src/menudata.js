@@ -589,6 +589,30 @@ export const MenuItems = [
     children: [
       {
         key: nanoid(),
+        label: '○ Dashboards',
+        tooltip: 'Reactor operation parameter dashboards',
+        authmodlevel: 'basic',
+        children: [
+          {
+            key: nanoid(),
+            label: 'Area Monitors.',
+            value: 'ro.area.monitors.dashboard',
+            title: 'View Reactor Area Monitors',
+            tooltip: 'View reactor radiation area monitors.',
+            authmodlevel: 'basic',
+          },
+          {
+            key: nanoid(),
+            label: 'Reactor Parameters',
+            value: 'ro.reactor.operation.parameters.dashboard',
+            title: 'View Reactor Parameters',
+            tooltip: 'View reactor parameters dashboard.',
+            authmodlevel: 'basic',
+          },
+        ]
+      },
+      {
+        key: nanoid(),
         label: '○ Authorizations',
         tooltip: 'Authorizations for reactor utilization',
         authmodlevel: 'basic',
