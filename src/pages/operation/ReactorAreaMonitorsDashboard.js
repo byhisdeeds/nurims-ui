@@ -21,7 +21,7 @@ import {
   TitleComponent
 } from "../../components/CommonComponents";
 import {
-  CMD_GET_DATA_STREAM_METRICS_RECORDS,
+  CMD_GET_DATA_STREAM_METRICS_RECORDS, CMD_SUBSCRIBE_TO_DATA_PUBLISHER, CMD_UNSUBSCRIBE_FROM_DATA_PUBLISHER,
   ITEM_ID,
   NURIMS_OPERATION_DATA_STREAM_METRICS,
 } from "../../utils/constants";
@@ -143,16 +143,20 @@ class ReactorAreaMonitorsDashboard extends Component {
 
 
   componentDidMount() {
-    // this.props.send({
-    //   cmd: CMD_GET_DATA_STREAM_METRICS_RECORDS,
-    //   module: this.Module,
-    //   startDate: "2023-12-01",
-    //   endDate: "2023-12-31",
-    //   "include.metadata": "true",
-    // });
+    this.props.send({
+      cmd: CMD_SUBSCRIBE_TO_DATA_PUBLISHER,
+      module: this.Module,
+    });
   }
 
-  // addEventFromMetrics = (records) => {
+  componentWillUnmount() {
+    this.props.send({
+      cmd: CMD_UNSUBSCRIBE_FROM_DATA_PUBLISHER,
+      module: this.Module,
+    });
+  }
+
+// addEventFromMetrics = (records) => {
   //   const events = this.state.events;
   //   let update = false;
   //   for (const record of records) {

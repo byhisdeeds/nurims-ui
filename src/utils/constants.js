@@ -195,6 +195,8 @@ module.exports = Object.freeze({
   CMD_GET_SESSION_INFO: "get_session_info",
   CMD_INTERRUPT_BACKGROUND_TASK: "interrupt_background_task",
 
+  CMD_UNSUBSCRIBE_FROM_DATA_PUBLISHER: "unsubscribe_from_data_publisher",
+  CMD_SUBSCRIBE_TO_DATA_PUBLISHER: "subscribe_to_data_publisher",
   CMD_GET_DATA_STREAM_METRICS_RECORDS: "get_data_stream_metrics_records",
   CMD_DISCOVER_DATA_STREAM_METRICS: "discover_data_stream_metrics",
 
