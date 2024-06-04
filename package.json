@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "/nurims",
   "dependencies": {
+    "@amcharts/amcharts5": "^5.9.11",
     "@cozimacode/react-bot": "^2.1.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
@@ -18,6 +19,7 @@
     "@mui/x-data-grid": "^6.0.3",
     "@mui/x-date-pickers": "^6.14.0",
     "@pdftron/pdfjs-express-viewer": "^8.7.1",
+    "@react-leaflet/core": "^2.1.0",
     "@react-pdf-viewer/attachment": "^3.12.0",
     "@react-pdf-viewer/bookmark": "^3.12.0",
     "@react-pdf-viewer/core": "^3.12.0",
@@ -56,7 +58,6 @@
     "react-json-pretty": "^2.2.0",
     "react-json-view": "^1.21.3",
     "react-leaflet": "^4.2.1",
-    "@react-leaflet/core": "^2.1.0",
     "react-papaparse": "^4.1.0",
     "react-router-dom": "^6.9.0",
     "react-scripts": "^4.0.3",
