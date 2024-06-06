@@ -341,7 +341,7 @@ class App extends React.Component {
             for (const [k, v] of Object.entries(this.crefs)) {
               console.log("-->k", k, message.module)
               if (k === message.module) {
-                console.log("******************************************88")
+                console.log("****************************************** ##### ", v.current)
                 if (v.current) {
                   v.current.ws_message(message)
                 }

@@ -107,6 +107,9 @@ class ReactorAreaMonitorsDashboard extends Component {
   }
 
   ws_message = (message) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "ws_message", message);
+    }
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
