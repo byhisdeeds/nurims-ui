@@ -113,8 +113,7 @@ class ReactorAreaMonitorsDashboard extends Component {
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
-        if (isCommandResponse(message, CMD_GET_DATA_STREAM_METRICS_RECORDS)) {
-          // this.addEventFromMetrics(response.operation);
+        if (isCommandResponse(message, CMD_SUBSCRIBE_TO_DATA_PUBLISHER)) {
           this.refreshEventsFromMetrics(response.operation);
         }
       } else {
@@ -321,3 +320,87 @@ ReactorAreaMonitorsDashboard.defaultProps = {
 };
 
 export default withTheme(ReactorAreaMonitorsDashboard);
+
+
+//{
+//   "message": "",
+//   "status": 0,
+//   "data": [
+//     {
+//       "timestamp": "2024-06-06 10:42:52.518192",
+//       "id": "server.timestamp"
+//     },
+//     {
+//       "timestamp": "2024-06-06 10:42:52.179000-05:00",
+//       "id": "Control_Rod_Position",
+//       "value": 0.3,
+//       "units": "in",
+//       "label": "Control Rod Position"
+//     },
+//     {
+//       "timestamp": "2024-06-06 10:42:52.026000-05:00",
+//       "id": "Neutron_Flux",
+//       "value": 0.0,
+//       "units": "10^11 n/cm2/s",
+//       "label": "Neutron Flux"
+//     },
+//     {
+//       "timestamp": "2024-06-06 10:42:52.128000-05:00",
+//       "id": "Inlet_Temp",
+//       "value": 20.05,
+//       "units": "\\u00b0C",
+//       "label": "Inlet Temp"
+//     },
+//     {
+//       "timestamp": "2024-06-06 10:42:52.077000-05:00",
+//       "id": "Outlet_Temp",
+//       "value": 20.47,
+//       "units": "\\u00b0C",
+//       "label": "Outlet Temp"
+//     },
+//     {
+//       "timestamp": "2024-06-06 10:42:52.099000-05:00",
+//       "id": "971070",
+//       "value": 0.02,
+//       "units": "mR/hr",
+//       "label": "IC3"
+//     },
+//     {
+//       "timestamp": "2024-06-06 10:42:52.056000-05:00",
+//       "id": "971073",
+//       "value": 0.01,
+//       "units": "mR/hr",
+//       "label": "Reactor"
+//     },
+//     {
+//       "timestamp": "2024-06-06 10:42:50.206000-05:00",
+//       "id": "971098",
+//       "value": 0.01,
+//       "units": "mR/hr",
+//       "label": "Ceiling"
+//     },
+//     {
+//       "timestamp": "2024-06-06 10:42:49.495000-05:00",
+//       "id": "973014",
+//       "value": 0.03,
+//       "units": "mR/hr",
+//       "label": "IC1"
+//     },
+//     {
+//       "timestamp": "2024-06-06 10:42:51.470000-05:00",
+//       "id": "974017",
+//       "value": 0.03,
+//       "units": "mR/hr",
+//       "label": "DI-Column"
+//     },
+//     {
+//       "timestamp": "2024-06-06 10:42:52.596329",
+//       "id": "query.stats",
+//       "n": 9,
+//       "total.duration": "0.00095",
+//       "min.duration": "0.00009",
+//       "max.duration": "0.00013",
+//       "median.duration": "0.00011"
+//     }
+//   ]
+// }
