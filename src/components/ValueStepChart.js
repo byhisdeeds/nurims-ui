@@ -263,6 +263,7 @@ class ValueStepChart extends React.Component {
 
   update = (data) => {
     // get data value and find rendering colors
+    console.log("VAlLUE_STEP_CHART", data )
     let dataValue = data.value;
     if (effectiveDoseRate().hasUnit(normalizeUnits(data.units))) {
       dataValue = effectiveDoseRate(data.value).from(normalizeUnits(data.units)).to(normalizeUnits(this.props.units)).value;

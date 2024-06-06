@@ -113,10 +113,23 @@ class ReactorAreaMonitorsDashboard extends Component {
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
-        if (isCommandResponse(message, CMD_SUBSCRIBE_TO_DATA_PUBLISHER)) {
-          this.refreshEventsFromMetrics(response.operation);
+        if (message.response.hasOwnProperty("data")) {
+          for (const data of response.data) {
+            if (this.poolRadmonRef.current && data.hasOwnProperty("id") && data.id === REACTOR_POOL_RADIATION_MONITOR_ID) {
+              this.poolRadmonRef.current.update(data);
+            } else if (this.ceilingRadmonRef.current && data.hasOwnProperty("id") && data.id === CEILING_RADIATION_MONITOR_ID) {
+              this.ceilingRadmonRef.current.update(data);
+            } else if (this.ic1RadmonRef.current && data.hasOwnProperty("id") && data.id === IC1_RADIATION_MONITOR_ID) {
+              this.ic1RadmonRef.current.update(data);
+            } else if (this.ic3RadmonRef.current && data.hasOwnProperty("id") && data.id === IC3_RADIATION_MONITOR_ID) {
+              this.ic3RadmonRef.current.update(data);
+            }
+            if (this.ref.current && data.hasOwnProperty("id") && data.id === REACTOR_POOL_RADIATION_MONITOR_ID) {
+              this.ref.current.update(data);
+            }
+          }
         }
-      } else {
+    } else {
         enqueueErrorSnackbar(response.message);
       }
     }
