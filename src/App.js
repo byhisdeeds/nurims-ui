@@ -79,12 +79,8 @@ import {VIEWMATERIALSLIST_REF} from "./pages/controlledmaterials/ViewMaterialsLi
 import {MANAGEUSERS_REF} from "./pages/sysadmin/ManageUsers"
 import {MAINTENANCESCHEDULE_REF} from "./pages/maintenance/MaintenanceSchedule"
 import {GENERATESSCMAINTENANCEREPORT_REF} from "./pages/maintenance/GenerateSSCMaintenanceReport"
-import {
-  ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF
-} from "./pages/operation/AddEditReactorSampleIrradiationAuthorization"
-import {
-  GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF
-} from "./pages/operation/GenerateReactorSampleIrradiationAuthorizationPdf"
+import {ADDEDITREACTORSAMPLEIRRADIATIONAUTHORIZATION_REF} from "./pages/operation/AddEditReactorSampleIrradiationAuthorization"
+import {GENERATEREACTORSAMPLEIRRADIATIONAUTHORIZATIONPDF_REF} from "./pages/operation/GenerateReactorSampleIrradiationAuthorizationPdf"
 import {TERMSANDDEFINITIONS_REF} from "./pages/support/TermsAndDefinitions"
 import {UNDERDEVELOPMENT_REF} from "./components/UnderDevelopment"
 import LogWindow from "./components/LogWindow";
@@ -94,6 +90,8 @@ import {DISCOVERORPHANEDMETADATA_REF} from "./pages/sysadmin/DiscoverOrphanedMet
 import {ADDEDITMODIFICATIONRECORD_REF} from "./pages/maintenance/AddEditModificationRecord";
 import {ADDEDITMAINTENANCERECORD_REF} from "./pages/maintenance/AddEditMaintenanceRecord";
 import {SIGNIN_REF} from "./components/Signin";
+import {REACTOR_AREA_MONITORS_DASHBOARD_REF} from "./pages/operation/ReactorAreaMonitorsDashboard";
+import {REACTOR_OPERATION_PARAMETERS_DASHBOARD_REF} from "./pages/operation/ReactorOperationParametersDashboard";
 import {SYSTEMCONFIGURATION_REF} from "./pages/sysadmin/SystemConfiguration";
 import {OPERATINGRUNDATAMETRICS_REF} from "./pages/operation/OperatingRunDataMetrics";
 import NotificationWindow from "./components/NotificationWindow";
@@ -135,8 +133,6 @@ import {
   ConfirmInterruptBackgroundTaskDialog,
 } from "./components/UtilityDialogs";
 import LazyLoaderIndicator from "./components/LazyLoaderIndicator";
-import {REACTOR_AREA_MONITORS_DASHBOARD_REF} from "./pages/operation/ReactorAreaMonitorsDashboard";
-import {REACTOR_OPERATION_PARAMETERS_DASHBOARD_REF} from "./pages/operation/ReactorOperationParametersDashboard";
 
 const MyAccount = lazy(() => import('./pages/account/MyAccount'));
 const Settings = lazy(() => import('./pages/settings/Settings'));
@@ -294,7 +290,6 @@ class App extends React.Component {
       this.ws = new ReconnectingWebSocket(ws_url);
       this.ws.onopen = (event) => {
         const msg = `Websocket connection to server established for client ${this.uuid}`;
-        console.log("aaaaaaaaaaaaaa")
         if (this.context.debug) {
           ConsoleLog("App", "ws.onopen", msg);
         }
@@ -344,7 +339,9 @@ class App extends React.Component {
         if (isValidMessageSignature(message)) {
           if (isModuleMessage(message)) {
             for (const [k, v] of Object.entries(this.crefs)) {
+              console.log("-->k", k, message.module)
               if (k === message.module) {
+                console.log("******************************************88")
                 if (v.current) {
                   v.current.ws_message(message)
                 }
