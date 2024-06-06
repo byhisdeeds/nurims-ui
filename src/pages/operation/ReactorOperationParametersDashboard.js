@@ -35,7 +35,6 @@ import {
   ConsoleLog,
   UserContext
 } from "../../utils/UserContext";
-import * as console from "node:console";
 
 const localizer = dayjsLocalizer(dayjs)
 
