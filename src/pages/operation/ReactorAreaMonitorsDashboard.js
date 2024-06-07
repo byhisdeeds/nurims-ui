@@ -113,7 +113,7 @@ class ReactorAreaMonitorsDashboard extends Component {
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
-        if (message.response.hasOwnProperty("data")) {
+        if (response.hasOwnProperty("data")) {
           console.log("--- RESPONSE.DATA-->", response.data)
           for (const data of response.data) {
             console.log("-->", data)
