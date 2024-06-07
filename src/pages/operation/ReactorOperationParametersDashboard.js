@@ -92,7 +92,7 @@ class ReactorOperationParametersDashboard extends Component {
 
   render() {
     if (this.context.debug) {
-      ConsoleLog(this.Module, "ws_message", message);
+      ConsoleLog(this.Module, "render");
     }
     return (<Grid container>
         <Grid item xs={12} sm={12} md={12} lg={6}>
