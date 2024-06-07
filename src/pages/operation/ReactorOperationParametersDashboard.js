@@ -35,6 +35,7 @@ import {
   ConsoleLog,
   UserContext
 } from "../../utils/UserContext";
+import CoreCard from "../../components/CoreCard";
 
 const localizer = dayjsLocalizer(dayjs)
 
@@ -50,6 +51,7 @@ class ReactorOperationParametersDashboard extends Component {
       currentDay: dayjs(),
     };
     this.Module = REACTOR_OPERATION_PARAMETERS_DASHBOARD_REF;
+    this.coreRef = React.createRef();
   }
 
 
@@ -74,9 +76,13 @@ class ReactorOperationParametersDashboard extends Component {
     if (messageHasResponse(message)) {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
-        if (isCommandResponse(message, CMD_GET_DATA_STREAM_METRICS_RECORDS)) {
-          // this.addEventFromMetrics(response.operation);
-          this.refreshEventsFromMetrics(response.operation);
+        if (isCommandResponse(message, CMD_SUBSCRIBE_TO_DATA_PUBLISHER)) {
+          if (response.hasOwnProperty("data")) {
+            const data = JSON.parse(response.data)
+            if (this.coreRef.current) {
+              this.coreRef.current.ws_message(data);
+            }
+          }
         }
       } else {
         enqueueErrorSnackbar(response.message);
@@ -85,8 +91,16 @@ class ReactorOperationParametersDashboard extends Component {
   }
 
   render() {
-    const {events} = this.state;
-    return <h2>Hi, I AREA PARAMETERS am a Car!</h2>;
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "ws_message", message);
+    }
+    return (<Grid container>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
+          <CoreCard ref={this.coreRef}/>
+        </Grid>
+      </Grid>
+
+    )
   }
 }
 

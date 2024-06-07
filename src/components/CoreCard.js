@@ -68,6 +68,9 @@ class CoreCard extends React.Component {
   }
 
   ws_message = (message) => {
+    if (this.context.debug) {
+      ConsoleLog(this.Module, "ws_message", message);
+    }
     const newStateObject = {};
     for (const m of message) {
       if (m.hasOwnProperty("id") && m.id === MESSAGE_INLET_TEMPERATURE) {
