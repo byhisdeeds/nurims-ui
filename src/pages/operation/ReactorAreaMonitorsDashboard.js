@@ -114,7 +114,7 @@ class ReactorAreaMonitorsDashboard extends Component {
       const response = message.response;
       if (messageResponseStatusOk(message)) {
         if (response.hasOwnProperty("data")) {
-          console.log("--- RESPONSE.DATA-->", response.data)
+          console.log("--- RESPONSE.DATA-->", typeof (response.data), response.data)
           for (const data of response.data) {
             // console.log("-->", data)
             if (this.poolRadmonRef.current && data.hasOwnProperty("id") && data.id === REACTOR_POOL_RADIATION_MONITOR_ID) {
