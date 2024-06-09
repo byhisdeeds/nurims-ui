@@ -95,8 +95,8 @@ class ReactorOperationParametersDashboard extends Component {
       ConsoleLog(this.Module, "render");
     }
     return (<Grid container>
-        <Grid item xs={12} sm={12} md={12} lg={6}>
-          <CoreCard ref={this.coreRef}/>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <CoreCard ref={this.coreRef} style={{border: "2px solid red"}} />
         </Grid>
       </Grid>
 

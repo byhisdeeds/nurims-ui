@@ -67,6 +67,11 @@
 
 }
 
+@font-face {
+  font-family: 'lucidaconsole';
+  src: local('LucidaConsole'), url(./fonts/RobotoSlabRegular.ttf) format('truetype');
+}
+
 body {
   margin: 0;
   font-family: Segoeui, Cabin, RobotoSlabRegular, sans-serif;
