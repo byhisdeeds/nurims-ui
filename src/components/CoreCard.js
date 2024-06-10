@@ -7,12 +7,6 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CoreCanvas from "./CoreCanvas";
-import {
-  MESSAGE_CONTROL_ROD_POSITION,
-  MESSAGE_INLET_TEMPERATURE,
-  MESSAGE_NEUTRON_FLUX,
-  MESSAGE_OUTLET_TEMPERATURE
-} from "../utils/constants";
 import {scaleFontSize} from "../utils/Helpers";
 import {withTheme} from "@mui/styles";
 
@@ -33,6 +27,11 @@ const operating_sign_off = {
   margin: "0 2em",
   color: "#d2d2d2",
 }
+
+const MESSAGE_INLET_TEMPERATURE = 'Inlet_Temp'
+const MESSAGE_OUTLET_TEMPERATURE = 'Outlet_Temp'
+const MESSAGE_CONTROL_ROD_POSITION = 'Control_Rod_Position'
+const MESSAGE_NEUTRON_FLUX = 'Neutron_Flux'
 
 class CoreCard extends React.Component {
   static contextType = UserContext;
