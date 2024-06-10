@@ -78,9 +78,9 @@ class ReactorOperationParametersDashboard extends Component {
       if (messageResponseStatusOk(message)) {
         if (isCommandResponse(message, CMD_SUBSCRIBE_TO_DATA_PUBLISHER)) {
           if (response.hasOwnProperty("data")) {
-            const data = JSON.parse(response.data)
+            // const data = JSON.parse(response.data)
             if (this.coreRef.current) {
-              this.coreRef.current.ws_message(data);
+              this.coreRef.current.ws_message(response.data);
             }
           }
         }
